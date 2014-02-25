@@ -38,7 +38,7 @@ namespace MangaReader
             if (logLevel == Level.Information)
                 MessageBox.Show(message, message, MessageBoxButton.OK, MessageBoxImage.Information);
             
-            File.AppendAllText(logPath, string.Concat(message, Environment.NewLine), System.Text.Encoding.UTF8);
+            File.AppendAllText(logPath, string.Concat(DateTime.Now, " ", message, Environment.NewLine), System.Text.Encoding.UTF8);
         }
     }
 }

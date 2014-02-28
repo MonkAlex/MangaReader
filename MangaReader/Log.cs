@@ -4,12 +4,17 @@ using System.Windows;
 
 namespace MangaReader
 {
-    public static class Log
+    public class Log
     {
+        /// <summary>
+        /// Указатель блокировки лог файла.
+        /// </summary>
+        private static object logLock = new object();
+
         /// <summary>
         /// Ссылка на файл лога.
         /// </summary>
-        private const string logPath = @".\manga.log";
+        private static string logPath = @".\manga.log";
 
         /// <summary>
         /// Уровень события.
@@ -29,16 +34,21 @@ namespace MangaReader
         /// <param name="logLevel">Уровень события.</param>
         public static void Add(string message, Level logLevel = Level.None)
         {
-            if (logLevel == Level.Error)
-                MessageBox.Show(message, message, MessageBoxButton.OK, MessageBoxImage.Error);
+            lock (logLock)
+            {
+                File.AppendAllText(logPath,
+                    string.Concat(DateTime.Now,
+                        "   ",
+                        message,
+                        Environment.NewLine,
+                        Environment.NewLine),
+                    System.Text.Encoding.UTF8);
+            }
+        }
 
-            if (logLevel == Level.Warning)
-                MessageBox.Show(message, message, MessageBoxButton.OK, MessageBoxImage.Warning);
-
-            if (logLevel == Level.Information)
-                MessageBox.Show(message, message, MessageBoxButton.OK, MessageBoxImage.Information);
-            
-            File.AppendAllText(logPath, string.Concat(DateTime.Now, " ", message, Environment.NewLine), System.Text.Encoding.UTF8);
+        public Log()
+        {
+            throw new Exception("Use static methods. Dont create log object.");
         }
     }
 }

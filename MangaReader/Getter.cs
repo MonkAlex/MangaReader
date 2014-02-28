@@ -31,7 +31,7 @@ namespace MangaReader
                 if (rusNode != null)
                     name.Russian = rusNode.InnerText;
             }
-            catch (NullReferenceException ex) { Log.Add(ex.Message, Log.Level.None); }
+            catch (NullReferenceException ex) { Log.Add(ex.ToString()); }
             return name;
         }
 
@@ -66,8 +66,8 @@ namespace MangaReader
                     .ConvertAll(r => r.InnerText.Replace("\r\n", string.Empty).Trim())
                     .ToList();
             }
-            catch (NullReferenceException ex) { Log.Add(ex.Message + " - ошибка получения списка глав.", Log.Level.Error); }
-            catch (ArgumentNullException ex) { Log.Add(ex.Message + " - главы не найдены.", Log.Level.Warning); }
+            catch (NullReferenceException ex) { Log.Add(ex.ToString() + " - ошибка получения списка глав."); }
+            catch (ArgumentNullException ex) { Log.Add(ex.ToString() + " - главы не найдены."); }
 
             for (var i = 0; i < links.Count; i++)
             {

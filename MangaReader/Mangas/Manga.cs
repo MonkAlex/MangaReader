@@ -1,4 +1,5 @@
 ﻿using MangaReader.Chapters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,12 +14,17 @@ namespace MangaReader.Mangas
         /// <summary>
         /// Название манги.
         /// </summary>
-        public MangaName Name { get; private set; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// Ссылка на мангу.
         /// </summary>
         public string Url { get; private set; }
+
+        /// <summary>
+        /// Статус перевода.
+        /// </summary>
+        public string Status { get; private set; }
 
         /// <summary>
         /// Закешированный список глав.
@@ -37,7 +43,10 @@ namespace MangaReader.Mangas
         /// <returns>Глава.</returns>
         public Chapter GetChapter(string chapterUrl)
         {
-            return listOfChapters.Where(ch => ch.Key.Contains(chapterUrl)).Select(ch => new Chapter(ch.Key, ch.Value)).FirstOrDefault();
+            return listOfChapters
+                .Where(ch => ch.Key.Contains(chapterUrl))
+                .Select(ch => new Chapter(ch.Key, ch.Value))
+                .FirstOrDefault();
         }
 
         /// <summary>
@@ -56,25 +65,39 @@ namespace MangaReader.Mangas
         /// </summary>
         public void Download(string mangaFolder, string volumePrefix, string chapterPrefix)
         {
+            Log.Add("Download start " + this.Name);
             if (allChapters == null)
                 GetAllChapters();
 
             // Формируем путь к главе вида Папка_манги\Том_001\Глава_0001
-            Parallel.ForEach(allChapters, ch => ch.Download(string.Concat(mangaFolder,
-                "\\",
-                volumePrefix,
-                ch.Volume.ToString().PadLeft(3, '0'),
-                "\\",
-                chapterPrefix,
-                ch.Number.ToString().PadLeft(4, '0')
-                )));
+            try
+            {
+                Parallel.ForEach(allChapters, ch => ch.Download(string.Concat(mangaFolder,
+                    "\\",
+                    volumePrefix,
+                    ch.Volume.ToString().PadLeft(3, '0'),
+                    "\\",
+                    chapterPrefix,
+                    ch.Number.ToString().PadLeft(4, '0')
+                    )));
+                Log.Add("Download end " + this.Name);
+            }
+            catch (AggregateException ae)
+            {
+                foreach (var ex in ae.InnerExceptions)
+                    Log.Add(ex.ToString());
+            }
+            catch (Exception ex)
+            {
+                Log.Add(ex.ToString());
+            }
         }
 
         public Manga(string url)
         {
             this.Url = url;
             var page = Page.GetPage(url);
-            this.Name = Getter.GetMangaName(page);
+            this.Name = Getter.GetMangaName(page).ToString();
             this.listOfChapters = Getter.GetLinksOfMangaChapters(page, url);
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace MangaReader.Mangas
+﻿using System;
+
+namespace MangaReader.Mangas
 {
     public class MangaName
     {
@@ -67,6 +69,19 @@
             {
                 return !string.IsNullOrEmpty(this.Japanese);
             }
+        }
+
+        /// <summary>
+        /// Определение строкового значения по настройкам.
+        /// </summary>
+        /// <returns>Название манги.</returns>
+        public override string ToString()
+        {
+            if (Settings.Language == Settings.Languages.English)
+                return English;
+            if (Settings.Language == Settings.Languages.Russian)
+                return Russian;
+            return Japanese;
         }
 
         /// <summary>

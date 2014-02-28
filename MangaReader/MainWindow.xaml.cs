@@ -16,8 +16,8 @@ namespace MangaReader
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            var manga = new Manga("http://readmanga.me/lilim_kiss");
-            manga.Download(manga.Name.Russian, "Том_", "Глава_");
+            var manga = new Manga("http://readmanga.me/monster");
+          //manga.Download(manga.Name.Russian, "Том_", "Глава_");
         }
     }
 }

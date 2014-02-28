@@ -39,19 +39,6 @@ namespace MangaReader.Chapters
         public int Volume;
 
         /// <summary>
-        /// Получить ссылку на изображение.
-        /// </summary>
-        /// <param name="index">Индекс изображения.</param>
-        /// <returns>Ссылка на изображение.</returns>
-        public string GetImageLink(int index)
-        {
-            if (listOfImageLink == null)
-                GetAllImagesLink();
-            return listOfImageLink[index];
-        }
-
-
-        /// <summary>
         /// Скачать главу.
         /// </summary>
         /// <param name="chapterFolder">Папка для файлов.</param>
@@ -62,6 +49,7 @@ namespace MangaReader.Chapters
 
             try
             {
+                chapterFolder = Page.MakeValidPath(chapterFolder);
                 if (!Directory.Exists(chapterFolder))
                     Directory.CreateDirectory(chapterFolder);
 
@@ -75,11 +63,11 @@ namespace MangaReader.Chapters
             catch (AggregateException ae)
             {
                 foreach (var ex in ae.InnerExceptions)
-                    Log.Add(ex.Message, Log.Level.Information);
+                    Log.Add(ex.ToString());
             }
             catch (Exception ex)
             {
-                Log.Add(ex.Message, Log.Level.Information);
+                Log.Add(ex.ToString());
             }
         }
 

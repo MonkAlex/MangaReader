@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Windows;
 using MangaReader.Mangas;
+using System;
 
 namespace MangaReader
 {

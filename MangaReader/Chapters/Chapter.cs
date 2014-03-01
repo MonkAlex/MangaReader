@@ -63,11 +63,11 @@ namespace MangaReader.Chapters
             catch (AggregateException ae)
             {
                 foreach (var ex in ae.InnerExceptions)
-                    Log.Add(ex.ToString());
+                    Log.Add(this.Url + this.Name + ex.ToString());
             }
             catch (Exception ex)
             {
-                Log.Add(ex.ToString());
+                Log.Add(this.Url + this.Name + ex.ToString());
             }
         }
 

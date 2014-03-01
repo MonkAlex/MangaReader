@@ -44,7 +44,7 @@ namespace MangaReader.Mangas
         public Chapter GetChapter(string chapterUrl)
         {
             return listOfChapters
-                .Where(ch => ch.Key.Contains(chapterUrl))
+                .Where(ch => ch.Key == chapterUrl)
                 .Select(ch => new Chapter(ch.Key, ch.Value))
                 .FirstOrDefault();
         }

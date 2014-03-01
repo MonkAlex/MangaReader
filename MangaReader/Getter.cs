@@ -1,9 +1,9 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using MangaReader.Mangas;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using HtmlAgilityPack;
-using MangaReader.Mangas;
 
 namespace MangaReader
 {
@@ -95,11 +95,11 @@ namespace MangaReader
             if (firstOrDefault == null) 
                 return chapterLinksList;
 
-            var theNode = firstOrDefault.OuterHtml;
             chapterLinksList = Regex
-                .Matches(theNode, @"{url:.[/:a-z0-9\-\._()\[\]&+]+", RegexOptions.IgnoreCase)
+                .Matches(firstOrDefault.OuterHtml, @"{url:.[/:a-z0-9\-\._()\[\]&+]+", RegexOptions.IgnoreCase)
                 .OfType<Match>()
                 .Select(m => m.Groups[0].Value.Remove(0, 6))
+                .Select(l => (!Uri.IsWellFormedUriString(l, UriKind.Absolute)) ? (@"http://" + new Uri(url).Host + l) : l)
                 .ToList();
             return chapterLinksList;
         }

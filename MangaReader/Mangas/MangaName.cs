@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace MangaReader.Mangas
 {
     public class MangaName

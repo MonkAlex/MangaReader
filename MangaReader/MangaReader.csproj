@@ -65,9 +65,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Comperssion.cs" />
-    <Compile Include="History.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="Services\Comperssion.cs" />
+    <Compile Include="Services\History.cs" />
+    <Compile Include="Services\Settings.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -76,8 +76,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Getter.cs" />
-    <Compile Include="Log.cs" />
+    <Compile Include="Services\Getter.cs" />
+    <Compile Include="Services\Log.cs" />
     <Compile Include="Chapters\Chapter.cs" />
     <Compile Include="Mangas\Manga.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -87,7 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Mangas\MangaName.cs" />
-    <Compile Include="Page.cs" />
+    <Compile Include="Mangas\Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

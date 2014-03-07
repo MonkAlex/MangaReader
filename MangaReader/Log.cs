@@ -39,7 +39,6 @@ namespace MangaReader
                     string.Concat(DateTime.Now,
                         "   ",
                         message,
-                        Environment.NewLine,
                         Environment.NewLine),
                     System.Text.Encoding.UTF8);
             }

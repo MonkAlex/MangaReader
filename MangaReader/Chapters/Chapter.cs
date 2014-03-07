@@ -59,6 +59,8 @@ namespace MangaReader.Chapters
                     webClient.DownloadFile(link, string.Concat(chapterFolder, "\\", Path.GetFileName(link)));
 
                 });
+
+                History.Add(this.Url);
             }
             catch (AggregateException ae)
             {

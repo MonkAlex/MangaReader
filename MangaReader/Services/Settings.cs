@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MangaReader
 {
@@ -11,6 +8,11 @@ namespace MangaReader
         /// Язык манги.
         /// </summary>
         public static Languages Language { get; set; }
+
+        /// <summary>
+        /// Обновлять при скачивании (true) или скачивать целиком(false).
+        /// </summary>
+        public static bool Update { get; set; }
 
         /// <summary>
         /// Доступные языки.

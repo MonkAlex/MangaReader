@@ -78,16 +78,16 @@
     </Compile>
     <Compile Include="Services\Getter.cs" />
     <Compile Include="Services\Log.cs" />
-    <Compile Include="Chapters\Chapter.cs" />
-    <Compile Include="Mangas\Manga.cs" />
+    <Compile Include="Manga\Chapter.cs" />
+    <Compile Include="Manga\Manga.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mangas\MangaName.cs" />
-    <Compile Include="Mangas\Page.cs" />
+    <Compile Include="Manga\MangaName.cs" />
+    <Compile Include="Manga\Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

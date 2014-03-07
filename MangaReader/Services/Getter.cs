@@ -1,5 +1,4 @@
 ﻿using HtmlAgilityPack;
-using MangaReader.Mangas;
 using System;
 using System.Collections.Generic;
 using System.Linq;

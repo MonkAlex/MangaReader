@@ -1,5 +1,5 @@
 ﻿
-namespace MangaReader.Mangas
+namespace MangaReader
 {
     public class MangaName
     {

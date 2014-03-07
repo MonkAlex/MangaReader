@@ -1,10 +1,9 @@
-﻿using MangaReader.Chapters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MangaReader.Mangas
+namespace MangaReader
 {
     /// <summary>
     /// Манга.
@@ -69,10 +68,19 @@ namespace MangaReader.Mangas
             if (allChapters == null)
                 GetAllChapters();
 
+            var newChapters = allChapters;
+            if (Settings.Update == true)
+            {
+                var messages = History.Get(this.Url);
+                newChapters = newChapters
+                    .Where(ch => !messages.Contains(ch.Url))
+                    .ToList();
+            }
+
             // Формируем путь к главе вида Папка_манги\Том_001\Глава_0001
             try
             {
-                Parallel.ForEach(allChapters, ch => ch.Download(string.Concat(mangaFolder,
+                Parallel.ForEach(newChapters, ch => ch.Download(string.Concat(mangaFolder,
                     "\\",
                     volumePrefix,
                     ch.Volume.ToString().PadLeft(3, '0'),

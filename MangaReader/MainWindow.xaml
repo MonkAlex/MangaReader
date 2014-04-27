@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <Button Content="Button" Height="23" HorizontalAlignment="Left" Margin="48,62,0,0" Name="button1" VerticalAlignment="Top" Width="75" Click="button1_Click" />
+        <Button Content="Update" Height="23" HorizontalAlignment="Left" Margin="48,62,0,0" Name="UpdateButton" VerticalAlignment="Top" Width="75" Click="Update_click" />
+        <Button Content="Compress" Height="23" HorizontalAlignment="Left" Margin="170,62,0,0" x:Name="CompressButton" VerticalAlignment="Top" Width="75" Click="Compess_click" />
     </Grid>
 </Window>

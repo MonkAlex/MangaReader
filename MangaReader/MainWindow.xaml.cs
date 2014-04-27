@@ -19,7 +19,7 @@ namespace MangaReader
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, RoutedEventArgs e)
+        private void Update_click(object sender, RoutedEventArgs e)
         {
             Settings.Update = true;
             Settings.Language = Settings.Languages.English;
@@ -33,6 +33,12 @@ namespace MangaReader
                     Comperssion.ComperssVolumes(folder);
                 }
             }
+        }
+
+        private void Compess_click(object sender, RoutedEventArgs e)
+        {
+            var folder = @"E:\Docs\Visual Studio 2010\Projects\MangaReader\MangaReader\bin\Debug\Download\The God of Poverty Is!";
+            Comperssion.ComperssVolumes(folder);
         }
     }
 }

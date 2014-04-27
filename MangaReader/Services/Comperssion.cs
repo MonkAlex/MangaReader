@@ -25,8 +25,9 @@ namespace MangaReader
                     {
                         var acr = string.Concat(GetFolderName(message), "_", GetFolderName(volume), "_", GetFolderName(chapter), ".zip");
                         if (File.Exists(acr))
-                            File.Delete(acr);
-                        ZipFile.CreateFromDirectory(chapter, acr, CompressionLevel.NoCompression, false, Encoding.UTF8);
+                          AddToArchive(acr, chapter);
+                        else
+                          ZipFile.CreateFromDirectory(chapter, acr, CompressionLevel.NoCompression, false, Encoding.UTF8);
                         Directory.Delete(chapter, true);
                     }
                 }
@@ -47,8 +48,9 @@ namespace MangaReader
                 {
                     var acr = string.Concat(GetFolderName(message), "_", GetFolderName(volume), ".zip");
                     if (File.Exists(acr))
-                        File.Delete(acr);
-                    ZipFile.CreateFromDirectory(volume, acr, CompressionLevel.NoCompression, false, Encoding.UTF8);
+                      AddToArchive(acr, volume);
+                    else
+                      ZipFile.CreateFromDirectory(volume, acr, CompressionLevel.NoCompression, false, Encoding.UTF8);
                     Directory.Delete(volume, true);
                 }
             }
@@ -64,6 +66,26 @@ namespace MangaReader
             return path.Split(new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
                             StringSplitOptions.RemoveEmptyEntries)
                        .Last();
+        }
+
+        /// <summary>
+        /// Добавить файлы в архив.
+        /// </summary>
+        /// <param name="archive">Существующий архив.</param>
+        /// <param name="folder">Папка, файлы которой необходимо запаковать.</param>
+        private static void AddToArchive(string archive, string folder)
+        {
+            using (var zip = ZipFile.Open(archive, ZipArchiveMode.Update, Encoding.UTF8))
+            {
+                foreach (var file in Directory.GetFiles(folder, "*", SearchOption.AllDirectories))
+                {
+                    var fileName = file.Replace(folder+ "\\", string.Empty);
+                    var fileInZip = zip.Entries.FirstOrDefault(f => f.FullName == fileName);
+                    if (fileInZip != null)
+                        fileInZip.Delete();
+                    zip.CreateEntryFromFile(file, fileName, CompressionLevel.NoCompression);
+                }
+            }
         }
     }
 }

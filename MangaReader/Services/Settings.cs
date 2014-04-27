@@ -15,6 +15,11 @@ namespace MangaReader
         public static bool Update { get; set; }
 
         /// <summary>
+        /// Папка программы.
+        /// </summary>
+        public static string WorkFolder { get; set; }
+
+        /// <summary>
         /// Доступные языки.
         /// </summary>
         public enum Languages

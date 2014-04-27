@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Windows;
 using MangaReader.Services;
 
@@ -11,21 +14,25 @@ namespace MangaReader
     {
         public MainWindow()
         {
+            Settings.WorkFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             Update.Initialize();
             InitializeComponent();
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            /*  var manga = new Manga("http://readmanga.me/toradora");
-              //manga.Download(manga.Name, "Том_", "Глава_");
-              Comperssion.ComperssChapters(@"E:\Docs\Visual Studio 2010\Projects\MangaReader\MangaReader\bin\Debug\ToraDora");
-
-            var manga2 = new Manga("http://readmanga.me/saki");
-              manga2.Download(manga2.Name, "Том_", "Глава_");
-              Comperssion.ComperssVolumes(manga2.Name);*/
-            Update.StartUpdate();
-            MessageBox.Show("dontSeeNewVersion");
+            Settings.Update = true;
+            Settings.Language = Settings.Languages.English;
+            if (File.Exists("db"))
+            {
+                var links = File.ReadAllLines("db");
+                foreach (var manga in links.Select(link => new Manga(link)))
+                {
+                    var folder = @"E:\Docs\Visual Studio 2010\Projects\MangaReader\MangaReader\bin\Debug\Download\" + manga.Name;
+                    manga.Download(folder, "Volume_", "Chapter_");
+                    Comperssion.ComperssVolumes(folder);
+                }
+            }
         }
     }
 }

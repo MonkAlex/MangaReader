@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -47,29 +46,36 @@ namespace MangaReader
             if (listOfImageLink == null)
                 GetAllImagesLink();
 
+            var chLink = string.Empty;
+            var chFile = string.Empty;
+
             try
             {
                 chapterFolder = Page.MakeValidPath(chapterFolder);
                 if (!Directory.Exists(chapterFolder))
                     Directory.CreateDirectory(chapterFolder);
 
-                Parallel.ForEach(listOfImageLink, link =>
+                Parallel.ForEach(listOfImageLink,
+                    () => new WebClient(),
+                    (link, loopstate, webclient) =>
                 {
-                    using (var webClient = new WebClient { Encoding = Encoding.UTF8 })
-                    webClient.DownloadFile(link, string.Concat(chapterFolder, "\\", Path.GetFileName(link)));
-
-                });
+                    chLink = link;
+                    chFile = string.Concat(chapterFolder, "\\", Path.GetFileName(chLink));
+                    File.WriteAllBytes(chFile, webclient.DownloadData(chLink));
+                    return webclient;
+                },
+                    (webclient) => { });
 
                 History.Add(this.Url);
             }
             catch (AggregateException ae)
             {
                 foreach (var ex in ae.InnerExceptions)
-                    Log.Add(this.Url + this.Name + ex.ToString());
+                    Log.Exception(ex, this.Url, this.Name, chLink, chFile);
             }
             catch (Exception ex)
             {
-                Log.Add(this.Url + this.Name + ex.ToString());
+                Log.Exception(ex, this.Url, this.Name);
             }
         }
 
@@ -90,8 +96,8 @@ namespace MangaReader
         {
             this.Url = url;
             this.Name = desc;
-            this.Volume = Convert.ToInt32(Regex.Match(url, @"vol[0-9]+").Value.Remove(0, 3));
-            this.Number = Convert.ToInt32(Regex.Match(url, @"/[0-9]+").Value.Remove(0, 1));
+            this.Volume = Convert.ToInt32(Regex.Match(url, @"vol[-]?[0-9]+").Value.Remove(0, 3));
+            this.Number = Convert.ToInt32(Regex.Match(url, @"/[-]?[0-9]+", RegexOptions.RightToLeft).Value.Remove(0, 1));
         }
     }
 }

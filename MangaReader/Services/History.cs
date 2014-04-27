@@ -11,12 +11,12 @@ namespace MangaReader
         /// <summary>
         /// Указатель блокировки файла истории.
         /// </summary>
-        private static object historyLock = new object();
+        private static readonly object HistoryLock = new object();
 
         /// <summary>
         /// Ссылка на файл лога.
         /// </summary>
-        private static string historyPath = @".\history";
+        private static readonly string HistoryPath = Settings.WorkFolder + @".\history";
 
         /// <summary>
         /// Добавление записи в историю.
@@ -25,8 +25,8 @@ namespace MangaReader
         public static void Add(string message)
         {
             if (!Contains(message))
-                lock (historyLock)
-                    File.AppendAllText(historyPath, string.Concat(message, Environment.NewLine), System.Text.Encoding.UTF8);
+                lock (HistoryLock)
+                    File.AppendAllText(HistoryPath, string.Concat(message, Environment.NewLine), System.Text.Encoding.UTF8);
         }
 
         /// <summary>
@@ -37,9 +37,9 @@ namespace MangaReader
         public static IEnumerable<string> Get(string subString = "")
         {
             IEnumerable<string> history = new string[] {};
-            lock (historyLock)
-                if (File.Exists(historyPath))
-                    history = File.ReadAllLines(historyPath);
+            lock (HistoryLock)
+                if (File.Exists(HistoryPath))
+                    history = File.ReadAllLines(HistoryPath);
             if (subString != string.Empty)
             {
                 history = history.Where(l => CultureInfo
@@ -58,15 +58,14 @@ namespace MangaReader
         public static bool Contains(string message)
         {
             IEnumerable<string> history = new string[] { };
-            lock (historyLock)
-                if (File.Exists(historyPath))
-                    history = File.ReadAllLines(historyPath);
+            lock (HistoryLock)
+                if (File.Exists(HistoryPath))
+                    history = File.ReadAllLines(HistoryPath);
             if (message != null)
-                return history.Where(m => CultureInfo
+                return history.Any(m => CultureInfo
                     .InvariantCulture
                     .CompareInfo
-                    .Compare(m, message, CompareOptions.IgnoreCase) == 0)
-                    .Any();
+                    .Compare(m, message, CompareOptions.IgnoreCase) == 0);
             return false;
         }
 
@@ -78,12 +77,12 @@ namespace MangaReader
         public static IEnumerable<string> Except(IEnumerable<string> messages)
         {
             IEnumerable<string> history = new string[] { };
-            lock (historyLock)
-                if (File.Exists(historyPath))
-                    history = File.ReadAllLines(historyPath);
-            if (messages != null)
-                return messages.Where(m => !history.Contains(m, StringComparer.InvariantCultureIgnoreCase));
-            return null;
+            lock (HistoryLock)
+                if (File.Exists(HistoryPath))
+                    history = File.ReadAllLines(HistoryPath);
+            return messages != null ?
+                messages.Where(m => !history.Contains(m, StringComparer.InvariantCultureIgnoreCase)) :
+                null;
         }
 
         public History()

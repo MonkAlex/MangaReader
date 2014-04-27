@@ -58,7 +58,7 @@ namespace MangaReader.Services
 
             using (var client = new WebClient())
             {
-                File.WriteAllBytes(Directory.GetCurrentDirectory() + "\\" + UpdateFilename,
+                File.WriteAllBytes(Settings.WorkFolder + "\\" + UpdateFilename,
                     client.DownloadData(LinkToUpdate));
                 File.Copy(UpdateFilename, UpdateTempFilename, true);
                 var run = new Process()
@@ -67,7 +67,7 @@ namespace MangaReader.Services
                     {
                         Arguments = UpdateStarted,
                         FileName = UpdateFilename,
-                        WorkingDirectory = Directory.GetCurrentDirectory()
+                        WorkingDirectory = Settings.WorkFolder
                     }
                 };
                 run.Start();
@@ -87,7 +87,7 @@ namespace MangaReader.Services
                 {
                     Arguments = UpdateFinished,
                     FileName = OriginalFilename,
-                    WorkingDirectory = Directory.GetCurrentDirectory()
+                    WorkingDirectory = Settings.WorkFolder
                 }
             };
             run.Start();

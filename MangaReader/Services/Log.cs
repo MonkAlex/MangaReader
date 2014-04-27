@@ -8,37 +8,45 @@ namespace MangaReader
         /// <summary>
         /// Указатель блокировки лог файла.
         /// </summary>
-        private static object logLock = new object();
+        private static readonly object LogLock = new object();
 
         /// <summary>
         /// Ссылка на файл лога.
         /// </summary>
-        private static string logPath = @".\manga.log";
+        private static readonly string LogPath = Settings.WorkFolder + @".\manga.log";
 
         /// <summary>
-        /// Уровень события.
+        /// Добавление записи в лог.
         /// </summary>
-        public enum Level
+        /// <param name="messages">Сообщение.</param>
+        public static void Add(params string[] messages)
         {
-            None,
-            Information,
-            Warning,
-            Error
+            lock (LogLock)
+            {
+                File.AppendAllText(LogPath,
+                    string.Concat(DateTime.Now,
+                        "   ",
+                        string.Join(Environment.NewLine, messages),
+                        Environment.NewLine),
+                    System.Text.Encoding.UTF8);
+            }
         }
 
         /// <summary>
         /// Добавление записи в лог.
         /// </summary>
-        /// <param name="message">Сообщение.</param>
-        /// <param name="logLevel">Уровень события.</param>
-        public static void Add(string message, Level logLevel = Level.None)
+        /// <param name="ex">Исключение.</param>
+        /// <param name="messages">Сообщение.</param>
+        public static void Exception(Exception ex, params string[] messages)
         {
-            lock (logLock)
+            lock (LogLock)
             {
-                File.AppendAllText(logPath,
+                File.AppendAllText(LogPath,
                     string.Concat(DateTime.Now,
                         "   ",
-                        message,
+                        string.Join(Environment.NewLine, messages),
+                        "   ",
+                        ex.ToString(),
                         Environment.NewLine),
                     System.Text.Encoding.UTF8);
             }

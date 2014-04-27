@@ -54,9 +54,8 @@ namespace MangaReader
         /// <returns>Список глав.</returns>
         public List<Chapter> GetAllChapters()
         {
-            if (allChapters == null)
-                allChapters = listOfChapters.Select(link => new Chapter(link.Key, link.Value)).ToList();
-            return allChapters;
+            return allChapters ??
+                   (allChapters = listOfChapters.Select(link => new Chapter(link.Key, link.Value)).ToList());
         }
 
         /// <summary>
@@ -93,11 +92,11 @@ namespace MangaReader
             catch (AggregateException ae)
             {
                 foreach (var ex in ae.InnerExceptions)
-                    Log.Add(ex.ToString());
+                    Log.Exception(ex);
             }
             catch (Exception ex)
             {
-                Log.Add(ex.ToString());
+                Log.Exception(ex);
             }
         }
 

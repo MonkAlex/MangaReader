@@ -21,7 +21,7 @@ namespace MangaReader
                 }
                 catch (Exception ex)
                 {
-                    Log.Add(ex.ToString());
+                    Log.Exception(ex);
                     return string.Empty;
                 }
         }
@@ -33,8 +33,8 @@ namespace MangaReader
         /// <returns>Исправленное имя файла.</returns>
         public static string MakeValidFileName(string name)
         {
-            string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
-            string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
+            var invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
+            var invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
 
             return Regex.Replace(name, invalidRegStr, "_");
         }
@@ -49,8 +49,8 @@ namespace MangaReader
             //TODO: Символ ":" в абсолютном пути должен быть не более одного раза, и то не всегда.
             if (!Path.IsPathRooted(name))
                 name = name.Replace(":", "");
-            string invalidChars = Regex.Escape(new string(Path.GetInvalidPathChars()));
-            string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
+            var invalidChars = Regex.Escape(new string(Path.GetInvalidPathChars()));
+            var invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
 
             return Regex.Replace(name, invalidRegStr, "_");
         }

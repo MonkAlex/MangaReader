@@ -79,7 +79,8 @@ namespace MangaReader
             // Формируем путь к главе вида Папка_манги\Том_001\Глава_0001
             try
             {
-                Parallel.ForEach(newChapters, ch => ch.Download(string.Concat(mangaFolder,
+                Parallel.ForEach(newChapters,
+                    ch => ch.Download(string.Concat(mangaFolder,
                     "\\",
                     volumePrefix,
                     ch.Volume.ToString().PadLeft(3, '0'),

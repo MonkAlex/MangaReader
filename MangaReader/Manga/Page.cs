@@ -46,13 +46,21 @@ namespace MangaReader
         /// <returns>Исправленный путь.</returns>
         public static string MakeValidPath(string name)
         {
-            //TODO: Символ ":" в абсолютном пути должен быть не более одного раза, и то не всегда.
-            if (!Path.IsPathRooted(name))
-                name = name.Replace(":", "");
+            const string replacement = "_";
+            var matchesCount = Regex.Matches(name, @":\\").Count;
+            string correctName;
+            if (matchesCount > 0)
+            {
+                var regex = new Regex(@":", RegexOptions.RightToLeft);
+                correctName = regex.Replace(name, replacement, regex.Matches(name).Count - matchesCount);
+            }
+            else
+                correctName = name.Replace(":", replacement);
+
             var invalidChars = Regex.Escape(new string(Path.GetInvalidPathChars()));
             var invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
 
-            return Regex.Replace(name, invalidRegStr, "_");
+            return Regex.Replace(correctName, invalidRegStr, replacement);
         }
     }
 }

@@ -13,6 +13,11 @@ namespace MangaReader
     public class Chapter
     {
         /// <summary>
+        /// Количество запусков загрузки.
+        /// </summary>
+        private int counter;
+
+        /// <summary>
         /// Хранилище ссылок на изображения.
         /// </summary>
         private List<string> listOfImageLink;
@@ -43,6 +48,9 @@ namespace MangaReader
         /// <param name="chapterFolder">Папка для файлов.</param>
         public void Download(string chapterFolder)
         {
+            if (counter > 3)
+                throw new Exception(string.Format("Load failed after {0} counts.", counter));
+
             if (listOfImageLink == null)
                 GetAllImagesLink();
 
@@ -64,7 +72,7 @@ namespace MangaReader
                     File.WriteAllBytes(chFile, webclient.DownloadData(chLink));
                     return webclient;
                 },
-                    (webclient) => { });
+                    webclient => { });
 
                 History.Add(this.Url);
             }
@@ -72,6 +80,8 @@ namespace MangaReader
             {
                 foreach (var ex in ae.InnerExceptions)
                     Log.Exception(ex, this.Url, this.Name, chLink, chFile);
+                ++counter;
+                Download(chapterFolder);
             }
             catch (Exception ex)
             {
@@ -96,6 +106,7 @@ namespace MangaReader
         {
             this.Url = url;
             this.Name = desc;
+            this.counter = 0;
             this.Volume = Convert.ToInt32(Regex.Match(url, @"vol[-]?[0-9]+").Value.Remove(0, 3));
             this.Number = Convert.ToInt32(Regex.Match(url, @"/[-]?[0-9]+", RegexOptions.RightToLeft).Value.Remove(0, 1));
         }

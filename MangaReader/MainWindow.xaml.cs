@@ -37,7 +37,11 @@ namespace MangaReader
 
         private void Compess_click(object sender, RoutedEventArgs e)
         {
-            var folder = @"E:\Docs\Visual Studio 2010\Projects\MangaReader\MangaReader\bin\Debug\Download\The God of Poverty Is!";
+            Settings.Update = true;
+            Settings.Language = Settings.Languages.English;
+            var manga = new Manga("http://readmanga.me/the_breaker__new_waves");
+            var folder = @"E:\Docs\Visual Studio 2010\Projects\MangaReader\MangaReader\bin\Debug\Download\" + manga.Name;
+            manga.Download(folder, "Volume_", "Chapter_");
             Comperssion.ComperssVolumes(folder);
         }
     }

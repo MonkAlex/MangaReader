@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -12,10 +11,12 @@ namespace MangaReader
     /// </summary>
     public class Chapter
     {
+        #region Свойства
+
         /// <summary>
-        /// Количество запусков загрузки.
+        /// Количество перезапусков загрузки.
         /// </summary>
-        private int counter;
+        private int restartCounter;
 
         /// <summary>
         /// Хранилище ссылок на изображения.
@@ -42,20 +43,21 @@ namespace MangaReader
         /// </summary>
         public int Volume;
 
+        #endregion
+
+        #region Методы
+
         /// <summary>
         /// Скачать главу.
         /// </summary>
         /// <param name="chapterFolder">Папка для файлов.</param>
         public void Download(string chapterFolder)
         {
-            if (counter > 3)
-                throw new Exception(string.Format("Load failed after {0} counts.", counter));
+            if (restartCounter > 3)
+                throw new Exception(string.Format("Load failed after {0} counts.", restartCounter));
 
             if (listOfImageLink == null)
                 GetAllImagesLink();
-
-            var chLink = string.Empty;
-            var chFile = string.Empty;
 
             try
             {
@@ -63,24 +65,21 @@ namespace MangaReader
                 if (!Directory.Exists(chapterFolder))
                     Directory.CreateDirectory(chapterFolder);
 
-                Parallel.ForEach(listOfImageLink,
-                    () => new WebClient(),
-                    (link, loopstate, webclient) =>
+                Parallel.ForEach(listOfImageLink, link =>
                 {
-                    chLink = link;
-                    chFile = string.Concat(chapterFolder, "\\", Path.GetFileName(chLink));
-                    File.WriteAllBytes(chFile, webclient.DownloadData(chLink));
-                    return webclient;
-                },
-                    webclient => { });
+                    var file = Page.DownloadFile(link);
+                    if (file == null)
+                        throw new Exception("Restart chapter download, downloaded file is corrupted.");
+                    File.WriteAllBytes(string.Concat(chapterFolder, "\\", Path.GetFileName(link)), file);
+                });
 
                 History.Add(this.Url);
             }
             catch (AggregateException ae)
             {
                 foreach (var ex in ae.InnerExceptions)
-                    Log.Exception(ex, this.Url, this.Name, chLink, chFile);
-                ++counter;
+                    Log.Exception(ex, this.Url, this.Name);
+                ++restartCounter;
                 Download(chapterFolder);
             }
             catch (Exception ex)
@@ -97,6 +96,10 @@ namespace MangaReader
             this.listOfImageLink = Getter.GetImagesLink(this.Url);
         }
 
+        #endregion
+
+        #region Конструктор
+
         /// <summary>
         /// Глава манги.
         /// </summary>
@@ -106,9 +109,12 @@ namespace MangaReader
         {
             this.Url = url;
             this.Name = desc;
-            this.counter = 0;
+            this.restartCounter = 0;
             this.Volume = Convert.ToInt32(Regex.Match(url, @"vol[-]?[0-9]+").Value.Remove(0, 3));
             this.Number = Convert.ToInt32(Regex.Match(url, @"/[-]?[0-9]+", RegexOptions.RightToLeft).Value.Remove(0, 1));
         }
+
+        #endregion
+
     }
 }

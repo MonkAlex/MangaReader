@@ -28,7 +28,7 @@ namespace MangaReader
         /// <summary>
         /// Закешированный список глав.
         /// </summary>
-        private List<Chapter> allChapters = null;
+        private List<Chapter> allChapters;
 
         /// <summary>
         /// Список глав, ссылка-описание.
@@ -63,7 +63,6 @@ namespace MangaReader
         /// </summary>
         public void Download(string mangaFolder, string volumePrefix, string chapterPrefix)
         {
-            Log.Add("Download start " + this.Name);
             if (allChapters == null)
                 GetAllChapters();
 
@@ -75,6 +74,11 @@ namespace MangaReader
                     .Where(ch => !messages.Contains(ch.Url))
                     .ToList();
             }
+
+            if (newChapters.Count == 0)
+                return;
+
+            Log.Add("Download start " + this.Name);
 
             // Формируем путь к главе вида Папка_манги\Том_001\Глава_0001
             try

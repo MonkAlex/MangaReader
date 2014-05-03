@@ -11,9 +11,19 @@ namespace MangaReader
         private static readonly object LogLock = new object();
 
         /// <summary>
+        /// Указатель блокировки лог файла исключений.
+        /// </summary>
+        private static readonly object ExceptionLock = new object();
+
+        /// <summary>
         /// Ссылка на файл лога.
         /// </summary>
         private static readonly string LogPath = Settings.WorkFolder + @".\manga.log";
+
+        /// <summary>
+        /// Ссылка на файл лога исключений.
+        /// </summary>
+        private static readonly string ExceptionPath = Settings.WorkFolder + @".\exception.log";
 
         /// <summary>
         /// Добавление записи в лог.
@@ -39,13 +49,13 @@ namespace MangaReader
         /// <param name="messages">Сообщение.</param>
         public static void Exception(Exception ex, params string[] messages)
         {
-            lock (LogLock)
+            lock (ExceptionLock)
             {
-                File.AppendAllText(LogPath,
+                File.AppendAllText(ExceptionPath,
                     string.Concat(DateTime.Now,
                         "   ",
                         string.Join(Environment.NewLine, messages),
-                        "   ",
+                        Environment.NewLine,
                         ex.ToString(),
                         Environment.NewLine),
                     System.Text.Encoding.UTF8);

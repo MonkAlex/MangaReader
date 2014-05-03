@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -7,6 +8,33 @@ namespace MangaReader
 {
     public static class Page
     {
+        /// <summary>
+        /// Скачать файл.
+        /// </summary>
+        /// <param name="url">Ссылка на файл.</param>
+        /// <returns>Содержимое файла.</returns>
+        public static byte[] DownloadFile(string url)
+        {
+            Byte[] result;
+            WebResponse response;
+            var request = WebRequest.Create(url);
+
+            try
+            {
+                response = request.GetResponse();
+                var ms = new MemoryStream();
+                response.GetResponseStream().CopyTo(ms);
+                result = ms.ToArray();
+                ms.Dispose();
+            }
+            catch
+            {
+                return null;
+            }
+
+            return response.ContentLength == result.LongLength ? result : null;
+        }
+
         /// <summary>
         /// Получить текст страницы.
         /// </summary>
@@ -16,7 +44,7 @@ namespace MangaReader
         {
                 try
                 {
-                    var webClient = new System.Net.WebClient { Encoding = Encoding.UTF8 };
+                    var webClient = new WebClient { Encoding = Encoding.UTF8 };
                     return webClient.DownloadString(url);
                 }
                 catch (Exception ex)

@@ -70,7 +70,15 @@ namespace MangaReader
                     var file = Page.DownloadFile(link);
                     if (file == null)
                         throw new Exception("Restart chapter download, downloaded file is corrupted.");
-                    File.WriteAllBytes(string.Concat(chapterFolder, "\\", Path.GetFileName(link)), file);
+
+                    var fileName = listOfImageLink
+                        .FindIndex(l => l == link)
+                        .ToString()
+                        .PadLeft(4, '0') + 
+                        "." + 
+                        Page.GetImageExtension(file);
+
+                    File.WriteAllBytes(string.Concat(chapterFolder, "\\", fileName), file);
                 });
 
                 History.Add(this.Url);

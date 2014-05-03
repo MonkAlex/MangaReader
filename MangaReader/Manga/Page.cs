@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -8,6 +9,18 @@ namespace MangaReader
 {
     public static class Page
     {
+
+        /// <summary>
+        /// Получить расширение изображения.
+        /// </summary>
+        /// <param name="image">Изображение.</param>
+        /// <returns>Строка с типом картинки.</returns>
+        public static string GetImageExtension(byte[] image)
+        {
+            var created = Image.FromStream(new MemoryStream(image));
+            return new ImageFormatConverter().ConvertToString(created.RawFormat).ToLower();
+        }
+
         /// <summary>
         /// Скачать файл.
         /// </summary>

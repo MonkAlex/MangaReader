@@ -46,6 +46,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml" />
@@ -67,6 +68,7 @@
     </ApplicationDefinition>
     <Compile Include="Services\Comperssion.cs" />
     <Compile Include="Services\History.cs" />
+    <Compile Include="Services\Library.cs" />
     <Compile Include="Services\Settings.cs" />
     <Compile Include="Services\Update.cs" />
     <Page Include="MainWindow.xaml">

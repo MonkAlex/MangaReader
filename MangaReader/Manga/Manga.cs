@@ -10,6 +10,8 @@ namespace MangaReader
     /// </summary>
     public class Manga
     {
+        #region Свойства
+
         /// <summary>
         /// Название манги.
         /// </summary>
@@ -34,6 +36,10 @@ namespace MangaReader
         /// Список глав, ссылка-описание.
         /// </summary>
         private readonly Dictionary<string, string> listOfChapters;
+
+        #endregion
+
+        #region Методы
 
         /// <summary>
         /// Получить главу.
@@ -85,13 +91,13 @@ namespace MangaReader
             {
                 Parallel.ForEach(newChapters,
                     ch => ch.Download(string.Concat(mangaFolder,
-                    "\\",
-                    volumePrefix,
-                    ch.Volume.ToString().PadLeft(3, '0'),
-                    "\\",
-                    chapterPrefix,
-                    ch.Number.ToString().PadLeft(4, '0')
-                    )));
+                        "\\",
+                        volumePrefix,
+                        ch.Volume.ToString().PadLeft(3, '0'),
+                        "\\",
+                        chapterPrefix,
+                        ch.Number.ToString().PadLeft(4, '0')
+                        )));
                 Log.Add("Download end " + this.Name);
             }
             catch (AggregateException ae)
@@ -105,6 +111,14 @@ namespace MangaReader
             }
         }
 
+        #endregion
+
+        #region Конструктор
+
+        /// <summary>
+        /// Открыть мангу.
+        /// </summary>
+        /// <param name="url">Ссылка на мангу.</param>
         public Manga(string url)
         {
             this.Url = url;
@@ -112,5 +126,8 @@ namespace MangaReader
             this.Name = Getter.GetMangaName(page).ToString();
             this.listOfChapters = Getter.GetLinksOfMangaChapters(page, url);
         }
+
+        #endregion
+
     }
 }

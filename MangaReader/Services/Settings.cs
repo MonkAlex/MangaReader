@@ -20,6 +20,11 @@ namespace MangaReader
         public static string WorkFolder { get; set; }
 
         /// <summary>
+        /// Папка загрузки.
+        /// </summary>
+        public static string DownloadFolder { get; set; }
+
+        /// <summary>
         /// Доступные языки.
         /// </summary>
         public enum Languages
@@ -31,7 +36,7 @@ namespace MangaReader
 
         public Settings()
         {
-            throw new Exception("Use methods.");
+            throw new Exception("Use properties.");
         }
     }
 }

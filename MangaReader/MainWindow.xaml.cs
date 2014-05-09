@@ -1,8 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Windows;
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using MangaReader.Services;
 
 namespace MangaReader
@@ -14,26 +12,32 @@ namespace MangaReader
     {
         public MainWindow()
         {
-            Settings.WorkFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             Update.Initialize();
             InitializeComponent();
+            this.FormLibrary.ItemsSource = Library.DatabaseMangas;
         }
 
         private void Update_click(object sender, RoutedEventArgs e)
         {
-            Settings.DownloadFolder = @"E:\Docs\Visual Studio 2010\Projects\MangaReader\MangaReader\bin\Debug\Download\";
-            Settings.Language = Settings.Languages.English;
             Library.Update();
         }
 
-        private void Compess_click(object sender, RoutedEventArgs e)
+        private void Load_click(object sender, RoutedEventArgs e)
         {
-            Settings.Update = true;
-            Settings.Language = Settings.Languages.English;
-            var manga = new Manga("http://readmanga.me/nanohana_no_kare");
-            var folder = @"E:\Docs\Visual Studio 2010\Projects\MangaReader\MangaReader\bin\Debug\Download\" + manga.Name;
-            manga.Download(folder, "Volume_", "Chapter_");
-            Comperssion.ComperssVolumes(folder);
+            Library.GetMangas();
+        }
+
+        private void Mangas_clicked(object sender, MouseButtonEventArgs e)
+        {
+            var listBox = sender as ListBox;
+            if (listBox == null || listBox.SelectedItems.Count == 0)
+                return;
+
+            var manga = listBox.SelectedItem as Manga;
+            if (manga == null)
+                return;
+
+            Library.Update(manga, true);
         }
     }
 }

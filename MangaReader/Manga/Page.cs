@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -9,6 +10,21 @@ namespace MangaReader
 {
     public static class Page
     {
+
+        /// <summary>
+        /// Сжать изображение.
+        /// </summary>
+        /// <param name="image">Изображение.</param>
+        /// <returns>Сжатое изображение.</returns>
+        public static byte[] GetThumbnail(byte[] image)
+        {
+            var memory = new MemoryStream();
+            Image
+                .FromStream(new MemoryStream(image))
+                .GetThumbnailImage(128, 200, null, new IntPtr())
+                .Save(memory, ImageFormat.Png);
+            return memory.ToArray();
+        }
 
         /// <summary>
         /// Получить расширение изображения.

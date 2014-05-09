@@ -28,6 +28,11 @@ namespace MangaReader
         public string Status { get; private set; }
 
         /// <summary>
+        /// Обложка.
+        /// </summary>
+        public byte[] Cover { get; set; }
+
+        /// <summary>
         /// Закешированный список глав.
         /// </summary>
         private List<Chapter> allChapters;
@@ -67,8 +72,13 @@ namespace MangaReader
         /// <summary>
         /// Скачать все главы.
         /// </summary>
-        public void Download(string mangaFolder, string volumePrefix, string chapterPrefix)
+        public void Download(string mangaFolder, string volumePrefix = null, string chapterPrefix = null)
         {
+            if (volumePrefix == null)
+                volumePrefix = Settings.VolumePrefix;
+            if (chapterPrefix == null)
+                chapterPrefix = Settings.ChapterPrefix;
+
             if (allChapters == null)
                 GetAllChapters();
 
@@ -81,7 +91,7 @@ namespace MangaReader
                     .ToList();
             }
 
-            if (newChapters.Count == 0)
+            if (!newChapters.Any())
                 return;
 
             Log.Add("Download start " + this.Name);
@@ -125,6 +135,7 @@ namespace MangaReader
             var page = Page.GetPage(url);
             this.Name = Getter.GetMangaName(page).ToString();
             this.listOfChapters = Getter.GetLinksOfMangaChapters(page, url);
+            this.Cover = Getter.GetMangaCover(page);
         }
 
         #endregion

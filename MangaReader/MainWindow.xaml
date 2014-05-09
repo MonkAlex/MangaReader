@@ -1,9 +1,44 @@
 ﻿<Window x:Class="MangaReader.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local ="clr-namespace:MangaReader"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <Button Content="Update" Height="23" HorizontalAlignment="Left" Margin="48,62,0,0" Name="UpdateButton" VerticalAlignment="Top" Width="75" Click="Update_click" />
-        <Button Content="Compress" Height="23" HorizontalAlignment="Left" Margin="170,62,0,0" x:Name="CompressButton" VerticalAlignment="Top" Width="75" Click="Compess_click" />
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type local:Manga}">
+            <StackPanel>
+                <Image Source="{Binding Path=Cover}"/>
+                <TextBlock Text="{Binding Path=Name}"/>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid Name="MainGrid">
+        <Button Content="Update" 
+                Margin="0,0,100,5" 
+                x:Name="UpdateButton" 
+                Click="Update_click" 
+                VerticalAlignment="Bottom" 
+                HorizontalAlignment="Right" 
+                Height="25" 
+                Width="75"/>
+        <Button Content="Load" 
+                Margin="0,0,20,5" 
+                x:Name="LoadButton" 
+                Click="Load_click" 
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right"
+                Height="25" 
+                Width="75"/> 
+        <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                 MouseDoubleClick="Mangas_clicked" 
+                 x:Name="FormLibrary" 
+                 Margin="10,10,10.4,38.4">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True"
+                               ItemWidth="140"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
     </Grid>
 </Window>

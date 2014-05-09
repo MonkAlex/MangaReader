@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 
@@ -12,21 +13,44 @@ namespace MangaReader
         private static readonly string Database = Settings.WorkFolder + @".\db";
 
         /// <summary>
+        /// Манга в библиотеке.
+        /// </summary>
+        public static ObservableCollection<Manga> DatabaseMangas = new ObservableCollection<Manga>();
+
+        /// <summary>
+        /// Получить мангу в базе.
+        /// </summary>
+        /// <returns>Манга.</returns>
+        public static ObservableCollection<Manga> GetMangas()
+        {
+            if (!File.Exists(Database))
+                return null;
+
+            if (DatabaseMangas.Any())
+                return DatabaseMangas;
+            
+            foreach (var line in File.ReadAllLines(Database))
+            {
+                DatabaseMangas.Add(new Manga(line));
+            }
+            return DatabaseMangas;
+        }
+
+        /// <summary>
         /// Обновить мангу.
         /// </summary>
         /// <param name="needCompress">Сжимать скачанное?</param>
-        public static void Update(bool needCompress = true)
+        /// <param name="manga">Обновляемая манга. По умолчанию - вся.</param>
+        public static void Update(Manga manga = null, bool needCompress = true)
         {
             Settings.Update = true;
 
-            if (!File.Exists(Database))
-                return;
+            var mangas = manga == null ? GetMangas() : new ObservableCollection<Manga> { manga };
 
-            var links = File.ReadAllLines(Database);
-            foreach (var manga in links.Select(link => new Manga(link)))
+            foreach (var current in mangas)
             {
-                var folder = Settings.DownloadFolder + "\\" + manga.Name;
-                manga.Download(folder, "Volume_", "Chapter_");
+                var folder = Settings.DownloadFolder + "\\" + current.Name;
+                current.Download(folder);
                 if (needCompress)
                     Comperssion.ComperssVolumes(folder);
             }

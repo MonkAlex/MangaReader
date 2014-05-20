@@ -15,17 +15,17 @@ namespace MangaReader
         /// <summary>
         /// Название манги.
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Ссылка на мангу.
         /// </summary>
-        public string Url { get; private set; }
+        public string Url { get; set; }
 
         /// <summary>
         /// Статус перевода.
         /// </summary>
-        public string Status { get; private set; }
+        public string Status { get; set; }
 
         /// <summary>
         /// Обложка.
@@ -55,20 +55,6 @@ namespace MangaReader
             this.Name = Getter.GetMangaName(page).ToString();
             this.listOfChapters = Getter.GetLinksOfMangaChapters(page, this.Url);
             this.Cover = Getter.GetMangaCover(page);
-            Cache.Add(this);
-        }
-
-        /// <summary>
-        /// Получить главу.
-        /// </summary>
-        /// <param name="chapterUrl">Ссылка на главу.</param>
-        /// <returns>Глава.</returns>
-        public Chapter GetChapter(string chapterUrl)
-        {
-            return listOfChapters
-                .Where(ch => ch.Key == chapterUrl)
-                .Select(ch => new Chapter(ch.Key, ch.Value))
-                .FirstOrDefault();
         }
 
         /// <summary>
@@ -77,6 +63,8 @@ namespace MangaReader
         /// <returns>Список глав.</returns>
         public List<Chapter> GetAllChapters()
         {
+            if (listOfChapters == null)
+                listOfChapters = Getter.GetLinksOfMangaChapters(Page.GetPage(this.Url), this.Url);
             return allChapters ??
                    (allChapters = listOfChapters.Select(link => new Chapter(link.Key, link.Value)).ToList());
         }
@@ -146,6 +134,8 @@ namespace MangaReader
             this.Url = url;
             this.Refresh();
         }
+
+        public Manga() { }
 
         #endregion
 

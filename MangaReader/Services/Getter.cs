@@ -60,7 +60,7 @@ namespace MangaReader
                 Log.Exception(ex);
                 return null;
             }
-            catch (ArgumentNullException ex)
+            catch (ArgumentNullException)
             {
                 return null;
             }

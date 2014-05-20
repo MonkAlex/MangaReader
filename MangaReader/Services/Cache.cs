@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Xml.Serialization;
 
 
 namespace MangaReader
@@ -16,16 +15,17 @@ namespace MangaReader
         /// <summary>
         /// Ссылка на файл лога.
         /// </summary>
-        private static readonly string CachePath = Settings.WorkFolder + @".\Cache\";
+        private static readonly string CacheFile = Settings.WorkFolder + @".\Cache";
+
+        private static ObservableCollection<Manga> CachedMangas;
 
         /// <summary>
-        /// Добавление манги в кеш.
+        /// Сохранить кеш на диск.
         /// </summary>
-        /// <param name="manga">Манга.</param>
-        public static void Add(Manga manga)
+        public static void Save()
         {
             lock (CacheLock)
-                Serializer<Manga>.Save(CachePath + manga.Name, manga);
+                Serializer<ObservableCollection<Manga>>.Save(CacheFile, CachedMangas);
         }
 
         /// <summary>
@@ -35,23 +35,7 @@ namespace MangaReader
         public static void Add(ObservableCollection<Manga> mangas)
         {
             lock (CacheLock)
-                foreach (var manga in mangas)
-                {
-                    Serializer<Manga>.Save(CachePath + manga.Name, manga);
-                }
-        }
-
-        /// <summary>
-        /// Получить мангу из кеша.
-        /// </summary>
-        /// <param name="name">Название манги.</param>
-        /// <returns>Манга.</returns>
-        public static Manga Get(string name)
-        {
-            lock (CacheLock)
-                if (File.Exists(CachePath + name))
-                    return Serializer<Manga>.Load(CachePath + name);
-            return null;
+              CachedMangas = mangas;
         }
 
         /// <summary>
@@ -62,48 +46,16 @@ namespace MangaReader
         {
             lock (CacheLock)
             {
-                if (!Directory.Exists(CachePath))
-                    return null;
-                var mangas = new ObservableCollection<Manga>();
-                foreach (var file in Directory.GetFiles(CachePath))
-                {
-                    mangas.Add(Serializer<Manga>.Load(file));
-                }
-                return mangas;
+                return CachedMangas ??
+                    (File.Exists(CacheFile) ?
+                    Serializer<ObservableCollection<Manga>>.Load(CacheFile) :
+                    null);
             }
         }
 
         public Cache()
         {
             throw new Exception("U shell not pass.");
-        }
-    }
-
-    public static class Serializer<T>
-    {
-        public static void Save(string path, T data)
-        {
-            var formatter = new XmlSerializer(typeof(T));
-
-            using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Write))
-            {
-                formatter.Serialize(stream, data);
-            }
-        }
-
-        public static T Load(string path)
-        {
-            Type type = typeof(T);
-            T retVal;
-
-            var formatter = new XmlSerializer(type);
-
-            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                retVal = (T)formatter.Deserialize(stream);
-            }
-
-            return retVal;
         }
     }
 }

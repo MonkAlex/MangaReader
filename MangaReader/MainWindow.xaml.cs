@@ -14,8 +14,7 @@ namespace MangaReader
         {
             Update.Initialize();
             InitializeComponent();
-            this.FormLibrary.ItemsSource = Library.DatabaseMangas;
-            Library.DatabaseMangas = Cache.Get();
+            this.FormLibrary.ItemsSource = Library.Initialize();
         }
 
         private void Update_click(object sender, RoutedEventArgs e)
@@ -43,8 +42,9 @@ namespace MangaReader
 
         private void Add_click(object sender, RoutedEventArgs e)
         {
-            //TODO: необходим ввод ссылки.
-            Library.Add("");
+            var db = new Input {Owner = this};
+            if (db.ShowDialog() == true)
+                Library.Add(db.Result.Text);
         }
     }
 }

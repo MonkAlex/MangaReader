@@ -66,12 +66,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Input.xaml.cs">
+      <DependentUpon>Input.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Serializer.cs" />
     <Compile Include="Services\Cache.cs" />
     <Compile Include="Services\Comperssion.cs" />
     <Compile Include="Services\History.cs" />
     <Compile Include="Services\Library.cs" />
     <Compile Include="Services\Settings.cs" />
     <Compile Include="Services\Update.cs" />
+    <Page Include="Input.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

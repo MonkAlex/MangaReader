@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MangaReader
 {
@@ -15,7 +16,23 @@ namespace MangaReader
         /// <summary>
         /// Манга в библиотеке.
         /// </summary>
-        public static ObservableCollection<Manga> DatabaseMangas = new ObservableCollection<Manga>();
+        public static ObservableCollection<Manga> DatabaseMangas = new ObservableCollection<Manga>(Enumerable.Empty<Manga>());
+
+        #region Методы
+
+        /// <summary>
+        /// Инициализация библиотеки - заполнение массива из кеша.
+        /// </summary>
+        /// <returns></returns>
+        public static ObservableCollection<Manga> Initialize()
+        {
+            foreach (var manga in Cache.Get())
+            {
+                DatabaseMangas.Add(manga);
+            }
+            DatabaseMangas.CollectionChanged += (s, e) => Cache.Add(DatabaseMangas);
+            return DatabaseMangas;
+        }
 
         /// <summary>
         /// Добавить мангу.
@@ -23,7 +40,7 @@ namespace MangaReader
         /// <param name="url"></param>
         public static void Add(string url)
         {
-            File.AppendAllLines(Database, new [] {url});
+            File.AppendAllLines(Database, new[] {url});
             DatabaseMangas.Add(new Manga(url));
         }
 
@@ -35,10 +52,10 @@ namespace MangaReader
         {
             if (!File.Exists(Database))
                 return null;
-            
+
             foreach (var line in File.ReadAllLines(Database))
             {
-                var manga = DatabaseMangas.FirstOrDefault(m => m.Url == line);
+                var manga = DatabaseMangas != null ? DatabaseMangas.FirstOrDefault(m => m.Url == line) : null;
                 if (manga == null)
                     DatabaseMangas.Add(new Manga(line));
                 else
@@ -60,16 +77,19 @@ namespace MangaReader
         {
             Settings.Update = true;
 
-            var mangas = manga == null ? GetMangas() : new ObservableCollection<Manga> { manga };
+            var mangas = manga == null ? GetMangas() : new ObservableCollection<Manga> {manga};
 
-            foreach (var current in mangas)
+            Parallel.ForEach(mangas, current =>
             {
                 var folder = Settings.DownloadFolder + "\\" + current.Name;
                 current.Download(folder);
                 if (needCompress)
                     Comperssion.ComperssVolumes(folder);
-            }
+            });
         }
+
+        #endregion
+
 
         public Library()
         {

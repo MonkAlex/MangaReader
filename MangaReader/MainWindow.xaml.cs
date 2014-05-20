@@ -40,5 +40,11 @@ namespace MangaReader
 
             Library.Update(manga, true);
         }
+
+        private void Add_click(object sender, RoutedEventArgs e)
+        {
+            //TODO: необходим ввод ссылки.
+            Library.Add("");
+        }
     }
 }

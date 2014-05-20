@@ -14,7 +14,7 @@
 
     <Grid Name="MainGrid">
         <Button Content="Update" 
-                Margin="0,0,100,5" 
+                Margin="0,0,180,5" 
                 x:Name="UpdateButton" 
                 Click="Update_click" 
                 VerticalAlignment="Bottom" 
@@ -22,13 +22,21 @@
                 Height="25" 
                 Width="75"/>
         <Button Content="Load" 
-                Margin="0,0,20,5" 
+                Margin="0,0,100,5" 
                 x:Name="LoadButton" 
                 Click="Load_click" 
                 VerticalAlignment="Bottom"
                 HorizontalAlignment="Right"
                 Height="25" 
-                Width="75"/> 
+                Width="75"/>
+        <Button Content="Add" 
+                Margin="0,0,20,5" 
+                x:Name="AddButton" 
+                Click="Add_click" 
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right"
+                Height="25" 
+                Width="75"/>
         <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                  MouseDoubleClick="Mangas_clicked" 
                  x:Name="FormLibrary" 

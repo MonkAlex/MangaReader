@@ -18,6 +18,16 @@ namespace MangaReader
         public static ObservableCollection<Manga> DatabaseMangas = new ObservableCollection<Manga>();
 
         /// <summary>
+        /// Добавить мангу.
+        /// </summary>
+        /// <param name="url"></param>
+        public static void Add(string url)
+        {
+            File.AppendAllLines(Database, new [] {url});
+            DatabaseMangas.Add(new Manga(url));
+        }
+
+        /// <summary>
         /// Получить мангу в базе.
         /// </summary>
         /// <returns>Манга.</returns>
@@ -25,15 +35,19 @@ namespace MangaReader
         {
             if (!File.Exists(Database))
                 return null;
-
-            if (DatabaseMangas.Any())
-                return DatabaseMangas;
             
             foreach (var line in File.ReadAllLines(Database))
             {
-                DatabaseMangas.Add(new Manga(line));
+                var manga = DatabaseMangas.FirstOrDefault(m => m.Url == line);
+                if (manga == null)
+                    DatabaseMangas.Add(new Manga(line));
+                else
+                {
+                    DatabaseMangas.Remove(manga);
+                    manga.Refresh();
+                    DatabaseMangas.Add(manga);
+                }
             }
-            Cache.Add(DatabaseMangas);
             return DatabaseMangas;
         }
 

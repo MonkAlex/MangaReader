@@ -55,6 +55,7 @@ namespace MangaReader
             this.Name = Getter.GetMangaName(page).ToString();
             this.listOfChapters = Getter.GetLinksOfMangaChapters(page, this.Url);
             this.Cover = Getter.GetMangaCover(page);
+            Cache.Add(this);
         }
 
         /// <summary>
@@ -144,19 +145,6 @@ namespace MangaReader
         {
             this.Url = url;
             this.Refresh();
-        }
-
-        /// <summary>
-        /// Оффлайн открытие манги.
-        /// </summary>
-        /// <param name="url">Ссылка на мангу.</param>
-        /// <param name="name">Название манги.</param>
-        /// <param name="cover">Обложка.</param>
-        public Manga(string url, string name, byte[] cover)
-        {
-            this.Url = url;
-            this.Name = name;
-            this.Cover = cover;
         }
 
         #endregion

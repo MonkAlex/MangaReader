@@ -66,6 +66,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Services\Cache.cs" />
     <Compile Include="Services\Comperssion.cs" />
     <Compile Include="Services\History.cs" />
     <Compile Include="Services\Library.cs" />

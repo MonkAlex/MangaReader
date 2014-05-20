@@ -33,6 +33,7 @@ namespace MangaReader
             {
                 DatabaseMangas.Add(new Manga(line));
             }
+            Cache.Add(DatabaseMangas);
             return DatabaseMangas;
         }
 

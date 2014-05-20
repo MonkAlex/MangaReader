@@ -15,6 +15,7 @@ namespace MangaReader
             Update.Initialize();
             InitializeComponent();
             this.FormLibrary.ItemsSource = Library.DatabaseMangas;
+            Library.DatabaseMangas = Cache.Get();
         }
 
         private void Update_click(object sender, RoutedEventArgs e)

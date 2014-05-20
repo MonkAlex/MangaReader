@@ -40,11 +40,22 @@ namespace MangaReader
         /// <summary>
         /// Список глав, ссылка-описание.
         /// </summary>
-        private readonly Dictionary<string, string> listOfChapters;
+        private Dictionary<string, string> listOfChapters;
 
         #endregion
 
         #region Методы
+
+        /// <summary>
+        /// Обновить информацию о манге - название, главы, обложка.
+        /// </summary>
+        public void Refresh()
+        {
+            var page = Page.GetPage(this.Url);
+            this.Name = Getter.GetMangaName(page).ToString();
+            this.listOfChapters = Getter.GetLinksOfMangaChapters(page, this.Url);
+            this.Cover = Getter.GetMangaCover(page);
+        }
 
         /// <summary>
         /// Получить главу.
@@ -132,10 +143,20 @@ namespace MangaReader
         public Manga(string url)
         {
             this.Url = url;
-            var page = Page.GetPage(url);
-            this.Name = Getter.GetMangaName(page).ToString();
-            this.listOfChapters = Getter.GetLinksOfMangaChapters(page, url);
-            this.Cover = Getter.GetMangaCover(page);
+            this.Refresh();
+        }
+
+        /// <summary>
+        /// Оффлайн открытие манги.
+        /// </summary>
+        /// <param name="url">Ссылка на мангу.</param>
+        /// <param name="name">Название манги.</param>
+        /// <param name="cover">Обложка.</param>
+        public Manga(string url, string name, byte[] cover)
+        {
+            this.Url = url;
+            this.Name = name;
+            this.Cover = cover;
         }
 
         #endregion

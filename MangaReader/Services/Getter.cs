@@ -97,8 +97,8 @@ namespace MangaReader
                     .ConvertAll(r => r.InnerText.Replace("\r\n", string.Empty).Trim())
                     .ToList();
             }
-            catch (NullReferenceException ex) { Log.Exception(ex, "Ошибка получения списка глав."); }
-            catch (ArgumentNullException ex) { Log.Exception(ex, "Главы не найдены."); }
+            catch (NullReferenceException ex) { Log.Exception(ex, "Ошибка получения списка глав.", url); }
+            catch (ArgumentNullException ex) { Log.Exception(ex, "Главы не найдены.", url); }
 
             for (var i = 0; i < links.Count; i++)
             {

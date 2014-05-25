@@ -33,6 +33,14 @@ namespace MangaReader
         public byte[] Cover { get; set; }
 
         /// <summary>
+        /// Статус корректности манги.
+        /// </summary>
+        public bool IsValid
+        {
+            get { return !string.IsNullOrWhiteSpace(this.Name) && this.listOfChapters != null && this.Cover != null; }
+        }
+
+        /// <summary>
         /// Закешированный список глав.
         /// </summary>
         private List<Chapter> allChapters;
@@ -52,6 +60,9 @@ namespace MangaReader
         public void Refresh()
         {
             var page = Page.GetPage(this.Url);
+            if (string.IsNullOrWhiteSpace(page))
+                return;
+
             this.Name = Getter.GetMangaName(page).ToString();
             this.listOfChapters = Getter.GetLinksOfMangaChapters(page, this.Url);
             this.Cover = Getter.GetMangaCover(page);

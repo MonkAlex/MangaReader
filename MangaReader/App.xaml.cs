@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace MangaReader
 {
@@ -10,6 +11,7 @@ namespace MangaReader
         private void App_OnExit(object sender, ExitEventArgs e)
         {
             Cache.Save();
+            Environment.Exit(0);
         }
     }
 }

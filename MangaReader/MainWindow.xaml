@@ -48,5 +48,6 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
+        <StatusBar HorizontalAlignment="Right" Margin="0,0,260,5" Width="240" Height="25" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 
 
 namespace MangaReader
@@ -49,7 +50,7 @@ namespace MangaReader
                 return CachedMangas ??
                     (File.Exists(CacheFile) ?
                     Serializer<ObservableCollection<Manga>>.Load(CacheFile) :
-                    null);
+                    new ObservableCollection<Manga>(Enumerable.Empty<Manga>()));
             }
         }
 

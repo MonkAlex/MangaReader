@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace MangaReader
 {
@@ -18,6 +21,11 @@ namespace MangaReader
         /// </summary>
         public static ObservableCollection<Manga> DatabaseMangas = new ObservableCollection<Manga>(Enumerable.Empty<Manga>());
 
+        /// <summary>
+        /// Служба управления UI главного окна.
+        /// </summary>
+        private static Dispatcher formDispatcher;
+
         #region Методы
 
         /// <summary>
@@ -31,6 +39,7 @@ namespace MangaReader
                 DatabaseMangas.Add(manga);
             }
             DatabaseMangas.CollectionChanged += (s, e) => Cache.Add(DatabaseMangas);
+            formDispatcher = Dispatcher.CurrentDispatcher;
             return DatabaseMangas;
         }
 
@@ -40,8 +49,25 @@ namespace MangaReader
         /// <param name="url"></param>
         public static void Add(string url)
         {
+            IEnumerable<string> database = new string[] { };
+            var urlExist = false;
+            if (File.Exists(Database))
+                database = File.ReadAllLines(Database);
+            if (!string.IsNullOrWhiteSpace(url))
+                urlExist = database.Any(m => CultureInfo
+                    .InvariantCulture
+                    .CompareInfo
+                    .Compare(m, url, CompareOptions.IgnoreCase) == 0);
+
+            if (urlExist)
+                return;
+
+            var newManga = new Manga(url);
+            if (!newManga.IsValid)
+                return;
+
             File.AppendAllLines(Database, new[] {url});
-            DatabaseMangas.Add(new Manga(url));
+            formDispatcher.Invoke(() => DatabaseMangas.Add(newManga));
         }
 
         /// <summary>
@@ -57,12 +83,19 @@ namespace MangaReader
             {
                 var manga = DatabaseMangas != null ? DatabaseMangas.FirstOrDefault(m => m.Url == line) : null;
                 if (manga == null)
-                    DatabaseMangas.Add(new Manga(line));
+                {
+                    var newManga = new Manga(line);
+                    formDispatcher.Invoke(() => DatabaseMangas.Add(newManga));
+                }
                 else
                 {
-                    DatabaseMangas.Remove(manga);
+                    var index = DatabaseMangas.IndexOf(manga);
                     manga.Refresh();
-                    DatabaseMangas.Add(manga);
+                    formDispatcher.Invoke(() =>
+                    {
+                        DatabaseMangas.RemoveAt(index);
+                        DatabaseMangas.Insert(index, manga);
+                    });
                 }
             }
             return DatabaseMangas;
@@ -77,7 +110,7 @@ namespace MangaReader
         {
             Settings.Update = true;
 
-            var mangas = manga == null ? GetMangas() : new ObservableCollection<Manga> {manga};
+            var mangas = manga == null ? GetMangas() : new ObservableCollection<Manga> { manga };
 
             Parallel.ForEach(mangas, current =>
             {

@@ -71,16 +71,21 @@ namespace MangaReader
         /// <returns>Исходный код страницы.</returns>
         public static string GetPage(string url)
         {
-                try
-                {
-                    var webClient = new WebClient { Encoding = Encoding.UTF8 };
-                    return webClient.DownloadString(url);
-                }
-                catch (Exception ex)
-                {
-                    Log.Exception(ex);
-                    return string.Empty;
-                }
+            try
+            {
+                var webClient = new WebClient { Encoding = Encoding.UTF8 };
+                return webClient.DownloadString(new Uri(url));
+            }
+            catch (UriFormatException ex)
+            {
+                Log.Exception(ex, "Некорректная ссылка:", url);
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                Log.Exception(ex);
+                return string.Empty;
+            }
         }
 
         /// <summary>

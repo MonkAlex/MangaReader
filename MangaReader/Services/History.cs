@@ -61,7 +61,7 @@ namespace MangaReader
             lock (HistoryLock)
                 if (File.Exists(HistoryPath))
                     history = File.ReadAllLines(HistoryPath);
-            if (message != null)
+            if (!string.IsNullOrWhiteSpace(message))
                 return history.Any(m => CultureInfo
                     .InvariantCulture
                     .CompareInfo

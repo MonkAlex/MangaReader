@@ -14,19 +14,11 @@
 
     <Grid Name="MainGrid">
         <Button Content="Update" 
-                Margin="0,0,180,5" 
+                Margin="0,0,100,5" 
                 x:Name="UpdateButton" 
                 Click="Update_click" 
                 VerticalAlignment="Bottom" 
                 HorizontalAlignment="Right" 
-                Height="25" 
-                Width="75"/>
-        <Button Content="Load" 
-                Margin="0,0,100,5" 
-                x:Name="LoadButton" 
-                Click="Load_click" 
-                VerticalAlignment="Bottom"
-                HorizontalAlignment="Right"
                 Height="25" 
                 Width="75"/>
         <Button Content="Add" 
@@ -48,6 +40,13 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
-        <StatusBar HorizontalAlignment="Right" Margin="0,0,260,5" Width="240" Height="25" VerticalAlignment="Bottom"/>
+        <StatusBar x:Name="StatusBar"
+                   Margin="18,0,180.4,5.4" 
+                   Height="25" 
+                   VerticalAlignment="Bottom">
+            <StatusBarItem>
+                <TextBlock x:Name="TextBlock" TextAlignment="Center"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>

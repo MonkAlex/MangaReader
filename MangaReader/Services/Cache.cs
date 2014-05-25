@@ -36,7 +36,7 @@ namespace MangaReader
         public static void Add(ObservableCollection<Manga> mangas)
         {
             lock (CacheLock)
-              CachedMangas = mangas;
+                CachedMangas = mangas;
         }
 
         /// <summary>
@@ -47,10 +47,11 @@ namespace MangaReader
         {
             lock (CacheLock)
             {
-                return CachedMangas ??
+                CachedMangas = CachedMangas ??
                     (File.Exists(CacheFile) ?
                     Serializer<ObservableCollection<Manga>>.Load(CacheFile) :
                     new ObservableCollection<Manga>(Enumerable.Empty<Manga>()));
+                return CachedMangas;
             }
         }
 

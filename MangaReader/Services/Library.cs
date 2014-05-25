@@ -22,6 +22,11 @@ namespace MangaReader
         public static ObservableCollection<Manga> DatabaseMangas = new ObservableCollection<Manga>(Enumerable.Empty<Manga>());
 
         /// <summary>
+        /// Статус библиотеки.
+        /// </summary>
+        public static string Status = string.Empty;
+
+        /// <summary>
         /// Служба управления UI главного окна.
         /// </summary>
         private static Dispatcher formDispatcher;
@@ -66,8 +71,9 @@ namespace MangaReader
             if (!newManga.IsValid)
                 return;
 
-            File.AppendAllLines(Database, new[] {url});
+            File.AppendAllLines(Database, new[] { url });
             formDispatcher.Invoke(() => DatabaseMangas.Add(newManga));
+            Status = "Добавлена манга " + newManga.Name;
         }
 
         /// <summary>
@@ -81,24 +87,33 @@ namespace MangaReader
 
             foreach (var line in File.ReadAllLines(Database))
             {
-                var manga = DatabaseMangas != null ? DatabaseMangas.FirstOrDefault(m => m.Url == line) : null;
-                if (manga == null)
-                {
-                    var newManga = new Manga(line);
-                    formDispatcher.Invoke(() => DatabaseMangas.Add(newManga));
-                }
-                else
-                {
-                    var index = DatabaseMangas.IndexOf(manga);
-                    manga.Refresh();
-                    formDispatcher.Invoke(() =>
-                    {
-                        DatabaseMangas.RemoveAt(index);
-                        DatabaseMangas.Insert(index, manga);
-                    });
-                }
+                UpdateMangaByUrl(line);
             }
             return DatabaseMangas;
+        }
+
+        /// <summary>
+        /// Обновить состояние манги в библиотеке.
+        /// </summary>
+        /// <param name="line">Ссылка на мангу.</param>
+        private static void UpdateMangaByUrl(string line)
+        {
+            var manga = DatabaseMangas != null ? DatabaseMangas.FirstOrDefault(m => m.Url == line) : null;
+            if (manga == null)
+            {
+                var newManga = new Manga(line);
+                formDispatcher.Invoke(() => DatabaseMangas.Add(newManga));
+            }
+            else
+            {
+                var index = DatabaseMangas.IndexOf(manga);
+                manga.Refresh();
+                formDispatcher.Invoke(() =>
+                {
+                    DatabaseMangas.RemoveAt(index);
+                    DatabaseMangas.Insert(index, manga);
+                });
+            }
         }
 
         /// <summary>
@@ -110,15 +125,43 @@ namespace MangaReader
         {
             Settings.Update = true;
 
-            var mangas = manga == null ? GetMangas() : new ObservableCollection<Manga> { manga };
-
-            Parallel.ForEach(mangas, current =>
+            ObservableCollection<Manga> mangas;
+            if (manga != null)
             {
-                var folder = Settings.DownloadFolder + "\\" + current.Name;
-                current.Download(folder);
-                if (needCompress)
-                    Comperssion.ComperssVolumes(folder);
-            });
+                Status = "Обновление " + manga.Name;
+                UpdateMangaByUrl(manga.Url);
+                mangas = new ObservableCollection<Manga> { manga };
+            }
+            else
+            {
+                Status = "Обновление манги";
+                mangas = GetMangas();
+            }
+
+            try
+            {
+                Parallel.ForEach(mangas, current =>
+                {
+                    var folder = Settings.DownloadFolder + "\\" + current.Name;
+                    current.Download(folder);
+                    if (needCompress)
+                        Comperssion.ComperssVolumes(folder);
+                });
+            }
+            catch (AggregateException ae)
+            {
+                foreach (var ex in ae.InnerExceptions)
+                    Log.Exception(ex);
+            }
+            catch (Exception ex)
+            {
+                Log.Exception(ex);
+            }
+            finally
+            {
+                Status = "Обновление манги завершено";
+            }
+
         }
 
         #endregion

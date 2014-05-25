@@ -34,23 +34,15 @@ namespace MangaReader
         public void Initialize()
         {
             timer = new DispatcherTimer(new TimeSpan(0, 0, 1),
-            DispatcherPriority.Background,
-            TimerTick,
-            Dispatcher.CurrentDispatcher);
+                DispatcherPriority.Background,
+                TimerTick,
+                Dispatcher.CurrentDispatcher);
         }
 
         private void Update_click(object sender, RoutedEventArgs e)
         {
             if (loadThread == null || loadThread.ThreadState == ThreadState.Stopped)
                 loadThread = new Thread(() => Library.Update());
-            if (loadThread.ThreadState == ThreadState.Unstarted)
-                loadThread.Start();
-        }
-
-        private void Load_click(object sender, RoutedEventArgs e)
-        {
-            if (loadThread == null || loadThread.ThreadState == ThreadState.Stopped)
-                loadThread = new Thread(() => Library.GetMangas());
             if (loadThread.ThreadState == ThreadState.Unstarted)
                 loadThread.Start();
         }
@@ -65,7 +57,10 @@ namespace MangaReader
             if (manga == null)
                 return;
 
-            Library.Update(manga, true);
+            if (loadThread == null || loadThread.ThreadState == ThreadState.Stopped)
+                loadThread = new Thread(() => Library.Update(manga, true));
+            if (loadThread.ThreadState == ThreadState.Unstarted)
+                loadThread.Start();
         }
 
         private void Add_click(object sender, RoutedEventArgs e)
@@ -78,9 +73,10 @@ namespace MangaReader
         private void TimerTick(object sender, EventArgs e)
         {
             var isEnabled = loadThread == null || loadThread.ThreadState == ThreadState.Stopped;
-            LoadButton.IsEnabled = isEnabled;
+            this.TextBlock.Text = Library.Status;
             UpdateButton.IsEnabled = isEnabled;
             AddButton.IsEnabled = isEnabled;
+            FormLibrary.IsEnabled = isEnabled;
         }
     }
 }

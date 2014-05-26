@@ -14,17 +14,20 @@ namespace MangaReader
         /// <param name="message">Папка манги.</param>
         public static void ComperssChapters(string message)
         {
-            message = Page.MakeValidPath(message);
+            message = Page.MakeValidPath(message) + "\\";
             if (!Directory.Exists(message))
                 return;
+
             var volumes = Directory.GetDirectories(message);
             foreach (var volume in volumes)
             {
-                Directory.SetCurrentDirectory(volume);
-                var chapters = Directory.GetDirectories(".\\");
+                var chapters = Directory.GetDirectories(volume);
                 foreach (var chapter in chapters)
                 {
-                    var acr = string.Concat(GetFolderName(message), "_", GetFolderName(volume), "_", GetFolderName(chapter), ".zip");
+                    var acr = string.Concat(volume, "\\",
+                        GetFolderName(message), "_", 
+                        GetFolderName(volume), "_", 
+                        GetFolderName(chapter), ".zip");
                     if (File.Exists(acr))
                         AddToArchive(acr, chapter);
                     else
@@ -40,14 +43,14 @@ namespace MangaReader
         /// <param name="message">Папка манги.</param>
         public static void ComperssVolumes(string message)
         {
-            message = Page.MakeValidPath(message);
+            message = Page.MakeValidPath(message) + "\\";
             if (!Directory.Exists(message))
                 return;
-            Directory.SetCurrentDirectory(message);
-            var volumes = Directory.GetDirectories(".\\");
+
+            var volumes = Directory.GetDirectories(message);
             foreach (var volume in volumes)
             {
-                var acr = string.Concat(GetFolderName(message), "_", GetFolderName(volume), ".zip");
+                var acr = string.Concat(message, GetFolderName(message), "_", GetFolderName(volume), ".zip");
                 if (File.Exists(acr))
                     AddToArchive(acr, volume);
                 else

@@ -120,7 +120,7 @@ namespace MangaReader
             document.LoadHtml(Page.GetPage(url));
 
             var firstOrDefault = document.DocumentNode
-                .SelectNodes("//div[@class=\"pageBlock reader-bottom\"]//script[@type=\"text/javascript\"]")
+                .SelectNodes("//div[@class=\"pageBlock reader-bottom\"]")
                 .FirstOrDefault();
 
             if (firstOrDefault == null) 

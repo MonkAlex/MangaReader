@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,7 +13,12 @@ namespace MangaReader
         /// <summary>
         /// Ссылка на файл базы.
         /// </summary>
-        private static readonly string Database = Settings.WorkFolder + @".\db";
+        private static readonly string DatabaseFile = Settings.WorkFolder + @".\db";
+
+        /// <summary>
+        /// База манги.
+        /// </summary>
+        private static List<string> Database = Serializer<List<string>>.Load(DatabaseFile);
 
         /// <summary>
         /// Манга в библиотеке.
@@ -54,27 +58,18 @@ namespace MangaReader
         /// <param name="url"></param>
         public static void Add(string url)
         {
-            IEnumerable<string> database = new string[] { };
-            var urlExist = false;
-            if (File.Exists(Database))
-                database = File.ReadAllLines(Database);
-            if (!string.IsNullOrWhiteSpace(url))
-                urlExist = database.Any(m => CultureInfo
-                    .InvariantCulture
-                    .CompareInfo
-                    .Compare(m, url, CompareOptions.IgnoreCase) == 0);
-
-            if (urlExist)
+            if (Database.Contains(url))
                 return;
 
             var newManga = new Manga(url);
             if (!newManga.IsValid)
                 return;
 
-            File.AppendAllLines(Database, new[] { url });
+            Database.Add(url);
             formDispatcher.Invoke(() => DatabaseMangas.Add(newManga));
             Status = "Добавлена манга " + newManga.Name;
         }
+
         /// <summary>
         /// Удалить мангу.
         /// </summary>
@@ -84,24 +79,39 @@ namespace MangaReader
             if (manga == null || !manga.IsValid)
                 return;
 
+            Database.Remove(manga.Url);
             formDispatcher.Invoke(() => DatabaseMangas.Remove(manga));
-            // TODO: добавить удаление из базы.
             Status = "Удалена манга " + manga.Name;
         }
 
+        /// <summary>
+        /// Сохранить библиотеку.
+        /// </summary>
+        public static void Save()
+        {
+            Serializer<List<string>>.Save(DatabaseFile, Database);
+        }
+
+        /// <summary>
+        /// Сконвертировать в новый формат.
+        /// </summary>
+        public static void Convert()
+        {
+            if (Database != null)
+                return;
+
+            Database = new List<string>(File.ReadAllLines(DatabaseFile));
+            Save();
+        }
         /// <summary>
         /// Получить мангу в базе.
         /// </summary>
         /// <returns>Манга.</returns>
         public static ObservableCollection<Manga> GetMangas()
         {
-            if (!File.Exists(Database))
-                return null;
-
-            foreach (var line in File.ReadAllLines(Database))
-            {
+            foreach (var line in Database)
                 UpdateMangaByUrl(line);
-            }
+
             return DatabaseMangas;
         }
 

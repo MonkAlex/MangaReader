@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Xml.Serialization;
 
 namespace MangaReader
@@ -32,9 +33,16 @@ namespace MangaReader
 
             var formatter = new XmlSerializer(type);
 
-            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+            try
             {
-                retVal = (T)formatter.Deserialize(stream);
+                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    retVal = (T) formatter.Deserialize(stream);
+                }
+            }
+            catch (Exception)
+            {
+                return default(T);
             }
 
             return retVal;

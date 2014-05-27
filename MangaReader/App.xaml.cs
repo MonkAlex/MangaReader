@@ -10,6 +10,8 @@ namespace MangaReader
     {
         private void App_OnExit(object sender, ExitEventArgs e)
         {
+            Library.Save();
+            History.Save();
             Cache.Save();
             Environment.Exit(0);
         }

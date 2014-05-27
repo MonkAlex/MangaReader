@@ -9,7 +9,7 @@ namespace MangaReader
     class History
     {
         /// <summary>
-        /// Указатель блокировки файла истории.
+        /// Указатель блокировки истории.
         /// </summary>
         private static readonly object HistoryLock = new object();
 
@@ -19,14 +19,41 @@ namespace MangaReader
         private static readonly string HistoryPath = Settings.WorkFolder + @".\history";
 
         /// <summary>
+        /// История.
+        /// </summary>
+        private static List<string> Historis = Serializer<List<string>>.Load(HistoryPath);
+
+        /// <summary>
         /// Добавление записи в историю.
         /// </summary>
         /// <param name="message">Сообщение.</param>
         public static void Add(string message)
         {
-            if (!Contains(message))
-                lock (HistoryLock)
-                    File.AppendAllText(HistoryPath, string.Concat(message, Environment.NewLine), System.Text.Encoding.UTF8);
+            if (Historis.Contains(message))
+                return;
+
+            lock (HistoryLock)
+                Historis.Add(message);
+        }
+
+        /// <summary>
+        /// Сохранить историю локально.
+        /// </summary>
+        public static void Save()
+        {
+            Serializer<List<string>>.Save(HistoryPath, Historis);
+        }
+
+        /// <summary>
+        /// Сконвертировать в новый формат.
+        /// </summary>
+        public static void Convert()
+        {
+            if (Historis != null)
+                return;
+
+            Historis = new List<string>(File.ReadAllLines(HistoryPath));
+            Save();
         }
 
         /// <summary>
@@ -36,53 +63,13 @@ namespace MangaReader
         /// <returns>Перечисление сообщений из истории.</returns>
         public static IEnumerable<string> Get(string subString = "")
         {
-            IEnumerable<string> history = new string[] {};
-            lock (HistoryLock)
-                if (File.Exists(HistoryPath))
-                    history = File.ReadAllLines(HistoryPath);
-            if (subString != string.Empty)
-            {
-                history = history.Where(l => CultureInfo
-                    .InvariantCulture
-                    .CompareInfo
-                    .IndexOf(l, subString, CompareOptions.IgnoreCase) >= 0);
-            }
-            return history;
-        }
+            if (string.IsNullOrWhiteSpace(subString)) 
+                return Historis;
 
-        /// <summary>
-        /// Проверка наличия сообщения в истории.
-        /// </summary>
-        /// <param name="message">Сообщение для проверки.</param>
-        /// <returns>True, если сообщение уже есть в истории.</returns>
-        public static bool Contains(string message)
-        {
-            IEnumerable<string> history = new string[] { };
-            lock (HistoryLock)
-                if (File.Exists(HistoryPath))
-                    history = File.ReadAllLines(HistoryPath);
-            if (!string.IsNullOrWhiteSpace(message))
-                return history.Any(m => CultureInfo
-                    .InvariantCulture
-                    .CompareInfo
-                    .Compare(m, message, CompareOptions.IgnoreCase) == 0);
-            return false;
-        }
-
-        /// <summary>
-        /// Исключить сообщения имеющиеся в истории.
-        /// </summary>
-        /// <param name="messages">Сообщения для проверки.</param>
-        /// <returns>Сообщения, не найденные в истории. Null, если сообщения для проверки не были переданы.</returns>
-        public static IEnumerable<string> Except(IEnumerable<string> messages)
-        {
-            IEnumerable<string> history = new string[] { };
-            lock (HistoryLock)
-                if (File.Exists(HistoryPath))
-                    history = File.ReadAllLines(HistoryPath);
-            return messages != null ?
-                messages.Where(m => !history.Contains(m, StringComparer.InvariantCultureIgnoreCase)) :
-                null;
+            return Historis.Where(l => CultureInfo
+                .InvariantCulture
+                .CompareInfo
+                .IndexOf(l, subString, CompareOptions.IgnoreCase) >= 0);
         }
 
         public History()

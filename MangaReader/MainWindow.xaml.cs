@@ -37,12 +37,31 @@ namespace MangaReader
                 TimerTick,
                 Dispatcher.CurrentDispatcher);
             this.FormLibrary.ItemsSource = Library.Initialize();
+            this.FormLibrary.ContextMenu = CreateMangaMenu();
+            Convert();
+        }
+
+        /// <summary>
+        /// Сконвертировать старый формат в новый.
+        /// </summary>
+        private static void Convert()
+        {
+            History.Convert();
+            Library.Convert();
+        }
+
+        /// <summary>
+        /// Создать меню, вызываемое по правому клику на манге.
+        /// </summary>
+        /// <returns></returns>
+        private ContextMenu CreateMangaMenu()
+        {
             var contextMenu = new ContextMenu();
-            var menuItem = new MenuItem {Header = "Remove"};
+            var menuItem = new MenuItem { Header = "Remove" };
             menuItem.Click += Remove_click;
             contextMenu.Items.Add(menuItem);
             contextMenu.StaysOpen = false;
-            this.FormLibrary.ContextMenu = contextMenu;
+            return contextMenu;
         }
 
         private void Update_click(object sender, RoutedEventArgs e)
@@ -80,7 +99,7 @@ namespace MangaReader
         {
             var manga = ((ListBox)((ContextMenu)((MenuItem)sender).Parent).PlacementTarget).SelectedItem;
             if (manga is Manga)
-              Library.Remove(manga as Manga);
+                Library.Remove(manga as Manga);
         }
 
         private void TimerTick(object sender, EventArgs e)

@@ -75,6 +75,19 @@ namespace MangaReader
             formDispatcher.Invoke(() => DatabaseMangas.Add(newManga));
             Status = "Добавлена манга " + newManga.Name;
         }
+        /// <summary>
+        /// Удалить мангу.
+        /// </summary>
+        /// <param name="manga"></param>
+        public static void Remove(Manga manga)
+        {
+            if (manga == null || !manga.IsValid)
+                return;
+
+            formDispatcher.Invoke(() => DatabaseMangas.Remove(manga));
+            // TODO: добавить удаление из базы.
+            Status = "Удалена манга " + manga.Name;
+        }
 
         /// <summary>
         /// Получить мангу в базе.

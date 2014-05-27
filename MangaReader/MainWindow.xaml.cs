@@ -28,7 +28,6 @@ namespace MangaReader
             Update.Initialize();
             InitializeComponent();
             Initialize();
-            this.FormLibrary.ItemsSource = Library.Initialize();
         }
 
         public void Initialize()
@@ -37,6 +36,13 @@ namespace MangaReader
                 DispatcherPriority.Background,
                 TimerTick,
                 Dispatcher.CurrentDispatcher);
+            this.FormLibrary.ItemsSource = Library.Initialize();
+            var contextMenu = new ContextMenu();
+            var menuItem = new MenuItem {Header = "Remove"};
+            menuItem.Click += Remove_click;
+            contextMenu.Items.Add(menuItem);
+            contextMenu.StaysOpen = false;
+            this.FormLibrary.ContextMenu = contextMenu;
         }
 
         private void Update_click(object sender, RoutedEventArgs e)
@@ -68,6 +74,13 @@ namespace MangaReader
             var db = new Input { Owner = this };
             if (db.ShowDialog() == true)
                 Library.Add(db.Result.Text);
+        }
+
+        private void Remove_click(object sender, RoutedEventArgs e)
+        {
+            var manga = ((ListBox)((ContextMenu)((MenuItem)sender).Parent).PlacementTarget).SelectedItem;
+            if (manga is Manga)
+              Library.Remove(manga as Manga);
         }
 
         private void TimerTick(object sender, EventArgs e)

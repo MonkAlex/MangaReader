@@ -98,7 +98,7 @@ namespace MangaReader
             {
                 var messages = History.Get(this.Url);
                 newChapters = newChapters
-                    .Where(ch => !messages.Contains(ch.Url))
+                    .Where(ch => messages.All(m => m.Url != ch.Url))
                     .ToList();
             }
 

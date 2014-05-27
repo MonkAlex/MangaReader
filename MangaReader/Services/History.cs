@@ -21,7 +21,7 @@ namespace MangaReader
         /// <summary>
         /// История.
         /// </summary>
-        private static List<string> Historis = Serializer<List<string>>.Load(HistoryPath);
+        private static List<MangaHistory> Historis = Serializer<List<MangaHistory>>.Load(HistoryPath);
 
         /// <summary>
         /// Добавление записи в историю.
@@ -29,11 +29,11 @@ namespace MangaReader
         /// <param name="message">Сообщение.</param>
         public static void Add(string message)
         {
-            if (Historis.Contains(message))
+            if (Historis.Any(l => l.Url == message))
                 return;
 
             lock (HistoryLock)
-                Historis.Add(message);
+                Historis.Add(new MangaHistory(message));
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace MangaReader
         /// </summary>
         public static void Save()
         {
-            Serializer<List<string>>.Save(HistoryPath, Historis);
+            Serializer<List<MangaHistory>>.Save(HistoryPath, Historis);
         }
 
         /// <summary>
@@ -52,7 +52,21 @@ namespace MangaReader
             if (Historis != null)
                 return;
 
-            Historis = new List<string>(File.ReadAllLines(HistoryPath));
+            var serializedStrings = Serializer<List<string>>.Load(HistoryPath);
+            var isStringList = serializedStrings != null;
+
+            var serializedMangaHistoris = Serializer<List<MangaHistory>>.Load(HistoryPath);
+            var isMangaHistory = serializedMangaHistoris != null;
+
+            var strings = new List<string>(File.ReadAllLines(HistoryPath));
+
+            if (!isMangaHistory && !isStringList)
+                Historis = MangaHistory.CreateHistories(strings);
+            if (!isMangaHistory && isStringList)
+                Historis = MangaHistory.CreateHistories(serializedStrings);
+            if (isMangaHistory && !isStringList)
+                Historis = serializedMangaHistoris;
+
             Save();
         }
 
@@ -61,15 +75,9 @@ namespace MangaReader
         /// </summary>
         /// <param name="subString">Подстрока, по которой будет получена история. Например, название манги.</param>
         /// <returns>Перечисление сообщений из истории.</returns>
-        public static IEnumerable<string> Get(string subString = "")
+        public static IEnumerable<MangaHistory> Get(string subString = "")
         {
-            if (string.IsNullOrWhiteSpace(subString)) 
-                return Historis;
-
-            return Historis.Where(l => CultureInfo
-                .InvariantCulture
-                .CompareInfo
-                .IndexOf(l, subString, CompareOptions.IgnoreCase) >= 0);
+            return string.IsNullOrWhiteSpace(subString) ? Historis : Historis.Where(l => l.MangaUrl.Contains(subString));
         }
 
         public History()

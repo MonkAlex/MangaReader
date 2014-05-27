@@ -69,6 +69,7 @@
     <Compile Include="Input.xaml.cs">
       <DependentUpon>Input.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Manga\MangaHistory.cs" />
     <Compile Include="Services\Serializer.cs" />
     <Compile Include="Services\Cache.cs" />
     <Compile Include="Services\Comperssion.cs" />

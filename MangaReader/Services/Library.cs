@@ -101,7 +101,7 @@ namespace MangaReader
             if (Database != null)
                 return;
 
-            Database = new List<string>(File.ReadAllLines(DatabaseFile));
+            Database = File.Exists(DatabaseFile) ? new List<string>(File.ReadAllLines(DatabaseFile)) : new List<string>();
             Save();
         }
         /// <summary>

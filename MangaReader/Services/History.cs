@@ -58,7 +58,8 @@ namespace MangaReader
             var serializedMangaHistoris = Serializer<List<MangaHistory>>.Load(HistoryPath);
             var isMangaHistory = serializedMangaHistoris != null;
 
-            var strings = new List<string>(File.ReadAllLines(HistoryPath));
+
+            var strings = File.Exists(HistoryPath) ? new List<string>(File.ReadAllLines(HistoryPath)) : new List<string>();
 
             if (!isMangaHistory && !isStringList)
                 Historis = MangaHistory.CreateHistories(strings);

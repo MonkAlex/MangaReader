@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using MangaReader.Properties;
 using MangaReader.Services;
+using Ookii.Dialogs.Wpf;
+using ThreadState = System.Threading.ThreadState;
 
 namespace MangaReader
 {
@@ -31,6 +35,9 @@ namespace MangaReader
             Initialize();
         }
 
+        /// <summary>
+        /// Инициализация программмы.
+        /// </summary>
         public void Initialize()
         {
             _timer = new DispatcherTimer(new TimeSpan(0, 0, 1),
@@ -50,6 +57,11 @@ namespace MangaReader
             Library.Convert();
         }
 
+        /// <summary>
+        /// Обновление библиотеки.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Update_click(object sender, RoutedEventArgs e)
         {
             if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
@@ -58,6 +70,11 @@ namespace MangaReader
                 _loadThread.Start();
         }
 
+        /// <summary>
+        /// Обработчик двойного клика по манге.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Mangas_clicked(object sender, MouseButtonEventArgs e)
         {
             var listBox = sender as ListBox;
@@ -68,12 +85,39 @@ namespace MangaReader
             if (manga == null)
                 return;
 
-            if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
-                _loadThread = new Thread(() => Library.Update(manga, true));
-            if (_loadThread.ThreadState == ThreadState.Unstarted)
-                _loadThread.Start();
+            TaskDialogButton result;
+            using (var dialog = new TaskDialog())
+            {
+                dialog.WindowTitle = manga.Name;
+                dialog.Content = Strings.Manga_Dialog_Content;
+
+                dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_Update));
+                dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_Remove));
+                dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_View));
+                dialog.Buttons.Add(new TaskDialogButton { ButtonType = ButtonType.Cancel });
+
+                dialog.AllowDialogCancellation = true;
+                result = dialog.ShowDialog(this);
+            }
+
+            if (result.Text == Strings.Manga_Action_Update)
+            {
+                if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
+                    _loadThread = new Thread(() => Library.Update(manga, true));
+                if (_loadThread.ThreadState == ThreadState.Unstarted)
+                    _loadThread.Start();
+            }
+            if (result.Text == Strings.Manga_Action_Remove)
+                Library.Remove(manga);
+            if (result.Text == Strings.Manga_Action_View)
+                Process.Start(manga.Url);
         }
 
+        /// <summary>
+        /// Добавление манги. Используем кастомный диалог.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Add_click(object sender, RoutedEventArgs e)
         {
             var db = new Input { Owner = this };
@@ -81,19 +125,40 @@ namespace MangaReader
                 Library.Add(db.Result.Text);
         }
 
+        /// <summary>
+        /// Удаление манги.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Remove_click(object sender, RoutedEventArgs e)
         {
             var manga = this.FormLibrary.SelectedItem as Manga;
             if (manga == null)
                 return;
 
-            var message = MessageBox.Show("U want to remove " + manga.Name + "?", 
-                manga.Name, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+            bool result;
+            using (var dialog = new TaskDialog())
+            {
+                dialog.WindowTitle = manga.Name;
+                dialog.Content = string.Format(Strings.Manga_Action_Remove_Confirm, manga.Name);
 
-            if (message == MessageBoxResult.Yes)
+                dialog.Buttons.Add(new TaskDialogButton { ButtonType = ButtonType.Yes});
+                dialog.Buttons.Add(new TaskDialogButton { ButtonType = ButtonType.No});
+
+                dialog.AllowDialogCancellation = true;
+                var button = dialog.ShowDialog(this);
+                result = (button != null) && button.ButtonType == ButtonType.Yes;
+            }
+
+            if (result)
               Library.Remove(manga);
         }
 
+        /// <summary>
+        /// Обработчик таймера, вешаем всякие обработки формы.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TimerTick(object sender, EventArgs e)
         {
             var isEnabled = _loadThread == null || _loadThread.ThreadState == ThreadState.Stopped;

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using MangaReader.Properties;
 
 namespace MangaReader
 {
@@ -67,7 +68,7 @@ namespace MangaReader
 
             Database.Add(url);
             formDispatcher.Invoke(() => DatabaseMangas.Add(newManga));
-            Status = "Добавлена манга " + newManga.Name;
+            Status = Strings.Library_Status_MangaAdded + newManga.Name;
         }
 
         /// <summary>
@@ -81,7 +82,7 @@ namespace MangaReader
 
             Database.Remove(manga.Url);
             formDispatcher.Invoke(() => DatabaseMangas.Remove(manga));
-            Status = "Удалена манга " + manga.Name;
+            Status = Strings.Library_Status_MangaRemoved + manga.Name;
         }
 
         /// <summary>
@@ -151,13 +152,13 @@ namespace MangaReader
             ObservableCollection<Manga> mangas;
             if (manga != null)
             {
-                Status = "Обновление " + manga.Name;
+                Status = Strings.Library_Status_MangaUpdate + manga.Name;
                 UpdateMangaByUrl(manga.Url);
                 mangas = new ObservableCollection<Manga> { manga };
             }
             else
             {
-                Status = "Обновление манги";
+                Status = Strings.Library_Status_Update;
                 mangas = GetMangas();
             }
 
@@ -182,7 +183,7 @@ namespace MangaReader
             }
             finally
             {
-                Status = "Обновление манги завершено";
+                Status = Strings.Library_Status_UpdateComplete;
             }
 
         }

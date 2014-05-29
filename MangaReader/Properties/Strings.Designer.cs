@@ -97,6 +97,15 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Settings.
+        /// </summary>
+        public static string Library_Action_Settings {
+            get {
+                return ResourceManager.GetString("Library_Action_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Added manga .
         /// </summary>
         public static string Library_Status_MangaAdded {
@@ -183,6 +192,60 @@ namespace MangaReader.Properties {
         public static string Manga_Dialog_Content {
             get {
                 return ResourceManager.GetString("Manga_Dialog_Content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Change.
+        /// </summary>
+        public static string Settings_ChangeButton {
+            get {
+                return ResourceManager.GetString("Settings_ChangeButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Download manga to:.
+        /// </summary>
+        public static string Settings_DownloadMangaTo {
+            get {
+                return ResourceManager.GetString("Settings_DownloadMangaTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Default language:.
+        /// </summary>
+        public static string Settings_Language {
+            get {
+                return ResourceManager.GetString("Settings_Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Its language for manga in library and downloaded archive..
+        /// </summary>
+        public static string Settings_LanguageHint {
+            get {
+                return ResourceManager.GetString("Settings_LanguageHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Just update manga, no full download.
+        /// </summary>
+        public static string Settings_Update {
+            get {
+                return ResourceManager.GetString("Settings_Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Update MangaReader on start..
+        /// </summary>
+        public static string Settings_UpdateReader {
+            get {
+                return ResourceManager.GetString("Settings_UpdateReader", resourceCulture);
             }
         }
         

@@ -30,6 +30,7 @@ namespace MangaReader
 
         public MainWindow()
         {
+            Settings.Load();
             Update.Initialize();
             InitializeComponent();
             Initialize();
@@ -126,32 +127,13 @@ namespace MangaReader
         }
 
         /// <summary>
-        /// Удаление манги.
+        /// Настройки.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Remove_click(object sender, RoutedEventArgs e)
+        private void Settings_click(object sender, RoutedEventArgs e)
         {
-            var manga = this.FormLibrary.SelectedItem as Manga;
-            if (manga == null)
-                return;
-
-            bool result;
-            using (var dialog = new TaskDialog())
-            {
-                dialog.WindowTitle = manga.Name;
-                dialog.Content = string.Format(Strings.Manga_Action_Remove_Confirm, manga.Name);
-
-                dialog.Buttons.Add(new TaskDialogButton { ButtonType = ButtonType.Yes});
-                dialog.Buttons.Add(new TaskDialogButton { ButtonType = ButtonType.No});
-
-                dialog.AllowDialogCancellation = true;
-                var button = dialog.ShowDialog(this);
-                result = (button != null) && button.ButtonType == ButtonType.Yes;
-            }
-
-            if (result)
-              Library.Remove(manga);
+            new SettingsForm {Owner = this}.ShowDialog();
         }
 
         /// <summary>
@@ -165,7 +147,7 @@ namespace MangaReader
             this.TextBlock.Text = Library.Status;
             UpdateButton.IsEnabled = isEnabled;
             AddButton.IsEnabled = isEnabled;
-            RemoveButton.IsEnabled = isEnabled;
+            SettingsButton.IsEnabled = isEnabled;
             FormLibrary.IsEnabled = isEnabled;
         }
     }

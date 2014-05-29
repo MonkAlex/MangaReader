@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local ="clr-namespace:MangaReader"
         xmlns:resx="clr-namespace:MangaReader.Properties"
+        Icon="main.ico"
         Title="{x:Static resx:Strings.Title}"  Height="350" Width="525">
     <Window.Resources>
         <DataTemplate DataType="{x:Type local:Manga}">
@@ -30,10 +31,10 @@
                 HorizontalAlignment="Right"
                 Height="25" 
                 Width="75"/>
-        <Button Content="{x:Static resx:Strings.Manga_Action_Remove}"  
+        <Button Content="{x:Static resx:Strings.Library_Action_Settings}"  
                 Margin="0,0,20,5" 
-                x:Name="RemoveButton" 
-                Click="Remove_click" 
+                x:Name="SettingsButton" 
+                Click="Settings_click" 
                 VerticalAlignment="Bottom" 
                 HorizontalAlignment="Right" 
                 Height="25" 

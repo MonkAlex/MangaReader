@@ -162,4 +162,25 @@
   <data name="Input_Add" xml:space="preserve">
     <value>Добавить</value>
   </data>
+  <data name="Library_Action_Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="Settings_ChangeButton" xml:space="preserve">
+    <value>Изменить</value>
+  </data>
+  <data name="Settings_DownloadMangaTo" xml:space="preserve">
+    <value>Скачивать мангу в:</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>Язык по умолчанию:</value>
+  </data>
+  <data name="Settings_LanguageHint" xml:space="preserve">
+    <value>Язык влияет на названия манги в архивах и в библиотеке.</value>
+  </data>
+  <data name="Settings_Update" xml:space="preserve">
+    <value>Обновлять мангу вместо полного скачивания</value>
+  </data>
+  <data name="Settings_UpdateReader" xml:space="preserve">
+    <value>Обновлять программу при запуске</value>
+  </data>
 </root>

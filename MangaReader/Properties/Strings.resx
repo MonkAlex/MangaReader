@@ -162,4 +162,25 @@
   <data name="Input_Add" xml:space="preserve">
     <value>Add</value>
   </data>
+  <data name="Library_Action_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Settings_Update" xml:space="preserve">
+    <value>Just update manga, no full download</value>
+  </data>
+  <data name="Settings_DownloadMangaTo" xml:space="preserve">
+    <value>Download manga to:</value>
+  </data>
+  <data name="Settings_ChangeButton" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>Default language:</value>
+  </data>
+  <data name="Settings_UpdateReader" xml:space="preserve">
+    <value>Update MangaReader on start.</value>
+  </data>
+  <data name="Settings_LanguageHint" xml:space="preserve">
+    <value>Its language for manga in library and downloaded archive.</value>
+  </data>
 </root>

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
 
 namespace MangaReader
@@ -19,7 +18,17 @@ namespace MangaReader
         /// <summary>
         /// Папка программы.
         /// </summary>
-        public static string WorkFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        public static readonly string WorkFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+        /// <summary>
+        /// Настройки программы.
+        /// </summary>
+        private static readonly string SettingsPath = WorkFolder + "\\settings.xml";
+
+        /// <summary>
+        /// Автообновление программы.
+        /// </summary>
+        public static bool UpdateReader = true;
 
         /// <summary>
         /// Папка загрузки.
@@ -36,6 +45,35 @@ namespace MangaReader
         /// </summary>
         public static string ChapterPrefix = "Chapter_";
 
+        /// <summary>
+        /// Сохранить настройки.
+        /// </summary>
+        public static void Save()
+        {
+            object[] settings = 
+            {
+                Language,
+                Update,
+                UpdateReader,
+                DownloadFolder
+            };
+            Serializer<object[]>.Save(SettingsPath, settings);
+        }
+
+        /// <summary>
+        /// Загрузить настройки.
+        /// </summary>
+        public static void Load()
+        {
+            var settings = Serializer<object[]>.Load(SettingsPath);
+            if (settings == null)
+                return;
+
+            Language = (Languages) settings[0];
+            Update = (bool) settings[1];
+            UpdateReader = (bool) settings[2];
+            DownloadFolder = (string) settings[3];
+        }
 
         /// <summary>
         /// Доступные языки.
@@ -47,9 +85,6 @@ namespace MangaReader
             Japanese
         }
 
-        public Settings()
-        {
-            throw new Exception("Use properties.");
-        }
+        public Settings(){}
     }
 }

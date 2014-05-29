@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -29,11 +28,13 @@ namespace MangaReader
         /// <param name="message">Сообщение.</param>
         public static void Add(string message)
         {
-            if (Historis.Any(l => l.Url == message))
-                return;
-
             lock (HistoryLock)
+            {
+                if (Historis.Any(l => l.Url == message))
+                    return;
+
                 Historis.Add(new MangaHistory(message));
+            }
         }
 
         /// <summary>
@@ -41,7 +42,8 @@ namespace MangaReader
         /// </summary>
         public static void Save()
         {
-            Serializer<List<MangaHistory>>.Save(HistoryPath, Historis);
+            lock (HistoryLock)
+                Serializer<List<MangaHistory>>.Save(HistoryPath, Historis);
         }
 
         /// <summary>
@@ -78,7 +80,10 @@ namespace MangaReader
         /// <returns>Перечисление сообщений из истории.</returns>
         public static IEnumerable<MangaHistory> Get(string subString = "")
         {
-            return string.IsNullOrWhiteSpace(subString) ? Historis : Historis.Where(l => l.MangaUrl.Contains(subString));
+            lock (HistoryLock)
+                return string.IsNullOrWhiteSpace(subString) ?
+                    Historis : 
+                    Historis.Where(l => l.MangaUrl.Contains(subString)).ToList();
         }
 
         public History()

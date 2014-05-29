@@ -16,12 +16,13 @@ namespace MangaReader
         /// <summary>
         /// Таймер на обновление формы.
         /// </summary>
-        private static DispatcherTimer timer;
+        // ReSharper disable once NotAccessedField.Local
+        private static DispatcherTimer _timer;
 
         /// <summary>
         /// Поток загрузки манги.
         /// </summary>
-        private static Thread loadThread;
+        private static Thread _loadThread;
 
         public MainWindow()
         {
@@ -32,12 +33,11 @@ namespace MangaReader
 
         public void Initialize()
         {
-            timer = new DispatcherTimer(new TimeSpan(0, 0, 1),
+            _timer = new DispatcherTimer(new TimeSpan(0, 0, 1),
                 DispatcherPriority.Background,
                 TimerTick,
                 Dispatcher.CurrentDispatcher);
             this.FormLibrary.ItemsSource = Library.Initialize();
-            this.FormLibrary.ContextMenu = CreateMangaMenu();
             Convert();
         }
 
@@ -50,42 +50,28 @@ namespace MangaReader
             Library.Convert();
         }
 
-        /// <summary>
-        /// Создать меню, вызываемое по правому клику на манге.
-        /// </summary>
-        /// <returns></returns>
-        private ContextMenu CreateMangaMenu()
-        {
-            var contextMenu = new ContextMenu();
-            var menuItem = new MenuItem { Header = "Remove" };
-            menuItem.Click += Remove_click;
-            contextMenu.Items.Add(menuItem);
-            contextMenu.StaysOpen = false;
-            return contextMenu;
-        }
-
         private void Update_click(object sender, RoutedEventArgs e)
         {
-            if (loadThread == null || loadThread.ThreadState == ThreadState.Stopped)
-                loadThread = new Thread(() => Library.Update());
-            if (loadThread.ThreadState == ThreadState.Unstarted)
-                loadThread.Start();
+            if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
+                _loadThread = new Thread(() => Library.Update());
+            if (_loadThread.ThreadState == ThreadState.Unstarted)
+                _loadThread.Start();
         }
 
         private void Mangas_clicked(object sender, MouseButtonEventArgs e)
         {
             var listBox = sender as ListBox;
-            if (listBox == null || listBox.SelectedItems.Count == 0)
+            if (listBox == null || listBox.SelectedItems.Count == 0 || !(e.MouseDevice.DirectlyOver is Image))
                 return;
 
             var manga = listBox.SelectedItem as Manga;
             if (manga == null)
                 return;
 
-            if (loadThread == null || loadThread.ThreadState == ThreadState.Stopped)
-                loadThread = new Thread(() => Library.Update(manga, true));
-            if (loadThread.ThreadState == ThreadState.Unstarted)
-                loadThread.Start();
+            if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
+                _loadThread = new Thread(() => Library.Update(manga, true));
+            if (_loadThread.ThreadState == ThreadState.Unstarted)
+                _loadThread.Start();
         }
 
         private void Add_click(object sender, RoutedEventArgs e)
@@ -97,17 +83,24 @@ namespace MangaReader
 
         private void Remove_click(object sender, RoutedEventArgs e)
         {
-            var manga = ((ListBox)((ContextMenu)((MenuItem)sender).Parent).PlacementTarget).SelectedItem;
-            if (manga is Manga)
-                Library.Remove(manga as Manga);
+            var manga = this.FormLibrary.SelectedItem as Manga;
+            if (manga == null)
+                return;
+
+            var message = MessageBox.Show("U want to remove " + manga.Name + "?", 
+                manga.Name, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+
+            if (message == MessageBoxResult.Yes)
+              Library.Remove(manga);
         }
 
         private void TimerTick(object sender, EventArgs e)
         {
-            var isEnabled = loadThread == null || loadThread.ThreadState == ThreadState.Stopped;
+            var isEnabled = _loadThread == null || _loadThread.ThreadState == ThreadState.Stopped;
             this.TextBlock.Text = Library.Status;
             UpdateButton.IsEnabled = isEnabled;
             AddButton.IsEnabled = isEnabled;
+            RemoveButton.IsEnabled = isEnabled;
             FormLibrary.IsEnabled = isEnabled;
         }
     }

@@ -61,7 +61,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Ookii.Dialogs.Wpf">
-      <HintPath>C:\Users\aLex\Documents\Visual Studio 2010\Projects\MangaReader\MangaReader\Ookii.Dialogs.Wpf.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Ookii.Dialogs.Wpf.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

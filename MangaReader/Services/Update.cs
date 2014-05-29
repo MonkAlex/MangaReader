@@ -9,14 +9,14 @@ namespace MangaReader.Services
 {
     class Update
     {
-        private const string LinkToUpdate = "https://dl.dropboxusercontent.com/u/1945107/RMG/readmanga.exe";
+        private const string LinkToUpdate = "https://dl.dropboxusercontent.com/u/1945107/RMG/MangaReader.exe";
         private const string LinkToVersion = "https://dl.dropboxusercontent.com/u/1945107/RMG/version.ini";
         private const string UpdateStarted = "update";
         private const string UpdateFinished = "updated";
 
         private const string UpdateFilename = "update.exe";
         private const string UpdateTempFilename = "update.it";
-        private const string OriginalFilename = "MangaReader3.exe";
+        private const string OriginalFilename = "MangaReader.exe";
         private const string OriginalTempFilename = OriginalFilename + ".bak";
 
         /// <summary>
@@ -30,6 +30,9 @@ namespace MangaReader.Services
                 Update.FinishUpdate();
             if (args.Contains(UpdateFinished))
                 Update.Clean();
+
+            if (Settings.UpdateReader)
+                Update.StartUpdate();
         }
 
         /// <summary>

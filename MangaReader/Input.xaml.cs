@@ -10,6 +10,7 @@ namespace MangaReader
         public Input()
         {
             InitializeComponent();
+            Result.Focus();
         }
 
         public string ResponseText

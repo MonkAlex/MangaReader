@@ -41,14 +41,16 @@ namespace MangaReader.Services
         /// <returns></returns>
         public static bool CheckUpdate()
         {
-            using (var client = new WebClient())
+            try
             {
-                var serverVersion = new Version(client.DownloadString(LinkToVersion));
+                var serverVersion = new Version(Page.GetPage(LinkToVersion));
                 var clientVersion = Assembly.GetExecutingAssembly().GetName().Version;
-                if (serverVersion.CompareTo(clientVersion) > 0)
-                    return true;
+                return serverVersion.CompareTo(clientVersion) > 0;
             }
-            return false;
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         /// <summary>

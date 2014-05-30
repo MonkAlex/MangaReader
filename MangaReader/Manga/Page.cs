@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using MangaReader.Properties;
 
 namespace MangaReader
 {
@@ -73,12 +74,18 @@ namespace MangaReader
         {
             try
             {
-                var webClient = new WebClient { Encoding = Encoding.UTF8 };
+                var webClient = new WebClient {Encoding = Encoding.UTF8};
                 return webClient.DownloadString(new Uri(url));
             }
             catch (UriFormatException ex)
             {
                 Log.Exception(ex, "Некорректная ссылка:", url);
+                return string.Empty;
+            }
+            catch (WebException ex)
+            {
+                Library.Status = Strings.Page_GetPage_InternetOff;
+                Log.Exception(ex, Strings.Page_GetPage_InternetOff);
                 return string.Empty;
             }
             catch (Exception ex)

@@ -196,6 +196,15 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Интернет недоступен.
+        /// </summary>
+        public static string Page_GetPage_InternetOff {
+            get {
+                return ResourceManager.GetString("Page_GetPage_InternetOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Изменить.
         /// </summary>
         public static string Settings_ChangeButton {

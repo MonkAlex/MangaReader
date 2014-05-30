@@ -183,4 +183,7 @@
   <data name="Settings_UpdateReader" xml:space="preserve">
     <value>Обновлять программу при запуске</value>
   </data>
+  <data name="Settings_Compress" xml:space="preserve">
+    <value>Сжимать мангу после скачивания</value>
+  </data>
 </root>

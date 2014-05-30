@@ -183,4 +183,7 @@
   <data name="Settings_LanguageHint" xml:space="preserve">
     <value>Its language for manga in library and downloaded archive.</value>
   </data>
+  <data name="Settings_Compress" xml:space="preserve">
+    <value>Compress manga after downloading</value>
+  </data>
 </root>

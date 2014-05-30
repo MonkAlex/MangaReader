@@ -24,7 +24,7 @@
         <TextBlock TextTrimming="WordEllipsis" Text="{x:Static resx:Strings.Settings_Language}" Margin="10,78,109.4,0" Height="14" VerticalAlignment="Top"></TextBlock>
         <ComboBox x:Name="Language" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Source={StaticResource Languages}}" Height="26" Margin="0,71,13.4,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91"></ComboBox>
         <CheckBox x:Name="UpdateReaderBox" Content="{x:Static resx:Strings.Settings_UpdateReader}" Margin="10,155,13.4,0" Height="16" VerticalAlignment="Top"/>
-        <CheckBox x:Name="CompressBox" Content="Сжимать мангу после скачивания" Margin="10,207,13.4,0" Height="16" VerticalAlignment="Top"/>
+        <CheckBox x:Name="CompressBox" Content="{x:Static resx:Strings.Settings_Compress}" Margin="10,207,13.4,0" Height="16" VerticalAlignment="Top"/>
         <TextBlock TextWrapping="Wrap" TextTrimming="WordEllipsis" Text="{x:Static resx:Strings.Settings_LanguageHint}" Margin="38,112,38.4,0" Height="34" VerticalAlignment="Top"/>
     </Grid>
 </Window>

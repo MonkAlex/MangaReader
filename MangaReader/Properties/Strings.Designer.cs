@@ -205,6 +205,15 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Compress manga after downloading.
+        /// </summary>
+        public static string Settings_Compress {
+            get {
+                return ResourceManager.GetString("Settings_Compress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Download manga to:.
         /// </summary>
         public static string Settings_DownloadMangaTo {

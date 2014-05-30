@@ -77,7 +77,7 @@ namespace MangaReader
         /// <param name="manga"></param>
         public static void Remove(Manga manga)
         {
-            if (manga == null || !manga.IsValid)
+            if (manga == null)
                 return;
 
             Database.Remove(manga.Url);

@@ -117,73 +117,73 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Input_Add" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="Input_Text" xml:space="preserve">
+    <value>Введите ссылку на мангу</value>
+  </data>
+  <data name="Input_Title" xml:space="preserve">
+    <value>Ввод</value>
+  </data>
   <data name="Library_Action_Add" xml:space="preserve">
-    <value>Add</value>
+    <value>Добавить</value>
+  </data>
+  <data name="Library_Action_Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="Library_Status_MangaAdded" xml:space="preserve">
+    <value>Добавлена манга </value>
+  </data>
+  <data name="Library_Status_MangaRemoved" xml:space="preserve">
+    <value>Удалена манга </value>
+  </data>
+  <data name="Library_Status_MangaUpdate" xml:space="preserve">
+    <value>Обновление </value>
+  </data>
+  <data name="Library_Status_Update" xml:space="preserve">
+    <value>Обновление манги</value>
+  </data>
+  <data name="Library_Status_UpdateComplete" xml:space="preserve">
+    <value>Обновление манги завершено</value>
   </data>
   <data name="Manga_Action_Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>Удалить</value>
   </data>
   <data name="Manga_Action_Remove_Confirm" xml:space="preserve">
-    <value>U want to remove {0} ?</value>
+    <value>Вы хотите удалить {0} ?</value>
   </data>
   <data name="Manga_Action_Update" xml:space="preserve">
-    <value>Update</value>
+    <value>Обновить</value>
   </data>
   <data name="Manga_Action_View" xml:space="preserve">
-    <value>View</value>
+    <value>Посмотреть</value>
   </data>
   <data name="Manga_Dialog_Content" xml:space="preserve">
-    <value>Select action</value>
+    <value>Выберите действие</value>
+  </data>
+  <data name="Settings_ChangeButton" xml:space="preserve">
+    <value>Изменить</value>
+  </data>
+  <data name="Settings_Compress" xml:space="preserve">
+    <value>Сжимать мангу после скачивания</value>
+  </data>
+  <data name="Settings_DownloadMangaTo" xml:space="preserve">
+    <value>Скачивать мангу в:</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>Язык по умолчанию:</value>
+  </data>
+  <data name="Settings_LanguageHint" xml:space="preserve">
+    <value>Язык влияет на названия манги в архивах и в библиотеке.</value>
+  </data>
+  <data name="Settings_Update" xml:space="preserve">
+    <value>Обновлять мангу вместо полного скачивания</value>
+  </data>
+  <data name="Settings_UpdateReader" xml:space="preserve">
+    <value>Обновлять программу при запуске</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>MangaReader</value>
-  </data>
-  <data name="Library_Status_MangaAdded" xml:space="preserve">
-    <value>Added manga </value>
-  </data>
-  <data name="Library_Status_MangaRemoved" xml:space="preserve">
-    <value>Removed manga </value>
-  </data>
-  <data name="Library_Status_Update" xml:space="preserve">
-    <value>Mangas update</value>
-  </data>
-  <data name="Library_Status_MangaUpdate" xml:space="preserve">
-    <value>Update </value>
-  </data>
-  <data name="Library_Status_UpdateComplete" xml:space="preserve">
-    <value>Update complete</value>
-  </data>
-  <data name="Input_Title" xml:space="preserve">
-    <value>Input</value>
-  </data>
-  <data name="Input_Text" xml:space="preserve">
-    <value>Input link to manga</value>
-  </data>
-  <data name="Input_Add" xml:space="preserve">
-    <value>Add</value>
-  </data>
-  <data name="Library_Action_Settings" xml:space="preserve">
-    <value>Settings</value>
-  </data>
-  <data name="Settings_Update" xml:space="preserve">
-    <value>Just update manga, no full download</value>
-  </data>
-  <data name="Settings_DownloadMangaTo" xml:space="preserve">
-    <value>Download manga to:</value>
-  </data>
-  <data name="Settings_ChangeButton" xml:space="preserve">
-    <value>Change</value>
-  </data>
-  <data name="Settings_Language" xml:space="preserve">
-    <value>Default language:</value>
-  </data>
-  <data name="Settings_UpdateReader" xml:space="preserve">
-    <value>Update MangaReader on start.</value>
-  </data>
-  <data name="Settings_LanguageHint" xml:space="preserve">
-    <value>Its language for manga in library and downloaded archive.</value>
-  </data>
-  <data name="Settings_Compress" xml:space="preserve">
-    <value>Compress manga after downloading</value>
   </data>
 </root>

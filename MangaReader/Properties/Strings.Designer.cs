@@ -61,7 +61,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Add.
+        ///   Ищет локализованную строку, похожую на Добавить.
         /// </summary>
         public static string Input_Add {
             get {
@@ -70,7 +70,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Input link to manga.
+        ///   Ищет локализованную строку, похожую на Введите ссылку на мангу.
         /// </summary>
         public static string Input_Text {
             get {
@@ -79,7 +79,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Input.
+        ///   Ищет локализованную строку, похожую на Ввод.
         /// </summary>
         public static string Input_Title {
             get {
@@ -88,7 +88,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Add.
+        ///   Ищет локализованную строку, похожую на Добавить.
         /// </summary>
         public static string Library_Action_Add {
             get {
@@ -97,7 +97,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Settings.
+        ///   Ищет локализованную строку, похожую на Настройки.
         /// </summary>
         public static string Library_Action_Settings {
             get {
@@ -106,7 +106,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Added manga .
+        ///   Ищет локализованную строку, похожую на Добавлена манга .
         /// </summary>
         public static string Library_Status_MangaAdded {
             get {
@@ -115,7 +115,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Removed manga .
+        ///   Ищет локализованную строку, похожую на Удалена манга .
         /// </summary>
         public static string Library_Status_MangaRemoved {
             get {
@@ -124,7 +124,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Update .
+        ///   Ищет локализованную строку, похожую на Обновление .
         /// </summary>
         public static string Library_Status_MangaUpdate {
             get {
@@ -133,7 +133,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Mangas update.
+        ///   Ищет локализованную строку, похожую на Обновление манги.
         /// </summary>
         public static string Library_Status_Update {
             get {
@@ -142,7 +142,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Update complete.
+        ///   Ищет локализованную строку, похожую на Обновление манги завершено.
         /// </summary>
         public static string Library_Status_UpdateComplete {
             get {
@@ -151,7 +151,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Remove.
+        ///   Ищет локализованную строку, похожую на Удалить.
         /// </summary>
         public static string Manga_Action_Remove {
             get {
@@ -160,7 +160,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на U want to remove {0} ?.
+        ///   Ищет локализованную строку, похожую на Вы хотите удалить {0} ?.
         /// </summary>
         public static string Manga_Action_Remove_Confirm {
             get {
@@ -169,7 +169,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Update.
+        ///   Ищет локализованную строку, похожую на Обновить.
         /// </summary>
         public static string Manga_Action_Update {
             get {
@@ -178,7 +178,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на View.
+        ///   Ищет локализованную строку, похожую на Посмотреть.
         /// </summary>
         public static string Manga_Action_View {
             get {
@@ -187,7 +187,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Select action.
+        ///   Ищет локализованную строку, похожую на Выберите действие.
         /// </summary>
         public static string Manga_Dialog_Content {
             get {
@@ -196,7 +196,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Change.
+        ///   Ищет локализованную строку, похожую на Изменить.
         /// </summary>
         public static string Settings_ChangeButton {
             get {
@@ -205,7 +205,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Compress manga after downloading.
+        ///   Ищет локализованную строку, похожую на Сжимать мангу после скачивания.
         /// </summary>
         public static string Settings_Compress {
             get {
@@ -214,7 +214,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Download manga to:.
+        ///   Ищет локализованную строку, похожую на Скачивать мангу в:.
         /// </summary>
         public static string Settings_DownloadMangaTo {
             get {
@@ -223,7 +223,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Default language:.
+        ///   Ищет локализованную строку, похожую на Язык по умолчанию:.
         /// </summary>
         public static string Settings_Language {
             get {
@@ -232,7 +232,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Its language for manga in library and downloaded archive..
+        ///   Ищет локализованную строку, похожую на Язык влияет на названия манги в архивах и в библиотеке..
         /// </summary>
         public static string Settings_LanguageHint {
             get {
@@ -241,7 +241,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Just update manga, no full download.
+        ///   Ищет локализованную строку, похожую на Обновлять мангу вместо полного скачивания.
         /// </summary>
         public static string Settings_Update {
             get {
@@ -250,7 +250,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Update MangaReader on start..
+        ///   Ищет локализованную строку, похожую на Обновлять программу при запуске.
         /// </summary>
         public static string Settings_UpdateReader {
             get {

@@ -104,7 +104,7 @@ namespace MangaReader
             if (result.Text == Strings.Manga_Action_Update)
             {
                 if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
-                    _loadThread = new Thread(() => Library.Update(manga, true));
+                    _loadThread = new Thread(() => Library.Update(manga));
                 if (_loadThread.ThreadState == ThreadState.Unstarted)
                     _loadThread.Start();
             }

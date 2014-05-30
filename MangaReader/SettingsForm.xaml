@@ -17,13 +17,14 @@
         </ObjectDataProvider>
     </Window.Resources>
     <Grid>
-        <CheckBox x:Name="UpdateBox" Content="{x:Static resx:Strings.Settings_Update}" Margin="10,197,13.4,0" Height="16" VerticalAlignment="Top"/>
-        <TextBlock TextTrimming="WordEllipsis" Text="{x:Static resx:Strings.Settings_DownloadMangaTo}" Margin="10,25,13.4,0" Height="14" VerticalAlignment="Top"></TextBlock>
-        <TextBlock TextTrimming="WordEllipsis" x:Name="DownloadPath"  Margin="10,50,78.4,0" Height="15" VerticalAlignment="Top"></TextBlock>
-        <Button Content="{x:Static resx:Strings.Settings_ChangeButton}" Click="ChangeFolder" Margin="0,49,13.4,0" Height="23" HorizontalAlignment="Right" Width="60" VerticalAlignment="Top"/>
-        <TextBlock TextTrimming="WordEllipsis" Text="{x:Static resx:Strings.Settings_Language}" Margin="10,94,109.4,0" Height="14" VerticalAlignment="Top"></TextBlock>
-        <ComboBox x:Name="Language" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Source={StaticResource Languages}}" Height="26" Margin="0,87,13.4,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91"></ComboBox>
-        <CheckBox x:Name="UpdateReaderBox" Content="{x:Static resx:Strings.Settings_UpdateReader}" Margin="10,171,13.4,0" Height="16" VerticalAlignment="Top"/>
-        <TextBlock TextWrapping="Wrap" TextTrimming="WordEllipsis" Text="{x:Static resx:Strings.Settings_LanguageHint}" Margin="38,128,38.4,0" Height="34" VerticalAlignment="Top"/>
+        <CheckBox x:Name="UpdateBox" Content="{x:Static resx:Strings.Settings_Update}" Margin="10,181,13.4,0" Height="16" VerticalAlignment="Top"/>
+        <TextBlock TextTrimming="WordEllipsis" Text="{x:Static resx:Strings.Settings_DownloadMangaTo}" Margin="10,9,13.4,0" Height="14" VerticalAlignment="Top"></TextBlock>
+        <TextBlock TextTrimming="WordEllipsis" x:Name="DownloadPath"  Margin="10,34,78.4,0" Height="15" VerticalAlignment="Top"></TextBlock>
+        <Button Content="{x:Static resx:Strings.Settings_ChangeButton}" Click="ChangeFolder" Margin="0,33,13.4,0" Height="23" HorizontalAlignment="Right" Width="60" VerticalAlignment="Top"/>
+        <TextBlock TextTrimming="WordEllipsis" Text="{x:Static resx:Strings.Settings_Language}" Margin="10,78,109.4,0" Height="14" VerticalAlignment="Top"></TextBlock>
+        <ComboBox x:Name="Language" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Source={StaticResource Languages}}" Height="26" Margin="0,71,13.4,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91"></ComboBox>
+        <CheckBox x:Name="UpdateReaderBox" Content="{x:Static resx:Strings.Settings_UpdateReader}" Margin="10,155,13.4,0" Height="16" VerticalAlignment="Top"/>
+        <CheckBox x:Name="CompressBox" Content="Сжимать мангу после скачивания" Margin="10,207,13.4,0" Height="16" VerticalAlignment="Top"/>
+        <TextBlock TextWrapping="Wrap" TextTrimming="WordEllipsis" Text="{x:Static resx:Strings.Settings_LanguageHint}" Margin="38,112,38.4,0" Height="34" VerticalAlignment="Top"/>
     </Grid>
 </Window>

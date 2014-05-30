@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 
 namespace MangaReader
@@ -46,6 +47,11 @@ namespace MangaReader
         public static string ChapterPrefix = "Chapter_";
 
         /// <summary>
+        /// Сжимать скачанную мангу.
+        /// </summary>
+        public static bool CompressManga = true;
+
+        /// <summary>
         /// Сохранить настройки.
         /// </summary>
         public static void Save()
@@ -55,7 +61,8 @@ namespace MangaReader
                 Language,
                 Update,
                 UpdateReader,
-                DownloadFolder
+                DownloadFolder,
+                CompressManga
             };
             Serializer<object[]>.Save(SettingsPath, settings);
         }
@@ -69,10 +76,15 @@ namespace MangaReader
             if (settings == null)
                 return;
 
-            Language = (Languages) settings[0];
-            Update = (bool) settings[1];
-            UpdateReader = (bool) settings[2];
-            DownloadFolder = (string) settings[3];
+            try
+            {
+                Language = (Languages) settings[0];
+                Update = (bool) settings[1];
+                UpdateReader = (bool) settings[2];
+                DownloadFolder = (string) settings[3];
+                CompressManga = (bool) settings[4];
+            }
+            catch (IndexOutOfRangeException){}
         }
 
         /// <summary>

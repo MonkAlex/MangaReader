@@ -143,9 +143,8 @@ namespace MangaReader
         /// <summary>
         /// Обновить мангу.
         /// </summary>
-        /// <param name="needCompress">Сжимать скачанное?</param>
         /// <param name="manga">Обновляемая манга. По умолчанию - вся.</param>
-        public static void Update(Manga manga = null, bool needCompress = true)
+        public static void Update(Manga manga = null)
         {
             Settings.Update = true;
 
@@ -168,7 +167,7 @@ namespace MangaReader
                 {
                     var folder = Settings.DownloadFolder + "\\" + current.Name;
                     current.Download(folder);
-                    if (needCompress)
+                    if (Settings.CompressManga)
                         Comperssion.ComperssVolumes(folder);
                 });
             }

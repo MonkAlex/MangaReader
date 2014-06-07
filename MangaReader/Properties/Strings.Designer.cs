@@ -196,6 +196,15 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Перевод: завершен.
+        /// </summary>
+        public static string Manga_IsCompleted {
+            get {
+                return ResourceManager.GetString("Manga_IsCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Интернет недоступен.
         /// </summary>
         public static string Page_GetPage_InternetOff {

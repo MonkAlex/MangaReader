@@ -90,7 +90,7 @@ namespace MangaReader
             using (var dialog = new TaskDialog())
             {
                 dialog.WindowTitle = manga.Name;
-                dialog.Content = Strings.Manga_Dialog_Content;
+                dialog.Content = manga.Status;
 
                 dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_Update));
                 dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_Remove));

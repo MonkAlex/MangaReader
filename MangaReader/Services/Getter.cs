@@ -34,6 +34,22 @@ namespace MangaReader
             return name;
         }
 
+        public static string GetTranslateStatus(string mangaMainPage)
+        {
+            var status = string.Empty;
+            try
+            {
+                var document = new HtmlDocument();
+                document.LoadHtml(mangaMainPage);
+                var nodes = document.DocumentNode.SelectNodes("//div[@class=\"subject-meta\"]//p");
+                if (nodes != null)
+                    status = nodes.Aggregate(status, (current, node) =>
+                        current + Regex.Replace(node.InnerText.Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
+            }
+            catch (NullReferenceException ex) { Log.Exception(ex); }
+            return status;
+        }
+
         /// <summary>
         /// Получить обложку манги.
         /// </summary>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MangaReader.Properties;
 
 namespace MangaReader
 {
@@ -37,7 +38,17 @@ namespace MangaReader
         /// </summary>
         public bool IsValid
         {
-            get { return !string.IsNullOrWhiteSpace(this.Name) && this.listOfChapters != null && this.Cover != null; }
+            get { return !string.IsNullOrWhiteSpace(this.Name) &&
+                this.listOfChapters != null && this.Cover != null; }
+        }
+
+        /// <summary>
+        /// Статус перевода.
+        /// </summary>
+        public bool IsCompleted
+        {
+            get { return !string.IsNullOrWhiteSpace(this.Status) &&
+                this.Status.Contains(Strings.Manga_IsCompleted); }
         }
 
         /// <summary>
@@ -66,6 +77,7 @@ namespace MangaReader
             this.Name = Getter.GetMangaName(page).ToString();
             this.listOfChapters = Getter.GetLinksOfMangaChapters(page, this.Url);
             this.Cover = Getter.GetMangaCover(page);
+            this.Status = Getter.GetTranslateStatus(page);
         }
 
         /// <summary>

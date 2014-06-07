@@ -189,4 +189,7 @@
   <data name="Page_GetPage_InternetOff" xml:space="preserve">
     <value>Интернет недоступен</value>
   </data>
+  <data name="Manga_IsCompleted" xml:space="preserve">
+    <value>Перевод: завершен</value>
+  </data>
 </root>

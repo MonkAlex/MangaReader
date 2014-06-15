@@ -151,7 +151,6 @@ namespace MangaReader
             ObservableCollection<Manga> mangas;
             if (manga != null)
             {
-                Status = Strings.Library_Status_MangaUpdate + manga.Name;
                 UpdateMangaByUrl(manga.Url);
                 mangas = new ObservableCollection<Manga> { manga };
             }
@@ -163,12 +162,13 @@ namespace MangaReader
 
             try
             {
-                Parallel.ForEach(mangas, current =>
+                foreach (var current in mangas)
                 {
+                    Status = Strings.Library_Status_MangaUpdate + current.Name;
                     current.Download();
                     if (Settings.CompressManga)
                         Comperssion.ComperssVolumes(current.Folder);
-                });
+                }
             }
             catch (AggregateException ae)
             {

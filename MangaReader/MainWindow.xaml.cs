@@ -47,7 +47,47 @@ namespace MangaReader
                 TimerTick,
                 Dispatcher.CurrentDispatcher);
             this.FormLibrary.ItemsSource = Library.Initialize();
+
+            var itemContainerStyle = new Style(typeof(ListBoxItem));
+            itemContainerStyle.Setters.Add(new Setter(AllowDropProperty, true));
+            itemContainerStyle.Setters.Add(new EventSetter(PreviewMouseMoveEvent, new MouseEventHandler(_PreviewMouseMoveEvent)));
+            itemContainerStyle.Setters.Add(new EventSetter(DropEvent, new DragEventHandler(Library_Drop)));
+            this.FormLibrary.ItemContainerStyle = itemContainerStyle;
+
             Convert();
+        }
+
+        static void _PreviewMouseMoveEvent(object sender, MouseEventArgs e)
+        {
+            if (!(sender is ListBoxItem) || e.LeftButton != MouseButtonState.Pressed)
+                return;
+
+            var draggedItem = sender as ListBoxItem;
+            DragDrop.DoDragDrop(draggedItem, draggedItem.DataContext, DragDropEffects.Move);
+            draggedItem.IsSelected = true;
+        }
+
+        void Library_Drop(object sender, DragEventArgs e)
+        {
+            var droppedData = e.Data.GetData(typeof(Manga)) as Manga;
+            var target = ((ListBoxItem)(sender)).DataContext as Manga;
+
+            var removedIdx = this.FormLibrary.Items.IndexOf(droppedData);
+            var targetIdx = this.FormLibrary.Items.IndexOf(target);
+
+            if (removedIdx < targetIdx)
+            {
+                Library.DatabaseMangas.Insert(targetIdx + 1, droppedData);
+                Library.DatabaseMangas.RemoveAt(removedIdx);
+            }
+            else
+            {
+                var remIdx = removedIdx + 1;
+                if (Library.DatabaseMangas.Count + 1 <= remIdx)
+                  return;
+                Library.DatabaseMangas.Insert(targetIdx, droppedData);
+                Library.DatabaseMangas.RemoveAt(remIdx);
+            }
         }
 
         /// <summary>
@@ -87,40 +127,10 @@ namespace MangaReader
             if (manga == null)
                 return;
 
-            TaskDialogButton result;
-            using (var dialog = new TaskDialog())
-            {
-                dialog.WindowTitle = manga.Name;
-                dialog.Content = manga.Status;
-
-                dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_Update));
-                dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_Remove));
-                dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_OpenFolder));
-                dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_View));
-                dialog.Buttons.Add(new TaskDialogButton { ButtonType = ButtonType.Cancel });
-
-                dialog.AllowDialogCancellation = true;
-                result = dialog.ShowDialog(this);
-            }
-
-            if (result.Text == Strings.Manga_Action_Update)
-            {
-                if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
-                    _loadThread = new Thread(() => Library.Update(manga));
-                if (_loadThread.ThreadState == ThreadState.Unstarted)
-                    _loadThread.Start();
-            }
-            if (result.Text == Strings.Manga_Action_Remove)
-                Library.Remove(manga);
-            if (result.Text == Strings.Manga_Action_OpenFolder)
-            { 
-                if (Directory.Exists(manga.Folder))
-                  Process.Start(manga.Folder);
-                else
-                  Library.Status = Strings.Library_Status_FolderNotFound;
-            }
-            if (result.Text == Strings.Manga_Action_View)
-                Process.Start(manga.Url);
+            if (Directory.Exists(manga.Folder))
+                Process.Start(manga.Folder);
+            else
+                Library.Status = Strings.Library_Status_FolderNotFound;
         }
 
         /// <summary>
@@ -158,6 +168,58 @@ namespace MangaReader
             AddButton.IsEnabled = isEnabled;
             SettingsButton.IsEnabled = isEnabled;
             FormLibrary.IsEnabled = isEnabled;
+        }
+
+        /// <summary>
+        /// Клик правой кнопкой.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FormLibrary_OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var listBox = sender as ListBox;
+            if (listBox == null || listBox.SelectedItems.Count == 0 || !(e.MouseDevice.DirectlyOver is Image))
+                return;
+
+            var manga = listBox.SelectedItem as Manga;
+            if (manga == null)
+                return;
+
+            TaskDialogButton result;
+            using (var dialog = new TaskDialog())
+            {
+                dialog.WindowTitle = manga.Name;
+                dialog.Content = manga.Status;
+
+                dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_Update));
+                dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_Remove));
+                dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_OpenFolder));
+                dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_View));
+                dialog.Buttons.Add(new TaskDialogButton { ButtonType = ButtonType.Cancel });
+
+                dialog.AllowDialogCancellation = true;
+                result = dialog.ShowDialog(this);
+            }
+
+            if (result.Text == Strings.Manga_Action_Update)
+            {
+                if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
+                    _loadThread = new Thread(() => Library.Update(manga));
+                if (_loadThread.ThreadState == ThreadState.Unstarted)
+                    _loadThread.Start();
+            }
+            if (result.Text == Strings.Manga_Action_Remove)
+                Library.Remove(manga);
+            if (result.Text == Strings.Manga_Action_OpenFolder)
+            {
+                if (Directory.Exists(manga.Folder))
+                    Process.Start(manga.Folder);
+                else
+                    Library.Status = Strings.Library_Status_FolderNotFound;
+            }
+            if (result.Text == Strings.Manga_Action_View)
+                Process.Start(manga.Url);
+
         }
     }
 }

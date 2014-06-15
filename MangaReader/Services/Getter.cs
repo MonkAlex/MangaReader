@@ -143,10 +143,12 @@ namespace MangaReader
                 return chapterLinksList;
 
             chapterLinksList = Regex
-                .Matches(firstOrDefault.OuterHtml, @"{url:.[/:a-z0-9\-\._()\[\]&+]+", RegexOptions.IgnoreCase)
+                .Matches(firstOrDefault.OuterHtml, @"{url:""(.*?)""", RegexOptions.IgnoreCase)
+                .OfType<Group>()
+                .Select(g => g.Captures[0])
                 .OfType<Match>()
-                .Select(m => m.Groups[0].Value.Remove(0, 6))
-                .Select(l => (!Uri.IsWellFormedUriString(l, UriKind.Absolute)) ? (@"http://" + new Uri(url).Host + l) : l)
+                .Select(m => m.Groups[1].Value)
+                .Select(s => (!Uri.IsWellFormedUriString(s, UriKind.Absolute)) ? (@"http://" + new Uri(url).Host + s) : s)
                 .ToList();
             return chapterLinksList;
         }

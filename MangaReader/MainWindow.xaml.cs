@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -94,6 +95,7 @@ namespace MangaReader
 
                 dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_Update));
                 dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_Remove));
+                dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_OpenFolder));
                 dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_View));
                 dialog.Buttons.Add(new TaskDialogButton { ButtonType = ButtonType.Cancel });
 
@@ -110,6 +112,13 @@ namespace MangaReader
             }
             if (result.Text == Strings.Manga_Action_Remove)
                 Library.Remove(manga);
+            if (result.Text == Strings.Manga_Action_OpenFolder)
+            { 
+                if (Directory.Exists(manga.Folder))
+                  Process.Start(manga.Folder);
+                else
+                  Library.Status = Strings.Library_Status_FolderNotFound;
+            }
             if (result.Text == Strings.Manga_Action_View)
                 Process.Start(manga.Url);
         }

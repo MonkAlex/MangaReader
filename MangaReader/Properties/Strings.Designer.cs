@@ -106,6 +106,15 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Папка c мангой не найдена.
+        /// </summary>
+        public static string Library_Status_FolderNotFound {
+            get {
+                return ResourceManager.GetString("Library_Status_FolderNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Добавлена манга .
         /// </summary>
         public static string Library_Status_MangaAdded {
@@ -151,6 +160,15 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Открыть папку.
+        /// </summary>
+        public static string Manga_Action_OpenFolder {
+            get {
+                return ResourceManager.GetString("Manga_Action_OpenFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Удалить.
         /// </summary>
         public static string Manga_Action_Remove {
@@ -178,7 +196,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Посмотреть.
+        ///   Ищет локализованную строку, похожую на Открыть сайт.
         /// </summary>
         public static string Manga_Action_View {
             get {

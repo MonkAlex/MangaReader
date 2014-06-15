@@ -43,6 +43,14 @@ namespace MangaReader
         }
 
         /// <summary>
+        /// Папка с мангой.
+        /// </summary>
+        public string Folder
+        {
+            get { return Page.MakeValidPath(Settings.DownloadFolder + "\\" + this.Name); }
+        }
+
+        /// <summary>
         /// Статус перевода.
         /// </summary>
         public bool IsCompleted
@@ -95,8 +103,10 @@ namespace MangaReader
         /// <summary>
         /// Скачать все главы.
         /// </summary>
-        public void Download(string mangaFolder, string volumePrefix = null, string chapterPrefix = null)
+        public void Download(string mangaFolder = null, string volumePrefix = null, string chapterPrefix = null)
         {
+            if (mangaFolder == null)
+                mangaFolder = this.Folder;
             if (volumePrefix == null)
                 volumePrefix = Settings.VolumePrefix;
             if (chapterPrefix == null)

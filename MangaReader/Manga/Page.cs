@@ -96,19 +96,6 @@ namespace MangaReader
         }
 
         /// <summary>
-        /// Очистка имени файла от недопустимых символов.
-        /// </summary>
-        /// <param name="name">Имя файла.</param>
-        /// <returns>Исправленное имя файла.</returns>
-        public static string MakeValidFileName(string name)
-        {
-            var invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
-            var invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
-
-            return Regex.Replace(name, invalidRegStr, "_");
-        }
-
-        /// <summary>
         /// Очистка пути от недопустимых символов.
         /// </summary>
         /// <param name="name">Путь.</param>
@@ -126,7 +113,7 @@ namespace MangaReader
             else
                 correctName = name.Replace(":", replacement);
 
-            var invalidChars = Regex.Escape(new string(Path.GetInvalidPathChars()));
+            var invalidChars = Regex.Escape(string.Concat(new string(Path.GetInvalidPathChars()), "?", "/", "*"));
             var invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
 
             return Regex.Replace(correctName, invalidRegStr, replacement);

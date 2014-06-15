@@ -69,7 +69,7 @@ namespace MangaReader
                 {
                     var file = Page.DownloadFile(link);
                     if (file == null)
-                        throw new Exception("Restart chapter download, downloaded file is corrupted.");
+                        throw new Exception("Restart chapter download, downloaded file is corrupted, link = " + link);
 
                     var fileName = listOfImageLink
                         .FindIndex(l => l == link)

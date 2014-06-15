@@ -165,10 +165,9 @@ namespace MangaReader
             {
                 Parallel.ForEach(mangas, current =>
                 {
-                    var folder = Settings.DownloadFolder + "\\" + current.Name;
-                    current.Download(folder);
+                    current.Download();
                     if (Settings.CompressManga)
-                        Comperssion.ComperssVolumes(folder);
+                        Comperssion.ComperssVolumes(current.Folder);
                 });
             }
             catch (AggregateException ae)

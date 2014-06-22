@@ -90,7 +90,17 @@ namespace MangaReader
         /// </summary>
         public static void Save()
         {
-            Serializer<List<string>>.Save(DatabaseFile, Database);
+            var sortedDatabase = Database
+                .OrderBy(r =>
+                {
+                    var index = DatabaseMangas
+                        .IndexOf(DatabaseMangas
+                            .FirstOrDefault(m => m.Url == r));
+                    return index < 0 ? int.MaxValue : index;
+
+                }).ToList();
+
+            Serializer<List<string>>.Save(DatabaseFile, sortedDatabase);
         }
 
         /// <summary>

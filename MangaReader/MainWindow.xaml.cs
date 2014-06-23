@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -34,6 +35,7 @@ namespace MangaReader
             Settings.Load();
             Update.Initialize();
             InitializeComponent();
+            Settings.UpdateWindowsState(this);
             Initialize();
         }
 
@@ -220,6 +222,11 @@ namespace MangaReader
             if (result.Text == Strings.Manga_Action_View)
                 Process.Start(manga.Url);
 
+        }
+
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            Settings.WindowsState = new object[]{this.Top, this.Left, this.Width, this.Height, this.WindowState};
         }
     }
 }

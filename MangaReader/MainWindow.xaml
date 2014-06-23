@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local ="clr-namespace:MangaReader"
         xmlns:resx="clr-namespace:MangaReader.Properties"
+        Closing="MainWindow_OnClosing"
         Icon="main.ico"
         Title="{x:Static resx:Strings.Title}"  Height="350" Width="525">
     <Window.Resources>

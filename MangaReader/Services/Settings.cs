@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Windows;
 
 namespace MangaReader
 {
@@ -52,6 +53,11 @@ namespace MangaReader
         public static bool CompressManga = true;
 
         /// <summary>
+        /// Состояние окна.
+        /// </summary>
+        public static object[] WindowsState;
+
+        /// <summary>
         /// Сохранить настройки.
         /// </summary>
         public static void Save()
@@ -62,7 +68,8 @@ namespace MangaReader
                 Update,
                 UpdateReader,
                 DownloadFolder,
-                CompressManga
+                CompressManga,
+                WindowsState
             };
             Serializer<object[]>.Save(SettingsPath, settings);
         }
@@ -83,8 +90,28 @@ namespace MangaReader
                 UpdateReader = (bool) settings[2];
                 DownloadFolder = (string) settings[3];
                 CompressManga = (bool) settings[4];
+                WindowsState = (object[]) settings[5];
             }
             catch (IndexOutOfRangeException){}
+        }
+
+        /// <summary>
+        /// Загрузить положение и размеры окна.
+        /// </summary>
+        /// <param name="main">Окно.</param>
+        public static void UpdateWindowsState(MainWindow main)
+        {
+            if (WindowsState == null)
+                return;
+            try
+            {
+                main.Top = (double)WindowsState[0];
+                main.Left = (double)WindowsState[1];
+                main.Width = (double)WindowsState[2];
+                main.Height = (double)WindowsState[3];
+                main.WindowState = (WindowState)WindowsState[4];
+            }
+            catch (IndexOutOfRangeException) { }
         }
 
         /// <summary>

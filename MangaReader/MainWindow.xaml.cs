@@ -9,7 +9,6 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using MangaReader.Properties;
 using MangaReader.Services;
-using Ookii.Dialogs.Wpf;
 using ThreadState = System.Threading.ThreadState;
 
 namespace MangaReader
@@ -187,41 +186,37 @@ namespace MangaReader
             if (manga == null)
                 return;
 
-            TaskDialogButton result;
-            using (var dialog = new TaskDialog())
-            {
-                dialog.WindowTitle = manga.Name;
-                dialog.Content = manga.Status;
+            var openFolder = new MenuItem() {Header = Strings.Manga_Action_OpenFolder, FontWeight = FontWeights.Bold};
+            openFolder.Click += (o, args) => MenuOpenFolder(manga);
+            var update = new MenuItem() {Header = Strings.Manga_Action_Update};
+            update.Click += (o, agrs) => UpdateManga(manga);
+            var remove = new MenuItem() {Header = Strings.Manga_Action_Remove};
+            remove.Click += (o, agrs) => Library.Remove(manga);
+            var view = new MenuItem() {Header = Strings.Manga_Action_View};
+            view.Click += (o, agrs) => Process.Start(manga.Url);
 
-                dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_Update));
-                dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_Remove));
-                dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_OpenFolder));
-                dialog.Buttons.Add(new TaskDialogButton(Strings.Manga_Action_View));
-                dialog.Buttons.Add(new TaskDialogButton { ButtonType = ButtonType.Cancel });
+            var menu = new ContextMenu();
+            menu.Items.Add(openFolder);
+            menu.Items.Add(update);
+            menu.Items.Add(view);
+            menu.Items.Add(remove);
+            this.FormLibrary.ContextMenu = menu;
+        }
 
-                dialog.AllowDialogCancellation = true;
-                result = dialog.ShowDialog(this);
-            }
+        private static void UpdateManga(Manga manga)
+        {
+            if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
+                _loadThread = new Thread(() => Library.Update(manga));
+            if (_loadThread.ThreadState == ThreadState.Unstarted)
+                _loadThread.Start();
+        }
 
-            if (result.Text == Strings.Manga_Action_Update)
-            {
-                if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
-                    _loadThread = new Thread(() => Library.Update(manga));
-                if (_loadThread.ThreadState == ThreadState.Unstarted)
-                    _loadThread.Start();
-            }
-            if (result.Text == Strings.Manga_Action_Remove)
-                Library.Remove(manga);
-            if (result.Text == Strings.Manga_Action_OpenFolder)
-            {
-                if (Directory.Exists(manga.Folder))
-                    Process.Start(manga.Folder);
-                else
-                    Library.Status = Strings.Library_Status_FolderNotFound;
-            }
-            if (result.Text == Strings.Manga_Action_View)
-                Process.Start(manga.Url);
-
+        private static void MenuOpenFolder(Manga manga)
+        {
+            if (Directory.Exists(manga.Folder))
+                Process.Start(manga.Folder);
+            else
+                Library.Status = Strings.Library_Status_FolderNotFound;
         }
 
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Windows.Shell;
 using System.Windows.Threading;
 using MangaReader.Properties;
 
@@ -36,13 +36,18 @@ namespace MangaReader
         /// </summary>
         private static Dispatcher formDispatcher;
 
+        /// <summary>
+        /// Таскбар окна.
+        /// </summary>
+        private static TaskbarItemInfo taskBar;
+
         #region Методы
 
         /// <summary>
         /// Инициализация библиотеки - заполнение массива из кеша.
         /// </summary>
         /// <returns></returns>
-        public static ObservableCollection<Manga> Initialize()
+        public static ObservableCollection<Manga> Initialize(TaskbarItemInfo taskbar)
         {
             foreach (var manga in Cache.Get())
             {
@@ -50,6 +55,7 @@ namespace MangaReader
             }
             DatabaseMangas.CollectionChanged += (s, e) => Cache.Add(DatabaseMangas);
             formDispatcher = Dispatcher.CurrentDispatcher;
+            taskBar = taskbar;
             return DatabaseMangas;
         }
 
@@ -158,6 +164,8 @@ namespace MangaReader
         {
             Settings.Update = true;
 
+            formDispatcher.Invoke(() => taskBar.ProgressState = TaskbarItemProgressState.Indeterminate);
+
             ObservableCollection<Manga> mangas;
             if (manga != null)
             {
@@ -172,12 +180,14 @@ namespace MangaReader
 
             try
             {
+                formDispatcher.Invoke(() => taskBar.ProgressState = TaskbarItemProgressState.Normal);
                 foreach (var current in mangas)
                 {
                     Status = Strings.Library_Status_MangaUpdate + current.Name;
+                    formDispatcher.Invoke(() => taskBar.ProgressValue += 1.0/mangas.Count);
                     current.Download();
                     if (Settings.CompressManga)
-                        Comperssion.ComperssVolumes(current.Folder);
+                      Comperssion.ComperssVolumes(current.Folder);
                 }
             }
             catch (AggregateException ae)
@@ -191,6 +201,11 @@ namespace MangaReader
             }
             finally
             {
+                formDispatcher.Invoke(() =>
+                {
+                    taskBar.ProgressValue = 0;
+                    taskBar.ProgressState = TaskbarItemProgressState.None;
+                });
                 Status = Strings.Library_Status_UpdateComplete;
             }
 

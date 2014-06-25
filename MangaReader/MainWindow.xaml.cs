@@ -47,7 +47,7 @@ namespace MangaReader
                 DispatcherPriority.Background,
                 TimerTick,
                 Dispatcher.CurrentDispatcher);
-            this.FormLibrary.ItemsSource = Library.Initialize();
+            this.FormLibrary.ItemsSource = Library.Initialize(this.TaskBar);
 
             var itemContainerStyle = new Style(typeof(ListBoxItem));
             itemContainerStyle.Setters.Add(new Setter(AllowDropProperty, true));

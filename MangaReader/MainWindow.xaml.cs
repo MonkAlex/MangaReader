@@ -223,5 +223,15 @@ namespace MangaReader
         {
             Settings.WindowsState = new object[]{this.Top, this.Left, this.Width, this.Height, this.WindowState};
         }
+
+        private void FormLibrary_OnMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            var listBox = sender as ListBox;
+            if (listBox == null || listBox.SelectedItems.Count == 0)
+                return;
+
+            if (!(e.MouseDevice.DirectlyOver is Image))
+                listBox.SelectedIndex = -1;
+        }
     }
 }

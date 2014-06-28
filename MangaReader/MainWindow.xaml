@@ -45,6 +45,7 @@
         <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                  MouseDoubleClick="Mangas_clicked"
                  MouseRightButtonUp="FormLibrary_OnMouseRightButtonUp"
+                 MouseUp="FormLibrary_OnMouseUp"
                  x:Name="FormLibrary" 
                  Margin="10,10,10.4,38.4">
             <ListBox.ItemsPanel>

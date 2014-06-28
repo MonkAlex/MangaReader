@@ -107,9 +107,12 @@
     <Compile Include="Services\History.cs" />
     <Compile Include="Services\Library.cs" />
     <Compile Include="Services\Settings.cs" />
-    <Compile Include="Services\Update.cs" />
+    <Compile Include="Update\Update.cs" />
     <Compile Include="SettingsForm.xaml.cs">
       <DependentUpon>SettingsForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Update\VersionHistory.xaml.cs">
+      <DependentUpon>VersionHistory.xaml</DependentUpon>
     </Compile>
     <Page Include="Input.xaml">
       <SubType>Designer</SubType>
@@ -132,6 +135,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SettingsForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Update\VersionHistory.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -187,6 +194,9 @@
   <ItemGroup>
     <EmbeddedResource Include="HtmlAgilityPack.dll" />
     <EmbeddedResource Include="Ookii.Dialogs.Wpf.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Update\VersionHistory.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

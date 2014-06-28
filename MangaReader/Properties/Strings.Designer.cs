@@ -302,5 +302,23 @@ namespace MangaReader.Properties {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Версия: {0}.{1}.{2}.
+        /// </summary>
+        public static string Update_Label_Version {
+            get {
+                return ResourceManager.GetString("Update_Label_Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на История версий.
+        /// </summary>
+        public static string Update_Title {
+            get {
+                return ResourceManager.GetString("Update_Title", resourceCulture);
+            }
+        }
     }
 }

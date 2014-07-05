@@ -55,6 +55,17 @@
                                x:Name="ListWrapPanel"/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
+            <ListBox.ItemContainerStyle>
+                <Style>
+                    <Setter Property="UIElement.AllowDrop" Value="true"/>
+                    <EventSetter Event="UIElement.PreviewMouseMove" Handler="_PreviewMouseMoveEvent"/>
+                    <EventSetter Event="UIElement.Drop" Handler="Library_Drop"/>
+                    <Style.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="LightSlateGray"/>
+                    </Style.Resources>
+                </Style>
+            </ListBox.ItemContainerStyle>
         </ListBox>
         <StatusBar x:Name="StatusBar"
                    Margin="18,0,260.4,5.4" 

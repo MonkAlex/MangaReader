@@ -32,6 +32,14 @@
                                x:Name="ListWrapPanel"/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
+            <ListBox.ItemContainerStyle>
+                <Style>
+                    <Style.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="LightSlateGray"/>
+                    </Style.Resources>
+                </Style>
+            </ListBox.ItemContainerStyle>
         </ListBox>
         <TextBox x:Name="Login" Margin="0,11,390,0" Height="23" VerticalAlignment="Top" HorizontalAlignment="Right" Width="290"/>
         <PasswordBox x:Name="Password" Margin="0,11,80,0" PasswordChar="♥" Height="23" VerticalAlignment="Top" HorizontalAlignment="Right" Width="290"/>

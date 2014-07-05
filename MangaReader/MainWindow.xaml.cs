@@ -49,17 +49,10 @@ namespace MangaReader
                 TimerTick,
                 Dispatcher.CurrentDispatcher);
             this.FormLibrary.ItemsSource = Library.Initialize(this.TaskBar);
-
-            var itemContainerStyle = new Style(typeof(ListBoxItem));
-            itemContainerStyle.Setters.Add(new Setter(AllowDropProperty, true));
-            itemContainerStyle.Setters.Add(new EventSetter(PreviewMouseMoveEvent, new MouseEventHandler(_PreviewMouseMoveEvent)));
-            itemContainerStyle.Setters.Add(new EventSetter(DropEvent, new DragEventHandler(Library_Drop)));
-            this.FormLibrary.ItemContainerStyle = itemContainerStyle;
-
             Convert();
         }
 
-        static void _PreviewMouseMoveEvent(object sender, MouseEventArgs e)
+        void _PreviewMouseMoveEvent(object sender, MouseEventArgs e)
         {
             if (!(sender is ListBoxItem) || e.LeftButton != MouseButtonState.Pressed)
                 return;

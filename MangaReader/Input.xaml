@@ -1,15 +1,40 @@
 ﻿<Window x:Class="MangaReader.Input"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:Properties="clr-namespace:MangaReader.Properties"
+        xmlns:properties="clr-namespace:MangaReader.Properties"
+        xmlns:local ="clr-namespace:MangaReader"
         Icon="main.ico"
-        Title="{x:Static Properties:Strings.Input_Title}" Height="107.333" Width="220.8"
-        WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize"
-        WindowStyle="ToolWindow">
-    <StackPanel Margin="0,0,-0.4,0.4">
-        <TextBlock Text="{x:Static Properties:Strings.Input_Text}" Margin="10,0,9.4,0" />
-        <TextBox x:Name="Result" Margin="10,0,9.4,0" />
-        <Button Content="{x:Static Properties:Strings.Input_Add}" Click="Add_click" IsDefault="True" Height="23" Margin="10,0,9.4,0"/>
-    </StackPanel>
+        Title="{x:Static properties:Strings.Input_Title}" 
+        Height="400" Width="700"
+        MinWidth="700"
+        WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type local:Manga}">
+            <StackPanel>
+                <Image Source="{Binding Path=Cover}"/>
+                <TextBlock Text="{Binding Path=Name}"/>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <TextBlock Text="{x:Static properties:Strings.Input_Text}" TextWrapping="WrapWithOverflow" Margin="31,0,225,38" Height="29" VerticalAlignment="Bottom" />
+        <TextBox x:Name="Result" Margin="31,0,225,10" Height="23" VerticalAlignment="Bottom" />
+        <Button Content="{x:Static properties:Strings.Input_Add}" Click="Add_click" IsDefault="True" Margin="0,0,10,10" Height="57" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="159"/>
+        <ListBox x:Name="Bookmarks"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                 SelectionMode="Multiple"
+                 MouseUp="Bookmarks_OnMouseUp"
+                 Margin="10,40,10,72">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True"
+                               ItemWidth="140"
+                               x:Name="ListWrapPanel"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+        <TextBox x:Name="Login" Margin="0,11,390,0" Height="23" VerticalAlignment="Top" HorizontalAlignment="Right" Width="290"/>
+        <PasswordBox x:Name="Password" Margin="0,11,80,0" PasswordChar="♥" Height="23" VerticalAlignment="Top" HorizontalAlignment="Right" Width="290"/>
+        <Button Content="{x:Static properties:Strings.Input_Login}" Click="Login_click" IsDefault="True" Margin="0,10,10,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Width="47"/>
+    </Grid>
 </Window>

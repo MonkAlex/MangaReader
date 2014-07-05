@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -142,8 +143,15 @@ namespace MangaReader
         private void Add_click(object sender, RoutedEventArgs e)
         {
             var db = new Input { Owner = this };
-            if (db.ShowDialog() == true)
+            if (db.ShowDialog() != true) 
+                return;
+
+            if (!string.IsNullOrWhiteSpace(db.Result.Text))
                 Library.Add(db.Result.Text);
+            foreach (var manga in db.Bookmarks.SelectedItems.OfType<Manga>())
+            {
+                Library.Add(manga.Url);
+            }
         }
 
         /// <summary>

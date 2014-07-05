@@ -69,12 +69,13 @@ namespace MangaReader
         /// Получить текст страницы.
         /// </summary>
         /// <param name="url">Ссылка на страницу.</param>
+        /// <param name="client">Клиент, если нужен специфичный.</param>
         /// <returns>Исходный код страницы.</returns>
-        public static string GetPage(string url)
+        public static string GetPage(string url, WebClient client = null)
         {
             try
             {
-                var webClient = new WebClient {Encoding = Encoding.UTF8};
+                var webClient = client ?? new WebClient {Encoding = Encoding.UTF8};
                 return webClient.DownloadString(new Uri(url));
             }
             catch (UriFormatException ex)

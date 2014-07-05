@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows;
+using MangaReader.Logins;
 
 namespace MangaReader
 {
@@ -58,6 +60,11 @@ namespace MangaReader
         public static object[] WindowsState;
 
         /// <summary>
+        /// Логин.
+        /// </summary>
+        public static Login Login = new Login();
+
+        /// <summary>
         /// Сохранить настройки.
         /// </summary>
         public static void Save()
@@ -69,7 +76,8 @@ namespace MangaReader
                 UpdateReader,
                 DownloadFolder,
                 CompressManga,
-                WindowsState
+                WindowsState,
+                new object[] {Login.Name, Login.Password}
             };
             Serializer<object[]>.Save(SettingsPath, settings);
         }
@@ -91,6 +99,7 @@ namespace MangaReader
                 DownloadFolder = (string) settings[3];
                 CompressManga = (bool) settings[4];
                 WindowsState = (object[]) settings[5];
+                Login = new Login() { Name = (string)((object[])settings[6])[0], Password = (string)((object[])settings[6])[1] }; 
             }
             catch (IndexOutOfRangeException){}
         }

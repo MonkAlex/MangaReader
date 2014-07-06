@@ -207,4 +207,7 @@
   <data name="Input_Login" xml:space="preserve">
     <value>Вход</value>
   </data>
+  <data name="Input_Logout" xml:space="preserve">
+    <value>Выход</value>
+  </data>
 </root>

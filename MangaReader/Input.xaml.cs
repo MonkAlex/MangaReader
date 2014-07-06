@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using MangaReader.Logins;
+using MangaReader.Properties;
 
 namespace MangaReader
 {
@@ -13,9 +14,13 @@ namespace MangaReader
         public Input()
         {
             InitializeComponent();
+            this.Bookmarks.ItemsSource = Grouple.Bookmarks;
             Result.Focus();
             this.Login.Text = Settings.Login.Name;
             this.Password.Password = Settings.Login.Password;
+            this.Login.IsEnabled = !Grouple.IsLogined;
+            this.Password.IsEnabled = !Grouple.IsLogined;
+            this.Enter.Content = Grouple.IsLogined ? Strings.Input_Logout : Strings.Input_Login;
         }
 
         public string ResponseText
@@ -26,9 +31,20 @@ namespace MangaReader
 
         private void Login_click(object sender, RoutedEventArgs e)
         {
-            Settings.Login = new Login() { Name = Login.Text, Password = Password.Password };
-            Grouple.Login();
-            this.Bookmarks.ItemsSource = Grouple.LoadBookmarks();
+            var logined = Grouple.IsLogined;
+            if (!logined)
+            {
+                Settings.Login = new Login() { Name = Login.Text, Password = Password.Password };
+                Grouple.Login();
+            }
+            else
+                Grouple.Logout();
+            logined = Grouple.IsLogined;
+
+            this.Bookmarks.ItemsSource = logined ? Grouple.Bookmarks : null;
+            this.Login.IsEnabled = !logined;
+            this.Password.IsEnabled = !logined;
+            this.Enter.Content = logined ? Strings.Input_Logout : Strings.Input_Login;
         }
 
         private void Add_click(object sender, RoutedEventArgs e)
@@ -43,7 +59,7 @@ namespace MangaReader
             if (listBox == null || listBox.SelectedItems.Count == 0)
                 return;
 
-            if (!(e.MouseDevice.DirectlyOver is Image))
+            if (!(e.MouseDevice.DirectlyOver is TextBlock))
                 listBox.SelectedIndex = -1;
         }
     }

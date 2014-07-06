@@ -79,6 +79,15 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Выход.
+        /// </summary>
+        public static string Input_Logout {
+            get {
+                return ResourceManager.GetString("Input_Logout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Выполните вход и выберите мангу из закладок или введите ссылку на мангу.
         /// </summary>
         public static string Input_Text {

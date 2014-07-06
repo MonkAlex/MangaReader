@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using MangaReader.Logins;
 using MangaReader.Properties;
 using MangaReader.Services;
 using ThreadState = System.Threading.ThreadState;
@@ -50,6 +51,7 @@ namespace MangaReader
                 Dispatcher.CurrentDispatcher);
             this.FormLibrary.ItemsSource = Library.Initialize(this.TaskBar);
             Convert();
+            Grouple.LoginWhile();
         }
 
         void _PreviewMouseMoveEvent(object sender, MouseEventArgs e)

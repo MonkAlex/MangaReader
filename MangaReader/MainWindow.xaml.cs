@@ -197,9 +197,12 @@ namespace MangaReader
             remove.Click += (o, agrs) => Library.Remove(manga);
             var view = new MenuItem() {Header = Strings.Manga_Action_View};
             view.Click += (o, agrs) => Process.Start(manga.Url);
+            var needUpdate = new MenuItem() {Header = manga.NeedUpdate ? "Не обновлять" : "Обновлять"};
+            needUpdate.Click += (o, args) => manga.NeedUpdate = !manga.NeedUpdate;
 
             var menu = new ContextMenu();
             menu.Items.Add(openFolder);
+            menu.Items.Add(needUpdate);
             menu.Items.Add(update);
             menu.Items.Add(view);
             menu.Items.Add(remove);

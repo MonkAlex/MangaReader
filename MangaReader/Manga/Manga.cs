@@ -29,6 +29,11 @@ namespace MangaReader
         public string Status { get; set; }
 
         /// <summary>
+        /// Нужно ли обновлять мангу.
+        /// </summary>
+        public bool NeedUpdate = true;
+
+        /// <summary>
         /// Обложка.
         /// </summary>
         public byte[] Cover { get; set; }
@@ -105,6 +110,9 @@ namespace MangaReader
         /// </summary>
         public void Download(string mangaFolder = null, string volumePrefix = null, string chapterPrefix = null)
         {
+            if (!this.NeedUpdate)
+                return;
+
             if (mangaFolder == null)
                 mangaFolder = this.Folder;
             if (volumePrefix == null)

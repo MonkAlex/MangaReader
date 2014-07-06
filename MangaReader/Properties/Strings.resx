@@ -166,7 +166,7 @@
     <value>Изменить</value>
   </data>
   <data name="Settings_Compress" xml:space="preserve">
-    <value>Сжимать мангу после скачивания</value>
+    <value>Архивировать мангу после скачивания</value>
   </data>
   <data name="Settings_DownloadMangaTo" xml:space="preserve">
     <value>Скачивать мангу в:</value>

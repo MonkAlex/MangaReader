@@ -259,7 +259,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Сжимать мангу после скачивания.
+        ///   Ищет локализованную строку, похожую на Архивировать мангу после скачивания.
         /// </summary>
         public static string Settings_Compress {
             get {

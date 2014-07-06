@@ -27,7 +27,7 @@ namespace MangaReader
                     var acr = string.Concat(volume, "\\",
                         GetFolderName(message), "_", 
                         GetFolderName(volume), "_", 
-                        GetFolderName(chapter), ".zip");
+                        GetFolderName(chapter), ".cbz");
                     if (File.Exists(acr))
                         AddToArchive(acr, chapter);
                     else
@@ -50,7 +50,7 @@ namespace MangaReader
             var volumes = Directory.GetDirectories(message);
             foreach (var volume in volumes)
             {
-                var acr = string.Concat(message, GetFolderName(message), "_", GetFolderName(volume), ".zip");
+                var acr = string.Concat(message, GetFolderName(message), "_", GetFolderName(volume), ".cbz");
                 if (File.Exists(acr))
                     AddToArchive(acr, volume);
                 else

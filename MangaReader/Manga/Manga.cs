@@ -162,6 +162,11 @@ namespace MangaReader
             }
         }
 
+        public override string ToString()
+        {
+            return this.Name;
+        }
+
         #endregion
 
         #region Конструктор

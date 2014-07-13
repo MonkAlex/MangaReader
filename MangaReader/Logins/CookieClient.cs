@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 
 namespace MangaReader.Logins
@@ -14,7 +10,7 @@ namespace MangaReader.Logins
 
         protected override WebRequest GetWebRequest(Uri address)
         {
-            WebRequest request = base.GetWebRequest(address);
+            var request = base.GetWebRequest(address);
             if (request is HttpWebRequest)
             {
                 (request as HttpWebRequest).CookieContainer = cookie;

@@ -23,7 +23,7 @@ namespace MangaReader
         /// <summary>
         /// Ссылка на файл лога исключений.
         /// </summary>
-        private static readonly string ExceptionPath = Settings.WorkFolder + @".\exception.log";
+        private static readonly string ExceptionPath = Settings.WorkFolder + @".\error.log";
 
         /// <summary>
         /// Добавление записи в лог.

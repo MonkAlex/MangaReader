@@ -22,9 +22,11 @@ namespace MangaReader
         private void ChangeFolder(object sender, RoutedEventArgs e)
         {
             var dialog = new VistaFolderBrowserDialog();
-            dialog.ShowDialog();
-            Settings.DownloadFolder = dialog.SelectedPath + "\\";
-            this.DownloadPath.Text = Settings.DownloadFolder;
+            if (dialog.ShowDialog() == true)
+            {
+                Settings.DownloadFolder = dialog.SelectedPath + "\\";
+                this.DownloadPath.Text = Settings.DownloadFolder;
+            }
         }
 
         private void SettingsForm_OnClosed(object sender, EventArgs e)

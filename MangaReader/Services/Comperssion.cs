@@ -18,6 +18,10 @@ namespace MangaReader
             if (!Directory.Exists(message))
                 return;
 
+            // Нельзя сжимать папку со всей мангой.
+            if (message.Trim('\\') == Settings.DownloadFolder.Trim('\\'))
+                return; 
+            
             var volumes = Directory.GetDirectories(message);
             foreach (var volume in volumes)
             {
@@ -45,6 +49,10 @@ namespace MangaReader
         {
             message = Page.MakeValidPath(message) + "\\";
             if (!Directory.Exists(message))
+                return;
+
+            // Нельзя сжимать папку со всей мангой.
+            if (message.Trim('\\') == Settings.DownloadFolder.Trim('\\'))
                 return;
 
             var volumes = Directory.GetDirectories(message);

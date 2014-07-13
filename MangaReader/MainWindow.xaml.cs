@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -51,6 +52,7 @@ namespace MangaReader
                 Dispatcher.CurrentDispatcher);
             this.FormLibrary.ItemsSource = Library.Initialize(this.TaskBar);
             Convert();
+            ServicePointManager.DefaultConnectionLimit = 100;
             Grouple.LoginWhile();
         }
 

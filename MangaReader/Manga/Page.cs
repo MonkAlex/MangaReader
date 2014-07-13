@@ -70,12 +70,16 @@ namespace MangaReader
         /// </summary>
         /// <param name="url">Ссылка на страницу.</param>
         /// <param name="client">Клиент, если нужен специфичный.</param>
+        /// <param name="restartCounter">Попыток скачивания.</param>
         /// <returns>Исходный код страницы.</returns>
-        public static string GetPage(string url, WebClient client = null)
+        public static string GetPage(string url, WebClient client = null, int restartCounter = 0)
         {
             try
             {
-                var webClient = client ?? new WebClient {Encoding = Encoding.UTF8};
+                if (restartCounter > 3)
+                    throw new Exception(string.Format("Load failed after {0} counts.", restartCounter));
+
+                var webClient = client ?? new WebClient { Encoding = Encoding.UTF8 };
                 return webClient.DownloadString(new Uri(url));
             }
             catch (UriFormatException ex)
@@ -86,12 +90,15 @@ namespace MangaReader
             catch (WebException ex)
             {
                 Library.Status = Strings.Page_GetPage_InternetOff;
-                Log.Exception(ex, Strings.Page_GetPage_InternetOff);
-                return string.Empty;
+                Log.Exception(ex, Strings.Page_GetPage_InternetOff, ", ссылка:", url);
+                if (ex.Status != WebExceptionStatus.Timeout)
+                    return string.Empty;
+                ++restartCounter;
+                return GetPage(url, client, restartCounter);
             }
             catch (Exception ex)
             {
-                Log.Exception(ex);
+                Log.Exception(ex, ", ссылка:", url);
                 return string.Empty;
             }
         }

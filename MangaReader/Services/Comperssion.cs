@@ -78,14 +78,26 @@ namespace MangaReader
         /// <param name="folder">Папка, файлы которой необходимо запаковать.</param>
         private static void AddToArchive(string archive, string folder)
         {
-            using (var zip = ZipFile.Open(archive, ZipArchiveMode.Update, Encoding.UTF8))
-            foreach (var file in Directory.GetFiles(folder, "*", SearchOption.AllDirectories))
+            try
             {
-                var fileName = file.Replace(folder+ "\\", string.Empty);
-                var fileInZip = zip.Entries.FirstOrDefault(f => f.FullName == fileName);
-                if (fileInZip != null)
-                    fileInZip.Delete();
-                zip.CreateEntryFromFile(file, fileName, CompressionLevel.NoCompression);
+                using (var zip = ZipFile.Open(archive, ZipArchiveMode.Update, Encoding.UTF8))
+                foreach (var file in Directory.GetFiles(folder, "*", SearchOption.AllDirectories))
+                {
+                    var fileName = file.Replace(folder + "\\", string.Empty);
+                    var fileInZip = zip.Entries.FirstOrDefault(f => f.FullName == fileName);
+                    if (fileInZip != null)
+                        fileInZip.Delete();
+                    zip.CreateEntryFromFile(file, fileName, CompressionLevel.NoCompression);
+                }
+            }
+            catch (InvalidDataException ex)
+            {
+                File.Move(archive, archive + ".bak");
+                ZipFile.CreateFromDirectory(folder, archive, CompressionLevel.NoCompression, false, Encoding.UTF8);
+                var text = string.Format(
+                        "Не удалось прочитать архив {0} для записи в него папки {1}. \r\n Существующий файл был переименован в {2}. В {3} только содержимое указанной папки.",
+                        archive, folder, archive + ".bak", archive);
+                Log.Exception(ex, text);
             }
         }
     }

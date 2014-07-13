@@ -110,7 +110,7 @@ namespace MangaReader
         /// <returns>Исправленный путь.</returns>
         public static string MakeValidPath(string name)
         {
-            const string replacement = "_";
+            const string replacement = ".";
             var matchesCount = Regex.Matches(name, @":\\").Count;
             string correctName;
             if (matchesCount > 0)

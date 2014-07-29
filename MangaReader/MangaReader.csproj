@@ -100,9 +100,11 @@
     <Compile Include="Input.xaml.cs">
       <DependentUpon>Input.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Logins\CookieClient.cs"/>
-    <Compile Include="Logins\Grouple.cs" />
-    <Compile Include="Logins\Login.cs" />
+    <Compile Include="Account\CookieClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Account\Grouple.cs" />
+    <Compile Include="Account\Login.cs" />
     <Compile Include="Manga\MangaHistory.cs" />
     <Compile Include="Services\Serializer.cs" />
     <Compile Include="Services\Cache.cs" />

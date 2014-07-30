@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MangaReader.Properties;
 
@@ -9,7 +11,7 @@ namespace MangaReader
     /// <summary>
     /// Манга.
     /// </summary>
-    public class Manga
+    public class Manga : INotifyPropertyChanged
     {
         #region Свойства
 
@@ -24,14 +26,24 @@ namespace MangaReader
         public string Url { get; set; }
 
         /// <summary>
-        /// Статус перевода.
+        /// Статус манги.
         /// </summary>
         public string Status { get; set; }
 
         /// <summary>
         /// Нужно ли обновлять мангу.
         /// </summary>
-        public bool NeedUpdate = true;
+        public bool NeedUpdate
+        {
+            get { return _needUpdate; }
+            set
+            {
+                _needUpdate = value;
+                OnPropertyChanged("NeedUpdate");
+            }
+        }
+
+        private bool _needUpdate;
 
         /// <summary>
         /// Обложка.
@@ -43,8 +55,7 @@ namespace MangaReader
         /// </summary>
         public bool IsValid
         {
-            get { return !string.IsNullOrWhiteSpace(this.Name) &&
-                this.listOfChapters != null && this.Cover != null; }
+            get { return !string.IsNullOrWhiteSpace(this.Name) && this.listOfChapters != null; }
         }
 
         /// <summary>
@@ -58,10 +69,13 @@ namespace MangaReader
         /// <summary>
         /// Статус перевода.
         /// </summary>
-        public bool IsCompleted
+        public string IsCompleted
         {
-            get { return !string.IsNullOrWhiteSpace(this.Status) &&
-                this.Status.Contains(Strings.Manga_IsCompleted); }
+            get
+            {
+                var match = Regex.Match(this.Status, Strings.Manga_IsCompleted);
+                return match.Groups.Count > 1 ? match.Groups[1].Value.Trim() : null;
+            }
         }
 
         /// <summary>
@@ -74,7 +88,25 @@ namespace MangaReader
         /// </summary>
         private Dictionary<string, string> listOfChapters;
 
+
         #endregion
+
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string property)
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(property));
+            }
+        }
+
+        #endregion
+
 
         #region Методы
 
@@ -89,8 +121,8 @@ namespace MangaReader
 
             this.Name = Getter.GetMangaName(page).ToString();
             this.listOfChapters = Getter.GetLinksOfMangaChapters(page, this.Url);
-            this.Cover = Getter.GetMangaCover(page);
             this.Status = Getter.GetTranslateStatus(page);
+            OnPropertyChanged("IsCompleted");
         }
 
         /// <summary>
@@ -184,6 +216,5 @@ namespace MangaReader
         public Manga() { }
 
         #endregion
-
     }
 }

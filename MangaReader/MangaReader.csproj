@@ -100,9 +100,14 @@
     <Compile Include="Input.xaml.cs">
       <DependentUpon>Input.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Account\CookieClient.cs" />
+    <Compile Include="Account\CookieClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Account\Grouple.cs" />
     <Compile Include="Account\Login.cs" />
+    <Compile Include="Table.xaml.cs">
+      <DependentUpon>Table.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Manga\MangaHistory.cs" />
     <Compile Include="Services\Serializer.cs" />
     <Compile Include="Services\Cache.cs" />
@@ -120,6 +125,10 @@
     <Page Include="Input.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Table.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

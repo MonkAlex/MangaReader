@@ -189,8 +189,8 @@
   <data name="Page_GetPage_InternetOff" xml:space="preserve">
     <value>Интернет недоступен</value>
   </data>
-  <data name="Manga_IsCompleted" xml:space="preserve">
-    <value>Перевод: завершен</value>
+  <data name="Manga_Translate" xml:space="preserve">
+    <value>Перевод</value>
   </data>
   <data name="Manga_Action_OpenFolder" xml:space="preserve">
     <value>Открыть папку</value>
@@ -209,5 +209,17 @@
   </data>
   <data name="Input_Logout" xml:space="preserve">
     <value>Выход</value>
+  </data>
+  <data name="Manga_Name" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="Manga_Update" xml:space="preserve">
+    <value>Обновлять</value>
+  </data>
+  <data name="Manga_NotUpdate" xml:space="preserve">
+    <value>Не обновлять</value>
+  </data>
+  <data name="Manga_IsCompleted" xml:space="preserve">
+    <value>Перевод: (.*)</value>
   </data>
 </root>

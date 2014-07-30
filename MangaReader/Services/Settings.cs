@@ -107,7 +107,7 @@ namespace MangaReader
         /// Загрузить положение и размеры окна.
         /// </summary>
         /// <param name="main">Окно.</param>
-        public static void UpdateWindowsState(MainWindow main)
+        public static void UpdateWindowsState(Window main)
         {
             if (WindowsState == null)
                 return;

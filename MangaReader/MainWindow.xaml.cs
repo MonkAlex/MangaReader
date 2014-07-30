@@ -9,7 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using MangaReader.Logins;
+using MangaReader.Account;
 using MangaReader.Properties;
 using MangaReader.Services;
 using ThreadState = System.Threading.ThreadState;

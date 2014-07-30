@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows;
-using MangaReader.Logins;
+using MangaReader.Account;
 
 namespace MangaReader
 {
@@ -132,7 +131,5 @@ namespace MangaReader
             Russian,
             Japanese
         }
-
-        public Settings(){}
     }
 }

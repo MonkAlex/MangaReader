@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using MangaReader.Logins;
+using MangaReader.Account;
 using MangaReader.Properties;
 
 namespace MangaReader

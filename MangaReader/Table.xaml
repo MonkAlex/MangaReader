@@ -10,8 +10,10 @@
     <Window.Resources>
         <local:StringBooleanConverter x:Key="StringBooleanConverter"/>
     </Window.Resources>
-    
-    <Window.TaskbarItemInfo><TaskbarItemInfo x:Name="TaskBar"></TaskbarItemInfo></Window.TaskbarItemInfo>
+
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo x:Name="TaskBar"></TaskbarItemInfo>
+    </Window.TaskbarItemInfo>
 
     <Grid Name="MainGrid">
         <Button Content="{x:Static resx:Strings.Manga_Action_Update}" 
@@ -38,29 +40,77 @@
                 HorizontalAlignment="Right" 
                 Height="25" 
                 Width="75"/>
-        <ListView MouseDoubleClick="Mangas_clicked"
-                 MouseRightButtonUp="FormLibrary_OnMouseRightButtonUp"
-                 MouseUp="FormLibrary_OnMouseUp"
-                 x:Name="FormLibrary" 
+        <ListView x:Name="FormLibrary" 
                  DataContext="{Binding}"
-                 Margin="10,10,10.4,38.4">
+                 Margin="10,10,10.4,38.4"
+                 MouseDown="ListView_MouseDown"
+                 SelectionMode="Single">
             <ListView.ItemContainerStyle>
-                <Style>
+                <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="UIElement.AllowDrop" Value="true"/>
                     <EventSetter Event="UIElement.PreviewMouseMove" Handler="_PreviewMouseMoveEvent"/>
                     <EventSetter Event="UIElement.Drop" Handler="Library_Drop"/>
-                    <Style.Resources>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="LightSlateGray"/>
-                    </Style.Resources>
+                    <EventSetter Event="UIElement.MouseRightButtonUp" Handler="ListViewItem_OnMouseRightButtonUp"/>
+                    <EventSetter Event="UIElement.PreviewMouseLeftButtonDown" Handler="Mangas_clicked"/>
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="UIElement.SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+
+                                <Border SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        Background="{TemplateBinding Background}">
+
+                                    <Grid>
+
+                                        <!-- This is used when GridView is put inside the ListView -->
+                                        <GridViewRowPresenter Content="{TemplateBinding ContentControl.Content}"
+                                                              HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                                                              VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                                                              SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
+
+                                        <!-- This is used for ListView that does not use GridView -->
+                                        <ContentPresenter x:Name="contentPresenter"
+                                                          Content="{TemplateBinding ContentControl.Content}"
+                                                          Visibility="Collapsed"
+                                                          ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
+                                                          ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}"
+                                                          HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                                                          VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                                                          SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
+                                    </Grid>
+
+                                </Border>
+
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="GridView.ColumnCollection" Value="{x:Null}">
+                                        <Setter TargetName="contentPresenter" Property="Visibility" Value="Visible"/>
+                                    </Trigger>
+                                    
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="Transparent" />
+                                    </Trigger>
+
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
-                        <GridViewColumn Header="{x:Static resx:Strings.Manga_Name}" DisplayMemberBinding="{Binding Path=Name}"></GridViewColumn>
-                        <GridViewColumn Header="{x:Static resx:Strings.Manga_Update}" DisplayMemberBinding="{Binding Path=NeedUpdate, Converter={StaticResource StringBooleanConverter}}"></GridViewColumn>
-                        <GridViewColumn Header="{x:Static resx:Strings.Manga_Translate}" DisplayMemberBinding="{Binding Path=IsCompleted}"></GridViewColumn>
+                        <GridViewColumn Header="{x:Static resx:Strings.Manga_Name}" DisplayMemberBinding="{Binding Path=Name}"/>
+                        <GridViewColumn Header="{x:Static resx:Strings.Manga_Update}" 
+                                        DisplayMemberBinding="{Binding Path=NeedUpdate, Converter={StaticResource StringBooleanConverter}}"/>
+                        <GridViewColumn Header="{x:Static resx:Strings.Manga_Translate}" DisplayMemberBinding="{Binding Path=IsCompleted}"/>
                     </GridView.Columns>
                 </GridView>
             </ListView.View>

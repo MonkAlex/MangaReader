@@ -43,7 +43,7 @@ namespace MangaReader
             }
         }
 
-        private bool _needUpdate;
+        private bool _needUpdate = true;
 
         /// <summary>
         /// Обложка.
@@ -91,7 +91,6 @@ namespace MangaReader
 
         #endregion
 
-
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -106,7 +105,6 @@ namespace MangaReader
         }
 
         #endregion
-
 
         #region Методы
 

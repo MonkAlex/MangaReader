@@ -8,6 +8,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Threading;
 using MangaReader.Account;
@@ -119,11 +120,10 @@ namespace MangaReader
         /// <param name="e"></param>
         private void Mangas_clicked(object sender, MouseButtonEventArgs e)
         {
-            var listView = sender as ListView;
-            if (listView == null || listView.SelectedItems.Count == 0 || !(e.MouseDevice.DirectlyOver is TextBlock))
+            if (e.ClickCount < 2 || !(sender is ListViewItem))
                 return;
 
-            var manga = listView.SelectedItem as Manga;
+            var manga = ((ListViewItem)sender).DataContext as Manga;
             if (manga == null)
                 return;
 
@@ -182,14 +182,11 @@ namespace MangaReader
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void FormLibrary_OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        private void ListViewItem_OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-            this.FormLibrary.ContextMenu = null;
-            var listView = sender as ListView;
-            if (listView == null || listView.SelectedItems.Count == 0 || (!(e.MouseDevice.DirectlyOver is TextBlock) && !(e.MouseDevice.DirectlyOver is Border)))
-                return;
+            var item = sender as ListViewItem;
 
-            var manga = listView.SelectedItem as Manga;
+            var manga = item.DataContext as Manga;
             if (manga == null)
                 return;
 
@@ -210,7 +207,7 @@ namespace MangaReader
             menu.Items.Add(update);
             menu.Items.Add(view);
             menu.Items.Add(remove);
-            this.FormLibrary.ContextMenu = menu;
+            item.ContextMenu = menu;
         }
 
         private static void UpdateManga(Manga manga)
@@ -234,14 +231,13 @@ namespace MangaReader
             Settings.WindowsState = new object[]{this.Top, this.Left, this.Width, this.Height, this.WindowState};
         }
 
-        private void FormLibrary_OnMouseUp(object sender, MouseButtonEventArgs e)
+        private void ListView_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var listView = sender as ListView;
-            if (listView == null || listView.SelectedItems.Count == 0)
-                return;
-
-            if (!(e.MouseDevice.DirectlyOver is TextBlock) && !(e.MouseDevice.DirectlyOver is Border))
+            if (listView != null)
+            {
                 listView.SelectedIndex = -1;
+            }
         }
     }
 

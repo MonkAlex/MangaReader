@@ -8,7 +8,6 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Threading;
 using MangaReader.Account;
@@ -226,7 +225,7 @@ namespace MangaReader
                 Library.Status = Strings.Library_Status_FolderNotFound;
         }
 
-        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        private void Window_OnClosing(object sender, CancelEventArgs e)
         {
             Settings.WindowsState = new object[]{this.Top, this.Left, this.Width, this.Height, this.WindowState};
         }

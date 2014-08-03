@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Shell;
 using System.Windows.Threading;
 using MangaReader.Properties;
@@ -35,6 +36,8 @@ namespace MangaReader
         /// Служба управления UI главного окна.
         /// </summary>
         private static Dispatcher formDispatcher;
+
+        private static readonly object DispatcherLock = new object();
 
         /// <summary>
         /// Таскбар окна.
@@ -126,9 +129,7 @@ namespace MangaReader
         /// <returns>Манга.</returns>
         public static ObservableCollection<Manga> GetMangas()
         {
-            foreach (var line in Database)
-                UpdateMangaByUrl(line);
-
+            Parallel.ForEach(Database, UpdateMangaByUrl);
             return DatabaseMangas;
         }
 
@@ -138,21 +139,30 @@ namespace MangaReader
         /// <param name="line">Ссылка на мангу.</param>
         private static void UpdateMangaByUrl(string line)
         {
-            var manga = DatabaseMangas != null ? DatabaseMangas.FirstOrDefault(m => m.Url == line) : null;
+            Manga manga = null;
+            if (DatabaseMangas != null)
+                lock (DispatcherLock)
+                    manga = DatabaseMangas.FirstOrDefault(m => m.Url == line);
+
             if (manga == null)
             {
                 var newManga = new Manga(line);
-                formDispatcher.Invoke(() => DatabaseMangas.Add(newManga));
+                lock (DispatcherLock)
+                    formDispatcher.Invoke(() => DatabaseMangas.Add(newManga));
+                
             }
             else
             {
-                var index = DatabaseMangas.IndexOf(manga);
+                var index = 0;
+                lock (DispatcherLock)
+                  index = DatabaseMangas.IndexOf(manga);
                 manga.Refresh();
-                formDispatcher.Invoke(() =>
-                {
-                    DatabaseMangas.RemoveAt(index);
-                    DatabaseMangas.Insert(index, manga);
-                });
+                lock (DispatcherLock)
+                    formDispatcher.Invoke(() =>
+                    {
+                        DatabaseMangas.RemoveAt(index);
+                        DatabaseMangas.Insert(index, manga);
+                    });
             }
         }
 
@@ -162,8 +172,6 @@ namespace MangaReader
         /// <param name="manga">Обновляемая манга. По умолчанию - вся.</param>
         public static void Update(Manga manga = null)
         {
-            Settings.Update = true;
-
             formDispatcher.Invoke(() => taskBar.ProgressState = TaskbarItemProgressState.Indeterminate);
 
             ObservableCollection<Manga> mangas;
@@ -181,13 +189,17 @@ namespace MangaReader
             try
             {
                 formDispatcher.Invoke(() => taskBar.ProgressState = TaskbarItemProgressState.Normal);
+                var mangaIndex = 0;
                 foreach (var current in mangas)
                 {
                     Status = Strings.Library_Status_MangaUpdate + current.Name;
-                    formDispatcher.Invoke(() => taskBar.ProgressValue += 1.0/mangas.Count);
+                    current.DownloadProgressChanged += (sender, args) => formDispatcher.Invoke(
+                            () => taskBar.ProgressValue = (double) mangaIndex/mangas.Count + (1.0/mangas.Count) *
+                                                          (args.Downloaded / 100.0));
                     current.Download();
                     if (Settings.CompressManga)
                       Comperssion.ComperssVolumes(current.Folder);
+                    mangaIndex++;
                 }
             }
             catch (AggregateException ae)

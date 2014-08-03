@@ -222,4 +222,7 @@
   <data name="Manga_IsCompleted" xml:space="preserve">
     <value>Перевод: (.*)</value>
   </data>
+  <data name="Manga_Downloaded" xml:space="preserve">
+    <value>Загружено</value>
+  </data>
 </root>

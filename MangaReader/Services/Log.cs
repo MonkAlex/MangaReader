@@ -29,7 +29,7 @@ namespace MangaReader
         /// Добавление записи в лог.
         /// </summary>
         /// <param name="messages">Сообщение.</param>
-        public static void Add(params string[] messages)
+        public static void Add(params object[] messages)
         {
             lock (LogLock)
             {

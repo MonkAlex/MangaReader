@@ -33,6 +33,11 @@ namespace MangaReader
         /// </summary>
         private static Thread _loadThread;
 
+        /// <summary>
+        /// Библиотека доступна, т.е. не в процессе обновления.
+        /// </summary>
+        internal bool IsAvaible = true;
+
         public Table()
         {
             Settings.Load();
@@ -59,6 +64,9 @@ namespace MangaReader
 
         void _PreviewMouseMoveEvent(object sender, MouseEventArgs e)
         {
+            if (!this.IsAvaible)
+                return;
+            
             if (!(sender is ListBoxItem) || e.LeftButton != MouseButtonState.Pressed)
                 return;
 
@@ -69,6 +77,9 @@ namespace MangaReader
 
         void Library_Drop(object sender, DragEventArgs e)
         {
+            if (!this.IsAvaible)
+                return;
+
             var droppedData = e.Data.GetData(typeof(Manga)) as Manga;
             var target = ((ListBoxItem)(sender)).DataContext as Manga;
 
@@ -168,12 +179,11 @@ namespace MangaReader
         /// <param name="e"></param>
         private void TimerTick(object sender, EventArgs e)
         {
-            var isEnabled = _loadThread == null || _loadThread.ThreadState == ThreadState.Stopped;
+            this.IsAvaible = _loadThread == null || _loadThread.ThreadState == ThreadState.Stopped;
             this.TextBlock.Text = Library.Status;
-            UpdateButton.IsEnabled = isEnabled;
-            AddButton.IsEnabled = isEnabled;
-            SettingsButton.IsEnabled = isEnabled;
-            FormLibrary.IsEnabled = isEnabled;
+            UpdateButton.IsEnabled = this.IsAvaible;
+            AddButton.IsEnabled = this.IsAvaible;
+            SettingsButton.IsEnabled = this.IsAvaible;
         }
 
         /// <summary>
@@ -191,13 +201,13 @@ namespace MangaReader
 
             var openFolder = new MenuItem() {Header = Strings.Manga_Action_OpenFolder, FontWeight = FontWeights.Bold};
             openFolder.Click += (o, args) => MenuOpenFolder(manga);
-            var update = new MenuItem() {Header = Strings.Manga_Action_Update};
+            var update = new MenuItem() { Header = Strings.Manga_Action_Update, IsEnabled = this.IsAvaible };
             update.Click += (o, agrs) => UpdateManga(manga);
-            var remove = new MenuItem() {Header = Strings.Manga_Action_Remove};
+            var remove = new MenuItem() { Header = Strings.Manga_Action_Remove, IsEnabled = this.IsAvaible };
             remove.Click += (o, agrs) => Library.Remove(manga);
             var view = new MenuItem() {Header = Strings.Manga_Action_View};
             view.Click += (o, agrs) => Process.Start(manga.Url);
-            var needUpdate = new MenuItem() {Header = manga.NeedUpdate ? Strings.Manga_NotUpdate : Strings.Manga_Update};
+            var needUpdate = new MenuItem() { Header = manga.NeedUpdate ? Strings.Manga_NotUpdate : Strings.Manga_Update, IsEnabled = this.IsAvaible };
             needUpdate.Click += (o, args) => manga.NeedUpdate = !manga.NeedUpdate;
 
             var menu = new ContextMenu();
@@ -240,15 +250,34 @@ namespace MangaReader
         }
     }
 
-    [ValueConversion(typeof(string), typeof(bool))]
-    public class StringBooleanConverter : IValueConverter
+    [ValueConversion(typeof(string), typeof(string))]
+    public class StringImageConverter : IValueConverter
     {
         #region IValueConverter Members
 
         public object Convert(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)
         {
-            return (bool)value ? "+" : "-";
+            var result = string.Empty;
+            switch (value.ToString())
+            {
+                case "продолжается":
+                  result = "Icons/play.png";
+                  break;
+
+                case "завершен":
+                  result = "Icons/stop.png";
+                  break;
+
+                case "True":
+                  result = "Icons/yes.png";
+                  break;
+
+                case "False":
+                  result = "Icons/no.png";
+                  break;
+}
+            return result;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter,

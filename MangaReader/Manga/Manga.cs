@@ -79,6 +79,28 @@ namespace MangaReader
         }
 
         /// <summary>
+        /// Статус загрузки.
+        /// </summary>
+        public bool IsDownloaded
+        {
+            get { return downloadedChapters != null && downloadedChapters.All(c => c.IsDownloaded); }
+        }
+
+        /// <summary>
+        /// Процент загрузки манги.
+        /// </summary>
+        public double Downloaded
+        {
+            get { return (downloadedChapters != null && downloadedChapters.Any()) ? downloadedChapters.Average(ch => ch.Downloaded) : 0; }
+            set { }
+        }
+
+        /// <summary>
+        /// Загружаемый список глав.
+        /// </summary>
+        private List<Chapter> downloadedChapters;
+
+        /// <summary>
         /// Закешированный список глав.
         /// </summary>
         private List<Chapter> allChapters;
@@ -90,6 +112,15 @@ namespace MangaReader
 
 
         #endregion
+
+        public event EventHandler<Manga> DownloadProgressChanged;
+
+        protected virtual void OnDownloadProgressChanged(Manga manga)
+        {
+            var handler = DownloadProgressChanged;
+            if (handler != null)
+                handler(this, manga);
+        }
 
         #region INotifyPropertyChanged
 
@@ -131,8 +162,10 @@ namespace MangaReader
         {
             if (listOfChapters == null)
                 listOfChapters = Getter.GetLinksOfMangaChapters(Page.GetPage(this.Url), this.Url);
-            return allChapters ??
+            this.allChapters = allChapters ??
                    (allChapters = listOfChapters.Select(link => new Chapter(link.Key, link.Value)).ToList());
+            this.allChapters.ForEach(ch => ch.DownloadProgressChanged += (sender, args) => this.DownloadProgressChanged(ch, this));
+            return this.allChapters;
         }
 
         /// <summary>
@@ -150,19 +183,19 @@ namespace MangaReader
             if (chapterPrefix == null)
                 chapterPrefix = Settings.ChapterPrefix;
 
-            if (allChapters == null)
-                GetAllChapters();
+            if (this.allChapters == null)
+                this.GetAllChapters();
 
-            var newChapters = allChapters;
+            this.downloadedChapters = this.allChapters;
             if (Settings.Update == true)
             {
                 var messages = History.Get(this.Url);
-                newChapters = newChapters
+                this.downloadedChapters = this.downloadedChapters
                     .Where(ch => messages.All(m => m.Url != ch.Url))
                     .ToList();
             }
 
-            if (!newChapters.Any())
+            if (!this.downloadedChapters.Any())
                 return;
 
             Log.Add("Download start " + this.Name);
@@ -170,15 +203,19 @@ namespace MangaReader
             // Формируем путь к главе вида Папка_манги\Том_001\Глава_0001
             try
             {
-                Parallel.ForEach(newChapters,
-                    ch => ch.Download(string.Concat(mangaFolder,
-                        "\\",
-                        volumePrefix,
-                        ch.Volume.ToString().PadLeft(3, '0'),
-                        "\\",
-                        chapterPrefix,
-                        ch.Number.ToString().PadLeft(4, '0')
-                        )));
+                Parallel.ForEach(this.downloadedChapters,
+                    ch =>
+                    {
+                        ch.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged("Downloaded");
+                        ch.Download(string.Concat(mangaFolder,
+                            "\\",
+                            volumePrefix,
+                            ch.Volume.ToString().PadLeft(3, '0'),
+                            "\\",
+                            chapterPrefix,
+                            ch.Number.ToString().PadLeft(4, '0')
+                            ));
+                    });
                 Log.Add("Download end " + this.Name);
             }
             catch (AggregateException ae)

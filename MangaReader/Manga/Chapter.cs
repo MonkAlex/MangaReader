@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -43,7 +44,31 @@ namespace MangaReader
         /// </summary>
         public int Volume;
 
+        /// <summary>
+        /// Статус загрузки.
+        /// </summary>
+        public bool IsDownloaded = false;
+
+        /// <summary>
+        /// Процент загрузки главы.
+        /// </summary>
+        public int Downloaded
+        {
+            get { return (this.listOfImageLink != null && this.listOfImageLink.Any()) ? _downloaded * 100 / this.listOfImageLink.Count : 0; }
+        }
+
+        private int _downloaded;
+
         #endregion
+
+        public event EventHandler DownloadProgressChanged;
+
+        protected virtual void OnDownloadProgressChanged(EventArgs e)
+        {
+            var handler = DownloadProgressChanged;
+            if (handler != null) 
+                handler(this, e);
+        }
 
         #region Методы
 
@@ -53,11 +78,12 @@ namespace MangaReader
         /// <param name="chapterFolder">Папка для файлов.</param>
         public void Download(string chapterFolder)
         {
+            this.IsDownloaded = false;
             if (restartCounter > 3)
                 throw new Exception(string.Format("Load failed after {0} counts.", restartCounter));
 
-            if (listOfImageLink == null)
-                GetAllImagesLink();
+            if (this.listOfImageLink == null)
+                this.GetAllImagesLink();
 
             try
             {
@@ -65,22 +91,21 @@ namespace MangaReader
                 if (!Directory.Exists(chapterFolder))
                     Directory.CreateDirectory(chapterFolder);
 
-                Parallel.ForEach(listOfImageLink, link =>
+                Parallel.ForEach(this.listOfImageLink, link =>
                 {
                     var file = Page.DownloadFile(link);
                     if (file == null)
                         throw new Exception("Restart chapter download, downloaded file is corrupted, link = " + link);
 
-                    var fileName = listOfImageLink
-                        .FindIndex(l => l == link)
-                        .ToString()
-                        .PadLeft(4, '0') + 
-                        "." + 
-                        Page.GetImageExtension(file);
+                    var index = this.listOfImageLink.FindIndex(l => l == link);
+                    var fileName = index.ToString().PadLeft(4, '0') + "." + Page.GetImageExtension(file);
 
                     File.WriteAllBytes(string.Concat(chapterFolder, "\\", fileName), file);
+                    this._downloaded++;
+                    this.DownloadProgressChanged(this, null);
                 });
 
+                this.IsDownloaded = true;
                 History.Add(this.Url);
             }
             catch (AggregateException ae)

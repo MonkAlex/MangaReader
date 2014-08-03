@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
@@ -75,8 +76,15 @@ namespace MangaReader.Account
             };
             lock (ClientLock)
             {
-                Client.UploadValues("internal/auth/j_spring_security_check", "POST", loginData);
-                IsLogined = Page.GetPage(MainUrl, Client).Contains("internal/auth/logout");
+                try
+                {
+                    Client.UploadValues("internal/auth/j_spring_security_check", "POST", loginData);
+                    IsLogined = Page.GetPage(MainUrl, Client).Contains("internal/auth/logout");
+                }
+                catch (Exception ex)
+                {
+                    Log.Exception(ex);
+                }
             }
         }
 

@@ -232,6 +232,15 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Загружено.
+        /// </summary>
+        public static string Manga_Downloaded {
+            get {
+                return ResourceManager.GetString("Manga_Downloaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Перевод: (.*).
         /// </summary>
         public static string Manga_IsCompleted {

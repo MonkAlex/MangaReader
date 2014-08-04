@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Shell;
 using System.Windows.Threading;
+using MangaReader.Manga;
 using MangaReader.Properties;
 
 namespace MangaReader
@@ -25,7 +26,7 @@ namespace MangaReader
         /// <summary>
         /// Манга в библиотеке.
         /// </summary>
-        public static ObservableCollection<Manga> DatabaseMangas = new ObservableCollection<Manga>(Enumerable.Empty<Manga>());
+        public static ObservableCollection<Mangas> DatabaseMangas = new ObservableCollection<Mangas>(Enumerable.Empty<Mangas>());
 
         /// <summary>
         /// Статус библиотеки.
@@ -50,7 +51,7 @@ namespace MangaReader
         /// Инициализация библиотеки - заполнение массива из кеша.
         /// </summary>
         /// <returns></returns>
-        public static ObservableCollection<Manga> Initialize(TaskbarItemInfo taskbar)
+        public static ObservableCollection<Mangas> Initialize(TaskbarItemInfo taskbar)
         {
             foreach (var manga in Cache.Get())
             {
@@ -71,7 +72,7 @@ namespace MangaReader
             if (Database.Contains(url))
                 return;
 
-            var newManga = new Manga(url);
+            var newManga = Mangas.Create(url);
             if (!newManga.IsValid)
                 return;
 
@@ -84,7 +85,7 @@ namespace MangaReader
         /// Удалить мангу.
         /// </summary>
         /// <param name="manga"></param>
-        public static void Remove(Manga manga)
+        public static void Remove(Mangas manga)
         {
             if (manga == null)
                 return;
@@ -127,7 +128,7 @@ namespace MangaReader
         /// Получить мангу в базе.
         /// </summary>
         /// <returns>Манга.</returns>
-        public static ObservableCollection<Manga> GetMangas()
+        public static ObservableCollection<Mangas> GetMangas()
         {
             Parallel.ForEach(Database, UpdateMangaByUrl);
             return DatabaseMangas;
@@ -139,14 +140,14 @@ namespace MangaReader
         /// <param name="line">Ссылка на мангу.</param>
         private static void UpdateMangaByUrl(string line)
         {
-            Manga manga = null;
+            Mangas manga = null;
             if (DatabaseMangas != null)
                 lock (DispatcherLock)
                     manga = DatabaseMangas.FirstOrDefault(m => m.Url == line);
 
             if (manga == null)
             {
-                var newManga = new Manga(line);
+                var newManga = Mangas.Create(line);
                 lock (DispatcherLock)
                     formDispatcher.Invoke(() => DatabaseMangas.Add(newManga));
                 
@@ -170,15 +171,15 @@ namespace MangaReader
         /// Обновить мангу.
         /// </summary>
         /// <param name="manga">Обновляемая манга. По умолчанию - вся.</param>
-        public static void Update(Manga manga = null)
+        public static void Update(Mangas manga = null)
         {
             formDispatcher.Invoke(() => taskBar.ProgressState = TaskbarItemProgressState.Indeterminate);
 
-            ObservableCollection<Manga> mangas;
+            ObservableCollection<Mangas> mangas;
             if (manga != null)
             {
                 UpdateMangaByUrl(manga.Url);
-                mangas = new ObservableCollection<Manga> { manga };
+                mangas = new ObservableCollection<Mangas> { manga };
             }
             else
             {

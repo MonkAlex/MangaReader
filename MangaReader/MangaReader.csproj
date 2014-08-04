@@ -105,6 +105,10 @@
     </Compile>
     <Compile Include="Account\Grouple.cs" />
     <Compile Include="Account\Login.cs" />
+    <Compile Include="Manga\Acomics\Acomics.cs" />
+    <Compile Include="Manga\IDownloadable.cs" />
+    <Compile Include="Manga\Mangas.cs" />
+    <Compile Include="Manga\MangaObsolete.cs" />
     <Compile Include="Table.xaml.cs">
       <DependentUpon>Table.xaml</DependentUpon>
     </Compile>
@@ -134,10 +138,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Services\Getter.cs" />
+    <Compile Include="Manga\Grouple\Getter.cs" />
     <Compile Include="Services\Log.cs" />
-    <Compile Include="Manga\Chapter.cs" />
-    <Compile Include="Manga\Manga.cs" />
+    <Compile Include="Manga\Grouple\Chapter.cs" />
+    <Compile Include="Manga\Grouple\Readmanga.cs" />
     <Page Include="SettingsForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -148,7 +152,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Manga\MangaName.cs" />
+    <Compile Include="Manga\Grouple\MangaName.cs" />
     <Compile Include="Manga\Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

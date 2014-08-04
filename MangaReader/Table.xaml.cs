@@ -11,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
 using MangaReader.Account;
+using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services;
 using ThreadState = System.Threading.ThreadState;
@@ -52,14 +53,14 @@ namespace MangaReader
         /// </summary>
         public void Initialize()
         {
+            Convert();
+            this.FormLibrary.ItemsSource = Library.Initialize(this.TaskBar);
+            ServicePointManager.DefaultConnectionLimit = 100;
+            Grouple.LoginWhile();
             _timer = new DispatcherTimer(new TimeSpan(0, 0, 1),
                 DispatcherPriority.Background,
                 TimerTick,
                 Dispatcher.CurrentDispatcher);
-            this.FormLibrary.ItemsSource = Library.Initialize(this.TaskBar);
-            Convert();
-            ServicePointManager.DefaultConnectionLimit = 100;
-            Grouple.LoginWhile();
         }
 
         void _PreviewMouseMoveEvent(object sender, MouseEventArgs e)
@@ -80,8 +81,8 @@ namespace MangaReader
             if (!this.IsAvaible)
                 return;
 
-            var droppedData = e.Data.GetData(typeof(Manga)) as Manga;
-            var target = ((ListBoxItem)(sender)).DataContext as Manga;
+            var droppedData = e.Data.GetData(typeof(Mangas)) as Mangas;
+            var target = ((ListBoxItem)(sender)).DataContext as Mangas;
 
             var removedIdx = this.FormLibrary.Items.IndexOf(droppedData);
             var targetIdx = this.FormLibrary.Items.IndexOf(target);
@@ -106,6 +107,7 @@ namespace MangaReader
         /// </summary>
         private static void Convert()
         {
+            Cache.Convert();
             History.Convert();
             Library.Convert();
         }
@@ -133,7 +135,7 @@ namespace MangaReader
             if (e.ClickCount < 2 || !(sender is ListViewItem))
                 return;
 
-            var manga = ((ListViewItem)sender).DataContext as Manga;
+            var manga = ((ListViewItem)sender).DataContext as Manga.Mangas;
             if (manga == null)
                 return;
 
@@ -156,7 +158,7 @@ namespace MangaReader
 
             if (!string.IsNullOrWhiteSpace(db.Result.Text))
                 Library.Add(db.Result.Text);
-            foreach (var manga in db.Bookmarks.SelectedItems.OfType<Manga>())
+            foreach (var manga in db.Bookmarks.SelectedItems.OfType<Manga.Mangas>())
             {
                 Library.Add(manga.Url);
             }
@@ -195,7 +197,7 @@ namespace MangaReader
         {
             var item = sender as ListViewItem;
 
-            var manga = item.DataContext as Manga;
+            var manga = item.DataContext as Mangas;
             if (manga == null)
                 return;
 
@@ -219,7 +221,7 @@ namespace MangaReader
             item.ContextMenu = menu;
         }
 
-        private static void UpdateManga(Manga manga)
+        private static void UpdateManga(Mangas manga)
         {
             if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
                 _loadThread = new Thread(() => Library.Update(manga));
@@ -227,7 +229,7 @@ namespace MangaReader
                 _loadThread.Start();
         }
 
-        private static void MenuOpenFolder(Manga manga)
+        private static void MenuOpenFolder(Mangas manga)
         {
             if (Directory.Exists(manga.Folder))
                 Process.Start(manga.Folder);

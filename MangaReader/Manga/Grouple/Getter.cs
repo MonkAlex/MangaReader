@@ -1,10 +1,10 @@
-﻿using HtmlAgilityPack;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using HtmlAgilityPack;
 
-namespace MangaReader
+namespace MangaReader.Manga.Grouple
 {
     public static class Getter
     {

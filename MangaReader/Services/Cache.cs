@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using MangaReader.Manga;
+using MangaReader.Manga.Grouple;
 
 
 namespace MangaReader
@@ -18,7 +20,7 @@ namespace MangaReader
         /// </summary>
         private static readonly string CacheFile = Settings.WorkFolder + @".\Cache";
 
-        private static ObservableCollection<Manga> CachedMangas;
+        private static ObservableCollection<Mangas> CachedMangas;
 
         /// <summary>
         /// Сохранить кеш на диск.
@@ -26,14 +28,14 @@ namespace MangaReader
         public static void Save()
         {
             lock (CacheLock)
-                Serializer<ObservableCollection<Manga>>.Save(CacheFile, CachedMangas);
+                Serializer <ObservableCollection<Mangas>>.Save(CacheFile, CachedMangas);
         }
 
         /// <summary>
         /// Добавление манги в кеш.
         /// </summary>
         /// <param name="mangas">Манга.</param>
-        public static void Add(ObservableCollection<Manga> mangas)
+        public static void Add(ObservableCollection<Mangas> mangas)
         {
             lock (CacheLock)
                 CachedMangas = mangas;
@@ -43,15 +45,40 @@ namespace MangaReader
         /// Получить мангу из кеша.
         /// </summary>
         /// <returns>Манга.</returns>
-        public static ObservableCollection<Manga> Get()
+        public static ObservableCollection<Mangas> Get()
         {
             lock (CacheLock)
             {
                 CachedMangas = CachedMangas ??
                     (File.Exists(CacheFile) ?
-                    Serializer<ObservableCollection<Manga>>.Load(CacheFile) :
-                    new ObservableCollection<Manga>(Enumerable.Empty<Manga>()));
+                    Serializer<ObservableCollection<Mangas>>.Load(CacheFile) :
+                    new ObservableCollection<Mangas>(Enumerable.Empty<Mangas>()));
                 return CachedMangas;
+            }
+        }
+
+        public static void Convert()
+        {
+            lock (CacheLock)
+            {
+                var obsoleteManga = File.Exists(CacheFile) ?
+                    Serializer<ObservableCollection<Manga.Manga>>.Load(CacheFile) :
+                    null;
+                if (obsoleteManga != null)
+                {
+                    var newMangas = new ObservableCollection<Mangas>(Enumerable.Empty<Mangas>());
+                    foreach (var manga in obsoleteManga)
+                    {
+                        newMangas.Add(new Readmanga()
+                        {
+                            Name = manga.Name,
+                            Url = manga.Url,
+                            Status = manga.Status,
+                            NeedUpdate = manga.NeedUpdate
+                        });
+                    }
+                    Serializer<ObservableCollection<Mangas>>.Save(CacheFile, newMangas);
+                }
             }
         }
 

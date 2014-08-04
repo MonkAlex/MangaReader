@@ -1,5 +1,5 @@
 ﻿
-namespace MangaReader
+namespace MangaReader.Manga.Grouple
 {
     public class MangaName
     {

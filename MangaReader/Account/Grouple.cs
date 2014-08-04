@@ -6,6 +6,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using HtmlAgilityPack;
+using MangaReader.Manga;
+using MangaReader.Manga.Grouple;
 
 namespace MangaReader.Account
 {
@@ -21,12 +23,12 @@ namespace MangaReader.Account
         /// <summary>
         /// Закладки.
         /// </summary>
-        public static List<Manga> Bookmarks
+        public static List<Readmanga> Bookmarks
         {
             get { return _bookmarsk ?? LoadBookmarks(); }
         }
 
-        private static List<Manga> _bookmarsk; 
+        private static List<Readmanga> _bookmarsk; 
 
         /// <summary>
         /// Указатель блокировки клиента файла.
@@ -105,9 +107,9 @@ namespace MangaReader.Account
         /// Загрузить закладки.
         /// </summary>
         /// <returns></returns>
-        public static List<Manga> LoadBookmarks()
+        public static List<Readmanga> LoadBookmarks()
         {
-            var bookmarks = new List<Manga>();
+            var bookmarks = new List<Readmanga>();
             var document = new HtmlDocument();
             lock (ClientLock)
             {
@@ -126,7 +128,7 @@ namespace MangaReader.Account
                 .Select(g => g.Captures[0])
                 .OfType<Match>()
                 .Select(m => m.Groups[1].Value)
-                .Select(s => new Manga() { Url = s, Name = Getter.GetMangaName(Page.GetPage(s)).ToString() })
+                .Select(s => new Readmanga() { Url = s, Name = Getter.GetMangaName(Page.GetPage(s)).ToString() })
                 .ToList();
             _bookmarsk = bookmarks;
             return bookmarks;

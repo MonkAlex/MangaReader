@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 
 namespace MangaReader
 {
+
     class Serializer<T>
     {
         /// <summary>
@@ -12,7 +13,7 @@ namespace MangaReader
         /// <param name="path"></param>
         /// <param name="data"></param>
         public static void Save(string path, T data)
-        {
+        {   
             var formatter = new XmlSerializer(typeof(T));
 
             using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Write))

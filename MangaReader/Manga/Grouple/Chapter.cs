@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace MangaReader
+namespace MangaReader.Manga.Grouple
 {
     /// <summary>
     /// Глава.

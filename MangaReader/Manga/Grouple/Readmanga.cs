@@ -1,39 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using MangaReader.Manga.Grouple;
 using MangaReader.Properties;
 
-namespace MangaReader
+namespace MangaReader.Manga
 {
     /// <summary>
     /// Манга.
     /// </summary>
-    public class Manga : INotifyPropertyChanged
+    public class Readmanga : Mangas
     {
         #region Свойства
 
         /// <summary>
-        /// Название манги.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Ссылка на мангу.
-        /// </summary>
-        public string Url { get; set; }
-
-        /// <summary>
         /// Статус манги.
         /// </summary>
-        public string Status { get; set; }
+        public override string Status { get; set; }
 
         /// <summary>
         /// Нужно ли обновлять мангу.
         /// </summary>
-        public bool NeedUpdate
+        public override bool NeedUpdate
         {
             get { return _needUpdate; }
             set
@@ -46,30 +36,17 @@ namespace MangaReader
         private bool _needUpdate = true;
 
         /// <summary>
-        /// Обложка.
-        /// </summary>
-        public byte[] Cover { get; set; }
-
-        /// <summary>
         /// Статус корректности манги.
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get { return !string.IsNullOrWhiteSpace(this.Name) && this.listOfChapters != null; }
         }
 
         /// <summary>
-        /// Папка с мангой.
-        /// </summary>
-        public string Folder
-        {
-            get { return Page.MakeValidPath(Settings.DownloadFolder + "\\" + this.Name); }
-        }
-
-        /// <summary>
         /// Статус перевода.
         /// </summary>
-        public string IsCompleted
+        public override string IsCompleted
         {
             get
             {
@@ -81,7 +58,7 @@ namespace MangaReader
         /// <summary>
         /// Статус загрузки.
         /// </summary>
-        public bool IsDownloaded
+        public override bool IsDownloaded
         {
             get { return downloadedChapters != null && downloadedChapters.All(c => c.IsDownloaded); }
         }
@@ -89,7 +66,7 @@ namespace MangaReader
         /// <summary>
         /// Процент загрузки манги.
         /// </summary>
-        public double Downloaded
+        public override double Downloaded
         {
             get { return (downloadedChapters != null && downloadedChapters.Any()) ? downloadedChapters.Average(ch => ch.Downloaded) : 0; }
             set { }
@@ -113,26 +90,15 @@ namespace MangaReader
 
         #endregion
 
-        public event EventHandler<Manga> DownloadProgressChanged;
+        #region DownloadProgressChanged
 
-        protected virtual void OnDownloadProgressChanged(Manga manga)
+        public override event EventHandler<Mangas> DownloadProgressChanged;
+
+        protected virtual void OnDownloadProgressChanged(Mangas manga)
         {
             var handler = DownloadProgressChanged;
             if (handler != null)
                 handler(this, manga);
-        }
-
-        #region INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged(string property)
-        {
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(property));
-            }
         }
 
         #endregion
@@ -142,7 +108,7 @@ namespace MangaReader
         /// <summary>
         /// Обновить информацию о манге - название, главы, обложка.
         /// </summary>
-        public void Refresh()
+        public override void Refresh()
         {
             var page = Page.GetPage(this.Url);
             if (string.IsNullOrWhiteSpace(page))
@@ -171,7 +137,7 @@ namespace MangaReader
         /// <summary>
         /// Скачать все главы.
         /// </summary>
-        public void Download(string mangaFolder = null, string volumePrefix = null, string chapterPrefix = null)
+        public override void Download(string mangaFolder = null, string volumePrefix = null, string chapterPrefix = null)
         {
             if (!this.NeedUpdate)
                 return;
@@ -218,6 +184,7 @@ namespace MangaReader
                     });
                 Log.Add("Download end " + this.Name);
             }
+
             catch (AggregateException ae)
             {
                 foreach (var ex in ae.InnerExceptions)
@@ -242,13 +209,13 @@ namespace MangaReader
         /// Открыть мангу.
         /// </summary>
         /// <param name="url">Ссылка на мангу.</param>
-        public Manga(string url)
+        public Readmanga(string url)
         {
             this.Url = url;
             this.Refresh();
         }
 
-        public Manga() { }
+        public Readmanga() { }
 
         #endregion
     }

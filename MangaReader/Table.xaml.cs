@@ -259,7 +259,7 @@ namespace MangaReader
             System.Globalization.CultureInfo culture)
         {
             var result = string.Empty;
-            switch (value.ToString())
+            switch (value != null ? value.ToString() : string.Empty)
             {
                 case "продолжается":
                   result = "Icons/play.png";

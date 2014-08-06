@@ -40,7 +40,7 @@ namespace MangaReader.Manga
         /// </summary>
         public override bool IsValid
         {
-            get { return !string.IsNullOrWhiteSpace(this.Name) && this.allChapters != null; }
+            get { return !string.IsNullOrWhiteSpace(this.Name); }
         }
 
         /// <summary>
@@ -182,6 +182,7 @@ namespace MangaReader.Manga
         public Acomics(string url)
         {
             this.Url = url;
+            this.Name = Getter.GetMangaName(this.Url);
         }
 
         public Acomics() { }

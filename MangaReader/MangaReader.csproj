@@ -105,7 +105,9 @@
     </Compile>
     <Compile Include="Account\Grouple.cs" />
     <Compile Include="Account\Login.cs" />
-    <Compile Include="Manga\Acomics\Acomics.cs" />
+    <Compile Include="Manga\Acomic\Acomics.cs" />
+    <Compile Include="Manga\Acomic\Chapter.cs" />
+    <Compile Include="Manga\Acomic\Getter.cs" />
     <Compile Include="Manga\IDownloadable.cs" />
     <Compile Include="Manga\Mangas.cs" />
     <Compile Include="Manga\MangaObsolete.cs" />
@@ -115,7 +117,7 @@
     <Compile Include="Manga\MangaHistory.cs" />
     <Compile Include="Services\Serializer.cs" />
     <Compile Include="Services\Cache.cs" />
-    <Compile Include="Services\Comperssion.cs" />
+    <Compile Include="Services\Compression.cs" />
     <Compile Include="Services\History.cs" />
     <Compile Include="Services\Library.cs" />
     <Compile Include="Services\Settings.cs" />

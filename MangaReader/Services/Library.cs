@@ -199,7 +199,7 @@ namespace MangaReader
                                                           (args.Downloaded / 100.0));
                     current.Download();
                     if (Settings.CompressManga)
-                      Comperssion.ComperssVolumes(current.Folder);
+                        current.Compress();
                     mangaIndex++;
                 }
             }

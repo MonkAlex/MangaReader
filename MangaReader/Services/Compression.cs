@@ -6,13 +6,13 @@ using System.Text;
 
 namespace MangaReader
 {
-    class Comperssion
+    class Compression
     {
         /// <summary>
         /// Упаковка всех глав.
         /// </summary>
         /// <param name="message">Папка манги.</param>
-        public static void ComperssChapters(string message)
+        public static void CompressChapters(string message)
         {
             message = Page.MakeValidPath(message) + "\\";
             if (!Directory.Exists(message))
@@ -45,7 +45,7 @@ namespace MangaReader
         /// Упаковка всех томов.
         /// </summary>
         /// <param name="message">Папка манги.</param>
-        public static void ComperssVolumes(string message)
+        public static void CompressVolumes(string message)
         {
             message = Page.MakeValidPath(message) + "\\";
             if (!Directory.Exists(message))
@@ -64,6 +64,47 @@ namespace MangaReader
                 else
                     ZipFile.CreateFromDirectory(volume, acr, CompressionLevel.NoCompression, false, Encoding.UTF8);
                 Directory.Delete(volume, true);
+            }
+        }
+
+        /// <summary>
+        /// Упаковка всей манги.
+        /// </summary>
+        /// <param name="message">Папка манги.</param>
+        public static void CompressManga(string message)
+        {
+            message = Page.MakeValidPath(message) + "\\";
+            if (!Directory.Exists(message))
+                return;
+
+            // Нельзя сжимать папку со всей мангой.
+            if (message.Trim('\\') == Settings.DownloadFolder.Trim('\\'))
+                return;
+
+            var acr = string.Concat(message, GetFolderName(message), ".cbz");
+            var directories = new DirectoryInfo(message);
+            var cbzs = directories.GetFiles("*.cbz", SearchOption.TopDirectoryOnly);
+            var files = directories.GetFiles("*", SearchOption.TopDirectoryOnly);
+
+            if (File.Exists(acr))
+                AddToArchive(acr, message);
+            else
+                using (var fileStream = new FileStream(acr, FileMode.Create))
+                {
+                    using (var zip = new ZipArchive(fileStream, ZipArchiveMode.Create, false, Encoding.UTF8))
+                    {
+                        foreach (var file in files.Except(cbzs))
+                        {
+                            zip.CreateEntryFromFile(file.FullName, file.Name, CompressionLevel.NoCompression);
+                        }
+                    }
+                }
+
+            var toDelete = directories.GetFiles("*", SearchOption.TopDirectoryOnly).Select(f => f.FullName)
+                        .Except(directories.GetFiles("*.cbz", SearchOption.TopDirectoryOnly).Select(f => f.FullName));
+            foreach (var file in toDelete)
+            {
+                File.Delete(file);
             }
         }
 
@@ -89,13 +130,18 @@ namespace MangaReader
             try
             {
                 using (var zip = ZipFile.Open(archive, ZipArchiveMode.Update, Encoding.UTF8))
-                foreach (var file in Directory.GetFiles(folder, "*", SearchOption.AllDirectories))
                 {
-                    var fileName = file.Replace(folder + "\\", string.Empty);
-                    var fileInZip = zip.Entries.FirstOrDefault(f => f.FullName == fileName);
-                    if (fileInZip != null)
-                        fileInZip.Delete();
-                    zip.CreateEntryFromFile(file, fileName, CompressionLevel.NoCompression);
+                    var directories = new DirectoryInfo(folder);
+                    var files = directories.GetFiles("*", SearchOption.TopDirectoryOnly).Select(f => f.FullName)
+                        .Except(directories.GetFiles("*.cbz", SearchOption.TopDirectoryOnly).Select(f => f.FullName));
+                    foreach (var file in files)
+                    {
+                        var fileName = file.Replace(directories.FullName + "\\", string.Empty).Replace(directories.FullName, string.Empty);
+                        var fileInZip = zip.Entries.FirstOrDefault(f => f.FullName == fileName);
+                        if (fileInZip != null)
+                            fileInZip.Delete();
+                        zip.CreateEntryFromFile(file, fileName, CompressionLevel.NoCompression);
+                    }
                 }
             }
             catch (InvalidDataException ex)

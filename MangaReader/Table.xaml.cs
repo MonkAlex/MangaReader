@@ -260,13 +260,9 @@ namespace MangaReader
         public object Convert(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)
         {
-            var result = string.Empty;
+            var result = "Icons/play.png";
             switch (value != null ? value.ToString() : string.Empty)
             {
-                case "продолжается":
-                  result = "Icons/play.png";
-                  break;
-
                 case "завершен":
                   result = "Icons/stop.png";
                   break;
@@ -278,7 +274,7 @@ namespace MangaReader
                 case "False":
                   result = "Icons/no.png";
                   break;
-}
+            }
             return result;
         }
 

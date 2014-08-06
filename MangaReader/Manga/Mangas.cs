@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace MangaReader.Manga
 {
-    [XmlInclude(typeof(Readmanga))]
+    [XmlInclude(typeof(Readmanga)), XmlInclude(typeof(Acomics))]
     public abstract class Mangas : INotifyPropertyChanged, IDownloadable
     {
         #region Свойства
@@ -82,6 +82,11 @@ namespace MangaReader.Manga
         /// Обновить информацию о манге - название, главы, обложка.
         /// </summary>
         public abstract void Refresh();
+
+        /// <summary>
+        /// Упаковка манги.
+        /// </summary>
+        public abstract void Compress();
 
         /// <summary>
         /// Создать мангу по ссылке.

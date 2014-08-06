@@ -120,6 +120,11 @@ namespace MangaReader.Manga
             OnPropertyChanged("IsCompleted");
         }
 
+        public override void Compress()
+        {
+            Compression.CompressVolumes(this.Folder);
+        }
+
         /// <summary>
         /// Получить список глав.
         /// </summary>

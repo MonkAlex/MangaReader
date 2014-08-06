@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using MangaReader.Manga.Grouple;
+using MangaReader.Manga.Acomic;
 using MangaReader.Properties;
 
 namespace MangaReader.Manga
@@ -40,7 +40,7 @@ namespace MangaReader.Manga
         /// </summary>
         public override bool IsValid
         {
-            get { return !string.IsNullOrWhiteSpace(this.Name) && this.listOfChapters != null; }
+            get { return !string.IsNullOrWhiteSpace(this.Name) && this.allChapters != null; }
         }
 
         /// <summary>
@@ -50,8 +50,7 @@ namespace MangaReader.Manga
         {
             get
             {
-                var match = Regex.Match(this.Status, Strings.Manga_IsCompleted);
-                return match.Groups.Count > 1 ? match.Groups[1].Value.Trim() : null;
+                return string.Empty;
             }
         }
 
@@ -68,7 +67,7 @@ namespace MangaReader.Manga
         /// </summary>
         public override double Downloaded
         {
-            get { return (downloadedChapters != null && downloadedChapters.Any()) ? downloadedChapters.Average(ch => ch.Downloaded) : 0; }
+            get { return (downloadedChapters != null && downloadedChapters.Any()) ? (downloadedChapters.Count(ch => ch.IsDownloaded) / (double)downloadedChapters.Count) * 100.0 : 0; }
             set { }
         }
 
@@ -81,11 +80,6 @@ namespace MangaReader.Manga
         /// Закешированный список глав.
         /// </summary>
         private List<Chapter> allChapters;
-
-        /// <summary>
-        /// Список глав, ссылка-описание.
-        /// </summary>
-        private Dictionary<string, string> listOfChapters;
 
 
         #endregion
@@ -110,25 +104,14 @@ namespace MangaReader.Manga
         /// </summary>
         public override void Refresh()
         {
-            var page = Page.GetPage(this.Url);
-            if (string.IsNullOrWhiteSpace(page))
-                return;
-
+            this.Name = Getter.GetMangaName(this.Url);
+            this.allChapters = Getter.GetMangaChapters(this.Url);
             OnPropertyChanged("IsCompleted");
         }
 
-        /// <summary>
-        /// Получить список глав.
-        /// </summary>
-        /// <returns>Список глав.</returns>
-        public List<Chapter> GetAllChapters()
+        public override void Compress()
         {
-            if (listOfChapters == null)
-                listOfChapters = Getter.GetLinksOfMangaChapters(Page.GetPage(this.Url), this.Url);
-            this.allChapters = allChapters ??
-                   (allChapters = listOfChapters.Select(link => new Chapter(link.Key, link.Value)).ToList());
-            this.allChapters.ForEach(ch => ch.DownloadProgressChanged += (sender, args) => this.DownloadProgressChanged(ch, this));
-            return this.allChapters;
+            Compression.CompressManga(this.Folder);
         }
 
         /// <summary>
@@ -141,13 +124,9 @@ namespace MangaReader.Manga
 
             if (mangaFolder == null)
                 mangaFolder = this.Folder;
-            if (volumePrefix == null)
-                volumePrefix = Settings.VolumePrefix;
-            if (chapterPrefix == null)
-                chapterPrefix = Settings.ChapterPrefix;
 
             if (this.allChapters == null)
-                this.GetAllChapters();
+                Getter.GetMangaChapters(this.Url);
 
             this.downloadedChapters = this.allChapters;
             if (Settings.Update == true)
@@ -169,15 +148,9 @@ namespace MangaReader.Manga
                 Parallel.ForEach(this.downloadedChapters,
                     ch =>
                     {
-                        ch.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged("Downloaded");
-                        ch.Download(string.Concat(mangaFolder,
-                            "\\",
-                            volumePrefix,
-                            ch.Volume.ToString().PadLeft(3, '0'),
-                            "\\",
-                            chapterPrefix,
-                            ch.Number.ToString().PadLeft(4, '0')
-                            ));
+                        ch.Download(mangaFolder);
+                        this.OnPropertyChanged("Downloaded");
+                        this.DownloadProgressChanged(ch, this);
                     });
                 Log.Add("Download end " + this.Name);
             }
@@ -209,7 +182,6 @@ namespace MangaReader.Manga
         public Acomics(string url)
         {
             this.Url = url;
-            this.Refresh();
         }
 
         public Acomics() { }

@@ -3,7 +3,7 @@ using System.Net;
 
 namespace MangaReader.Account
 {
-    class CookieClient : WebClient
+    public class CookieClient : WebClient
     {
 
         private CookieContainer cookie = new CookieContainer();

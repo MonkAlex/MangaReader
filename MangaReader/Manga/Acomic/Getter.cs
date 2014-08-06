@@ -40,7 +40,7 @@ namespace MangaReader.Manga.Acomic
                     name = nameNode.Attributes[1].Value;
             }
             catch (NullReferenceException ex) { Log.Exception(ex); }
-            return name;
+            return System.Net.WebUtility.HtmlDecode(name);
         }
 
         public static string GetTranslateStatus(string mangaMainPage)

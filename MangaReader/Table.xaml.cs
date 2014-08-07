@@ -54,7 +54,7 @@ namespace MangaReader
         public void Initialize()
         {
             Convert();
-            this.FormLibrary.ItemsSource = Library.Initialize(this.TaskBar);
+            this.FormLibrary.ItemsSource = Library.Initialize(this.TaskBar, this.NotifyIcon);
             ServicePointManager.DefaultConnectionLimit = 100;
             Grouple.LoginWhile();
             _timer = new DispatcherTimer(new TimeSpan(0, 0, 1),
@@ -68,10 +68,10 @@ namespace MangaReader
             if (!this.IsAvaible)
                 return;
             
-            if (!(sender is ListBoxItem) || e.LeftButton != MouseButtonState.Pressed)
+            if (!(sender is ListViewItem) || e.LeftButton != MouseButtonState.Pressed)
                 return;
 
-            var draggedItem = sender as ListBoxItem;
+            var draggedItem = sender as ListViewItem;
             DragDrop.DoDragDrop(draggedItem, draggedItem.DataContext, DragDropEffects.Move);
             draggedItem.IsSelected = true;
         }
@@ -81,8 +81,8 @@ namespace MangaReader
             if (!this.IsAvaible)
                 return;
 
-            var droppedData = e.Data.GetData(typeof(Mangas)) as Mangas;
-            var target = ((ListBoxItem)(sender)).DataContext as Mangas;
+            var droppedData = e.Data.GetData(e.Data.GetFormats().FirstOrDefault()) as Mangas;
+            var target = ((ListViewItem)(sender)).DataContext as Mangas;
 
             var removedIdx = this.FormLibrary.Items.IndexOf(droppedData);
             var targetIdx = this.FormLibrary.Items.IndexOf(target);
@@ -240,6 +240,7 @@ namespace MangaReader
         private void Window_OnClosing(object sender, CancelEventArgs e)
         {
             Settings.WindowsState = new object[]{this.Top, this.Left, this.Width, this.Height, this.WindowState};
+            this.NotifyIcon.Dispose();
         }
 
         private void ListView_MouseDown(object sender, MouseButtonEventArgs e)
@@ -249,6 +250,18 @@ namespace MangaReader
             {
                 listView.SelectedIndex = -1;
             }
+        }
+
+        private void Table_OnStateChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState == WindowState.Minimized)
+                this.Hide();
+        }
+
+        private void NotifyIcon_OnTrayMouseDoubleClick(object sender, RoutedEventArgs e)
+        {
+            this.Show();
+            this.WindowState = WindowState.Normal;
         }
     }
 

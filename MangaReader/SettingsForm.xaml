@@ -5,7 +5,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:resx="clr-namespace:MangaReader.Properties"
         WindowStartupLocation="CenterOwner"
-        Icon="main.ico"
+        Icon="Icons/main.ico"
         Title="{x:Static resx:Strings.Library_Action_Settings}" Height="272" Width="312.8"
         Closed="SettingsForm_OnClosed">
     <Window.Resources>

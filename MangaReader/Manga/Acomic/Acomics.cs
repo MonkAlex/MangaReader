@@ -59,7 +59,7 @@ namespace MangaReader.Manga
         /// </summary>
         public override bool IsDownloaded
         {
-            get { return downloadedChapters != null && downloadedChapters.All(c => c.IsDownloaded); }
+            get { return downloadedChapters != null && downloadedChapters.Any() && downloadedChapters.All(c => c.IsDownloaded); }
         }
 
         /// <summary>

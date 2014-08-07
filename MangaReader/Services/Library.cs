@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Shell;
 using System.Windows.Threading;
+using Hardcodet.Wpf.TaskbarNotification;
 using MangaReader.Manga;
 using MangaReader.Properties;
 
@@ -45,13 +46,18 @@ namespace MangaReader
         /// </summary>
         private static TaskbarItemInfo taskBar;
 
+        /// <summary>
+        /// Иконка в трее.
+        /// </summary>
+        private static TaskbarIcon taskbarIcon;
+
         #region Методы
 
         /// <summary>
         /// Инициализация библиотеки - заполнение массива из кеша.
         /// </summary>
         /// <returns></returns>
-        public static ObservableCollection<Mangas> Initialize(TaskbarItemInfo taskbar)
+        public static ObservableCollection<Mangas> Initialize(TaskbarItemInfo taskbar, TaskbarIcon taskbaricon)
         {
             foreach (var manga in Cache.Get())
             {
@@ -60,6 +66,7 @@ namespace MangaReader
             DatabaseMangas.CollectionChanged += (s, e) => Cache.Add(DatabaseMangas);
             formDispatcher = Dispatcher.CurrentDispatcher;
             taskBar = taskbar;
+            taskbarIcon = taskbaricon;
             return DatabaseMangas;
         }
 
@@ -201,6 +208,8 @@ namespace MangaReader
                     if (Settings.CompressManga)
                         current.Compress();
                     mangaIndex++;
+                    if (current.IsDownloaded)
+                      formDispatcher.Invoke(() => taskbarIcon.ShowBalloonTip(Strings.Title, Strings.Library_Status_MangaUpdate + current.Name + " завершено.", BalloonIcon.Info));
                 }
             }
             catch (AggregateException ae)

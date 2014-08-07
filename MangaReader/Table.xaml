@@ -2,9 +2,11 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local ="clr-namespace:MangaReader"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:resx="clr-namespace:MangaReader.Properties"
         Closing="Window_OnClosing"
-        Icon="main.ico"
+        StateChanged="Table_OnStateChanged"
+        Icon="Icons/main.ico"
         Title="{x:Static resx:Strings.Title}"  Height="350" Width="525">
 
     <Window.Resources>
@@ -149,5 +151,10 @@
                 <TextBlock x:Name="TextBlock" TextAlignment="Center"/>
             </StatusBarItem>
         </StatusBar>
+        <tb:TaskbarIcon
+            x:Name="NotifyIcon"
+            IconSource="/Icons/main.ico"
+            TrayMouseDoubleClick="NotifyIcon_OnTrayMouseDoubleClick"
+            ToolTipText="{x:Static resx:Strings.Title}" />
     </Grid>
 </Window>

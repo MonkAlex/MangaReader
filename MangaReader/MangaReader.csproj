@@ -63,7 +63,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>main.ico</ApplicationIcon>
+    <ApplicationIcon>Icons\main.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <NoWin32Manifest>true</NoWin32Manifest>
@@ -71,12 +71,12 @@
   <ItemGroup>
     <Reference Include="HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\HtmlAgilityPack.dll</HintPath>
+      <HintPath>Library\HtmlAgilityPack.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Ookii.Dialogs.Wpf">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\Ookii.Dialogs.Wpf.dll</HintPath>
+      <HintPath>Library\Ookii.Dialogs.Wpf.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -87,6 +87,11 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -199,11 +204,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="main.ico" />
+    <Resource Include="Icons\main.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="HtmlAgilityPack.dll" />
-    <EmbeddedResource Include="Ookii.Dialogs.Wpf.dll" />
+    <EmbeddedResource Include="Library\HtmlAgilityPack.dll" />
+    <EmbeddedResource Include="Library\Ookii.Dialogs.Wpf.dll" />
+    <EmbeddedResource Include="Library\Hardcodet.Wpf.TaskbarNotification.dll" />
+    <Resource Include="Library\Hardcodet.Wpf.TaskbarNotification.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Update\VersionHistory.txt" />

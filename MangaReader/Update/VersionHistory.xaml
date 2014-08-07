@@ -5,7 +5,7 @@
         Title="{x:Static properties:Strings.Update_Title}" Height="400" Width="500"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        Icon="../main.ico">
+        Icon="../Icons/main.ico">
     <Grid>
         <TextBox x:Name="TextBox" Margin="10,10,9.6,41" TextWrapping="Wrap" Text="TextBox"/>
         <Button Content="Ok" Margin="0,0,9.6,10" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Ok_Click" IsDefault="True"/>

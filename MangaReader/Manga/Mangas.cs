@@ -95,9 +95,11 @@ namespace MangaReader.Manga
         /// <returns>Манга.</returns>
         public static Mangas Create(string url)
         {
-            var readmanga = new Readmanga(url);
-            var acomics = new Acomics(url);
-            return readmanga.IsValid ? readmanga as Mangas : acomics as Mangas;
+            if (url.Contains("readmanga.me") || url.Contains("adultmanga.ru"))
+                return new Readmanga(url);
+            if (url.Contains("acomics.ru"))
+                return new Acomics(url);
+            return null;
         }
         
         #endregion

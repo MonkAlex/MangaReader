@@ -340,6 +340,15 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Сворачивать в трей.
+        /// </summary>
+        public static string Settings_MinimizeToTray {
+            get {
+                return ResourceManager.GetString("Settings_MinimizeToTray", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Обновлять мангу вместо полного скачивания.
         /// </summary>
         public static string Settings_Update {

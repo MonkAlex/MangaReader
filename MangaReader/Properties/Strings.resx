@@ -225,4 +225,7 @@
   <data name="Manga_Downloaded" xml:space="preserve">
     <value>Загружено</value>
   </data>
+  <data name="Settings_MinimizeToTray" xml:space="preserve">
+    <value>Сворачивать в трей</value>
+  </data>
 </root>

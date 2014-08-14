@@ -12,8 +12,9 @@ namespace MangaReader
         public SettingsForm()
         {
             InitializeComponent();
-            UpdateBox.IsChecked = Settings.Update;
-            UpdateReaderBox.IsChecked = Settings.UpdateReader;
+            this.UpdateBox.IsChecked = Settings.Update;
+            this.UpdateReaderBox.IsChecked = Settings.UpdateReader;
+            this.MinimizeToTray.IsChecked = Settings.MinimizeToTray;
             this.CompressBox.IsChecked = Settings.CompressManga;
             this.DownloadPath.Text = Settings.DownloadFolder;
             this.Language.SelectedItem = Settings.Language;
@@ -34,6 +35,7 @@ namespace MangaReader
             Settings.Language = (Settings.Languages)this.Language.SelectedItem;
             Settings.Update = UpdateBox.IsChecked.Value;
             Settings.UpdateReader = UpdateReaderBox.IsChecked.Value;
+            Settings.MinimizeToTray = MinimizeToTray.IsChecked.Value;
             Settings.CompressManga = CompressBox.IsChecked.Value;
 
             Settings.Save();

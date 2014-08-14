@@ -135,7 +135,7 @@ namespace MangaReader
             if (e.ClickCount < 2 || !(sender is ListViewItem))
                 return;
 
-            var manga = ((ListViewItem)sender).DataContext as Manga.Mangas;
+            var manga = ((ListViewItem)sender).DataContext as Mangas;
             if (manga == null)
                 return;
 
@@ -158,7 +158,7 @@ namespace MangaReader
 
             if (!string.IsNullOrWhiteSpace(db.Result.Text))
                 Library.Add(db.Result.Text);
-            foreach (var manga in db.Bookmarks.SelectedItems.OfType<Manga.Mangas>())
+            foreach (var manga in db.Bookmarks.SelectedItems.OfType<Mangas>())
             {
                 Library.Add(manga.Url);
             }
@@ -254,14 +254,17 @@ namespace MangaReader
 
         private void Table_OnStateChanged(object sender, EventArgs e)
         {
-            if (this.WindowState == WindowState.Minimized)
+            if (Settings.MinimizeToTray && this.WindowState == WindowState.Minimized)
                 this.Hide();
         }
 
         private void NotifyIcon_OnTrayMouseDoubleClick(object sender, RoutedEventArgs e)
         {
-            this.Show();
-            this.WindowState = WindowState.Normal;
+            if (Settings.MinimizeToTray)
+            {
+                this.Show();
+                this.WindowState = WindowState.Normal;
+            }
         }
     }
 

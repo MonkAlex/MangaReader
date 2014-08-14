@@ -19,6 +19,11 @@ namespace MangaReader
         public static bool Update = true;
 
         /// <summary>
+        /// Сворачивать в трей.
+        /// </summary>
+        public static bool MinimizeToTray = true;
+
+        /// <summary>
         /// Папка программы.
         /// </summary>
         public static readonly string WorkFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -76,7 +81,8 @@ namespace MangaReader
                 DownloadFolder,
                 CompressManga,
                 WindowsState,
-                new object[] {Login.Name, Login.Password}
+                new object[] {Login.Name, Login.Password},
+                MinimizeToTray
             };
             Serializer<object[]>.Save(SettingsPath, settings);
         }
@@ -98,7 +104,8 @@ namespace MangaReader
                 DownloadFolder = (string) settings[3];
                 CompressManga = (bool) settings[4];
                 WindowsState = (object[]) settings[5];
-                Login = new Login() { Name = (string)((object[])settings[6])[0], Password = (string)((object[])settings[6])[1] }; 
+                Login = new Login() { Name = (string)((object[])settings[6])[0], Password = (string)((object[])settings[6])[1] };
+                MinimizeToTray = (bool) settings[7];
             }
             catch (IndexOutOfRangeException){}
         }

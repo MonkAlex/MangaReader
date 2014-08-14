@@ -210,7 +210,7 @@
     <EmbeddedResource Include="Library\HtmlAgilityPack.dll" />
     <EmbeddedResource Include="Library\Ookii.Dialogs.Wpf.dll" />
     <EmbeddedResource Include="Library\Hardcodet.Wpf.TaskbarNotification.dll" />
-    <Resource Include="Library\Hardcodet.Wpf.TaskbarNotification.xml" />
+    <None Include="Library\Hardcodet.Wpf.TaskbarNotification.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Update\VersionHistory.txt" />

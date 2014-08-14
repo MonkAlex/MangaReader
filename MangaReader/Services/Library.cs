@@ -51,6 +51,21 @@ namespace MangaReader
         /// </summary>
         private static TaskbarIcon taskbarIcon;
 
+        private static readonly object TaskbarLock = new object();
+
+        /// <summary>
+        /// Показать сообщение в трее.
+        /// </summary>
+        /// <param name="message"></param>
+        internal static void ShowInTray(string message)
+        {
+            if (Settings.MinimizeToTray)
+              lock (TaskbarLock)
+                lock (DispatcherLock)
+                  formDispatcher.Invoke(() => taskbarIcon.ShowBalloonTip(Strings.Title, message, BalloonIcon.Info));
+
+        }
+
         #region Методы
 
         /// <summary>
@@ -206,10 +221,10 @@ namespace MangaReader
                                                           (args.Downloaded / 100.0));
                     current.Download();
                     if (Settings.CompressManga)
-                        current.Compress();
+                      current.Compress();
                     mangaIndex++;
                     if (current.IsDownloaded)
-                      formDispatcher.Invoke(() => taskbarIcon.ShowBalloonTip(Strings.Title, Strings.Library_Status_MangaUpdate + current.Name + " завершено.", BalloonIcon.Info));
+                      Library.ShowInTray(Strings.Library_Status_MangaUpdate + current.Name + " завершено.");
                 }
             }
             catch (AggregateException ae)

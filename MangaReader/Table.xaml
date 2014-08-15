@@ -155,6 +155,7 @@
             x:Name="NotifyIcon"
             IconSource="/Icons/main.ico"
             TrayMouseDoubleClick="NotifyIcon_OnTrayMouseDoubleClick"
+            TrayBalloonTipClicked="NotifyIcon_OnTrayBalloonTipClicked"
             ToolTipText="{x:Static resx:Strings.Title}" />
     </Grid>
 </Window>

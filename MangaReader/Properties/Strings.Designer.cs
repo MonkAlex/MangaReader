@@ -61,6 +61,15 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Запущено автоматическое обновление..
+        /// </summary>
+        public static string AutoUpdate {
+            get {
+                return ResourceManager.GetString("AutoUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Добавить.
         /// </summary>
         public static string Input_Add {
@@ -322,6 +331,15 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на часов.
+        /// </summary>
+        public static string Settings_Hours {
+            get {
+                return ResourceManager.GetString("Settings_Hours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Язык по умолчанию:.
         /// </summary>
         public static string Settings_Language {
@@ -354,6 +372,15 @@ namespace MangaReader.Properties {
         public static string Settings_Update {
             get {
                 return ResourceManager.GetString("Settings_Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Обновлять мангу через каждые.
+        /// </summary>
+        public static string Settings_UpdateEver {
+            get {
+                return ResourceManager.GetString("Settings_UpdateEver", resourceCulture);
             }
         }
         

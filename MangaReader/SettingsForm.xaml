@@ -6,7 +6,7 @@
         xmlns:resx="clr-namespace:MangaReader.Properties"
         WindowStartupLocation="CenterOwner"
         Icon="Icons/main.ico"
-        Title="{x:Static resx:Strings.Library_Action_Settings}" Height="300" Width="312.8"
+        Title="{x:Static resx:Strings.Library_Action_Settings}" Height="254" Width="365.6"
         Closed="SettingsForm_OnClosed">
     <Window.Resources>
         <ObjectDataProvider x:Key="Languages"
@@ -17,16 +17,82 @@
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Window.Resources>
-    <Grid>
-        <TextBlock TextTrimming="WordEllipsis" Text="{x:Static resx:Strings.Settings_DownloadMangaTo}" Margin="10,9,13.4,0" Height="14" VerticalAlignment="Top"></TextBlock>
-        <TextBlock TextTrimming="WordEllipsis" x:Name="DownloadPath"  Margin="10,34,78.4,0" Height="15" VerticalAlignment="Top"></TextBlock>
-        <Button Content="{x:Static resx:Strings.Settings_ChangeButton}" Click="ChangeFolder" Margin="0,33,13.4,0" Height="23" HorizontalAlignment="Right" Width="60" VerticalAlignment="Top"/>
-        <TextBlock TextTrimming="WordEllipsis" Text="{x:Static resx:Strings.Settings_Language}" Margin="10,78,109.4,0" Height="14" VerticalAlignment="Top"></TextBlock>
-        <ComboBox x:Name="Language" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Source={StaticResource Languages}}" Height="26" Margin="0,71,13.4,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91"></ComboBox>
-        <CheckBox x:Name="UpdateReaderBox" Content="{x:Static resx:Strings.Settings_UpdateReader}" Margin="10,150,13.4,0" Height="16" VerticalAlignment="Top"/>
-        <CheckBox x:Name="MinimizeToTray" Content="{x:Static resx:Strings.Settings_MinimizeToTray}" Margin="10,180,13.4,0" Height="16" VerticalAlignment="Top"/>
-        <CheckBox x:Name="UpdateBox" Content="{x:Static resx:Strings.Settings_Update}" Margin="10,210,13.4,0" Height="16" VerticalAlignment="Top"/>
-        <CheckBox x:Name="CompressBox" Content="{x:Static resx:Strings.Settings_Compress}" Margin="10,240,13.4,0" Height="16" VerticalAlignment="Top"/>
-        <TextBlock TextWrapping="Wrap" TextTrimming="WordEllipsis" Text="{x:Static resx:Strings.Settings_LanguageHint}" Margin="38,112,38.4,0" Height="34" VerticalAlignment="Top"/>
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="45*"></ColumnDefinition>
+            <ColumnDefinition Width="15*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" 
+                   TextTrimming="WordEllipsis" 
+                   Text="{x:Static resx:Strings.Settings_DownloadMangaTo}" 
+                   VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" 
+                   TextTrimming="WordEllipsis" 
+                   x:Name="DownloadPath"  
+                   VerticalAlignment="Center"/>
+        <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" 
+                Content="{x:Static resx:Strings.Settings_ChangeButton}" 
+                Click="ChangeFolder"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" 
+                   TextTrimming="WordEllipsis" 
+                   Text="{x:Static resx:Strings.Settings_Language}" 
+                   VerticalAlignment="Center"/>
+        <ComboBox Grid.Row="2" Grid.Column="1" 
+                  x:Name="Language" 
+                  IsSynchronizedWithCurrentItem="True" 
+                  ItemsSource="{Binding Source={StaticResource Languages}}" 
+                  VerticalAlignment="Center" 
+                  HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                   TextWrapping="Wrap" 
+                   TextTrimming="WordEllipsis" 
+                   Text="{x:Static resx:Strings.Settings_LanguageHint}" 
+                   VerticalAlignment="Center"/>
+
+        <TextBlock Grid.Row="4" Grid.Column="0" 
+                   TextTrimming="WordEllipsis" 
+                   Text="{x:Static resx:Strings.Settings_UpdateEver}" 
+                   VerticalAlignment="Center"/>
+        <TextBox Grid.Row="4" Grid.Column="1" 
+                  x:Name="AutoUpdate"
+                  VerticalAlignment="Center" 
+                  HorizontalAlignment="Left"/>
+        <TextBlock Grid.Row="4" Grid.Column="1" 
+                   TextTrimming="WordEllipsis" 
+                   Text="{x:Static resx:Strings.Settings_Hours}" 
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Right"/>
+
+        <CheckBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
+                  x:Name="UpdateReaderBox" 
+                  Content="{x:Static resx:Strings.Settings_UpdateReader}" 
+                  VerticalAlignment="Center"/>
+        <CheckBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+                  x:Name="MinimizeToTray" 
+                  Content="{x:Static resx:Strings.Settings_MinimizeToTray}" 
+                  VerticalAlignment="Center"/>
+        <CheckBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
+                  x:Name="UpdateBox" 
+                  Content="{x:Static resx:Strings.Settings_Update}" 
+                  VerticalAlignment="Center"/>
+        <CheckBox Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
+                  x:Name="CompressBox" 
+                  Content="{x:Static resx:Strings.Settings_Compress}" 
+                  VerticalAlignment="Center"/>
     </Grid>
 </Window>

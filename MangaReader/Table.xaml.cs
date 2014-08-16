@@ -186,6 +186,13 @@ namespace MangaReader
       UpdateButton.IsEnabled = this.IsAvaible;
       AddButton.IsEnabled = this.IsAvaible;
       SettingsButton.IsEnabled = this.IsAvaible;
+
+      if (this.IsAvaible && Settings.AutoUpdateInHours > 0 &&
+        DateTime.Now > Settings.LastUpdate.AddHours(Settings.AutoUpdateInHours))
+      {
+        Log.Add(Strings.AutoUpdate);
+        Update_click(this, new RoutedEventArgs());
+      }
     }
 
     /// <summary>

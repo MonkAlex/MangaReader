@@ -228,4 +228,13 @@
   <data name="Settings_MinimizeToTray" xml:space="preserve">
     <value>Сворачивать в трей</value>
   </data>
+  <data name="AutoUpdate" xml:space="preserve">
+    <value>Запущено автоматическое обновление.</value>
+  </data>
+  <data name="Settings_UpdateEver" xml:space="preserve">
+    <value>Обновлять мангу через каждые</value>
+  </data>
+  <data name="Settings_Hours" xml:space="preserve">
+    <value>часов</value>
+  </data>
 </root>

@@ -264,6 +264,8 @@ namespace MangaReader
       {
         Library.SetTaskbarState(0, TaskbarItemProgressState.None);
         Status = Strings.Library_Status_UpdateComplete;
+        if (manga == null)
+          Settings.LastUpdate = DateTime.Now;
       }
 
     }

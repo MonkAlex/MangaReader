@@ -119,6 +119,9 @@
     <Compile Include="Manga\IDownloadable.cs" />
     <Compile Include="Manga\Mangas.cs" />
     <Compile Include="Manga\MangaObsolete.cs" />
+    <Compile Include="Services\DownloadFolderSetting.xaml.cs">
+      <DependentUpon>DownloadFolderSetting.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Table.xaml.cs">
       <DependentUpon>Table.xaml</DependentUpon>
     </Compile>
@@ -137,6 +140,10 @@
       <DependentUpon>VersionHistory.xaml</DependentUpon>
     </Compile>
     <Page Include="Input.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Services\DownloadFolderSetting.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

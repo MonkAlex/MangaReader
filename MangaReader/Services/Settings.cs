@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows;
 using MangaReader.Account;
+using MangaReader.Manga;
 
 namespace MangaReader
 {
@@ -147,6 +148,11 @@ namespace MangaReader
         main.WindowState = (WindowState)WindowsState[4];
       }
       catch (IndexOutOfRangeException) { }
+    }
+
+    public static string GetDownloadFolder(Mangas manga)
+    {
+      return 
     }
 
     /// <summary>

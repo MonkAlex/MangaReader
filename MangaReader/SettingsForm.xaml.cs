@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Documents;
+using MangaReader.Manga;
 using Ookii.Dialogs.Wpf;
 
 namespace MangaReader
@@ -16,9 +19,10 @@ namespace MangaReader
       this.UpdateReaderBox.IsChecked = Settings.UpdateReader;
       this.MinimizeToTray.IsChecked = Settings.MinimizeToTray;
       this.CompressBox.IsChecked = Settings.CompressManga;
-      this.DownloadPath.Text = Settings.DownloadFolder;
       this.Language.SelectedItem = Settings.Language;
       this.AutoUpdate.Text = Settings.AutoUpdateInHours.ToString();
+      this.ReadManga.DataContext = Readmanga.Create();
+      this.Acomics.DataContext = new Acomics();
     }
 
     private void ChangeFolder(object sender, RoutedEventArgs e)
@@ -27,7 +31,7 @@ namespace MangaReader
       if (dialog.ShowDialog() == true)
       {
         Settings.DownloadFolder = dialog.SelectedPath + "\\";
-        this.DownloadPath.Text = Settings.DownloadFolder;
+    //  this.DownloadPath.Text = Settings.DownloadFolder;
       }
     }
 

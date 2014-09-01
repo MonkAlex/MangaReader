@@ -300,7 +300,7 @@ namespace MangaReader
       var selfUpdate = new MenuItem() { Header = Strings.Library_CheckUpdate, IsEnabled = this.IsAvaible };
       selfUpdate.Click += (o, agrs) => Update.StartUpdate();
       var exit = new MenuItem() { Header = Strings.Library_Exit };
-      exit.Click += (o, agrs) => Environment.Exit(0);
+      exit.Click += (o, agrs) => Application.Current.Shutdown(0);
 
       var menu = new ContextMenu();
       menu.Items.Add(update);

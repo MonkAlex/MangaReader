@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Windows;
 
 namespace MangaReader.Services
 {
@@ -78,7 +79,7 @@ namespace MangaReader.Services
           }
         };
         run.Start();
-        Environment.Exit(1);
+        Application.Current.Shutdown(1);
       }
     }
 
@@ -98,7 +99,7 @@ namespace MangaReader.Services
         }
       };
       run.Start();
-      Environment.Exit(1);
+      Application.Current.Shutdown(1);
     }
 
     /// <summary>

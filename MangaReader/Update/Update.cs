@@ -96,7 +96,7 @@ namespace MangaReader.Services
         }
       };
       run.Start();
-      Application.Current.Shutdown(1);
+      Environment.Exit(1);
     }
 
     /// <summary>
@@ -112,7 +112,7 @@ namespace MangaReader.Services
       }
       catch (UnauthorizedAccessException exception)
       {
-        Console.WriteLine(exception);
+        Log.Exception(exception);
       }
       new VersionHistory().ShowDialog();
     }

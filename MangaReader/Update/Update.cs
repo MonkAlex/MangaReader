@@ -15,10 +15,10 @@ namespace MangaReader.Services
     private const string UpdateStarted = "update";
     private const string UpdateFinished = "updated";
 
-    private const string UpdateFilename = "update.exe";
-    private const string UpdateTempFilename = "update.it";
-    private const string OriginalFilename = "MangaReader.exe";
-    private const string OriginalTempFilename = OriginalFilename + ".bak";
+    private static string UpdateFilename = Settings.WorkFolder + "\\update.exe";
+    private static string UpdateTempFilename = Settings.WorkFolder + "\\update.it";
+    private static string OriginalFilename = Settings.WorkFolder + "\\MangaReader.exe";
+    private static string OriginalTempFilename = Settings.WorkFolder + "\\MangaReader.exe.bak";
 
     /// <summary>
     /// Запуск обновления, вызываемый до инициализации программы.
@@ -35,8 +35,6 @@ namespace MangaReader.Services
       if (Settings.UpdateReader)
         Update.StartUpdate();
     }
-
-
 
     /// <summary>
     /// Проверка наличия обновления.
@@ -66,8 +64,7 @@ namespace MangaReader.Services
 
       using (var client = new WebClient())
       {
-        File.WriteAllBytes(Settings.WorkFolder + "\\" + UpdateFilename,
-            client.DownloadData(LinkToUpdate));
+        File.WriteAllBytes(UpdateFilename, client.DownloadData(LinkToUpdate));
         File.Copy(UpdateFilename, UpdateTempFilename, true);
         var run = new Process()
         {
@@ -107,9 +104,16 @@ namespace MangaReader.Services
     /// </summary>
     public static void Clean()
     {
-      File.Delete(UpdateFilename);
-      File.Delete(OriginalTempFilename);
-      File.Delete(UpdateTempFilename);
+      try
+      {
+        File.Delete(UpdateFilename);
+        File.Delete(OriginalTempFilename);
+        File.Delete(UpdateTempFilename);
+      }
+      catch (UnauthorizedAccessException exception)
+      {
+        Console.WriteLine(exception);
+      }
       new VersionHistory().ShowDialog();
     }
   }

@@ -89,7 +89,7 @@ namespace MangaReader
                 Language,
                 Update,
                 UpdateReader,
-                DownloadFolder,
+                new object[] {Readmanga.DownloadFolder, Acomics.DownloadFolder},
                 CompressManga,
                 WindowsState,
                 new object[] {Login.Name, Login.Password},
@@ -108,6 +108,8 @@ namespace MangaReader
       if (settings == null)
         return;
 
+      Convert();
+
       try
       {
         Language = (Languages)settings[0];
@@ -116,8 +118,6 @@ namespace MangaReader
         Console.WriteLine("Update or full download {0}", Update);
         UpdateReader = (bool)settings[2];
         Console.WriteLine("Autoupdate Mangareader {0}", UpdateReader);
-        DownloadFolder = (string)settings[3];
-        Console.WriteLine("Download to {0}", DownloadFolder);
         CompressManga = (bool)settings[4];
         Console.WriteLine("Need compress manga {0}", CompressManga);
         WindowsState = (object[])settings[5];
@@ -127,8 +127,30 @@ namespace MangaReader
         Console.WriteLine("Minimize to tray {0}", MinimizeToTray);
         AutoUpdateInHours = (int)settings[8];
         Console.WriteLine("Update mangas ever {0} hours, if its not zero.", AutoUpdateInHours);
+        Readmanga.DownloadFolder = (string)((object[])settings[3])[0];
+        Console.WriteLine("Readmanga download to {0}", Readmanga.DownloadFolder);
+        Acomics.DownloadFolder = (string)((object[])settings[3])[1];
+        Console.WriteLine("Acomics download to {0}", Acomics.DownloadFolder);
       }
       catch (IndexOutOfRangeException) { }
+    }
+
+    public static void Convert()
+    {
+      var settings = Serializer<object[]>.Load(SettingsPath);
+      if (settings == null)
+        return;
+
+      try
+      {
+        if (settings[3] is string)
+          settings[3] = new[] {settings[3], settings[3]};
+        Serializer<object[]>.Save(SettingsPath, settings);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine(ex);
+      }
     }
 
     /// <summary>
@@ -148,11 +170,6 @@ namespace MangaReader
         main.WindowState = (WindowState)WindowsState[4];
       }
       catch (IndexOutOfRangeException) { }
-    }
-
-    public static string GetDownloadFolder(Mangas manga)
-    {
-      return 
     }
 
     /// <summary>

@@ -41,6 +41,7 @@ namespace MangaReader
 
     public Table()
     {
+      Convert();
       Settings.Load();
       Update.Initialize();
       InitializeComponent();
@@ -54,7 +55,6 @@ namespace MangaReader
     /// </summary>
     public void Initialize()
     {
-      Convert();
       ServicePointManager.DefaultConnectionLimit = 100;
       Grouple.LoginWhile();
       _timer = new DispatcherTimer(new TimeSpan(0, 0, 1),
@@ -107,6 +107,7 @@ namespace MangaReader
     /// </summary>
     private static void Convert()
     {
+      Settings.Convert();
       Cache.Convert();
       History.Convert();
       Library.Convert();

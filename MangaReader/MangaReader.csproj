@@ -77,6 +77,7 @@
       <HintPath>Library\HtmlAgilityPack.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Ookii.Dialogs.Wpf">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\Ookii.Dialogs.Wpf.dll</HintPath>

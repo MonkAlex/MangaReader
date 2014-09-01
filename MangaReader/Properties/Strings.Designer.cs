@@ -133,6 +133,24 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Проверить обновления.
+        /// </summary>
+        public static string Library_CheckUpdate {
+            get {
+                return ResourceManager.GetString("Library_CheckUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Выйти.
+        /// </summary>
+        public static string Library_Exit {
+            get {
+                return ResourceManager.GetString("Library_Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Папка c мангой не найдена.
         /// </summary>
         public static string Library_Status_FolderNotFound {

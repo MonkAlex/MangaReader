@@ -11,6 +11,7 @@
 
     <Window.Resources>
         <local:StringImageConverter x:Key="ImageConverter"/>
+        <local:UrlTypeConverter x:Key="UrlTypeConverter"/>
     </Window.Resources>
 
     <Window.TaskbarItemInfo>
@@ -111,6 +112,7 @@
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Url, Converter={StaticResource UrlTypeConverter}}"/>
                         <GridViewColumn>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -156,6 +158,7 @@
             IconSource="/Icons/main.ico"
             TrayMouseDoubleClick="NotifyIcon_OnTrayMouseDoubleClick"
             TrayBalloonTipClicked="NotifyIcon_OnTrayBalloonTipClicked"
+            TrayRightMouseUp="NotifyIcon_OnTrayRightMouseUp"
             ToolTipText="{x:Static resx:Strings.Title}" />
     </Grid>
 </Window>

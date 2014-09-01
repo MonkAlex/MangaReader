@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Hardcodet.Wpf.TaskbarNotification;
 using MangaReader.Account;
 using MangaReader.Manga;
 using MangaReader.Properties;
@@ -285,6 +286,57 @@ namespace MangaReader
       if (downloadable != null)
         MenuOpenFolder(downloadable);
     }
+
+    private void NotifyIcon_OnTrayRightMouseUp(object sender, RoutedEventArgs e)
+    {
+      var item = sender as TaskbarIcon;
+
+      var update = new MenuItem() { Header = Strings.Manga_Action_Update, IsEnabled = this.IsAvaible };
+      update.Click += (o, agrs) => this.Update_click(sender, e);
+      var add = new MenuItem() { Header = Strings.Library_Action_Add, IsEnabled = this.IsAvaible };
+      add.Click += (o, agrs) => this.Add_click(sender, e);
+      var settings = new MenuItem() { Header = Strings.Library_Action_Settings, IsEnabled = this.IsAvaible };
+      settings.Click += (o, agrs) => this.Settings_click(sender, e);
+      var selfUpdate = new MenuItem() { Header = Strings.Library_CheckUpdate, IsEnabled = this.IsAvaible };
+      selfUpdate.Click += (o, agrs) => Update.StartUpdate();
+      var exit = new MenuItem() { Header = Strings.Library_Exit };
+      exit.Click += (o, agrs) => Environment.Exit(0);
+
+      var menu = new ContextMenu();
+      menu.Items.Add(update);
+      menu.Items.Add(add);
+      menu.Items.Add(settings);
+      menu.Items.Add(selfUpdate);
+      menu.Items.Add(exit);
+      item.ContextMenu = menu;
+    }
+  }
+
+  [ValueConversion(typeof(string), typeof(string))]
+  public class UrlTypeConverter : IValueConverter
+  {
+    #region IValueConverter Members
+
+    public object Convert(object value, Type targetType, object parameter,
+        System.Globalization.CultureInfo culture)
+    {
+      var result = value == null ? string.Empty : value.ToString();
+      if (result.Contains("readmanga"))
+        return "RM";
+      if (result.Contains("adultmanga"))
+        return "AM";
+      if (result.Contains("acomics"))
+        return "AC";
+      return "NA";
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter,
+        System.Globalization.CultureInfo culture)
+    {
+      throw new NotSupportedException();
+    }
+
+    #endregion
   }
 
   [ValueConversion(typeof(string), typeof(string))]

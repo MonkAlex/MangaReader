@@ -237,4 +237,10 @@
   <data name="Settings_Hours" xml:space="preserve">
     <value>часов</value>
   </data>
+  <data name="Library_CheckUpdate" xml:space="preserve">
+    <value>Проверить обновления</value>
+  </data>
+  <data name="Library_Exit" xml:space="preserve">
+    <value>Выйти</value>
+  </data>
 </root>

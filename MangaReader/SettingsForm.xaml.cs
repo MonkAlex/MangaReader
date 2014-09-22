@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows;
-using MangaReader.Manga;
+using MangaReader.Manga.Acomic;
+using MangaReader.Manga.Grouple;
+using MangaReader.Services;
 
 namespace MangaReader
 {
@@ -16,7 +18,7 @@ namespace MangaReader
       this.UpdateReaderBox.IsChecked = Settings.UpdateReader;
       this.MinimizeToTray.IsChecked = Settings.MinimizeToTray;
       this.CompressBox.IsChecked = Settings.CompressManga;
-      this.Language.SelectedItem = Settings.Language;
+      this.MangaLanguage.SelectedItem = Settings.Language;
       this.AutoUpdate.Text = Settings.AutoUpdateInHours.ToString();
       this.ReadManga.DataContext = typeof(Readmanga);
       this.Acomics.DataContext = typeof(Acomics);
@@ -24,7 +26,7 @@ namespace MangaReader
 
     private void SettingsForm_OnClosed(object sender, EventArgs e)
     {
-      Settings.Language = (Settings.Languages)this.Language.SelectedItem;
+      Settings.Language = (Settings.Languages)this.MangaLanguage.SelectedItem;
       Settings.Update = UpdateBox.IsChecked.Value;
       Settings.UpdateReader = UpdateReaderBox.IsChecked.Value;
       Settings.MinimizeToTray = MinimizeToTray.IsChecked.Value;

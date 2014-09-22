@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace MangaReader
+namespace MangaReader.Services
 {
   public class Log
   {

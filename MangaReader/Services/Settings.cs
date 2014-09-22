@@ -3,9 +3,10 @@ using System.IO;
 using System.Reflection;
 using System.Windows;
 using MangaReader.Account;
-using MangaReader.Manga;
+using MangaReader.Manga.Acomic;
+using MangaReader.Manga.Grouple;
 
-namespace MangaReader
+namespace MangaReader.Services
 {
   public class Settings
   {
@@ -144,7 +145,7 @@ namespace MangaReader
       try
       {
         if (settings[3] is string)
-          settings[3] = new[] {settings[3], settings[3]};
+          settings[3] = new[] { settings[3], settings[3] };
         Serializer<object[]>.Save(SettingsPath, settings);
       }
       catch (Exception ex)

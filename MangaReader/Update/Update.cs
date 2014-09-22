@@ -24,7 +24,7 @@ namespace MangaReader.Services
     /// Запуск обновления, вызываемый до инициализации программы.
     /// </summary>
     /// <remarks>Завершает обновление и удаляет временные файлы.</remarks>
-    public static void Initialize()
+    internal static void Initialize()
     {
       var args = Environment.GetCommandLineArgs();
       if (args.Contains(UpdateStarted))
@@ -40,7 +40,7 @@ namespace MangaReader.Services
     /// Проверка наличия обновления.
     /// </summary>
     /// <returns></returns>
-    public static bool CheckUpdate()
+    private static bool CheckUpdate()
     {
       try
       {
@@ -57,7 +57,7 @@ namespace MangaReader.Services
     /// <summary>
     /// Запуск обновления.
     /// </summary>
-    public static void StartUpdate()
+    internal static void StartUpdate()
     {
       if (!Update.CheckUpdate())
         return;
@@ -83,7 +83,7 @@ namespace MangaReader.Services
     /// <summary>
     /// Завершение обновления и запуск обновленного приложения.
     /// </summary>
-    public static void FinishUpdate()
+    private static void FinishUpdate()
     {
       File.Replace(UpdateTempFilename, OriginalFilename, OriginalTempFilename);
       var run = new Process()
@@ -102,7 +102,7 @@ namespace MangaReader.Services
     /// <summary>
     /// Удаление временных файлов.
     /// </summary>
-    public static void Clean()
+    private static void Clean()
     {
       try
       {

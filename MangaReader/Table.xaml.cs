@@ -279,7 +279,7 @@ namespace MangaReader
     private void NotifyIcon_OnTrayBalloonTipClicked(object sender, RoutedEventArgs e)
     {
       var element = sender as FrameworkElement;
-      if (element == null) 
+      if (element == null)
         return;
 
       var downloadable = element.DataContext as IDownloadable;

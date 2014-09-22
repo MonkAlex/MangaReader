@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MangaReader.Manga.Acomic;
+using MangaReader.Services;
 
-namespace MangaReader.Manga
+namespace MangaReader.Manga.Acomic
 {
   /// <summary>
   /// Манга.

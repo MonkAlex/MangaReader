@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+using MangaReader.Services;
 
 namespace MangaReader.Manga.Grouple
 {
@@ -22,13 +24,13 @@ namespace MangaReader.Manga.Grouple
         document.LoadHtml(mangaMainPage);
         var japNode = document.DocumentNode.SelectSingleNode("//div[@class=\"leftContent manga-page\"]//span[@class='jp-name']");
         if (japNode != null)
-          name.Japanese = System.Net.WebUtility.HtmlDecode(japNode.InnerText);
+          name.Japanese = WebUtility.HtmlDecode(japNode.InnerText);
         var engNode = document.DocumentNode.SelectSingleNode("//div[@class=\"leftContent manga-page\"]//span[@class='eng-name']");
         if (engNode != null)
-          name.English = System.Net.WebUtility.HtmlDecode(engNode.InnerText);
+          name.English = WebUtility.HtmlDecode(engNode.InnerText);
         var rusNode = document.DocumentNode.SelectSingleNode("//div[@class=\"leftContent manga-page\"]//span[@class='name']");
         if (rusNode != null)
-          name.Russian = System.Net.WebUtility.HtmlDecode(rusNode.InnerText);
+          name.Russian = WebUtility.HtmlDecode(rusNode.InnerText);
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
       return name;

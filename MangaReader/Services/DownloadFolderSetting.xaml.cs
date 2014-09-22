@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Ookii.Dialogs.Wpf;
 
-namespace MangaReader
+namespace MangaReader.Services
 {
   /// <summary>
   /// Логика взаимодействия для DownloadFolderSetting.xaml
@@ -21,7 +21,7 @@ namespace MangaReader
     private void DownloadFolderSetting_OnLoaded(object sender, RoutedEventArgs e)
     {
       DonwloadFolder = (this.DataContext as Type).GetProperty("DownloadFolder", BindingFlags.Static | BindingFlags.NonPublic);
-      this.Name.Text = (this.DataContext as Type).Name + ": ";
+      this.Class.Text = (this.DataContext as Type).Name + ": ";
       this.FolderPath.Text = DonwloadFolder.GetValue(null) as string;
     }
 

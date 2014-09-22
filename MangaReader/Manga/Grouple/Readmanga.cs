@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using MangaReader.Manga.Grouple;
 using MangaReader.Properties;
+using MangaReader.Services;
 
-namespace MangaReader.Manga
+namespace MangaReader.Manga.Grouple
 {
   /// <summary>
   /// Манга.

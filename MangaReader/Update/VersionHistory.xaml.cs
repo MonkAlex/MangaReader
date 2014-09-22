@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Windows;
 using MangaReader.Properties;
 
-namespace MangaReader
+namespace MangaReader.Services
 {
     /// <summary>
     /// Логика взаимодействия для VersionHistory.xaml

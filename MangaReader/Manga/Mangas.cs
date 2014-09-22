@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace MangaReader.Manga
 {
-  [XmlInclude(typeof(Readmanga)), XmlInclude(typeof(Acomics))]
+  [XmlInclude(typeof(Grouple.Readmanga)), XmlInclude(typeof(Acomic.Acomics))]
   public abstract class Mangas : INotifyPropertyChanged, IDownloadable
   {
     #region Свойства
@@ -90,9 +90,9 @@ namespace MangaReader.Manga
     public static Mangas Create(string url)
     {
       if (url.Contains("readmanga.me") || url.Contains("adultmanga.ru"))
-        return new Readmanga(url);
+        return new Grouple.Readmanga(url);
       if (url.Contains("acomics.ru"))
-        return new Acomics(url);
+        return new Acomic.Acomics(url);
       return null;
     }
 

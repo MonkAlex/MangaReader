@@ -10,7 +10,7 @@ using Hardcodet.Wpf.TaskbarNotification;
 using MangaReader.Manga;
 using MangaReader.Properties;
 
-namespace MangaReader
+namespace MangaReader.Services
 {
   class Library
   {

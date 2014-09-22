@@ -1,7 +1,7 @@
 ﻿<Window x:Class="MangaReader.SettingsForm"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:mangaReader="clr-namespace:MangaReader"
+        xmlns:mangaReader="clr-namespace:MangaReader.Services"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:resx="clr-namespace:MangaReader.Properties"
         WindowStartupLocation="CenterOwner"
@@ -49,7 +49,7 @@
                    Text="{x:Static resx:Strings.Settings_Language}" 
                    VerticalAlignment="Center"/>
         <ComboBox Grid.Row="3" Grid.Column="1" 
-                  x:Name="Language" 
+                  x:Name="MangaLanguage" 
                   IsSynchronizedWithCurrentItem="True" 
                   ItemsSource="{Binding Source={StaticResource Languages}}" 
                   VerticalAlignment="Center" 

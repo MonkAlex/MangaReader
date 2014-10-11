@@ -31,6 +31,11 @@ namespace MangaReader.Services
     public static int AutoUpdateInHours = 0;
 
     /// <summary>
+    /// Пропускать дубли.
+    /// </summary>
+    public static bool SkipDouble = false;
+
+    /// <summary>
     /// Время последнего обновления.
     /// </summary>
     public static DateTime LastUpdate = DateTime.Now;
@@ -95,7 +100,8 @@ namespace MangaReader.Services
                 WindowsState,
                 new object[] {Login.Name, Login.Password},
                 MinimizeToTray,
-                AutoUpdateInHours
+                AutoUpdateInHours,
+                SkipDouble
             };
       Serializer<object[]>.Save(SettingsPath, settings);
     }
@@ -119,6 +125,10 @@ namespace MangaReader.Services
         Console.WriteLine("Update or full download {0}", Update);
         UpdateReader = (bool)settings[2];
         Console.WriteLine("Autoupdate Mangareader {0}", UpdateReader);
+        Readmanga.DownloadFolder = (string)((object[])settings[3])[0];
+        Console.WriteLine("Readmanga download to {0}", Readmanga.DownloadFolder);
+        Acomics.DownloadFolder = (string)((object[])settings[3])[1];
+        Console.WriteLine("Acomics download to {0}", Acomics.DownloadFolder);
         CompressManga = (bool)settings[4];
         Console.WriteLine("Need compress manga {0}", CompressManga);
         WindowsState = (object[])settings[5];
@@ -128,10 +138,8 @@ namespace MangaReader.Services
         Console.WriteLine("Minimize to tray {0}", MinimizeToTray);
         AutoUpdateInHours = (int)settings[8];
         Console.WriteLine("Update mangas ever {0} hours, if its not zero.", AutoUpdateInHours);
-        Readmanga.DownloadFolder = (string)((object[])settings[3])[0];
-        Console.WriteLine("Readmanga download to {0}", Readmanga.DownloadFolder);
-        Acomics.DownloadFolder = (string)((object[])settings[3])[1];
-        Console.WriteLine("Acomics download to {0}", Acomics.DownloadFolder);
+        SkipDouble = (bool)settings[9];
+        Console.WriteLine("Skip double images in manga {0}", SkipDouble);
       }
       catch (IndexOutOfRangeException) { }
     }

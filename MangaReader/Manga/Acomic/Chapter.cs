@@ -62,12 +62,12 @@ namespace MangaReader.Manga.Acomic
           Directory.CreateDirectory(chapterFolder);
 
         var file = Page.DownloadFile(this.ImageLink);
-        if (file == null)
+        if (!file.Exist)
           throw new Exception("Restart chapter download, downloaded file is corrupted, link = " + this.ImageLink);
 
-        var fileName = Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + Page.GetImageExtension(file);
+        var fileName = Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + file.Extension;
 
-        File.WriteAllBytes(string.Concat(chapterFolder, "\\", fileName), file);
+        File.WriteAllBytes(string.Concat(chapterFolder, "\\", fileName), file.Body);
 
         History.Add(this.Url);
         this.IsDownloaded = true;

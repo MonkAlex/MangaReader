@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -12,42 +10,16 @@ namespace MangaReader
 {
   public static class Page
   {
-
-    /// <summary>
-    /// Сжать изображение.
-    /// </summary>
-    /// <param name="image">Изображение.</param>
-    /// <returns>Сжатое изображение.</returns>
-    public static byte[] GetThumbnail(byte[] image)
-    {
-      var memory = new MemoryStream();
-      Image
-          .FromStream(new MemoryStream(image))
-          .GetThumbnailImage(128, 200, null, new IntPtr())
-          .Save(memory, ImageFormat.Png);
-      return memory.ToArray();
-    }
-
-    /// <summary>
-    /// Получить расширение изображения.
-    /// </summary>
-    /// <param name="image">Изображение.</param>
-    /// <returns>Строка с типом картинки.</returns>
-    public static string GetImageExtension(byte[] image)
-    {
-      var created = Image.FromStream(new MemoryStream(image));
-      return new ImageFormatConverter().ConvertToString(created.RawFormat).ToLower();
-    }
-
     /// <summary>
     /// Скачать файл.
     /// </summary>
     /// <param name="url">Ссылка на файл.</param>
     /// <returns>Содержимое файла.</returns>
-    public static byte[] DownloadFile(string url)
+    internal static ImageFile DownloadFile(string url)
     {
       Byte[] result;
       WebResponse response;
+      var file = new ImageFile();
       var request = WebRequest.Create(url);
 
       try
@@ -60,10 +32,11 @@ namespace MangaReader
       }
       catch
       {
-        return null;
+        return file;
       }
-
-      return response.ContentLength == result.LongLength ? result : null;
+      if (response.ContentLength == result.LongLength)
+        file.Body = result;
+      return file;
     }
 
     /// <summary>

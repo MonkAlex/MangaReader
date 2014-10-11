@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -150,7 +151,7 @@ namespace MangaReader.Manga.Grouple
       if (listOfChapters == null)
         listOfChapters = Getter.GetLinksOfMangaChapters(Page.GetPage(this.Url), this.Url);
       this.allChapters = allChapters ??
-             (allChapters = listOfChapters.Select(link => new Chapter(link.Key, link.Value)).ToList());
+             (allChapters = listOfChapters.Select(link => new Chapter(link.Key, link.Value, this)).ToList());
       this.allChapters.ForEach(ch => ch.DownloadProgressChanged += (sender, args) => this.DownloadProgressChanged(ch, this));
       return this.allChapters;
     }
@@ -197,10 +198,10 @@ namespace MangaReader.Manga.Grouple
               ch.Download(string.Concat(mangaFolder,
                   "\\",
                   volumePrefix,
-                  ch.Volume.ToString().PadLeft(3, '0'),
+                  ch.Volume.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0'),
                   "\\",
                   chapterPrefix,
-                  ch.Number.ToString().PadLeft(4, '0')
+                  ch.Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0')
                   ));
             });
         Log.Add("Download end " + this.Name);

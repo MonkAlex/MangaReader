@@ -166,7 +166,7 @@ namespace MangaReader.Manga
       if (listOfChapters == null)
         listOfChapters = Getter.GetLinksOfMangaChapters(Page.GetPage(this.Url), this.Url);
       this.allChapters = allChapters ??
-             (allChapters = listOfChapters.Select(link => new Chapter(link.Key, link.Value)).ToList());
+             (allChapters = listOfChapters.Select(link => new Chapter(link.Key, link.Value, new Readmanga())).ToList());
       this.allChapters.ForEach(ch => ch.DownloadProgressChanged += (sender, args) => this.DownloadProgressChanged(ch, this));
       return this.allChapters;
     }

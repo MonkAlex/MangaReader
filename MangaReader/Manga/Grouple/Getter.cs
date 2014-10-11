@@ -53,38 +53,6 @@ namespace MangaReader.Manga.Grouple
     }
 
     /// <summary>
-    /// Получить обложку манги.
-    /// </summary>
-    /// <param name="mangaMainPage">Содержимое страницы манги.</param>
-    /// <returns>Картинка для обложки.</returns>
-    public static byte[] GetMangaCover(string mangaMainPage)
-    {
-      try
-      {
-        var document = new HtmlDocument();
-        document.LoadHtml(mangaMainPage);
-        var links = document.DocumentNode.SelectNodes("//div[@class=\"subject-cower\"]//img[@src]")
-            .ToList()
-            .ConvertAll(r => r.Attributes.ToList().ConvertAll(i => i.Value))
-            .SelectMany(j => j)
-            .Where(k => k != string.Empty && k.StartsWith("http"))
-            .ToList();
-        return links.Any() ?
-            Page.GetThumbnail(Page.DownloadFile(links.OrderBy(x => Guid.NewGuid()).FirstOrDefault())) :
-            null;
-      }
-      catch (NullReferenceException ex)
-      {
-        Log.Exception(ex);
-        return null;
-      }
-      catch (ArgumentNullException)
-      {
-        return null;
-      }
-    }
-
-    /// <summary>
     /// Получить ссылки на главы манги.
     /// </summary>
     /// <param name="mangaMainPage">Содержимое страницы манги.</param>

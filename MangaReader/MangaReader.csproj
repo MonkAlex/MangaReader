@@ -117,12 +117,14 @@
     <Compile Include="Manga\Acomic\Acomics.cs" />
     <Compile Include="Manga\Acomic\Chapter.cs" />
     <Compile Include="Manga\Acomic\Getter.cs" />
+    <Compile Include="Manga\IChapter.cs" />
     <Compile Include="Manga\IDownloadable.cs" />
     <Compile Include="Manga\Mangas.cs" />
     <Compile Include="Manga\MangaObsolete.cs" />
     <Compile Include="Services\DownloadFolderSetting.xaml.cs">
       <DependentUpon>DownloadFolderSetting.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\ImageFile.cs" />
     <Compile Include="Table.xaml.cs">
       <DependentUpon>Table.xaml</DependentUpon>
     </Compile>

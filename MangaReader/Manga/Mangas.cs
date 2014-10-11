@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
@@ -23,6 +24,8 @@ namespace MangaReader.Manga
     /// Статус манги.
     /// </summary>
     public abstract string Status { get; set; }
+
+    public List<string> Doubles = new List<string>();
 
     /// <summary>
     /// Нужно ли обновлять мангу.

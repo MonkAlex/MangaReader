@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -11,7 +12,7 @@ namespace MangaReader.Manga.Grouple
   /// <summary>
   /// Глава.
   /// </summary>
-  public class Chapter
+  public class Chapter : IChapter
   {
     #region Свойства
 
@@ -95,13 +96,24 @@ namespace MangaReader.Manga.Grouple
         Parallel.ForEach(this.listOfImageLink, link =>
         {
           var file = Page.DownloadFile(link);
-          if (file == null)
+          if (!file.Exist)
             throw new Exception("Restart chapter download, downloaded file is corrupted, link = " + link);
 
-          var index = this.listOfImageLink.FindIndex(l => l == link);
-          var fileName = index.ToString().PadLeft(4, '0') + "." + Page.GetImageExtension(file);
-
-          File.WriteAllBytes(string.Concat(chapterFolder, "\\", fileName), file);
+          if (Settings.SkipDouble && this.Parent.Doubles.Contains(file.Hash))
+          {
+            Console.WriteLine(file.Hash);
+            var fileName = file.Hash + "." + file.Extension;
+            var folder = string.Concat(chapterFolder, "\\..\\..\\Doubles\\");
+            Directory.CreateDirectory(folder);
+            File.WriteAllBytes(folder + fileName, file.Body);
+          }
+          else
+          {
+            this.Parent.Doubles.Add(file.Hash);
+            var index = this.listOfImageLink.FindIndex(l => l == link);
+            var fileName = index.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + file.Extension;
+            File.WriteAllBytes(string.Concat(chapterFolder, "\\", fileName), file.Body);
+          }
           this._downloaded++;
           this.DownloadProgressChanged(this, null);
         });
@@ -139,16 +151,19 @@ namespace MangaReader.Manga.Grouple
     /// </summary>
     /// <param name="url">Ссылка на главу.</param>
     /// <param name="desc">Описание главы.</param>
-    public Chapter(string url, string desc)
+    /// <param name="parent">Ссылка на мангу.</param>
+    public Chapter(string url, string desc, Mangas parent)
     {
       this.Url = url;
       this.Name = desc;
       this.restartCounter = 0;
       this.Volume = Convert.ToInt32(Regex.Match(url, @"vol[-]?[0-9]+").Value.Remove(0, 3));
       this.Number = Convert.ToInt32(Regex.Match(url, @"/[-]?[0-9]+", RegexOptions.RightToLeft).Value.Remove(0, 1));
+      this.Parent = parent;
     }
 
     #endregion
 
+    public Mangas Parent { get; set; }
   }
 }

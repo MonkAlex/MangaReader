@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
+using MangaReader.Services;
 
 namespace MangaReader.Manga
 {
@@ -25,7 +26,11 @@ namespace MangaReader.Manga
     /// </summary>
     public abstract string Status { get; set; }
 
+    public List<ImageFile> Files = new List<ImageFile>();
+
     public List<string> Doubles = new List<string>();
+
+    public List<string> Extend = new List<string>(); 
 
     /// <summary>
     /// Нужно ли обновлять мангу.

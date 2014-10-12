@@ -99,20 +99,29 @@ namespace MangaReader.Manga.Grouple
           if (!file.Exist)
             throw new Exception("Restart chapter download, downloaded file is corrupted, link = " + link);
 
+          if (this.Parent.Files.Exists(f => f.Hash == file.Hash) && !this.Parent.Doubles.Contains(file.Hash))
+            this.Parent.Doubles.Add(file.Hash);
           if (Settings.SkipDouble && this.Parent.Doubles.Contains(file.Hash))
           {
             Console.WriteLine(file.Hash);
             var fileName = file.Hash + "." + file.Extension;
             var folder = string.Concat(chapterFolder, "\\..\\..\\Doubles\\");
             Directory.CreateDirectory(folder);
-            File.WriteAllBytes(folder + fileName, file.Body);
+            file.Save(folder + fileName);
+            var doubles = this.Parent.Files.Where(a => a.Hash == file.Hash).ToList();
+            foreach (var doubleFile in doubles)
+            {
+              doubleFile.Delete();
+              this.Parent.Files.Remove(doubleFile);
+            }
           }
           else
           {
-            this.Parent.Doubles.Add(file.Hash);
             var index = this.listOfImageLink.FindIndex(l => l == link);
             var fileName = index.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + file.Extension;
-            File.WriteAllBytes(string.Concat(chapterFolder, "\\", fileName), file.Body);
+            var filePath = string.Concat(chapterFolder, "\\", fileName);
+            file.Save(filePath);
+            this.Parent.Files.Add(file);
           }
           this._downloaded++;
           this.DownloadProgressChanged(this, null);

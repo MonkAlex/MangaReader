@@ -16,6 +16,8 @@ namespace MangaReader.Manga.Grouple
   {
     #region Свойства
 
+    protected static internal new string Type { get { return "2C98BBF4-DB46-47C4-AB0E-F207E283142D"; } }
+
     /// <summary>
     /// Статус манги.
     /// </summary>
@@ -26,15 +28,15 @@ namespace MangaReader.Manga.Grouple
     /// </summary>
     public override bool NeedUpdate
     {
-      get { return _needUpdate; }
+      get { return needUpdate; }
       set
       {
-        _needUpdate = value;
+        needUpdate = value;
         OnPropertyChanged("NeedUpdate");
       }
     }
 
-    private bool _needUpdate = true;
+    private bool needUpdate = true;
 
     /// <summary>
     /// Статус корректности манги.
@@ -146,7 +148,7 @@ namespace MangaReader.Manga.Grouple
     /// Получить список глав.
     /// </summary>
     /// <returns>Список глав.</returns>
-    public List<Chapter> GetAllChapters()
+    protected internal virtual List<Chapter> GetAllChapters()
     {
       if (listOfChapters == null)
         listOfChapters = Getter.GetLinksOfMangaChapters(Page.GetPage(this.Url), this.Url);
@@ -175,7 +177,7 @@ namespace MangaReader.Manga.Grouple
         this.GetAllChapters();
 
       this.downloadedChapters = this.allChapters;
-      if (Settings.Update == true)
+      if (Settings.Update)
       {
         var messages = History.Get(this.Url);
         this.downloadedChapters = this.downloadedChapters

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using MangaReader.Manga;
 
 namespace MangaReader.Services
 {
@@ -42,8 +43,18 @@ namespace MangaReader.Services
     /// </summary>
     public static void Save()
     {
-      lock (HistoryLock)
-        Serializer<List<MangaHistory>>.Save(HistoryPath, Historis);
+      IList<Mangas> mangas;
+      using (var session = Mapping.Environment.SessionFactory.OpenSession())
+      {
+        mangas = session.QueryOver<Mangas>().List();
+      }
+      foreach (var history in Historis)
+      {
+        if (history.Manga == null)
+          history.Manga = mangas.SingleOrDefault(m => m.Url == history.MangaUrl);
+        if (history.Manga != null)
+          history.Save();
+      }
     }
 
     /// <summary>

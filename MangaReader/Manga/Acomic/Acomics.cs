@@ -13,6 +13,8 @@ namespace MangaReader.Manga.Acomic
   {
     #region Свойства
 
+    protected static internal new string Type { get { return "F090B9A2-1400-4F5E-B298-18CD35341C34"; } }
+
     /// <summary>
     /// Статус манги.
     /// </summary>
@@ -23,15 +25,15 @@ namespace MangaReader.Manga.Acomic
     /// </summary>
     public override bool NeedUpdate
     {
-      get { return _needUpdate; }
+      get { return needUpdate; }
       set
       {
-        _needUpdate = value;
+        needUpdate = value;
         OnPropertyChanged("NeedUpdate");
       }
     }
 
-    private bool _needUpdate = true;
+    private bool needUpdate = true;
 
     /// <summary>
     /// Статус корректности манги.
@@ -143,7 +145,7 @@ namespace MangaReader.Manga.Acomic
         Getter.GetMangaChapters(this.Url);
 
       this.downloadedChapters = this.allChapters;
-      if (Settings.Update == true)
+      if (Settings.Update)
       {
         var messages = History.Get(this.Url);
         this.downloadedChapters = this.downloadedChapters

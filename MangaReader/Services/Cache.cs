@@ -6,7 +6,7 @@ using MangaReader.Manga;
 
 namespace MangaReader.Services
 {
-  class Cache
+  public class Cache
   {
     /// <summary>
     /// Указатель блокировки файла истории.
@@ -25,8 +25,13 @@ namespace MangaReader.Services
     /// </summary>
     public static void Save()
     {
-      lock (CacheLock)
-        Serializer<ObservableCollection<Mangas>>.Save(CacheFile, CachedMangas);
+      using (var session = Mapping.Environment.SessionFactory.OpenSession())
+      {
+        foreach (var manga in CachedMangas)
+        {
+          session.SaveOrUpdate(manga);
+        }
+      }
     }
 
     /// <summary>
@@ -37,6 +42,28 @@ namespace MangaReader.Services
     {
       lock (CacheLock)
         CachedMangas = mangas;
+      using (var session = Mapping.Environment.SessionFactory.OpenSession())
+      {
+        foreach (var manga in mangas)
+        {
+          session.SaveOrUpdate(manga);
+        }
+      }
+    }
+
+    /// <summary>
+    /// Получить мангу из кеша.
+    /// </summary>
+    /// <param name="id">Id манги.</param>
+    /// <returns>Манга.</returns>
+    public static Mangas Get(int id)
+    {
+      Mangas manga;
+      using (var session = Mapping.Environment.SessionFactory.OpenSession())
+      {
+        manga = session.Get<Mangas>(id);
+      }
+      return manga;
     }
 
     /// <summary>
@@ -51,12 +78,23 @@ namespace MangaReader.Services
             (File.Exists(CacheFile) ?
             Serializer<ObservableCollection<Mangas>>.Load(CacheFile) :
             new ObservableCollection<Mangas>(Enumerable.Empty<Mangas>()));
-        return CachedMangas;
       }
+      using (var session = Mapping.Environment.SessionFactory.OpenSession())
+      {
+        var fileUrls = CachedMangas.Select(m => m.Url).ToList();
+        var dbMangas = session.QueryOver<Mangas>().List();
+        var fromFileInDb = dbMangas.Where(m => fileUrls.Contains(m.Url)).ToList();
+        if (fromFileInDb.Count == 0)
+          fromFileInDb = CachedMangas.ToList();
+        var onlyInDb = dbMangas.Where(m => !fileUrls.Contains(m.Url)).ToList();
+        CachedMangas = new ObservableCollection<Mangas>(fromFileInDb.Concat(onlyInDb).ToList());
+      }
+      return CachedMangas;
     }
 
     public static void Convert()
     {
+      var newMangas = new ObservableCollection<Mangas>(Enumerable.Empty<Mangas>());
       lock (CacheLock)
       {
         var obsoleteManga = File.Exists(CacheFile) ?
@@ -64,7 +102,6 @@ namespace MangaReader.Services
             null;
         if (obsoleteManga != null)
         {
-          var newMangas = new ObservableCollection<Mangas>(Enumerable.Empty<Mangas>());
           foreach (var manga in obsoleteManga)
           {
             newMangas.Add(new Manga.Grouple.Readmanga()
@@ -75,8 +112,14 @@ namespace MangaReader.Services
               NeedUpdate = manga.NeedUpdate
             });
           }
-          Serializer<ObservableCollection<Mangas>>.Save(CacheFile, newMangas);
+          // TODO: выпилить, перевести конвертирование сразу в базу.
+          // Serializer<ObservableCollection<Mangas>>.Save(CacheFile, newMangas);
         }
+      }
+
+      foreach (var manga in newMangas)
+      {
+        manga.Save();
       }
     }
 

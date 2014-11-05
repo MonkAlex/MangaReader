@@ -72,18 +72,34 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentNHibernate">
+      <HintPath>..\packages\FluentNHibernate.2.0.1-alpha\lib\net40\FluentNHibernate.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\HtmlAgilityPack.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NHibernate">
+      <HintPath>..\packages\NHibernate.4.0.0.4000\lib\net40\NHibernate.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Ookii.Dialogs.Wpf">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\Ookii.Dialogs.Wpf.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>Library\System.Data.SQLite.DLL</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
@@ -106,6 +122,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Entity\Entity.cs" />
     <Compile Include="Input.xaml.cs">
       <DependentUpon>Input.xaml</DependentUpon>
     </Compile>
@@ -121,6 +138,9 @@
     <Compile Include="Manga\IDownloadable.cs" />
     <Compile Include="Manga\Mangas.cs" />
     <Compile Include="Manga\MangaObsolete.cs" />
+    <Compile Include="Mapping\Environment.cs" />
+    <Compile Include="Mapping\HistoryMap.cs" />
+    <Compile Include="Mapping\MangaMap.cs" />
     <Compile Include="Services\DownloadFolderSetting.xaml.cs">
       <DependentUpon>DownloadFolderSetting.xaml</DependentUpon>
     </Compile>
@@ -189,6 +209,7 @@
     </EmbeddedResource>
     <None Include="app.config" />
     <AppDesigner Include="Properties\" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
@@ -214,7 +235,6 @@
     <EmbeddedResource Include="Library\HtmlAgilityPack.dll" />
     <EmbeddedResource Include="Library\Ookii.Dialogs.Wpf.dll" />
     <EmbeddedResource Include="Library\Hardcodet.Wpf.TaskbarNotification.dll" />
-    <None Include="Library\Hardcodet.Wpf.TaskbarNotification.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Update\VersionHistory.txt" />
@@ -226,6 +246,12 @@
   <ItemGroup>
     <Resource Include="Icons\no.png" />
     <Resource Include="Icons\yes.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Library\FluentNHibernate.dll" />
+    <EmbeddedResource Include="Library\Iesi.Collections.dll" />
+    <EmbeddedResource Include="Library\NHibernate.dll" />
+    <None Include="Library\System.Data.SQLite.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

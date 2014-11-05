@@ -42,6 +42,7 @@ namespace MangaReader
 
     public Table()
     {
+      Mapping.Environment.Initialize();
       Convert();
       Settings.Load();
       Update.Initialize();

@@ -16,8 +16,8 @@ namespace MangaReader
     {
       Settings.Save();
       Library.Save();
-      History.Save();
       Cache.Save();
+      History.Save();
       Environment.Exit(0);
     }
 
@@ -31,8 +31,10 @@ namespace MangaReader
     static Assembly ResolveAssembly(object sender, ResolveEventArgs args)
     {
       var thisAssembly = Assembly.GetExecutingAssembly();
-      var name = args.Name.Substring(0, args.Name.IndexOf(',')) + ".dll";
-      var resourceName = thisAssembly.GetManifestResourceNames().First(s => s.EndsWith(name));
+      var resourceNames = thisAssembly.GetManifestResourceNames();
+      var subname = string.Format(".{0}.dll", args.Name.Substring(0, args.Name.IndexOf(',')));
+      var resourceName = resourceNames.FirstOrDefault(s => s.EndsWith(subname)) ??
+                         resourceNames.First(s => s.EndsWith(subname.Remove(0, 1)));
       using (var stream = thisAssembly.GetManifestResourceStream(resourceName))
       {
         var block = new byte[stream.Length];

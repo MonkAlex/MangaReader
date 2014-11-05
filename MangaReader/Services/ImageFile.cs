@@ -9,7 +9,17 @@ namespace MangaReader.Services
   {
     internal byte[] Body { get; set; }
 
-    internal string Hash { get { return GetHash(this.Body); } }
+    internal string Hash
+    {
+      get
+      {
+        if (this.Exist && string.IsNullOrWhiteSpace(this.hash))
+          this.hash = GetHash(this.Body);
+        return this.hash;
+      }
+    }
+
+    private string hash = string.Empty;
 
     internal bool Exist { get { return this.Body != null; } }
 
@@ -26,9 +36,10 @@ namespace MangaReader.Services
       }
     }
     private string extension = string.Empty;
-
+    
     static string GetHash(byte[] body)
     {
+      // TODO: возможно стоит переехать на sha2? Хотя, главное - скорость.
       using (var md5 = MD5.Create())
       {
         return BitConverter.ToString(md5.ComputeHash(md5.ComputeHash(body))).Replace("-", "");

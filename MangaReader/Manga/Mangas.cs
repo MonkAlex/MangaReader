@@ -6,26 +6,28 @@ using System.Xml.Serialization;
 namespace MangaReader.Manga
 {
   [XmlInclude(typeof(Grouple.Readmanga)), XmlInclude(typeof(Acomic.Acomics))]
-  public abstract class Mangas : INotifyPropertyChanged, IDownloadable
+  public abstract class Mangas : Entity.Entity, INotifyPropertyChanged, IDownloadable
   {
     #region Свойства
+
+    protected static internal string Type { get { return "Type"; } }
 
     /// <summary>
     /// Название манги.
     /// </summary>
-    public string Name { get; set; }
+    public virtual string Name { get; set; }
 
     /// <summary>
     /// Ссылка на мангу.
     /// </summary>
-    public string Url { get; set; }
+    public virtual string Url { get; set; }
 
     /// <summary>
     /// Статус манги.
     /// </summary>
     public abstract string Status { get; set; }
 
-    public List<string> Doubles = new List<string>();
+    public virtual List<string> Doubles { get; set; }
 
     /// <summary>
     /// Нужно ли обновлять мангу.
@@ -60,7 +62,7 @@ namespace MangaReader.Manga
 
     #region INotifyPropertyChanged
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public virtual event PropertyChangedEventHandler PropertyChanged;
 
     protected void OnPropertyChanged(string property)
     {
@@ -72,6 +74,25 @@ namespace MangaReader.Manga
     }
 
     #endregion
+
+    #region Equals
+
+    public override bool Equals(object obj)
+    {
+      if (obj == null)
+        return false;
+
+      var manga = obj as Mangas;
+      return manga == null ? base.Equals(obj) : this.Url.Equals(manga.Url);
+    }
+
+    public override int GetHashCode()
+    {
+      return this.Url.GetHashCode()*this.Name.GetHashCode();
+    }
+
+    #endregion
+
 
     #region Методы
 
@@ -92,11 +113,17 @@ namespace MangaReader.Manga
     /// <returns>Манга.</returns>
     public static Mangas Create(string url)
     {
+      Mangas manga = null;
+
       if (url.Contains("readmanga.me") || url.Contains("adultmanga.ru"))
-        return new Grouple.Readmanga(url);
+        manga = new Grouple.Readmanga(url);
       if (url.Contains("acomics.ru"))
-        return new Acomic.Acomics(url);
-      return null;
+        manga = new Acomic.Acomics(url);
+
+      if (manga != null)
+        manga.Save();
+
+      return manga;
     }
 
     #endregion

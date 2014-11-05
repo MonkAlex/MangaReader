@@ -12,7 +12,7 @@ using MangaReader.Properties;
 
 namespace MangaReader.Services
 {
-  class Library
+  public class Library
   {
     /// <summary>
     /// Ссылка на файл базы.

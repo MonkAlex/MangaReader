@@ -22,6 +22,11 @@ namespace MangaReader.Mapping
       SessionFactory = CreateSessionFactory();
     }
 
+    public static ISession OpenSession()
+    {
+      return SessionFactory.OpenSession();
+    }
+
     private static ISessionFactory CreateSessionFactory()
     {
       return Fluently
@@ -36,8 +41,8 @@ namespace MangaReader.Mapping
     {
       // delete the existing db on each run
       if (File.Exists(Settings.WorkFolder + DbFile))
-      //return;
-        File.Delete(Settings.WorkFolder + DbFile);
+        return;
+      //  File.Delete(Settings.WorkFolder + DbFile);
 
       // this NHibernate tool takes a configuration (with mapping info in)
       // and exports a database schema from it

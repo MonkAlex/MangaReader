@@ -43,7 +43,7 @@ namespace MangaReader
     public Table()
     {
       Mapping.Environment.Initialize();
-      Convert();
+      Converter.Convert(true);
       Settings.Load();
       Update.Initialize();
       InitializeComponent();
@@ -102,17 +102,6 @@ namespace MangaReader
         Library.DatabaseMangas.Insert(targetIdx, droppedData);
         Library.DatabaseMangas.RemoveAt(remIdx);
       }
-    }
-
-    /// <summary>
-    /// Сконвертировать старый формат в новый.
-    /// </summary>
-    private static void Convert()
-    {
-      Settings.Convert();
-      Cache.Convert();
-      History.Convert();
-      Library.Convert();
     }
 
     /// <summary>

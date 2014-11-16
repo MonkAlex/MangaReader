@@ -21,7 +21,7 @@ namespace MangaReader.Services
     /// <summary>
     /// История.
     /// </summary>
-    private static List<MangaHistory> Historis = Serializer<List<MangaHistory>>.Load(HistoryPath);
+    private static List<MangaHistory> Historis = null; //Serializer<List<MangaHistory>>.Load(HistoryPath);
 
     /// <summary>
     /// Добавление записи в историю.
@@ -41,26 +41,29 @@ namespace MangaReader.Services
     /// <summary>
     /// Сохранить историю локально.
     /// </summary>
-    public static void Save()
+    public static void Save(ConverterProcess process = null)
     {
       IList<Mangas> mangas;
-      using (var session = Mapping.Environment.SessionFactory.OpenSession())
+      using (var session = Mapping.Environment.OpenSession())
       {
         mangas = session.QueryOver<Mangas>().List();
       }
+      if (process != null)
+        process.IsIndeterminate = false;
       foreach (var history in Historis)
       {
+        if (process != null)
+          process.Percent += 100.0 / Historis.Count;
         if (history.Manga == null)
           history.Manga = mangas.SingleOrDefault(m => m.Url == history.MangaUrl);
-        if (history.Manga != null)
-          history.Save();
+        history.Save();
       }
     }
 
     /// <summary>
     /// Сконвертировать в новый формат.
     /// </summary>
-    public static void Convert()
+    public static void Convert(ConverterProcess process)
     {
       if (Historis != null)
         return;
@@ -81,7 +84,7 @@ namespace MangaReader.Services
       if (isMangaHistory && !isStringList)
         Historis = serializedMangaHistoris;
 
-      Save();
+      Save(process);
     }
 
     /// <summary>

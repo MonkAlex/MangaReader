@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using MangaReader.Manga;
+using NHibernate.Mapping;
 
 namespace MangaReader.Services
 {
@@ -25,7 +27,7 @@ namespace MangaReader.Services
     /// </summary>
     public static void Save()
     {
-      using (var session = Mapping.Environment.SessionFactory.OpenSession())
+      using (var session = Mapping.Environment.OpenSession())
       {
         foreach (var manga in CachedMangas)
         {
@@ -42,7 +44,7 @@ namespace MangaReader.Services
     {
       lock (CacheLock)
         CachedMangas = mangas;
-      using (var session = Mapping.Environment.SessionFactory.OpenSession())
+      using (var session = Mapping.Environment.OpenSession())
       {
         foreach (var manga in mangas)
         {
@@ -59,7 +61,7 @@ namespace MangaReader.Services
     public static Mangas Get(int id)
     {
       Mangas manga;
-      using (var session = Mapping.Environment.SessionFactory.OpenSession())
+      using (var session = Mapping.Environment.OpenSession())
       {
         manga = session.Get<Mangas>(id);
       }
@@ -72,29 +74,16 @@ namespace MangaReader.Services
     /// <returns>Манга.</returns>
     public static ObservableCollection<Mangas> Get()
     {
-      lock (CacheLock)
+      using (var session = Mapping.Environment.OpenSession())
       {
-        CachedMangas = CachedMangas ??
-            (File.Exists(CacheFile) ?
-            Serializer<ObservableCollection<Mangas>>.Load(CacheFile) :
-            new ObservableCollection<Mangas>(Enumerable.Empty<Mangas>()));
+        return new ObservableCollection<Mangas>(session.QueryOver<Mangas>().List());
       }
-      using (var session = Mapping.Environment.SessionFactory.OpenSession())
-      {
-        var fileUrls = CachedMangas.Select(m => m.Url).ToList();
-        var dbMangas = session.QueryOver<Mangas>().List();
-        var fromFileInDb = dbMangas.Where(m => fileUrls.Contains(m.Url)).ToList();
-        if (fromFileInDb.Count == 0)
-          fromFileInDb = CachedMangas.ToList();
-        var onlyInDb = dbMangas.Where(m => !fileUrls.Contains(m.Url)).ToList();
-        CachedMangas = new ObservableCollection<Mangas>(fromFileInDb.Concat(onlyInDb).ToList());
-      }
-      return CachedMangas;
     }
 
-    public static void Convert()
+    internal static void Convert(ConverterProcess process)
     {
-      var newMangas = new ObservableCollection<Mangas>(Enumerable.Empty<Mangas>());
+      var globalCollection = new List<Mangas>();
+
       lock (CacheLock)
       {
         var obsoleteManga = File.Exists(CacheFile) ?
@@ -102,23 +91,35 @@ namespace MangaReader.Services
             null;
         if (obsoleteManga != null)
         {
-          foreach (var manga in obsoleteManga)
+          globalCollection.AddRange(obsoleteManga.Select(manga => new Manga.Grouple.Readmanga()
           {
-            newMangas.Add(new Manga.Grouple.Readmanga()
-            {
-              Name = manga.Name,
-              Url = manga.Url,
-              Status = manga.Status,
-              NeedUpdate = manga.NeedUpdate
-            });
-          }
-          // TODO: выпилить, перевести конвертирование сразу в базу.
-          // Serializer<ObservableCollection<Mangas>>.Save(CacheFile, newMangas);
+            Name = manga.Name, Url = manga.Url, Status = manga.Status, NeedUpdate = manga.NeedUpdate
+          }));
         }
       }
 
-      foreach (var manga in newMangas)
+      lock (CacheLock)
       {
+        var cache = File.Exists(CacheFile) ?
+            Serializer<ObservableCollection<Mangas>>.Load(CacheFile).ToList() :
+            new ObservableCollection<Mangas>(Enumerable.Empty<Mangas>()).ToList();
+        globalCollection.AddRange(cache.Where(gm => !globalCollection.Exists(m => m.Url == gm.Url)));
+      }
+      using (var session = Mapping.Environment.OpenSession())
+      {
+        var fileUrls = globalCollection.Select(m => m.Url).ToList();
+        var dbMangas = session.QueryOver<Mangas>().List();
+        var fromFileInDb = dbMangas.Where(m => fileUrls.Contains(m.Url)).ToList();
+        if (fromFileInDb.Count == 0)
+          fromFileInDb = globalCollection.ToList();
+        var onlyInDb = dbMangas.Where(m => !fileUrls.Contains(m.Url)).ToList();
+        globalCollection = fromFileInDb.Concat(onlyInDb).ToList();
+      }
+
+      process.IsIndeterminate = false;
+      foreach (var manga in globalCollection)
+      {
+        process.Percent += 100.0 / globalCollection.Count;
         manga.Save();
       }
     }

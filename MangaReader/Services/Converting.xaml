@@ -1,0 +1,12 @@
+﻿<Window x:Class="MangaReader.Services.Converting"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="False"
+        Title="" Height="100" Width="300">
+  <Grid>
+    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="TextBlock"/>
+    <ProgressBar IsIndeterminate="True" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" x:Name="ProgressBar" Value="0" Maximum="100" Height="20"/>
+  </Grid>
+</Window>

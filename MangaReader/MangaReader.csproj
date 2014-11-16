@@ -141,6 +141,11 @@
     <Compile Include="Mapping\Environment.cs" />
     <Compile Include="Mapping\HistoryMap.cs" />
     <Compile Include="Mapping\MangaMap.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Services\Convert.cs" />
+    <Compile Include="Services\Converting.xaml.cs">
+      <DependentUpon>Converting.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\DownloadFolderSetting.xaml.cs">
       <DependentUpon>DownloadFolderSetting.xaml</DependentUpon>
     </Compile>
@@ -163,6 +168,10 @@
       <DependentUpon>VersionHistory.xaml</DependentUpon>
     </Compile>
     <Page Include="Input.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Services\Converting.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

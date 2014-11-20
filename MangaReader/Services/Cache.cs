@@ -117,10 +117,15 @@ namespace MangaReader.Services
       }
 
       process.IsIndeterminate = false;
-      foreach (var manga in globalCollection)
+      using (var session = Mapping.Environment.OpenSession())
+      using (var tranc = session.BeginTransaction())
       {
-        process.Percent += 100.0 / globalCollection.Count;
-        manga.Save();
+        foreach (var manga in globalCollection)
+        {
+          process.Percent += 100.0/globalCollection.Count;
+          session.Save(manga);
+        }
+        tranc.Commit();
       }
     }
 

@@ -45,19 +45,16 @@ namespace MangaReader.Services
       State = ConverterState.Started;
 
       Process.Status = "Convert settings...";
-      Process.Percent = 0;
       Settings.Convert();
 
       Process.Status = "Convert manga...";
-      Process.Percent = 25;
       Cache.Convert(Process);
 
       Process.Status = "Convert history...";
-      Process.Percent = 50;
+      Process.Percent = 0;
       History.Convert(Process);
 
       Process.Status = "Convert manga list...";
-      Process.Percent = 75;
       Library.Convert();
 
       State = ConverterState.Completed;

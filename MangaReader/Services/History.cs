@@ -29,6 +29,7 @@ namespace MangaReader.Services
     /// <param name="message">Сообщение.</param>
     public static void Add(string message)
     {
+      throw new NotImplementedException();
       lock (HistoryLock)
       {
         if (Historis.Any(l => l.Url == message))
@@ -41,23 +42,9 @@ namespace MangaReader.Services
     /// <summary>
     /// Сохранить историю локально.
     /// </summary>
-    public static void Save(ConverterProcess process = null)
+    public static void Save()
     {
-      IList<Mangas> mangas;
-      using (var session = Mapping.Environment.OpenSession())
-      {
-        mangas = session.QueryOver<Mangas>().List();
-      }
-      if (process != null)
-        process.IsIndeterminate = false;
-      foreach (var history in Historis)
-      {
-        if (process != null)
-          process.Percent += 100.0 / Historis.Count;
-        if (history.Manga == null)
-          history.Manga = mangas.SingleOrDefault(m => m.Url == history.MangaUrl);
-        history.Save();
-      }
+      throw new NotImplementedException();
     }
 
     /// <summary>
@@ -73,8 +60,7 @@ namespace MangaReader.Services
 
       var serializedMangaHistoris = Serializer<List<MangaHistory>>.Load(HistoryPath);
       var isMangaHistory = serializedMangaHistoris != null;
-
-
+      
       var strings = File.Exists(HistoryPath) ? new List<string>(File.ReadAllLines(HistoryPath)) : new List<string>();
 
       if (!isMangaHistory && !isStringList)
@@ -84,7 +70,30 @@ namespace MangaReader.Services
       if (isMangaHistory && !isStringList)
         Historis = serializedMangaHistoris;
 
-      Save(process);
+      IList<Mangas> mangas;
+      using (var session = Mapping.Environment.OpenSession())
+      {
+        mangas = session.QueryOver<Mangas>().List();
+      }
+      if (process != null)
+        process.IsIndeterminate = false;
+
+      using (var session = Mapping.Environment.OpenSession())
+      {
+        using (var tranc = session.BeginTransaction())
+        {
+          foreach (var history in Historis)
+          {
+            if (process != null)
+              process.Percent += 100.0 / Historis.Count;
+            if (history.Manga == null)
+              history.Manga = mangas.SingleOrDefault(m => m.Url == history.MangaUrl);
+            //if (history.Manga != null)
+              session.Save(history);
+          }
+          tranc.Commit();
+        }
+      }
     }
 
     /// <summary>
@@ -94,6 +103,7 @@ namespace MangaReader.Services
     /// <returns>Перечисление сообщений из истории.</returns>
     public static List<MangaHistory> Get(string subString = "")
     {
+      throw new NotImplementedException();
       lock (HistoryLock)
         return string.IsNullOrWhiteSpace(subString) ?
             Historis :

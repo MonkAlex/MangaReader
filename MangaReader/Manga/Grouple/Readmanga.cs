@@ -190,6 +190,9 @@ namespace MangaReader.Manga.Grouple
 
       Log.Add("Download start " + this.Name);
 
+      if (!Settings.Update)
+        this.Files = new List<ImageFile>();
+
       // Формируем путь к главе вида Папка_манги\Том_001\Глава_0001
       try
       {
@@ -206,6 +209,7 @@ namespace MangaReader.Manga.Grouple
                   ch.Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0')
                   ));
             });
+        this.Extend = this.Files.GroupBy(s => s).Where(s => s.Count() > 1).Select(s => s.Key.Hash).ToList();
         this.Save();
         Log.Add("Download end " + this.Name);
       }

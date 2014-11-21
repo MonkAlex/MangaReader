@@ -20,7 +20,7 @@ namespace MangaReader.Services
     public Converting()
     {
       InitializeComponent();
-      _timer = new DispatcherTimer(new TimeSpan(0, 0, 1),
+      _timer = new DispatcherTimer(new TimeSpan(0, 0, 0, 0, 100),
         DispatcherPriority.Background,
         TimerTick,
         Dispatcher.CurrentDispatcher);

@@ -26,6 +26,24 @@ namespace MangaReader
     /// </summary>
     public virtual DateTime Date { get; set; }
 
+    #region Equals
+
+    public override bool Equals(object obj)
+    {
+      if (obj == null)
+        return false;
+
+      var mangaHistory = obj as MangaHistory;
+      return mangaHistory != null && this.Url.Equals(mangaHistory.Url);
+    }
+
+    public override int GetHashCode()
+    {
+      return this.Url.GetHashCode();
+    }
+
+    #endregion
+
     /// <summary>
     /// Создать историю из ссылок.
     /// </summary>

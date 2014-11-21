@@ -1,27 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NHibernate.Linq;
 using MangaReader.Manga;
 
 namespace MangaReader.Services
 {
-  class History
+  static class History
   {
-    /// <summary>
-    /// Указатель блокировки истории.
-    /// </summary>
-    private static readonly object HistoryLock = new object();
-
     /// <summary>
     /// Ссылка на файл лога.
     /// </summary>
     private static readonly string HistoryPath = Settings.WorkFolder + @".\history";
-
-    /// <summary>
-    /// История.
-    /// </summary>
-    private static List<MangaHistory> Historis = null; //Serializer<List<MangaHistory>>.Load(HistoryPath);
 
     /// <summary>
     /// Добавление записи в историю.
@@ -29,22 +19,16 @@ namespace MangaReader.Services
     /// <param name="message">Сообщение.</param>
     public static void Add(string message)
     {
-      throw new NotImplementedException();
-      lock (HistoryLock)
+      using (var session = Mapping.Environment.SessionFactory.OpenSession())
+      using (var tranc = session.BeginTransaction())
       {
-        if (Historis.Any(l => l.Url == message))
+        if (session.Query<MangaHistory>().Where(h => h.Url == message).Any())
           return;
 
-        Historis.Add(new MangaHistory(message));
+        var history = new MangaHistory(message);
+        session.Save(history);
+        tranc.Commit();
       }
-    }
-
-    /// <summary>
-    /// Сохранить историю локально.
-    /// </summary>
-    public static void Save()
-    {
-      throw new NotImplementedException();
     }
 
     /// <summary>
@@ -52,67 +36,57 @@ namespace MangaReader.Services
     /// </summary>
     public static void Convert(ConverterProcess process)
     {
-      if (Historis != null)
+      if (!File.Exists(HistoryPath))
         return;
+
+      var histories = new List<MangaHistory>();
 
       var serializedStrings = Serializer<List<string>>.Load(HistoryPath);
       var isStringList = serializedStrings != null;
 
       var serializedMangaHistoris = Serializer<List<MangaHistory>>.Load(HistoryPath);
       var isMangaHistory = serializedMangaHistoris != null;
-      
+
       var strings = File.Exists(HistoryPath) ? new List<string>(File.ReadAllLines(HistoryPath)) : new List<string>();
 
       if (!isMangaHistory && !isStringList)
-        Historis = MangaHistory.CreateHistories(strings);
+        histories = MangaHistory.CreateHistories(strings);
       if (!isMangaHistory && isStringList)
-        Historis = MangaHistory.CreateHistories(serializedStrings);
+        histories = MangaHistory.CreateHistories(serializedStrings);
       if (isMangaHistory && !isStringList)
-        Historis = serializedMangaHistoris;
+        histories = serializedMangaHistoris;
 
-      IList<Mangas> mangas;
-      using (var session = Mapping.Environment.OpenSession())
-      {
-        mangas = session.QueryOver<Mangas>().List();
-      }
-      if (process != null)
+      var session = Mapping.Environment.Session;
+      var mangas = session.Query<Mangas>().ToList();
+      var historyInDb = session.Query<MangaHistory>().Select(h => h.Url).ToList();
+      histories = histories.Where(h => !historyInDb.Contains(h.Url)).Distinct().ToList();
+      if (process != null && histories.Any())
         process.IsIndeterminate = false;
 
-      using (var session = Mapping.Environment.OpenSession())
+      using (var tranc = session.BeginTransaction())
       {
-        using (var tranc = session.BeginTransaction())
+        foreach (var history in histories)
         {
-          foreach (var history in Historis)
-          {
-            if (process != null)
-              process.Percent += 100.0 / Historis.Count;
-            if (history.Manga == null)
-              history.Manga = mangas.SingleOrDefault(m => m.Url == history.MangaUrl);
-            //if (history.Manga != null)
-              session.Save(history);
-          }
-          tranc.Commit();
+          if (process != null)
+            process.Percent += 100.0 / histories.Count;
+          if (history.Manga == null)
+            history.Manga = mangas.SingleOrDefault(m => m.Url == history.MangaUrl);
+          // TODO: надо решить что делать с невалидной историей.
+          //if (history.Manga != null)
+          session.Save(history);
         }
+        tranc.Commit();
       }
     }
 
     /// <summary>
     /// Получить историю.
     /// </summary>
-    /// <param name="subString">Подстрока, по которой будет получена история. Например, название манги.</param>
+    /// <param name="manga">Манга, история которой нужна.</param>
     /// <returns>Перечисление сообщений из истории.</returns>
-    public static List<MangaHistory> Get(string subString = "")
+    public static List<MangaHistory> Get(Mangas manga)
     {
-      throw new NotImplementedException();
-      lock (HistoryLock)
-        return string.IsNullOrWhiteSpace(subString) ?
-            Historis :
-            Historis.Where(l => l.MangaUrl.Contains(subString)).ToList();
-    }
-
-    public History()
-    {
-      throw new Exception("U shell not pass.");
+      return Mapping.Environment.Session.Query<MangaHistory>().Where(h => h.Manga.Id == manga.Id).ToList();
     }
   }
 }

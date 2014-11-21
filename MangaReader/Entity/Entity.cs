@@ -23,16 +23,14 @@ namespace MangaReader.Entity
     /// </summary>
     public virtual void Save()
     {
-      using (var session = Mapping.Environment.OpenSession())
+      var session = Mapping.Environment.Session;
+      using (var tranc = session.BeginTransaction())
       {
-        using (var tranc = session.BeginTransaction())
-        {
-          if (this.Id == 0)
-            session.Save(this);
-          else
-            session.Update(this);
-          tranc.Commit();
-        }
+        if (this.Id == 0)
+          session.Save(this);
+        else
+          session.Update(this);
+        tranc.Commit();
       }
     }
 
@@ -47,10 +45,7 @@ namespace MangaReader.Entity
         return;
       }
 
-      using (var session = Mapping.Environment.OpenSession())
-      {
-        session.Refresh(this);
-      }
+      Mapping.Environment.Session.Refresh(this);
     }
 
     /// <summary>
@@ -62,14 +57,12 @@ namespace MangaReader.Entity
       if (this.Id == 0)
         return false;
 
-      using (var session = Mapping.Environment.OpenSession())
+      var session = Mapping.Environment.Session;
+      using (var tranc = session.BeginTransaction())
       {
-        using (var tranc = session.BeginTransaction())
-        {
-          session.Delete(this);
-          this.Id = 0;
-          tranc.Commit();
-        }
+        session.Delete(this);
+        this.Id = 0;
+        tranc.Commit();
       }
       return true;
     }

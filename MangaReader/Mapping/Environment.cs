@@ -15,16 +15,14 @@ namespace MangaReader.Mapping
 
     public static ISessionFactory SessionFactory;
 
+    public static ISession Session;
+
     public static void Initialize()
     {
       // TODO: подумать над другим способом явно подгрузить SQLite.
       var sqlite = FunctionType.Aggregate;
       SessionFactory = CreateSessionFactory();
-    }
-
-    public static ISession OpenSession()
-    {
-      return SessionFactory.OpenSession();
+      Session = SessionFactory.OpenSession();
     }
 
     private static ISessionFactory CreateSessionFactory()
@@ -39,13 +37,10 @@ namespace MangaReader.Mapping
 
     private static void BuildSchema(Configuration config)
     {
-      // delete the existing db on each run
       if (File.Exists(Settings.WorkFolder + DbFile))
         return;
       //  File.Delete(Settings.WorkFolder + DbFile);
 
-      // this NHibernate tool takes a configuration (with mapping info in)
-      // and exports a database schema from it
       new SchemaExport(config).Create(false, true);
     }
   }

@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using MangaReader.Manga;
-using NHibernate.Mapping;
+using NHibernate.Linq;
 
 namespace MangaReader.Services
 {
-  public class Cache
+  public static class Cache
   {
     /// <summary>
     /// Указатель блокировки файла истории.
@@ -20,52 +19,17 @@ namespace MangaReader.Services
     /// </summary>
     private static readonly string CacheFile = Settings.WorkFolder + @".\Cache";
 
-    private static ObservableCollection<Mangas> CachedMangas;
-
-    /// <summary>
-    /// Сохранить кеш на диск.
-    /// </summary>
-    public static void Save()
-    {
-      using (var session = Mapping.Environment.OpenSession())
-      {
-        foreach (var manga in CachedMangas)
-        {
-          session.SaveOrUpdate(manga);
-        }
-      }
-    }
-
     /// <summary>
     /// Добавление манги в кеш.
     /// </summary>
     /// <param name="mangas">Манга.</param>
     public static void Add(ObservableCollection<Mangas> mangas)
     {
-      lock (CacheLock)
-        CachedMangas = mangas;
-      using (var session = Mapping.Environment.OpenSession())
+      var session = Mapping.Environment.Session;
+      foreach (var manga in mangas)
       {
-        foreach (var manga in mangas)
-        {
-          session.SaveOrUpdate(manga);
-        }
+        session.SaveOrUpdate(manga);
       }
-    }
-
-    /// <summary>
-    /// Получить мангу из кеша.
-    /// </summary>
-    /// <param name="id">Id манги.</param>
-    /// <returns>Манга.</returns>
-    public static Mangas Get(int id)
-    {
-      Mangas manga;
-      using (var session = Mapping.Environment.OpenSession())
-      {
-        manga = session.Get<Mangas>(id);
-      }
-      return manga;
     }
 
     /// <summary>
@@ -74,64 +38,52 @@ namespace MangaReader.Services
     /// <returns>Манга.</returns>
     public static ObservableCollection<Mangas> Get()
     {
-      using (var session = Mapping.Environment.OpenSession())
-      {
-        return new ObservableCollection<Mangas>(session.QueryOver<Mangas>().List());
-      }
+      var fromDb = Mapping.Environment.Session.Query<Mangas>().ToList();
+      return new ObservableCollection<Mangas>(fromDb);
     }
 
     internal static void Convert(ConverterProcess process)
     {
       var globalCollection = new List<Mangas>();
 
-      lock (CacheLock)
+      var obsoleteManga = File.Exists(CacheFile) ?
+          Serializer<ObservableCollection<Manga.Manga>>.Load(CacheFile) :
+          null;
+      if (obsoleteManga != null)
       {
-        var obsoleteManga = File.Exists(CacheFile) ?
-            Serializer<ObservableCollection<Manga.Manga>>.Load(CacheFile) :
-            null;
-        if (obsoleteManga != null)
+        globalCollection.AddRange(obsoleteManga.Select(manga => new Manga.Grouple.Readmanga()
         {
-          globalCollection.AddRange(obsoleteManga.Select(manga => new Manga.Grouple.Readmanga()
-          {
-            Name = manga.Name, Url = manga.Url, Status = manga.Status, NeedUpdate = manga.NeedUpdate
-          }));
-        }
+          Name = manga.Name,
+          Url = manga.Url,
+          Status = manga.Status,
+          NeedUpdate = manga.NeedUpdate
+        }));
       }
 
-      lock (CacheLock)
-      {
-        var cache = File.Exists(CacheFile) ?
-            Serializer<ObservableCollection<Mangas>>.Load(CacheFile).ToList() :
-            new ObservableCollection<Mangas>(Enumerable.Empty<Mangas>()).ToList();
-        globalCollection.AddRange(cache.Where(gm => !globalCollection.Exists(m => m.Url == gm.Url)));
-      }
-      using (var session = Mapping.Environment.OpenSession())
-      {
-        var fileUrls = globalCollection.Select(m => m.Url).ToList();
-        var dbMangas = session.QueryOver<Mangas>().List();
-        var fromFileInDb = dbMangas.Where(m => fileUrls.Contains(m.Url)).ToList();
-        if (fromFileInDb.Count == 0)
-          fromFileInDb = globalCollection.ToList();
-        var onlyInDb = dbMangas.Where(m => !fileUrls.Contains(m.Url)).ToList();
-        globalCollection = fromFileInDb.Concat(onlyInDb).ToList();
-      }
+      var cache = File.Exists(CacheFile) ?
+          Serializer<ObservableCollection<Mangas>>.Load(CacheFile).ToList() :
+          new ObservableCollection<Mangas>(Enumerable.Empty<Mangas>()).ToList();
+      globalCollection.AddRange(cache.Where(gm => !globalCollection.Exists(m => m.Url == gm.Url)));
+
+      var session = Mapping.Environment.Session;
+      var fileUrls = globalCollection.Select(m => m.Url).ToList();
+      var dbMangas = session.Query<Mangas>().ToList();
+      var fromFileInDb = dbMangas.Where(m => fileUrls.Contains(m.Url)).ToList();
+      if (fromFileInDb.Count == 0)
+        fromFileInDb = globalCollection.ToList();
+      var onlyInDb = dbMangas.Where(m => !fileUrls.Contains(m.Url)).ToList();
+      globalCollection = fromFileInDb.Concat(onlyInDb).ToList();
 
       process.IsIndeterminate = false;
-      using (var session = Mapping.Environment.OpenSession())
       using (var tranc = session.BeginTransaction())
       {
         foreach (var manga in globalCollection)
         {
-          process.Percent += 100.0/globalCollection.Count;
+          process.Percent += 100.0 / globalCollection.Count;
           session.Save(manga);
         }
         tranc.Commit();
       }
-    }
-
-    public Cache()
-    {
-      throw new Exception("U shell not pass.");
     }
   }
 }

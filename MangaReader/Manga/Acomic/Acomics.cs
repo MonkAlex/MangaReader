@@ -147,7 +147,7 @@ namespace MangaReader.Manga.Acomic
       this.downloadedChapters = this.allChapters;
       if (Settings.Update)
       {
-        var messages = History.Get(this.Url);
+        var messages = History.Get(this);
         this.downloadedChapters = this.downloadedChapters
             .Where(ch => messages.All(m => m.Url != ch.Url))
             .ToList();
@@ -168,6 +168,7 @@ namespace MangaReader.Manga.Acomic
               this.OnPropertyChanged("Downloaded");
               this.DownloadProgressChanged(ch, this);
             });
+        this.Save();
         Log.Add("Download end " + this.Name);
       }
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using MangaReader.Manga.Grouple;
 using MangaReader.Properties;
 using MangaReader.Services;
@@ -176,60 +175,7 @@ namespace MangaReader.Manga
     /// </summary>
     public void Download(string mangaFolder = null, string volumePrefix = null, string chapterPrefix = null)
     {
-      if (!this.NeedUpdate)
-        return;
-
-      if (mangaFolder == null)
-        mangaFolder = this.Folder;
-      if (volumePrefix == null)
-        volumePrefix = Settings.VolumePrefix;
-      if (chapterPrefix == null)
-        chapterPrefix = Settings.ChapterPrefix;
-
-      if (this.allChapters == null)
-        this.GetAllChapters();
-
-      this.downloadedChapters = this.allChapters;
-      if (Settings.Update == true)
-      {
-        var messages = History.Get(this.Url);
-        this.downloadedChapters = this.downloadedChapters
-            .Where(ch => messages.All(m => m.Url != ch.Url))
-            .ToList();
-      }
-
-      if (!this.downloadedChapters.Any())
-        return;
-
-      Log.Add("Download start " + this.Name);
-
-      // Формируем путь к главе вида Папка_манги\Том_001\Глава_0001
-      try
-      {
-        Parallel.ForEach(this.downloadedChapters,
-            ch =>
-            {
-              ch.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged("Downloaded");
-              ch.Download(string.Concat(mangaFolder,
-                  "\\",
-                  volumePrefix,
-                  ch.Volume.ToString().PadLeft(3, '0'),
-                  "\\",
-                  chapterPrefix,
-                  ch.Number.ToString().PadLeft(4, '0')
-                  ));
-            });
-        Log.Add("Download end " + this.Name);
-      }
-      catch (AggregateException ae)
-      {
-        foreach (var ex in ae.InnerExceptions)
-          Log.Exception(ex);
-      }
-      catch (Exception ex)
-      {
-        Log.Exception(ex);
-      }
+      throw new NotImplementedException("Obsolete class");
     }
 
     public override string ToString()

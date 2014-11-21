@@ -16,8 +16,6 @@ namespace MangaReader
     {
       Settings.Save();
       Library.Save();
-      Cache.Save();
-      History.Save();
       Environment.Exit(0);
     }
 

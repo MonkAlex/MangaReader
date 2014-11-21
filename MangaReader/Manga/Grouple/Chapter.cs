@@ -131,6 +131,8 @@ namespace MangaReader.Manga.Grouple
       catch (Exception ex)
       {
         Log.Exception(ex, this.Url, this.Name);
+        ++restartCounter;
+        Download(chapterFolder);
       }
     }
 

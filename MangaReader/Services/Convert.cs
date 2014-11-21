@@ -36,7 +36,7 @@ namespace MangaReader.Services
 
       if (withDialog)
       {
-        while (dialogOpened) { Thread.Sleep(1000); }
+        while (dialogOpened) { Thread.Sleep(100); }
       }
     }
 

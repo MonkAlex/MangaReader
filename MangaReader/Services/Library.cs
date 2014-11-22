@@ -12,7 +12,7 @@ using MangaReader.Properties;
 
 namespace MangaReader.Services
 {
-  public class Library
+  public static class Library
   {
     /// <summary>
     /// Ссылка на файл базы.
@@ -272,10 +272,5 @@ namespace MangaReader.Services
 
     #endregion
 
-
-    public Library()
-    {
-      throw new Exception("Use methods.");
-    }
   }
 }

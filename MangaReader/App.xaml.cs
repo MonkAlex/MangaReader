@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -37,7 +38,15 @@ namespace MangaReader
       {
         var block = new byte[stream.Length];
         stream.Read(block, 0, block.Length);
-        return Assembly.Load(block);
+        try
+        {
+          return Assembly.Load(block);
+        }
+        catch (FileLoadException)
+        {
+          File.WriteAllBytes(subname.Remove(0, 1), block);
+          return Assembly.LoadFrom(resourceName);
+        }
       }
     }
 

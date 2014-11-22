@@ -85,7 +85,7 @@ namespace MangaReader.Manga
     /// </summary>
     public bool IsDownloaded
     {
-      get { return downloadedChapters != null && downloadedChapters.All(c => c.IsDownloaded); }
+      get { return false; }
     }
 
     /// <summary>
@@ -93,14 +93,9 @@ namespace MangaReader.Manga
     /// </summary>
     public double Downloaded
     {
-      get { return (downloadedChapters != null && downloadedChapters.Any()) ? downloadedChapters.Average(ch => ch.Downloaded) : 0; }
+      get { return 0; }
       set { }
     }
-
-    /// <summary>
-    /// Загружаемый список глав.
-    /// </summary>
-    private List<Chapter> downloadedChapters;
 
     /// <summary>
     /// Закешированный список глав.

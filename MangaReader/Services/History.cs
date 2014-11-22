@@ -77,6 +77,8 @@ namespace MangaReader.Services
         }
         tranc.Commit();
       }
+
+      File.Move(HistoryPath, HistoryPath + ".dbak");
     }
 
     /// <summary>

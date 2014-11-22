@@ -26,8 +26,6 @@ namespace MangaReader.Services
     static internal void Convert(bool withDialog)
     {
       var dialog = new Converting();
-      var dialogOpened = true;
-      dialog.Closed += (sender, args) => { dialogOpened = false; };
 
       if (withDialog)
         dialog.ShowDialog(JustConvert);
@@ -36,7 +34,7 @@ namespace MangaReader.Services
 
       if (withDialog)
       {
-        while (dialogOpened) { Thread.Sleep(100); }
+        while (State != ConverterState.Completed) { Thread.Sleep(100); }
       }
     }
 
@@ -44,6 +42,7 @@ namespace MangaReader.Services
     {
       State = ConverterState.Started;
 
+      Log.Add("Convert started.");
       Process.Status = "Convert settings...";
       Settings.Convert();
 
@@ -56,6 +55,7 @@ namespace MangaReader.Services
 
       Process.Status = "Convert manga list...";
       Library.Convert();
+      Log.Add("Convert completed.");
 
       State = ConverterState.Completed;
     }

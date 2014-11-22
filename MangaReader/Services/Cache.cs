@@ -44,9 +44,13 @@ namespace MangaReader.Services
 
     internal static void Convert(ConverterProcess process)
     {
+      if (!File.Exists(CacheFile))
+        return;
+
       var globalCollection = new List<Mangas>();
 
       var obsoleteManga = File.Exists(CacheFile) ?
+// ReSharper disable once CSharpWarnings::CS0612
           Serializer<ObservableCollection<Manga.Manga>>.Load(CacheFile) :
           null;
       if (obsoleteManga != null)
@@ -84,6 +88,8 @@ namespace MangaReader.Services
         }
         tranc.Commit();
       }
+
+      File.Move(CacheFile, CacheFile + ".dbak");
     }
   }
 }

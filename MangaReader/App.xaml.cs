@@ -45,7 +45,7 @@ namespace MangaReader
         catch (FileLoadException)
         {
           File.WriteAllBytes(subname.Remove(0, 1), block);
-          return Assembly.LoadFrom(resourceName);
+          return Assembly.LoadFrom(subname.Remove(0, 1));
         }
       }
     }

@@ -9,17 +9,17 @@
         Icon="Icons/main.ico"
         Title="{x:Static resx:Strings.Title}"  Height="350" Width="525">
 
-    <Window.Resources>
-        <local:StringImageConverter x:Key="ImageConverter"/>
-        <local:UrlTypeConverter x:Key="UrlTypeConverter"/>
-    </Window.Resources>
+  <Window.Resources>
+    <local:StringImageConverter x:Key="ImageConverter"/>
+    <local:UrlTypeConverter x:Key="UrlTypeConverter"/>
+  </Window.Resources>
 
-    <Window.TaskbarItemInfo>
-        <TaskbarItemInfo x:Name="TaskBar"></TaskbarItemInfo>
-    </Window.TaskbarItemInfo>
+  <Window.TaskbarItemInfo>
+    <TaskbarItemInfo x:Name="TaskBar"></TaskbarItemInfo>
+  </Window.TaskbarItemInfo>
 
-    <Grid Name="MainGrid">
-        <Button Content="{x:Static resx:Strings.Manga_Action_Update}" 
+  <Grid Name="MainGrid">
+    <Button Content="{x:Static resx:Strings.Manga_Action_Update}" 
                 Margin="0,0,180,5" 
                 x:Name="UpdateButton" 
                 Click="Update_click" 
@@ -27,7 +27,7 @@
                 HorizontalAlignment="Right" 
                 Height="25" 
                 Width="75"/>
-        <Button Content="{x:Static resx:Strings.Library_Action_Add}" 
+    <Button Content="{x:Static resx:Strings.Library_Action_Add}" 
                 Margin="0,0,100,5" 
                 x:Name="AddButton" 
                 Click="Add_click" 
@@ -35,7 +35,7 @@
                 HorizontalAlignment="Right"
                 Height="25" 
                 Width="75"/>
-        <Button Content="{x:Static resx:Strings.Library_Action_Settings}"  
+    <Button Content="{x:Static resx:Strings.Library_Action_Settings}"  
                 Margin="0,0,20,5" 
                 x:Name="SettingsButton" 
                 Click="Settings_click" 
@@ -43,42 +43,42 @@
                 HorizontalAlignment="Right" 
                 Height="25" 
                 Width="75"/>
-        <ListView x:Name="FormLibrary" 
+    <ListView x:Name="FormLibrary" 
                  DataContext="{Binding}"
-                 Margin="10,10,10.4,38.4"
+                 Margin="10,36,10.4,38.4"
                  MouseDown="ListView_MouseDown"
                  SelectionMode="Single">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}">
-                    <EventSetter Event="PreviewMouseMove" Handler="_PreviewMouseMoveEvent"/>
-                    <EventSetter Event="Drop" Handler="Library_Drop"/>
-                    <EventSetter Event="MouseRightButtonUp" Handler="ListViewItem_OnMouseRightButtonUp"/>
-                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Mangas_clicked"/>
-                    <Setter Property="AllowDrop" Value="True"/>
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                    <Setter Property="Foreground" Value="Black"/>
-                    <Setter Property="SnapsToDevicePixels" Value="True"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+      <ListView.ItemContainerStyle>
+        <Style TargetType="{x:Type ListViewItem}">
+          <EventSetter Event="PreviewMouseMove" Handler="_PreviewMouseMoveEvent"/>
+          <EventSetter Event="Drop" Handler="Library_Drop"/>
+          <EventSetter Event="MouseRightButtonUp" Handler="ListViewItem_OnMouseRightButtonUp"/>
+          <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Mangas_clicked"/>
+          <Setter Property="AllowDrop" Value="True"/>
+          <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+          <Setter Property="Foreground" Value="Black"/>
+          <Setter Property="SnapsToDevicePixels" Value="True"/>
+          <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+          <Setter Property="VerticalContentAlignment" Value="Stretch" />
+          <Setter Property="Template">
+            <Setter.Value>
+              <ControlTemplate TargetType="{x:Type ListViewItem}">
 
-                                <Border SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                <Border SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
                                         BorderThickness="{TemplateBinding BorderThickness}"
                                         BorderBrush="{TemplateBinding BorderBrush}"
                                         Background="{TemplateBinding Background}">
 
-                                    <Grid>
+                  <Grid>
 
-                                        <!-- This is used when GridView is put inside the ListView -->
-                                        <GridViewRowPresenter Content="{TemplateBinding ContentControl.Content}"
+                    <!-- This is used when GridView is put inside the ListView -->
+                    <GridViewRowPresenter Content="{TemplateBinding ContentControl.Content}"
                                                               HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
                                                               VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
                                                               SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
 
-                                        <!-- This is used for ListView that does not use GridView -->
-                                        <ContentPresenter x:Name="contentPresenter"
+                    <!-- This is used for ListView that does not use GridView -->
+                    <ContentPresenter x:Name="contentPresenter"
                                                           Content="{TemplateBinding ContentControl.Content}"
                                                           Visibility="Collapsed"
                                                           ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
@@ -86,79 +86,82 @@
                                                           HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
                                                           VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
                                                           SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
-                                    </Grid>
+                  </Grid>
 
-                                </Border>
+                </Border>
 
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="GridView.ColumnCollection" Value="{x:Null}">
-                                        <Setter TargetName="contentPresenter" Property="Visibility" Value="Visible"/>
-                                    </Trigger>
-                                    
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="Background" Value="Transparent" />
-                                    </Trigger>
+                <ControlTemplate.Triggers>
+                  <Trigger Property="GridView.ColumnCollection" Value="{x:Null}">
+                    <Setter TargetName="contentPresenter" Property="Visibility" Value="Visible"/>
+                  </Trigger>
 
-                                    <Trigger Property="IsEnabled" Value="False">
-                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
+                  <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Transparent" />
+                  </Trigger>
 
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.View>
-                <GridView>
-                    <GridView.Columns>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Url, Converter={StaticResource UrlTypeConverter}}"/>
-                        <GridViewColumn>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Image Source="{Binding IsCompleted, Converter={StaticResource ImageConverter}}" Width="16" Height="16"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="{x:Static resx:Strings.Manga_Name}" DisplayMemberBinding="{Binding Path=Name}"/>
-                        <GridViewColumn Header="{x:Static resx:Strings.Manga_Update}">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Image Source="{Binding NeedUpdate, Converter={StaticResource ImageConverter}}" Width="16" Height="16"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="{x:Static resx:Strings.Manga_Downloaded}">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <ProgressBar Maximum="100" Value="{Binding Downloaded}"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView.Columns>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <StatusBar x:Name="StatusBar"
+                  <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                  </Trigger>
+                </ControlTemplate.Triggers>
+
+              </ControlTemplate>
+            </Setter.Value>
+          </Setter>
+        </Style>
+      </ListView.ItemContainerStyle>
+      <ListView.View>
+        <GridView>
+          <GridView.Columns>
+            <GridViewColumn DisplayMemberBinding="{Binding Path=Url, Converter={StaticResource UrlTypeConverter}}"/>
+            <GridViewColumn>
+              <GridViewColumn.CellTemplate>
+                <DataTemplate>
+                  <Grid>
+                    <Image Source="{Binding IsCompleted, Converter={StaticResource ImageConverter}}" Width="16" Height="16"/>
+                  </Grid>
+                </DataTemplate>
+              </GridViewColumn.CellTemplate>
+            </GridViewColumn>
+            <GridViewColumn Header="{x:Static resx:Strings.Manga_Name}" DisplayMemberBinding="{Binding Path=Name}"/>
+            <GridViewColumn Header="{x:Static resx:Strings.Manga_Update}">
+              <GridViewColumn.CellTemplate>
+                <DataTemplate>
+                  <Grid>
+                    <Image Source="{Binding NeedUpdate, Converter={StaticResource ImageConverter}}" Width="16" Height="16"/>
+                  </Grid>
+                </DataTemplate>
+              </GridViewColumn.CellTemplate>
+            </GridViewColumn>
+            <GridViewColumn Header="{x:Static resx:Strings.Manga_Downloaded}">
+              <GridViewColumn.CellTemplate>
+                <DataTemplate>
+                  <Grid>
+                    <ProgressBar Maximum="100" Value="{Binding Downloaded}"/>
+                  </Grid>
+                </DataTemplate>
+              </GridViewColumn.CellTemplate>
+            </GridViewColumn>
+          </GridView.Columns>
+        </GridView>
+      </ListView.View>
+    </ListView>
+    <StatusBar x:Name="StatusBar"
                    Margin="18,0,260.4,5.4" 
                    Height="25" 
                    VerticalAlignment="Bottom">
-            <StatusBarItem>
-                <TextBlock x:Name="TextBlock" TextAlignment="Center"/>
-            </StatusBarItem>
-        </StatusBar>
-        <tb:TaskbarIcon
+      <StatusBarItem>
+        <TextBlock x:Name="TextBlock" TextAlignment="Center"/>
+      </StatusBarItem>
+    </StatusBar>
+    <tb:TaskbarIcon
             x:Name="NotifyIcon"
             IconSource="/Icons/main.ico"
             TrayMouseDoubleClick="NotifyIcon_OnTrayMouseDoubleClick"
             TrayBalloonTipClicked="NotifyIcon_OnTrayBalloonTipClicked"
             TrayRightMouseUp="NotifyIcon_OnTrayRightMouseUp"
             ToolTipText="{x:Static resx:Strings.Title}" />
-    </Grid>
+    <ComboBox x:Name="Type" Margin="388,9,10.4,0" VerticalAlignment="Top"/>
+    <CheckBox x:Name="Uncompleted" Content="Незавершенные" HorizontalAlignment="Left" Margin="276,15,0,0" VerticalAlignment="Top"/>
+    <TextBox x:Name="NameFilter" HorizontalAlignment="Left" Height="23" Margin="10,8,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="261"/>
+  </Grid>
 </Window>

@@ -99,15 +99,31 @@ namespace MangaReader.Services
     /// <returns></returns>
     public static void Initialize(Table main)
     {
-      foreach (var manga in Cache.Get())
-      {
-        DatabaseMangas.Add(manga);
-      }
+      DatabaseMangas = Cache.Get();
       DatabaseMangas.CollectionChanged += (s, e) => Cache.Add(DatabaseMangas);
       formDispatcher = main.Dispatcher;
       taskBar = main.TaskBar;
       taskbarIcon = main.NotifyIcon;
-      main.FormLibrary.ItemsSource = DatabaseMangas;
+      main.Type.Items.Add("All");
+      main.Type.Items.Add("adultmanga");
+      main.Type.Items.Add("acomics");
+      main.Type.Items.Add("readmanga");
+      main.Type.SelectionChanged += (s, a) => FilterChanged(main);
+      main.NameFilter.TextChanged += (s, a) => FilterChanged(main);
+      main.Uncompleted.Click += (s, a) => FilterChanged(main);
+      main.Type.SelectedIndex = 0;
+    }
+
+    private static void FilterChanged(Table main)
+    {
+      var query = DatabaseMangas.Where(n => n != null);
+      if (main.Type.SelectedItem.ToString() != "All")
+        query = query.Where(n => n.Url.ToLowerInvariant().Contains(main.Type.SelectedItem.ToString().ToLowerInvariant()));
+      if (main.Uncompleted.IsChecked == true)
+        query = query.Where(n => n.IsCompleted != "завершен");
+      if (main.NameFilter.Text.Any())
+        query = query.Where(n => n.Name.ToLowerInvariant().Contains(main.NameFilter.Text.ToLowerInvariant()));
+      main.FormLibrary.ItemsSource = query;
     }
 
     /// <summary>
@@ -139,6 +155,7 @@ namespace MangaReader.Services
 
       Database.Remove(manga.Url);
       formDispatcher.Invoke(() => DatabaseMangas.Remove(manga));
+      manga.Delete();
       Status = Strings.Library_Status_MangaRemoved + manga.Name;
     }
 

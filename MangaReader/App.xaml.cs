@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
+using MangaReader.Account;
 using MangaReader.Services;
 
 namespace MangaReader
@@ -25,15 +27,31 @@ namespace MangaReader
       AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly;
       if (Environment.GetCommandLineArgs().Contains("-t"))
         ShowConsoleWindow();
+
+      ServicePointManager.DefaultConnectionLimit = 100;
+      Mapping.Environment.Initialize();
+      Converter.Convert(true);
+      Settings.Load();
+      Update.Initialize();
+      Grouple.LoginWhile();
+
+
+      var mainform = new Table();
+      mainform.ShowDialog();
     }
 
     static Assembly ResolveAssembly(object sender, ResolveEventArgs args)
     {
       var thisAssembly = Assembly.GetExecutingAssembly();
       var resourceNames = thisAssembly.GetManifestResourceNames();
-      var subname = string.Format(".{0}.dll", args.Name.Substring(0, args.Name.IndexOf(',')));
-      var resourceName = resourceNames.FirstOrDefault(s => s.EndsWith(subname)) ??
-                         resourceNames.First(s => s.EndsWith(subname.Remove(0, 1)));
+      var assemblyFile = string.Format(".{0}.dll", args.Name.Substring(0, args.Name.IndexOf(',')));
+      var resourceName = resourceNames.FirstOrDefault(s => s.EndsWith(assemblyFile));
+      if (string.IsNullOrWhiteSpace(resourceName))
+      {
+        assemblyFile = assemblyFile.Remove(0, 1);
+        resourceName = resourceNames.First(s => s.EndsWith(assemblyFile));
+      }
+
       using (var stream = thisAssembly.GetManifestResourceStream(resourceName))
       {
         var block = new byte[stream.Length];
@@ -44,8 +62,8 @@ namespace MangaReader
         }
         catch (FileLoadException)
         {
-          File.WriteAllBytes(subname.Remove(0, 1), block);
-          return Assembly.LoadFrom(resourceName);
+          File.WriteAllBytes(assemblyFile, block);
+          return Assembly.LoadFrom(assemblyFile);
         }
       }
     }

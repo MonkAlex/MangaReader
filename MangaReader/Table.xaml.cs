@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,7 +10,6 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Hardcodet.Wpf.TaskbarNotification;
-using MangaReader.Account;
 using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services;
@@ -42,23 +40,9 @@ namespace MangaReader
 
     public Table()
     {
-      Mapping.Environment.Initialize();
-      Converter.Convert(true);
-      Settings.Load();
-      Update.Initialize();
       InitializeComponent();
       Settings.UpdateWindowsState(this);
       Library.Initialize(this);
-      Initialize();
-    }
-
-    /// <summary>
-    /// Инициализация программмы.
-    /// </summary>
-    public void Initialize()
-    {
-      ServicePointManager.DefaultConnectionLimit = 100;
-      Grouple.LoginWhile();
       _timer = new DispatcherTimer(new TimeSpan(0, 0, 1),
           DispatcherPriority.Background,
           TimerTick,

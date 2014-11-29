@@ -7,7 +7,7 @@ using MangaReader.Services;
 namespace MangaReader.Manga
 {
   [XmlInclude(typeof(Grouple.Readmanga)), XmlInclude(typeof(Acomic.Acomics))]
-  public abstract class Mangas : Entity.Entity, INotifyPropertyChanged, IDownloadable
+  public class Mangas : Entity.Entity, INotifyPropertyChanged, IDownloadable
   {
     #region Свойства
 
@@ -26,42 +26,79 @@ namespace MangaReader.Manga
     /// <summary>
     /// Статус манги.
     /// </summary>
-    public abstract string Status { get; set; }
+    public virtual string Status { get; set; }
 
     public virtual List<ImageFile> Files { get; set; }
 
-    public virtual List<string> Doubles { get; set; }
+    public virtual List<string> Doubles
+    {
+      get { return doubles; }
+      set { doubles = value; }
+    }
 
     public virtual List<string> Extend { get; set; }
 
     /// <summary>
     /// Нужно ли обновлять мангу.
     /// </summary>
-    public abstract bool NeedUpdate { get; set; }
+    public virtual bool NeedUpdate
+    {
+      get { return needUpdate; }
+      set
+      {
+        needUpdate = value;
+        OnPropertyChanged("NeedUpdate");
+      }
+    }
+
+    private bool needUpdate = true;
+
+    private List<string> doubles = new List<string>();
 
     /// <summary>
     /// Статус корректности манги.
     /// </summary>
-    public abstract bool IsValid { get; }
+    public virtual bool IsValid()
+    {
+      return true;
+    }
 
     /// <summary>
     /// Статус перевода.
     /// </summary>
-    public abstract string IsCompleted { get; }
+    public virtual string IsCompleted { get; set; }
 
     #endregion
 
     #region DownloadProgressChanged
 
-    public abstract bool IsDownloaded { get; }
+    public virtual bool IsDownloaded { get; set; }
 
-    public abstract double Downloaded { get; set; }
+    public virtual double Downloaded { get; set; }
 
-    public abstract string Folder { get; }
+    public virtual string Folder { get; set; }
 
-    public abstract event EventHandler<Mangas> DownloadProgressChanged;
+    internal static string DownloadFolder
+    {
+      get { return string.IsNullOrWhiteSpace(downloadFolder) ? Settings.DownloadFolder : downloadFolder; }
+      set { downloadFolder = value; }
+    }
 
-    public abstract void Download(string mangaFolder = null, string volumePrefix = null, string chapterPrefix = null);
+    private static string downloadFolder;
+
+    public virtual event EventHandler<Mangas> DownloadProgressChanged;
+
+    protected virtual void OnDownloadProgressChanged(Mangas manga)
+    {
+      var handler = DownloadProgressChanged;
+      if (handler != null)
+        handler(this, manga);
+    }
+
+    public virtual void Download(string mangaFolder = null, string volumePrefix = null, string chapterPrefix = null)
+    {
+      
+    }
 
     #endregion
 
@@ -93,23 +130,28 @@ namespace MangaReader.Manga
 
     public override int GetHashCode()
     {
-      return this.Url.GetHashCode()*this.Name.GetHashCode();
+      return this.Url.GetHashCode();
     }
 
     #endregion
-
-
+    
     #region Методы
 
     /// <summary>
     /// Обновить информацию о манге - название, главы, обложка.
     /// </summary>
-    public abstract void Refresh();
+    public virtual void Refresh()
+    {
+      
+    }
 
     /// <summary>
     /// Упаковка манги.
     /// </summary>
-    public abstract void Compress();
+    public virtual void Compress()
+    {
+      
+    }
 
     /// <summary>
     /// Создать мангу по ссылке.

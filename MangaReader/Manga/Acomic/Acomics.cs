@@ -16,42 +16,11 @@ namespace MangaReader.Manga.Acomic
     protected static internal new string Type { get { return "F090B9A2-1400-4F5E-B298-18CD35341C34"; } }
 
     /// <summary>
-    /// Статус манги.
-    /// </summary>
-    public override string Status { get; set; }
-
-    /// <summary>
-    /// Нужно ли обновлять мангу.
-    /// </summary>
-    public override bool NeedUpdate
-    {
-      get { return needUpdate; }
-      set
-      {
-        needUpdate = value;
-        OnPropertyChanged("NeedUpdate");
-      }
-    }
-
-    private bool needUpdate = true;
-
-    /// <summary>
     /// Статус корректности манги.
     /// </summary>
-    public override bool IsValid
+    public override bool IsValid()
     {
-      get { return !string.IsNullOrWhiteSpace(this.Name); }
-    }
-
-    /// <summary>
-    /// Статус перевода.
-    /// </summary>
-    public override string IsCompleted
-    {
-      get
-      {
-        return string.Empty;
-      }
+      return !string.IsNullOrWhiteSpace(this.Name) && base.IsValid();
     }
 
     /// <summary>
@@ -89,27 +58,6 @@ namespace MangaReader.Manga.Acomic
     /// </summary>
     private List<Chapter> allChapters;
 
-
-    #endregion
-
-    #region DownloadProgressChanged
-
-    public override event EventHandler<Mangas> DownloadProgressChanged;
-
-    internal static string DownloadFolder
-    {
-      get { return string.IsNullOrWhiteSpace(downloadFolder) ? Settings.DownloadFolder : downloadFolder; }
-      set { downloadFolder = value; }
-    }
-
-    private static string downloadFolder;
-
-    protected virtual void OnDownloadProgressChanged(Mangas manga)
-    {
-      var handler = DownloadProgressChanged;
-      if (handler != null)
-        handler(this, manga);
-    }
 
     #endregion
 
@@ -166,7 +114,7 @@ namespace MangaReader.Manga.Acomic
             {
               ch.Download(mangaFolder);
               this.OnPropertyChanged("Downloaded");
-              this.DownloadProgressChanged(ch, this);
+              OnDownloadProgressChanged(this);
             });
         this.Save();
         Log.Add("Download end " + this.Name);

@@ -136,7 +136,7 @@ namespace MangaReader.Services
         return;
 
       var newManga = Mangas.Create(url);
-      if (!newManga.IsValid)
+      if (!newManga.IsValid())
         return;
 
       Database.Add(url);

@@ -20,31 +20,11 @@ namespace MangaReader.Manga.Grouple
     protected static internal new string Type { get { return "2C98BBF4-DB46-47C4-AB0E-F207E283142D"; } }
 
     /// <summary>
-    /// Статус манги.
-    /// </summary>
-    public override string Status { get; set; }
-
-    /// <summary>
-    /// Нужно ли обновлять мангу.
-    /// </summary>
-    public override bool NeedUpdate
-    {
-      get { return needUpdate; }
-      set
-      {
-        needUpdate = value;
-        OnPropertyChanged("NeedUpdate");
-      }
-    }
-
-    private bool needUpdate = true;
-
-    /// <summary>
     /// Статус корректности манги.
     /// </summary>
-    public override bool IsValid
+    public override bool IsValid()
     {
-      get { return !string.IsNullOrWhiteSpace(this.Name) && this.listOfChapters != null; }
+      return !string.IsNullOrWhiteSpace(this.Name) && this.listOfChapters != null && base.IsValid();
     }
 
     /// <summary>
@@ -102,27 +82,6 @@ namespace MangaReader.Manga.Grouple
 
     #endregion
 
-    #region DownloadProgressChanged
-
-    public override event EventHandler<Mangas> DownloadProgressChanged;
-
-    internal static string DownloadFolder
-    {
-      get { return string.IsNullOrWhiteSpace(downloadFolder) ? Settings.DownloadFolder : downloadFolder; }
-      set { downloadFolder = value; }
-    }
-
-    private static string downloadFolder;
-
-    protected virtual void OnDownloadProgressChanged(Mangas manga)
-    {
-      var handler = DownloadProgressChanged;
-      if (handler != null)
-        handler(this, manga);
-    }
-
-    #endregion
-
     #region Методы
 
     /// <summary>
@@ -155,7 +114,7 @@ namespace MangaReader.Manga.Grouple
         listOfChapters = Getter.GetLinksOfMangaChapters(Page.GetPage(this.Url), this.Url);
       this.allChapters = allChapters ??
              (allChapters = listOfChapters.Select(link => new Chapter(link.Key, link.Value, this)).ToList());
-      this.allChapters.ForEach(ch => ch.DownloadProgressChanged += (sender, args) => this.DownloadProgressChanged(ch, this));
+      this.allChapters.ForEach(ch => ch.DownloadProgressChanged += (sender, args) => OnDownloadProgressChanged(this));
       return this.allChapters;
     }
 

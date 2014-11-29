@@ -63,12 +63,12 @@ namespace MangaReader.Services
     /// <summary>
     /// Префикс папки томов.
     /// </summary>
-    public static string VolumePrefix = "Volume_";
+    public static string VolumePrefix = "Volume ";
 
     /// <summary>
     /// Префикс папки глав.
     /// </summary>
-    public static string ChapterPrefix = "Chapter_";
+    public static string ChapterPrefix = "Chapter ";
 
     /// <summary>
     /// Сжимать скачанную мангу.

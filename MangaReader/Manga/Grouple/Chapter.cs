@@ -119,7 +119,7 @@ namespace MangaReader.Manga.Grouple
           {
             var index = this.listOfImageLink.FindIndex(l => l == link);
             var fileName = index.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + file.Extension;
-            var filePath = string.Concat(chapterFolder, "\\", fileName);
+            var filePath = string.Concat(chapterFolder, Path.DirectorySeparatorChar, fileName);
             file.Save(filePath);
             this.Parent.Files.Add(file);
           }

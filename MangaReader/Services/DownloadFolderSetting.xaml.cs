@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,7 +31,7 @@ namespace MangaReader.Services
       var dialog = new VistaFolderBrowserDialog();
       if (dialog.ShowDialog() == true)
       {
-        DonwloadFolder.SetValue(null, dialog.SelectedPath + "\\");
+        DonwloadFolder.SetValue(null, dialog.SelectedPath + Path.DirectorySeparatorChar);
         this.FolderPath.Text = DonwloadFolder.GetValue(null) as string;
       }
     }

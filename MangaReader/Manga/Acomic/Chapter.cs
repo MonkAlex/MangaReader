@@ -67,7 +67,7 @@ namespace MangaReader.Manga.Acomic
 
         var fileName = Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + file.Extension;
 
-        File.WriteAllBytes(string.Concat(chapterFolder, "\\", fileName), file.Body);
+        File.WriteAllBytes(string.Concat(chapterFolder, Path.DirectorySeparatorChar, fileName), file.Body);
 
         History.Add(this.Url);
         this.IsDownloaded = true;

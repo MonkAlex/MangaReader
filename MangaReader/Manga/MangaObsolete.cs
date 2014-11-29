@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using MangaReader.Manga.Grouple;
@@ -65,7 +66,7 @@ namespace MangaReader.Manga
     /// </summary>
     public string Folder
     {
-      get { return Page.MakeValidPath(Settings.DownloadFolder + "\\" + this.Name); }
+      get { return Page.MakeValidPath(Settings.DownloadFolder + Path.DirectorySeparatorChar + this.Name); }
     }
 
     /// <summary>

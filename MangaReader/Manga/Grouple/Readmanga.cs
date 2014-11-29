@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -201,10 +202,10 @@ namespace MangaReader.Manga.Grouple
             {
               ch.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged("Downloaded");
               ch.Download(string.Concat(mangaFolder,
-                  "\\",
+                  Path.DirectorySeparatorChar,
                   volumePrefix,
                   ch.Volume.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0'),
-                  "\\",
+                  Path.DirectorySeparatorChar,
                   chapterPrefix,
                   ch.Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0')
                   ));

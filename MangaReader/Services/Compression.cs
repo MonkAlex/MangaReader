@@ -8,18 +8,22 @@ namespace MangaReader.Services
 {
   class Compression
   {
+    private const string ArchiveFormat = ".cbz";
+    private const string ArchivePattern = "*.cbz";
+    private const string Separator = " ";
+
     /// <summary>
     /// Упаковка всех глав.
     /// </summary>
     /// <param name="message">Папка манги.</param>
     public static void CompressChapters(string message)
     {
-      message = Page.MakeValidPath(message) + "\\";
+      message = Page.MakeValidPath(message) + Path.DirectorySeparatorChar;
       if (!Directory.Exists(message))
         return;
 
       // Нельзя сжимать папку со всей мангой.
-      if (message.Trim('\\') == Settings.DownloadFolder.Trim('\\'))
+      if (message.Trim(Path.DirectorySeparatorChar) == Settings.DownloadFolder.Trim(Path.DirectorySeparatorChar))
         return;
 
       var volumes = Directory.GetDirectories(message);
@@ -28,10 +32,10 @@ namespace MangaReader.Services
         var chapters = Directory.GetDirectories(volume);
         foreach (var chapter in chapters)
         {
-          var acr = string.Concat(volume, "\\",
-              GetFolderName(message), "_",
-              GetFolderName(volume), "_",
-              GetFolderName(chapter), ".cbz");
+          var acr = string.Concat(volume, Path.DirectorySeparatorChar,
+              GetFolderName(message), Separator,
+              GetFolderName(volume), Separator,
+              GetFolderName(chapter), ArchiveFormat);
           if (File.Exists(acr))
             AddToArchive(acr, chapter);
           else
@@ -47,18 +51,18 @@ namespace MangaReader.Services
     /// <param name="message">Папка манги.</param>
     public static void CompressVolumes(string message)
     {
-      message = Page.MakeValidPath(message) + "\\";
+      message = Page.MakeValidPath(message) + Path.DirectorySeparatorChar;
       if (!Directory.Exists(message))
         return;
 
       // Нельзя сжимать папку со всей мангой.
-      if (message.Trim('\\') == Settings.DownloadFolder.Trim('\\'))
+      if (message.Trim(Path.DirectorySeparatorChar ) == Settings.DownloadFolder.Trim(Path.DirectorySeparatorChar))
         return;
 
       var volumes = Directory.GetDirectories(message);
       foreach (var volume in volumes)
       {
-        var acr = string.Concat(message, GetFolderName(message), "_", GetFolderName(volume), ".cbz");
+        var acr = string.Concat(message, GetFolderName(message), Separator, GetFolderName(volume), ArchiveFormat);
         if (File.Exists(acr))
           AddToArchive(acr, volume);
         else
@@ -73,17 +77,17 @@ namespace MangaReader.Services
     /// <param name="message">Папка манги.</param>
     public static void CompressManga(string message)
     {
-      message = Page.MakeValidPath(message) + "\\";
+      message = Page.MakeValidPath(message) + Path.DirectorySeparatorChar;
       if (!Directory.Exists(message))
         return;
 
       // Нельзя сжимать папку со всей мангой.
-      if (message.Trim('\\') == Settings.DownloadFolder.Trim('\\'))
+      if (message.Trim(Path.DirectorySeparatorChar) == Settings.DownloadFolder.Trim(Path.DirectorySeparatorChar))
         return;
 
-      var acr = string.Concat(message, GetFolderName(message), ".cbz");
+      var acr = string.Concat(message, GetFolderName(message), ArchiveFormat);
       var directories = new DirectoryInfo(message);
-      var cbzs = directories.GetFiles("*.cbz", SearchOption.TopDirectoryOnly);
+      var cbzs = directories.GetFiles(ArchivePattern, SearchOption.TopDirectoryOnly);
       var files = directories.GetFiles("*", SearchOption.TopDirectoryOnly);
 
       if (File.Exists(acr))
@@ -101,7 +105,7 @@ namespace MangaReader.Services
         }
 
       var toDelete = directories.GetFiles("*", SearchOption.TopDirectoryOnly).Select(f => f.FullName)
-                  .Except(directories.GetFiles("*.cbz", SearchOption.TopDirectoryOnly).Select(f => f.FullName));
+                  .Except(directories.GetFiles(ArchivePattern, SearchOption.TopDirectoryOnly).Select(f => f.FullName));
       foreach (var file in toDelete)
       {
         File.Delete(file);
@@ -133,10 +137,10 @@ namespace MangaReader.Services
         {
           var directories = new DirectoryInfo(folder);
           var files = directories.GetFiles("*", SearchOption.TopDirectoryOnly).Select(f => f.FullName)
-              .Except(directories.GetFiles("*.cbz", SearchOption.TopDirectoryOnly).Select(f => f.FullName));
+              .Except(directories.GetFiles(ArchivePattern, SearchOption.TopDirectoryOnly).Select(f => f.FullName));
           foreach (var file in files)
           {
-            var fileName = file.Replace(directories.FullName + "\\", string.Empty).Replace(directories.FullName, string.Empty);
+            var fileName = file.Replace(directories.FullName + Path.DirectorySeparatorChar, string.Empty).Replace(directories.FullName, string.Empty);
             var fileInZip = zip.Entries.FirstOrDefault(f => f.FullName == fileName);
             if (fileInZip != null)
               fileInZip.Delete();

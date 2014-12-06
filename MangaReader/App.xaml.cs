@@ -60,6 +60,7 @@ namespace MangaReader
         }
         catch (FileLoadException)
         {
+          assemblyFile = assemblyFile.TrimStart('.');
           File.WriteAllBytes(assemblyFile, block);
           return Assembly.LoadFrom(assemblyFile);
         }

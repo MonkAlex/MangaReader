@@ -57,14 +57,6 @@ namespace MangaReader.Manga.Grouple
     }
 
     /// <summary>
-    /// Папка манги.
-    /// </summary>
-    public override string Folder
-    {
-      get { return Page.MakeValidPath(DownloadFolder + this.Name); }
-    }
-
-    /// <summary>
     /// Загружаемый список глав.
     /// </summary>
     private List<Chapter> downloadedChapters;
@@ -93,7 +85,7 @@ namespace MangaReader.Manga.Grouple
       if (string.IsNullOrWhiteSpace(page))
         return;
 
-      this.Name = Getter.GetMangaName(page).ToString();
+      this.ServerName = Getter.GetMangaName(page).ToString();
       this.listOfChapters = Getter.GetLinksOfMangaChapters(page, this.Url);
       this.Status = Getter.GetTranslateStatus(page);
       OnPropertyChanged("IsCompleted");

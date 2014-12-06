@@ -111,14 +111,11 @@ namespace MangaReader
       if (e.ClickCount < 2 || !(sender is ListViewItem))
         return;
 
-      var manga = ((ListViewItem)sender).DataContext as Mangas;
-      if (manga == null)
+      var downloadable = ((ListViewItem)sender).DataContext as IDownloadable;
+      if (downloadable == null)
         return;
 
-      if (Directory.Exists(manga.Folder))
-        Process.Start(manga.Folder);
-      else
-        Library.Status = Strings.Library_Status_FolderNotFound;
+      MenuOpenFolder(downloadable);
     }
 
     /// <summary>
@@ -193,12 +190,15 @@ namespace MangaReader
       var view = new MenuItem() { Header = Strings.Manga_Action_View };
       view.Click += (o, agrs) => Process.Start(manga.Url);
       var needUpdate = new MenuItem() { Header = manga.NeedUpdate ? Strings.Manga_NotUpdate : Strings.Manga_Update, IsEnabled = this.IsAvaible };
-      needUpdate.Click += (o, args) => manga.NeedUpdate = !manga.NeedUpdate;
+      needUpdate.Click += (o, args) => { manga.NeedUpdate = !manga.NeedUpdate; manga.Save(); };
+      var settings = new MenuItem() { Header = Strings.Manga_Settings, IsEnabled = this.IsAvaible };
+      settings.Click += (o, args) => new MangaForm {DataContext = manga, Owner = this}.ShowDialog();
 
       var menu = new ContextMenu();
       menu.Items.Add(openFolder);
       menu.Items.Add(needUpdate);
       menu.Items.Add(update);
+      menu.Items.Add(settings);
       menu.Items.Add(view);
       menu.Items.Add(remove);
       item.ContextMenu = menu;
@@ -224,6 +224,7 @@ namespace MangaReader
     {
       Settings.WindowsState = new object[] { this.Top, this.Left, this.Width, this.Height, this.WindowState };
       this.NotifyIcon.Dispose();
+      Application.Current.Shutdown(0);
     }
 
     private void ListView_MouseDown(object sender, MouseButtonEventArgs e)

@@ -38,8 +38,10 @@ namespace MangaReader.Mapping
     private static void BuildSchema(Configuration config)
     {
       if (File.Exists(Settings.WorkFolder + DbFile))
+      {
+        new SchemaUpdate(config).Execute(false, true);
         return;
-      //  File.Delete(Settings.WorkFolder + DbFile);
+      }
 
       new SchemaExport(config).Create(false, true);
     }

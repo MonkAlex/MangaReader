@@ -41,14 +41,6 @@ namespace MangaReader.Manga.Acomic
     }
 
     /// <summary>
-    /// Папка типа манги.
-    /// </summary>
-    public override string Folder
-    {
-      get { return Page.MakeValidPath(DownloadFolder + this.Name); }
-    }
-
-    /// <summary>
     /// Загружаемый список глав.
     /// </summary>
     private List<Chapter> downloadedChapters;
@@ -68,7 +60,7 @@ namespace MangaReader.Manga.Acomic
     /// </summary>
     public override void Refresh()
     {
-      this.Name = Getter.GetMangaName(this.Url);
+      this.ServerName = Getter.GetMangaName(this.Url);
       this.allChapters = Getter.GetMangaChapters(this.Url);
       OnPropertyChanged("IsCompleted");
     }
@@ -147,7 +139,7 @@ namespace MangaReader.Manga.Acomic
     public Acomics(string url)
     {
       this.Url = url;
-      this.Name = Getter.GetMangaName(this.Url);
+      this.ServerName = Getter.GetMangaName(this.Url);
     }
 
     public Acomics() { }

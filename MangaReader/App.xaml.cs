@@ -35,9 +35,7 @@ namespace MangaReader
       Update.Initialize();
       Grouple.LoginWhile();
 
-
-      var mainform = new Table();
-      mainform.ShowDialog();
+      new Table().ShowDialog();
     }
 
     static Assembly ResolveAssembly(object sender, ResolveEventArgs args)

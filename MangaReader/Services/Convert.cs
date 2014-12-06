@@ -43,6 +43,7 @@ namespace MangaReader.Services
       State = ConverterState.Started;
 
       Log.Add("Convert started.");
+
       Process.Status = "Convert settings...";
       Settings.Convert();
 

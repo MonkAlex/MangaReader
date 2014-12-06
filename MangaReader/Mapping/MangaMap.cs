@@ -11,7 +11,9 @@ namespace MangaReader.Mapping
     public MangaMap()
     {
       Id(x => x.Id).GeneratedBy.Native();
-      Map(x => x.Name).Not.LazyLoad();
+      Map(x => x.LocalName).Not.LazyLoad();
+      Map(x => x.ServerName).Not.LazyLoad();
+      Map(x => x.IsNameChanged).Not.LazyLoad();
       Map(x => x.Url).Not.LazyLoad();
       Map(x => x.Status).Not.LazyLoad();
       Map(x => x.NeedUpdate).Not.LazyLoad();

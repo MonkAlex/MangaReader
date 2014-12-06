@@ -140,6 +140,9 @@
     <Compile Include="Manga\Acomic\Getter.cs" />
     <Compile Include="Manga\IChapter.cs" />
     <Compile Include="Manga\IDownloadable.cs" />
+    <Compile Include="Manga\MangaForm.xaml.cs">
+      <DependentUpon>MangaForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Manga\Mangas.cs" />
     <Compile Include="Manga\MangaObsolete.cs" />
     <Compile Include="Mapping\Environment.cs" />
@@ -172,6 +175,10 @@
       <DependentUpon>VersionHistory.xaml</DependentUpon>
     </Compile>
     <Page Include="Input.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Manga\MangaForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

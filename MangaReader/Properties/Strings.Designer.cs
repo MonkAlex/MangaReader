@@ -295,6 +295,15 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Настройки.
+        /// </summary>
+        public static string Manga_Settings {
+            get {
+                return ResourceManager.GetString("Manga_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Перевод.
         /// </summary>
         public static string Manga_Translate {

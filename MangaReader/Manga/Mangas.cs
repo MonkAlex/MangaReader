@@ -16,7 +16,43 @@ namespace MangaReader.Manga
     /// <summary>
     /// Название манги.
     /// </summary>
-    public virtual string Name { get; set; }
+    public virtual string Name 
+    {
+      get { return this.IsNameChanged ? this.LocalName : this.ServerName; }
+      set
+      {
+        if (this.IsNameChanged)
+          this.LocalName = value;
+        else
+          this.ServerName = value;
+        OnPropertyChanged("Name");
+        OnPropertyChanged("Folder");
+      }
+    }
+
+    public virtual string LocalName 
+    {
+      get { return localName ?? ServerName; }
+      set { localName = value; }
+    }
+
+    private string localName;
+
+    public virtual string ServerName { get; set; }
+
+    public virtual bool IsNameChanged
+    {
+      get { return isNameChanged; }
+      set
+      {
+        isNameChanged = value;
+        OnPropertyChanged("IsNameChanged");
+        OnPropertyChanged("Name");
+        OnPropertyChanged("Folder");
+      }
+    }
+
+    private bool isNameChanged = false;
 
     /// <summary>
     /// Ссылка на мангу.
@@ -76,7 +112,11 @@ namespace MangaReader.Manga
 
     public virtual double Downloaded { get; set; }
 
-    public virtual string Folder { get; set; }
+    public virtual string Folder 
+    {
+      get { return Page.MakeValidPath(DownloadFolder + this.Name); }
+      set { }
+    }
 
     internal static string DownloadFolder
     {

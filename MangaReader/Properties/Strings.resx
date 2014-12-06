@@ -243,4 +243,7 @@
   <data name="Library_Exit" xml:space="preserve">
     <value>Выйти</value>
   </data>
+  <data name="Manga_Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
 </root>

@@ -96,7 +96,7 @@ namespace MangaReader.Services
         }
       };
       run.Start();
-      Environment.Exit(1);
+      Application.Current.Shutdown(1);
     }
 
     /// <summary>

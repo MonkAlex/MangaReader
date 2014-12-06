@@ -1,0 +1,44 @@
+﻿<Window x:Class="MangaReader.Manga.MangaForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:services="clr-namespace:MangaReader.Manga"
+        DataContextChanged="MangaForm_OnDataContextChanged"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        ShowInTaskbar="False"
+        Title="MangaForm" Height="200" Width="400">
+  <Window.Resources>
+    <services:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+  </Window.Resources>
+  
+  <Grid Margin="15">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="40*"></ColumnDefinition>
+      <ColumnDefinition Width="30*"></ColumnDefinition>
+      <ColumnDefinition Width="30*"></ColumnDefinition>
+    </Grid.ColumnDefinitions>
+    <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+              x:Name="MangaNameIsChanged" IsChecked="{Binding Path=IsNameChanged}"
+              Content="Разрешить переименовывание"/>
+    <Label Grid.Row="0" Grid.Column="0"
+           x:Name="MangaNameLabel" Content="Название манги: "/>
+    <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
+             x:Name="MangaName" Text="{Binding Path=Name}" IsReadOnly="{Binding Path=IsNameChanged, Converter={StaticResource InverseBooleanConverter}}"/>
+      <Label Grid.Row="2" Grid.Column="0"
+             x:Name="MangaFolderLabel" Content="Манга скачивается в: "/>
+    <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+             x:Name="MangaFolder" Text="{Binding Path=Folder}" IsReadOnly="True"/>
+
+    <Button Grid.Row="4" Grid.Column="1"
+            x:Name="OkButton" Content="Принять" Click="OkButton_OnClick"/>
+    <Button Grid.Row="4" Grid.Column="2"
+            x:Name="CancelButton" Content="Отмена" Click="CancelButton_OnClick"/>
+  </Grid>
+</Window>

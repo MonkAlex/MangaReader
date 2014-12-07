@@ -14,12 +14,15 @@ namespace Tests
     private const string DbFile = "\\test.db";
 
     public static ISessionFactory SessionFactory;
+    public static ISession Session;
 
     public static void Initialize()
     {
       // TODO: подумать над другим способом явно подгрузить SQLite.
       var sqlite = FunctionType.Aggregate;
+      sqlite.Equals(FunctionType.Collation);
       SessionFactory = CreateSessionFactory();
+      Session = SessionFactory.OpenSession();
     }
 
     private static ISessionFactory CreateSessionFactory()

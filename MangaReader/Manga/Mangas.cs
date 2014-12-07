@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
+using FluentNHibernate.Visitors;
 using MangaReader.Services;
 
 namespace MangaReader.Manga
@@ -64,15 +65,11 @@ namespace MangaReader.Manga
     /// </summary>
     public virtual string Status { get; set; }
 
-    public virtual List<ImageFile> Files { get; set; }
-
-    public virtual List<string> Doubles
-    {
-      get { return doubles; }
-      set { doubles = value; }
-    }
-
-    public virtual List<string> Extend { get; set; }
+    /// <summary>
+    /// История манги.
+    /// </summary>
+    [XmlIgnore]
+    public virtual IList<MangaHistory> Histories { get; set; }
 
     /// <summary>
     /// Нужно ли обновлять мангу.
@@ -193,6 +190,14 @@ namespace MangaReader.Manga
       
     }
 
+    public override void Save()
+    {
+      if (!this.IsValid())
+        throw new ValidationException("Нельзя сохранять невалидную сущность", "Сохранение прервано", this.GetType());
+
+      base.Save();
+    }
+
     /// <summary>
     /// Создать мангу по ссылке.
     /// </summary>
@@ -207,10 +212,15 @@ namespace MangaReader.Manga
       if (url.Contains("acomics.ru"))
         manga = new Acomic.Acomics(url);
 
-      if (manga != null)
+      if (manga != null && manga.IsValid())
         manga.Save();
 
       return manga;
+    }
+
+    public Mangas()
+    {
+      this.Histories = new List<MangaHistory>();
     }
 
     #endregion

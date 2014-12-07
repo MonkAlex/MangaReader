@@ -60,9 +60,10 @@ namespace MangaReader.Entity
       var session = Mapping.Environment.Session;
       using (var tranc = session.BeginTransaction())
       {
-        session.Delete(this);
-        this.Id = 0;
+        var entity = session.Load(this.GetType(), this.Id);
+        session.Delete(entity);
         tranc.Commit();
+        this.Id = 0;
       }
       return true;
     }

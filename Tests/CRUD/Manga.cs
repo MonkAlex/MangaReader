@@ -12,7 +12,7 @@ namespace MangaReader.Tests.CRUD
     {
       Environment.Initialize();
       Mapping.Environment.SessionFactory = Environment.SessionFactory;
-
+      Mapping.Environment.Session = Environment.Session;
 
       var newManga = Builder.CreateReadmanga();
       var mangaId = newManga.Id;

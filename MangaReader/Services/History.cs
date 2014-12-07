@@ -16,17 +16,18 @@ namespace MangaReader.Services
     /// <summary>
     /// Добавление записи в историю.
     /// </summary>
+    /// <param name="manga">Манга, к которой относится сообщение.</param>
     /// <param name="message">Сообщение.</param>
-    public static void Add(string message)
+    public static void AddHistory(this Mangas manga, string message)
     {
       using (var session = Mapping.Environment.SessionFactory.OpenSession())
       using (var tranc = session.BeginTransaction())
       {
-        if (session.Query<MangaHistory>().Where(h => h.Url == message).Any())
+        if (manga.Histories.Any(h => h.Url == message))
           return;
 
         var history = new MangaHistory(message);
-        session.Save(history);
+        manga.Histories.Add(history);
         tranc.Commit();
       }
     }
@@ -39,6 +40,7 @@ namespace MangaReader.Services
       if (!File.Exists(HistoryPath))
         return;
 
+      // ReSharper disable CSharpWarnings::CS0612
       var histories = new List<MangaHistory>();
 
       var serializedStrings = Serializer<List<string>>.Load(HistoryPath);
@@ -63,32 +65,22 @@ namespace MangaReader.Services
       if (process != null && histories.Any())
         process.IsIndeterminate = false;
 
-      using (var tranc = session.BeginTransaction())
+      foreach (var manga in mangas)
       {
-        foreach (var history in histories)
+        if (process != null)
+          process.Percent += 100.0 / mangas.Count;
+        using (var tranc = session.BeginTransaction())
         {
-          if (process != null)
-            process.Percent += 100.0 / histories.Count;
-          if (history.Manga == null)
-            history.Manga = mangas.SingleOrDefault(m => m.Url == history.MangaUrl);
-          // TODO: надо решить что делать с невалидной историей.
-          //if (history.Manga != null)
-          session.Save(history);
+          foreach (var history in histories.Where(h => h.MangaUrl == manga.Url))
+          {
+            manga.Histories.Add(history);
+          }
+          tranc.Commit();
         }
-        tranc.Commit();
       }
+      // ReSharper restore CSharpWarnings::CS0612
 
       File.Move(HistoryPath, HistoryPath + ".dbak");
-    }
-
-    /// <summary>
-    /// Получить историю.
-    /// </summary>
-    /// <param name="manga">Манга, история которой нужна.</param>
-    /// <returns>Перечисление сообщений из истории.</returns>
-    public static List<MangaHistory> Get(Mangas manga)
-    {
-      return Mapping.Environment.Session.Query<MangaHistory>().Where(h => h.Manga.Id == manga.Id).ToList();
     }
   }
 }

@@ -1,4 +1,5 @@
-﻿using MangaReader.Manga;
+﻿using System.Linq;
+using MangaReader.Manga;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Environment = Tests.Environment;
 
@@ -12,13 +13,15 @@ namespace MangaReader.Tests.CRUD
     {
       Environment.Initialize();
       Mapping.Environment.SessionFactory = Environment.SessionFactory;
+      Mapping.Environment.Session = Environment.Session;
 
-
-      var history = Builder.CreateMangaHistory();
+      var manga = Builder.CreateAcomics();
+      Builder.CreateMangaHistory(manga);
+      var history = manga.Histories.FirstOrDefault();
       var historyId = history.Id;
-      var mangaId = history.Manga.Id;
+      var mangaId = manga.Id;
       Assert.AreNotEqual(0, history.Id);
-      Assert.AreNotEqual(null, history.Manga);
+      Assert.AreNotEqual(null, manga.Histories.FirstOrDefault());
       using (var session = Environment.SessionFactory.OpenSession())
       {
         var fromDb = session.Get<MangaReader.MangaHistory>(historyId);
@@ -30,8 +33,8 @@ namespace MangaReader.Tests.CRUD
         Assert.AreNotEqual(null, fromDb);
       }
 
-      Builder.DeleteMangaHistory(history);
-      Assert.AreEqual(0, history.Id);
+      Builder.DeleteMangaHistory(manga);
+      Builder.DeleteAcomics(manga);
       using (var session = Environment.SessionFactory.OpenSession())
       {
         var fromDb = session.Get<MangaReader.MangaHistory>(historyId);
@@ -53,7 +56,9 @@ namespace MangaReader.Tests.CRUD
       Mapping.Environment.SessionFactory = Environment.SessionFactory;
 
 
-      var history = Builder.CreateMangaHistory();
+      var manga = Builder.CreateReadmanga();
+      Builder.CreateMangaHistory(manga);
+      var history = manga.Histories.FirstOrDefault();
       var oldUrl = history.Url;
       var historyId = history.Id;
 
@@ -82,7 +87,8 @@ namespace MangaReader.Tests.CRUD
         Assert.AreEqual(url, fromDb.Url);
       }
 
-      Builder.DeleteMangaHistory(history);
+      Builder.DeleteMangaHistory(manga);
+      Builder.DeleteReadmanga(manga);
     }
   }
 }

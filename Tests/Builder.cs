@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using MangaReader.Manga;
 using MangaReader.Manga.Acomic;
 using MangaReader.Manga.Grouple;
 
@@ -50,24 +52,25 @@ namespace MangaReader.Tests
       manga.Delete();
     }
 
-    public static MangaHistory CreateMangaHistory()
+    public static void CreateMangaHistory(Mangas manga)
     {
-      var manga = CreateAcomics();
       var history = new MangaHistory()
       {
         Date = DateTime.Today,
-        Manga = manga,
         Url = Url
       };
-      history.Save();
-      return history;
+      manga.Histories.Add(history);
+      manga.Save();
     }
 
-    public static void DeleteMangaHistory(MangaHistory history)
+    public static void DeleteMangaHistory(Mangas manga)
     {
-      var manga = history.Manga;
-      history.Delete();
-      manga.Delete();
+      var history = manga.Histories.ToList();
+      foreach (var mangaHistory in history)
+      {
+        manga.Histories.Remove(mangaHistory);
+      }
+      manga.Save();
     }
   }
 }

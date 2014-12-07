@@ -21,6 +21,8 @@ namespace MangaReader.Mapping
     {
       // TODO: подумать над другим способом явно подгрузить SQLite.
       var sqlite = FunctionType.Aggregate;
+      sqlite.Equals(FunctionType.Collation);
+
       SessionFactory = CreateSessionFactory();
       Session = SessionFactory.OpenSession();
     }
@@ -38,12 +40,9 @@ namespace MangaReader.Mapping
     private static void BuildSchema(Configuration config)
     {
       if (File.Exists(Settings.WorkFolder + DbFile))
-      {
         new SchemaUpdate(config).Execute(false, true);
-        return;
-      }
-
-      new SchemaExport(config).Create(false, true);
+      else
+        new SchemaExport(config).Create(false, true);
     }
   }
 }

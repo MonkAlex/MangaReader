@@ -12,7 +12,7 @@ namespace MangaReader.Manga.Grouple
   /// <summary>
   /// Глава.
   /// </summary>
-  public class Chapter : IChapter
+  public class Chapter
   {
     #region Свойства
 
@@ -99,36 +99,15 @@ namespace MangaReader.Manga.Grouple
           if (!file.Exist)
             throw new Exception("Restart chapter download, downloaded file is corrupted, link = " + link);
 
-          if (this.Parent.Files.Exists(f => f.Hash == file.Hash) && !this.Parent.Doubles.Contains(file.Hash))
-            this.Parent.Doubles.Add(file.Hash);
-          if (Settings.SkipDouble && this.Parent.Doubles.Contains(file.Hash))
-          {
-            Console.WriteLine(file.Hash);
-            var fileName = file.Hash + "." + file.Extension;
-            var folder = string.Concat(chapterFolder, "\\..\\..\\Doubles\\");
-            Directory.CreateDirectory(folder);
-            file.Save(folder + fileName);
-            var doubles = this.Parent.Files.Where(a => a.Hash == file.Hash).ToList();
-            foreach (var doubleFile in doubles)
-            {
-              doubleFile.Delete();
-              this.Parent.Files.Remove(doubleFile);
-            }
-          }
-          else
-          {
-            var index = this.listOfImageLink.FindIndex(l => l == link);
-            var fileName = index.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + file.Extension;
-            var filePath = string.Concat(chapterFolder, Path.DirectorySeparatorChar, fileName);
-            file.Save(filePath);
-            this.Parent.Files.Add(file);
-          }
+          var index = this.listOfImageLink.FindIndex(l => l == link);
+          var fileName = index.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + file.Extension;
+          var filePath = string.Concat(chapterFolder, Path.DirectorySeparatorChar, fileName);
+          file.Save(filePath);
           this._downloaded++;
           this.DownloadProgressChanged(this, null);
         });
 
         this.IsDownloaded = true;
-        History.Add(this.Url);
       }
       catch (AggregateException ae)
       {
@@ -170,11 +149,9 @@ namespace MangaReader.Manga.Grouple
       this.restartCounter = 0;
       this.Volume = Convert.ToInt32(Regex.Match(url, @"vol[-]?[0-9]+").Value.Remove(0, 3));
       this.Number = Convert.ToInt32(Regex.Match(url, @"/[-]?[0-9]+", RegexOptions.RightToLeft).Value.Remove(0, 1));
-      this.Parent = parent;
     }
 
     #endregion
 
-    public Mangas Parent { get; set; }
   }
 }

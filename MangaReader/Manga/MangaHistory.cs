@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MangaReader.Manga;
 
 namespace MangaReader
 {
   // История манги.
   public class MangaHistory : Entity.Entity
   {
-    
-    public virtual Mangas Manga { get; set; }
 
     /// <summary>
     /// Ссылка на мангу.
+    /// Исключительно для десериализации старых данных.
     /// </summary>
     public virtual string MangaUrl { get; set; }
 
@@ -49,6 +47,7 @@ namespace MangaReader
     /// </summary>
     /// <param name="messages"></param>
     /// <returns></returns>
+    [Obsolete]
     public static List<MangaHistory> CreateHistories(IEnumerable<string> messages)
     {
       return messages.Select(message => new MangaHistory(message)).ToList();
@@ -58,12 +57,8 @@ namespace MangaReader
 
     public MangaHistory(string message)
     {
-      var builder = new UriBuilder(message);
-      var mangaLink = string.Concat(builder.Scheme, Uri.SchemeDelimiter, builder.Host, builder.Uri.Segments[0],
-          builder.Uri.Segments[1].Replace(builder.Uri.Segments[0], string.Empty));
-      MangaUrl = mangaLink;
-      Url = message;
-      Date = DateTime.Now;
+      this.Url = message;
+      this.Date = DateTime.Now;
     }
   }
 }

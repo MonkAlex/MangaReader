@@ -100,7 +100,7 @@ namespace MangaReader.Services
     public static void Initialize(Table main)
     {
       DatabaseMangas = Cache.Get();
-      DatabaseMangas.CollectionChanged += (s, e) => Cache.Add(DatabaseMangas);
+      DatabaseMangas.CollectionChanged += (s, e) => { Cache.Add(DatabaseMangas); FilterChanged(main); };
       formDispatcher = main.Dispatcher;
       taskBar = main.TaskBar;
       taskbarIcon = main.NotifyIcon;
@@ -153,10 +153,14 @@ namespace MangaReader.Services
       if (manga == null)
         return;
 
+      Log.Add(Strings.Manga_Action_Remove + manga.Name);
+      
       Database.Remove(manga.Url);
       formDispatcher.Invoke(() => DatabaseMangas.Remove(manga));
       manga.Delete();
+
       Status = Strings.Library_Status_MangaRemoved + manga.Name;
+      Log.Add(Strings.Library_Status_MangaRemoved + manga.Name);
     }
 
     /// <summary>

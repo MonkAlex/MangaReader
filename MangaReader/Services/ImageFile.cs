@@ -7,9 +7,9 @@ namespace MangaReader.Services
 {
   public class ImageFile
   {
-    internal byte[] Body { get; set; }
+    protected internal virtual byte[] Body { get; set; }
 
-    public string Hash
+    public virtual string Hash
     {
       get
       {
@@ -22,9 +22,9 @@ namespace MangaReader.Services
 
     private string hash = string.Empty;
 
-    internal bool Exist { get { return this.Body != null; } }
+    protected internal virtual bool Exist { get { return this.Body != null; } }
 
-    public string Extension 
+    protected internal virtual string Extension 
     {
       get
       {
@@ -40,9 +40,9 @@ namespace MangaReader.Services
     }
     private string extension = string.Empty;
 
-    public string Path { get; set; }
+    public virtual string Path { get; set; }
 
-    public new string GetHashCode()
+    public virtual new string GetHashCode()
     {
       using (var md5 = MD5.Create())
       {
@@ -54,7 +54,7 @@ namespace MangaReader.Services
     /// Сохранить файл на диск.
     /// </summary>
     /// <param name="path">Путь к файлу.</param>
-    public void Save(string path)
+    public virtual void Save(string path)
     {
       File.WriteAllBytes(path, this.Body);
       this.Path = path;
@@ -63,7 +63,7 @@ namespace MangaReader.Services
     /// <summary>
     /// Сохранить файл на диск.
     /// </summary>
-    public void Delete()
+    public virtual void Delete()
     {
       if (string.IsNullOrWhiteSpace(this.Path) || !File.Exists(this.Path))
       {

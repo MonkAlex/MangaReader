@@ -31,11 +31,6 @@ namespace MangaReader.Services
     public static int AutoUpdateInHours = 0;
 
     /// <summary>
-    /// Пропускать дубли.
-    /// </summary>
-    public static bool SkipDouble = false;
-
-    /// <summary>
     /// Время последнего обновления.
     /// </summary>
     public static DateTime LastUpdate = DateTime.Now;
@@ -100,8 +95,7 @@ namespace MangaReader.Services
                 WindowsState,
                 new object[] {Login.Name, Login.Password},
                 MinimizeToTray,
-                AutoUpdateInHours,
-                SkipDouble
+                AutoUpdateInHours
             };
       Serializer<object[]>.Save(SettingsPath, settings);
     }
@@ -138,8 +132,6 @@ namespace MangaReader.Services
         Console.WriteLine("Minimize to tray {0}", MinimizeToTray);
         AutoUpdateInHours = (int)settings[8];
         Console.WriteLine("Update mangas ever {0} hours, if its not zero.", AutoUpdateInHours);
-        SkipDouble = (bool)settings[9];
-        Console.WriteLine("Skip double images in manga {0}", SkipDouble);
       }
       catch (IndexOutOfRangeException) { }
     }

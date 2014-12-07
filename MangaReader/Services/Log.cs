@@ -26,7 +26,7 @@ namespace MangaReader.Services
     /// <param name="messages">Сообщение.</param>
     public static void Add(params object[] messages)
     {
-      var contents = string.Concat(DateTime.Now, "   ", string.Join(Environment.NewLine, messages), Environment.NewLine);
+      var contents = string.Concat(DateTime.Now.ToString("O"), "   ", string.Join(Environment.NewLine, messages), Environment.NewLine);
       Write(contents, LogPath);
     }
 

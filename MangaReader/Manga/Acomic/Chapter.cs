@@ -66,10 +66,7 @@ namespace MangaReader.Manga.Acomic
           throw new Exception("Restart chapter download, downloaded file is corrupted, link = " + this.ImageLink);
 
         var fileName = Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + file.Extension;
-
         File.WriteAllBytes(string.Concat(chapterFolder, Path.DirectorySeparatorChar, fileName), file.Body);
-
-        History.Add(this.Url);
         this.IsDownloaded = true;
       }
       catch (Exception ex)

@@ -131,9 +131,8 @@ namespace MangaReader.Manga.Grouple
       this.downloadedChapters = this.allChapters;
       if (Settings.Update)
       {
-        var messages = History.Get(this);
         this.downloadedChapters = this.downloadedChapters
-            .Where(ch => messages.All(m => m.Url != ch.Url))
+            .Where(ch => this.Histories.All(m => m.Url != ch.Url))
             .ToList();
       }
 
@@ -141,9 +140,6 @@ namespace MangaReader.Manga.Grouple
         return;
 
       Log.Add("Download start " + this.Name);
-
-      if (!Settings.Update)
-        this.Files = new List<ImageFile>();
 
       // Формируем путь к главе вида Папка_манги\Том_001\Глава_0001
       try
@@ -160,8 +156,8 @@ namespace MangaReader.Manga.Grouple
                   chapterPrefix,
                   ch.Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0')
                   ));
+              this.AddHistory(ch.Url);
             });
-        this.Extend = this.Files.GroupBy(s => s).Where(s => s.Count() > 1).Select(s => s.Key.Hash).ToList();
         this.Save();
         Log.Add("Download end " + this.Name);
       }
@@ -190,13 +186,13 @@ namespace MangaReader.Manga.Grouple
     /// Открыть мангу.
     /// </summary>
     /// <param name="url">Ссылка на мангу.</param>
-    public Readmanga(string url)
+    public Readmanga(string url) : base()
     {
       this.Url = url;
       this.Refresh();
     }
 
-    public Readmanga() { }
+    public Readmanga() : base() { }
 
     #endregion
   }

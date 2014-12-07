@@ -87,9 +87,8 @@ namespace MangaReader.Manga.Acomic
       this.downloadedChapters = this.allChapters;
       if (Settings.Update)
       {
-        var messages = History.Get(this);
         this.downloadedChapters = this.downloadedChapters
-            .Where(ch => messages.All(m => m.Url != ch.Url))
+            .Where(ch => this.Histories.All(m => m.Url != ch.Url))
             .ToList();
       }
 
@@ -105,6 +104,7 @@ namespace MangaReader.Manga.Acomic
             ch =>
             {
               ch.Download(mangaFolder);
+              this.AddHistory(ch.Url);
               this.OnPropertyChanged("Downloaded");
               OnDownloadProgressChanged(this);
             });
@@ -137,12 +137,13 @@ namespace MangaReader.Manga.Acomic
     /// </summary>
     /// <param name="url">Ссылка на мангу.</param>
     public Acomics(string url)
+      : base()
     {
       this.Url = url;
       this.ServerName = Getter.GetMangaName(this.Url);
     }
 
-    public Acomics() { }
+    public Acomics() : base() { }
 
     #endregion
   }

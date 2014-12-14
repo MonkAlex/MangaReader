@@ -11,7 +11,7 @@ namespace MangaReader.Services
     /// <summary>
     /// Ссылка на файл лога.
     /// </summary>
-    private static readonly string HistoryPath = Settings.WorkFolder + @".\history";
+    private static readonly string HistoryFile = Settings.WorkFolder + @".\history";
 
     /// <summary>
     /// Добавление записи в историю.
@@ -37,19 +37,19 @@ namespace MangaReader.Services
     /// </summary>
     public static void Convert(ConverterProcess process)
     {
-      if (!File.Exists(HistoryPath))
+      if (!File.Exists(HistoryFile))
         return;
 
       // ReSharper disable CSharpWarnings::CS0612
       var histories = new List<MangaHistory>();
 
-      var serializedStrings = Serializer<List<string>>.Load(HistoryPath);
+      var serializedStrings = Serializer<List<string>>.Load(HistoryFile);
       var isStringList = serializedStrings != null;
 
-      var serializedMangaHistoris = Serializer<List<MangaHistory>>.Load(HistoryPath);
+      var serializedMangaHistoris = Serializer<List<MangaHistory>>.Load(HistoryFile);
       var isMangaHistory = serializedMangaHistoris != null;
 
-      var strings = File.Exists(HistoryPath) ? new List<string>(File.ReadAllLines(HistoryPath)) : new List<string>();
+      var strings = File.Exists(HistoryFile) ? new List<string>(File.ReadAllLines(HistoryFile)) : new List<string>();
 
       if (!isMangaHistory && !isStringList)
         histories = MangaHistory.CreateHistories(strings);
@@ -80,7 +80,7 @@ namespace MangaReader.Services
       }
       // ReSharper restore CSharpWarnings::CS0612
 
-      File.Move(HistoryPath, HistoryPath + ".dbak");
+      BackupFile.MoveToBackup(HistoryFile);
     }
   }
 }

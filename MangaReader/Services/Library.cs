@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Shell;
 using System.Windows.Threading;
 using Hardcodet.Wpf.TaskbarNotification;
 using MangaReader.Manga;
 using MangaReader.Properties;
+using NHibernate.Linq;
 
 namespace MangaReader.Services
 {
@@ -18,12 +18,7 @@ namespace MangaReader.Services
     /// Ссылка на файл базы.
     /// </summary>
     private static readonly string DatabaseFile = Settings.WorkFolder + @".\db";
-
-    /// <summary>
-    /// База манги.
-    /// </summary>
-    private static List<string> Database = Serializer<List<string>>.Load(DatabaseFile);
-
+    
     /// <summary>
     /// Манга в библиотеке.
     /// </summary>
@@ -132,14 +127,16 @@ namespace MangaReader.Services
     /// <param name="url"></param>
     public static void Add(string url)
     {
-      if (Database.Contains(url))
-        return;
+      using (var session = Mapping.Environment.SessionFactory.OpenSession())
+      {
+        if (session.Query<Mangas>().Any(m => m.Url == url))
+          return;
+      }
 
       var newManga = Mangas.Create(url);
       if (!newManga.IsValid())
         return;
 
-      Database.Add(url);
       formDispatcher.Invoke(() => DatabaseMangas.Add(newManga));
       Status = Strings.Library_Status_MangaAdded + newManga.Name;
     }
@@ -155,7 +152,6 @@ namespace MangaReader.Services
 
       Log.Add(Strings.Manga_Action_Remove + manga.Name);
       
-      Database.Remove(manga.Url);
       formDispatcher.Invoke(() => DatabaseMangas.Remove(manga));
       manga.Delete();
 
@@ -164,75 +160,29 @@ namespace MangaReader.Services
     }
 
     /// <summary>
-    /// Сохранить библиотеку.
-    /// </summary>
-    public static void Save()
-    {
-      var sortedDatabase = Database
-          .OrderBy(r =>
-          {
-            var index = DatabaseMangas
-                .IndexOf(DatabaseMangas
-                    .FirstOrDefault(m => m.Url == r));
-            return index < 0 ? int.MaxValue : index;
-
-          }).ToList();
-
-      Serializer<List<string>>.Save(DatabaseFile, sortedDatabase);
-    }
-
-    /// <summary>
     /// Сконвертировать в новый формат.
     /// </summary>
-    public static void Convert()
+    internal static void Convert(ConverterProcess process)
     {
-      if (Database != null)
+      if (!File.Exists(DatabaseFile))
         return;
 
-      Database = File.Exists(DatabaseFile) ? new List<string>(File.ReadAllLines(DatabaseFile)) : new List<string>();
-      Save();
-    }
-    /// <summary>
-    /// Получить мангу в базе.
-    /// </summary>
-    /// <returns>Манга.</returns>
-    public static ObservableCollection<Mangas> GetMangas()
-    {
-      Parallel.ForEach(Database, UpdateMangaByUrl);
-      return DatabaseMangas;
-    }
+      var database = Serializer<List<string>>.Load(DatabaseFile) ?? new List<string>(File.ReadAllLines(DatabaseFile));
 
-    /// <summary>
-    /// Обновить состояние манги в библиотеке.
-    /// </summary>
-    /// <param name="line">Ссылка на мангу.</param>
-    private static void UpdateMangaByUrl(string line)
-    {
-      Mangas manga = null;
-      if (DatabaseMangas != null)
-        lock (DispatcherLock)
-          manga = DatabaseMangas.FirstOrDefault(m => m.Url == line);
+      if (process != null && database.Any())
+        process.IsIndeterminate = false;
 
-      if (manga == null)
+      var mangaUrls = Mapping.Environment.Session.Query<Mangas>().Select(m => m.Url).ToList();
+
+      foreach (var dbstring in database)
       {
-        var newManga = Mangas.Create(line);
-        lock (DispatcherLock)
-          formDispatcher.Invoke(() => DatabaseMangas.Add(newManga));
+        if (process != null)
+          process.Percent += 100.0 / database.Count;
+        if (!mangaUrls.Contains(dbstring))
+          Mangas.Create(dbstring);
+      }
 
-      }
-      else
-      {
-        var index = 0;
-        lock (DispatcherLock)
-          index = DatabaseMangas.IndexOf(manga);
-        manga.Refresh();
-        lock (DispatcherLock)
-          formDispatcher.Invoke(() =>
-          {
-            DatabaseMangas.RemoveAt(index);
-            DatabaseMangas.Insert(index, manga);
-          });
-      }
+      BackupFile.MoveToBackup(DatabaseFile);
     }
 
     /// <summary>
@@ -243,22 +193,22 @@ namespace MangaReader.Services
     {
       Library.SetTaskbarState(0, TaskbarItemProgressState.Indeterminate);
 
-      ObservableCollection<Mangas> mangas;
+      List<Mangas> mangas;
       if (manga != null)
       {
-        UpdateMangaByUrl(manga.Url);
-        mangas = new ObservableCollection<Mangas> { manga };
+        mangas = new List<Mangas> { manga };
       }
       else
       {
         Status = Strings.Library_Status_Update;
-        mangas = GetMangas();
+        mangas = Mapping.Environment.Session.Query<Mangas>().Where(m => m.NeedUpdate).ToList();
       }
 
       try
       {
         Library.SetTaskbarState(0, TaskbarItemProgressState.Normal);
         var mangaIndex = 0;
+        mangas = mangas.Where(m => m.NeedUpdate).ToList();
         foreach (var current in mangas)
         {
           Status = Strings.Library_Status_MangaUpdate + current.Name;

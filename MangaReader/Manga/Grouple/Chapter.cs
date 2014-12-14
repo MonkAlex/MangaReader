@@ -141,8 +141,7 @@ namespace MangaReader.Manga.Grouple
     /// </summary>
     /// <param name="url">Ссылка на главу.</param>
     /// <param name="desc">Описание главы.</param>
-    /// <param name="parent">Ссылка на мангу.</param>
-    public Chapter(string url, string desc, Mangas parent)
+    public Chapter(string url, string desc)
     {
       this.Url = url;
       this.Name = desc;

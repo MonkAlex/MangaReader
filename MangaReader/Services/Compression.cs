@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using System.Xaml;
 
 namespace MangaReader.Services
 {
@@ -150,13 +153,46 @@ namespace MangaReader.Services
       }
       catch (InvalidDataException ex)
       {
-        File.Move(archive, archive + ".bak");
+        BackupFile.MoveToBackup(archive);
         ZipFile.CreateFromDirectory(folder, archive, CompressionLevel.NoCompression, false, Encoding.UTF8);
         var text = string.Format(
                 "Не удалось прочитать архив {0} для записи в него папки {1}. \r\n Существующий файл был переименован в {2}. В {3} только содержимое указанной папки.",
                 archive, folder, archive + ".bak", archive);
         Log.Exception(ex, text);
       }
+    }
+  }
+
+  class BackupFile
+  {
+    private const string BackupFormat = ".dbak";
+
+    internal static void MoveToBackup(string fileName, bool deleteExistBackup = false)
+    {
+      var backupFileName = fileName + BackupFormat;
+      if (File.Exists(backupFileName))
+      {
+        if (deleteExistBackup)
+          File.Delete(backupFileName);
+        else
+        {
+          File.Move(backupFileName, GetNewBackupFileName(backupFileName));
+        }
+      }
+      File.Move(fileName, backupFileName);
+    }
+
+    private static string GetNewBackupFileName(string fileName)
+    {
+      var onlyName = Path.GetFileName(fileName);
+      var folder = Path.GetDirectoryName(fileName);
+      var backups = Directory.GetFiles(folder, onlyName + "*");
+      var backup = backups.Select(Path.GetFileName).OrderBy(s => s.Length).Last();
+
+      var id = new String(backup.Where(Char.IsDigit).ToArray());
+      var newId = string.IsNullOrWhiteSpace(id) ? "1" : (int.Parse(id) + 1).ToString(CultureInfo.InvariantCulture);
+      var result = string.IsNullOrWhiteSpace(id) ? backup + newId : backup.Replace(id, newId);
+      return result;
     }
   }
 }

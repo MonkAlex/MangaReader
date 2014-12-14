@@ -16,14 +16,6 @@ namespace MangaReader.Manga.Acomic
     protected static internal new string Type { get { return "F090B9A2-1400-4F5E-B298-18CD35341C34"; } }
 
     /// <summary>
-    /// Статус корректности манги.
-    /// </summary>
-    public override bool IsValid()
-    {
-      return !string.IsNullOrWhiteSpace(this.Name) && base.IsValid();
-    }
-
-    /// <summary>
     /// Статус загрузки.
     /// </summary>
     public override bool IsDownloaded
@@ -77,6 +69,8 @@ namespace MangaReader.Manga.Acomic
     {
       if (!this.NeedUpdate)
         return;
+
+      this.Refresh();
 
       if (mangaFolder == null)
         mangaFolder = this.Folder;

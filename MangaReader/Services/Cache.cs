@@ -10,11 +10,6 @@ namespace MangaReader.Services
   public static class Cache
   {
     /// <summary>
-    /// Указатель блокировки файла истории.
-    /// </summary>
-    private static readonly object CacheLock = new object();
-
-    /// <summary>
     /// Ссылка на файл лога.
     /// </summary>
     private static readonly string CacheFile = Settings.WorkFolder + @".\Cache";
@@ -90,7 +85,7 @@ namespace MangaReader.Services
         tranc.Commit();
       }
 
-      File.Move(CacheFile, CacheFile + ".dbak");
+      BackupFile.MoveToBackup(CacheFile);
     }
   }
 }

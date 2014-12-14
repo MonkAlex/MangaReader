@@ -20,14 +20,6 @@ namespace MangaReader.Manga.Grouple
     protected static internal new string Type { get { return "2C98BBF4-DB46-47C4-AB0E-F207E283142D"; } }
 
     /// <summary>
-    /// Статус корректности манги.
-    /// </summary>
-    public override bool IsValid()
-    {
-      return !string.IsNullOrWhiteSpace(this.Name) && this.listOfChapters != null && base.IsValid();
-    }
-
-    /// <summary>
     /// Статус перевода.
     /// </summary>
     public override string IsCompleted
@@ -105,7 +97,7 @@ namespace MangaReader.Manga.Grouple
       if (listOfChapters == null)
         listOfChapters = Getter.GetLinksOfMangaChapters(Page.GetPage(this.Url), this.Url);
       this.allChapters = allChapters ??
-             (allChapters = listOfChapters.Select(link => new Chapter(link.Key, link.Value, this)).ToList());
+             (allChapters = listOfChapters.Select(link => new Chapter(link.Key, link.Value)).ToList());
       this.allChapters.ForEach(ch => ch.DownloadProgressChanged += (sender, args) => OnDownloadProgressChanged(this));
       return this.allChapters;
     }
@@ -117,6 +109,8 @@ namespace MangaReader.Manga.Grouple
     {
       if (!this.NeedUpdate)
         return;
+
+      this.Refresh();
 
       if (mangaFolder == null)
         mangaFolder = this.Folder;

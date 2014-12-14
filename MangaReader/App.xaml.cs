@@ -18,7 +18,6 @@ namespace MangaReader
     private void App_OnExit(object sender, ExitEventArgs e)
     {
       Settings.Save();
-      Library.Save();
       Environment.Exit(0);
     }
 
@@ -35,7 +34,8 @@ namespace MangaReader
       Update.Initialize();
       Grouple.LoginWhile();
 
-      new Table().ShowDialog();
+      var mainwindow = new Table();
+      mainwindow.ShowDialog();
     }
 
     static Assembly ResolveAssembly(object sender, ResolveEventArgs args)

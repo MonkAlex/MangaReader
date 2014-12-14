@@ -55,7 +55,8 @@ namespace MangaReader.Services
       History.Convert(Process);
 
       Process.Status = "Convert manga list...";
-      Library.Convert();
+      Process.Percent = 0;
+      Library.Convert(Process);
       Log.Add("Convert completed.");
 
       State = ConverterState.Completed;

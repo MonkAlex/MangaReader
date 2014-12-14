@@ -93,7 +93,7 @@ namespace MangaReader.Manga
     /// </summary>
     public virtual bool IsValid()
     {
-      return true;
+      return !string.IsNullOrWhiteSpace(this.Name);
     }
 
     /// <summary>

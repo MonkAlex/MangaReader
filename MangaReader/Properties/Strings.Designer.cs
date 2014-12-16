@@ -295,7 +295,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Настройки.
+        ///   Ищет локализованную строку, похожую на Свойства.
         /// </summary>
         public static string Manga_Settings {
             get {

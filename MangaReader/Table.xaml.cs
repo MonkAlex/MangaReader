@@ -198,9 +198,9 @@ namespace MangaReader
       menu.Items.Add(openFolder);
       menu.Items.Add(needUpdate);
       menu.Items.Add(update);
-      menu.Items.Add(settings);
       menu.Items.Add(view);
       menu.Items.Add(remove);
+      menu.Items.Add(settings);
       item.ContextMenu = menu;
     }
 

@@ -99,23 +99,26 @@ namespace MangaReader.Services
       formDispatcher = main.Dispatcher;
       taskBar = main.TaskBar;
       taskbarIcon = main.NotifyIcon;
-      main.Type.Items.Add("All");
-      main.Type.Items.Add("adultmanga");
-      main.Type.Items.Add("acomics");
-      main.Type.Items.Add("readmanga");
+      main.Type.Items.Add("Все");
+      main.Type.Items.Add("AdultManga");
+      main.Type.Items.Add("AComics");
+      main.Type.Items.Add("ReadManga");
       main.Type.SelectionChanged += (s, a) => FilterChanged(main);
       main.NameFilter.TextChanged += (s, a) => FilterChanged(main);
       main.Uncompleted.Click += (s, a) => FilterChanged(main);
+      main.OnlyUpdate.Click += (s, a) => FilterChanged(main);
       main.Type.SelectedIndex = 0;
     }
 
     private static void FilterChanged(Table main)
     {
       var query = DatabaseMangas.Where(n => n != null);
-      if (main.Type.SelectedItem.ToString() != "All")
+      if (main.Type.SelectedItem.ToString() != "Все")
         query = query.Where(n => n.Url.ToLowerInvariant().Contains(main.Type.SelectedItem.ToString().ToLowerInvariant()));
       if (main.Uncompleted.IsChecked == true)
         query = query.Where(n => n.IsCompleted != "завершен");
+      if (main.OnlyUpdate.IsChecked == true)
+        query = query.Where(n => n.NeedUpdate);
       if (main.NameFilter.Text.Any())
         query = query.Where(n => n.Name.ToLowerInvariant().Contains(main.NameFilter.Text.ToLowerInvariant()));
       main.FormLibrary.ItemsSource = query;

@@ -39,6 +39,7 @@ namespace MangaReader.Mapping
 
     private static void BuildSchema(Configuration config)
     {
+      config.SetInterceptor(new BaseInterceptor());
       if (File.Exists(Settings.WorkFolder + DbFile))
         new SchemaUpdate(config).Execute(false, true);
       else

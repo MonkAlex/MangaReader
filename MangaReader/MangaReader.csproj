@@ -145,6 +145,7 @@
     <Compile Include="Manga\MangaObsolete.cs" />
     <Compile Include="Mapping\Environment.cs" />
     <Compile Include="Mapping\HistoryMap.cs" />
+    <Compile Include="Mapping\Interceptors.cs" />
     <Compile Include="Mapping\MangaMap.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Services\Convert.cs" />

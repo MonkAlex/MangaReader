@@ -18,6 +18,17 @@ namespace MangaReader.Entity
 
     private int id = 0;
 
+    protected virtual void BeforeSave(object[] currentState, object[] previousState, string[] propertyNames)
+    {
+      
+    }
+
+    public virtual void BeforeSave(object[] currentState, object[] previousState, 
+      string[] propertyNames, NHibernate.Type.IType[] types)
+    {
+      this.BeforeSave(currentState, previousState, propertyNames);
+    }
+
     /// <summary>
     /// Сохранить в базу.
     /// </summary>
@@ -26,12 +37,17 @@ namespace MangaReader.Entity
       var session = Mapping.Environment.Session;
       using (var tranc = session.BeginTransaction())
       {
-        if (this.Id == 0)
-          session.Save(this);
-        else
-          session.Update(this);
+        this.Save(session, tranc);
         tranc.Commit();
       }
+    }
+
+    public virtual void Save(NHibernate.ISession session, NHibernate.ITransaction transaction)
+    {
+      if (this.Id == 0)
+        session.Save(this);
+      else
+        session.Update(this);
     }
 
     /// <summary>

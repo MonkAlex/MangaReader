@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 using FluentNHibernate.Visitors;
 using MangaReader.Services;
+using NHibernate.Linq;
 
 namespace MangaReader.Manga
 {
@@ -17,7 +20,7 @@ namespace MangaReader.Manga
     /// <summary>
     /// Название манги.
     /// </summary>
-    public virtual string Name 
+    public virtual string Name
     {
       get { return this.IsNameChanged ? this.LocalName : this.ServerName; }
       set
@@ -31,7 +34,7 @@ namespace MangaReader.Manga
       }
     }
 
-    public virtual string LocalName 
+    public virtual string LocalName
     {
       get { return localName ?? ServerName; }
       set { localName = value; }
@@ -109,7 +112,7 @@ namespace MangaReader.Manga
 
     public virtual double Downloaded { get; set; }
 
-    public virtual string Folder 
+    public virtual string Folder
     {
       get { return Page.MakeValidPath(DownloadFolder + this.Name); }
       set { }
@@ -134,7 +137,7 @@ namespace MangaReader.Manga
 
     public virtual void Download(string mangaFolder = null, string volumePrefix = null, string chapterPrefix = null)
     {
-      
+
     }
 
     #endregion
@@ -171,7 +174,7 @@ namespace MangaReader.Manga
     }
 
     #endregion
-    
+
     #region Методы
 
     /// <summary>
@@ -179,7 +182,7 @@ namespace MangaReader.Manga
     /// </summary>
     public virtual void Refresh()
     {
-      
+
     }
 
     /// <summary>
@@ -187,15 +190,29 @@ namespace MangaReader.Manga
     /// </summary>
     public virtual void Compress()
     {
-      
+
     }
 
-    public override void Save()
+    protected override void BeforeSave(object[] currentState, object[] previousState, string[] propertyNames)
+    {
+      var dirName = previousState[propertyNames.ToList().IndexOf("Folder")] as string;
+      if (dirName != null && this.Folder != dirName)
+      {
+        if (!Directory.Exists(this.Folder) && Directory.Exists(dirName))
+          Directory.Move(dirName, this.Folder);
+      }
+      base.BeforeSave(currentState, previousState, propertyNames);
+    }
+
+    public override void Save(NHibernate.ISession session, NHibernate.ITransaction transaction)
     {
       if (!this.IsValid())
         throw new ValidationException("Нельзя сохранять невалидную сущность", "Сохранение прервано", this.GetType());
 
-      base.Save();
+      if (session.Query<Mangas>().Any(m => m.Id != this.Id && (m.IsNameChanged ? m.LocalName : m.ServerName) == this.Name))
+        throw new ValidationException("Манга с таким именем уже существует", "Сохранение прервано", this.GetType());
+
+      base.Save(session, transaction);
     }
 
     /// <summary>

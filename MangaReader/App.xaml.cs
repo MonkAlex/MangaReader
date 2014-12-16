@@ -23,6 +23,7 @@ namespace MangaReader
 
     private void App_OnStartup(object sender, StartupEventArgs e)
     {
+      this.DispatcherUnhandledException += (o, a) => Log.Exception(a.Exception);
       AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly;
       if (Environment.GetCommandLineArgs().Contains("-t"))
         ShowConsoleWindow();

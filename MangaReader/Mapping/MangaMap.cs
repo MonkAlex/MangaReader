@@ -17,6 +17,7 @@ namespace MangaReader.Mapping
       Map(x => x.Url).Not.LazyLoad();
       Map(x => x.Status).Not.LazyLoad();
       Map(x => x.NeedUpdate).Not.LazyLoad();
+      Map(x => x.Folder).Not.LazyLoad();
       HasMany(x => x.Histories).Not.LazyLoad().AsBag().Cascade.AllDeleteOrphan();
       DiscriminateSubClassesOnColumn(Mangas.Type);
     }

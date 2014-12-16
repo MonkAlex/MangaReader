@@ -68,6 +68,18 @@ namespace MangaReader.Manga
     /// </summary>
     public virtual string Status { get; set; }
 
+    public virtual bool? NeedCompress
+    {
+      get { return needCompress; }
+      set
+      {
+        needCompress = value;
+        OnPropertyChanged("NeedCompress");
+      }
+    }
+
+    private bool? needCompress = null;
+
     /// <summary>
     /// История манги.
     /// </summary>

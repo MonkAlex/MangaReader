@@ -100,9 +100,7 @@ namespace MangaReader.Manga
     }
 
     private bool needUpdate = true;
-
-    private List<string> doubles = new List<string>();
-
+    
     /// <summary>
     /// Статус корректности манги.
     /// </summary>
@@ -130,13 +128,11 @@ namespace MangaReader.Manga
       set { }
     }
 
-    internal static string DownloadFolder
+    public virtual string DownloadFolder
     {
-      get { return string.IsNullOrWhiteSpace(downloadFolder) ? Settings.DownloadFolder : downloadFolder; }
-      set { downloadFolder = value; }
+      get { return Settings.DownloadFolders.First(f => f.SubType == this.GetType()).Folder; }
+      set { }
     }
-
-    private static string downloadFolder;
 
     public virtual event EventHandler<Mangas> DownloadProgressChanged;
 
@@ -210,7 +206,9 @@ namespace MangaReader.Manga
       var dirName = previousState[propertyNames.ToList().IndexOf("Folder")] as string;
       if (dirName != null && this.Folder != dirName)
       {
-        if (!Directory.Exists(this.Folder) && Directory.Exists(dirName))
+        if (Directory.Exists(this.Folder))
+          throw new DirectoryNotFoundException(string.Format("Папка {0} уже существует. Сохранение прервано.", this.Folder));
+        if (Directory.Exists(dirName))
           Directory.Move(dirName, this.Folder);
       }
       base.BeforeSave(currentState, previousState, propertyNames);

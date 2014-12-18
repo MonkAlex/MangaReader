@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Xml.Serialization;
 using MangaReader.Account;
 using MangaReader.Manga.Acomic;
 using MangaReader.Manga.Grouple;
+using NHibernate.Linq;
 
 namespace MangaReader.Services
 {
@@ -65,6 +69,23 @@ namespace MangaReader.Services
     /// </summary>
     public static string ChapterPrefix = "Chapter ";
 
+    [XmlIgnore]
+    public static List<SubclassDownloadFolder> DownloadFolders
+    {
+      get
+      {
+        if (downloadFolders == null)
+        {
+          var query = Mapping.Environment.Session.Query<SubclassDownloadFolder>();
+          downloadFolders = query.Any() ? query.ToList() : GetSubclass(typeof(Manga.Mangas));
+        }
+        return downloadFolders;
+      }
+      set { }
+    }
+
+    private static List<SubclassDownloadFolder> downloadFolders;
+
     /// <summary>
     /// Сжимать скачанную мангу.
     /// </summary>
@@ -85,12 +106,13 @@ namespace MangaReader.Services
     /// </summary>
     public static void Save()
     {
+      DownloadFolders.ForEach(a => a.Save());
       object[] settings = 
             {
                 Language,
                 Update,
                 UpdateReader,
-                new object[] {Readmanga.DownloadFolder, Acomics.DownloadFolder},
+                null,
                 CompressManga,
                 WindowsState,
                 new object[] {Login.Name, Login.Password},
@@ -109,8 +131,6 @@ namespace MangaReader.Services
       if (settings == null)
         return;
 
-      Convert();
-
       try
       {
         Language = (Languages)settings[0];
@@ -119,10 +139,6 @@ namespace MangaReader.Services
         Console.WriteLine("Update or full download {0}", Update);
         UpdateReader = (bool)settings[2];
         Console.WriteLine("Autoupdate Mangareader {0}", UpdateReader);
-        Readmanga.DownloadFolder = (string)((object[])settings[3])[0];
-        Console.WriteLine("Readmanga download to {0}", Readmanga.DownloadFolder);
-        Acomics.DownloadFolder = (string)((object[])settings[3])[1];
-        Console.WriteLine("Acomics download to {0}", Acomics.DownloadFolder);
         CompressManga = (bool)settings[4];
         Console.WriteLine("Need compress manga {0}", CompressManga);
         WindowsState = (object[])settings[5];
@@ -136,6 +152,17 @@ namespace MangaReader.Services
       catch (IndexOutOfRangeException) { }
     }
 
+    private static List<SubclassDownloadFolder> GetSubclass(Type baseClass)
+    {
+      var types = Assembly.GetAssembly(baseClass).GetTypes()
+        .Where(type => type.IsSubclassOf(baseClass));
+      var folders = types
+        .Select(type => new SubclassDownloadFolder { Folder = Settings.DownloadFolder, SubType = type })
+        .ToList();
+      folders.ForEach(f => f.Save());
+      return folders;
+    }
+
     public static void Convert()
     {
       var settings = Serializer<object[]>.Load(SettingsPath);
@@ -144,8 +171,15 @@ namespace MangaReader.Services
 
       try
       {
-        if (settings[3] is string)
-          settings[3] = new[] { settings[3], settings[3] };
+        if (settings[3] is object[])
+        {
+          var setting = settings[3] as object[];
+          var query = Mapping.Environment.Session.Query<SubclassDownloadFolder>().ToList();
+          if (query.FirstOrDefault(a => a.SubType == typeof(Readmanga)) == null)
+            new SubclassDownloadFolder() { Folder = setting[0] as string, SubType = typeof(Readmanga) }.Save();
+          if (query.FirstOrDefault(a => a.SubType == typeof(Acomics)) == null)
+            new SubclassDownloadFolder() { Folder = setting[1] as string, SubType = typeof(Acomics) }.Save();
+        }
         Serializer<object[]>.Save(SettingsPath, settings);
       }
       catch (Exception ex)
@@ -181,6 +215,17 @@ namespace MangaReader.Services
       English,
       Russian,
       Japanese
+    }
+
+    public class SubclassDownloadFolder : Entity.Entity
+    {
+      public virtual Type SubType { get; set; }
+      public virtual string TypeName
+      {
+        get { return SubType.FullName; }
+        set { SubType = Assembly.GetAssembly(this.GetType()).GetType(value); }
+      }
+      public virtual string Folder { get; set; }
     }
   }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Ookii.Dialogs.Wpf;
@@ -12,7 +12,7 @@ namespace MangaReader.Services
   /// </summary>
   public partial class DownloadFolderSetting : UserControl
   {
-    private PropertyInfo DonwloadFolder;
+    private Settings.SubclassDownloadFolder DonwloadFolder;
 
     public DownloadFolderSetting()
     {
@@ -21,9 +21,9 @@ namespace MangaReader.Services
 
     private void DownloadFolderSetting_OnLoaded(object sender, RoutedEventArgs e)
     {
-      DonwloadFolder = (this.DataContext as Type).GetProperty("DownloadFolder", BindingFlags.Static | BindingFlags.NonPublic);
-      this.Class.Text = (this.DataContext as Type).Name + ": ";
-      this.FolderPath.Text = DonwloadFolder.GetValue(null) as string;
+      DonwloadFolder = Settings.DownloadFolders.First(f => f.SubType == (this.DataContext as Type));
+      this.Class.Text = DonwloadFolder.SubType.Name + ": ";
+      this.FolderPath.Text = DonwloadFolder.Folder;
     }
 
     private void ChangeFolder_OnClick(object sender, RoutedEventArgs e)
@@ -31,8 +31,8 @@ namespace MangaReader.Services
       var dialog = new VistaFolderBrowserDialog();
       if (dialog.ShowDialog() == true)
       {
-        DonwloadFolder.SetValue(null, dialog.SelectedPath + Path.DirectorySeparatorChar);
-        this.FolderPath.Text = DonwloadFolder.GetValue(null) as string;
+        DonwloadFolder.Folder = dialog.SelectedPath + Path.DirectorySeparatorChar;
+        this.FolderPath.Text = DonwloadFolder.Folder;
       }
     }
   }

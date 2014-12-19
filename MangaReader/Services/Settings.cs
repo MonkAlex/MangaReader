@@ -76,8 +76,8 @@ namespace MangaReader.Services
       {
         if (downloadFolders == null)
         {
-          var query = Mapping.Environment.Session.Query<SubclassDownloadFolder>();
-          downloadFolders = query.Any() ? query.ToList() : GetSubclass(typeof(Manga.Mangas));
+          var query = Mapping.Environment.Session.Query<SubclassDownloadFolder>().ToList();
+          downloadFolders = query.Any() ? query : GetSubclass(typeof(Manga.Mangas));
         }
         return downloadFolders;
       }
@@ -127,6 +127,8 @@ namespace MangaReader.Services
     /// </summary>
     public static void Load()
     {
+      DownloadFolders.ForEach(a => Console.WriteLine("Type {0}, folder {1}", a.SubType.Name, a.Folder));
+
       var settings = Serializer<object[]>.Load(SettingsPath);
       if (settings == null)
         return;

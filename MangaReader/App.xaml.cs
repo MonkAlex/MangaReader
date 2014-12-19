@@ -31,7 +31,6 @@ namespace MangaReader
       ServicePointManager.DefaultConnectionLimit = 100;
       Mapping.Environment.Initialize();
       Converter.Convert(true);
-      Settings.Load();
       Update.Initialize();
       Grouple.LoginWhile();
 

@@ -1,4 +1,5 @@
 ﻿using MangaReader.Manga;
+using MangaReader.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Environment = Tests.Environment;
 
@@ -13,6 +14,7 @@ namespace MangaReader.Tests.CRUD
       Environment.Initialize();
       Mapping.Environment.SessionFactory = Environment.SessionFactory;
       Mapping.Environment.Session = Environment.Session;
+      Settings.Load();
 
       var newManga = Builder.CreateReadmanga();
       var mangaId = newManga.Id;
@@ -39,6 +41,8 @@ namespace MangaReader.Tests.CRUD
 
       Environment.Initialize();
       Mapping.Environment.SessionFactory = Environment.SessionFactory;
+      Mapping.Environment.Session = Environment.Session;
+      Settings.Load();
 
 
       var newManga = Builder.CreateAcomics();

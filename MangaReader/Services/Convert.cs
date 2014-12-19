@@ -46,6 +46,7 @@ namespace MangaReader.Services
 
       Process.Status = "Convert settings...";
       Settings.Convert();
+      Settings.Load();
 
       Process.Status = "Convert manga...";
       Cache.Convert(Process);

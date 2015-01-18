@@ -48,7 +48,7 @@ namespace MangaReader.Tests.CRUD
     [TestMethod]
     public void MangaHistoryReadUpdate()
     {
-      var url = new Uri("test_url");
+      var url = new Uri("http://rutracker.org/forum/viewforum.php?f=52");
       var manga = Builder.CreateReadmanga();
       Builder.CreateMangaHistory(manga);
       var history = manga.Histories.FirstOrDefault();

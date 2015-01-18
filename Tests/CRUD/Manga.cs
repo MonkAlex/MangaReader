@@ -32,7 +32,7 @@ namespace MangaReader.Tests.CRUD
     [TestMethod]
     public void MangaReadUpdate()
     {
-      var url = new Uri("test_url");
+      var url = new Uri("http://rutracker.org/forum/viewforum.php?f=52");
       var newManga = Builder.CreateAcomics();
       var oldUrl = newManga.Uri;
       var mangaId = newManga.Id;

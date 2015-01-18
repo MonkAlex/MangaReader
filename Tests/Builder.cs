@@ -8,7 +8,7 @@ namespace MangaReader.Tests
 {
   public static class Builder
   {
-    private static readonly Uri Url = new Uri("http:\\example.com");
+    private static readonly Uri Url = new Uri("http://example.com");
 
     public static Readmanga CreateReadmanga()
     {

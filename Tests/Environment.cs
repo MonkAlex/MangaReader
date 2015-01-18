@@ -2,6 +2,7 @@
 using System.IO;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
@@ -9,12 +10,27 @@ using Settings = MangaReader.Services.Settings;
 
 namespace Tests
 {
-  class Environment
+  [TestClass]
+  public class Environment
   {
     private const string DbFile = "\\test.db";
 
     public static ISessionFactory SessionFactory;
     public static ISession Session;
+
+    [AssemblyInitialize]
+    public static void TestInitialize(TestContext context)
+    {
+      Initialize();
+      MangaReader.Mapping.Environment.Session = Environment.Session;
+      Settings.Load();
+    }
+
+    [AssemblyCleanup]
+    public static void TestCleanup()
+    {
+      
+    }
 
     public static void Initialize()
     {

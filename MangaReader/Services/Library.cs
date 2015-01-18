@@ -18,7 +18,7 @@ namespace MangaReader.Services
     /// Ссылка на файл базы.
     /// </summary>
     private static readonly string DatabaseFile = Settings.WorkFolder + @".\db";
-    
+
     /// <summary>
     /// Манга в библиотеке.
     /// </summary>
@@ -130,11 +130,8 @@ namespace MangaReader.Services
     /// <param name="url"></param>
     public static void Add(string url)
     {
-      using (var session = Mapping.Environment.SessionFactory.OpenSession())
-      {
-        if (session.Query<Mangas>().Any(m => m.Url == url))
-          return;
-      }
+      if (Mapping.Environment.Session.Query<Mangas>().Any(m => m.Url == url))
+        return;
 
       var newManga = Mangas.Create(url);
       if (!newManga.IsValid())
@@ -154,7 +151,7 @@ namespace MangaReader.Services
         return;
 
       Log.Add(Strings.Manga_Action_Remove + manga.Name);
-      
+
       formDispatcher.Invoke(() => DatabaseMangas.Remove(manga));
       manga.Delete();
 

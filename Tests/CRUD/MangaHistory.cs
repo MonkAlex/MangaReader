@@ -12,11 +12,6 @@ namespace MangaReader.Tests.CRUD
     [TestMethod]
     public void MangaHistoryCreateDelete()
     {
-      Environment.Initialize();
-      Mapping.Environment.SessionFactory = Environment.SessionFactory;
-      Mapping.Environment.Session = Environment.Session;
-      Settings.Load();
-
       var manga = Builder.CreateAcomics();
       Builder.CreateMangaHistory(manga);
       var history = manga.Histories.FirstOrDefault();
@@ -53,12 +48,6 @@ namespace MangaReader.Tests.CRUD
     public void MangaHistoryReadUpdate()
     {
       var url = "test_url";
-
-      Environment.Initialize();
-      Mapping.Environment.SessionFactory = Environment.SessionFactory;
-      Mapping.Environment.Session = Environment.Session;
-      Settings.Load();
-
       var manga = Builder.CreateReadmanga();
       Builder.CreateMangaHistory(manga);
       var history = manga.Histories.FirstOrDefault();

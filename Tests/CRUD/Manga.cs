@@ -1,5 +1,4 @@
 ﻿using MangaReader.Manga;
-using MangaReader.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Environment = Tests.Environment;
 
@@ -11,11 +10,6 @@ namespace MangaReader.Tests.CRUD
     [TestMethod]
     public void MangaCreateDelete()
     {
-      Environment.Initialize();
-      Mapping.Environment.SessionFactory = Environment.SessionFactory;
-      Mapping.Environment.Session = Environment.Session;
-      Settings.Load();
-
       var newManga = Builder.CreateReadmanga();
       var mangaId = newManga.Id;
       Assert.AreNotEqual(0, newManga.Id);
@@ -38,13 +32,6 @@ namespace MangaReader.Tests.CRUD
     public void MangaReadUpdate()
     {
       var url = "test_url";
-
-      Environment.Initialize();
-      Mapping.Environment.SessionFactory = Environment.SessionFactory;
-      Mapping.Environment.Session = Environment.Session;
-      Settings.Load();
-
-
       var newManga = Builder.CreateAcomics();
       var oldUrl = newManga.Url;
       var mangaId = newManga.Id;

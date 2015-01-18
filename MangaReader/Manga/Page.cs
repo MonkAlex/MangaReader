@@ -10,6 +10,53 @@ namespace MangaReader
 {
   public static class Page
   {
+    internal static bool CopyDirectory(string sourceFolder, string destFolder)
+    {
+      try
+      {
+        if (!Directory.Exists(destFolder))
+          Directory.CreateDirectory(destFolder);
+        var files = Directory.GetFiles(sourceFolder);
+        foreach (var file in files)
+        {
+          var name = Path.GetFileName(file);
+          var dest = Path.Combine(destFolder, name);
+          File.Copy(file, dest);
+        }
+        var folders = Directory.GetDirectories(sourceFolder);
+        foreach (var folder in folders)
+        {
+          var name = Path.GetFileName(folder);
+          var dest = Path.Combine(destFolder, name);
+          if (!CopyDirectory(folder, dest))
+            return false;
+        }
+        return true;
+      }
+      catch (Exception e)
+      {
+        Log.Exception(e, string.Format("Не удалось скопировать {0} в {1}.", sourceFolder, destFolder));
+        return false;
+      }
+    }
+
+    internal static bool MoveDirectory(string sourceFolder, string destFolder)
+    {
+      try
+      {
+        if (CopyDirectory(sourceFolder, destFolder))
+          Directory.Delete(sourceFolder, true);
+        else
+          throw new Exception(string.Format("Не удалось скопировать {0} в {1}.", sourceFolder, destFolder));
+        return true;
+      }
+      catch (Exception ex)
+      {
+        Log.Exception(ex, string.Format("Не удалось переместить {0} в {1}.", sourceFolder, destFolder));
+        return false;
+      }
+    }
+
     /// <summary>
     /// Скачать файл.
     /// </summary>

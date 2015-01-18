@@ -207,9 +207,11 @@ namespace MangaReader.Manga
       if (dirName != null && this.Folder != dirName)
       {
         if (Directory.Exists(this.Folder))
-          throw new DirectoryNotFoundException(string.Format("Папка {0} уже существует. Сохранение прервано.", this.Folder));
-        if (Directory.Exists(dirName))
-          Directory.Move(dirName, this.Folder);
+          throw new DirectoryNotFoundException(
+            string.Format("Папка {0} уже существует. Сохранение прервано.", this.Folder));
+        if (Directory.Exists(dirName) && !Page.MoveDirectory(dirName, this.Folder))
+          throw new DirectoryNotFoundException(
+            string.Format("Не удалось переместить {0} в {1}. Сохранение прервано.", dirName, this.Folder));
       }
       base.BeforeSave(currentState, previousState, propertyNames);
     }

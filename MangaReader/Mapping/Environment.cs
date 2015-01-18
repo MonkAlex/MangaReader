@@ -11,11 +11,16 @@ namespace MangaReader.Mapping
 {
   public class Environment
   {
-    private const string DbFile = "\\firstProject.db";
+    private const string DbFile = "\\storage.db";
 
-    public static ISessionFactory SessionFactory;
+    private static ISessionFactory SessionFactory;
 
     public static ISession Session;
+
+    public static ISession OpenSession()
+    {
+      return SessionFactory.OpenSession();
+    }
 
     public static void Initialize()
     {

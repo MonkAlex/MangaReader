@@ -18,16 +18,16 @@ namespace MangaReader.Services
     /// </summary>
     /// <param name="manga">Манга, к которой относится сообщение.</param>
     /// <param name="message">Сообщение.</param>
+    /// <remarks>Используется для сохранения важной информации - открывает новое соединение, дорогая операция.</remarks>
     public static void AddHistory(this Mangas manga, string message)
     {
-      using (var session = Mapping.Environment.SessionFactory.OpenSession())
+      using (var session = Mapping.Environment.OpenSession())
       using (var tranc = session.BeginTransaction())
       {
         if (manga.Histories.Any(h => h.Url == message))
           return;
 
-        var history = new MangaHistory(message);
-        manga.Histories.Add(history);
+        manga.Histories.Add(new MangaHistory(message));
         tranc.Commit();
       }
     }
@@ -71,7 +71,7 @@ namespace MangaReader.Services
           process.Percent += 100.0 / mangas.Count;
         using (var tranc = session.BeginTransaction())
         {
-          foreach (var history in histories.Where(h => h.MangaUrl == manga.Url))
+          foreach (var history in histories.Where(h => h.MangaUrl == manga.Url).ToList())
           {
             manga.Histories.Add(history);
           }

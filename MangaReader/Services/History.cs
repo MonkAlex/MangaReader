@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NHibernate.Linq;
@@ -19,12 +20,12 @@ namespace MangaReader.Services
     /// <param name="manga">Манга, к которой относится сообщение.</param>
     /// <param name="message">Сообщение.</param>
     /// <remarks>Используется для сохранения важной информации - открывает новое соединение, дорогая операция.</remarks>
-    public static void AddHistory(this Mangas manga, string message)
+    public static void AddHistory(this Mangas manga, Uri message)
     {
       using (var session = Mapping.Environment.OpenSession())
       using (var tranc = session.BeginTransaction())
       {
-        if (manga.Histories.Any(h => h.Url == message))
+        if (manga.Histories.Any(h => h.Uri == message))
           return;
 
         manga.Histories.Add(new MangaHistory(message));
@@ -60,8 +61,8 @@ namespace MangaReader.Services
 
       var session = Mapping.Environment.Session;
       var mangas = session.Query<Mangas>().ToList();
-      var historyInDb = session.Query<MangaHistory>().Select(h => h.Url).ToList();
-      histories = histories.Where(h => !historyInDb.Contains(h.Url)).Distinct().ToList();
+      var historyInDb = session.Query<MangaHistory>().Select(h => h.Uri).ToList();
+      histories = histories.Where(h => !historyInDb.Contains(h.Uri)).Distinct().ToList();
       if (process != null && histories.Any())
         process.IsIndeterminate = false;
 
@@ -71,7 +72,7 @@ namespace MangaReader.Services
           process.Percent += 100.0 / mangas.Count;
         using (var tranc = session.BeginTransaction())
         {
-          foreach (var history in histories.Where(h => h.MangaUrl == manga.Url).ToList())
+          foreach (var history in histories.Where(h => h.MangaUrl == manga.Uri.OriginalString).ToList())
           {
             manga.Histories.Add(history);
           }

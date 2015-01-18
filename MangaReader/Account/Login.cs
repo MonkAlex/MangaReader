@@ -1,9 +1,9 @@
 ﻿namespace MangaReader.Account
 {
-    public class Login
-    {
-        public string Name { get; set; }
+  public class Login : Entity.Entity
+  {
+    public virtual string Name { get; set; }
 
-        public string Password { get; set; }
-    }
+    public virtual string Password { get; set; }
+  }
 }

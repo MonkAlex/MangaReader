@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -54,7 +55,7 @@ namespace MangaReader.Services
         globalCollection.AddRange(obsoleteManga.Select(manga => new Manga.Grouple.Readmanga()
         {
           Name = manga.Name,
-          Url = manga.Url,
+          Uri = new Uri(manga.Url),
           Status = manga.Status,
           NeedUpdate = manga.NeedUpdate
         }));
@@ -63,15 +64,15 @@ namespace MangaReader.Services
       var cache = File.Exists(CacheFile) ?
           Serializer<ObservableCollection<Mangas>>.Load(CacheFile).ToList() :
           new ObservableCollection<Mangas>(Enumerable.Empty<Mangas>()).ToList();
-      globalCollection.AddRange(cache.Where(gm => !globalCollection.Exists(m => m.Url == gm.Url)));
+      globalCollection.AddRange(cache.Where(gm => !globalCollection.Exists(m => m.Uri == gm.Uri)));
 
       var session = Mapping.Environment.Session;
-      var fileUrls = globalCollection.Select(m => m.Url).ToList();
+      var fileUrls = globalCollection.Select(m => m.Uri).ToList();
       var dbMangas = session.Query<Mangas>().ToList();
-      var fromFileInDb = dbMangas.Where(m => fileUrls.Contains(m.Url)).ToList();
+      var fromFileInDb = dbMangas.Where(m => fileUrls.Contains(m.Uri)).ToList();
       if (fromFileInDb.Count == 0)
         fromFileInDb = globalCollection.ToList();
-      var onlyInDb = dbMangas.Where(m => !fileUrls.Contains(m.Url)).ToList();
+      var onlyInDb = dbMangas.Where(m => !fileUrls.Contains(m.Uri)).ToList();
       globalCollection = fromFileInDb.Concat(onlyInDb).ToList();
 
       process.IsIndeterminate = false;

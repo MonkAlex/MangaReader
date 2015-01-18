@@ -21,7 +21,7 @@ namespace MangaReader.Manga.Acomic
     /// <summary>
     /// Хранилище ссылок на изображения.
     /// </summary>
-    public string ImageLink;
+    public Uri ImageLink;
 
     /// <summary>
     /// Название главы.
@@ -31,7 +31,7 @@ namespace MangaReader.Manga.Acomic
     /// <summary>
     /// Ссылка на главу.
     /// </summary>
-    public string Url;
+    public Uri Uri;
 
     /// <summary>
     /// Номер главы.
@@ -71,7 +71,7 @@ namespace MangaReader.Manga.Acomic
       }
       catch (Exception ex)
       {
-        Log.Exception(ex, this.Url, this.Name);
+        Log.Exception(ex, this.Uri.OriginalString, this.Name);
         ++restartCounter;
         Download(chapterFolder);
       }
@@ -84,16 +84,16 @@ namespace MangaReader.Manga.Acomic
     /// <summary>
     /// Глава манги.
     /// </summary>
-    /// <param name="url">Ссылка на главу.</param>
+    /// <param name="uri">Ссылка на главу.</param>
     /// <param name="desc">Описание главы.</param>
     /// <param name="link">Ссылка на изображение.</param>
-    public Chapter(string url, string desc, string link)
+    public Chapter(Uri uri, string desc, Uri link)
     {
-      this.Url = url;
+      this.Uri = uri;
       this.Name = desc;
       this.ImageLink = link;
       this.restartCounter = 0;
-      this.Number = Convert.ToInt32(Regex.Match(url, @"/[-]?[0-9]+", RegexOptions.RightToLeft).Value.Remove(0, 1));
+      this.Number = Convert.ToInt32(Regex.Match(uri.OriginalString, @"/[-]?[0-9]+", RegexOptions.RightToLeft).Value.Remove(0, 1));
     }
 
     #endregion

@@ -1,4 +1,5 @@
-﻿using NHibernate.Id;
+﻿using System;
+using NHibernate.Id;
 
 namespace MangaReader.Entity
 {
@@ -37,8 +38,18 @@ namespace MangaReader.Entity
       var session = Mapping.Environment.Session;
       using (var tranc = session.BeginTransaction())
       {
-        this.Save(session, tranc);
-        tranc.Commit();
+        try
+        {
+          this.Save(session, tranc);
+          tranc.Commit();
+          session.Flush();
+        }
+        catch (Exception)
+        {
+          this.Update();
+          session.Flush();
+          throw;
+        }
       }
     }
 
@@ -62,6 +73,7 @@ namespace MangaReader.Entity
       }
 
       Mapping.Environment.Session.Refresh(this);
+      Mapping.Environment.Session.Flush();
     }
 
     /// <summary>
@@ -79,6 +91,7 @@ namespace MangaReader.Entity
         var entity = session.Load(this.GetType(), this.Id);
         session.Delete(entity);
         tranc.Commit();
+        session.Flush();
         this.Id = 0;
       }
       return true;

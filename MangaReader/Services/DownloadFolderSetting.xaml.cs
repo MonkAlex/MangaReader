@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using Ookii.Dialogs.Wpf;
@@ -12,7 +10,7 @@ namespace MangaReader.Services
   /// </summary>
   public partial class DownloadFolderSetting : UserControl
   {
-    private Settings.SubclassDownloadFolder DonwloadFolder;
+    private MangaSetting DonwloadFolder;
 
     public DownloadFolderSetting()
     {
@@ -21,8 +19,8 @@ namespace MangaReader.Services
 
     private void DownloadFolderSetting_OnLoaded(object sender, RoutedEventArgs e)
     {
-      DonwloadFolder = Settings.DownloadFolders.First(f => f.SubType == (this.DataContext as Type));
-      this.Class.Text = DonwloadFolder.SubType.Name + ": ";
+      DonwloadFolder = this.DataContext as MangaSetting;
+      this.Class.Text = DonwloadFolder.MangaName + ": ";
       this.FolderPath.Text = DonwloadFolder.Folder;
     }
 

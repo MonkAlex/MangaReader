@@ -11,7 +11,7 @@ namespace MangaReader.Services
   class Update
   {
     private const string LinkToUpdate = "https://dl.dropboxusercontent.com/u/1945107/RMG/MangaReader.exe";
-    private const string LinkToVersion = "https://dl.dropboxusercontent.com/u/1945107/RMG/version.ini";
+    private static Uri LinkToVersion = new Uri("https://dl.dropboxusercontent.com/u/1945107/RMG/version.ini");
     private const string UpdateStarted = "update";
     private const string UpdateFinished = "updated";
 

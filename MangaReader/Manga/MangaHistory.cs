@@ -17,7 +17,7 @@ namespace MangaReader
     /// <summary>
     /// Ссылка в историю.
     /// </summary>
-    public virtual string Url { get; set; }
+    public virtual Uri Uri { get; set; }
 
     /// <summary>
     /// Время добавления.
@@ -32,12 +32,12 @@ namespace MangaReader
         return false;
 
       var mangaHistory = obj as MangaHistory;
-      return mangaHistory != null && this.Url.Equals(mangaHistory.Url);
+      return mangaHistory != null && this.Uri.Equals(mangaHistory.Uri);
     }
 
     public override int GetHashCode()
     {
-      return this.Url.GetHashCode();
+      return this.Uri.GetHashCode();
     }
 
     #endregion
@@ -50,14 +50,14 @@ namespace MangaReader
     [Obsolete]
     public static List<MangaHistory> CreateHistories(IEnumerable<string> messages)
     {
-      return messages.Select(message => new MangaHistory(message)).ToList();
+      return messages.Select(message => new MangaHistory(new Uri(message))).ToList();
     }
 
     public MangaHistory() { }
 
-    public MangaHistory(string message)
+    public MangaHistory(Uri message)
     {
-      this.Url = message;
+      this.Uri = message;
       this.Date = DateTime.Now;
     }
   }

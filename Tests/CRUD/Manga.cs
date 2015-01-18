@@ -1,4 +1,5 @@
-﻿using MangaReader.Manga;
+﻿using System;
+using MangaReader.Manga;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Environment = Tests.Environment;
 
@@ -31,34 +32,34 @@ namespace MangaReader.Tests.CRUD
     [TestMethod]
     public void MangaReadUpdate()
     {
-      var url = "test_url";
+      var url = new Uri("test_url");
       var newManga = Builder.CreateAcomics();
-      var oldUrl = newManga.Url;
+      var oldUrl = newManga.Uri;
       var mangaId = newManga.Id;
 
-      newManga.Url = url;
-      Assert.AreEqual(url, newManga.Url);
+      newManga.Uri = url;
+      Assert.AreEqual(url, newManga.Uri);
 
       using (var session = Environment.SessionFactory.OpenSession())
       {
         var fromDb = session.Get<Mangas>(mangaId);
-        Assert.AreEqual(oldUrl, fromDb.Url);
+        Assert.AreEqual(oldUrl, fromDb.Uri);
       }
       newManga.Update();
-      Assert.AreEqual(oldUrl, newManga.Url);
+      Assert.AreEqual(oldUrl, newManga.Uri);
       using (var session = Environment.SessionFactory.OpenSession())
       {
         var fromDb = session.Get<Mangas>(mangaId);
-        Assert.AreEqual(oldUrl, fromDb.Url);
+        Assert.AreEqual(oldUrl, fromDb.Uri);
       }
 
-      newManga.Url = url;
+      newManga.Uri = url;
       newManga.Save();
-      Assert.AreEqual(url, newManga.Url);
+      Assert.AreEqual(url, newManga.Uri);
       using (var session = Environment.SessionFactory.OpenSession())
       {
         var fromDb = session.Get<Mangas>(mangaId);
-        Assert.AreEqual(url, fromDb.Url);
+        Assert.AreEqual(url, fromDb.Uri);
       }
 
       Builder.DeleteAcomics(newManga);

@@ -13,7 +13,7 @@ namespace MangaReader.Manga.Acomic
   {
     #region Свойства
 
-    protected static internal new string Type { get { return "F090B9A2-1400-4F5E-B298-18CD35341C34"; } }
+    public new static Guid Type { get { return Guid.Parse("F090B9A2-1400-4F5E-B298-18CD35341C34"); } }
 
     /// <summary>
     /// Статус загрузки.
@@ -52,8 +52,8 @@ namespace MangaReader.Manga.Acomic
     /// </summary>
     public override void Refresh()
     {
-      this.ServerName = Getter.GetMangaName(this.Url);
-      this.allChapters = Getter.GetMangaChapters(this.Url);
+      this.ServerName = Getter.GetMangaName(this.Uri);
+      this.allChapters = Getter.GetMangaChapters(this.Uri);
       OnPropertyChanged("IsCompleted");
     }
 
@@ -76,13 +76,13 @@ namespace MangaReader.Manga.Acomic
         mangaFolder = this.Folder;
 
       if (this.allChapters == null)
-        Getter.GetMangaChapters(this.Url);
+        Getter.GetMangaChapters(this.Uri);
 
       this.downloadedChapters = this.allChapters;
       if (Settings.Update)
       {
         this.downloadedChapters = this.downloadedChapters
-            .Where(ch => this.Histories.All(m => m.Url != ch.Url))
+            .Where(ch => this.Histories.All(m => m.Uri != ch.Uri))
             .ToList();
       }
 
@@ -98,7 +98,7 @@ namespace MangaReader.Manga.Acomic
             ch =>
             {
               ch.Download(mangaFolder);
-              this.AddHistory(ch.Url);
+              this.AddHistory(ch.Uri);
               this.OnPropertyChanged("Downloaded");
               OnDownloadProgressChanged(this);
             });
@@ -130,11 +130,11 @@ namespace MangaReader.Manga.Acomic
     /// Открыть мангу.
     /// </summary>
     /// <param name="url">Ссылка на мангу.</param>
-    public Acomics(string url)
+    public Acomics(Uri url)
       : base()
     {
-      this.Url = url;
-      this.ServerName = Getter.GetMangaName(this.Url);
+      this.Uri = url;
+      this.ServerName = Getter.GetMangaName(url);
     }
 
     public Acomics() : base() { }

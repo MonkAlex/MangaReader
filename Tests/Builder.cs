@@ -8,13 +8,13 @@ namespace MangaReader.Tests
 {
   public static class Builder
   {
-    private const string Url = "http:\\example.com";
+    private static readonly Uri Url = new Uri("http:\\example.com");
 
     public static Readmanga CreateReadmanga()
     {
       var manga = new Readmanga
       {
-        Url = Url,
+        Uri = Url,
         Status = "example status",
         NeedUpdate = false,
         Name = "readmanga from example"
@@ -35,7 +35,7 @@ namespace MangaReader.Tests
     {
       var manga = new Acomics
       {
-        Url = Url,
+        Uri = Url,
         Status = "example status",
         NeedUpdate = false,
         Name = "Acomics from example"
@@ -57,7 +57,7 @@ namespace MangaReader.Tests
       var history = new MangaHistory()
       {
         Date = DateTime.Today,
-        Url = Url
+        Uri = Url
       };
       manga.Histories.Add(history);
       manga.Save();

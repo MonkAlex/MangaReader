@@ -142,14 +142,7 @@ namespace MangaReader.Manga
     /// </summary>
     public void Refresh()
     {
-      var page = Page.GetPage(this.Url);
-      if (string.IsNullOrWhiteSpace(page))
-        return;
-
-      this.Name = Getter.GetMangaName(page).ToString();
-      this.listOfChapters = Getter.GetLinksOfMangaChapters(page, this.Url);
-      this.Status = Getter.GetTranslateStatus(page);
-      OnPropertyChanged("IsCompleted");
+      throw new NotImplementedException("Obsolete class");
     }
 
     /// <summary>
@@ -158,12 +151,7 @@ namespace MangaReader.Manga
     /// <returns>Список глав.</returns>
     public List<Chapter> GetAllChapters()
     {
-      if (listOfChapters == null)
-        listOfChapters = Getter.GetLinksOfMangaChapters(Page.GetPage(this.Url), this.Url);
-      this.allChapters = allChapters ??
-             (allChapters = listOfChapters.Select(link => new Chapter(link.Key, link.Value)).ToList());
-      this.allChapters.ForEach(ch => ch.DownloadProgressChanged += (sender, args) => this.DownloadProgressChanged(ch, this));
-      return this.allChapters;
+      throw new NotImplementedException("Obsolete class");
     }
 
     /// <summary>

@@ -24,7 +24,7 @@ namespace MangaReader.Manga.Grouple
     /// <summary>
     /// Хранилище ссылок на изображения.
     /// </summary>
-    private List<string> listOfImageLink;
+    private List<Uri> listOfImageLink;
 
     /// <summary>
     /// Название главы.
@@ -34,7 +34,7 @@ namespace MangaReader.Manga.Grouple
     /// <summary>
     /// Ссылка на главу.
     /// </summary>
-    public string Url;
+    public Uri Uri;
 
     /// <summary>
     /// Номер главы.
@@ -112,13 +112,13 @@ namespace MangaReader.Manga.Grouple
       catch (AggregateException ae)
       {
         foreach (var ex in ae.InnerExceptions)
-          Log.Exception(ex, this.Url, this.Name);
+          Log.Exception(ex, this.Uri.ToString(), this.Name);
         ++restartCounter;
         Download(chapterFolder);
       }
       catch (Exception ex)
       {
-        Log.Exception(ex, this.Url, this.Name);
+        Log.Exception(ex, this.Uri.ToString(), this.Name);
         ++restartCounter;
         Download(chapterFolder);
       }
@@ -129,7 +129,7 @@ namespace MangaReader.Manga.Grouple
     /// </summary>
     private void GetAllImagesLink()
     {
-      this.listOfImageLink = Getter.GetImagesLink(this.Url);
+      this.listOfImageLink = Getter.GetImagesLink(this.Uri);
     }
 
     #endregion
@@ -139,15 +139,15 @@ namespace MangaReader.Manga.Grouple
     /// <summary>
     /// Глава манги.
     /// </summary>
-    /// <param name="url">Ссылка на главу.</param>
+    /// <param name="uri">Ссылка на главу.</param>
     /// <param name="desc">Описание главы.</param>
-    public Chapter(string url, string desc)
+    public Chapter(Uri uri, string desc)
     {
-      this.Url = url;
+      this.Uri = uri;
       this.Name = desc;
       this.restartCounter = 0;
-      this.Volume = Convert.ToInt32(Regex.Match(url, @"vol[-]?[0-9]+").Value.Remove(0, 3));
-      this.Number = Convert.ToInt32(Regex.Match(url, @"/[-]?[0-9]+", RegexOptions.RightToLeft).Value.Remove(0, 1));
+      this.Volume = Convert.ToInt32(Regex.Match(uri.ToString(), @"vol[-]?[0-9]+").Value.Remove(0, 3));
+      this.Number = Convert.ToInt32(Regex.Match(uri.ToString(), @"/[-]?[0-9]+", RegexOptions.RightToLeft).Value.Remove(0, 1));
     }
 
     #endregion

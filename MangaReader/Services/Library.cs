@@ -114,7 +114,7 @@ namespace MangaReader.Services
     {
       var query = DatabaseMangas.Where(n => n != null);
       if (main.Type.SelectedItem.ToString() != "Все")
-        query = query.Where(n => n.Url.ToLowerInvariant().Contains(main.Type.SelectedItem.ToString().ToLowerInvariant()));
+        query = query.Where(n => n.Uri.OriginalString.ToLowerInvariant().Contains(main.Type.SelectedItem.ToString().ToLowerInvariant()));
       if (main.Uncompleted.IsChecked == true)
         query = query.Where(n => n.IsCompleted != "завершен");
       if (main.OnlyUpdate.IsChecked == true)
@@ -130,10 +130,23 @@ namespace MangaReader.Services
     /// <param name="url"></param>
     public static void Add(string url)
     {
-      if (Mapping.Environment.Session.Query<Mangas>().Any(m => m.Url == url))
+      Uri uri;
+      if (Uri.TryCreate(url, UriKind.Absolute, out uri))
+        Add(uri);
+      else
+        Library.Status = "Некорректная ссылка.";
+    }
+
+    /// <summary>
+    /// Добавить мангу.
+    /// </summary>
+    /// <param name="uri"></param>
+    public static void Add(Uri uri)
+    {
+      if (Mapping.Environment.Session.Query<Mangas>().Any(m => m.Uri == uri))
         return;
 
-      var newManga = Mangas.Create(url);
+      var newManga = Mangas.Create(uri);
       if (!newManga.IsValid())
         return;
 
@@ -172,7 +185,7 @@ namespace MangaReader.Services
       if (process != null && database.Any())
         process.IsIndeterminate = false;
 
-      var mangaUrls = Mapping.Environment.Session.Query<Mangas>().Select(m => m.Url).ToList();
+      var mangaUrls = Mapping.Environment.Session.Query<Mangas>().Select(m => m.Uri.OriginalString).ToList();
 
       foreach (var dbstring in database)
       {

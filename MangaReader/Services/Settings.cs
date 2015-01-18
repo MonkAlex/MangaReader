@@ -70,13 +70,13 @@ namespace MangaReader.Services
     public static string ChapterPrefix = "Chapter ";
 
     [XmlIgnore]
-    public static List<SubclassDownloadFolder> DownloadFolders
+    public static List<MangaSetting> DownloadFolders
     {
       get
       {
         if (downloadFolders == null)
         {
-          var query = Mapping.Environment.Session.Query<SubclassDownloadFolder>().ToList();
+          var query = Mapping.Environment.Session.Query<MangaSetting>().ToList();
           downloadFolders = query.Any() ? query : GetSubclass(typeof(Manga.Mangas));
         }
         return downloadFolders;
@@ -84,7 +84,7 @@ namespace MangaReader.Services
       set { }
     }
 
-    private static List<SubclassDownloadFolder> downloadFolders;
+    private static List<MangaSetting> downloadFolders;
 
     /// <summary>
     /// Сжимать скачанную мангу.
@@ -127,7 +127,7 @@ namespace MangaReader.Services
     /// </summary>
     public static void Load()
     {
-      DownloadFolders.ForEach(a => Console.WriteLine("Type {0}, folder {1}", a.SubType.Name, a.Folder));
+      DownloadFolders.ForEach(a => Console.WriteLine("Type {0}, folder {1}", a.MangaName, a.Folder));
 
       var settings = Serializer<object[]>.Load(SettingsPath);
       if (settings == null)
@@ -154,12 +154,17 @@ namespace MangaReader.Services
       catch (IndexOutOfRangeException) { }
     }
 
-    private static List<SubclassDownloadFolder> GetSubclass(Type baseClass)
+    private static List<MangaSetting> GetSubclass(Type baseClass)
     {
       var types = Assembly.GetAssembly(baseClass).GetTypes()
         .Where(type => type.IsSubclassOf(baseClass));
       var folders = types
-        .Select(type => new SubclassDownloadFolder { Folder = Settings.DownloadFolder, SubType = type })
+        .Select(type => new MangaSetting
+        {
+          Folder = Settings.DownloadFolder,
+          Manga = type.MangaType(), 
+          MangaName = type.Name
+        })
         .ToList();
       folders.ForEach(f => f.Save());
       return folders;
@@ -176,11 +181,11 @@ namespace MangaReader.Services
         if (settings[3] is object[])
         {
           var setting = settings[3] as object[];
-          var query = Mapping.Environment.Session.Query<SubclassDownloadFolder>().ToList();
-          if (query.FirstOrDefault(a => a.SubType == typeof(Readmanga)) == null)
-            new SubclassDownloadFolder() { Folder = setting[0] as string, SubType = typeof(Readmanga) }.Save();
-          if (query.FirstOrDefault(a => a.SubType == typeof(Acomics)) == null)
-            new SubclassDownloadFolder() { Folder = setting[1] as string, SubType = typeof(Acomics) }.Save();
+          var query = Mapping.Environment.Session.Query<MangaSetting>().ToList();
+          if (query.FirstOrDefault(a => a.Manga == Readmanga.Type) == null)
+            new MangaSetting() { Folder = setting[0] as string, Manga = Readmanga.Type, MangaName = "Readmanga"}.Save();
+          if (query.FirstOrDefault(a => a.Manga == Acomics.Type) == null)
+            new MangaSetting() { Folder = setting[1] as string, Manga = Acomics.Type, MangaName = "Acomics" }.Save();
         }
         Serializer<object[]>.Save(SettingsPath, settings);
       }
@@ -219,15 +224,5 @@ namespace MangaReader.Services
       Japanese
     }
 
-    public class SubclassDownloadFolder : Entity.Entity
-    {
-      public virtual Type SubType { get; set; }
-      public virtual string TypeName
-      {
-        get { return SubType.FullName; }
-        set { SubType = Assembly.GetAssembly(this.GetType()).GetType(value); }
-      }
-      public virtual string Folder { get; set; }
-    }
   }
 }

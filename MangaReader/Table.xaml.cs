@@ -133,7 +133,7 @@ namespace MangaReader
         Library.Add(db.Result.Text);
       foreach (var manga in db.Bookmarks.SelectedItems.OfType<Mangas>())
       {
-        Library.Add(manga.Url);
+        Library.Add(manga.Uri);
       }
     }
 
@@ -188,7 +188,7 @@ namespace MangaReader
       var remove = new MenuItem() { Header = Strings.Manga_Action_Remove, IsEnabled = this.IsAvaible };
       remove.Click += (o, agrs) => Library.Remove(manga);
       var view = new MenuItem() { Header = Strings.Manga_Action_View };
-      view.Click += (o, agrs) => Process.Start(manga.Url);
+      view.Click += (o, agrs) => Process.Start(manga.Uri.OriginalString);
       var needUpdate = new MenuItem() { Header = manga.NeedUpdate ? Strings.Manga_NotUpdate : Strings.Manga_Update, IsEnabled = this.IsAvaible };
       needUpdate.Click += (o, args) => { manga.NeedUpdate = !manga.NeedUpdate; manga.Save(); };
       var settings = new MenuItem() { Header = Strings.Manga_Settings, IsEnabled = this.IsAvaible };

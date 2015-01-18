@@ -56,12 +56,12 @@ namespace MangaReader.Manga.Grouple
     /// Получить ссылки на главы манги.
     /// </summary>
     /// <param name="mangaMainPage">Содержимое страницы манги.</param>
-    /// <param name="url">Ссылка на мангу.</param>
+    /// <param name="uri">Ссылка на мангу.</param>
     /// <returns>Словарь (ссылка, описание).</returns>
-    public static Dictionary<string, string> GetLinksOfMangaChapters(string mangaMainPage, string url)
+    public static Dictionary<Uri, string> GetLinksOfMangaChapters(string mangaMainPage, Uri uri)
     {
-      var dic = new Dictionary<string, string>();
-      var links = new List<string> { };
+      var dic = new Dictionary<Uri, string>();
+      var links = new List<Uri> { };
       var description = new List<string> { };
       try
       {
@@ -73,8 +73,9 @@ namespace MangaReader.Manga.Grouple
             .ConvertAll(r => r.Attributes.ToList().ConvertAll(i => i.Value))
             .SelectMany(j => j)
             .Where(k => k != string.Empty)
-            .Select(s => @"http://" + new Uri(url).Host + s + "?mature=1")
+            .Select(s => @"http://" + uri.Host + s + "?mature=1")
             .Reverse()
+            .Select(s => new Uri(s))
             .ToList();
         description = document.DocumentNode
             .SelectNodes("//div[@class=\"expandable chapters-link\"]//tr//td[@class=\" \"]")
@@ -83,8 +84,8 @@ namespace MangaReader.Manga.Grouple
             .ConvertAll(r => r.InnerText.Replace("\r\n", string.Empty).Trim())
             .ToList();
       }
-      catch (NullReferenceException ex) { Log.Exception(ex, "Ошибка получения списка глав.", url); }
-      catch (ArgumentNullException ex) { Log.Exception(ex, "Главы не найдены.", url); }
+      catch (NullReferenceException ex) { Log.Exception(ex, "Ошибка получения списка глав.", uri.ToString()); }
+      catch (ArgumentNullException ex) { Log.Exception(ex, "Главы не найдены.", uri.ToString()); }
 
       for (var i = 0; i < links.Count; i++)
       {
@@ -97,13 +98,13 @@ namespace MangaReader.Manga.Grouple
     /// <summary>
     /// Получить ссылки на все изображения в главе.
     /// </summary>
-    /// <param name="url">Ссылка на главу.</param>
+    /// <param name="uri">Ссылка на главу.</param>
     /// <returns>Список ссылок на изображения главы.</returns>
-    public static List<string> GetImagesLink(string url)
+    public static List<Uri> GetImagesLink(Uri uri)
     {
-      var chapterLinksList = new List<string>();
+      var chapterLinksList = new List<Uri>();
       var document = new HtmlDocument();
-      document.LoadHtml(Page.GetPage(url));
+      document.LoadHtml(Page.GetPage(uri));
 
       var firstOrDefault = document.DocumentNode
           .SelectNodes("//div[@class=\"pageBlock reader-bottom\"]")
@@ -118,7 +119,8 @@ namespace MangaReader.Manga.Grouple
           .Select(g => g.Captures[0])
           .OfType<Match>()
           .Select(m => m.Groups[1].Value)
-          .Select(s => (!Uri.IsWellFormedUriString(s, UriKind.Absolute)) ? (@"http://" + new Uri(url).Host + s) : s)
+          .Select(s => (!Uri.IsWellFormedUriString(s, UriKind.Absolute)) ? (@"http://" + uri.Host + s) : s)
+          .Select(s => new Uri(s))
           .ToList();
       return chapterLinksList;
     }

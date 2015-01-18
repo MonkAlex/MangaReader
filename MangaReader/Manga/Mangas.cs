@@ -15,7 +15,7 @@ namespace MangaReader.Manga
   {
     #region Свойства
 
-    protected static internal string Type { get { return "Type"; } }
+    public static Guid Type { get { return Guid.Empty; } }
 
     /// <summary>
     /// Название манги.
@@ -61,7 +61,7 @@ namespace MangaReader.Manga
     /// <summary>
     /// Ссылка на мангу.
     /// </summary>
-    public virtual string Url { get; set; }
+    public virtual Uri Uri { get; set; }
 
     /// <summary>
     /// Статус манги.
@@ -130,7 +130,7 @@ namespace MangaReader.Manga
 
     public virtual string DownloadFolder
     {
-      get { return Settings.DownloadFolders.First(f => f.SubType == this.GetType()).Folder; }
+      get { return Settings.DownloadFolders.First(f => f.Manga == this.GetType().MangaType()).Folder; }
       set { }
     }
 
@@ -173,12 +173,12 @@ namespace MangaReader.Manga
         return false;
 
       var manga = obj as Mangas;
-      return manga == null ? base.Equals(obj) : this.Url.Equals(manga.Url);
+      return manga == null ? base.Equals(obj) : this.Uri.Equals(manga.Uri);
     }
 
     public override int GetHashCode()
     {
-      return this.Url.GetHashCode();
+      return this.Uri.GetHashCode();
     }
 
     #endregion
@@ -204,12 +204,12 @@ namespace MangaReader.Manga
     protected override void BeforeSave(object[] currentState, object[] previousState, string[] propertyNames)
     {
       var dirName = previousState[propertyNames.ToList().IndexOf("Folder")] as string;
-      if (dirName != null && this.Folder != dirName)
+      if (dirName != null && this.Folder != dirName && Directory.Exists(dirName))
       {
         if (Directory.Exists(this.Folder))
           throw new DirectoryNotFoundException(
             string.Format("Папка {0} уже существует. Сохранение прервано.", this.Folder));
-        if (Directory.Exists(dirName) && !Page.MoveDirectory(dirName, this.Folder))
+        if (!Page.MoveDirectory(dirName, this.Folder))
           throw new DirectoryNotFoundException(
             string.Format("Не удалось переместить {0} в {1}. Сохранение прервано.", dirName, this.Folder));
       }
@@ -234,11 +234,21 @@ namespace MangaReader.Manga
     /// <returns>Манга.</returns>
     public static Mangas Create(string url)
     {
+      return Create(new Uri(url));
+    }
+
+    /// <summary>
+    /// Создать мангу по ссылке.
+    /// </summary>
+    /// <param name="url">Ссылка на мангу.</param>
+    /// <returns>Манга.</returns>
+    public static Mangas Create(Uri url)
+    {
       Mangas manga = null;
 
-      if (url.Contains("readmanga.me") || url.Contains("adultmanga.ru"))
+      if (url.Host == "readmanga.me" || url.Host == "adultmanga.ru")
         manga = new Grouple.Readmanga(url);
-      if (url.Contains("acomics.ru"))
+      if (url.Host == "acomics.ru")
         manga = new Acomic.Acomics(url);
 
       if (manga != null && manga.IsValid())

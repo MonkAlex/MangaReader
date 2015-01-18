@@ -6,7 +6,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using HtmlAgilityPack;
-using MangaReader.Manga;
 using MangaReader.Manga.Grouple;
 using MangaReader.Services;
 
@@ -14,7 +13,9 @@ namespace MangaReader.Account
 {
   class Grouple
   {
-    public static string MainUrl = @"http://grouple.ru/";
+    public static Uri MainUri = new Uri(@"http://grouple.ru/");
+    public static Uri LogoutUri = new Uri(MainUri + "internal/auth/logout");
+    public static Uri BookmarksUri = new Uri(@"http://grouple.ru/private/bookmarks");
 
     /// <summary>
     /// Авторизирован ли на сайте.
@@ -39,7 +40,7 @@ namespace MangaReader.Account
     /// <summary>
     /// Клиент с куками авторизованного пользователя.
     /// </summary>
-    private static readonly CookieClient Client = new CookieClient() { BaseAddress = MainUrl, Encoding = Encoding.UTF8 };
+    private static readonly CookieClient Client = new CookieClient() { BaseAddress = MainUri.ToString(), Encoding = Encoding.UTF8 };
 
     /// <summary>
     /// Циклическая попытка залогниться.
@@ -82,7 +83,7 @@ namespace MangaReader.Account
         try
         {
           Client.UploadValues("internal/auth/j_spring_security_check", "POST", loginData);
-          IsLogined = Page.GetPage(MainUrl, Client).Contains("internal/auth/logout");
+          IsLogined = Page.GetPage(MainUri, Client).Contains("internal/auth/logout");
         }
         catch (Exception ex)
         {
@@ -100,7 +101,7 @@ namespace MangaReader.Account
       _bookmarsk = null;
       lock (ClientLock)
       {
-        Page.GetPage(MainUrl + "internal/auth/logout", Client);
+        Page.GetPage(LogoutUri, Client);
       }
     }
 
@@ -114,7 +115,7 @@ namespace MangaReader.Account
       var document = new HtmlDocument();
       lock (ClientLock)
       {
-        document.LoadHtml(Page.GetPage(@"http://grouple.ru/private/bookmarks", Client));
+        document.LoadHtml(Page.GetPage(BookmarksUri, Client));
       }
 
       var firstOrDefault = document.DocumentNode
@@ -128,8 +129,8 @@ namespace MangaReader.Account
           .OfType<Group>()
           .Select(g => g.Captures[0])
           .OfType<Match>()
-          .Select(m => m.Groups[1].Value)
-          .Select(s => new Readmanga() { Url = s, Name = Getter.GetMangaName(Page.GetPage(s)).ToString() })
+          .Select(m => new Uri(m.Groups[1].Value))
+          .Select(s => new Readmanga() { Uri = s, Name = Getter.GetMangaName(Page.GetPage(s)).ToString() })
           .ToList();
       _bookmarsk = bookmarks;
       return bookmarks;

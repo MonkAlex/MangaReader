@@ -60,14 +60,14 @@ namespace MangaReader
     /// <summary>
     /// Скачать файл.
     /// </summary>
-    /// <param name="url">Ссылка на файл.</param>
+    /// <param name="uri">Ссылка на файл.</param>
     /// <returns>Содержимое файла.</returns>
-    internal static ImageFile DownloadFile(string url)
+    internal static ImageFile DownloadFile(Uri uri)
     {
       Byte[] result;
       WebResponse response;
       var file = new ImageFile();
-      var request = WebRequest.Create(url);
+      var request = WebRequest.Create(uri);
 
       try
       {
@@ -93,7 +93,7 @@ namespace MangaReader
     /// <param name="client">Клиент, если нужен специфичный.</param>
     /// <param name="restartCounter">Попыток скачивания.</param>
     /// <returns>Исходный код страницы.</returns>
-    public static string GetPage(string url, WebClient client = null, int restartCounter = 0)
+    public static string GetPage(Uri url, WebClient client = null, int restartCounter = 0)
     {
       try
       {
@@ -101,17 +101,17 @@ namespace MangaReader
           throw new Exception(string.Format("Load failed after {0} counts.", restartCounter));
 
         var webClient = client ?? new WebClient { Encoding = Encoding.UTF8 };
-        return webClient.DownloadString(new Uri(url));
+        return webClient.DownloadString(url);
       }
       catch (UriFormatException ex)
       {
-        Log.Exception(ex, "Некорректная ссылка:", url);
+        Log.Exception(ex, "Некорректная ссылка:", url.ToString());
         return string.Empty;
       }
       catch (WebException ex)
       {
         Library.Status = Strings.Page_GetPage_InternetOff;
-        Log.Exception(ex, Strings.Page_GetPage_InternetOff, ", ссылка:", url);
+        Log.Exception(ex, Strings.Page_GetPage_InternetOff, ", ссылка:", url.ToString());
         if (ex.Status != WebExceptionStatus.Timeout)
           return string.Empty;
         ++restartCounter;
@@ -119,7 +119,7 @@ namespace MangaReader
       }
       catch (Exception ex)
       {
-        Log.Exception(ex, ", ссылка:", url);
+        Log.Exception(ex, ", ссылка:", url.ToString());
         return string.Empty;
       }
     }

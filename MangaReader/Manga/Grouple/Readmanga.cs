@@ -17,7 +17,7 @@ namespace MangaReader.Manga.Grouple
   {
     #region Свойства
 
-    protected static internal new string Type { get { return "2C98BBF4-DB46-47C4-AB0E-F207E283142D"; } }
+    public new static Guid Type { get { return Guid.Parse("2C98BBF4-DB46-47C4-AB0E-F207E283142D"); } }
 
     /// <summary>
     /// Статус перевода.
@@ -61,7 +61,7 @@ namespace MangaReader.Manga.Grouple
     /// <summary>
     /// Список глав, ссылка-описание.
     /// </summary>
-    private Dictionary<string, string> listOfChapters;
+    private Dictionary<Uri, string> listOfChapters;
 
 
     #endregion
@@ -73,12 +73,12 @@ namespace MangaReader.Manga.Grouple
     /// </summary>
     public override void Refresh()
     {
-      var page = Page.GetPage(this.Url);
+      var page = Page.GetPage(this.Uri);
       if (string.IsNullOrWhiteSpace(page))
         return;
 
       this.ServerName = Getter.GetMangaName(page).ToString();
-      this.listOfChapters = Getter.GetLinksOfMangaChapters(page, this.Url);
+      this.listOfChapters = Getter.GetLinksOfMangaChapters(page, this.Uri);
       this.Status = Getter.GetTranslateStatus(page);
       OnPropertyChanged("IsCompleted");
     }
@@ -95,7 +95,7 @@ namespace MangaReader.Manga.Grouple
     protected internal virtual List<Chapter> GetAllChapters()
     {
       if (listOfChapters == null)
-        listOfChapters = Getter.GetLinksOfMangaChapters(Page.GetPage(this.Url), this.Url);
+        listOfChapters = Getter.GetLinksOfMangaChapters(Page.GetPage(this.Uri), this.Uri);
       this.allChapters = allChapters ??
              (allChapters = listOfChapters.Select(link => new Chapter(link.Key, link.Value)).ToList());
       this.allChapters.ForEach(ch => ch.DownloadProgressChanged += (sender, args) => OnDownloadProgressChanged(this));
@@ -126,7 +126,7 @@ namespace MangaReader.Manga.Grouple
       if (Settings.Update)
       {
         this.downloadedChapters = this.downloadedChapters
-            .Where(ch => this.Histories.All(m => m.Url != ch.Url))
+            .Where(ch => this.Histories.All(m => m.Uri != ch.Uri))
             .ToList();
       }
 
@@ -150,7 +150,7 @@ namespace MangaReader.Manga.Grouple
                   chapterPrefix,
                   ch.Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0')
                   ));
-              this.AddHistory(ch.Url);
+              this.AddHistory(ch.Uri);
             });
         this.Save();
         Log.Add("Download end " + this.Name);
@@ -180,9 +180,9 @@ namespace MangaReader.Manga.Grouple
     /// Открыть мангу.
     /// </summary>
     /// <param name="url">Ссылка на мангу.</param>
-    public Readmanga(string url) : base()
+    public Readmanga(Uri url) : base()
     {
-      this.Url = url;
+      this.Uri = url;
       this.Refresh();
     }
 

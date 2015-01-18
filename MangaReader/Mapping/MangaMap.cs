@@ -14,13 +14,13 @@ namespace MangaReader.Mapping
       Map(x => x.LocalName).Not.LazyLoad();
       Map(x => x.ServerName).Not.LazyLoad();
       Map(x => x.IsNameChanged).Not.LazyLoad();
-      Map(x => x.Url).Not.LazyLoad();
+      Map(x => x.Uri).Not.LazyLoad();
       Map(x => x.Status).Not.LazyLoad();
       Map(x => x.NeedUpdate).Not.LazyLoad();
       Map(x => x.Folder).Not.LazyLoad();
       Map(x => x.NeedCompress).Not.LazyLoad();
       HasMany(x => x.Histories).Not.LazyLoad().AsBag().Cascade.AllDeleteOrphan();
-      DiscriminateSubClassesOnColumn(Mangas.Type);
+      DiscriminateSubClassesOnColumn("Type");
     }
   }
 
@@ -28,7 +28,7 @@ namespace MangaReader.Mapping
   {
     public ReadmangaMap()
     {
-      DiscriminatorValue(Readmanga.Type);
+      DiscriminatorValue(Readmanga.Type.ToString());
     }
   }
 
@@ -36,7 +36,7 @@ namespace MangaReader.Mapping
   {
     public AcomicsMap()
     {
-      DiscriminatorValue(Acomics.Type);
+      DiscriminatorValue(Acomics.Type.ToString());
     }
   }
 }

@@ -144,7 +144,8 @@
     <Compile Include="Manga\Mangas.cs" />
     <Compile Include="Manga\MangaObsolete.cs" />
     <Compile Include="Mapping\Environment.cs" />
-    <Compile Include="Mapping\SubclassDownloadFolderMap.cs" />
+    <Compile Include="Mapping\LoginMap.cs" />
+    <Compile Include="Mapping\MangaSettingMap.cs" />
     <Compile Include="Mapping\HistoryMap.cs" />
     <Compile Include="Mapping\Interceptors.cs" />
     <Compile Include="Mapping\MangaMap.cs" />
@@ -157,6 +158,8 @@
       <DependentUpon>DownloadFolderSetting.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\ImageFile.cs" />
+    <Compile Include="Services\MangaSetting.cs" />
+    <Compile Include="Services\TypeHelper.cs" />
     <Compile Include="Table.xaml.cs">
       <DependentUpon>Table.xaml</DependentUpon>
     </Compile>

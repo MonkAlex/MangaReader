@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using MangaReader.Manga;
 using MangaReader.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -47,36 +48,36 @@ namespace MangaReader.Tests.CRUD
     [TestMethod]
     public void MangaHistoryReadUpdate()
     {
-      var url = "test_url";
+      var url = new Uri("test_url");
       var manga = Builder.CreateReadmanga();
       Builder.CreateMangaHistory(manga);
       var history = manga.Histories.FirstOrDefault();
-      var oldUrl = history.Url;
+      var oldUrl = history.Uri;
       var historyId = history.Id;
 
-      history.Url = url;
-      Assert.AreEqual(url, history.Url);
+      history.Uri = url;
+      Assert.AreEqual(url, history.Uri);
 
       using (var session = Environment.SessionFactory.OpenSession())
       {
         var fromDb = session.Get<MangaReader.MangaHistory>(historyId);
-        Assert.AreEqual(oldUrl, fromDb.Url);
+        Assert.AreEqual(oldUrl, fromDb.Uri);
       }
       history.Update();
-      Assert.AreEqual(oldUrl, history.Url);
+      Assert.AreEqual(oldUrl, history.Uri);
       using (var session = Environment.SessionFactory.OpenSession())
       {
         var fromDb = session.Get<MangaReader.MangaHistory>(historyId);
-        Assert.AreEqual(oldUrl, fromDb.Url);
+        Assert.AreEqual(oldUrl, fromDb.Uri);
       }
 
-      history.Url = url;
+      history.Uri = url;
       history.Save();
-      Assert.AreEqual(url, history.Url);
+      Assert.AreEqual(url, history.Uri);
       using (var session = Environment.SessionFactory.OpenSession())
       {
         var fromDb = session.Get<MangaReader.MangaHistory>(historyId);
-        Assert.AreEqual(url, fromDb.Url);
+        Assert.AreEqual(url, fromDb.Uri);
       }
 
       Builder.DeleteMangaHistory(manga);

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Xml.Serialization;
-using MangaReader.Account;
 using MangaReader.Manga.Acomic;
 using MangaReader.Manga.Grouple;
 using NHibernate.Linq;
@@ -97,11 +96,6 @@ namespace MangaReader.Services
     public static object[] WindowsState;
 
     /// <summary>
-    /// Логин.
-    /// </summary>
-    public static Login Login = new Login();
-
-    /// <summary>
     /// Сохранить настройки.
     /// </summary>
     public static void Save()
@@ -115,7 +109,7 @@ namespace MangaReader.Services
                 null,
                 CompressManga,
                 WindowsState,
-                new object[] {Login.Name, Login.Password},
+                new object[] {null, null},
                 MinimizeToTray,
                 AutoUpdateInHours
             };
@@ -144,8 +138,6 @@ namespace MangaReader.Services
         CompressManga = (bool)settings[4];
         Console.WriteLine("Need compress manga {0}", CompressManga);
         WindowsState = (object[])settings[5];
-        Login = new Login() { Name = (string)((object[])settings[6])[0], Password = (string)((object[])settings[6])[1] };
-        Console.WriteLine("Login {0}", Login.Name);
         MinimizeToTray = (bool)settings[7];
         Console.WriteLine("Minimize to tray {0}", MinimizeToTray);
         AutoUpdateInHours = (int)settings[8];

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace MangaReader
 {
@@ -14,9 +15,16 @@ namespace MangaReader
     /// </summary>
     public virtual string MangaUrl { get; set; }
 
+    public virtual string Url
+    {
+      get { return Uri == null ? null : Uri.ToString(); }
+      set { Uri = value == null ? null : new Uri(value); }
+    }
+
     /// <summary>
     /// Ссылка в историю.
     /// </summary>
+    [XmlIgnore]
     public virtual Uri Uri { get; set; }
 
     /// <summary>

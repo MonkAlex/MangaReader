@@ -11,6 +11,12 @@ namespace MangaReader.Services
 
     public virtual string Folder { get; set; }
 
-    public virtual Login Login { get; set; }
+    public virtual Login Login
+    {
+      get { return login ?? (login = new Login()); }
+      set { login = value; }
+    }
+
+    private Login login;
   }
 }

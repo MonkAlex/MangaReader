@@ -185,7 +185,7 @@ namespace MangaReader.Services
       if (process != null && database.Any())
         process.IsIndeterminate = false;
 
-      var mangaUrls = Mapping.Environment.Session.Query<Mangas>().Select(m => m.Uri.OriginalString).ToList();
+      var mangaUrls = Mapping.Environment.Session.Query<Mangas>().Select(m => m.Uri.ToString()).ToList();
 
       foreach (var dbstring in database)
       {

@@ -58,9 +58,16 @@ namespace MangaReader.Manga
 
     private bool isNameChanged = false;
 
+    public virtual string Url
+    {
+      get { return Uri == null ? null : Uri.ToString(); }
+      set { Uri = value == null ? null : new Uri(value); }
+    }
+
     /// <summary>
     /// Ссылка на мангу.
     /// </summary>
+    [XmlIgnore]
     public virtual Uri Uri { get; set; }
 
     /// <summary>

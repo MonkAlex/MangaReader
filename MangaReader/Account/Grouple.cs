@@ -22,6 +22,8 @@ namespace MangaReader.Account
     /// </summary>
     public static bool IsLogined { get; set; }
 
+    public static Login SettingLogin = Settings.DownloadFolders.First(x => x.Manga == Readmanga.Type).Login;
+
     /// <summary>
     /// Закладки.
     /// </summary>
@@ -50,7 +52,7 @@ namespace MangaReader.Account
       var inOtherThread = new Thread(() =>
       {
         Login();
-        while (!IsLogined)
+        while (!IsLogined && SettingLogin.CanLogin)
         {
           Thread.Sleep(1000);
           Login();
@@ -68,14 +70,14 @@ namespace MangaReader.Account
       if (IsLogined)
         return;
 
-      var login = Settings.Login;
-      if (login == null)
+      
+      if (SettingLogin == null || !SettingLogin.CanLogin)
         return;
 
       var loginData = new NameValueCollection
             {
-                {"j_username", login.Name},
-                {"j_password", login.Password},
+                {"j_username", SettingLogin.Name},
+                {"j_password", SettingLogin.Password},
                 {"remember_me", "checked"}
             };
       lock (ClientLock)

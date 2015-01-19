@@ -1,7 +1,9 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MangaReader.Account;
+using MangaReader.Manga.Grouple;
 using MangaReader.Properties;
 using MangaReader.Services;
 
@@ -12,13 +14,15 @@ namespace MangaReader
   /// </summary>
   public partial class Input : Window
   {
+    private Login ReadManga = Settings.DownloadFolders.First(x => x.Manga == Readmanga.Type).Login;
+
     public Input()
     {
       InitializeComponent();
       this.Bookmarks.ItemsSource = Grouple.Bookmarks;
       Result.Focus();
-      this.Login.Text = Settings.Login.Name;
-      this.Password.Password = Settings.Login.Password;
+      this.Login.Text = ReadManga.Name;
+      this.Password.Password = ReadManga.Password;
       this.Login.IsEnabled = !Grouple.IsLogined;
       this.Password.IsEnabled = !Grouple.IsLogined;
       this.Enter.Content = Grouple.IsLogined ? Strings.Input_Logout : Strings.Input_Login;
@@ -35,7 +39,9 @@ namespace MangaReader
       var logined = Grouple.IsLogined;
       if (!logined)
       {
-        Settings.Login = new Login() { Name = Login.Text, Password = Password.Password };
+        ReadManga.Name = Login.Text;
+        ReadManga.Password = Password.Password;
+        ReadManga.Save();
         Grouple.Login();
       }
       else

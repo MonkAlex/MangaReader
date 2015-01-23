@@ -77,8 +77,9 @@ namespace MangaReader
         result = ms.ToArray();
         ms.Dispose();
       }
-      catch
+      catch (Exception ex)
       {
+        Log.Exception(ex, string.Format("Загрузка {0} не завершена.", uri));
         return file;
       }
       if (response.ContentLength == result.LongLength)

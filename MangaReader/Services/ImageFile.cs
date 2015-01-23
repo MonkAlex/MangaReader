@@ -13,7 +13,7 @@ namespace MangaReader.Services
     {
       get
       {
-        if(string.IsNullOrWhiteSpace(this.hash)) 
+        if (string.IsNullOrWhiteSpace(this.hash))
           this.hash = this.GetHashCode();
         return this.hash;
       }
@@ -24,7 +24,7 @@ namespace MangaReader.Services
 
     protected internal virtual bool Exist { get { return this.Body != null; } }
 
-    protected internal virtual string Extension 
+    protected internal virtual string Extension
     {
       get
       {

@@ -154,7 +154,7 @@ namespace MangaReader.Services
         .Select(type => new MangaSetting
         {
           Folder = Settings.DownloadFolder,
-          Manga = type.MangaType(), 
+          Manga = type.MangaType(),
           MangaName = type.Name
         })
         .ToList();
@@ -175,7 +175,7 @@ namespace MangaReader.Services
           var setting = settings[3] as object[];
           var query = Mapping.Environment.Session.Query<MangaSetting>().ToList();
           if (query.FirstOrDefault(a => a.Manga == Readmanga.Type) == null)
-            new MangaSetting() { Folder = setting[0] as string, Manga = Readmanga.Type, MangaName = "Readmanga"}.Save();
+            new MangaSetting() { Folder = setting[0] as string, Manga = Readmanga.Type, MangaName = "Readmanga" }.Save();
           if (query.FirstOrDefault(a => a.Manga == Acomics.Type) == null)
             new MangaSetting() { Folder = setting[1] as string, Manga = Acomics.Type, MangaName = "Acomics" }.Save();
         }

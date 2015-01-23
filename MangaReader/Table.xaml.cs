@@ -192,7 +192,7 @@ namespace MangaReader
       var needUpdate = new MenuItem() { Header = manga.NeedUpdate ? Strings.Manga_NotUpdate : Strings.Manga_Update, IsEnabled = this.IsAvaible };
       needUpdate.Click += (o, args) => { manga.NeedUpdate = !manga.NeedUpdate; manga.Save(); };
       var settings = new MenuItem() { Header = Strings.Manga_Settings, IsEnabled = this.IsAvaible };
-      settings.Click += (o, args) => new MangaForm {DataContext = manga, Owner = this}.ShowDialog();
+      settings.Click += (o, args) => new MangaForm { DataContext = manga, Owner = this }.ShowDialog();
 
       var menu = new ContextMenu();
       menu.Items.Add(openFolder);

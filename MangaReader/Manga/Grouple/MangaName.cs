@@ -47,12 +47,9 @@ namespace MangaReader.Manga.Grouple
       {
         if (!string.IsNullOrEmpty(this.japanese))
           return japanese;
-        else if (!string.IsNullOrEmpty(this.english))
+        if (!string.IsNullOrEmpty(this.english))
           return english;
-        else if (!string.IsNullOrEmpty(this.russian))
-          return russian;
-        else
-          return string.Empty;
+        return !string.IsNullOrEmpty(this.russian) ? russian : string.Empty;
       }
       set
       {

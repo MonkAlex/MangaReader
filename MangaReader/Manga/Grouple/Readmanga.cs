@@ -180,7 +180,8 @@ namespace MangaReader.Manga.Grouple
     /// Открыть мангу.
     /// </summary>
     /// <param name="url">Ссылка на мангу.</param>
-    public Readmanga(Uri url) : base()
+    public Readmanga(Uri url)
+      : base()
     {
       this.Uri = url;
       this.Refresh();

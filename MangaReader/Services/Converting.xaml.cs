@@ -37,7 +37,7 @@ namespace MangaReader.Services
       Thread.Sleep(500);
 
       if (thread.ThreadState == ThreadState.Running)
-       this.ShowDialog();
+        this.ShowDialog();
     }
 
     private void TimerTick(object o, EventArgs e)

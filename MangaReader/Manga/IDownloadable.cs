@@ -2,40 +2,40 @@
 
 namespace MangaReader.Manga
 {
-    public interface IDownloadable
-    {
-        #region Свойства
+  public interface IDownloadable
+  {
+    #region Свойства
 
-        /// <summary>
-        /// Статус загрузки.
-        /// </summary>
-        bool IsDownloaded { get; }
+    /// <summary>
+    /// Статус загрузки.
+    /// </summary>
+    bool IsDownloaded { get; }
 
-        /// <summary>
-        /// Процент загрузки манги.
-        /// </summary>
-        double Downloaded { get; set; }
+    /// <summary>
+    /// Процент загрузки манги.
+    /// </summary>
+    double Downloaded { get; set; }
 
-        /// <summary>
-        /// Папка с мангой.
-        /// </summary>
-        string Folder { get; }
-        
-        #endregion
+    /// <summary>
+    /// Папка с мангой.
+    /// </summary>
+    string Folder { get; }
 
-        #region DownloadProgressChanged
+    #endregion
 
-        event EventHandler<Mangas> DownloadProgressChanged;
+    #region DownloadProgressChanged
 
-        #endregion
+    event EventHandler<Mangas> DownloadProgressChanged;
 
-        #region Методы
+    #endregion
 
-        /// <summary>
-        /// Скачать все главы.
-        /// </summary>
-        void Download(string mangaFolder = null, string volumePrefix = null, string chapterPrefix = null);
+    #region Методы
 
-        #endregion
-    }
+    /// <summary>
+    /// Скачать все главы.
+    /// </summary>
+    void Download(string mangaFolder = null, string volumePrefix = null, string chapterPrefix = null);
+
+    #endregion
+  }
 }

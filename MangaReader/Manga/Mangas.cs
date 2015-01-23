@@ -107,7 +107,7 @@ namespace MangaReader.Manga
     }
 
     private bool needUpdate = true;
-    
+
     /// <summary>
     /// Статус корректности манги.
     /// </summary>

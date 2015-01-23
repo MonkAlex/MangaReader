@@ -29,7 +29,7 @@ namespace Tests
     [AssemblyCleanup]
     public static void TestCleanup()
     {
-      
+
     }
 
     public static void Initialize()

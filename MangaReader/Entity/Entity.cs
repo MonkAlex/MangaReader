@@ -21,10 +21,10 @@ namespace MangaReader.Entity
 
     protected virtual void BeforeSave(object[] currentState, object[] previousState, string[] propertyNames)
     {
-      
+
     }
 
-    public virtual void BeforeSave(object[] currentState, object[] previousState, 
+    public virtual void BeforeSave(object[] currentState, object[] previousState,
       string[] propertyNames, NHibernate.Type.IType[] types)
     {
       this.BeforeSave(currentState, previousState, propertyNames);

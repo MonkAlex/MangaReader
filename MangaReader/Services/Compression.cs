@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
-using System.Xaml;
 
 namespace MangaReader.Services
 {
@@ -59,7 +57,7 @@ namespace MangaReader.Services
         return;
 
       // Нельзя сжимать папку со всей мангой.
-      if (message.Trim(Path.DirectorySeparatorChar ) == Settings.DownloadFolder.Trim(Path.DirectorySeparatorChar))
+      if (message.Trim(Path.DirectorySeparatorChar) == Settings.DownloadFolder.Trim(Path.DirectorySeparatorChar))
         return;
 
       var volumes = Directory.GetDirectories(message);

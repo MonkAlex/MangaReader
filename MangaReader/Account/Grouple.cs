@@ -70,7 +70,7 @@ namespace MangaReader.Account
       if (IsLogined)
         return;
 
-      
+
       if (SettingLogin == null || !SettingLogin.CanLogin)
         return;
 

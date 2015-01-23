@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using MangaReader.Manga;
-using MangaReader.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Environment = Tests.Environment;
 

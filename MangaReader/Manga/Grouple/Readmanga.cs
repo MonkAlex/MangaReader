@@ -77,7 +77,12 @@ namespace MangaReader.Manga.Grouple
       if (string.IsNullOrWhiteSpace(page))
         return;
 
-      this.ServerName = Getter.GetMangaName(page).ToString();
+      var newName = Getter.GetMangaName(page).ToString();
+      if (string.IsNullOrWhiteSpace(newName))
+        Log.Add("Не удалось получить имя манги, текущее название = " + this.ServerName);
+      else if (newName != this.ServerName)
+        this.ServerName = newName;
+
       this.listOfChapters = Getter.GetLinksOfMangaChapters(page, this.Uri);
       this.Status = Getter.GetTranslateStatus(page);
       OnPropertyChanged("IsCompleted");

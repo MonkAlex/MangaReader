@@ -22,13 +22,13 @@ namespace MangaReader.Manga.Grouple
       {
         var document = new HtmlDocument();
         document.LoadHtml(mangaMainPage);
-        var japNode = document.DocumentNode.SelectSingleNode("//div[@class=\"leftContent manga-page\"]//span[@class='jp-name']");
+        var japNode = document.DocumentNode.SelectSingleNode("//span[@class='jp-name']");
         if (japNode != null)
           name.Japanese = WebUtility.HtmlDecode(japNode.InnerText);
-        var engNode = document.DocumentNode.SelectSingleNode("//div[@class=\"leftContent manga-page\"]//span[@class='eng-name']");
+        var engNode = document.DocumentNode.SelectSingleNode("//span[@class='eng-name']");
         if (engNode != null)
           name.English = WebUtility.HtmlDecode(engNode.InnerText);
-        var rusNode = document.DocumentNode.SelectSingleNode("//div[@class=\"leftContent manga-page\"]//span[@class='name']");
+        var rusNode = document.DocumentNode.SelectSingleNode("//span[@class='name']");
         if (rusNode != null)
           name.Russian = WebUtility.HtmlDecode(rusNode.InnerText);
       }

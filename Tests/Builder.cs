@@ -10,6 +10,10 @@ namespace MangaReader.Tests
   {
     private static readonly Uri Url = new Uri("http://example.com");
 
+    /// <summary>
+    /// Создать мангу.
+    /// </summary>
+    /// <returns></returns>
     public static Readmanga CreateReadmanga()
     {
       var manga = new Readmanga

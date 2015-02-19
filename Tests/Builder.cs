@@ -27,6 +27,10 @@ namespace MangaReader.Tests
       return manga;
     }
 
+    /// <summary>
+    /// Удалить мангу.
+    /// </summary>
+    /// <param name="manga"></param>
     public static void DeleteReadmanga(Readmanga manga)
     {
       if (manga == null)

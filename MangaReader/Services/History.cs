@@ -81,7 +81,7 @@ namespace MangaReader.Services
       }
       // ReSharper restore CSharpWarnings::CS0612
 
-      BackupFile.MoveToBackup(HistoryFile);
+      Backup.MoveToBackup(HistoryFile);
     }
   }
 }

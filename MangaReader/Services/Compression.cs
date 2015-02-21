@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Globalization;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -17,17 +17,19 @@ namespace MangaReader.Services
     /// Упаковка всех глав.
     /// </summary>
     /// <param name="message">Папка манги.</param>
-    public static void CompressChapters(string message)
+    public static List<string> CompressChapters(string message)
     {
-      Log.Add(string.Format("Compression: Start {0}.", message));
+      var files = new List<string>();
+
       message = Page.MakeValidPath(message) + Path.DirectorySeparatorChar;
       if (!Directory.Exists(message))
-        return;
+        return files;
 
       // Нельзя сжимать папку со всей мангой.
       if (message.Trim(Path.DirectorySeparatorChar) == Settings.DownloadFolder.Trim(Path.DirectorySeparatorChar))
-        return;
+        return files;
 
+      Log.Add(string.Format("Compression: Start {0}.", message));
       var volumes = Directory.GetDirectories(message);
       foreach (var volume in volumes)
       {
@@ -40,93 +42,67 @@ namespace MangaReader.Services
               GetFolderName(message), Separator,
               GetFolderName(volume), Separator,
               GetFolderName(chapter), ArchiveFormat);
-          if (File.Exists(acr))
-            AddToArchive(acr, chapter);
-          else
-          {
-            ZipFile.CreateFromDirectory(chapter, acr, CompressionLevel.NoCompression, false, Encoding.UTF8);
-            Log.Add(string.Format("Compression: Packed to {0}.", acr));
-          }
-          Directory.Delete(chapter, true);
+          files = AddToArchive(acr, chapter);
+          Log.Add(string.Format("Compression: Packed to {0}.", acr));
+          DeleteCompressedFiles(files, chapter);
         }
       }
       Log.Add(string.Format("Compression: End {0}.", message));
+      return files;
     }
 
     /// <summary>
     /// Упаковка всех томов.
     /// </summary>
     /// <param name="message">Папка манги.</param>
-    public static void CompressVolumes(string message)
+    public static List<string> CompressVolumes(string message)
     {
-      Log.Add(string.Format("Compression: Start {0}.", message));
+      var files = new List<string>();
+
       message = Page.MakeValidPath(message) + Path.DirectorySeparatorChar;
       if (!Directory.Exists(message))
-        return;
+        return files;
 
       // Нельзя сжимать папку со всей мангой.
       if (message.Trim(Path.DirectorySeparatorChar) == Settings.DownloadFolder.Trim(Path.DirectorySeparatorChar))
-        return;
+        return files;
 
+      Log.Add(string.Format("Compression: Start {0}.", message));
       var volumes = Directory.GetDirectories(message);
       foreach (var volume in volumes)
       {
         Log.Add(string.Format("Compression: Start volume {0}.", volume));
         var acr = string.Concat(message, GetFolderName(message), Separator, GetFolderName(volume), ArchiveFormat);
-        if (File.Exists(acr))
-          AddToArchive(acr, volume);
-        else
-        {
-          ZipFile.CreateFromDirectory(volume, acr, CompressionLevel.NoCompression, false, Encoding.UTF8);
-          Log.Add(string.Format("Compression: Packed to {0}.", acr));
-        }
-        Directory.Delete(volume, true);
+        files = AddToArchive(acr, volume);
+        Log.Add(string.Format("Compression: Packed to {0}.", acr));
+        DeleteCompressedFiles(files, volume);
       }
       Log.Add(string.Format("Compression: End {0}.", message));
+      return files;
     }
 
     /// <summary>
     /// Упаковка всей манги.
     /// </summary>
     /// <param name="message">Папка манги.</param>
-    public static void CompressManga(string message)
+    public static List<string> CompressManga(string message)
     {
-      Log.Add(string.Format("Compression: Start {0}.", message));
+      var files = new List<string>();
+
       message = Page.MakeValidPath(message) + Path.DirectorySeparatorChar;
       if (!Directory.Exists(message))
-        return;
+        return files;
 
       // Нельзя сжимать папку со всей мангой.
       if (message.Trim(Path.DirectorySeparatorChar) == Settings.DownloadFolder.Trim(Path.DirectorySeparatorChar))
-        return;
+        return files;
 
+      Log.Add(string.Format("Compression: Start {0}.", message));
       var acr = string.Concat(message, GetFolderName(message), ArchiveFormat);
-      var directories = new DirectoryInfo(message);
-      var cbzs = directories.GetFiles(ArchivePattern, SearchOption.TopDirectoryOnly);
-      var files = directories.GetFiles("*", SearchOption.TopDirectoryOnly);
-
-      if (File.Exists(acr))
-        AddToArchive(acr, message);
-      else
-        using (var fileStream = new FileStream(acr, FileMode.Create))
-        {
-          using (var zip = new ZipArchive(fileStream, ZipArchiveMode.Create, false, Encoding.UTF8))
-          {
-            foreach (var file in files.Except(cbzs))
-            {
-              zip.CreateEntryFromFile(file.FullName, file.Name, CompressionLevel.NoCompression);
-            }
-          }
-          Log.Add(string.Format("Compression: Packed to {0}.", acr));
-        }
-
-      var toDelete = directories.GetFiles("*", SearchOption.TopDirectoryOnly).Select(f => f.FullName)
-                  .Except(directories.GetFiles(ArchivePattern, SearchOption.TopDirectoryOnly).Select(f => f.FullName));
-      foreach (var file in toDelete)
-      {
-        File.Delete(file);
-      }
-      Log.Add(string.Format("Compression: End {0}.", message));
+      files = AddToArchive(acr, message);
+      Log.Add(string.Format("Compression: Packed to {0}.", acr));
+      DeleteCompressedFiles(files, message);
+      return files;
     }
 
     /// <summary>
@@ -136,7 +112,7 @@ namespace MangaReader.Services
     /// <returns>Название папки. '.\Folder\' -> 'Folder'</returns>
     private static string GetFolderName(string path)
     {
-      return path.Split(new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
+      return path.Split(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
                       StringSplitOptions.RemoveEmptyEntries)
                  .Last();
     }
@@ -146,77 +122,81 @@ namespace MangaReader.Services
     /// </summary>
     /// <param name="archive">Существующий архив.</param>
     /// <param name="folder">Папка, файлы которой необходимо запаковать.</param>
-    private static void AddToArchive(string archive, string folder)
+    private static List<string> AddToArchive(string archive, string folder)
     {
-      Log.Add(string.Format("Compression: archive {0} already exists, add folder {1}.", archive, folder));
+      var archiveMode = File.Exists(archive) ? ZipArchiveMode.Update : ZipArchiveMode.Create;
+      if (archiveMode == ZipArchiveMode.Update)
+        Log.Add(string.Format("Compression: archive {0} already exists, add folder {1}.", archive, folder));
       try
       {
-        using (var zip = ZipFile.Open(archive, ZipArchiveMode.Update, Encoding.UTF8))
+        var packedFiles = new List<string>();
+        using (var zip = ZipFile.Open(archive, archiveMode, Encoding.UTF8))
         {
           var directories = new DirectoryInfo(folder);
           var files = directories
-            .GetFiles("*", SearchOption.TopDirectoryOnly)
+            .GetFiles("*", SearchOption.AllDirectories)
             .Select(f => f.FullName)
             .Except(directories
-                .GetFiles(ArchivePattern, SearchOption.TopDirectoryOnly)
-                .Select(f => f.FullName));
+              .GetFiles(ArchivePattern, SearchOption.AllDirectories)
+              .Select(f => f.FullName))
+            .ToList();
           foreach (var file in files)
           {
-            var fileName = file
-              .Replace(directories.FullName + Path.DirectorySeparatorChar, string.Empty)
-              .Replace(directories.FullName, string.Empty);
-            var fileInZip = zip.Entries.FirstOrDefault(f => f.FullName == fileName);
-            if (fileInZip != null)
+            var fileName = file.Replace(directories.FullName, string.Empty).Trim(Path.DirectorySeparatorChar);
+            if (archiveMode == ZipArchiveMode.Update)
             {
-              Log.Add(string.Format("Compression: delete file {0} from archive {1}.", fileInZip.FullName, archive));
-              fileInZip.Delete();
+              var fileInZip = zip.Entries.SingleOrDefault(f => f.FullName == fileName);
+              if (fileInZip != null)
+              {
+                Log.Add(string.Format("Compression: delete file {0} from archive {1}.", fileInZip.FullName, archive));
+                fileInZip.Delete();
+              }
             }
             zip.CreateEntryFromFile(file, fileName, CompressionLevel.NoCompression);
+            packedFiles.Add(file);
+            Log.Add(string.Format("Compression: File {0} add to archive {1}.", fileName, archive));
           }
         }
+        return packedFiles;
       }
       catch (InvalidDataException ex)
       {
-        BackupFile.MoveToBackup(archive);
+        Backup.MoveToBackup(archive);
         ZipFile.CreateFromDirectory(folder, archive, CompressionLevel.NoCompression, false, Encoding.UTF8);
         var text = string.Format(
-                "Не удалось прочитать архив {0} для записи в него папки {1}. \r\n Существующий файл был переименован в {2}. В {3} только содержимое указанной папки.",
-                archive, folder, archive + ".bak", archive);
+          "Не удалось прочитать архив {0} для записи в него папки {1}. \r\n Существующий файл был переименован в {2}. В {3} только содержимое указанной папки.",
+          archive, folder, archive + ".bak", archive);
         Log.Exception(ex, text);
+        return new List<string>();
+      }
+      catch (Exception ex)
+      {
+        if (archiveMode == ZipArchiveMode.Update)
+          Backup.MoveToBackup(archive);
+
+        Log.Exception(ex);
+        return new List<string>();
       }
     }
-  }
 
-  class BackupFile
-  {
-    private const string BackupFormat = ".dbak";
-
-    internal static void MoveToBackup(string fileName, bool deleteExistBackup = false)
+    private static void DeleteCompressedFiles(List<string> files, string folder)
     {
-      var backupFileName = fileName + BackupFormat;
-      if (File.Exists(backupFileName))
+      foreach (var file in files)
       {
-        if (deleteExistBackup)
-          File.Delete(backupFileName);
-        else
+        File.Delete(file);
+      }
+      var subfolders = Directory.GetDirectories(folder).ToList();
+      subfolders.Add(folder);
+      foreach (var subfolder in subfolders)
+      {
+        try
         {
-          File.Move(backupFileName, GetNewBackupFileName(backupFileName));
+          Directory.Delete(subfolder);
+        }
+        catch (IOException)
+        {
         }
       }
-      File.Move(fileName, backupFileName);
-    }
-
-    private static string GetNewBackupFileName(string fileName)
-    {
-      var onlyName = Path.GetFileName(fileName);
-      var folder = Path.GetDirectoryName(fileName);
-      var backups = Directory.GetFiles(folder, onlyName + "*");
-      var backup = backups.Select(Path.GetFileName).OrderBy(s => s.Length).Last();
-
-      var id = new String(backup.Where(Char.IsDigit).ToArray());
-      var newId = string.IsNullOrWhiteSpace(id) ? "1" : (int.Parse(id) + 1).ToString(CultureInfo.InvariantCulture);
-      var result = string.IsNullOrWhiteSpace(id) ? backup + newId : backup.Replace(id, newId);
-      return result;
     }
   }
 }

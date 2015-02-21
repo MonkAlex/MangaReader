@@ -195,7 +195,7 @@ namespace MangaReader.Services
           Mangas.Create(dbstring);
       }
 
-      BackupFile.MoveToBackup(DatabaseFile);
+      Backup.MoveToBackup(DatabaseFile);
     }
 
     /// <summary>

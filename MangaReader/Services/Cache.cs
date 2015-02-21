@@ -61,10 +61,12 @@ namespace MangaReader.Services
         }));
       }
 
-      var cache = File.Exists(CacheFile) ?
-          Serializer<ObservableCollection<Mangas>>.Load(CacheFile).ToList() :
-          new ObservableCollection<Mangas>(Enumerable.Empty<Mangas>()).ToList();
-      globalCollection.AddRange(cache.Where(gm => !globalCollection.Exists(m => m.Uri == gm.Uri)));
+      if (File.Exists(CacheFile))
+      {
+        var cache = Serializer<ObservableCollection<Mangas>>.Load(CacheFile);
+        if (cache != null)
+          globalCollection.AddRange(cache.Where(gm => !globalCollection.Exists(m => m.Uri == gm.Uri)));
+      }
 
       var session = Mapping.Environment.Session;
       var fileUrls = globalCollection.Select(m => m.Uri).ToList();
@@ -86,7 +88,7 @@ namespace MangaReader.Services
         tranc.Commit();
       }
 
-      BackupFile.MoveToBackup(CacheFile);
+      Backup.MoveToBackup(CacheFile);
     }
   }
 }

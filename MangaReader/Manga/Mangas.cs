@@ -114,7 +114,7 @@ namespace MangaReader.Manga
       Enum.GetValues(typeof(Compression.CompressionMode))
             .Cast<Compression.CompressionMode>());
 
-    public virtual Compression.CompressionMode CompressionMode { get; set; }
+    public virtual Compression.CompressionMode? CompressionMode { get; set; }
 
     /// <summary>
     /// Статус корректности манги.

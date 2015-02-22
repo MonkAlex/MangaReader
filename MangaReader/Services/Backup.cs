@@ -12,16 +12,33 @@ namespace MangaReader.Services
     internal static void MoveToBackup(string fileName, bool deleteExistBackup = false)
     {
       var backupFileName = fileName + BackupFormat;
-      if (File.Exists(backupFileName))
+      try
       {
-        if (deleteExistBackup)
-          File.Delete(backupFileName);
-        else
+        if (File.Exists(backupFileName))
         {
-          File.Move(backupFileName, GetNewBackupFileName(backupFileName));
+          if (deleteExistBackup)
+            File.Delete(backupFileName);
+          else
+          {
+            File.Move(backupFileName, GetNewBackupFileName(backupFileName));
+          }
+        }
+        File.Move(fileName, backupFileName);
+      }
+      catch (Exception ex)
+      {
+        Log.Exception(ex, "Перемещение файла не удалось, пытаемся скопировать.");
+        try
+        {
+          if (File.Exists(backupFileName))
+            File.Copy(backupFileName, GetNewBackupFileName(backupFileName));
+          File.Copy(fileName, backupFileName, true);
+        }
+        catch (Exception subException)
+        {
+          Log.Exception(subException, "Создание копии вместо перемещения тоже не удалось.");
         }
       }
-      File.Move(fileName, backupFileName);
     }
 
     private static string GetNewBackupFileName(string fileName)

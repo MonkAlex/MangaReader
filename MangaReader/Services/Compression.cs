@@ -13,6 +13,13 @@ namespace MangaReader.Services
     public const string ArchivePattern = "*.cbz";
     public const string Separator = " ";
 
+    public enum CompressionMode
+    {
+      Manga,
+      Volume,
+      Chapter
+    }
+
     /// <summary>
     /// Упаковка всех глав.
     /// </summary>
@@ -39,8 +46,6 @@ namespace MangaReader.Services
         {
           Log.Add(string.Format("Compression: Start chapter {0}.", chapter));
           var acr = string.Concat(volume, Path.DirectorySeparatorChar,
-              GetFolderName(message), Separator,
-              GetFolderName(volume), Separator,
               GetFolderName(chapter), ArchiveFormat);
           files = AddToArchive(acr, chapter);
           Log.Add(string.Format("Compression: Packed to {0}.", acr));
@@ -72,7 +77,7 @@ namespace MangaReader.Services
       foreach (var volume in volumes)
       {
         Log.Add(string.Format("Compression: Start volume {0}.", volume));
-        var acr = string.Concat(message, GetFolderName(message), Separator, GetFolderName(volume), ArchiveFormat);
+        var acr = string.Concat(message, GetFolderName(volume), ArchiveFormat);
         files = AddToArchive(acr, volume);
         Log.Add(string.Format("Compression: Packed to {0}.", acr));
         DeleteCompressedFiles(files, volume);
@@ -171,10 +176,11 @@ namespace MangaReader.Services
       }
       catch (Exception ex)
       {
+        Log.Exception(ex);
+
         if (archiveMode == ZipArchiveMode.Update)
           Backup.MoveToBackup(archive);
 
-        Log.Exception(ex);
         return new List<string>();
       }
     }
@@ -185,17 +191,23 @@ namespace MangaReader.Services
       {
         File.Delete(file);
       }
+      DeleteEmptyFolder(folder);
+    }
+
+    private static void DeleteEmptyFolder(string folder)
+    {
       var subfolders = Directory.GetDirectories(folder).ToList();
-      subfolders.Add(folder);
       foreach (var subfolder in subfolders)
       {
-        try
-        {
-          Directory.Delete(subfolder);
-        }
-        catch (IOException)
-        {
-        }
+        DeleteEmptyFolder(subfolder);
+      }
+
+      try
+      {
+        Directory.Delete(folder);
+      }
+      catch (IOException)
+      {
       }
     }
   }

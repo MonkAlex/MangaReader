@@ -31,6 +31,11 @@ namespace MangaReader.Manga.Acomic
       get { return (downloadedChapters != null && downloadedChapters.Any()) ? (downloadedChapters.Count(ch => ch.IsDownloaded) / (double)downloadedChapters.Count) * 100.0 : 0; }
       set { }
     }
+    
+    public override List<Compression.CompressionMode> AllowedCompressionModes
+    {
+      get { return base.AllowedCompressionModes.Where(m => Equals(m, Compression.CompressionMode.Manga)).ToList(); }
+    }
 
     /// <summary>
     /// Загружаемый список глав.
@@ -61,11 +66,6 @@ namespace MangaReader.Manga.Acomic
 
       this.allChapters = Getter.GetMangaChapters(this.Uri);
       OnPropertyChanged("IsCompleted");
-    }
-
-    public override void Compress()
-    {
-      Compression.CompressManga(this.Folder);
     }
 
     /// <summary>
@@ -141,6 +141,7 @@ namespace MangaReader.Manga.Acomic
     {
       this.Uri = url;
       this.ServerName = Getter.GetMangaName(url);
+      this.CompressionMode = Compression.CompressionMode.Manga;
     }
 
     public Acomics() : base() { }

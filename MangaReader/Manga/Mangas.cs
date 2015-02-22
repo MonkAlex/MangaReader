@@ -108,6 +108,14 @@ namespace MangaReader.Manga
 
     private bool needUpdate = true;
 
+    public virtual List<Compression.CompressionMode> AllowedCompressionModes { get { return allowedCompressionModes; } }
+
+    private static List<Compression.CompressionMode> allowedCompressionModes = new List<Compression.CompressionMode>(
+      Enum.GetValues(typeof(Compression.CompressionMode))
+            .Cast<Compression.CompressionMode>());
+
+    public virtual Compression.CompressionMode CompressionMode { get; set; }
+
     /// <summary>
     /// Статус корректности манги.
     /// </summary>
@@ -137,7 +145,7 @@ namespace MangaReader.Manga
 
     public virtual string DownloadFolder
     {
-      get { return Settings.DownloadFolders.First(f => f.Manga == this.GetType().MangaType()).Folder; }
+      get { return Settings.DownloadFolders.Single(f => f.Manga == this.GetType().MangaType()).Folder; }
       set { }
     }
 
@@ -205,7 +213,20 @@ namespace MangaReader.Manga
     /// </summary>
     public virtual void Compress()
     {
-
+      switch (this.CompressionMode)
+      {
+        case Compression.CompressionMode.Manga:
+          Compression.CompressManga(this.Folder);
+          break;
+        case Compression.CompressionMode.Volume:
+          Compression.CompressVolumes(this.Folder);
+          break;
+        case Compression.CompressionMode.Chapter:
+          Compression.CompressChapters(this.Folder);
+          break;
+        default:
+          throw new InvalidEnumArgumentException("CompressionMode", 0, typeof(Compression.CompressionMode));
+      }
     }
 
     protected override void BeforeSave(object[] currentState, object[] previousState, string[] propertyNames)

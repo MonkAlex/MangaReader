@@ -1,10 +1,13 @@
 ﻿using System.Data.SQLite;
 using System.IO;
+using System.Linq;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using MangaReader.Services;
+using NHibernate.Linq;
 using Settings = MangaReader.Services.Settings;
 
 namespace MangaReader.Mapping
@@ -16,6 +19,19 @@ namespace MangaReader.Mapping
     private static ISessionFactory SessionFactory;
 
     public static ISession Session;
+
+    internal static void Convert(ConverterProcess process)
+    {
+      var readmangaCompressionMode = Session.CreateSQLQuery(@"update Mangas 
+set CompressionMode = 'Volume'
+where CompressionMode is null and Type = '2c98bbf4-db46-47c4-ab0e-f207e283142d'");
+      readmangaCompressionMode.UniqueResult();
+
+      var acomicsCompressionMode = Session.CreateSQLQuery(@"update Mangas 
+set CompressionMode = 'Manga'
+where CompressionMode is null and Type = 'f090b9a2-1400-4f5e-b298-18cd35341c34'");
+      acomicsCompressionMode.UniqueResult();
+    }
 
     public static ISession OpenSession()
     {

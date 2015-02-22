@@ -40,6 +40,9 @@
     <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
               x:Name="NeedCompress" IsChecked="{Binding Path=NeedCompress}" IsThreeState="True"
               Content="{x:Static resx:Strings.Settings_Compress}" />
+    <ComboBox Grid.Row="3" Grid.Column="2" x:Name="CompressBox" 
+              ItemsSource="{Binding Path=AllowedCompressionModes}" 
+              SelectedItem="{Binding Path=CompressionMode}"/>
 
     <Button Grid.Row="5" Grid.Column="1"
             IsDefault="True"

@@ -48,6 +48,11 @@ namespace MangaReader.Manga.Grouple
       set { }
     }
 
+    public override List<Compression.CompressionMode> AllowedCompressionModes
+    {
+      get { return base.AllowedCompressionModes.Where(m => !Equals(m, Compression.CompressionMode.Manga)).ToList(); }
+    }
+
     /// <summary>
     /// Загружаемый список глав.
     /// </summary>
@@ -86,11 +91,6 @@ namespace MangaReader.Manga.Grouple
       this.listOfChapters = Getter.GetLinksOfMangaChapters(page, this.Uri);
       this.Status = Getter.GetTranslateStatus(page);
       OnPropertyChanged("IsCompleted");
-    }
-
-    public override void Compress()
-    {
-      Compression.CompressVolumes(this.Folder);
     }
 
     /// <summary>
@@ -190,6 +190,7 @@ namespace MangaReader.Manga.Grouple
     {
       this.Uri = url;
       this.Refresh();
+      this.CompressionMode = Compression.CompressionMode.Volume;
     }
 
     public Readmanga() : base() { }

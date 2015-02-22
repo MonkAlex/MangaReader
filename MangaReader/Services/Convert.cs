@@ -50,6 +50,7 @@ namespace MangaReader.Services
 
       Process.Status = "Convert manga...";
       Cache.Convert(Process);
+      Mapping.Environment.Convert(Process);
 
       Process.Status = "Convert history...";
       Process.Percent = 0;

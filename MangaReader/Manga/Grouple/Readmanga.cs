@@ -186,14 +186,16 @@ namespace MangaReader.Manga.Grouple
     /// </summary>
     /// <param name="url">Ссылка на мангу.</param>
     public Readmanga(Uri url)
-      : base()
+      : this()
     {
       this.Uri = url;
       this.Refresh();
-      this.CompressionMode = Compression.CompressionMode.Volume;
     }
 
-    public Readmanga() : base() { }
+    public Readmanga() : base()
+    {
+      this.CompressionMode = Compression.CompressionMode.Volume;
+    }
 
     #endregion
   }

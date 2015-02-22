@@ -137,14 +137,16 @@ namespace MangaReader.Manga.Acomic
     /// </summary>
     /// <param name="url">Ссылка на мангу.</param>
     public Acomics(Uri url)
-      : base()
+      : this()
     {
       this.Uri = url;
       this.ServerName = Getter.GetMangaName(url);
-      this.CompressionMode = Compression.CompressionMode.Manga;
     }
 
-    public Acomics() : base() { }
+    public Acomics() : base()
+    {
+      this.CompressionMode = Compression.CompressionMode.Manga;
+    }
 
     #endregion
   }

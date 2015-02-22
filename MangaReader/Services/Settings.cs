@@ -39,6 +39,11 @@ namespace MangaReader.Services
     public static DateTime LastUpdate = DateTime.Now;
 
     /// <summary>
+    /// Версия базы данных.
+    /// </summary>
+    public static Version DatabaseVersion = new Version(1, 0, 0, 0);
+
+    /// <summary>
     /// Папка программы.
     /// </summary>
     public static readonly string WorkFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -111,7 +116,8 @@ namespace MangaReader.Services
                 WindowsState,
                 new object[] {null, null},
                 MinimizeToTray,
-                AutoUpdateInHours
+                AutoUpdateInHours,
+                DatabaseVersion.ToString(4)
             };
       Serializer<object[]>.Save(SettingsPath, settings);
     }
@@ -142,6 +148,8 @@ namespace MangaReader.Services
         Console.WriteLine("Minimize to tray {0}", MinimizeToTray);
         AutoUpdateInHours = (int)settings[8];
         Console.WriteLine("Update mangas ever {0} hours, if its not zero.", AutoUpdateInHours);
+        DatabaseVersion = new Version((string)settings[9]);
+        Console.WriteLine("Curent database version = {0}.", DatabaseVersion);
       }
       catch (IndexOutOfRangeException) { }
     }

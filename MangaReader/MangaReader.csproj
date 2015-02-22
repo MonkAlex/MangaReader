@@ -90,6 +90,7 @@
     </Reference>
     <Reference Include="NHibernate">
       <HintPath>Library\NHibernate.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Ookii.Dialogs.Wpf">
       <SpecificVersion>False</SpecificVersion>
@@ -141,6 +142,7 @@
     </Compile>
     <Compile Include="Manga\Mangas.cs" />
     <Compile Include="Manga\MangaObsolete.cs" />
+    <Compile Include="Mapping\Converting.cs" />
     <Compile Include="Mapping\Environment.cs" />
     <Compile Include="Mapping\LoginMap.cs" />
     <Compile Include="Mapping\MangaSettingMap.cs" />

@@ -28,7 +28,6 @@ namespace MangaReader
       if (Environment.GetCommandLineArgs().Contains("-t"))
         ShowConsoleWindow();
 
-      ServicePointManager.DefaultConnectionLimit = 100;
       Mapping.Environment.Initialize();
       Converter.Convert(true);
       Update.Initialize();

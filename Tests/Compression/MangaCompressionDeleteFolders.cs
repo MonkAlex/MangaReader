@@ -20,11 +20,13 @@ namespace MangaReader.Tests.Compression
 
       var volume = AddFolder(downloadFolder);
       var chapter = AddFolder(volume);
+      AddFile(chapter);
       Services.Compression.CompressManga(downloadFolder);
-      CheckFiles(downloadFolder, 1, 0);
+      CheckFiles(downloadFolder, 1, 1);
 
       Assert.IsFalse(Directory.Exists(chapter));
       Assert.IsFalse(Directory.Exists(volume));
+      Assert.IsTrue(Directory.Exists(downloadFolder));
     }
 
     private string AddFolder(string downloadFolder)
@@ -32,6 +34,12 @@ namespace MangaReader.Tests.Compression
       var directory = Path.Combine(downloadFolder, Guid.NewGuid().ToString("D"));
       Directory.CreateDirectory(directory);
       return directory;
+    }
+
+    private void AddFile(string folder)
+    {
+      var file = Path.Combine(folder, Guid.NewGuid().ToString("D"));
+      File.Create(file).Dispose();
     }
 
     private void CheckFiles(string downloadFolder, int archiveCount, params int[] filesCount)

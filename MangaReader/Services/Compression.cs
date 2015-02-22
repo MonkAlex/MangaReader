@@ -40,15 +40,12 @@ namespace MangaReader.Services
       var volumes = Directory.GetDirectories(message);
       foreach (var volume in volumes)
       {
-        Log.Add(string.Format("Compression: Start volume {0}.", volume));
         var chapters = Directory.GetDirectories(volume);
         foreach (var chapter in chapters)
         {
-          Log.Add(string.Format("Compression: Start chapter {0}.", chapter));
           var acr = string.Concat(volume, Path.DirectorySeparatorChar,
               GetFolderName(chapter), ArchiveFormat);
           files = AddToArchive(acr, chapter);
-          Log.Add(string.Format("Compression: Packed to {0}.", acr));
           DeleteCompressedFiles(files, chapter);
         }
       }
@@ -76,10 +73,8 @@ namespace MangaReader.Services
       var volumes = Directory.GetDirectories(message);
       foreach (var volume in volumes)
       {
-        Log.Add(string.Format("Compression: Start volume {0}.", volume));
         var acr = string.Concat(message, GetFolderName(volume), ArchiveFormat);
         files = AddToArchive(acr, volume);
-        Log.Add(string.Format("Compression: Packed to {0}.", acr));
         DeleteCompressedFiles(files, volume);
       }
       Log.Add(string.Format("Compression: End {0}.", message));
@@ -105,8 +100,8 @@ namespace MangaReader.Services
       Log.Add(string.Format("Compression: Start {0}.", message));
       var acr = string.Concat(message, GetFolderName(message), ArchiveFormat);
       files = AddToArchive(acr, message);
-      Log.Add(string.Format("Compression: Packed to {0}.", acr));
       DeleteCompressedFiles(files, message);
+      Log.Add(string.Format("Compression: End {0}.", message));
       return files;
     }
 
@@ -135,16 +130,19 @@ namespace MangaReader.Services
       try
       {
         var packedFiles = new List<string>();
+        var directories = new DirectoryInfo(folder);
+        var files = directories
+          .GetFiles("*", SearchOption.AllDirectories)
+          .Select(f => f.FullName)
+          .Except(directories
+            .GetFiles(ArchivePattern, SearchOption.AllDirectories)
+            .Select(f => f.FullName))
+          .ToList();
+        if (!files.Any()) 
+          return packedFiles;
+
         using (var zip = ZipFile.Open(archive, archiveMode, Encoding.UTF8))
         {
-          var directories = new DirectoryInfo(folder);
-          var files = directories
-            .GetFiles("*", SearchOption.AllDirectories)
-            .Select(f => f.FullName)
-            .Except(directories
-              .GetFiles(ArchivePattern, SearchOption.AllDirectories)
-              .Select(f => f.FullName))
-            .ToList();
           foreach (var file in files)
           {
             var fileName = file.Replace(directories.FullName, string.Empty).Trim(Path.DirectorySeparatorChar);
@@ -152,14 +150,10 @@ namespace MangaReader.Services
             {
               var fileInZip = zip.Entries.SingleOrDefault(f => f.FullName == fileName);
               if (fileInZip != null)
-              {
-                Log.Add(string.Format("Compression: delete file {0} from archive {1}.", fileInZip.FullName, archive));
                 fileInZip.Delete();
-              }
             }
             zip.CreateEntryFromFile(file, fileName, CompressionLevel.NoCompression);
             packedFiles.Add(file);
-            Log.Add(string.Format("Compression: File {0} add to archive {1}.", fileName, archive));
           }
         }
         return packedFiles;

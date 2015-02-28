@@ -214,6 +214,15 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Выполнить архивацию.
+        /// </summary>
+        public static string Manga_Action_Compress {
+            get {
+                return ResourceManager.GetString("Manga_Action_Compress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Открыть папку.
         /// </summary>
         public static string Manga_Action_OpenFolder {

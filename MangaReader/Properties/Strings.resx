@@ -255,4 +255,7 @@
   <data name="Library_TypeFilter_All" xml:space="preserve">
     <value>Все</value>
   </data>
+  <data name="Manga_Action_Compress" xml:space="preserve">
+    <value>Выполнить архивацию</value>
+  </data>
 </root>

@@ -150,6 +150,8 @@ namespace MangaReader
       openFolder.Click += (o, args) => MenuOpenFolder(manga);
       var update = new MenuItem() { Header = Strings.Manga_Action_Update, IsEnabled = this.IsAvaible };
       update.Click += (o, agrs) => UpdateManga(manga);
+      var compress = new MenuItem() {Header = Strings.Manga_Action_Compress, IsEnabled = this.IsAvaible};
+      compress.Click += (o, args) => manga.Compress();
       var removeHistory = new MenuItem() { Header = Strings.Manga_Action_Remove + " историю", IsEnabled = this.IsAvaible };
       removeHistory.Click += (o, agrs) => {manga.Histories.Clear(); manga.Save();};
       var remove = new MenuItem() { Header = Strings.Manga_Action_Remove, IsEnabled = this.IsAvaible };
@@ -165,6 +167,7 @@ namespace MangaReader
       menu.Items.Add(openFolder);
       menu.Items.Add(needUpdate);
       menu.Items.Add(update);
+      menu.Items.Add(compress);
       menu.Items.Add(view);
       menu.Items.Add(removeHistory);
       menu.Items.Add(remove);

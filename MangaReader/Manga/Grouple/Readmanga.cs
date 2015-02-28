@@ -22,12 +22,14 @@ namespace MangaReader.Manga.Grouple
     /// <summary>
     /// Статус перевода.
     /// </summary>
-    public override string IsCompleted
+    public override bool IsCompleted
     {
       get
       {
+        if (this.Status == null)
+          return false;
         var match = Regex.Match(this.Status, Strings.Manga_IsCompleted);
-        return match.Groups.Count > 1 ? match.Groups[1].Value.Trim() : null;
+        return match.Groups.Count > 1 && match.Groups[1].Value.Trim() == "завершен";
       }
     }
 

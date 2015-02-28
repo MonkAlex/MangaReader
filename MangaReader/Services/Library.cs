@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Shell;
@@ -18,11 +18,6 @@ namespace MangaReader.Services
     /// Ссылка на файл базы.
     /// </summary>
     private static readonly string DatabaseFile = Settings.WorkFolder + @".\db";
-
-    /// <summary>
-    /// Манга в библиотеке.
-    /// </summary>
-    public static ObservableCollection<Mangas> DatabaseMangas = new ObservableCollection<Mangas>(Enumerable.Empty<Mangas>());
 
     /// <summary>
     /// Статус библиотеки.
@@ -94,12 +89,10 @@ namespace MangaReader.Services
     /// <returns></returns>
     public static void Initialize(Table main)
     {
-      DatabaseMangas = Cache.Get();
-      DatabaseMangas.CollectionChanged += (s, e) => { Cache.Add(DatabaseMangas); FilterChanged(main); };
       formDispatcher = main.Dispatcher;
       taskBar = main.TaskBar;
       taskbarIcon = main.NotifyIcon;
-      main.Type.Items.Add("Все");
+      main.Type.Items.Add(Strings.Library_TypeFilter_All);
       main.Type.Items.Add("AdultManga");
       main.Type.Items.Add("AComics");
       main.Type.Items.Add("ReadManga");
@@ -110,18 +103,19 @@ namespace MangaReader.Services
       main.Type.SelectedIndex = 0;
     }
 
-    private static void FilterChanged(Table main)
+    public static void FilterChanged(Table main)
     {
-      var query = DatabaseMangas.Where(n => n != null);
-      if (main.Type.SelectedItem.ToString() != "Все")
-        query = query.Where(n => n.Uri.OriginalString.ToLowerInvariant().Contains(main.Type.SelectedItem.ToString().ToLowerInvariant()));
+      var query = Mapping.Environment.Session.Query<Mangas>().Where(n => n != null);
+      if (main.Type.SelectedItem.ToString() != Strings.Library_TypeFilter_All)
+        query = query.Where(n => n.Uri.ToString().ToUpper().Contains(main.Type.SelectedItem.ToString().ToUpper()));
       if (main.Uncompleted.IsChecked == true)
-        query = query.Where(n => n.IsCompleted != "завершен");
+        query = query.Where(n => !n.IsCompleted);
       if (main.OnlyUpdate.IsChecked == true)
         query = query.Where(n => n.NeedUpdate);
       if (main.NameFilter.Text.Any())
-        query = query.Where(n => n.Name.ToLowerInvariant().Contains(main.NameFilter.Text.ToLowerInvariant()));
-      main.FormLibrary.ItemsSource = query;
+        query = query.Where(n => (n.IsNameChanged ? n.LocalName : n.ServerName).ToLowerInvariant().
+          Contains(main.NameFilter.Text.ToLowerInvariant()));
+      main.FormLibrary.ItemsSource = query.OrderBy(m => m.IsNameChanged ? m.LocalName : m.ServerName).ToList();
     }
 
     /// <summary>
@@ -150,7 +144,6 @@ namespace MangaReader.Services
       if (!newManga.IsValid())
         return;
 
-      formDispatcher.Invoke(() => DatabaseMangas.Add(newManga));
       Status = Strings.Library_Status_MangaAdded + newManga.Name;
     }
 
@@ -163,9 +156,6 @@ namespace MangaReader.Services
       if (manga == null)
         return;
 
-      Log.Add(Strings.Manga_Action_Remove + manga.Name);
-
-      formDispatcher.Invoke(() => DatabaseMangas.Remove(manga));
       manga.Delete();
 
       Status = Strings.Library_Status_MangaRemoved + manga.Name;
@@ -201,32 +191,34 @@ namespace MangaReader.Services
     /// <summary>
     /// Обновить мангу.
     /// </summary>
-    /// <param name="manga">Обновляемая манга. По умолчанию - вся.</param>
-    public static void Update(Mangas manga = null)
+    /// <param name="manga">Обновляемая манга.</param>
+    public static void Update(Mangas manga)
+    {
+      Update(Enumerable.Repeat(manga, 1), new SortDescription());
+    }
+
+    /// <summary>
+    /// Обновить мангу.
+    /// </summary>
+    /// <param name="mangas">Обновляемая манга.</param>
+    /// <param name="sort">Сортировка.</param>
+    public static void Update(IEnumerable<Mangas> mangas, SortDescription sort)
     {
       Library.SetTaskbarState(0, TaskbarItemProgressState.Indeterminate);
-
-      List<Mangas> mangas;
-      if (manga != null)
-      {
-        mangas = new List<Mangas> { manga };
-      }
-      else
-      {
-        Status = Strings.Library_Status_Update;
-        mangas = Mapping.Environment.Session.Query<Mangas>().Where(m => m.NeedUpdate).ToList();
-      }
-
+      Status = Strings.Library_Status_Update;
       try
       {
         Library.SetTaskbarState(0, TaskbarItemProgressState.Normal);
         var mangaIndex = 0;
-        mangas = mangas.Where(m => m.NeedUpdate).ToList();
-        foreach (var current in mangas)
+        mangas = sort.Direction == ListSortDirection.Ascending ? 
+          mangas.OrderBy(m => m.Name) :
+          mangas.OrderByDescending(m => m.Name);
+        var listMangas = mangas.Where(m => m.NeedUpdate).ToList();
+        foreach (var current in listMangas)
         {
           Status = Strings.Library_Status_MangaUpdate + current.Name;
           current.DownloadProgressChanged += (sender, args) =>
-              Library.SetTaskbarState((double)(100 * mangaIndex + args.Downloaded) / (mangas.Count * 100));
+              Library.SetTaskbarState((double)(100 * mangaIndex + args.Downloaded) / (listMangas.Count * 100));
           current.Download();
           if (current.NeedCompress ?? Settings.CompressManga)
             current.Compress();
@@ -248,8 +240,7 @@ namespace MangaReader.Services
       {
         Library.SetTaskbarState(0, TaskbarItemProgressState.None);
         Status = Strings.Library_Status_UpdateComplete;
-        if (manga == null)
-          Settings.LastUpdate = DateTime.Now;
+        Settings.LastUpdate = DateTime.Now;
       }
 
     }

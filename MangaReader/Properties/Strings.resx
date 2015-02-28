@@ -246,4 +246,13 @@
   <data name="Manga_Settings" xml:space="preserve">
     <value>Свойства</value>
   </data>
+  <data name="Mangas_Compress_Started" xml:space="preserve">
+    <value>Архивация </value>
+  </data>
+  <data name="Mangas_Compress_Completed" xml:space="preserve">
+    <value>Архивация завершена.</value>
+  </data>
+  <data name="Library_TypeFilter_All" xml:space="preserve">
+    <value>Все</value>
+  </data>
 </root>

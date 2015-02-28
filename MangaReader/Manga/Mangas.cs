@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using FluentNHibernate.Visitors;
+using MangaReader.Properties;
 using MangaReader.Services;
 using NHibernate.Linq;
 
@@ -115,7 +116,7 @@ namespace MangaReader.Manga
             .Cast<Compression.CompressionMode>());
 
     public virtual Compression.CompressionMode? CompressionMode { get; set; }
-
+    
     /// <summary>
     /// Статус корректности манги.
     /// </summary>
@@ -127,7 +128,7 @@ namespace MangaReader.Manga
     /// <summary>
     /// Статус перевода.
     /// </summary>
-    public virtual string IsCompleted { get; set; }
+    public virtual bool IsCompleted { get; set; }
 
     #endregion
 
@@ -213,6 +214,7 @@ namespace MangaReader.Manga
     /// </summary>
     public virtual void Compress()
     {
+      Library.Status = Strings.Mangas_Compress_Started + this.Name;
       switch (this.CompressionMode)
       {
         case Compression.CompressionMode.Manga:
@@ -227,6 +229,7 @@ namespace MangaReader.Manga
         default:
           throw new InvalidEnumArgumentException("CompressionMode", 0, typeof(Compression.CompressionMode));
       }
+      Library.Status = Strings.Mangas_Compress_Completed;
     }
 
     protected override void BeforeSave(object[] currentState, object[] previousState, string[] propertyNames)

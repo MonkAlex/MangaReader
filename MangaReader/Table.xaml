@@ -11,7 +11,8 @@
         Title="{x:Static resx:Strings.Title}"  Height="350" Width="525">
 
   <Window.Resources>
-    <local:StringImageConverter x:Key="ImageConverter"/>
+    <local:UpdateImageConverter x:Key="UpdateImageConverter"/>
+    <local:CompletedImageConverter x:Key="CompletedImageConverter"/>
     <local:UrlTypeConverter x:Key="UrlTypeConverter"/>
   </Window.Resources>
 
@@ -52,8 +53,6 @@
                  ui:GridSort.AutoSort="True" >
       <ListView.ItemContainerStyle>
         <Style TargetType="{x:Type ListViewItem}">
-          <EventSetter Event="PreviewMouseMove" Handler="_PreviewMouseMoveEvent"/>
-          <EventSetter Event="Drop" Handler="Library_Drop"/>
           <EventSetter Event="MouseRightButtonUp" Handler="ListViewItem_OnMouseRightButtonUp"/>
           <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Mangas_clicked"/>
           <Setter Property="AllowDrop" Value="True"/>
@@ -119,7 +118,7 @@
               <GridViewColumn.CellTemplate>
                 <DataTemplate>
                   <Grid>
-                    <Image Source="{Binding IsCompleted, Converter={StaticResource ImageConverter}}" Width="16" Height="16"/>
+                    <Image Source="{Binding IsCompleted, Converter={StaticResource CompletedImageConverter}}" Width="16" Height="16"/>
                   </Grid>
                 </DataTemplate>
               </GridViewColumn.CellTemplate>
@@ -131,7 +130,7 @@
               <GridViewColumn.CellTemplate>
                 <DataTemplate>
                   <Grid>
-                    <Image Source="{Binding NeedUpdate, Converter={StaticResource ImageConverter}}" Width="16" Height="16"/>
+                    <Image Source="{Binding NeedUpdate, Converter={StaticResource UpdateImageConverter}}" Width="16" Height="16"/>
                   </Grid>
                 </DataTemplate>
               </GridViewColumn.CellTemplate>

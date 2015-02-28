@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -49,45 +50,6 @@ namespace MangaReader
           Dispatcher.CurrentDispatcher);
     }
 
-    void _PreviewMouseMoveEvent(object sender, MouseEventArgs e)
-    {
-      if (!this.IsAvaible)
-        return;
-
-      if (!(sender is ListViewItem) || e.LeftButton != MouseButtonState.Pressed)
-        return;
-
-      var draggedItem = sender as ListViewItem;
-      DragDrop.DoDragDrop(draggedItem, draggedItem.DataContext, DragDropEffects.Move);
-      draggedItem.IsSelected = true;
-    }
-
-    void Library_Drop(object sender, DragEventArgs e)
-    {
-      if (!this.IsAvaible)
-        return;
-
-      var droppedData = e.Data.GetData(e.Data.GetFormats().FirstOrDefault()) as Mangas;
-      var target = ((ListViewItem)(sender)).DataContext as Mangas;
-
-      var removedIdx = this.FormLibrary.Items.IndexOf(droppedData);
-      var targetIdx = this.FormLibrary.Items.IndexOf(target);
-
-      if (removedIdx < targetIdx)
-      {
-        Library.DatabaseMangas.Insert(targetIdx + 1, droppedData);
-        Library.DatabaseMangas.RemoveAt(removedIdx);
-      }
-      else
-      {
-        var remIdx = removedIdx + 1;
-        if (Library.DatabaseMangas.Count + 1 <= remIdx)
-          return;
-        Library.DatabaseMangas.Insert(targetIdx, droppedData);
-        Library.DatabaseMangas.RemoveAt(remIdx);
-      }
-    }
-
     /// <summary>
     /// Обновление библиотеки.
     /// </summary>
@@ -96,7 +58,9 @@ namespace MangaReader
     private void Update_click(object sender, RoutedEventArgs e)
     {
       if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
-        _loadThread = new Thread(() => Library.Update());
+        _loadThread = new Thread(() => 
+          Library.Update(FormLibrary.ItemsSource as IEnumerable<Mangas>, 
+          FormLibrary.Items.SortDescriptions.SingleOrDefault()));
       if (_loadThread.ThreadState == ThreadState.Unstarted)
         _loadThread.Start();
     }
@@ -135,6 +99,7 @@ namespace MangaReader
       {
         Library.Add(manga.Uri);
       }
+      Library.FilterChanged(this);
     }
 
     /// <summary>
@@ -188,13 +153,13 @@ namespace MangaReader
       var removeHistory = new MenuItem() { Header = Strings.Manga_Action_Remove + " историю", IsEnabled = this.IsAvaible };
       removeHistory.Click += (o, agrs) => {manga.Histories.Clear(); manga.Save();};
       var remove = new MenuItem() { Header = Strings.Manga_Action_Remove, IsEnabled = this.IsAvaible };
-      remove.Click += (o, agrs) => Library.Remove(manga);
+      remove.Click += (o, agrs) => { Library.Remove(manga); Library.FilterChanged(this); };
       var view = new MenuItem() { Header = Strings.Manga_Action_View };
       view.Click += (o, agrs) => Process.Start(manga.Uri.OriginalString);
       var needUpdate = new MenuItem() { Header = manga.NeedUpdate ? Strings.Manga_NotUpdate : Strings.Manga_Update, IsEnabled = this.IsAvaible };
       needUpdate.Click += (o, args) => { manga.NeedUpdate = !manga.NeedUpdate; manga.Save(); };
       var settings = new MenuItem() { Header = Strings.Manga_Settings, IsEnabled = this.IsAvaible };
-      settings.Click += (o, args) => new MangaForm { DataContext = manga, Owner = this }.ShowDialog();
+      settings.Click += (o, args) => { new MangaForm {DataContext = manga, Owner = this}.ShowDialog(); Library.FilterChanged(this); };
 
       var menu = new ContextMenu();
       menu.Items.Add(openFolder);
@@ -317,8 +282,8 @@ namespace MangaReader
     #endregion
   }
 
-  [ValueConversion(typeof(string), typeof(string))]
-  public class StringImageConverter : IValueConverter
+  [ValueConversion(typeof(bool), typeof(string))]
+  public class CompletedImageConverter : IValueConverter
   {
     #region IValueConverter Members
 
@@ -326,17 +291,44 @@ namespace MangaReader
         System.Globalization.CultureInfo culture)
     {
       var result = "Icons/play.png";
-      switch (value != null ? value.ToString() : string.Empty)
+      switch ((bool)value)
       {
-        case "завершен":
+        case true:
           result = "Icons/stop.png";
           break;
 
-        case "True":
+        case false:
+          result = "Icons/play.png";
+          break;
+      }
+      return result;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter,
+        System.Globalization.CultureInfo culture)
+    {
+      throw new NotSupportedException();
+    }
+
+    #endregion
+  }
+
+  [ValueConversion(typeof(bool), typeof(string))]
+  public class UpdateImageConverter : IValueConverter
+  {
+    #region IValueConverter Members
+
+    public object Convert(object value, Type targetType, object parameter,
+        System.Globalization.CultureInfo culture)
+    {
+      var result = "Icons/play.png";
+      switch ((bool)value)
+      {
+        case true:
           result = "Icons/yes.png";
           break;
 
-        case "False":
+        case false:
           result = "Icons/no.png";
           break;
       }

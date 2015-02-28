@@ -17,6 +17,7 @@ namespace MangaReader.Mapping
       Map(x => x.Uri).Not.LazyLoad();
       Map(x => x.Status).Not.LazyLoad();
       Map(x => x.NeedUpdate).Not.LazyLoad();
+      Map(x => x.IsCompleted).Not.LazyLoad();
       Map(x => x.Folder).Not.LazyLoad();
       Map(x => x.NeedCompress).Not.LazyLoad();
       Map(x => x.CompressionMode).Not.LazyLoad();

@@ -171,6 +171,7 @@
     <Compile Include="Services\History.cs" />
     <Compile Include="Services\Library.cs" />
     <Compile Include="Services\Settings.cs" />
+    <Compile Include="UI\GridSort.cs" />
     <Compile Include="Update\Update.cs" />
     <Compile Include="SettingsForm.xaml.cs">
       <DependentUpon>SettingsForm.xaml</DependentUpon>

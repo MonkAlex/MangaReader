@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local ="clr-namespace:MangaReader"
         xmlns:tb="clr-namespace:Hardcodet.Wpf.TaskbarNotification;assembly=Hardcodet.Wpf.TaskbarNotification"
+        xmlns:ui="clr-namespace:MangaReader.UI"
         xmlns:resx="clr-namespace:MangaReader.Properties"
         Closing="Window_OnClosing"
         StateChanged="Table_OnStateChanged"
@@ -47,7 +48,8 @@
                  DataContext="{Binding}"
                  Margin="10,36,10.4,38.4"
                  MouseDown="ListView_MouseDown"
-                 SelectionMode="Single">
+                 SelectionMode="Single"
+                 ui:GridSort.AutoSort="True" >
       <ListView.ItemContainerStyle>
         <Style TargetType="{x:Type ListViewItem}">
           <EventSetter Event="PreviewMouseMove" Handler="_PreviewMouseMoveEvent"/>
@@ -122,8 +124,10 @@
                 </DataTemplate>
               </GridViewColumn.CellTemplate>
             </GridViewColumn>
-            <GridViewColumn Header="{x:Static resx:Strings.Manga_Name}" DisplayMemberBinding="{Binding Path=Name}"/>
-            <GridViewColumn Header="{x:Static resx:Strings.Manga_Update}">
+            <GridViewColumn Header="{x:Static resx:Strings.Manga_Name}" DisplayMemberBinding="{Binding Path=Name}"
+                            ui:GridSort.PropertyName="Name"/>
+            <GridViewColumn Header="{x:Static resx:Strings.Manga_Update}"
+                            ui:GridSort.PropertyName="NeedUpdate">
               <GridViewColumn.CellTemplate>
                 <DataTemplate>
                   <Grid>
@@ -132,7 +136,8 @@
                 </DataTemplate>
               </GridViewColumn.CellTemplate>
             </GridViewColumn>
-            <GridViewColumn Header="{x:Static resx:Strings.Manga_Downloaded}">
+            <GridViewColumn Header="{x:Static resx:Strings.Manga_Downloaded}"
+                            ui:GridSort.PropertyName="Downloaded">
               <GridViewColumn.CellTemplate>
                 <DataTemplate>
                   <Grid>

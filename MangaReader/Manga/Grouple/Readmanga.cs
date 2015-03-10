@@ -84,6 +84,18 @@ namespace MangaReader.Manga.Grouple
       if (string.IsNullOrWhiteSpace(page))
         return;
 
+      // Если на странице редирект - выполняем его и получаем новую ссылку на мангу.
+      if (page.ToLowerInvariant().Contains(Getter.CookieKey))
+      {
+        var newUri = Getter.GetRedirectUri(this.Uri, page);
+        if (!this.Uri.Equals(newUri))
+        {
+          this.Uri = newUri;
+          this.Refresh();
+          return;
+        }
+      }
+
       var newName = Getter.GetMangaName(page).ToString();
       if (string.IsNullOrWhiteSpace(newName))
         Log.Add("Не удалось получить имя манги, текущее название = " + this.ServerName);

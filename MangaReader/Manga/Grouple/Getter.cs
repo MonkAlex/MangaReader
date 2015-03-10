@@ -1,15 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+using MangaReader.Account;
 using MangaReader.Services;
 
 namespace MangaReader.Manga.Grouple
 {
   public static class Getter
   {
+    /// <summary>
+    /// Ключ с куками для редиректа.
+    /// </summary>
+    internal static string CookieKey = "red-form";
+
+    /// <summary>
+    /// Получить ссылку с редиректа.
+    /// </summary>
+    /// <param name="uri">Исходная ссылка.</param>
+    /// <param name="page">Содержимое страницы по ссылке.</param>
+    /// <returns>Новая ссылка.</returns>
+    public static Uri GetRedirectUri(Uri uri, string page)
+    {
+      var client = new CookieClient() { Encoding = Encoding.UTF8 };
+      var cookie = new Cookie
+      {
+        Name = CookieKey,
+        Value = "true",
+        Expires = DateTime.Today.AddYears(1),
+        Domain = "." + uri.Host
+      };
+      client.Cookie.Add(cookie);
+
+      var document = new HtmlDocument();
+      document.LoadHtml(page);
+      var node = document.DocumentNode.SelectSingleNode("//form[@id='red-form']");
+      var actionUri = node.Attributes.FirstOrDefault(a => a.Name == "action").Value;
+      var fullUri = uri.GetLeftPart(UriPartial.Authority) + actionUri;
+      client.UploadValues(fullUri, "POST", new NameValueCollection() { { "_agree", "on" }, { "agree", "on" } });
+
+      return client.ResponseUri;
+    }
+
     /// <summary>
     /// Получить название манги.
     /// </summary>

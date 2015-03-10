@@ -69,7 +69,25 @@ namespace MangaReader.Manga
     /// Ссылка на мангу.
     /// </summary>
     [XmlIgnore]
-    public virtual Uri Uri { get; set; }
+    public virtual Uri Uri
+    {
+      get { return this.uri; }
+      set
+      {
+        if (this.uri != null && !Equals(this.uri, value))
+        {
+          foreach (var history in this.Histories)
+          {
+            var historyUri = new UriBuilder(history.Uri) {Host = value.Host};
+            historyUri.Path = historyUri.Path.Replace(this.uri.AbsolutePath, value.AbsolutePath);
+            history.Uri = historyUri.Uri;
+          }
+        }
+        this.uri = value;
+      }
+    }
+
+    private Uri uri;
 
     /// <summary>
     /// Статус манги.

@@ -143,7 +143,7 @@ namespace MangaReader.Manga.Grouple
       document.LoadHtml(Page.GetPage(uri));
 
       var firstOrDefault = document.DocumentNode
-          .SelectNodes("//div[@class=\"pageBlock reader-bottom\"]")
+          .SelectNodes("//div[@class=\"pageBlock container reader-bottom\"]")
           .FirstOrDefault();
 
       if (firstOrDefault == null)

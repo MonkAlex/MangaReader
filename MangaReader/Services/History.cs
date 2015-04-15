@@ -34,6 +34,30 @@ namespace MangaReader.Services
     }
 
     /// <summary>
+    /// Вернуть главы, которые не записаны в историю.
+    /// </summary>
+    /// <param name="chapters">Главы.</param>
+    /// <returns>Главы, не записанные в историю.</returns>
+    public static List<Chapter> GetNotSavedChapters(IEnumerable<Chapter> chapters)
+    {
+      var result = new List<Chapter>();
+      var uris = chapters.Select(c => c.Uri).ToList();
+
+      using (var session = Mapping.Environment.OpenSession())
+      {
+        result = chapters
+          .Where(c => uris
+            .Except(session.Query<MangaHistory>()
+              .Where(h => uris.Contains(h.Uri))
+                .Select(h => h.Uri))
+              .Contains(c.Uri))
+            .ToList();
+      }
+
+      return result;
+    }
+
+    /// <summary>
     /// Сконвертировать в новый формат.
     /// </summary>
     public static void Convert(ConverterProcess process)

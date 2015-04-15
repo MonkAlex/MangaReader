@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 using FluentNHibernate.Visitors;
 using MangaReader.Properties;
@@ -78,7 +80,7 @@ namespace MangaReader.Manga
         {
           foreach (var history in this.Histories)
           {
-            var historyUri = new UriBuilder(history.Uri) {Host = value.Host};
+            var historyUri = new UriBuilder(history.Uri) { Host = value.Host };
             historyUri.Path = historyUri.Path.Replace(this.uri.AbsolutePath, value.AbsolutePath);
             history.Uri = historyUri.Uri;
           }
@@ -112,6 +114,18 @@ namespace MangaReader.Manga
     [XmlIgnore]
     public virtual IList<MangaHistory> Histories { get; set; }
 
+    public virtual List<Volume> Volumes { get; set; }
+
+    public virtual List<Volume> ActiveVolumes { get; set; }
+
+    public virtual List<Chapter> Chapters { get; set; }
+
+    public virtual List<Chapter> ActiveChapters { get; set; }
+
+    public virtual List<MangaPage> Pages { get; set; }
+
+    public virtual List<MangaPage> ActivePages { get; set; }
+
     /// <summary>
     /// Нужно ли обновлять мангу.
     /// </summary>
@@ -134,7 +148,7 @@ namespace MangaReader.Manga
             .Cast<Compression.CompressionMode>());
 
     public virtual Compression.CompressionMode? CompressionMode { get; set; }
-    
+
     /// <summary>
     /// Статус корректности манги.
     /// </summary>
@@ -148,13 +162,55 @@ namespace MangaReader.Manga
     /// </summary>
     public virtual bool IsCompleted { get; set; }
 
+    /// <summary>
+    /// Признак только страниц, даже без глав.
+    /// </summary>
+    public virtual bool OnlyPages { get { return !this.HasVolumes && !this.HasChapters; } }
+
+    /// <summary>
+    /// Признак наличия глав.
+    /// </summary>
+    public virtual bool HasChapters { get; set; }
+
+    /// <summary>
+    /// Признак наличия томов.
+    /// </summary>
+    public virtual bool HasVolumes { get; set; }
+
     #endregion
 
     #region DownloadProgressChanged
 
-    public virtual bool IsDownloaded { get; set; }
+    /// <summary>
+    /// Статус загрузки.
+    /// </summary>
+    public virtual bool IsDownloaded
+    {
+      get
+      {
+        var isVolumesDownloaded = this.ActiveVolumes != null && this.ActiveVolumes.Any() &&
+                                this.ActiveVolumes.All(v => v.IsDownloaded);
+        var isChaptersDownloaded = this.ActiveChapters != null && this.ActiveChapters.Any() && this.ActiveChapters.All(v => v.IsDownloaded);
+        var isPagesDownloaded = this.ActivePages != null && this.ActivePages.Any() && this.ActivePages.All(v => v.IsDownloaded);
+        return isVolumesDownloaded || isChaptersDownloaded || isPagesDownloaded;
+      }
+    }
 
-    public virtual double Downloaded { get; set; }
+    /// <summary>
+    /// Процент загрузки манги.
+    /// </summary>
+    public virtual double Downloaded
+    {
+      get
+      {
+        var volumes = (this.ActiveVolumes != null && this.ActiveVolumes.Any()) ? this.ActiveVolumes.Average(v => v.Downloaded) : double.NaN;
+        var chapters = (this.ActiveChapters != null && this.ActiveChapters.Any()) ? this.ActiveChapters.Average(ch => ch.Downloaded) : double.NaN;
+        var pages = (this.ActivePages != null && this.ActivePages.Any()) ? this.ActivePages.Average(ch => ch.Downloaded) : 0;
+        return double.IsNaN(volumes) ? (double.IsNaN(chapters) ? pages : chapters) : volumes;
+      }
+      set { }
+    }
+
 
     public virtual string Folder
     {
@@ -177,9 +233,96 @@ namespace MangaReader.Manga
         handler(this, manga);
     }
 
-    public virtual void Download(string mangaFolder = null, string volumePrefix = null, string chapterPrefix = null)
+    /// <summary>
+    /// Обновить содержимое манги.
+    /// </summary>
+    /// <remarks>Каждая конкретная манга сама забьет коллекцию Volumes\Chapters\Pages.</remarks>
+    protected virtual void UpdateContent()
     {
+      if (this.Pages == null)
+        throw new ArgumentNullException("Pages");
 
+      if (this.Chapters == null)
+        throw new ArgumentNullException("Chapters");
+
+      if (this.Volumes == null)
+        throw new ArgumentNullException("Volumes");
+
+      this.Pages.ForEach(p => p.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this));
+      this.Chapters.ForEach(ch => ch.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this));
+      this.Volumes.ForEach(v => v.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this));
+    }
+
+    public virtual void Download(string mangaFolder = null)
+    {
+      if (!this.NeedUpdate)
+        return;
+
+      this.Refresh();
+
+      if (mangaFolder == null)
+        mangaFolder = this.Folder;
+
+      this.UpdateContent();
+
+      this.ActiveVolumes = this.Volumes;
+      this.ActiveChapters = this.Chapters;
+      this.ActivePages = this.Pages;
+      if (Settings.Update)
+      {
+        this.ActivePages = this.ActivePages
+            .Where(p => this.Histories.All(m => m.Uri != p.Uri))
+            .ToList();
+        this.ActiveChapters = this.ActiveChapters
+            .Where(ch => this.Histories.All(m => m.Uri != ch.Uri))
+            .ToList();
+        this.ActiveVolumes = this.ActiveVolumes
+            .Where(v => v.Chapters.Any(ch => this.Histories.All(m => m.Uri != ch.Uri)))
+            .ToList();
+      }
+
+      if (!this.ActiveChapters.Any() && !this.ActiveVolumes.Any() && !this.ActivePages.Any())
+        return;
+
+      Log.Add("Download start " + this.Name);
+
+      // Формируем путь к главе вида Папка_манги\Том_001\Глава_0001
+      try
+      {
+        Parallel.ForEach(this.ActiveVolumes,
+            v =>
+            {
+              v.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged("Downloaded");
+              v.Download(mangaFolder);
+              v.Chapters.ForEach(ch => this.AddHistory(ch.Uri));
+            });
+        Parallel.ForEach(this.ActiveChapters,
+          ch =>
+          {
+            ch.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged("Downloaded");
+            ch.Download(mangaFolder);
+            this.AddHistory(ch.Uri);
+          });
+        Parallel.ForEach(this.ActivePages,
+          p =>
+          {
+            p.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged("Downloaded");
+            p.Download(mangaFolder);
+            this.AddHistory(p.Uri);
+          });
+        this.Save();
+        Log.Add("Download end " + this.Name);
+      }
+
+      catch (AggregateException ae)
+      {
+        foreach (var ex in ae.InnerExceptions)
+          Log.Exception(ex);
+      }
+      catch (Exception ex)
+      {
+        Log.Exception(ex);
+      }
     }
 
     #endregion
@@ -276,6 +419,11 @@ namespace MangaReader.Manga
       base.Save(session, transaction);
     }
 
+    public override string ToString()
+    {
+      return this.Name;
+    }
+
     /// <summary>
     /// Создать мангу по ссылке.
     /// </summary>
@@ -310,6 +458,9 @@ namespace MangaReader.Manga
     public Mangas()
     {
       this.Histories = new List<MangaHistory>();
+      this.Chapters = new List<Chapter>();
+      this.Volumes = new List<Volume>();
+      this.Pages = new List<MangaPage>();
     }
 
     #endregion

@@ -7,6 +7,7 @@ using System.Windows.Shell;
 using System.Windows.Threading;
 using Hardcodet.Wpf.TaskbarNotification;
 using MangaReader.Manga;
+using MangaReader.Manga.Acomic;
 using MangaReader.Properties;
 using NHibernate.Linq;
 
@@ -53,14 +54,17 @@ namespace MangaReader.Services
     internal static void ShowInTray(string message, object context)
     {
       if (Settings.MinimizeToTray)
-        lock (TaskbarIconLock)
-          lock (DispatcherLock)
+        using (TimedLock.Lock(TaskbarIconLock))
+        {
+          using (TimedLock.Lock(DispatcherLock))
+          {
             formDispatcher.Invoke(() =>
             {
               taskbarIcon.ShowBalloonTip(Strings.Title, message, BalloonIcon.Info);
               taskbarIcon.DataContext = context;
             });
-
+          }
+        }
     }
 
     /// <summary>
@@ -70,8 +74,10 @@ namespace MangaReader.Services
     /// <param name="state">Состояние.</param>
     internal static void SetTaskbarState(double? percent = null, TaskbarItemProgressState? state = null)
     {
-      lock (TaskbarLock)
-        lock (DispatcherLock)
+      using (TimedLock.Lock(TaskbarLock))
+      {
+        using (TimedLock.Lock(DispatcherLock))
+        {
           formDispatcher.Invoke(() =>
           {
             if (state.HasValue)
@@ -79,6 +85,8 @@ namespace MangaReader.Services
             if (percent.HasValue)
               taskBar.ProgressValue = percent.Value;
           });
+        }
+      }
     }
 
     #region Методы
@@ -115,7 +123,7 @@ namespace MangaReader.Services
       if (main.NameFilter.Text.Any())
         query = query.Where(n => (n.IsNameChanged ? n.LocalName : n.ServerName).ToLowerInvariant().
           Contains(main.NameFilter.Text.ToLowerInvariant()));
-      main.FormLibrary.ItemsSource = query.OrderBy(m => m.IsNameChanged ? m.LocalName : m.ServerName).ToList();
+      main.FormLibrary.ItemsSource = query.ToList().OrderBy(m => m.Name);
     }
 
     /// <summary>
@@ -167,9 +175,31 @@ namespace MangaReader.Services
     /// </summary>
     internal static void Convert(ConverterProcess process)
     {
-      if (!File.Exists(DatabaseFile))
-        return;
+      if (File.Exists(DatabaseFile))
+        ConvertBaseTo24(process);
 
+      Convert24To27(process);
+    }
+
+    private static void Convert24To27(ConverterProcess process)
+    {
+      if (process.Version.CompareTo(Settings.DatabaseVersion) > 0)
+      {
+        process.Percent = 0;
+        var acomics = Mapping.Environment.Session.Query<Acomics>().ToList();
+        if (acomics.Any())
+          process.IsIndeterminate = false;
+
+        foreach (var acomic in acomics)
+        {
+          process.Percent += 100.0 / acomics.Count;
+          Getter.UpdateContentType(acomic);
+        }
+      }
+    }
+
+    private static void ConvertBaseTo24(ConverterProcess process)
+    {
       var database = Serializer<List<string>>.Load(DatabaseFile) ?? new List<string>(File.ReadAllLines(DatabaseFile));
 
       if (process != null && database.Any())
@@ -210,7 +240,7 @@ namespace MangaReader.Services
       {
         Library.SetTaskbarState(0, TaskbarItemProgressState.Normal);
         var mangaIndex = 0;
-        mangas = sort.Direction == ListSortDirection.Ascending ? 
+        mangas = sort.Direction == ListSortDirection.Ascending ?
           mangas.OrderBy(m => m.Name) :
           mangas.OrderByDescending(m => m.Name);
         var listMangas = mangas.Where(m => m.NeedUpdate).ToList();

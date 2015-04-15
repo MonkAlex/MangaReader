@@ -50,8 +50,10 @@ namespace MangaReader.Services
     private static void Write(string contents, string path)
     {
       Console.WriteLine(contents);
-      lock (LogLock)
+      using (TimedLock.Lock(LogLock))
+      {
         File.AppendAllText(path, contents, System.Text.Encoding.UTF8);
+      }
     }
 
     public Log()

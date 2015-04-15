@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 
 namespace MangaReader.Services
 {
@@ -15,11 +16,12 @@ namespace MangaReader.Services
     internal double Percent = 0;
     internal bool IsIndeterminate = true;
     internal string Status = string.Empty;
+    internal Version Version = Settings.DatabaseVersion;
   }
 
   static class Converter
   {
-    public static ConverterProcess Process = new ConverterProcess();
+    public static ConverterProcess Process = new ConverterProcess() { Version = new Version(1, 27, 0, 0) };
 
     public static ConverterState State = ConverterState.None;
 
@@ -61,6 +63,7 @@ namespace MangaReader.Services
       Library.Convert(Process);
       Log.Add("Convert completed.");
 
+      Settings.DatabaseVersion = Process.Version;
       State = ConverterState.Completed;
     }
   }

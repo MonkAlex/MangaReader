@@ -80,7 +80,7 @@ namespace MangaReader.Account
                 {"j_password", SettingLogin.Password},
                 {"remember_me", "checked"}
             };
-      lock (ClientLock)
+      using (TimedLock.Lock(ClientLock))
       {
         try
         {
@@ -101,7 +101,7 @@ namespace MangaReader.Account
     {
       IsLogined = false;
       _bookmarsk = null;
-      lock (ClientLock)
+      using (TimedLock.Lock(ClientLock))
       {
         Page.GetPage(LogoutUri, Client);
       }
@@ -115,7 +115,7 @@ namespace MangaReader.Account
     {
       var bookmarks = new List<Readmanga>();
       var document = new HtmlDocument();
-      lock (ClientLock)
+      using (TimedLock.Lock(ClientLock))
       {
         document.LoadHtml(Page.GetPage(BookmarksUri, Client));
       }

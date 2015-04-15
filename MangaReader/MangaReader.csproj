@@ -42,7 +42,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
     <CodeAnalysisRuleSet>MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
@@ -64,6 +64,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Icons\main.ico</ApplicationIcon>
@@ -137,12 +138,16 @@
     <Compile Include="Manga\Acomic\Acomics.cs" />
     <Compile Include="Manga\Acomic\Chapter.cs" />
     <Compile Include="Manga\Acomic\Getter.cs" />
+    <Compile Include="Manga\Acomic\MangaPage.cs" />
+    <Compile Include="Manga\Chapter.cs" />
     <Compile Include="Manga\IDownloadable.cs" />
     <Compile Include="Manga\MangaForm.xaml.cs">
       <DependentUpon>MangaForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Manga\Mangas.cs" />
     <Compile Include="Manga\MangaObsolete.cs" />
+    <Compile Include="Manga\MangaPage.cs" />
+    <Compile Include="Manga\Volume.cs" />
     <Compile Include="Mapping\Converting.cs" />
     <Compile Include="Mapping\Environment.cs" />
     <Compile Include="Mapping\LoginMap.cs" />
@@ -161,6 +166,7 @@
     </Compile>
     <Compile Include="Services\ImageFile.cs" />
     <Compile Include="Services\MangaSetting.cs" />
+    <Compile Include="Services\TimedLock.cs" />
     <Compile Include="Services\TypeHelper.cs" />
     <Compile Include="Table.xaml.cs">
       <DependentUpon>Table.xaml</DependentUpon>
@@ -219,7 +225,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Manga\Grouple\MangaName.cs" />
-    <Compile Include="Manga\Page.cs" />
+    <Compile Include="Services\Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

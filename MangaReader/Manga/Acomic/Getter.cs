@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -44,12 +45,88 @@ namespace MangaReader.Manga.Acomic
       return WebUtility.HtmlDecode(name);
     }
 
+    public static void UpdateContentType(Acomics manga)
+    {
+      try
+      {
+        var document = new HtmlDocument();
+        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), Getter.GetAdultClient(manga.Uri)));
+        manga.HasVolumes = document.DocumentNode.SelectNodes("//h2[@class=\"serial-chapters-head\"]") != null;
+        manga.HasChapters = document.DocumentNode.SelectNodes("//div[@class=\"chapters\"]//li") != null;
+      }
+      catch (Exception){}
+    }
+
     /// <summary>
-    /// Получить главы манги.
+    /// Получить содержание манги - тома и главы.
+    /// </summary>
+    /// <param name="manga">Манга.</param>
+    public static void UpdateContent(Acomics manga)
+    {
+      var volumes = new List<Volume>();
+      var chapters = new List<Chapter>();
+      var pages = new List<MangaPage>();
+      try
+      {
+        var document = new HtmlDocument();
+        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), Getter.GetAdultClient(manga.Uri)));
+
+        var volumeNodes = document.DocumentNode.SelectNodes("//h2[@class=\"serial-chapters-head\"]");
+        if (volumeNodes != null)
+          for (int i = 0; i < volumeNodes.Count; i++)
+          {
+            var desc = volumeNodes[i].InnerText;
+            var newVolume = new Volume(desc, volumes.Count + 1);
+            var subVolumeNodes = volumeNodes[i].ParentNode.ChildNodes[i * 2 + 1].ChildNodes;
+            AddChapters(subVolumeNodes, newVolume.Chapters);
+            volumes.Add(newVolume);
+          }
+
+        if (volumeNodes == null || !volumes.Any())
+        {
+          var chapterNodes = document.DocumentNode.SelectNodes("//div[@class=\"chapters\"]//li");
+          AddChapters(chapterNodes, chapters);
+        }
+
+        var allPages = GetMangaPages(manga.Uri);
+        var innerChapters = chapters.Count == 0 ? volumes.SelectMany(v => v.Chapters).Cast<Chapter>().ToList() : chapters;
+        for (int i = 0; i < innerChapters.Count; i++)
+        {
+          var current = innerChapters[i].Number;
+          var next = i + 1 != innerChapters.Count ? innerChapters[i + 1].Number : int.MaxValue;
+          innerChapters[i].Pages.AddRange(allPages.Where(p => current <= p.Number && p.Number < next));
+          innerChapters[i].Number = i + 1;
+        }
+        pages.AddRange(allPages.Except(innerChapters.SelectMany(c => c.Pages).Cast<MangaPage>()));
+      }
+      catch (NullReferenceException ex) { Log.Exception(ex); }
+
+      manga.HasVolumes = volumes.Any();
+      manga.HasChapters = volumes.Any() || chapters.Any();
+      manga.Volumes.AddRange(volumes);
+      manga.Chapters.AddRange(chapters);
+      manga.Pages.AddRange(pages);
+    }
+
+    private static void AddChapters(HtmlNodeCollection collection, IList chapters)
+    {
+      if (collection == null)
+        return;
+
+      foreach (var chapter in collection)
+      {
+        var desc = chapter.InnerText;
+        var link = new Uri(chapter.ChildNodes[0].ChildNodes[0].Attributes[0].Value);
+        chapters.Add(new Chapter(link, desc));
+      }
+    }
+
+    /// <summary>
+    /// Получить страницы манги.
     /// </summary>
     /// <param name="uri">Ссылка на мангу.</param>
     /// <returns>Словарь (ссылка, описание).</returns>
-    public static List<Chapter> GetMangaChapters(Uri uri)
+    private static List<MangaPage> GetMangaPages(Uri uri)
     {
       var links = new List<Uri> { };
       var description = new List<string> { };
@@ -82,7 +159,7 @@ namespace MangaReader.Manga.Acomic
       catch (NullReferenceException ex) { Log.Exception(ex, "Ошибка получения списка глав.", uri.ToString()); }
       catch (ArgumentNullException ex) { Log.Exception(ex, "Главы не найдены.", uri.ToString()); }
 
-      return links.Select((t, i) => new Chapter(t, description[i], images[i])).ToList();
+      return links.Select((t, i) => new MangaPage(t, images[i]) { Name = description[i] }).ToList();
     }
   }
 }

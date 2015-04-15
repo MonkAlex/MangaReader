@@ -4,6 +4,7 @@ namespace MangaReader.Manga
 {
   public interface IDownloadable
   {
+
     #region Свойства
 
     /// <summary>
@@ -34,8 +35,9 @@ namespace MangaReader.Manga
     /// <summary>
     /// Скачать все главы.
     /// </summary>
-    void Download(string mangaFolder = null, string volumePrefix = null, string chapterPrefix = null);
+    void Download(string folder = null);
 
     #endregion
+
   }
 }

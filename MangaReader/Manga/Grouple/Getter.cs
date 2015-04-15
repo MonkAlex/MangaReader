@@ -79,7 +79,7 @@ namespace MangaReader.Manga.Grouple
       {
         var document = new HtmlDocument();
         document.LoadHtml(mangaMainPage);
-        var nodes = document.DocumentNode.SelectNodes("//div[@class=\"subject-meta\"]//p");
+        var nodes = document.DocumentNode.SelectNodes("//div[@class=\"subject-meta col-sm-7\"]//p");
         if (nodes != null)
           status = nodes.Aggregate(status, (current, node) =>
               current + Regex.Replace(node.InnerText.Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
@@ -136,9 +136,9 @@ namespace MangaReader.Manga.Grouple
     /// </summary>
     /// <param name="uri">Ссылка на главу.</param>
     /// <returns>Список ссылок на изображения главы.</returns>
-    public static List<Uri> GetImagesLink(Uri uri)
+    public static List<MangaPage> GetImagesLink(Uri uri)
     {
-      var chapterLinksList = new List<Uri>();
+      var chapterLinksList = new List<MangaPage>();
       var document = new HtmlDocument();
       document.LoadHtml(Page.GetPage(uri));
 
@@ -156,8 +156,10 @@ namespace MangaReader.Manga.Grouple
           .OfType<Match>()
           .Select(m => m.Groups[1].Value)
           .Select(s => (!Uri.IsWellFormedUriString(s, UriKind.Absolute)) ? (@"http://" + uri.Host + s) : s)
-          .Select(s => new Uri(s))
+          .Select(s => new MangaPage(uri, new Uri(s)))
           .ToList();
+      var i = 0;
+      chapterLinksList.ForEach(ch => ch.Number = i++);
       return chapterLinksList;
     }
   }

@@ -114,16 +114,22 @@ namespace MangaReader.Manga
     [XmlIgnore]
     public virtual IList<MangaHistory> Histories { get; set; }
 
+    [XmlIgnore]
     public virtual List<Volume> Volumes { get; set; }
 
+    [XmlIgnore]
     public virtual List<Volume> ActiveVolumes { get; set; }
 
+    [XmlIgnore]
     public virtual List<Chapter> Chapters { get; set; }
 
+    [XmlIgnore]
     public virtual List<Chapter> ActiveChapters { get; set; }
 
+    [XmlIgnore]
     public virtual List<MangaPage> Pages { get; set; }
 
+    [XmlIgnore]
     public virtual List<MangaPage> ActivePages { get; set; }
 
     /// <summary>

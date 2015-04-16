@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Shell;
 using System.Windows.Threading;
 using Hardcodet.Wpf.TaskbarNotification;
@@ -45,6 +46,11 @@ namespace MangaReader.Services
     private static TaskbarIcon taskbarIcon;
 
     private static readonly object TaskbarIconLock = new object();
+
+    /// <summary>
+    /// Признак паузы.
+    /// </summary>
+    public static bool IsPaused { get; set; }
 
     /// <summary>
     /// Показать сообщение в трее.
@@ -228,6 +234,17 @@ namespace MangaReader.Services
     }
 
     /// <summary>
+    /// Реакция на паузу.
+    /// </summary>
+    public static void CheckPause()
+    {
+      while (IsPaused)
+      {
+        Thread.Sleep(1000);
+      }
+    }
+
+    /// <summary>
     /// Обновить мангу.
     /// </summary>
     /// <param name="mangas">Обновляемая манга.</param>
@@ -246,6 +263,8 @@ namespace MangaReader.Services
         var listMangas = mangas.Where(m => m.NeedUpdate).ToList();
         foreach (var current in listMangas)
         {
+          CheckPause();
+
           Status = Strings.Library_Status_MangaUpdate + current.Name;
           current.DownloadProgressChanged += (sender, args) =>
               Library.SetTaskbarState((double)(100 * mangaIndex + args.Downloaded) / (listMangas.Count * 100));

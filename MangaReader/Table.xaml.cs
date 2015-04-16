@@ -57,12 +57,17 @@ namespace MangaReader
     /// <param name="e"></param>
     private void Update_click(object sender, RoutedEventArgs e)
     {
-      if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
-        _loadThread = new Thread(() => 
-          Library.Update(FormLibrary.ItemsSource as IEnumerable<Mangas>, 
-          FormLibrary.Items.SortDescriptions.SingleOrDefault()));
-      if (_loadThread.ThreadState == ThreadState.Unstarted)
-        _loadThread.Start();
+      if (this.IsAvaible)
+      {
+        if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
+          _loadThread = new Thread(() =>
+            Library.Update(FormLibrary.ItemsSource as IEnumerable<Mangas>,
+              FormLibrary.Items.SortDescriptions.SingleOrDefault()));
+        if (_loadThread.ThreadState == ThreadState.Unstarted)
+          _loadThread.Start();
+      }
+      else
+        Library.IsPaused = !Library.IsPaused;
     }
 
     /// <summary>
@@ -121,7 +126,7 @@ namespace MangaReader
     {
       this.IsAvaible = _loadThread == null || _loadThread.ThreadState == ThreadState.Stopped;
       this.TextBlock.Text = Library.Status;
-      UpdateButton.IsEnabled = this.IsAvaible;
+      UpdateButton.Content = this.IsAvaible ? Strings.Manga_Action_Update : (Library.IsPaused ? Strings.Manga_Action_Restore : Strings.Manga_Action_Pause);
       AddButton.IsEnabled = this.IsAvaible;
       SettingsButton.IsEnabled = this.IsAvaible;
 

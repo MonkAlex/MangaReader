@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading;
 
 namespace MangaReader.Services
@@ -21,7 +22,7 @@ namespace MangaReader.Services
 
   static class Converter
   {
-    public static ConverterProcess Process = new ConverterProcess() { Version = new Version(1, 27, 0, 0) };
+    public static ConverterProcess Process = new ConverterProcess() { Version = Assembly.GetExecutingAssembly().GetName().Version };
 
     public static ConverterState State = ConverterState.None;
 

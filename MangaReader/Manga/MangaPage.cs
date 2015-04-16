@@ -69,6 +69,7 @@ namespace MangaReader.Manga
       if (restartCounter > 3)
         throw new Exception(string.Format("Load failed after {0} counts.", restartCounter));
 
+      Library.CheckPause();
       try
       {
         chapterFolder = Page.MakeValidPath(chapterFolder);

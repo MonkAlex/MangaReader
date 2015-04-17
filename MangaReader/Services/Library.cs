@@ -189,7 +189,8 @@ namespace MangaReader.Services
 
     private static void Convert24To27(ConverterProcess process)
     {
-      if (process.Version.CompareTo(Settings.DatabaseVersion) > 0)
+      var version = new Version(1, 27, 5584);
+      if (version.CompareTo(Settings.DatabaseVersion) > 0 && process.Version.CompareTo(version) >= 0)
       {
         process.Percent = 0;
         var acomics = Mapping.Environment.Session.Query<Acomics>().ToList();

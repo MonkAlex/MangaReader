@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -52,7 +51,7 @@ namespace MangaReader.Manga.Acomic
         var document = new HtmlDocument();
         document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), Getter.GetAdultClient(manga.Uri)));
         manga.HasVolumes = document.DocumentNode.SelectNodes("//h2[@class=\"serial-chapters-head\"]") != null;
-        manga.HasChapters = document.DocumentNode.SelectNodes("//div[@class=\"chapters\"]//li") != null;
+        manga.HasChapters = document.DocumentNode.SelectNodes("//div[@class=\"chapters\"]//a") != null;
       }
       catch (Exception){}
     }
@@ -73,19 +72,28 @@ namespace MangaReader.Manga.Acomic
 
         var volumeNodes = document.DocumentNode.SelectNodes("//h2[@class=\"serial-chapters-head\"]");
         if (volumeNodes != null)
-          for (int i = 0; i < volumeNodes.Count; i++)
+          for (var i = 0; i < volumeNodes.Count; i++)
           {
-            var desc = volumeNodes[i].InnerText;
+            var volume = volumeNodes[i];
+            var desc = volume.InnerText;
             var newVolume = new Volume(desc, volumes.Count + 1);
-            var subVolumeNodes = volumeNodes[i].ParentNode.ChildNodes[i * 2 + 1].ChildNodes;
-            AddChapters(subVolumeNodes, newVolume.Chapters);
+            var skipped = volume.ParentNode.ChildNodes
+              .SkipWhile(cn => cn.PreviousSibling != volume);
+            var volumeChapterNodes = skipped
+              .TakeWhile(cn => cn.Name != "h2");
+            var volumeChapters = volumeChapterNodes
+              .Select(cn => cn.SelectNodes(".//a"))
+              .SelectMany(cn => cn)
+              .Select(cn => new Chapter(new Uri(cn.Attributes[0].Value), (cn.Attributes.Count > 1 ? cn.Attributes[1].Value : cn.InnerText)));
+            newVolume.Chapters.AddRange(volumeChapters);
             volumes.Add(newVolume);
           }
 
         if (volumeNodes == null || !volumes.Any())
         {
-          var chapterNodes = document.DocumentNode.SelectNodes("//div[@class=\"chapters\"]//li");
-          AddChapters(chapterNodes, chapters);
+          var nodes = document.DocumentNode.SelectNodes("//div[@class=\"chapters\"]//a");
+          if (nodes != null)
+            chapters.AddRange(nodes.Select(cn => new Chapter(new Uri(cn.Attributes[0].Value), (cn.Attributes.Count > 1 ? cn.Attributes[1].Value : cn.InnerText))));
         }
 
         var allPages = GetMangaPages(manga.Uri);
@@ -106,19 +114,6 @@ namespace MangaReader.Manga.Acomic
       manga.Volumes.AddRange(volumes);
       manga.Chapters.AddRange(chapters);
       manga.Pages.AddRange(pages);
-    }
-
-    private static void AddChapters(HtmlNodeCollection collection, IList chapters)
-    {
-      if (collection == null)
-        return;
-
-      foreach (var chapter in collection)
-      {
-        var desc = chapter.InnerText;
-        var link = new Uri(chapter.ChildNodes[0].ChildNodes[0].Attributes[0].Value);
-        chapters.Add(new Chapter(link, desc));
-      }
     }
 
     /// <summary>

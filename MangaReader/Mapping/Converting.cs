@@ -1,4 +1,5 @@
-﻿using MangaReader.Services;
+﻿using System;
+using MangaReader.Services;
 
 namespace MangaReader.Mapping
 {
@@ -15,7 +16,8 @@ namespace MangaReader.Mapping
 
     private static void Convert24To27(ConverterProcess process)
     {
-      if (process.Version.CompareTo(Settings.DatabaseVersion) > 0)
+      var version = new Version(1, 27, 5584);
+      if (version.CompareTo(Settings.DatabaseVersion) > 0 && process.Version.CompareTo(version) >= 0)
       {
         var readmangaHas = Environment.Session.CreateSQLQuery(@"update Mangas 
           set HasVolumes = 1, HasChapters = 1
@@ -31,7 +33,8 @@ namespace MangaReader.Mapping
 
     internal static void ConvertBaseTo24(ConverterProcess process)
     {
-      if (process.Version.CompareTo(Settings.DatabaseVersion) > 0)
+      var version = new Version(1, 24);
+      if (version.CompareTo(Settings.DatabaseVersion) > 0 && process.Version.CompareTo(version) >= 0)
       {
         var readmangaCompressionMode = Environment.Session.CreateSQLQuery(@"update Mangas 
           set CompressionMode = 'Volume'

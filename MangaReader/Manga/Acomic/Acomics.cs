@@ -19,8 +19,8 @@ namespace MangaReader.Manga.Acomic
       get
       {
         return base.AllowedCompressionModes
-          .Where(m => this.HasVolumes && Equals(m, Compression.CompressionMode.Volume) ||
-            this.HasChapters && Equals(m, Compression.CompressionMode.Chapter) ||
+          .Where(m => this.HasVolumes && (Equals(m, Compression.CompressionMode.Volume) || Equals(m, Compression.CompressionMode.Chapter)) ||
+            this.HasChapters && Equals(m, Compression.CompressionMode.Volume) ||
             Equals(m, Compression.CompressionMode.Manga))
           .ToList();
       }

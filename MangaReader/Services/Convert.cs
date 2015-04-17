@@ -22,7 +22,8 @@ namespace MangaReader.Services
 
   static class Converter
   {
-    public static ConverterProcess Process = new ConverterProcess() { Version = Assembly.GetExecutingAssembly().GetName().Version };
+    public static ConverterProcess Process = new ConverterProcess() 
+    { Version = new Version(Settings.AppVersion.Major, Settings.AppVersion.Minor, Settings.AppVersion.Build ) };
 
     public static ConverterState State = ConverterState.None;
 

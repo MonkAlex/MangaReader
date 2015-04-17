@@ -44,6 +44,11 @@ namespace MangaReader.Services
     public static Version DatabaseVersion = new Version(1, 0, 0, 0);
 
     /// <summary>
+    /// Версия приложения.
+    /// </summary>
+    public static Version AppVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
+    /// <summary>
     /// Папка программы.
     /// </summary>
     public static readonly string WorkFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -117,7 +122,7 @@ namespace MangaReader.Services
                 new object[] {null, null},
                 MinimizeToTray,
                 AutoUpdateInHours,
-                DatabaseVersion.ToString(4)
+                DatabaseVersion.ToString()
             };
       Serializer<object[]>.Save(SettingsPath, settings);
     }

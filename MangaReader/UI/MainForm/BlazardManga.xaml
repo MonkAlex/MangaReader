@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="MangaReader.UI.MainForm.BlazardManga"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="clr-namespace:MangaReader.UI"
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="400">
+    <Grid>
+    <DockPanel HorizontalAlignment="Stretch" LastChildFill="False" Margin="50, 10, 10, 50" VerticalAlignment="Stretch">
+      <Image VerticalAlignment="Stretch" Width="Auto"/>
+      <RichTextBox VerticalAlignment="Stretch" Width="Auto" IsReadOnly="True">
+        <FlowDocument>
+          <Paragraph>
+            <Run Text="{Binding Path=Name}"/>
+          </Paragraph>
+          <Paragraph>
+            <Run Text="{Binding Path=Status}"/>
+          </Paragraph>
+        </FlowDocument>
+      </RichTextBox>
+    </DockPanel>
+    <ToolBarPanel HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="40">
+      <Button Command="{x:Static ui:Command.OpenFolder}" Content="Open Folder" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+      <Button Command="{x:Static ui:Command.DeleteManga}" Content="Delete Manga" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+      <Button Command="{x:Static ui:Command.UpdateManga}" Content="Update Manga" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+      <Button Command="{x:Static ui:Command.MangaProperty}" Content="Open Property" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+    </ToolBarPanel>
+    <ToolBarPanel Margin="10" VerticalAlignment="Bottom" Orientation="Horizontal" Height="40" HorizontalAlignment="Center">
+      <Button Content="Prev" Command="{x:Static ui:Command.SelectPrevManga}" Margin="5" HorizontalAlignment="Stretch"/>
+      <Button Content="Next" Command="{x:Static ui:Command.SelectNextManga}" Margin="5" HorizontalAlignment="Stretch"/>
+    </ToolBarPanel>
+  </Grid>
+</UserControl>

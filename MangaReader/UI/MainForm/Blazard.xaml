@@ -1,0 +1,32 @@
+﻿<base:BaseForm x:Class="MangaReader.UI.MainForm.Blazard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:resx="clr-namespace:MangaReader.Properties"
+        xmlns:base="clr-namespace:MangaReader.UI.MainForm"
+        xmlns:ui="clr-namespace:MangaReader.UI"
+        xmlns:services="clr-namespace:MangaReader.Services"
+        Icon="../../Icons/main.ico"
+        Title="{x:Static resx:Strings.Title}"  Height="350" Width="525">
+  <Grid>
+
+    <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top">
+      <MenuItem Header="File">
+        <MenuItem Header="Add" Command="New"/>
+        <MenuItem Header="Update current" Command="{x:Static ui:Command.UpdateCurrent}"/>
+        <MenuItem Header="Update all" Command="{x:Static ui:Command.UpdateAll}"/>
+        <MenuItem Header="Exit" Command="Close"/>
+      </MenuItem>
+      <MenuItem Header="Settings" Command="{x:Static ui:Command.ShowSettings}">
+        
+      </MenuItem>
+      <MenuItem Header="Help">
+        <MenuItem Header="Read Me"/>
+        <MenuItem Header="Check updates"/>
+        <MenuItem Header="Update history"/>
+        <MenuItem Header="About"/>
+      </MenuItem>
+    </Menu>
+    <base:BlazardManga x:Name="BlazardManga" Margin="10,55,10,10"/>
+    <ui:MultiSelectComboBox x:Name="MangaType" HorizontalAlignment="Stretch" Margin="0,25,0,0" VerticalAlignment="Top"/>
+  </Grid>
+</base:BaseForm>

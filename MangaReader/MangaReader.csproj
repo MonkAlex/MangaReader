@@ -156,6 +156,11 @@
     <Compile Include="Mapping\Interceptors.cs" />
     <Compile Include="Mapping\MangaMap.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\Backup.cs" />
     <Compile Include="Services\Convert.cs" />
     <Compile Include="Services\Converting.xaml.cs">
@@ -179,6 +184,17 @@
     <Compile Include="Services\Library.cs" />
     <Compile Include="Services\Settings.cs" />
     <Compile Include="UI\GridSort.cs" />
+    <Compile Include="UI\MainForm\Blazard.xaml.cs">
+      <DependentUpon>Blazard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MainForm\BaseForm.cs" />
+    <Compile Include="UI\Command.cs" />
+    <Compile Include="UI\MainForm\BlazardManga.xaml.cs">
+      <DependentUpon>BlazardManga.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MultiSelectComboBox.xaml.cs">
+      <DependentUpon>MultiSelectComboBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Update\Update.cs" />
     <Compile Include="SettingsForm.xaml.cs">
       <DependentUpon>SettingsForm.xaml</DependentUpon>
@@ -218,6 +234,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\MainForm\Blazard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\MainForm\BlazardManga.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\MultiSelectComboBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Update\VersionHistory.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -234,6 +262,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Strings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
@@ -284,6 +316,7 @@
     <EmbeddedResource Include="Library\NHibernate.dll" />
     <EmbeddedResource Include="Library\System.Data.SQLite.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

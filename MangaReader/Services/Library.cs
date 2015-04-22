@@ -10,6 +10,7 @@ using Hardcodet.Wpf.TaskbarNotification;
 using MangaReader.Manga;
 using MangaReader.Manga.Acomic;
 using MangaReader.Properties;
+using MangaReader.UI.MainForm;
 using NHibernate.Linq;
 
 namespace MangaReader.Services
@@ -51,6 +52,17 @@ namespace MangaReader.Services
     /// Признак паузы.
     /// </summary>
     public static bool IsPaused { get; set; }
+
+    public static IQueryable<Mangas> LibraryMangas { get { return Mapping.Environment.Session.Query<Mangas>().Where(n => n != null); } }
+
+    public static IQueryable<Mangas> FilteredMangas { get { return FilterChanged(LibraryMangas); } }
+
+    public static Mangas SelectedManga { get; set; }
+
+    /// <summary>
+    /// Библиотека доступна, т.е. не в процессе обновления.
+    /// </summary>
+    internal static bool IsAvaible = true;
 
     /// <summary>
     /// Показать сообщение в трее.
@@ -101,35 +113,37 @@ namespace MangaReader.Services
     /// Инициализация библиотеки - заполнение массива из кеша.
     /// </summary>
     /// <returns></returns>
-    public static void Initialize(Table main)
+    public static void Initialize(BaseForm main)
     {
       formDispatcher = main.Dispatcher;
-      taskBar = main.TaskBar;
+      taskBar = main.TaskbarItemInfo;
       taskbarIcon = main.NotifyIcon;
-      main.Type.Items.Add(Strings.Library_TypeFilter_All);
-      main.Type.Items.Add("AdultManga");
-      main.Type.Items.Add("AComics");
-      main.Type.Items.Add("ReadManga");
-      main.Type.SelectionChanged += (s, a) => FilterChanged(main);
-      main.NameFilter.TextChanged += (s, a) => FilterChanged(main);
-      main.Uncompleted.Click += (s, a) => FilterChanged(main);
-      main.OnlyUpdate.Click += (s, a) => FilterChanged(main);
-      main.Type.SelectedIndex = 0;
+
+      var table = main as Table;
+      if (table != null)
+      {
+        table.MangaType.MultiSelectCombo.DropDownClosed +=
+          (s, a) => table.FormLibrary.ItemsSource = FilterChanged(LibraryMangas);
+        table.NameFilter.TextChanged += (s, a) => table.FormLibrary.ItemsSource = FilterChanged(LibraryMangas);
+        table.Uncompleted.Click += (s, a) => table.FormLibrary.ItemsSource = FilterChanged(LibraryMangas);
+        table.OnlyUpdate.Click += (s, a) => table.FormLibrary.ItemsSource = FilterChanged(LibraryMangas);
+      }
+
+      SelectedManga = FilteredMangas.FirstOrDefault();
     }
 
-    public static void FilterChanged(Table main)
+    public static IQueryable<Mangas> FilterChanged(IQueryable<Mangas> mangas)
     {
-      var query = Mapping.Environment.Session.Query<Mangas>().Where(n => n != null);
-      if (main.Type.SelectedItem.ToString() != Strings.Library_TypeFilter_All)
-        query = query.Where(n => n.Uri.ToString().ToUpper().Contains(main.Type.SelectedItem.ToString().ToUpper()));
-      if (main.Uncompleted.IsChecked == true)
-        query = query.Where(n => !n.IsCompleted);
-      if (main.OnlyUpdate.IsChecked == true)
-        query = query.Where(n => n.NeedUpdate);
-      if (main.NameFilter.Text.Any())
-        query = query.Where(n => (n.IsNameChanged ? n.LocalName : n.ServerName).ToLowerInvariant().
-          Contains(main.NameFilter.Text.ToLowerInvariant()));
-      main.FormLibrary.ItemsSource = query.ToList().OrderBy(m => m.Name);
+      mangas = mangas.ToList().AsQueryable();
+      if (LibraryFilter.AllTypes.Count != LibraryFilter.AllowedTypes.Count)
+        mangas = mangas.Where(n => LibraryFilter.AllowedTypes.Any(t => n.Uri.ToString().ToUpper().Contains(t.Key.ToUpper())));
+      if (LibraryFilter.Uncompleted)
+        mangas = mangas.Where(n => !n.IsCompleted);
+      if (LibraryFilter.OnlyUpdate)
+        mangas = mangas.Where(n => n.NeedUpdate);
+      if (LibraryFilter.Name.Any())
+        mangas = mangas.Where(n => n.Name.ToLowerInvariant().Contains(LibraryFilter.Name.ToLowerInvariant()));
+      return mangas.OrderBy(m => m.Name).AsQueryable();
     }
 
     /// <summary>
@@ -252,6 +266,7 @@ namespace MangaReader.Services
     /// <param name="sort">Сортировка.</param>
     public static void Update(IEnumerable<Mangas> mangas, SortDescription sort)
     {
+      Library.IsAvaible = false;
       Library.SetTaskbarState(0, TaskbarItemProgressState.Indeterminate);
       Status = Strings.Library_Status_Update;
       try
@@ -291,11 +306,43 @@ namespace MangaReader.Services
         Library.SetTaskbarState(0, TaskbarItemProgressState.None);
         Status = Strings.Library_Status_UpdateComplete;
         Settings.LastUpdate = DateTime.Now;
+        Library.IsAvaible = true;
       }
 
     }
 
     #endregion
 
+  }
+
+  public static class LibraryFilter
+  {
+    public static Dictionary<string, object> AllowedTypes 
+    {
+      get { return _allowedTypes; }
+      set { _allowedTypes = value; }
+    }
+
+    public static Dictionary<string, object> AllTypes { get { return _allTypes; } }
+
+    public static readonly Dictionary<string, object> _allTypes = new Dictionary<string, object> 
+    { {"AdultManga", null}, 
+      {"AComics", null},
+      {"ReadManga", null} };
+
+    private static Dictionary<string, object> _allowedTypes = new Dictionary<string, object>(AllTypes);
+
+    public static bool Uncompleted { get; set; }
+
+    public static bool OnlyUpdate { get; set; }
+
+    public static string Name { get; set; }
+
+    public static SortDescription SortDescription { get; set; }
+
+    static LibraryFilter()
+    {
+      Name = string.Empty;
+    }
   }
 }

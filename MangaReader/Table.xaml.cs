@@ -14,6 +14,8 @@ using Hardcodet.Wpf.TaskbarNotification;
 using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services;
+using MangaReader.UI;
+using MangaReader.UI.MainForm;
 using ThreadState = System.Threading.ThreadState;
 
 namespace MangaReader
@@ -21,7 +23,7 @@ namespace MangaReader
   /// <summary>
   /// Логика взаимодействия для Table.xaml
   /// </summary>
-  public partial class Table : Window
+  public partial class Table : BaseForm
   {
     /// <summary>
     /// Таймер на обновление формы.
@@ -34,16 +36,11 @@ namespace MangaReader
     /// </summary>
     private static Thread _loadThread;
 
-    /// <summary>
-    /// Библиотека доступна, т.е. не в процессе обновления.
-    /// </summary>
-    internal bool IsAvaible = true;
-
     public Table()
     {
       InitializeComponent();
       Settings.UpdateWindowsState(this);
-      Library.Initialize(this);
+      //Library.Initialize(this);
       _timer = new DispatcherTimer(new TimeSpan(0, 0, 1),
           DispatcherPriority.Background,
           TimerTick,
@@ -57,7 +54,7 @@ namespace MangaReader
     /// <param name="e"></param>
     private void Update_click(object sender, RoutedEventArgs e)
     {
-      if (this.IsAvaible)
+      if (Library.IsAvaible)
       {
         if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
           _loadThread = new Thread(() =>
@@ -84,7 +81,7 @@ namespace MangaReader
       if (downloadable == null)
         return;
 
-      MenuOpenFolder(downloadable);
+      Command.OpenFolder.Execute(downloadable, null);
     }
 
     /// <summary>
@@ -104,7 +101,8 @@ namespace MangaReader
       {
         Library.Add(manga.Uri);
       }
-      Library.FilterChanged(this);
+      // TODO: проверить, а нужно ли ещё.
+      //Library.FilterChanged(this);
     }
 
     /// <summary>
@@ -124,13 +122,13 @@ namespace MangaReader
     /// <param name="e"></param>
     private void TimerTick(object sender, EventArgs e)
     {
-      this.IsAvaible = _loadThread == null || _loadThread.ThreadState == ThreadState.Stopped;
+      Library.IsAvaible = _loadThread == null || _loadThread.ThreadState == ThreadState.Stopped;
       this.TextBlock.Text = Library.Status;
-      UpdateButton.Content = this.IsAvaible ? Strings.Manga_Action_Update : (Library.IsPaused ? Strings.Manga_Action_Restore : Strings.Manga_Action_Pause);
-      AddButton.IsEnabled = this.IsAvaible;
-      SettingsButton.IsEnabled = this.IsAvaible;
+      UpdateButton.Content = Library.IsAvaible ? Strings.Manga_Action_Update : (Library.IsPaused ? Strings.Manga_Action_Restore : Strings.Manga_Action_Pause);
+      AddButton.IsEnabled = Library.IsAvaible;
+      SettingsButton.IsEnabled = Library.IsAvaible;
 
-      if (this.IsAvaible && Settings.AutoUpdateInHours > 0 &&
+      if (Library.IsAvaible && Settings.AutoUpdateInHours > 0 &&
         DateTime.Now > Settings.LastUpdate.AddHours(Settings.AutoUpdateInHours))
       {
         Log.Add(Strings.AutoUpdate);
@@ -152,21 +150,21 @@ namespace MangaReader
         return;
 
       var openFolder = new MenuItem() { Header = Strings.Manga_Action_OpenFolder, FontWeight = FontWeights.Bold };
-      openFolder.Click += (o, args) => MenuOpenFolder(manga);
-      var update = new MenuItem() { Header = Strings.Manga_Action_Update, IsEnabled = this.IsAvaible };
+      openFolder.Click += (o, args) => { Command.OpenFolder.Execute(manga, null); };
+      var update = new MenuItem() { Header = Strings.Manga_Action_Update, IsEnabled = Library.IsAvaible };
       update.Click += (o, agrs) => UpdateManga(manga);
-      var compress = new MenuItem() {Header = Strings.Manga_Action_Compress, IsEnabled = this.IsAvaible};
+      var compress = new MenuItem() {Header = Strings.Manga_Action_Compress, IsEnabled = Library.IsAvaible};
       compress.Click += (o, args) => manga.Compress();
-      var removeHistory = new MenuItem() { Header = Strings.Manga_Action_Remove + " историю", IsEnabled = this.IsAvaible };
+      var removeHistory = new MenuItem() { Header = Strings.Manga_Action_Remove + " историю", IsEnabled = Library.IsAvaible };
       removeHistory.Click += (o, agrs) => {manga.Histories.Clear(); manga.Save();};
-      var remove = new MenuItem() { Header = Strings.Manga_Action_Remove, IsEnabled = this.IsAvaible };
-      remove.Click += (o, agrs) => { Library.Remove(manga); Library.FilterChanged(this); };
+      var remove = new MenuItem() { Header = Strings.Manga_Action_Remove, IsEnabled = Library.IsAvaible };
+      remove.Click += (o, agrs) => { Library.Remove(manga); /*Library.FilterChanged(this); */};
       var view = new MenuItem() { Header = Strings.Manga_Action_View };
       view.Click += (o, agrs) => Process.Start(manga.Uri.OriginalString);
-      var needUpdate = new MenuItem() { Header = manga.NeedUpdate ? Strings.Manga_NotUpdate : Strings.Manga_Update, IsEnabled = this.IsAvaible };
+      var needUpdate = new MenuItem() { Header = manga.NeedUpdate ? Strings.Manga_NotUpdate : Strings.Manga_Update, IsEnabled = Library.IsAvaible };
       needUpdate.Click += (o, args) => { manga.NeedUpdate = !manga.NeedUpdate; manga.Save(); };
-      var settings = new MenuItem() { Header = Strings.Manga_Settings, IsEnabled = this.IsAvaible };
-      settings.Click += (o, args) => { new MangaForm {DataContext = manga, Owner = this}.ShowDialog(); Library.FilterChanged(this); };
+      var settings = new MenuItem() { Header = Strings.Manga_Settings, IsEnabled = Library.IsAvaible };
+      settings.Click += (o, args) => { new MangaForm {DataContext = manga, Owner = this}.ShowDialog(); /* Library.FilterChanged(this); */ };
 
       var menu = new ContextMenu();
       menu.Items.Add(openFolder);
@@ -188,19 +186,9 @@ namespace MangaReader
         _loadThread.Start();
     }
 
-    private static void MenuOpenFolder(IDownloadable manga)
-    {
-      if (Directory.Exists(manga.Folder))
-        Process.Start(manga.Folder);
-      else
-        Library.Status = Strings.Library_Status_FolderNotFound;
-    }
-
     private void Window_OnClosing(object sender, CancelEventArgs e)
     {
       Settings.WindowsState = new object[] { this.Top, this.Left, this.Width, this.Height, this.WindowState };
-      this.NotifyIcon.Dispose();
-      Application.Current.Shutdown(0);
     }
 
     private void ListView_MouseDown(object sender, MouseButtonEventArgs e)
@@ -216,50 +204,6 @@ namespace MangaReader
     {
       if (Settings.MinimizeToTray && this.WindowState == WindowState.Minimized)
         this.Hide();
-    }
-
-    private void NotifyIcon_OnTrayMouseDoubleClick(object sender, RoutedEventArgs e)
-    {
-      if (Settings.MinimizeToTray)
-      {
-        this.Show();
-        this.WindowState = WindowState.Normal;
-      }
-    }
-
-    private void NotifyIcon_OnTrayBalloonTipClicked(object sender, RoutedEventArgs e)
-    {
-      var element = sender as FrameworkElement;
-      if (element == null)
-        return;
-
-      var downloadable = element.DataContext as IDownloadable;
-      if (downloadable != null)
-        MenuOpenFolder(downloadable);
-    }
-
-    private void NotifyIcon_OnTrayRightMouseUp(object sender, RoutedEventArgs e)
-    {
-      var item = sender as TaskbarIcon;
-
-      var update = new MenuItem() { Header = Strings.Manga_Action_Update, IsEnabled = this.IsAvaible };
-      update.Click += (o, agrs) => this.Update_click(sender, e);
-      var add = new MenuItem() { Header = Strings.Library_Action_Add, IsEnabled = this.IsAvaible };
-      add.Click += (o, agrs) => this.Add_click(sender, e);
-      var settings = new MenuItem() { Header = Strings.Library_Action_Settings, IsEnabled = this.IsAvaible };
-      settings.Click += (o, agrs) => this.Settings_click(sender, e);
-      var selfUpdate = new MenuItem() { Header = Strings.Library_CheckUpdate, IsEnabled = this.IsAvaible };
-      selfUpdate.Click += (o, agrs) => Update.StartUpdate();
-      var exit = new MenuItem() { Header = Strings.Library_Exit };
-      exit.Click += (o, agrs) => Application.Current.Shutdown(0);
-
-      var menu = new ContextMenu();
-      menu.Items.Add(update);
-      menu.Items.Add(add);
-      menu.Items.Add(settings);
-      menu.Items.Add(selfUpdate);
-      menu.Items.Add(exit);
-      item.ContextMenu = menu;
     }
   }
 

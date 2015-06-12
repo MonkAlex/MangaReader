@@ -83,6 +83,7 @@
     <Compile Include="CRUD\MangaHistory.cs" />
     <Compile Include="CRUD\Manga.cs" />
     <Compile Include="Environment.cs" />
+    <Compile Include="Library\Add.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

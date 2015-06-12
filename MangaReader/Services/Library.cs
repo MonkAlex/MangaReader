@@ -150,29 +150,31 @@ namespace MangaReader.Services
     /// Добавить мангу.
     /// </summary>
     /// <param name="url"></param>
-    public static void Add(string url)
+    public static bool Add(string url)
     {
       Uri uri;
-      if (Uri.TryCreate(url, UriKind.Absolute, out uri))
-        Add(uri);
-      else
-        Library.Status = "Некорректная ссылка.";
+      if (Uri.TryCreate(url, UriKind.Absolute, out uri) && Add(uri))
+        return true;
+
+      Library.Status = "Некорректная ссылка.";
+      return false;
     }
 
     /// <summary>
     /// Добавить мангу.
     /// </summary>
     /// <param name="uri"></param>
-    public static void Add(Uri uri)
+    public static bool Add(Uri uri)
     {
       if (Mapping.Environment.Session.Query<Mangas>().Any(m => m.Uri == uri))
-        return;
+        return false;
 
       var newManga = Mangas.Create(uri);
-      if (!newManga.IsValid())
-        return;
+      if (newManga == null || !newManga.IsValid())
+        return false;
 
       Status = Strings.Library_Status_MangaAdded + newManga.Name;
+      return true;
     }
 
     /// <summary>

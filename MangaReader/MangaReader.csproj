@@ -155,7 +155,6 @@
     <Compile Include="Mapping\HistoryMap.cs" />
     <Compile Include="Mapping\Interceptors.cs" />
     <Compile Include="Mapping\MangaMap.cs" />
-    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

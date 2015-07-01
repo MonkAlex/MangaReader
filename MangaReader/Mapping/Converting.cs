@@ -10,8 +10,31 @@ namespace MangaReader.Mapping
     {
       // 1.* To 1.24
       ConvertBaseTo24(process);
+
+      // to 1.27.5584
       Convert24To27(process);
 
+      // to 1.28.5659
+      Convert27To28(process);
+    }
+
+    private static void Convert27To28(ConverterProcess process)
+    {
+      var version = new Version(1, 28, 5659);
+      if (version.CompareTo(Settings.DatabaseVersion) > 0 && process.Version.CompareTo(version) >= 0)
+      {
+        var readmangaHas = Environment.Session.CreateSQLQuery(@"update MangaSetting 
+          set DefaultCompression = 'Volume'
+          where DefaultCompression is null and MangaName = 'Readmanga'");
+        readmangaHas.UniqueResult();
+
+        var acomicsHas = Environment.Session.CreateSQLQuery(@"update MangaSetting
+          set DefaultCompression = 'Manga'
+          where DefaultCompression is null and MangaName = 'Acomics'");
+        acomicsHas.UniqueResult();
+
+        Settings.MangaSettings.ForEach(s => s.Update());
+      }
     }
 
     private static void Convert24To27(ConverterProcess process)

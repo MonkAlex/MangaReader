@@ -3,17 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             Loaded="DownloadFolderSetting_OnLoaded"
+             DataContextChanged="UserControl_DataContextChanged"
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="75"></ColumnDefinition>
+            <ColumnDefinition Width="120"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="50"></ColumnDefinition>
+            <ColumnDefinition Width="75"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="Class" VerticalAlignment="Center"/>
+        <TextBlock VerticalAlignment="Center" Text="Манга скачивается в:"/>
         <TextBlock IsEnabled="False" x:Name="FolderPath" VerticalAlignment="Center" Grid.Column="1" TextTrimming="WordEllipsis" Text="{Binding Folder}"/>
-        <Button x:Name="ChangeFolder" Content="Change" Grid.Column="2" Click="ChangeFolder_OnClick" VerticalAlignment="Center"/>
+        <Button x:Name="ChangeFolder" Content="Изменить" Grid.Column="2" Click="ChangeFolder_OnClick"/>
     </Grid>
 </UserControl>

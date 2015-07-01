@@ -226,7 +226,7 @@ namespace MangaReader.Manga
 
     public virtual string DownloadFolder
     {
-      get { return Settings.DownloadFolders.Single(f => f.Manga == this.GetType().MangaType()).Folder; }
+      get { return Settings.MangaSettings.Single(f => f.Manga == this.GetType().MangaType()).Folder; }
       set { }
     }
 
@@ -467,6 +467,14 @@ namespace MangaReader.Manga
       this.Chapters = new List<Chapter>();
       this.Volumes = new List<Volume>();
       this.Pages = new List<MangaPage>();
+      if (Mapping.Environment.Initialized)
+      {
+        var setting = Settings.MangaSettings.FirstOrDefault(s => Equals(s.Manga, this.GetType().MangaType()));
+        if (setting != null)
+        {
+          this.CompressionMode = setting.DefaultCompression;
+        }
+      }
     }
 
     #endregion

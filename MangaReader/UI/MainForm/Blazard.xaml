@@ -16,8 +16,8 @@
         <MenuItem Header="Update all" Command="{x:Static ui:Command.UpdateAll}"/>
         <MenuItem Header="Exit" Command="Close"/>
       </MenuItem>
-      <MenuItem Header="Settings" Command="{x:Static ui:Command.ShowSettings}">
-        
+      <MenuItem Header="Settings">
+        <MenuItem Header="Main settings" Command="{x:Static ui:Command.ShowSettings}"/>
       </MenuItem>
       <MenuItem Header="Help">
         <MenuItem Header="Read Me"/>

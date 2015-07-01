@@ -74,7 +74,7 @@ namespace MangaReader.Manga.Acomic
     public Acomics()
       : base()
     {
-      this.CompressionMode = Compression.CompressionMode.Manga;
+      //this.CompressionMode = Compression.CompressionMode.Manga;
     }
 
     #endregion

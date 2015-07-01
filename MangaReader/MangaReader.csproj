@@ -170,6 +170,9 @@
     </Compile>
     <Compile Include="Services\ImageFile.cs" />
     <Compile Include="Services\MangaSetting.cs" />
+    <Compile Include="Services\MangaSettings.xaml.cs">
+      <DependentUpon>MangaSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\TimedLock.cs" />
     <Compile Include="Services\TypeHelper.cs" />
     <Compile Include="Table.xaml.cs">
@@ -214,6 +217,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Services\DownloadFolderSetting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Services\MangaSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

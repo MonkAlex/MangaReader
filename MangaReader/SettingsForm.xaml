@@ -19,11 +19,11 @@
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Window.Resources>
+  
+  <TabControl x:Name="Tabs">
+    <TabItem Header="Основные настройки">
     <Grid Margin="15">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -39,56 +39,51 @@
 
         <TextBlock Grid.Row="0" Grid.Column="0" 
                    TextTrimming="WordEllipsis" 
-                   Text="{x:Static resx:Strings.Settings_DownloadMangaTo}" 
-                   VerticalAlignment="Center"/>
-        <mangaReader:DownloadFolderSetting Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="ReadManga"/>
-        <mangaReader:DownloadFolderSetting Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="Acomics"/>
-
-        <TextBlock Grid.Row="3" Grid.Column="0" 
-                   TextTrimming="WordEllipsis" 
                    Text="{x:Static resx:Strings.Settings_Language}" 
                    VerticalAlignment="Center"/>
-        <ComboBox Grid.Row="3" Grid.Column="1" 
+        <ComboBox Grid.Row="0" Grid.Column="1" 
                   x:Name="MangaLanguage" 
                   IsSynchronizedWithCurrentItem="True" 
                   ItemsSource="{Binding Source={StaticResource Languages}}" 
                   VerticalAlignment="Center" 
                   HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+        <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                    TextWrapping="Wrap" 
                    TextTrimming="WordEllipsis" 
                    Text="{x:Static resx:Strings.Settings_LanguageHint}" 
                    VerticalAlignment="Center"/>
 
-        <TextBlock Grid.Row="5" Grid.Column="0" 
+        <TextBlock Grid.Row="2" Grid.Column="0" 
                    TextTrimming="WordEllipsis" 
                    Text="{x:Static resx:Strings.Settings_UpdateEver}" 
                    VerticalAlignment="Center"/>
-        <TextBox Grid.Row="5" Grid.Column="1" 
+        <TextBox Grid.Row="2" Grid.Column="1" 
                   x:Name="AutoUpdate"
                   VerticalAlignment="Center" 
                   HorizontalAlignment="Left"/>
-        <TextBlock Grid.Row="5" Grid.Column="1" 
+        <TextBlock Grid.Row="2" Grid.Column="1" 
                    TextTrimming="WordEllipsis" 
                    Text="{x:Static resx:Strings.Settings_Hours}" 
                    VerticalAlignment="Center"
                    HorizontalAlignment="Right"/>
 
-        <CheckBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+        <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
                   x:Name="UpdateReaderBox" 
                   Content="{x:Static resx:Strings.Settings_UpdateReader}" 
                   VerticalAlignment="Center"/>
-        <CheckBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
+        <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
                   x:Name="MinimizeToTray" 
                   Content="{x:Static resx:Strings.Settings_MinimizeToTray}" 
                   VerticalAlignment="Center"/>
-        <CheckBox Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
+        <CheckBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
                   x:Name="UpdateBox" 
                   Content="{x:Static resx:Strings.Settings_Update}" 
                   VerticalAlignment="Center"/>
-        <CheckBox Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2"
+        <CheckBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
                   x:Name="CompressBox" 
                   Content="{x:Static resx:Strings.Settings_Compress}" 
                   VerticalAlignment="Center"/>
     </Grid>
+    </TabItem>
+  </TabControl>
 </Window>

@@ -126,7 +126,7 @@ namespace MangaReader.Manga.Grouple
     public Readmanga()
       : base()
     {
-      this.CompressionMode = Compression.CompressionMode.Volume;
+      //this.CompressionMode = Compression.CompressionMode.Volume;
     }
 
     #endregion

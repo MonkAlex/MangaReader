@@ -79,21 +79,21 @@ namespace MangaReader.Services
     public static string ChapterPrefix = "Chapter ";
 
     [XmlIgnore]
-    public static List<MangaSetting> DownloadFolders
+    public static List<MangaSetting> MangaSettings
     {
       get
       {
-        if (downloadFolders == null)
+        if (mangaSettings == null)
         {
           var query = Mapping.Environment.Session.Query<MangaSetting>().ToList();
-          downloadFolders = query.Any() ? query : GetSubclass(typeof(Manga.Mangas));
+          mangaSettings = query.Any() ? query : CreateDefaultMangaSettings();
         }
-        return downloadFolders;
+        return mangaSettings;
       }
       set { }
     }
 
-    private static List<MangaSetting> downloadFolders;
+    private static List<MangaSetting> mangaSettings;
 
     /// <summary>
     /// Сжимать скачанную мангу.
@@ -110,7 +110,7 @@ namespace MangaReader.Services
     /// </summary>
     public static void Save()
     {
-      DownloadFolders.ForEach(a => a.Save());
+      MangaSettings.ForEach(a => a.Save());
       object[] settings = 
             {
                 Language,
@@ -132,7 +132,7 @@ namespace MangaReader.Services
     /// </summary>
     public static void Load()
     {
-      DownloadFolders.ForEach(a => Console.WriteLine("Type {0}, folder {1}", a.MangaName, a.Folder));
+      MangaSettings.ForEach(a => Console.WriteLine("Type {0}, folder {1}", a.MangaName, a.Folder));
 
       var settings = Serializer<object[]>.Load(SettingsPath);
       if (settings == null)
@@ -159,8 +159,9 @@ namespace MangaReader.Services
       catch (IndexOutOfRangeException) { }
     }
 
-    private static List<MangaSetting> GetSubclass(Type baseClass)
+    private static List<MangaSetting> CreateDefaultMangaSettings()
     {
+      var baseClass = typeof(Manga.Mangas);
       var types = Assembly.GetAssembly(baseClass).GetTypes()
         .Where(type => type.IsSubclassOf(baseClass));
       var folders = types
@@ -168,7 +169,8 @@ namespace MangaReader.Services
         {
           Folder = Settings.DownloadFolder,
           Manga = type.MangaType(),
-          MangaName = type.Name
+          MangaName = type.Name,
+          DefaultCompression = Compression.CompressionMode.Volume // TODO: запилить нормальную упаковку для каждого типа.
         })
         .ToList();
       folders.ForEach(f => f.Save());
@@ -188,9 +190,21 @@ namespace MangaReader.Services
           var setting = settings[3] as object[];
           var query = Mapping.Environment.Session.Query<MangaSetting>().ToList();
           if (query.FirstOrDefault(a => a.Manga == Readmanga.Type) == null)
-            new MangaSetting() { Folder = setting[0] as string, Manga = Readmanga.Type, MangaName = "Readmanga" }.Save();
+            new MangaSetting() 
+            { 
+              Folder = setting[0] as string, 
+              Manga = Readmanga.Type, 
+              MangaName = "Readmanga", 
+              DefaultCompression = Compression.CompressionMode.Volume
+            }.Save();
           if (query.FirstOrDefault(a => a.Manga == Acomics.Type) == null)
-            new MangaSetting() { Folder = setting[1] as string, Manga = Acomics.Type, MangaName = "Acomics" }.Save();
+            new MangaSetting() 
+            { 
+              Folder = setting[1] as string, 
+              Manga = Acomics.Type, 
+              MangaName = "Acomics", 
+              DefaultCompression = Compression.CompressionMode.Manga 
+            }.Save();
         }
         Serializer<object[]>.Save(SettingsPath, settings);
       }

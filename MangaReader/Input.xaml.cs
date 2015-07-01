@@ -14,7 +14,7 @@ namespace MangaReader
   /// </summary>
   public partial class Input : Window
   {
-    private Login ReadManga = Settings.DownloadFolders.First(x => x.Manga == Readmanga.Type).Login;
+    private Login ReadManga = Settings.MangaSettings.First(x => x.Manga == Readmanga.Type).Login;
 
     public Input()
     {

@@ -22,7 +22,7 @@ namespace MangaReader.Account
     /// </summary>
     public static bool IsLogined { get; set; }
 
-    public static Login SettingLogin = Settings.DownloadFolders.First(x => x.Manga == Readmanga.Type).Login;
+    public static Login SettingLogin = Settings.MangaSettings.First(x => x.Manga == Readmanga.Type).Login;
 
     /// <summary>
     /// Закладки.

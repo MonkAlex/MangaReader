@@ -10,18 +10,11 @@ namespace MangaReader.Services
   /// </summary>
   public partial class DownloadFolderSetting : UserControl
   {
-    private MangaSetting DonwloadFolder;
+    private MangaSetting Setting;
 
     public DownloadFolderSetting()
     {
       InitializeComponent();
-    }
-
-    private void DownloadFolderSetting_OnLoaded(object sender, RoutedEventArgs e)
-    {
-      DonwloadFolder = this.DataContext as MangaSetting;
-      this.Class.Text = DonwloadFolder.MangaName + ": ";
-      this.FolderPath.Text = DonwloadFolder.Folder;
     }
 
     private void ChangeFolder_OnClick(object sender, RoutedEventArgs e)
@@ -29,9 +22,16 @@ namespace MangaReader.Services
       var dialog = new VistaFolderBrowserDialog();
       if (dialog.ShowDialog() == true)
       {
-        DonwloadFolder.Folder = dialog.SelectedPath + Path.DirectorySeparatorChar;
-        this.FolderPath.Text = DonwloadFolder.Folder;
+        Setting.Folder = dialog.SelectedPath + Path.DirectorySeparatorChar;
+        this.FolderPath.Text = Setting.Folder;
       }
+    }
+
+    private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+      Setting = e.NewValue as MangaSetting;
+      if (Setting != null)
+        this.FolderPath.Text = Setting.Folder;
     }
   }
 }

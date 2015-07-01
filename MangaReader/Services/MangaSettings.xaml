@@ -1,0 +1,61 @@
+﻿<TabItem x:Class="MangaReader.Services.MangaSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:manga="clr-namespace:MangaReader.Manga"
+        xmlns:services="clr-namespace:MangaReader.Services"
+        xmlns:resx="clr-namespace:MangaReader.Properties"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        DataContextChanged="TabItem_DataContextChanged"
+        Header="{Binding Path=MangaName}"
+        mc:Ignorable="d" 
+        d:DesignHeight="200" d:DesignWidth="200">
+
+  <TabItem.Resources>
+    <ObjectDataProvider x:Key="CompressionModes"
+                    MethodName="GetValues" 
+                    ObjectType="{x:Type sys:Enum}">
+      <ObjectDataProvider.MethodParameters>
+        <x:Type TypeName="services:Compression+CompressionMode" />
+      </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+  </TabItem.Resources>
+
+  <Grid Margin="15">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="40*"></ColumnDefinition>
+      <ColumnDefinition Width="30*"></ColumnDefinition>
+      <ColumnDefinition Width="30*"></ColumnDefinition>
+    </Grid.ColumnDefinitions>
+    
+    <Label Grid.Row="0" Grid.Column="0"
+           x:Name="LoginLabel" Content="Логин: "/>
+    <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
+             x:Name="LoginBox" Text="{Binding Path=Login.Name}"/>
+    <Label Grid.Row="1" Grid.Column="0"
+           x:Name="PasswordLabel" Content="Пароль: "/>
+    <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+             x:Name="PasswordBox" Text="{Binding Path=Login.Password}"/>
+    <services:DownloadFolderSetting x:Name="Folder" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"/>
+    <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+              Content="Сжатие по умолчанию для новой манги: " />
+    <ComboBox Grid.Row="3" Grid.Column="2" x:Name="DefaultCompression" 
+              ItemsSource="{Binding Source={StaticResource CompressionModes}}" 
+              SelectedItem="{Binding Path=DefaultCompression}"/>
+
+    <Button Grid.Row="5" Grid.Column="1"
+            IsDefault="True"
+            x:Name="OkButton" Content="Сохранить" Click="OkButton_OnClick"/>
+    <Button Grid.Row="5" Grid.Column="2"
+            x:Name="CancelButton" Content="Отмена" Click="CancelButton_OnClick"/>
+  </Grid>
+</TabItem>

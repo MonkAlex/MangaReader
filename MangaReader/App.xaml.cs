@@ -33,7 +33,7 @@ namespace MangaReader
       Update.Initialize();
       Grouple.LoginWhile();
 
-      var mainwindow = new Random().Next(1, 2) == 0 ? new Table() as Window : new UI.MainForm.Blazard();
+      var mainwindow = new Random().Next(0) == 0 ? new Table() as Window : new UI.MainForm.Blazard();
       mainwindow.ShowDialog();
     }
 

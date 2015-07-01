@@ -18,5 +18,7 @@ namespace MangaReader.Services
     }
 
     private Login login;
+
+    public virtual Compression.CompressionMode DefaultCompression { get; set; }
   }
 }

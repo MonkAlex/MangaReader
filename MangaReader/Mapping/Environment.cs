@@ -25,14 +25,20 @@ namespace MangaReader.Mapping
       return SessionFactory.OpenSession();
     }
 
+    public static bool Initialized { get; set; }
+
     public static void Initialize()
     {
+      Initialized = false;
+
       // TODO: подумать над другим способом явно подгрузить SQLite.
       var sqlite = FunctionType.Aggregate;
       sqlite.Equals(FunctionType.Collation);
 
       SessionFactory = CreateSessionFactory();
       Session = SessionFactory.OpenSession();
+
+      Initialized = true;
     }
 
     private static ISessionFactory CreateSessionFactory()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ookii.Dialogs.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,6 +39,13 @@ namespace MangaReader.Services
       }
     }
 
+    private void ChangeFolder_OnClick(object sender, RoutedEventArgs e)
+    {
+      var dialog = new VistaFolderBrowserDialog();
+      if (dialog.ShowDialog() == true)
+        this.FolderPath.Text = dialog.SelectedPath + System.IO.Path.DirectorySeparatorChar;
+    }
+
     private void CancelButton_OnClick(object sender, RoutedEventArgs e)
     {
       var setting = this.DataContext as MangaSetting;
@@ -46,11 +54,6 @@ namespace MangaReader.Services
 
       this.DataContext = null;
       this.DataContext = setting;
-    }
-
-    private void TabItem_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-    {
-      this.Folder.DataContext = e.NewValue;
     }
   }
 }

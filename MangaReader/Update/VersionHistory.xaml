@@ -7,9 +7,17 @@
         WindowStartupLocation="CenterScreen"
         Icon="../Icons/main.ico">
     <Grid>
-        <TextBox x:Name="TextBox" Margin="10,10,9.6,41" TextWrapping="Wrap" Text="TextBox"/>
-        <Button Content="Ok" Margin="0,0,9.6,10" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Ok_Click" IsDefault="True"/>
-        <StatusBar Margin="10,0,102.6,10" RenderTransformOrigin="0.168,-1.134" Height="26" VerticalAlignment="Bottom" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="TextBox" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap" Text="TextBox" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+        <Button Content="Ok" Grid.Row="1" Grid.Column="1" Click="Ok_Click" IsDefault="True"/>
+        <StatusBar  Grid.Row="1" Grid.Column="0">
             <StatusBarItem HorizontalContentAlignment="Center">
                 <TextBlock x:Name="Label"/>
             </StatusBarItem>

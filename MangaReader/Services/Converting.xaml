@@ -5,8 +5,17 @@
         WindowStartupLocation="CenterScreen"
         ShowInTaskbar="False"
         Title="" Height="100" Width="300">
-  <Grid>
-    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="TextBlock"/>
-    <ProgressBar IsIndeterminate="True" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" x:Name="ProgressBar" Value="0" Maximum="100" Height="20"/>
-  </Grid>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" x:Name="TextBlock"/>
+        <ProgressBar Grid.Row="1" 
+                     x:Name="ProgressBar" 
+                     Maximum="100"
+                     Height="25"
+                     Value="0"
+                     IsIndeterminate="True"/>
+    </Grid>
 </Window>

@@ -165,9 +165,6 @@
     <Compile Include="Services\Converting.xaml.cs">
       <DependentUpon>Converting.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\DownloadFolderSetting.xaml.cs">
-      <DependentUpon>DownloadFolderSetting.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Services\ImageFile.cs" />
     <Compile Include="Services\MangaSetting.cs" />
     <Compile Include="Services\MangaSettings.xaml.cs">
@@ -216,10 +213,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Services\DownloadFolderSetting.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Services\MangaSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -251,6 +244,10 @@
     <Page Include="UI\MultiSelectComboBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Update\VersionHistory.xaml">
       <SubType>Designer</SubType>

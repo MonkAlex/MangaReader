@@ -5,10 +5,42 @@
              ShutdownMode="OnExplicitShutdown"
              Exit="App_OnExit">
     <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/UI/Generic.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        <Style TargetType="Button" x:Key="BaseButton">
+            <Setter Property="MinHeight" Value="25"/>
+            <Setter Property="MaxHeight" Value="25"/>
+            <Setter Property="Width" Value="75"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="4"/>
+        </Style>
+        <Style TargetType="Button" x:Key="BigButton" BasedOn="{StaticResource BaseButton}">
+            <Setter Property="MaxHeight" Value="100"/>
+        </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource BaseButton}"/>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="MinHeight" Value="25"/>
+            <Setter Property="MaxHeight" Value="25"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="4"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="4"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="4"/>
+        </Style>
+        <Style TargetType="PasswordBox">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="4"/>
+        </Style>
     </Application.Resources>
 </Application>

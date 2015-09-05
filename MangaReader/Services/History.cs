@@ -77,9 +77,11 @@ namespace MangaReader.Services
       var strings = File.Exists(HistoryFile) ? new List<string>(File.ReadAllLines(HistoryFile)) : new List<string>();
 
       if (!isMangaHistory && !isStringList)
+#pragma warning disable CS0612 // Obsolete методы используются для конвертации
         histories = MangaHistory.CreateHistories(strings);
       if (!isMangaHistory && isStringList)
         histories = MangaHistory.CreateHistories(serializedStrings);
+#pragma warning restore CS0612
       if (isMangaHistory && !isStringList)
         histories = serializedMangaHistoris;
 

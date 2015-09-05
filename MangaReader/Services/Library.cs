@@ -235,7 +235,9 @@ namespace MangaReader.Services
         if (process != null)
           process.Percent += 100.0 / database.Count;
         if (!mangaUrls.Contains(dbstring))
+#pragma warning disable CS0612 // Obsolete методы используются для конвертации
           Mangas.Create(dbstring);
+#pragma warning restore CS0612
       }
 
       Backup.MoveToBackup(DatabaseFile);

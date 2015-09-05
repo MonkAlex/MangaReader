@@ -46,9 +46,9 @@ namespace MangaReader.Services
       var globalCollection = new List<Mangas>();
 
       var obsoleteManga = File.Exists(CacheFile) ?
-        // ReSharper disable CSharpWarnings::CS0612
+#pragma warning disable CS0612 // Obsolete методы используются для конвертации
           Serializer<ObservableCollection<Manga.Manga>>.Load(CacheFile) :
-        // ReSharper restore CSharpWarnings::CS0612
+#pragma warning restore CS0612
           null;
       if (obsoleteManga != null)
       {

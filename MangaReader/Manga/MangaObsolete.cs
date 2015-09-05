@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text.RegularExpressions;
-using MangaReader.Manga.Grouple;
 using MangaReader.Properties;
 using MangaReader.Services;
 
@@ -57,7 +56,7 @@ namespace MangaReader.Manga
     /// </summary>
     public bool IsValid
     {
-      get { return !string.IsNullOrWhiteSpace(this.Name) && this.listOfChapters != null; }
+      get { return !string.IsNullOrWhiteSpace(this.Name); }
     }
 
     /// <summary>
@@ -96,17 +95,6 @@ namespace MangaReader.Manga
       get { return 0; }
       set { }
     }
-
-    /// <summary>
-    /// Закешированный список глав.
-    /// </summary>
-    private List<Chapter> allChapters;
-
-    /// <summary>
-    /// Список глав, ссылка-описание.
-    /// </summary>
-    private Dictionary<string, string> listOfChapters;
-
 
     #endregion
 

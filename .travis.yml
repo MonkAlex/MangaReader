@@ -1,2 +1,5 @@
 ﻿language: csharp
 solution: MangaReader.sln
+
+script:
+  - xbuild /p:Configuration=Release MangaReader.sln

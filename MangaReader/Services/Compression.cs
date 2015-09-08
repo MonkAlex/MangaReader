@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MangaReader.Manga;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace MangaReader.Services
 {
-  public class Compression
+  public static class Compression
   {
     public const string ArchiveFormat = ".cbz";
     public const string ArchivePattern = "*.cbz";
@@ -18,6 +19,19 @@ namespace MangaReader.Services
       Manga,
       Volume,
       Chapter
+    }
+
+    public static CompressionMode? GetDefaultCompression(this Mangas manga)
+    {
+      if (Mapping.Environment.Initialized)
+      {
+        var setting = Settings.MangaSettings.SingleOrDefault(s => Equals(s.Manga, manga.GetType().MangaType()));
+        if (setting != null)
+        {
+          return setting.DefaultCompression;
+        }
+      }
+      return null;
     }
 
     /// <summary>

@@ -467,14 +467,7 @@ namespace MangaReader.Manga
       this.Chapters = new List<Chapter>();
       this.Volumes = new List<Volume>();
       this.Pages = new List<MangaPage>();
-      if (Mapping.Environment.Initialized)
-      {
-        var setting = Settings.MangaSettings.FirstOrDefault(s => Equals(s.Manga, this.GetType().MangaType()));
-        if (setting != null)
-        {
-          this.CompressionMode = setting.DefaultCompression;
-        }
-      }
+      this.CompressionMode = this.GetDefaultCompression();
     }
 
     #endregion

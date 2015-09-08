@@ -1,5 +1,9 @@
 ﻿language: csharp
-solution: MangaReader.sln
+solution: ./MangaReader.sln
+
+install:
+  - sudo apt-get install nunit-console
 
 script:
-  - xbuild /p:Configuration=Release MangaReader.sln
+  - xbuild ./MangaReader.sln
+  - nunit-console ./Tests/bin/Debug/MangaReader.Tests.dll

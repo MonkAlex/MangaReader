@@ -21,17 +21,25 @@ namespace MangaReader.Services
       Chapter
     }
 
+    /// <summary>
+    /// Получить упаковку манги по умолчанию.
+    /// </summary>
+    /// <param name="manga">Манга.</param>
+    /// <returns>Режим упаковки.</returns>
     public static CompressionMode? GetDefaultCompression(this Mangas manga)
     {
+      CompressionMode? mode = null;
       if (Mapping.Environment.Initialized)
       {
         var setting = Settings.MangaSettings.SingleOrDefault(s => Equals(s.Manga, manga.GetType().MangaType()));
         if (setting != null)
-        {
-          return setting.DefaultCompression;
-        }
+          mode = setting.DefaultCompression;
       }
-      return null;
+
+      if (mode == null || !manga.AllowedCompressionModes.Any(m => Equals(m, mode)))
+        mode = manga.AllowedCompressionModes.FirstOrDefault();
+
+      return mode;
     }
 
     /// <summary>

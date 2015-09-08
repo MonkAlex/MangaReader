@@ -153,7 +153,21 @@ namespace MangaReader.Manga
       Enum.GetValues(typeof(Compression.CompressionMode))
             .Cast<Compression.CompressionMode>());
 
-    public virtual Compression.CompressionMode? CompressionMode { get; set; }
+    public virtual Compression.CompressionMode? CompressionMode
+    {
+      get
+      {
+        if (this.compressionMode == null)
+          this.compressionMode = this.GetDefaultCompression();
+        return this.compressionMode;
+      }
+      set
+      {
+        this.compressionMode = value;
+      }
+    }
+
+    private Compression.CompressionMode? compressionMode;
 
     /// <summary>
     /// Статус корректности манги.
@@ -467,7 +481,6 @@ namespace MangaReader.Manga
       this.Chapters = new List<Chapter>();
       this.Volumes = new List<Volume>();
       this.Pages = new List<MangaPage>();
-      this.CompressionMode = this.GetDefaultCompression();
     }
 
     #endregion

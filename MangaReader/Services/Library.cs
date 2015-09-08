@@ -289,7 +289,7 @@ namespace MangaReader.Services
           current.DownloadProgressChanged += (sender, args) =>
               Library.SetTaskbarState((double)(100 * mangaIndex + args.Downloaded) / (listMangas.Count * 100));
           current.Download();
-          if (current.NeedCompress ?? Settings.CompressManga)
+          if (current.NeedCompress ?? current.Setting.CompressManga)
             current.Compress();
           mangaIndex++;
           if (current.IsDownloaded)

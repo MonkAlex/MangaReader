@@ -27,6 +27,8 @@
                 <RowDefinition Height="2*"></RowDefinition>
                 <RowDefinition Height="2*"></RowDefinition>
                 <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="1*"></RowDefinition>
             </Grid.RowDefinitions>
@@ -67,7 +69,14 @@
               ItemsSource="{Binding Source={StaticResource CompressionModes}}" 
               SelectedItem="{Binding Path=DefaultCompression}"/>
 
-            <Grid Grid.Row="5" Grid.ColumnSpan="3">
+            <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"
+                      Content="{x:Static resx:Strings.Settings_Update}" 
+                      IsChecked="{Binding OnlyUpdate}"/>
+            <CheckBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3"
+                      Content="{x:Static resx:Strings.Settings_Compress}"
+                      IsChecked="{Binding CompressManga}"/>
+
+            <Grid Grid.Row="7" Grid.ColumnSpan="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>

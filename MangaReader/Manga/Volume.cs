@@ -41,6 +41,8 @@ namespace MangaReader.Manga
       private set { this.folderPrefix = value; }
     }
 
+    public virtual bool OnlyUpdate { get; set; }
+
     private string folderPrefix = Settings.VolumePrefix;
 
     public event EventHandler<Mangas> DownloadProgressChanged;
@@ -57,7 +59,7 @@ namespace MangaReader.Manga
       var volumeFolder = Path.Combine(mangaFolder, this.Folder);
 
       this.ActiveChapters = this.Chapters;
-      if (Settings.Update)
+      if (this.OnlyUpdate)
       {
         this.ActiveChapters = History.GetNotSavedChapters(this.ActiveChapters);
       }

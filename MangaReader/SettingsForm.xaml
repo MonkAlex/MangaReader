@@ -7,7 +7,7 @@
         WindowStartupLocation="CenterOwner"
         Icon="Icons/main.ico"
         Title="{x:Static resx:Strings.Library_Action_Settings}"
-        Height="250"
+        Height="300"
         Width="450"
         Closed="SettingsForm_OnClosed">
     <Window.Resources>
@@ -75,14 +75,6 @@
                     <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
                   x:Name="MinimizeToTray" 
                   Content="{x:Static resx:Strings.Settings_MinimizeToTray}" 
-                  VerticalAlignment="Center"/>
-                    <CheckBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
-                  x:Name="UpdateBox" 
-                  Content="{x:Static resx:Strings.Settings_Update}" 
-                  VerticalAlignment="Center"/>
-                    <CheckBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
-                  x:Name="CompressBox" 
-                  Content="{x:Static resx:Strings.Settings_Compress}" 
                   VerticalAlignment="Center"/>
                 </Grid>
             </StackPanel>

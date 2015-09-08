@@ -19,11 +19,6 @@ namespace MangaReader.Services
     public static Languages Language = Languages.English;
 
     /// <summary>
-    /// Обновлять при скачивании (true) или скачивать целиком(false).
-    /// </summary>
-    public static bool Update = true;
-
-    /// <summary>
     /// Сворачивать в трей.
     /// </summary>
     public static bool MinimizeToTray = true;
@@ -96,11 +91,6 @@ namespace MangaReader.Services
     private static List<MangaSetting> mangaSettings;
 
     /// <summary>
-    /// Сжимать скачанную мангу.
-    /// </summary>
-    public static bool CompressManga = true;
-
-    /// <summary>
     /// Состояние окна.
     /// </summary>
     public static object[] WindowsState;
@@ -114,10 +104,10 @@ namespace MangaReader.Services
       object[] settings = 
             {
                 Language,
-                Update,
+                null, // Update
                 UpdateReader,
                 null,
-                CompressManga,
+                null, // CompressManga
                 WindowsState,
                 new object[] {null, null},
                 MinimizeToTray,
@@ -132,7 +122,12 @@ namespace MangaReader.Services
     /// </summary>
     public static void Load()
     {
-      MangaSettings.ForEach(a => Console.WriteLine("Type {0}, folder {1}", a.MangaName, a.Folder));
+      MangaSettings.ForEach(a => 
+      {
+        Console.WriteLine("Type {0}, folder {1}", a.MangaName, a.Folder);
+        Console.WriteLine("Type {0}, update or full download {1}", a.MangaName, a.OnlyUpdate);
+        Console.WriteLine("Type {0}, need compress manga {1}", a.MangaName, a.CompressManga);
+      });
 
       var settings = Serializer<object[]>.Load(SettingsPath);
       if (settings == null)
@@ -142,12 +137,8 @@ namespace MangaReader.Services
       {
         Language = (Languages)settings[0];
         Console.WriteLine("Language {0}", Language);
-        Update = (bool)settings[1];
-        Console.WriteLine("Update or full download {0}", Update);
         UpdateReader = (bool)settings[2];
         Console.WriteLine("Autoupdate Mangareader {0}", UpdateReader);
-        CompressManga = (bool)settings[4];
-        Console.WriteLine("Need compress manga {0}", CompressManga);
         WindowsState = (object[])settings[5];
         MinimizeToTray = (bool)settings[7];
         Console.WriteLine("Minimize to tray {0}", MinimizeToTray);
@@ -170,7 +161,7 @@ namespace MangaReader.Services
           Folder = Settings.DownloadFolder,
           Manga = type.MangaType(),
           MangaName = type.Name,
-          DefaultCompression = Compression.CompressionMode.Volume // TODO: запилить нормальную упаковку для каждого типа.
+          DefaultCompression = Compression.CompressionMode.Manga
         })
         .ToList();
       folders.ForEach(f => f.Save());

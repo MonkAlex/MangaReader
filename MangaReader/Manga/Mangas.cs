@@ -109,6 +109,19 @@ namespace MangaReader.Manga
     private bool? needCompress = null;
 
     /// <summary>
+    /// Настройки манги.
+    /// </summary>
+    public virtual MangaSetting Setting
+    {
+      get
+      {
+        if (Mapping.Environment.Initialized)
+          return Settings.MangaSettings.SingleOrDefault(s => Equals(s.Manga, this.GetType().MangaType()));
+        throw new Exception("Mappings not initialized.");
+      }
+    }
+
+    /// <summary>
     /// История манги.
     /// </summary>
     [XmlIgnore]
@@ -288,7 +301,7 @@ namespace MangaReader.Manga
       this.ActiveVolumes = this.Volumes;
       this.ActiveChapters = this.Chapters;
       this.ActivePages = this.Pages;
-      if (Settings.Update)
+      if (this.Setting.OnlyUpdate)
       {
         this.ActivePages = this.ActivePages
             .Where(p => this.Histories.All(m => m.Uri != p.Uri))
@@ -313,6 +326,7 @@ namespace MangaReader.Manga
             v =>
             {
               v.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged("Downloaded");
+              v.OnlyUpdate = this.Setting.OnlyUpdate;
               v.Download(mangaFolder);
               v.Chapters.ForEach(ch => this.AddHistory(ch.Uri));
             });

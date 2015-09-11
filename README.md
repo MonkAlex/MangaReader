@@ -1,3 +1,4 @@
+===
 [![Supported platforms][badge-platforms]][Releases] [![Latest release][badge-release]][Releases] [![Open issues][badge-issues]][Issues]
 MangaReader
 ===========

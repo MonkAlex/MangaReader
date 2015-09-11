@@ -23,6 +23,14 @@ namespace MangaReader
 
     private void App_OnStartup(object sender, StartupEventArgs e)
     {
+      var isSingle = false;
+      var mtx = new System.Threading.Mutex(true, "5197317b-a6f6-4a6c-a336-6fbf8642b7bc", out isSingle);
+      if (!isSingle)
+      {
+        Log.Add("Программа уже запущена.");
+        Environment.Exit(1);
+      }
+
       this.DispatcherUnhandledException += (o, a) => Log.Exception(a.Exception);
       AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly;
       if (Environment.GetCommandLineArgs().Contains("-t"))

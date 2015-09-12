@@ -38,6 +38,7 @@ namespace MangaReader.UI
 
     private static readonly string _All = "All";
 
+    public event RoutedEventHandler SelectionChanged;
 
     public Dictionary<string, object> ItemsSource
     {
@@ -124,6 +125,10 @@ namespace MangaReader.UI
       {
         SelectedItems.Add(node.Title, this.ItemsSource[node.Title]);
       }
+
+      var handler = SelectionChanged;
+      if (handler != null)
+        handler(this, new RoutedEventArgs());
     }
 
     private void DisplayInControl()

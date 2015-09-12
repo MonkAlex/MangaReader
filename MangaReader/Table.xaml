@@ -31,14 +31,14 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <ui:MultiSelectComboBox x:Name="MangaType" Grid.Column="3"
+            <ui:MultiSelectComboBox x:Name="MangaType" Grid.Column="3" SelectionChanged="FilterChanged"
                             ItemsSource="{Binding Path=(services:LibraryFilter.AllTypes), Mode=OneTime}"
                             SelectedItems="{Binding Path=(services:LibraryFilter.AllowedTypes), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <CheckBox x:Name="Uncompleted" Content="Незавершенная" Grid.Column="2"
+            <CheckBox x:Name="Uncompleted" Content="Незавершенная" Grid.Column="2" Click="FilterChanged"
               IsChecked="{Binding Path=(services:LibraryFilter.Uncompleted), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <CheckBox x:Name="OnlyUpdate" Content="Обновляемая" Grid.Column="1"
+            <CheckBox x:Name="OnlyUpdate" Content="Обновляемая" Grid.Column="1" Click="FilterChanged"
               IsChecked="{Binding Path=(services:LibraryFilter.OnlyUpdate), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBox x:Name="NameFilter" TextWrapping="Wrap" Grid.Column="0"
+            <TextBox x:Name="NameFilter" TextWrapping="Wrap" Grid.Column="0" TextChanged="FilterChanged"
              Text="{Binding Path=(services:LibraryFilter.Name), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
         <ListView x:Name="FormLibrary" 

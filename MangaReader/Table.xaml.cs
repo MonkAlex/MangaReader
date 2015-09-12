@@ -27,6 +27,8 @@ namespace MangaReader
     // ReSharper disable once NotAccessedField.Local
     private static DispatcherTimer _timer;
 
+    private ListCollectionView _view;
+
     public Table()
     {
       InitializeComponent();
@@ -36,6 +38,29 @@ namespace MangaReader
           DispatcherPriority.Background,
           TimerTick,
           Dispatcher.CurrentDispatcher);
+
+      _view = new ListCollectionView(Library.LibraryMangas)
+      {
+        Filter = Filter
+      };
+
+      FormLibrary.ItemsSource = _view;
+    }
+
+    private bool Filter(object o)
+    {
+      var manga = o as Mangas;
+      if (manga == null)
+        return false;
+
+      if (this.Uncompleted.IsChecked == true && manga.IsCompleted)
+        return false;
+
+      if (this.OnlyUpdate.IsChecked == true && !manga.NeedUpdate)
+        return false;
+
+      return LibraryFilter.AllowedTypes.Any(t => manga.Uri.ToString().ToUpper().Contains(t.Key.ToUpper())) &&
+        manga.Name.ToLowerInvariant().Contains(this.NameFilter.Text.ToLowerInvariant());
     }
 
     /// <summary>
@@ -150,6 +175,15 @@ namespace MangaReader
     {
       if (Settings.MinimizeToTray && this.WindowState == WindowState.Minimized)
         this.Hide();
+    }
+
+    private void FilterChanged(object sender, RoutedEventArgs e)
+    {
+      if (FormLibrary != null)
+      {
+        var view = FormLibrary.ItemsSource as ICollectionView;
+        view?.Refresh();
+      }
     }
   }
 

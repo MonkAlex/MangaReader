@@ -21,9 +21,9 @@
       </MenuItem>
       <MenuItem Header="Help">
         <MenuItem Header="Read Me"/>
-        <MenuItem Header="Check updates"/>
-        <MenuItem Header="Update history"/>
-        <MenuItem Header="About"/>
+        <MenuItem Header="Check updates" Command="{x:Static ui:Command.CheckUpdates}"/>
+        <MenuItem Header="Update history" Command="{x:Static ui:Command.ShowUpdateLog}"/>
+        <MenuItem Header="About" Command="{x:Static ui:Command.ShowAbout}"/>
       </MenuItem>
     </Menu>
     <base:BlazardManga x:Name="BlazardManga" Margin="10,55,10,10"/>

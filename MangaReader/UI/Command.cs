@@ -32,6 +32,12 @@ namespace MangaReader.UI
 
     public static RoutedUICommand SelectPrevManga = new RoutedUICommand("SelectPrevManga", "SelectPrevManga", typeof(Command));
 
+    public static RoutedUICommand CheckUpdates = new RoutedUICommand("CheckUpdates", "CheckUpdates", typeof(Command));
+
+    public static RoutedUICommand ShowUpdateLog = new RoutedUICommand("ShowUpdateLog", "ShowUpdateLog", typeof(Command));
+
+    public static RoutedUICommand ShowAbout = new RoutedUICommand("ShowAbout", "ShowAbout", typeof(Command));
+
     public static void AddMainMenuCommands(UIElement element)
     {
       /*
@@ -57,6 +63,10 @@ namespace MangaReader.UI
 
       AddCommand(ShowSettings, DoShowSettings, CanShowSettings, element);
 
+      AddCommand(CheckUpdates, DoCheckUpdates, CanCheckUpdates, element);
+      AddCommand(ShowUpdateLog, DoShowUpdateLog, CanShowUpdateLog, element);
+      AddCommand(ShowAbout, DoShowAbout, CanShowAbout, element);
+
       AddCommand(SelectNextManga, DoSelectNextManga, CanSelectNextManga, element);
       AddCommand(SelectPrevManga, DoSelectPrevManga, CanSelectPrevManga, element);
 
@@ -75,7 +85,6 @@ namespace MangaReader.UI
       AddCommand(DeleteManga, DoDeleteManga, CanDeleteManga, element);
       AddCommand(UpdateManga, DoUpdateManga, CanUpdateManga, element);
       AddCommand(MangaProperty, DoMangaProperty, CanMangaProperty, element);
-
     }
 
     private static void AddCommand(ICommand command, ExecutedRoutedEventHandler execute, CanExecuteRoutedEventHandler canExecute, UIElement element)
@@ -119,6 +128,7 @@ namespace MangaReader.UI
 
     private static void DoClose(object sender, ExecutedRoutedEventArgs e)
     {
+      Log.Add("Application will be closed.");
       var window = sender as Window;
       if (window != null)
       {
@@ -256,6 +266,36 @@ namespace MangaReader.UI
         Library.SelectedManga = Library.FilteredMangas.TakeWhile(m => !Equals(m, manga)).LastOrDefault();
         (e.Source as FrameworkElement).DataContext = Library.SelectedManga;
       }
+    }
+
+    private static void CanCheckUpdates(object sender, CanExecuteRoutedEventArgs e)
+    {
+      e.CanExecute = Library.IsAvaible;
+    }
+
+    private static void DoCheckUpdates(object sender, ExecutedRoutedEventArgs e)
+    {
+      Update.StartUpdate();
+    }
+
+    private static void DoShowUpdateLog(object sender, ExecutedRoutedEventArgs e)
+    {
+      new VersionHistory((Window)sender).ShowDialog();
+    }
+
+    private static void CanShowUpdateLog(object sender, CanExecuteRoutedEventArgs e)
+    {
+      e.CanExecute = true;
+    }
+
+    private static void CanShowAbout(object sender, CanExecuteRoutedEventArgs e)
+    {
+      e.CanExecute = true;
+    }
+
+    private static void DoShowAbout(object sender, ExecutedRoutedEventArgs e)
+    {
+      MessageBox.Show("Тут могла быть ваша реклама.");
     }
   }
 }

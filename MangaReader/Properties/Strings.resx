@@ -199,7 +199,7 @@
     <value>Папка c мангой не найдена</value>
   </data>
   <data name="Update_Label_Version" xml:space="preserve">
-    <value>Версия: {0}.{1}.{2}</value>
+    <value>Версия: {0}</value>
   </data>
   <data name="Update_Title" xml:space="preserve">
     <value>История версий</value>

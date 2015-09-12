@@ -56,7 +56,7 @@
         <TextBox x:Name="Result"
                  Grid.Column="0"
                  Grid.Row="4"/>
-        <Button Content="{x:Static properties:Strings.Input_Add}" 
+        <Button Content="{x:Static properties:Strings.Library_Action_Add}" 
                 Style="{DynamicResource BigButton}"
                 Grid.Column="1"
                 Grid.Row="3"

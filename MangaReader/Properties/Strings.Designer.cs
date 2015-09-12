@@ -70,15 +70,6 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Добавить.
-        /// </summary>
-        public static string Input_Add {
-            get {
-                return ResourceManager.GetString("Input_Add", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Ищет локализованную строку, похожую на Вход.
         /// </summary>
         public static string Input_Login {

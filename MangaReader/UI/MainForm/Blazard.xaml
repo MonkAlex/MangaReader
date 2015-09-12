@@ -11,19 +11,19 @@
 
     <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top">
       <MenuItem Header="File">
-        <MenuItem Header="Add" Command="New"/>
-        <MenuItem Header="Update current" Command="{x:Static ui:Command.UpdateCurrent}"/>
-        <MenuItem Header="Update all" Command="{x:Static ui:Command.UpdateAll}"/>
-        <MenuItem Header="Exit" Command="Close"/>
+        <MenuItem Header="{x:Static resx:Strings.Library_Action_Add}" Command="New"/>
+        <MenuItem Command="{x:Static ui:Command.UpdateCurrent}"/>
+        <MenuItem Command="{x:Static ui:Command.UpdateAll}"/>
+        <MenuItem Command="Close"/>
       </MenuItem>
-      <MenuItem Header="Settings">
-        <MenuItem Header="Main settings" Command="{x:Static ui:Command.ShowSettings}"/>
+      <MenuItem Header="{x:Static resx:Strings.Library_Action_Settings}">
+        <MenuItem Command="{x:Static ui:Command.ShowSettings}"/>
       </MenuItem>
       <MenuItem Header="Help">
         <MenuItem Header="Read Me"/>
-        <MenuItem Header="Check updates" Command="{x:Static ui:Command.CheckUpdates}"/>
-        <MenuItem Header="Update history" Command="{x:Static ui:Command.ShowUpdateLog}"/>
-        <MenuItem Header="About" Command="{x:Static ui:Command.ShowAbout}"/>
+        <MenuItem Command="{x:Static ui:Command.CheckUpdates}"/>
+        <MenuItem Command="{x:Static ui:Command.ShowUpdateLog}"/>
+        <MenuItem Command="{x:Static ui:Command.ShowAbout}"/>
       </MenuItem>
     </Menu>
     <base:BlazardManga x:Name="BlazardManga" Margin="10,55,10,10"/>

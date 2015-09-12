@@ -14,29 +14,29 @@ namespace MangaReader.UI
 {
   public static class Command
   {
-    public static RoutedUICommand UpdateCurrent = new RoutedUICommand("UpdateCurrent", "UpdateCurrent", typeof(Command));
+    public static RoutedUICommand UpdateCurrent = new RoutedUICommand("Обновить", "UpdateCurrent", typeof(Command));
 
-    public static RoutedUICommand UpdateAll = new RoutedUICommand("UpdateAll", "UpdateAll", typeof(Command));
+    public static RoutedUICommand UpdateAll = new RoutedUICommand("Обновить всё", "UpdateAll", typeof(Command));
 
-    public static RoutedUICommand ShowSettings = new RoutedUICommand("ShowSettings", "ShowSettings", typeof(Command));
+    public static RoutedUICommand ShowSettings = new RoutedUICommand(Strings.Library_Action_Settings, "ShowSettings", typeof(Command));
 
-    public static RoutedUICommand OpenFolder = new RoutedUICommand("OpenFolder", "OpenFolder", typeof(Command));
+    public static RoutedUICommand OpenFolder = new RoutedUICommand(Strings.Manga_Action_OpenFolder, "OpenFolder", typeof(Command));
 
-    public static RoutedUICommand DeleteManga = new RoutedUICommand("DeleteManga", "DeleteManga", typeof(Command));
+    public static RoutedUICommand DeleteManga = new RoutedUICommand(Strings.Manga_Action_Remove, "DeleteManga", typeof(Command));
 
-    public static RoutedUICommand UpdateManga = new RoutedUICommand("UpdateManga", "UpdateManga", typeof(Command));
+    public static RoutedUICommand UpdateManga = new RoutedUICommand(Strings.Manga_Action_Update, "UpdateManga", typeof(Command));
 
-    public static RoutedUICommand MangaProperty = new RoutedUICommand("MangaProperty", "MangaProperty", typeof(Command));
+    public static RoutedUICommand MangaProperty = new RoutedUICommand(Strings.Manga_Settings, "MangaProperty", typeof(Command));
 
-    public static RoutedUICommand SelectNextManga = new RoutedUICommand("SelectNextManga", "SelectNextManga", typeof(Command));
+    public static RoutedUICommand SelectNextManga = new RoutedUICommand("Следующая", "SelectNextManga", typeof(Command));
 
-    public static RoutedUICommand SelectPrevManga = new RoutedUICommand("SelectPrevManga", "SelectPrevManga", typeof(Command));
+    public static RoutedUICommand SelectPrevManga = new RoutedUICommand("Предыдущая", "SelectPrevManga", typeof(Command));
 
-    public static RoutedUICommand CheckUpdates = new RoutedUICommand("CheckUpdates", "CheckUpdates", typeof(Command));
+    public static RoutedUICommand CheckUpdates = new RoutedUICommand(Strings.Library_CheckUpdate, "CheckUpdates", typeof(Command));
 
-    public static RoutedUICommand ShowUpdateLog = new RoutedUICommand("ShowUpdateLog", "ShowUpdateLog", typeof(Command));
+    public static RoutedUICommand ShowUpdateLog = new RoutedUICommand(Strings.Update_Title, "ShowUpdateLog", typeof(Command));
 
-    public static RoutedUICommand ShowAbout = new RoutedUICommand("ShowAbout", "ShowAbout", typeof(Command));
+    public static RoutedUICommand ShowAbout = new RoutedUICommand("О программе", "ShowAbout", typeof(Command));
 
     public static void AddMainMenuCommands(UIElement element)
     {

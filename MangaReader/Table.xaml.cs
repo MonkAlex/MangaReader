@@ -74,14 +74,18 @@ namespace MangaReader
     /// <param name="e"></param>
     private void Mangas_clicked(object sender, MouseButtonEventArgs e)
     {
-      if (e.ClickCount < 2 || !(sender is ListViewItem))
+      if (e.ClickCount < 2)
         return;
 
-      var downloadable = ((ListViewItem)sender).DataContext as IDownloadable;
+      var item = sender as ListViewItem;
+      if (item == null)
+        return;
+
+      var downloadable = item.DataContext as IDownloadable;
       if (downloadable == null)
         return;
 
-      Command.OpenFolder.Execute(downloadable, null);
+      Command.OpenFolder.Execute(downloadable, item);
     }
 
     /// <summary>
@@ -149,7 +153,7 @@ namespace MangaReader
         return;
 
       var openFolder = new MenuItem() { Header = Strings.Manga_Action_OpenFolder, FontWeight = FontWeights.Bold };
-      openFolder.Click += (o, args) => { Command.OpenFolder.Execute(manga, null); };
+      openFolder.Click += (o, args) => { Command.OpenFolder.Execute(manga, item); };
       var update = new MenuItem() { Header = Strings.Manga_Action_Update, IsEnabled = Library.IsAvaible };
       update.Click += (o, agrs) => UpdateManga(manga);
       var compress = new MenuItem() {Header = Strings.Manga_Action_Compress, IsEnabled = Library.IsAvaible};

@@ -29,6 +29,7 @@ namespace MangaReader.UI.MainForm
       this.Loaded += (sender, args) =>
       {
         Command.AddMainMenuCommands(this.NotifyIcon);
+        Command.AddMangaCommands(this.NotifyIcon);
         this.NotifyIcon.ToolTipText = Strings.Title;
         this.NotifyIcon.Icon = Properties.Resources.main;
         this.NotifyIcon.TrayMouseDoubleClick += NotifyIcon_OnTrayMouseDoubleClick;
@@ -60,10 +61,10 @@ namespace MangaReader.UI.MainForm
       var element = sender as FrameworkElement;
       if (element == null)
         return;
-
+      
       var downloadable = element.DataContext as IDownloadable;
       if (downloadable != null)
-        Command.OpenFolder.Execute(downloadable, null);
+        Command.OpenFolder.Execute(downloadable, element);
     }
 
     private void NotifyIcon_OnTrayRightMouseUp(object sender, RoutedEventArgs e)

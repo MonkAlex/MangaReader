@@ -14,23 +14,23 @@ namespace MangaReader.UI
 {
   public static class Command
   {
-    public static RoutedUICommand UpdateCurrent = new RoutedUICommand("UpdateCurrent", "UpdateCurrent", typeof(BaseForm));
+    public static RoutedUICommand UpdateCurrent = new RoutedUICommand("UpdateCurrent", "UpdateCurrent", typeof(Command));
 
-    public static RoutedUICommand UpdateAll = new RoutedUICommand("UpdateAll", "UpdateAll", typeof(BaseForm));
+    public static RoutedUICommand UpdateAll = new RoutedUICommand("UpdateAll", "UpdateAll", typeof(Command));
 
-    public static RoutedUICommand ShowSettings = new RoutedUICommand("ShowSettings", "ShowSettings", typeof(BaseForm));
+    public static RoutedUICommand ShowSettings = new RoutedUICommand("ShowSettings", "ShowSettings", typeof(Command));
 
-    public static RoutedUICommand OpenFolder = new RoutedUICommand("OpenFolder", "OpenFolder", typeof(BaseForm));
+    public static RoutedUICommand OpenFolder = new RoutedUICommand("OpenFolder", "OpenFolder", typeof(Command));
 
-    public static RoutedUICommand DeleteManga = new RoutedUICommand("DeleteManga", "DeleteManga", typeof(BaseForm));
+    public static RoutedUICommand DeleteManga = new RoutedUICommand("DeleteManga", "DeleteManga", typeof(Command));
 
-    public static RoutedUICommand UpdateManga = new RoutedUICommand("UpdateManga", "UpdateManga", typeof(BaseForm));
+    public static RoutedUICommand UpdateManga = new RoutedUICommand("UpdateManga", "UpdateManga", typeof(Command));
 
-    public static RoutedUICommand MangaProperty = new RoutedUICommand("MangaProperty", "MangaProperty", typeof(BaseForm));
+    public static RoutedUICommand MangaProperty = new RoutedUICommand("MangaProperty", "MangaProperty", typeof(Command));
 
-    public static RoutedUICommand SelectNextManga = new RoutedUICommand("SelectNextManga", "SelectNextManga", typeof(BaseForm));
+    public static RoutedUICommand SelectNextManga = new RoutedUICommand("SelectNextManga", "SelectNextManga", typeof(Command));
 
-    public static RoutedUICommand SelectPrevManga = new RoutedUICommand("SelectPrevManga", "SelectPrevManga", typeof(BaseForm));
+    public static RoutedUICommand SelectPrevManga = new RoutedUICommand("SelectPrevManga", "SelectPrevManga", typeof(Command));
 
     public static void AddMainMenuCommands(UIElement element)
     {
@@ -177,7 +177,7 @@ namespace MangaReader.UI
 
     private static void DoOpenFolder(object sender, ExecutedRoutedEventArgs e)
     {
-      var manga = e.Parameter as Mangas ?? (e.Source as FrameworkElement).DataContext as Mangas;
+      var manga = e.Parameter as IDownloadable ?? (e.Source as FrameworkElement).DataContext as IDownloadable;
       if (manga != null && Directory.Exists(manga.Folder))
         Process.Start(manga.Folder);
       else

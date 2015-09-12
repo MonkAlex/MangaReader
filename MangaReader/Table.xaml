@@ -43,7 +43,7 @@
         </Grid>
         <ListView x:Name="FormLibrary" 
               Grid.Row="1"
-              ItemsSource="{Binding Path=(services:Library.FilteredMangas), Mode=OneWay}"
+              ItemsSource="{Binding Path=(services:Library.LibraryMangas), Mode=OneWay}"
               MouseDown="ListView_MouseDown"
               SelectionMode="Single"
               ui:GridSort.AutoSort="True" >

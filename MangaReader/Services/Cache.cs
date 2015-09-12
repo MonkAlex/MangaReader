@@ -8,6 +8,7 @@ using NHibernate.Linq;
 
 namespace MangaReader.Services
 {
+  [Obsolete("Класс нужен только для старых данных.")]
   public static class Cache
   {
     /// <summary>

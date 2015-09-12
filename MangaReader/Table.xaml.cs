@@ -105,7 +105,7 @@ namespace MangaReader
       {
         Library.Add(manga.Uri);
       }
-      this.FormLibrary.ItemsSource = Library.FilterChanged(Library.LibraryMangas);
+//      this.FormLibrary.ItemsSource = Library.FilterChanged(Library.LibraryMangas);
     }
 
     /// <summary>
@@ -125,7 +125,6 @@ namespace MangaReader
     /// <param name="e"></param>
     private void TimerTick(object sender, EventArgs e)
     {
-      Library.IsAvaible = _loadThread == null || _loadThread.ThreadState == ThreadState.Stopped;
       this.TextBlock.Text = Library.Status;
       UpdateButton.Content = Library.IsAvaible ? Strings.Manga_Action_Update : (Library.IsPaused ? Strings.Manga_Action_Restore : Strings.Manga_Action_Pause);
       AddButton.IsEnabled = Library.IsAvaible;
@@ -152,22 +151,18 @@ namespace MangaReader
       if (manga == null)
         return;
 
-      var openFolder = new MenuItem() { Header = Strings.Manga_Action_OpenFolder, FontWeight = FontWeights.Bold };
-      openFolder.Click += (o, args) => { Command.OpenFolder.Execute(manga, item); };
-      var update = new MenuItem() { Header = Strings.Manga_Action_Update, IsEnabled = Library.IsAvaible };
-      update.Click += (o, agrs) => UpdateManga(manga);
+      var openFolder = new MenuItem() { FontWeight = FontWeights.Bold, Command = Command.OpenFolder };
+      var update = new MenuItem() { Command = Command.UpdateManga };
       var compress = new MenuItem() {Header = Strings.Manga_Action_Compress, IsEnabled = Library.IsAvaible};
       compress.Click += (o, args) => manga.Compress();
       var removeHistory = new MenuItem() { Header = Strings.Manga_Action_Remove + " историю", IsEnabled = Library.IsAvaible };
       removeHistory.Click += (o, agrs) => {manga.Histories.Clear(); manga.Save();};
-      var remove = new MenuItem() { Header = Strings.Manga_Action_Remove, IsEnabled = Library.IsAvaible };
-      remove.Click += (o, agrs) => { Library.Remove(manga); this.FormLibrary.ItemsSource = Library.FilterChanged(Library.LibraryMangas); };
+      var remove = new MenuItem() { Command = Command.DeleteManga };
       var view = new MenuItem() { Header = Strings.Manga_Action_View };
       view.Click += (o, agrs) => Process.Start(manga.Uri.OriginalString);
       var needUpdate = new MenuItem() { Header = manga.NeedUpdate ? Strings.Manga_NotUpdate : Strings.Manga_Update, IsEnabled = Library.IsAvaible };
       needUpdate.Click += (o, args) => { manga.NeedUpdate = !manga.NeedUpdate; manga.Save(); };
-      var settings = new MenuItem() { Header = Strings.Manga_Settings, IsEnabled = Library.IsAvaible };
-      settings.Click += (o, args) => { new MangaForm {DataContext = manga, Owner = this}.ShowDialog(); this.FormLibrary.ItemsSource = Library.FilterChanged(Library.LibraryMangas); };
+      var settings = new MenuItem() { Command = Command.MangaProperty };
 
       var menu = new ContextMenu();
       menu.Items.Add(openFolder);

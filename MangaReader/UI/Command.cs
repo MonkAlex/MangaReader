@@ -140,32 +140,27 @@ namespace MangaReader.UI
       }
     }
 
-    private static Thread _loadThread;
-
     private static void CanUpdate(object sender, CanExecuteRoutedEventArgs e)
     {
-      e.CanExecute = (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped) && Library.IsAvaible;
+      e.CanExecute = Library.IsAvaible;
     }
 
     private static void DoUpdateCurrent(object sender, ExecutedRoutedEventArgs e)
     {
-      if (Library.IsAvaible)
+/*      if (Library.IsAvaible)
       {
         if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
           _loadThread = new Thread(() => Library.Update(Library.FilteredMangas, LibraryFilter.SortDescription));
         if (_loadThread.ThreadState == ThreadState.Unstarted)
           _loadThread.Start();
-      }
+      }*/
     }
 
     private static void DoUpdateAll(object sender, ExecutedRoutedEventArgs e)
     {
       if (Library.IsAvaible)
       {
-        if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
-          _loadThread = new Thread(() => Library.Update(Library.LibraryMangas, LibraryFilter.SortDescription));
-        if (_loadThread.ThreadState == ThreadState.Unstarted)
-          _loadThread.Start();
+        Library.ThreadAction(() => Library.Update(Library.LibraryMangas, LibraryFilter.SortDescription));
       }
     }
 
@@ -187,7 +182,7 @@ namespace MangaReader.UI
 
     private static void DoOpenFolder(object sender, ExecutedRoutedEventArgs e)
     {
-      var manga = e.Parameter as IDownloadable ?? (e.Source as FrameworkElement).DataContext as IDownloadable;
+      var manga = e.Parameter as IDownloadable ?? (e.OriginalSource as FrameworkElement).DataContext as IDownloadable;
       if (manga != null && Directory.Exists(manga.Folder))
         Process.Start(manga.Folder);
       else
@@ -196,14 +191,13 @@ namespace MangaReader.UI
 
     private static void CanDeleteManga(object sender, CanExecuteRoutedEventArgs e)
     {
-      e.CanExecute = true;
+      e.CanExecute = Library.IsAvaible;
     }
 
     private static void DoDeleteManga(object sender, ExecutedRoutedEventArgs e)
     {
-      var manga = e.Parameter as Mangas ?? (e.Source as FrameworkElement).DataContext as Mangas;
-      if (manga != null && manga.IsValid())
-        manga.Delete();
+      var manga = e.Parameter as Mangas ?? (e.OriginalSource as FrameworkElement).DataContext as Mangas;
+      Library.Remove(manga);
     }
 
     private static void CanUpdateManga(object sender, CanExecuteRoutedEventArgs e)
@@ -213,13 +207,10 @@ namespace MangaReader.UI
 
     private static void DoUpdateManga(object sender, ExecutedRoutedEventArgs e)
     {
-      var manga = e.Parameter as Mangas ?? (e.Source as FrameworkElement).DataContext as Mangas;
+      var manga = e.Parameter as Mangas ?? (e.OriginalSource as FrameworkElement).DataContext as Mangas;
       if (manga != null && Library.IsAvaible)
       {
-        if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
-          _loadThread = new Thread(() => Library.Update(manga));
-        if (_loadThread.ThreadState == ThreadState.Unstarted)
-          _loadThread.Start();
+        Library.ThreadAction(() => Library.Update(manga));
       }
     }
 
@@ -230,10 +221,10 @@ namespace MangaReader.UI
 
     private static void DoMangaProperty(object sender, ExecutedRoutedEventArgs e)
     {
-      var manga = e.Parameter as Mangas ?? (e.Source as FrameworkElement).DataContext as Mangas;
+      var manga = e.Parameter as Mangas ?? (e.OriginalSource as FrameworkElement).DataContext as Mangas;
       if (manga != null && Library.IsAvaible)
       {
-        new MangaForm { DataContext = manga, Owner = Application.Current.Windows.Count > 0 ? Application.Current.Windows[0] : null }.ShowDialog();
+        new MangaForm { DataContext = manga, Owner = sender as Window }.ShowDialog();
         //Library.FilterChanged(this);
       }
     }
@@ -246,11 +237,11 @@ namespace MangaReader.UI
     private static void DoSelectNextManga(object sender, ExecutedRoutedEventArgs e)
     {
       var manga = Library.SelectedManga;
-      if (manga != null && !Equals(Library.FilteredMangas.LastOrDefault(), manga))
+/*      if (manga != null && !Equals(Library.FilteredMangas.LastOrDefault(), manga))
       {
         Library.SelectedManga = Library.FilteredMangas.SkipWhile(m => !Equals(m, manga)).Skip(1).FirstOrDefault();
-        (e.Source as FrameworkElement).DataContext = Library.SelectedManga;
-      }
+        (e.OriginalSource as FrameworkElement).DataContext = Library.SelectedManga;
+      }*/
     }
 
     private static void CanSelectPrevManga(object sender, CanExecuteRoutedEventArgs e)
@@ -261,11 +252,11 @@ namespace MangaReader.UI
     private static void DoSelectPrevManga(object sender, ExecutedRoutedEventArgs e)
     {
       var manga = Library.SelectedManga;
-      if (manga != null && !Equals(Library.FilteredMangas.FirstOrDefault(), manga))
+/*      if (manga != null && !Equals(Library.FilteredMangas.FirstOrDefault(), manga))
       {
         Library.SelectedManga = Library.FilteredMangas.TakeWhile(m => !Equals(m, manga)).LastOrDefault();
-        (e.Source as FrameworkElement).DataContext = Library.SelectedManga;
-      }
+        (e.OriginalSource as FrameworkElement).DataContext = Library.SelectedManga;
+      }*/
     }
 
     private static void CanCheckUpdates(object sender, CanExecuteRoutedEventArgs e)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -53,16 +54,27 @@ namespace MangaReader.Services
     /// </summary>
     public static bool IsPaused { get; set; }
 
-    public static IQueryable<Mangas> LibraryMangas { get { return Mapping.Environment.Session.Query<Mangas>().Where(n => n != null); } }
+    public static ObservableCollection<Mangas> LibraryMangas
+    {
+      get
+      {
+        return _libraryMangas ?? (_libraryMangas = new ObservableCollection<Mangas>(Mapping.Environment.Session.Query<Mangas>().Where(n => n != null)));
+      }
+    }
 
-    public static IQueryable<Mangas> FilteredMangas { get { return FilterChanged(LibraryMangas); } }
+    private static ObservableCollection<Mangas> _libraryMangas;
 
+    /*
+    public static ObservableCollection<Mangas> FilteredMangas { get { return FilterChanged(LibraryMangas); } }
+    */
     public static Mangas SelectedManga { get; set; }
+
+    private static Thread _loadThread;
 
     /// <summary>
     /// Библиотека доступна, т.е. не в процессе обновления.
     /// </summary>
-    internal static bool IsAvaible = true;
+    internal static bool IsAvaible { get { return _loadThread == null || _loadThread.ThreadState == ThreadState.Stopped; } }
 
     /// <summary>
     /// Показать сообщение в трее.
@@ -83,6 +95,19 @@ namespace MangaReader.Services
             });
           }
         }
+    }
+
+    /// <summary>
+    /// Выполнить тяжелое действие изменения библиотеки в отдельном потоке.
+    /// </summary>
+    /// <param name="action">Выполняемое действие.</param>
+    /// <remarks>Только одно действие за раз. Доступность выполнения можно проверить в IsAvaible.</remarks>
+    internal static void ThreadAction(ThreadStart action)
+    {
+      if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
+        _loadThread = new Thread(action);
+      if (_loadThread.ThreadState == ThreadState.Unstarted)
+        _loadThread.Start();
     }
 
     /// <summary>
@@ -118,7 +143,7 @@ namespace MangaReader.Services
       formDispatcher = main.Dispatcher;
       taskBar = main.TaskbarItemInfo;
       taskbarIcon = main.NotifyIcon;
-
+      /*
       var table = main as Table;
       if (table != null)
       {
@@ -129,10 +154,10 @@ namespace MangaReader.Services
         table.OnlyUpdate.Click += (s, a) => table.FormLibrary.ItemsSource = FilterChanged(LibraryMangas);
       }
 
-      SelectedManga = FilteredMangas.FirstOrDefault();
+      SelectedManga = FilteredMangas.FirstOrDefault();*/
     }
 
-    public static IQueryable<Mangas> FilterChanged(IQueryable<Mangas> mangas)
+/*    public static ObservableCollection<Mangas> FilterChanged(IQueryable<Mangas> mangas)
     {
       mangas = mangas.ToList().AsQueryable();
       if (LibraryFilter.AllTypes.Count != LibraryFilter.AllowedTypes.Count)
@@ -143,9 +168,9 @@ namespace MangaReader.Services
         mangas = mangas.Where(n => n.NeedUpdate);
       if (LibraryFilter.Name.Any())
         mangas = mangas.Where(n => n.Name.ToLowerInvariant().Contains(LibraryFilter.Name.ToLowerInvariant()));
-      return mangas.OrderBy(m => m.Name).AsQueryable();
+      return new ObservableCollection<Mangas>(mangas.OrderBy(m => m.Name));
     }
-
+    */
     /// <summary>
     /// Добавить мангу.
     /// </summary>
@@ -174,6 +199,7 @@ namespace MangaReader.Services
         return false;
 
       Status = Strings.Library_Status_MangaAdded + newManga.Name;
+      LibraryMangas.Add(newManga);
       return true;
     }
 
@@ -185,6 +211,9 @@ namespace MangaReader.Services
     {
       if (manga == null)
         return;
+
+      if (LibraryMangas.Contains(manga))
+        LibraryMangas.Remove(manga);
 
       manga.Delete();
 
@@ -270,7 +299,6 @@ namespace MangaReader.Services
     /// <param name="sort">Сортировка.</param>
     public static void Update(IEnumerable<Mangas> mangas, SortDescription sort)
     {
-      Library.IsAvaible = false;
       Library.SetTaskbarState(0, TaskbarItemProgressState.Indeterminate);
       Status = Strings.Library_Status_Update;
       try
@@ -310,9 +338,7 @@ namespace MangaReader.Services
         Library.SetTaskbarState(0, TaskbarItemProgressState.None);
         Status = Strings.Library_Status_UpdateComplete;
         Settings.LastUpdate = DateTime.Now;
-        Library.IsAvaible = true;
       }
-
     }
 
     #endregion

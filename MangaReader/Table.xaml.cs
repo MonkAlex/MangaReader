@@ -2,21 +2,17 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Hardcodet.Wpf.TaskbarNotification;
 using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.UI;
 using MangaReader.UI.MainForm;
-using ThreadState = System.Threading.ThreadState;
 
 namespace MangaReader
 {
@@ -30,11 +26,6 @@ namespace MangaReader
     /// </summary>
     // ReSharper disable once NotAccessedField.Local
     private static DispatcherTimer _timer;
-
-    /// <summary>
-    /// Поток загрузки манги.
-    /// </summary>
-    private static Thread _loadThread;
 
     public Table()
     {
@@ -56,12 +47,7 @@ namespace MangaReader
     {
       if (Library.IsAvaible)
       {
-        if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
-          _loadThread = new Thread(() =>
-            Library.Update(FormLibrary.ItemsSource as IEnumerable<Mangas>,
-              FormLibrary.Items.SortDescriptions.SingleOrDefault()));
-        if (_loadThread.ThreadState == ThreadState.Unstarted)
-          _loadThread.Start();
+        Library.ThreadAction(() => Library.Update(FormLibrary.ItemsSource as IEnumerable<Mangas>, FormLibrary.Items.SortDescriptions.SingleOrDefault()));
       }
       else
         Library.IsPaused = !Library.IsPaused;
@@ -86,36 +72,6 @@ namespace MangaReader
         return;
 
       Command.OpenFolder.Execute(downloadable, item);
-    }
-
-    /// <summary>
-    /// Добавление манги. Используем кастомный диалог.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void Add_click(object sender, RoutedEventArgs e)
-    {
-      var db = new Input { Owner = this };
-      if (db.ShowDialog() != true)
-        return;
-
-      if (!string.IsNullOrWhiteSpace(db.Result.Text))
-        Library.Add(db.Result.Text);
-      foreach (var manga in db.Bookmarks.SelectedItems.OfType<Mangas>())
-      {
-        Library.Add(manga.Uri);
-      }
-//      this.FormLibrary.ItemsSource = Library.FilterChanged(Library.LibraryMangas);
-    }
-
-    /// <summary>
-    /// Настройки.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void Settings_click(object sender, RoutedEventArgs e)
-    {
-      new SettingsForm { Owner = this }.ShowDialog();
     }
 
     /// <summary>
@@ -153,10 +109,10 @@ namespace MangaReader
 
       var openFolder = new MenuItem() { FontWeight = FontWeights.Bold, Command = Command.OpenFolder };
       var update = new MenuItem() { Command = Command.UpdateManga };
-      var compress = new MenuItem() {Header = Strings.Manga_Action_Compress, IsEnabled = Library.IsAvaible};
+      var compress = new MenuItem() { Header = Strings.Manga_Action_Compress, IsEnabled = Library.IsAvaible };
       compress.Click += (o, args) => manga.Compress();
       var removeHistory = new MenuItem() { Header = Strings.Manga_Action_Remove + " историю", IsEnabled = Library.IsAvaible };
-      removeHistory.Click += (o, agrs) => {manga.Histories.Clear(); manga.Save();};
+      removeHistory.Click += (o, agrs) => { manga.Histories.Clear(); manga.Save(); };
       var remove = new MenuItem() { Command = Command.DeleteManga };
       var view = new MenuItem() { Header = Strings.Manga_Action_View };
       view.Click += (o, agrs) => Process.Start(manga.Uri.OriginalString);
@@ -174,14 +130,6 @@ namespace MangaReader
       menu.Items.Add(remove);
       menu.Items.Add(settings);
       item.ContextMenu = menu;
-    }
-
-    private static void UpdateManga(Mangas manga)
-    {
-      if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
-        _loadThread = new Thread(() => Library.Update(manga));
-      if (_loadThread.ThreadState == ThreadState.Unstarted)
-        _loadThread.Start();
     }
 
     private void Window_OnClosing(object sender, CancelEventArgs e)

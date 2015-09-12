@@ -1,14 +1,12 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.UI.MainForm;
-using ThreadState = System.Threading.ThreadState;
 
 namespace MangaReader.UI
 {
@@ -115,10 +113,7 @@ namespace MangaReader.UI
       if (!string.IsNullOrWhiteSpace(db.Result.Text))
         Library.Add(db.Result.Text);
       foreach (var manga in db.Bookmarks.SelectedItems.OfType<Mangas>())
-      {
         Library.Add(manga.Uri);
-      }
-      //Library.FilterChanged(window);
     }
 
     private static void CanClose(object sender, CanExecuteRoutedEventArgs e)

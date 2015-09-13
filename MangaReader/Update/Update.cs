@@ -77,6 +77,7 @@ namespace MangaReader.Services
             WorkingDirectory = Settings.WorkFolder
           }
         };
+        Log.Add(string.Format("Update process started: File '{0}', Args '{1}', Folder '{2}'", UpdateFilename, UpdateStarted, Settings.WorkFolder));
         run.Start();
         Application.Current.Shutdown(1);
       }
@@ -97,6 +98,7 @@ namespace MangaReader.Services
           WorkingDirectory = Settings.WorkFolder
         }
       };
+      Log.Add(string.Format("Update process finished: File '{0}', Args '{1}', Folder '{2}'", OriginalFilename, UpdateFinished, Settings.WorkFolder));
       run.Start();
       Application.Current.Shutdown(1);
     }
@@ -116,6 +118,7 @@ namespace MangaReader.Services
       {
         Log.Exception(exception);
       }
+      Log.Add("Update process clean temporary files");
       new VersionHistory().ShowDialog();
     }
   }

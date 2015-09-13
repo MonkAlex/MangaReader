@@ -23,6 +23,9 @@ namespace MangaReader
 
     private void App_OnStartup(object sender, StartupEventArgs e)
     {
+
+      Update.Initialize();
+
       var isSingle = false;
       var mtx = new System.Threading.Mutex(true, "5197317b-a6f6-4a6c-a336-6fbf8642b7bc", out isSingle);
       if (!isSingle)
@@ -38,7 +41,6 @@ namespace MangaReader
 
       Mapping.Environment.Initialize();
       Converter.Convert(true);
-      Update.Initialize();
       Grouple.LoginWhile();
 
       var mainwindow = true ? new Table() as Window : new UI.MainForm.Blazard();

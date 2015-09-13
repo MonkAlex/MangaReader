@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -28,8 +27,6 @@ namespace MangaReader
     // ReSharper disable once NotAccessedField.Local
     private static DispatcherTimer _timer;
 
-    private ListCollectionView _view;
-
     public Table()
     {
       InitializeComponent();
@@ -38,30 +35,6 @@ namespace MangaReader
           DispatcherPriority.Background,
           TimerTick,
           Dispatcher.CurrentDispatcher);
-
-      _view = new ListCollectionView(Library.LibraryMangas)
-      {
-        Filter = Filter,
-        CustomSort = new MangasComparer()
-      };
-
-      FormLibrary.ItemsSource = _view;
-    }
-
-    private bool Filter(object o)
-    {
-      var manga = o as Mangas;
-      if (manga == null)
-        return false;
-
-      if (this.Uncompleted.IsChecked == true && manga.IsCompleted)
-        return false;
-
-      if (this.OnlyUpdate.IsChecked == true && !manga.NeedUpdate)
-        return false;
-
-      return LibraryFilter.AllowedTypes.Any(t => (t.Value as MangaSetting).Manga == manga.GetType().MangaType()) &&
-        manga.Name.ToLowerInvariant().Contains(this.NameFilter.Text.ToLowerInvariant());
     }
 
     /// <summary>

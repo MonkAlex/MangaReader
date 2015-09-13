@@ -1,14 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Shell;
 using Hardcodet.Wpf.TaskbarNotification;
 using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services;
-using NHibernate.Linq;
 
 namespace MangaReader.UI.MainForm
 {
@@ -19,8 +18,11 @@ namespace MangaReader.UI.MainForm
   {
     public TaskbarIcon NotifyIcon = new TaskbarIcon{IsEnabled = false};
 
+    public ListCollectionView View { get; set; }
+
     public BaseForm()
     {
+      this.DataContext = this;
       this.TaskbarItemInfo = new TaskbarItemInfo();
       Command.AddMainMenuCommands(this);
       Command.AddMangaCommands(this);
@@ -44,6 +46,28 @@ namespace MangaReader.UI.MainForm
         this.NotifyIcon.Dispose();
         Application.Current.Shutdown(0);
       };
+
+      View = new ListCollectionView(Library.LibraryMangas)
+      {
+        Filter = Filter,
+        CustomSort = new MangasComparer()
+      };
+    }
+
+    internal virtual bool Filter(object o)
+    {
+      var manga = o as Mangas;
+      if (manga == null)
+        return false;
+
+      if (LibraryFilter.Uncompleted && manga.IsCompleted)
+        return false;
+
+      if (LibraryFilter.OnlyUpdate && !manga.NeedUpdate)
+        return false;
+
+      return LibraryFilter.AllowedTypes.Any(t => (t.Value as MangaSetting).Manga == manga.GetType().MangaType()) &&
+        manga.Name.ToLowerInvariant().Contains(LibraryFilter.Name.ToLowerInvariant());
     }
 
 

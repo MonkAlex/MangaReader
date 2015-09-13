@@ -46,7 +46,7 @@ namespace MangaReader
     {
       if (Library.IsAvaible)
       {
-        Library.ThreadAction(() => Library.Update(FormLibrary.ItemsSource as IEnumerable<Mangas>, FormLibrary.Items.SortDescriptions.SingleOrDefault()));
+        Library.ThreadAction(() => Library.Update(View.Cast<Mangas>(), FormLibrary.Items.SortDescriptions.SingleOrDefault()));
       }
       else
         Library.IsPaused = !Library.IsPaused;
@@ -151,10 +151,9 @@ namespace MangaReader
 
     private void FilterChanged(object sender, RoutedEventArgs e)
     {
-      if (FormLibrary != null)
+      if (View != null)
       {
-        var view = FormLibrary.ItemsSource as ICollectionView;
-        view.Refresh();
+        View.Refresh();
       }
     }
   }

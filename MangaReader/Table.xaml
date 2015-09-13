@@ -46,6 +46,7 @@
               ItemsSource="{Binding View}"
               MouseDown="ListView_MouseDown"
               SelectionMode="Single"
+              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
               ui:GridViewColumnResize.Enabled="True"
               ui:GridSort.AutoSort="True" >
             <ListView.ItemContainerStyle>

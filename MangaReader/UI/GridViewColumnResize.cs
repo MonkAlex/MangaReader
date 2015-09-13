@@ -179,7 +179,7 @@ namespace MangaReader.UI
         else
         {
           double width = allowedSpace * (Percentage / totalPercentage);
-          _element.Width = width;
+          _element.Width = width < 0 ? 0 : width;
         }
       }
     }
@@ -195,7 +195,7 @@ namespace MangaReader.UI
     {
       private const int Margin = 25;
       private const long RefreshTime = Timeout.Infinite;
-      private const long Delay = 500;
+      private const long Delay = 0;
 
       private readonly ListView _element;
       private readonly Timer _timer;

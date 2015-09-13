@@ -219,7 +219,7 @@ namespace MangaReader.UI
       if (manga != null && Library.IsAvaible)
       {
         new MangaForm { DataContext = manga, Owner = sender as Window }.ShowDialog();
-        //Library.FilterChanged(this);
+        (sender as BaseForm).View.Refresh();
       }
     }
 

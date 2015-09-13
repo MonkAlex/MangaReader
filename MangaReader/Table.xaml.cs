@@ -59,7 +59,7 @@ namespace MangaReader
       if (this.OnlyUpdate.IsChecked == true && !manga.NeedUpdate)
         return false;
 
-      return LibraryFilter.AllowedTypes.Any(t => manga.Uri.ToString().ToUpper().Contains(t.Key.ToUpper())) &&
+      return LibraryFilter.AllowedTypes.Any(t => (t.Value as MangaSetting).Manga == manga.GetType().MangaType()) &&
         manga.Name.ToLowerInvariant().Contains(this.NameFilter.Text.ToLowerInvariant());
     }
 
@@ -108,8 +108,6 @@ namespace MangaReader
     {
       this.TextBlock.Text = Library.Status;
       UpdateButton.Content = Library.IsAvaible ? Strings.Manga_Action_Update : (Library.IsPaused ? Strings.Manga_Action_Restore : Strings.Manga_Action_Pause);
-      AddButton.IsEnabled = Library.IsAvaible;
-      SettingsButton.IsEnabled = Library.IsAvaible;
 
       if (Library.IsAvaible && Settings.AutoUpdateInHours > 0 &&
         DateTime.Now > Settings.LastUpdate.AddHours(Settings.AutoUpdateInHours))

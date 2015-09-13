@@ -154,7 +154,7 @@
             </Grid.ColumnDefinitions>
             <StatusBar x:Name="StatusBar" Grid.Column="0">
                 <StatusBarItem>
-                    <TextBlock x:Name="TextBlock" TextAlignment="Center"/>
+                    <TextBlock x:Name="TextBlock" TextAlignment="Center" Text="{Binding Path=(services:Library.Status), Mode=TwoWay}"/>
                 </StatusBarItem>
             </StatusBar>
             <Button Content="{x:Static resx:Strings.Manga_Action_Update}" 

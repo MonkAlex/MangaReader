@@ -26,7 +26,7 @@ namespace MangaReader.Services
     /// <summary>
     /// Статус библиотеки.
     /// </summary>
-    public static string Status = string.Empty;
+    public static string Status { get; set; }
 
     /// <summary>
     /// Служба управления UI главного окна.
@@ -355,10 +355,9 @@ namespace MangaReader.Services
 
     public static Dictionary<string, object> AllTypes { get { return _allTypes; } }
 
-    public static readonly Dictionary<string, object> _allTypes = new Dictionary<string, object> 
-    { {"AdultManga", null}, 
-      {"AComics", null},
-      {"ReadManga", null} };
+    public static readonly Dictionary<string, object> _allTypes = Settings.MangaSettings
+      .Select(s => new { s.MangaName, s })
+      .ToDictionary(a => a.MangaName, a => a.s as object);
 
     private static Dictionary<string, object> _allowedTypes = new Dictionary<string, object>(AllTypes);
 

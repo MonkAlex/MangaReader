@@ -41,7 +41,7 @@ namespace MangaReader
       Update.Initialize();
       Grouple.LoginWhile();
 
-      var mainwindow = true ? new Table() as Window : new UI.MainForm.Blazard();
+      var mainwindow = false ? new Table() as Window : new UI.MainForm.Blazard();
       mainwindow.ShowDialog();
     }
 

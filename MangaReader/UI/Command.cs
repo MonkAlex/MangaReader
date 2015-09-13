@@ -7,6 +7,7 @@ using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.UI.MainForm;
+using Ookii.Dialogs.Wpf;
 
 namespace MangaReader.UI
 {
@@ -142,13 +143,11 @@ namespace MangaReader.UI
 
     private static void DoUpdateCurrent(object sender, ExecutedRoutedEventArgs e)
     {
-/*      if (Library.IsAvaible)
+      var baseForm = sender as BaseForm;
+      if (Library.IsAvaible)
       {
-        if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
-          _loadThread = new Thread(() => Library.Update(Library.FilteredMangas, LibraryFilter.SortDescription));
-        if (_loadThread.ThreadState == ThreadState.Unstarted)
-          _loadThread.Start();
-      }*/
+        Library.ThreadAction(() => Library.Update(baseForm.View.Cast<Mangas>(), LibraryFilter.SortDescription));
+      }
     }
 
     private static void DoUpdateAll(object sender, ExecutedRoutedEventArgs e)
@@ -231,12 +230,16 @@ namespace MangaReader.UI
 
     private static void DoSelectNextManga(object sender, ExecutedRoutedEventArgs e)
     {
+      var baseForm = sender as BaseForm;
+      var filtered = baseForm.View.Cast<Mangas>().ToList();
       var manga = Library.SelectedManga;
-/*      if (manga != null && !Equals(Library.FilteredMangas.LastOrDefault(), manga))
+      if (manga != null && !Equals(filtered.LastOrDefault(), manga))
       {
-        Library.SelectedManga = Library.FilteredMangas.SkipWhile(m => !Equals(m, manga)).Skip(1).FirstOrDefault();
-        (e.OriginalSource as FrameworkElement).DataContext = Library.SelectedManga;
-      }*/
+        Library.SelectedManga = filtered.Contains(manga) ? 
+          filtered.SkipWhile(m => !Equals(m, manga)).Skip(1).FirstOrDefault() : 
+          filtered.FirstOrDefault();
+        (e.Source as FrameworkElement).DataContext = Library.SelectedManga;
+      }
     }
 
     private static void CanSelectPrevManga(object sender, CanExecuteRoutedEventArgs e)
@@ -246,12 +249,16 @@ namespace MangaReader.UI
 
     private static void DoSelectPrevManga(object sender, ExecutedRoutedEventArgs e)
     {
+      var baseForm = sender as BaseForm;
+      var filtered = baseForm.View.Cast<Mangas>().ToList();
       var manga = Library.SelectedManga;
-/*      if (manga != null && !Equals(Library.FilteredMangas.FirstOrDefault(), manga))
+      if (manga != null && !Equals(filtered.FirstOrDefault(), manga))
       {
-        Library.SelectedManga = Library.FilteredMangas.TakeWhile(m => !Equals(m, manga)).LastOrDefault();
-        (e.OriginalSource as FrameworkElement).DataContext = Library.SelectedManga;
-      }*/
+        Library.SelectedManga = filtered.Contains(manga) ?
+          filtered.TakeWhile(m => !Equals(m, manga)).LastOrDefault() :
+          filtered.FirstOrDefault();
+        (e.Source as FrameworkElement).DataContext = Library.SelectedManga;
+      }
     }
 
     private static void CanCheckUpdates(object sender, CanExecuteRoutedEventArgs e)
@@ -261,7 +268,26 @@ namespace MangaReader.UI
 
     private static void DoCheckUpdates(object sender, ExecutedRoutedEventArgs e)
     {
-      Update.StartUpdate();
+      var dialog = new TaskDialog();
+      dialog.WindowTitle = "Обновление";
+      var owner = (sender as Window) ?? (e.Parameter as Window);
+      if (owner == null)
+        owner = Application.Current.MainWindow ?? Application.Current.Windows.Cast<Window>().FirstOrDefault();
+      if (Update.CheckUpdate())
+      {
+        dialog.MainInstruction = "Запустить процесс обновления?";
+        dialog.Content = string.Format("Доступно обновление с версии {0} на {1}", Update.ClientVersion.ToString(3), Update.ServerVersion.ToString(3));
+        dialog.Buttons.Add(new TaskDialogButton(ButtonType.Yes));
+        dialog.Buttons.Add(new TaskDialogButton(ButtonType.No));
+        if (dialog.ShowDialog(owner).ButtonType == ButtonType.Yes)
+          Update.StartUpdate();
+      }
+      else
+      {
+        dialog.MainInstruction = "Обновлений не найдено.";
+        dialog.Buttons.Add(new TaskDialogButton(ButtonType.Ok));
+        dialog.ShowDialog(owner);
+      }
     }
 
     private static void DoShowUpdateLog(object sender, ExecutedRoutedEventArgs e)

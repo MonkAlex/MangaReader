@@ -25,7 +25,14 @@ namespace MangaReader.UI.MainForm
     {
       InitializeComponent();
       this.BlazardManga.DataContext = Library.SelectedManga;
-      this.MangaType.ItemsSource = new Dictionary<string, object> {{"ReadManga", null}, {"AdultManga", null}, {"AComics", null}};
+    }
+
+    private void FilterChanged(object sender, RoutedEventArgs e)
+    {
+      if (View != null)
+      {
+        View.Refresh();
+      }
     }
   }
 }

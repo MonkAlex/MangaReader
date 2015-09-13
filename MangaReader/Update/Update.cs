@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Windows;
 
 namespace MangaReader.Services
@@ -19,6 +18,10 @@ namespace MangaReader.Services
     private static string UpdateTempFilename = Settings.WorkFolder + "\\update.it";
     private static string OriginalFilename = Settings.WorkFolder + "\\MangaReader.exe";
     private static string OriginalTempFilename = Settings.WorkFolder + "\\MangaReader.exe.bak";
+
+    internal static Version ClientVersion = Settings.AppVersion;
+
+    internal static Version ServerVersion = Settings.AppVersion;
 
     /// <summary>
     /// Запуск обновления, вызываемый до инициализации программы.
@@ -39,14 +42,13 @@ namespace MangaReader.Services
     /// <summary>
     /// Проверка наличия обновления.
     /// </summary>
-    /// <returns></returns>
-    private static bool CheckUpdate()
+    /// <returns>True, если есть обновление.</returns>
+    internal static bool CheckUpdate()
     {
       try
       {
-        var serverVersion = new Version(Page.GetPage(LinkToVersion));
-        var clientVersion = Assembly.GetExecutingAssembly().GetName().Version;
-        return serverVersion.CompareTo(clientVersion) > 0;
+        ServerVersion = new Version(Page.GetPage(LinkToVersion));
+        return ServerVersion.CompareTo(ClientVersion) > 0;
       }
       catch (Exception)
       {

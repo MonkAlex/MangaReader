@@ -64,9 +64,6 @@ namespace MangaReader.Services
 
     private static ObservableCollection<Mangas> _libraryMangas;
 
-    /*
-    public static ObservableCollection<Mangas> FilteredMangas { get { return FilterChanged(LibraryMangas); } }
-    */
     public static Mangas SelectedManga { get; set; }
 
     private static Thread _loadThread;
@@ -143,34 +140,9 @@ namespace MangaReader.Services
       formDispatcher = main.Dispatcher;
       taskBar = main.TaskbarItemInfo;
       taskbarIcon = main.NotifyIcon;
-      /*
-      var table = main as Table;
-      if (table != null)
-      {
-        table.MangaType.MultiSelectCombo.DropDownClosed +=
-          (s, a) => table.FormLibrary.ItemsSource = FilterChanged(LibraryMangas);
-        table.NameFilter.TextChanged += (s, a) => table.FormLibrary.ItemsSource = FilterChanged(LibraryMangas);
-        table.Uncompleted.Click += (s, a) => table.FormLibrary.ItemsSource = FilterChanged(LibraryMangas);
-        table.OnlyUpdate.Click += (s, a) => table.FormLibrary.ItemsSource = FilterChanged(LibraryMangas);
-      }
-
-      SelectedManga = FilteredMangas.FirstOrDefault();*/
+      SelectedManga = main.View.Cast<Mangas>().FirstOrDefault();
     }
 
-/*    public static ObservableCollection<Mangas> FilterChanged(IQueryable<Mangas> mangas)
-    {
-      mangas = mangas.ToList().AsQueryable();
-      if (LibraryFilter.AllTypes.Count != LibraryFilter.AllowedTypes.Count)
-        mangas = mangas.Where(n => LibraryFilter.AllowedTypes.Any(t => n.Uri.ToString().ToUpper().Contains(t.Key.ToUpper())));
-      if (LibraryFilter.Uncompleted)
-        mangas = mangas.Where(n => !n.IsCompleted);
-      if (LibraryFilter.OnlyUpdate)
-        mangas = mangas.Where(n => n.NeedUpdate);
-      if (LibraryFilter.Name.Any())
-        mangas = mangas.Where(n => n.Name.ToLowerInvariant().Contains(LibraryFilter.Name.ToLowerInvariant()));
-      return new ObservableCollection<Mangas>(mangas.OrderBy(m => m.Name));
-    }
-    */
     /// <summary>
     /// Добавить мангу.
     /// </summary>

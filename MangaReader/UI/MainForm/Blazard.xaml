@@ -7,26 +7,34 @@
         xmlns:services="clr-namespace:MangaReader.Services"
         Icon="../../Icons/main.ico"
         Title="{x:Static resx:Strings.Title}"  Height="350" Width="525">
-  <Grid>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-    <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top">
-      <MenuItem Header="File">
-        <MenuItem Header="{x:Static resx:Strings.Library_Action_Add}" Command="New"/>
-        <MenuItem Command="{x:Static ui:Command.UpdateCurrent}"/>
-        <MenuItem Command="{x:Static ui:Command.UpdateAll}"/>
-        <MenuItem Command="Close"/>
-      </MenuItem>
-      <MenuItem Header="{x:Static resx:Strings.Library_Action_Settings}">
-        <MenuItem Command="{x:Static ui:Command.ShowSettings}"/>
-      </MenuItem>
-      <MenuItem Header="Help">
-        <MenuItem Header="Read Me"/>
-        <MenuItem Command="{x:Static ui:Command.CheckUpdates}"/>
-        <MenuItem Command="{x:Static ui:Command.ShowUpdateLog}"/>
-        <MenuItem Command="{x:Static ui:Command.ShowAbout}"/>
-      </MenuItem>
-    </Menu>
-    <base:BlazardManga x:Name="BlazardManga" Margin="10,55,10,10"/>
-    <ui:MultiSelectComboBox x:Name="MangaType" HorizontalAlignment="Stretch" Margin="0,25,0,0" VerticalAlignment="Top"/>
-  </Grid>
+        <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0">
+            <MenuItem Header="Файл">
+                <MenuItem Header="{x:Static resx:Strings.Library_Action_Add}" Command="New"/>
+                <MenuItem Command="{x:Static ui:Command.UpdateCurrent}"/>
+                <MenuItem Command="{x:Static ui:Command.UpdateAll}"/>
+                <MenuItem Command="Close"/>
+            </MenuItem>
+            <MenuItem Header="{x:Static resx:Strings.Library_Action_Settings}">
+                <MenuItem Command="{x:Static ui:Command.ShowSettings}"/>
+            </MenuItem>
+            <MenuItem Header="О программе">
+                <MenuItem Header="Read Me" Command="{x:Static ui:Command.ShowAbout}"/>
+                <MenuItem Command="{x:Static ui:Command.CheckUpdates}"/>
+                <MenuItem Command="{x:Static ui:Command.ShowUpdateLog}"/>
+                <MenuItem Command="{x:Static ui:Command.ShowAbout}"/>
+            </MenuItem>
+        </Menu>
+
+        <ui:MultiSelectComboBox x:Name="MangaType" Grid.Row="1" SelectionChanged="FilterChanged"
+                            ItemsSource="{Binding Path=(services:LibraryFilter.AllTypes), Mode=OneTime}"
+                            SelectedItems="{Binding Path=(services:LibraryFilter.AllowedTypes), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <base:BlazardManga x:Name="BlazardManga" Margin="5" Grid.Row="2"/>
+    </Grid>
 </base:BaseForm>

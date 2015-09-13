@@ -154,7 +154,7 @@ namespace MangaReader
       if (FormLibrary != null)
       {
         var view = FormLibrary.ItemsSource as ICollectionView;
-        view?.Refresh();
+        view.Refresh();
       }
     }
   }

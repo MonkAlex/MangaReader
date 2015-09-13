@@ -96,10 +96,9 @@ namespace MangaReader.UI.MainForm
       var item = sender as TaskbarIcon;
 
       var add = new MenuItem() { Header = Strings.Library_Action_Add, Command = ApplicationCommands.New };
-      var settings = new MenuItem() { Header = Strings.Library_Action_Settings, Command = Command.ShowSettings };
-      var selfUpdate = new MenuItem() { Header = Strings.Library_CheckUpdate, IsEnabled = Library.IsAvaible };
-      selfUpdate.Click += (o, agrs) => Update.StartUpdate();
-      var exit = new MenuItem() { Header = Strings.Library_Exit, Command = ApplicationCommands.Close };
+      var settings = new MenuItem() { Command = Command.ShowSettings };
+      var selfUpdate = new MenuItem() { Command = Command.CheckUpdates };
+      var exit = new MenuItem() { Command = ApplicationCommands.Close };
 
       var menu = new ContextMenu();
       menu.CommandBindings.Clear();

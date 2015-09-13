@@ -53,7 +53,9 @@ namespace MangaReader.Services
       Settings.Load();
 
       Process.Status = "Convert manga...";
+#pragma warning disable 618
       Cache.Convert(Process);
+#pragma warning restore 618
       Mapping.Converting.ConvertAll(Process);
 
       Process.Status = "Convert history...";

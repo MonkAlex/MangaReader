@@ -30,14 +30,7 @@ namespace MangaReader.UI.MainForm
 
       this.Loaded += (sender, args) =>
       {
-        Command.AddMainMenuCommands(this.NotifyIcon);
-        Command.AddMangaCommands(this.NotifyIcon);
-        this.NotifyIcon.ToolTipText = Strings.Title;
-        this.NotifyIcon.Icon = Properties.Resources.main;
-        this.NotifyIcon.TrayMouseDoubleClick += NotifyIcon_OnTrayMouseDoubleClick;
-        this.NotifyIcon.TrayBalloonTipClicked += NotifyIcon_OnTrayBalloonTipClicked;
-        this.NotifyIcon.TrayRightMouseUp += NotifyIcon_OnTrayRightMouseUp;
-        this.NotifyIcon.IsEnabled = true;
+        NotifyIconInitialize();
       };
 
       this.Closing += (sender, args) =>
@@ -70,6 +63,31 @@ namespace MangaReader.UI.MainForm
         manga.Name.ToLowerInvariant().Contains(LibraryFilter.Name.ToLowerInvariant());
     }
 
+    private void NotifyIconInitialize()
+    {
+      Command.AddMainMenuCommands(this.NotifyIcon);
+      Command.AddMangaCommands(this.NotifyIcon);
+      this.NotifyIcon.ToolTipText = Strings.Title;
+      this.NotifyIcon.Icon = Properties.Resources.main;
+      this.NotifyIcon.TrayMouseDoubleClick += NotifyIcon_OnTrayMouseDoubleClick;
+      this.NotifyIcon.TrayBalloonTipClicked += NotifyIcon_OnTrayBalloonTipClicked;
+
+      var add = new MenuItem() { Header = Strings.Library_Action_Add, Command = ApplicationCommands.New };
+      var settings = new MenuItem() { Command = Command.ShowSettings };
+      var selfUpdate = new MenuItem() { Command = Command.CheckUpdates };
+      var exit = new MenuItem() { Command = ApplicationCommands.Close };
+
+      var menu = new ContextMenu();
+      menu.CommandBindings.Clear();
+      menu.CommandBindings.AddRange(this.NotifyIcon.CommandBindings);
+      menu.Items.Add(add);
+      menu.Items.Add(settings);
+      menu.Items.Add(selfUpdate);
+      menu.Items.Add(exit);
+      this.NotifyIcon.ContextMenu = menu;
+
+      this.NotifyIcon.IsEnabled = true;
+    }
 
     private void NotifyIcon_OnTrayMouseDoubleClick(object sender, RoutedEventArgs e)
     {
@@ -91,23 +109,5 @@ namespace MangaReader.UI.MainForm
         Command.OpenFolder.Execute(downloadable, element);
     }
 
-    private void NotifyIcon_OnTrayRightMouseUp(object sender, RoutedEventArgs e)
-    {
-      var item = sender as TaskbarIcon;
-
-      var add = new MenuItem() { Header = Strings.Library_Action_Add, Command = ApplicationCommands.New };
-      var settings = new MenuItem() { Command = Command.ShowSettings };
-      var selfUpdate = new MenuItem() { Command = Command.CheckUpdates };
-      var exit = new MenuItem() { Command = ApplicationCommands.Close };
-
-      var menu = new ContextMenu();
-      menu.CommandBindings.Clear();
-      menu.CommandBindings.AddRange(item.CommandBindings);
-      menu.Items.Add(add);
-      menu.Items.Add(settings);
-      menu.Items.Add(selfUpdate);
-      menu.Items.Add(exit);
-      item.ContextMenu = menu;
-    }
   }
 }

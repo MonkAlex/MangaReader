@@ -176,10 +176,10 @@ namespace MangaReader.Services
 
       try
       {
+        var query = Mapping.Environment.Session.Query<MangaSetting>().ToList();
         if (settings[3] is object[])
         {
           var setting = settings[3] as object[];
-          var query = Mapping.Environment.Session.Query<MangaSetting>().ToList();
           if (query.FirstOrDefault(a => a.Manga == Readmanga.Type) == null)
             new MangaSetting() 
             { 
@@ -197,6 +197,11 @@ namespace MangaReader.Services
               DefaultCompression = Compression.CompressionMode.Manga 
             }.Save();
         }
+        if (settings[1] is bool)
+          query.ForEach(ms => ms.OnlyUpdate = (bool)settings[1]);
+        if (settings[4] is bool)
+          query.ForEach(ms => ms.CompressManga = (bool)settings[4]);
+        query.ForEach(ms => ms.Save());
         Serializer<object[]>.Save(SettingsPath, settings);
       }
       catch (Exception ex)

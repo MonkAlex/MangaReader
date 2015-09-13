@@ -10,7 +10,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" x:Name="TextBlock"/>
+        <TextBlock Grid.Row="0" x:Name="TextBlock" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         <ProgressBar Grid.Row="1" 
                      x:Name="ProgressBar" 
                      Maximum="100"

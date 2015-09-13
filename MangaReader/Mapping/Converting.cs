@@ -25,12 +25,12 @@ namespace MangaReader.Mapping
       {
         var readmangaHas = Environment.Session.CreateSQLQuery(@"update MangaSetting 
           set DefaultCompression = 'Volume'
-          where DefaultCompression is null and MangaName = 'Readmanga'");
+          where MangaName = 'Readmanga'");
         readmangaHas.UniqueResult();
 
         var acomicsHas = Environment.Session.CreateSQLQuery(@"update MangaSetting
           set DefaultCompression = 'Manga'
-          where DefaultCompression is null and MangaName = 'Acomics'");
+          where MangaName = 'Acomics'");
         acomicsHas.UniqueResult();
 
         Settings.MangaSettings.ForEach(s => s.Update());

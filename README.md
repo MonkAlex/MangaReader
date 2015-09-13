@@ -1,7 +1,6 @@
-===
 MangaReader
+
 [![Supported platforms][badge-platforms]][Releases] [![Latest release][badge-release]][Releases] [![Open issues][badge-issues]][Issues] [![Build Status][badge-travis]][Travis]
-===
 
   [Releases]: https://github.com/MonkAlex/MangaReader/releases "MangaReader Releases"
   [Issues]: https://github.com/MonkAlex/MangaReader/issues "MangaReader Issues"

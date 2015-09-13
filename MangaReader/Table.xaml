@@ -43,9 +43,9 @@
         </Grid>
         <ListView x:Name="FormLibrary" 
               Grid.Row="1"
-              ItemsSource="{Binding Path=(services:Library.LibraryMangas), Mode=OneWay}"
               MouseDown="ListView_MouseDown"
               SelectionMode="Single"
+              ui:GridViewColumnResize.Enabled="True"
               ui:GridSort.AutoSort="True" >
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
@@ -120,7 +120,9 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn Header="{x:Static resx:Strings.Manga_Name}" DisplayMemberBinding="{Binding Path=Name}"
-                            ui:GridSort.PropertyName="Name"/>
+                            ui:GridViewColumnResize.Width="*"
+                            ui:GridSort.PropertyName="Name"
+                            ui:GridSort.ShowSortGlyph="True"/>
                         <GridViewColumn Header="{x:Static resx:Strings.Manga_Update}"
                             ui:GridSort.PropertyName="NeedUpdate">
                             <GridViewColumn.CellTemplate>

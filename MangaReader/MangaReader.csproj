@@ -147,6 +147,7 @@
     <Compile Include="Manga\Mangas.cs" />
     <Compile Include="Manga\MangaObsolete.cs" />
     <Compile Include="Manga\MangaPage.cs" />
+    <Compile Include="Manga\MangasComparer.cs" />
     <Compile Include="Manga\Volume.cs" />
     <Compile Include="Mapping\Converting.cs" />
     <Compile Include="Mapping\Environment.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="Services\Library.cs" />
     <Compile Include="Services\Settings.cs" />
     <Compile Include="UI\GridSort.cs" />
+    <Compile Include="UI\GridViewColumnResize.cs" />
     <Compile Include="UI\MainForm\Blazard.xaml.cs">
       <DependentUpon>Blazard.xaml</DependentUpon>
     </Compile>

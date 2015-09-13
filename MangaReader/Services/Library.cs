@@ -357,6 +357,7 @@ namespace MangaReader.Services
 
     public static readonly Dictionary<string, object> _allTypes = Settings.MangaSettings
       .Select(s => new { s.MangaName, s })
+      .OrderBy(a => a.MangaName)
       .ToDictionary(a => a.MangaName, a => a.s as object);
 
     private static Dictionary<string, object> _allowedTypes = new Dictionary<string, object>(AllTypes);

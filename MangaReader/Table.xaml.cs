@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -33,7 +34,6 @@ namespace MangaReader
     {
       InitializeComponent();
       Settings.UpdateWindowsState(this);
-      //Library.Initialize(this);
       _timer = new DispatcherTimer(new TimeSpan(0, 0, 1),
           DispatcherPriority.Background,
           TimerTick,
@@ -41,7 +41,8 @@ namespace MangaReader
 
       _view = new ListCollectionView(Library.LibraryMangas)
       {
-        Filter = Filter
+        Filter = Filter,
+        CustomSort = new MangasComparer()
       };
 
       FormLibrary.ItemsSource = _view;

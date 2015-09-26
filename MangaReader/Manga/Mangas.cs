@@ -14,7 +14,7 @@ using NHibernate.Linq;
 namespace MangaReader.Manga
 {
   [XmlInclude(typeof(Grouple.Readmanga)), XmlInclude(typeof(Acomic.Acomics))]
-  public class Mangas : Entity.Entity, INotifyPropertyChanged, IDownloadable
+  public abstract class Mangas : Entity.Entity, INotifyPropertyChanged, IDownloadable
   {
     #region Свойства
 
@@ -482,6 +482,8 @@ namespace MangaReader.Manga
         manga = new Grouple.Readmanga(url);
       if (url.Host == "acomics.ru")
         manga = new Acomic.Acomics(url);
+      if (url.Host == "hentaichan.ru")
+        manga = new Hentaichan.Hentaichan(url);
 
       if (manga != null && manga.IsValid())
         manga.Save();
@@ -489,7 +491,7 @@ namespace MangaReader.Manga
       return manga;
     }
 
-    public Mangas()
+    protected Mangas()
     {
       this.Histories = new List<MangaHistory>();
       this.Chapters = new List<Chapter>();

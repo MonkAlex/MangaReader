@@ -134,33 +134,32 @@ namespace MangaReader.Manga.Grouple
     /// <summary>
     /// Получить ссылки на все изображения в главе.
     /// </summary>
-    /// <param name="uri">Ссылка на главу.</param>
+    /// <param name="chapter">Глава.</param>
     /// <returns>Список ссылок на изображения главы.</returns>
-    public static List<MangaPage> GetImagesLink(Uri uri)
+    internal static void UpdatePages(Chapter chapter)
     {
-      var chapterLinksList = new List<MangaPage>();
+      chapter.Pages.Clear();
       var document = new HtmlDocument();
-      document.LoadHtml(Page.GetPage(uri));
+      document.LoadHtml(Page.GetPage(chapter.Uri));
 
       var firstOrDefault = document.DocumentNode
           .SelectNodes("//div[@class=\"pageBlock container reader-bottom\"]")
           .FirstOrDefault();
 
       if (firstOrDefault == null)
-        return chapterLinksList;
+        return;
 
-      chapterLinksList = Regex
-          .Matches(firstOrDefault.OuterHtml, @"{url:""(.*?)""", RegexOptions.IgnoreCase)
-          .OfType<Group>()
-          .Select(g => g.Captures[0])
-          .OfType<Match>()
-          .Select(m => m.Groups[1].Value)
-          .Select(s => (!Uri.IsWellFormedUriString(s, UriKind.Absolute)) ? (@"http://" + uri.Host + s) : s)
-          .Select(s => new MangaPage(uri, new Uri(s)))
-          .ToList();
       var i = 0;
-      chapterLinksList.ForEach(ch => ch.Number = i++);
-      return chapterLinksList;
+      var chapterLinksList = Regex
+        .Matches(firstOrDefault.OuterHtml, @"{url:""(.*?)""", RegexOptions.IgnoreCase)
+        .OfType<Group>()
+        .Select(g => g.Captures[0])
+        .OfType<Match>()
+        .Select(m => m.Groups[1].Value)
+        .Select(s => (!Uri.IsWellFormedUriString(s, UriKind.Absolute)) ? (@"http://" + chapter.Uri.Host + s) : s)
+        .Select(s => new MangaPage(chapter.Uri, new Uri(s), i++))
+        .ToList();
+      chapter.Pages.AddRange(chapterLinksList);
     }
   }
 }

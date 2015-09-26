@@ -28,7 +28,7 @@ namespace MangaReader.Manga.Acomic
     /// Получить название манги.
     /// </summary>
     /// <param name="uri">Ссылка на мангу.</param>
-    /// <returns>Мультиязыковый класс с именем манги.</returns>
+    /// <returns>Название манги.</returns>
     public static string GetMangaName(Uri uri)
     {
       var name = string.Empty;

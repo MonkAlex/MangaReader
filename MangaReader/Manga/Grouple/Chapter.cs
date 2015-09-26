@@ -24,7 +24,7 @@ namespace MangaReader.Manga.Grouple
     /// </summary>
     protected override void UpdatePages()
     {
-      this.Pages = Getter.GetImagesLink(this.Uri);
+      Getter.UpdatePages(this);
       base.UpdatePages();
     }
 

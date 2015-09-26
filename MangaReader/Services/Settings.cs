@@ -81,7 +81,7 @@ namespace MangaReader.Services
         if (mangaSettings == null)
         {
           var query = Mapping.Environment.Session.Query<MangaSetting>().ToList();
-          mangaSettings = query.Any() ? query : CreateDefaultMangaSettings();
+          mangaSettings = CreateDefaultMangaSettings(query);
         }
         return mangaSettings;
       }
@@ -150,22 +150,29 @@ namespace MangaReader.Services
       catch (IndexOutOfRangeException) { }
     }
 
-    private static List<MangaSetting> CreateDefaultMangaSettings()
+    private static List<MangaSetting> CreateDefaultMangaSettings(List<MangaSetting> query)
     {
       var baseClass = typeof(Manga.Mangas);
       var types = Assembly.GetAssembly(baseClass).GetTypes()
         .Where(type => type.IsSubclassOf(baseClass));
-      var folders = types
-        .Select(type => new MangaSetting
+
+      foreach (var type in types)
+      {
+        if (query.Any(s => Equals(s.Manga, type.MangaType())))
+          continue;
+
+        var setting = new MangaSetting
         {
           Folder = Settings.DownloadFolder,
           Manga = type.MangaType(),
           MangaName = type.Name,
           DefaultCompression = Compression.CompressionMode.Manga
-        })
-        .ToList();
-      folders.ForEach(f => f.Save());
-      return folders;
+        };
+
+        setting.Save();
+        query.Add(setting);
+      }
+      return query;
     }
 
     public static void Convert()

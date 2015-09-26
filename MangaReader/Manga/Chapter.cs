@@ -150,16 +150,6 @@ namespace MangaReader.Manga
     /// Глава манги.
     /// </summary>
     /// <param name="uri">Ссылка на главу.</param>
-    /// <param name="desc">Описание главы.</param>
-    public Chapter(Uri uri, string desc) : this(uri)
-    {
-      this.Name = desc;
-    }
-
-    /// <summary>
-    /// Глава манги.
-    /// </summary>
-    /// <param name="uri">Ссылка на главу.</param>
     public Chapter(Uri uri)
     {
       this.Uri = uri;

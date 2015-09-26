@@ -2,6 +2,7 @@
 using MangaReader.Manga;
 using MangaReader.Manga.Acomic;
 using MangaReader.Manga.Grouple;
+using MangaReader.Manga.Hentaichan;
 
 namespace MangaReader.Mapping
 {
@@ -41,6 +42,14 @@ namespace MangaReader.Mapping
     public AcomicsMap()
     {
       DiscriminatorValue(Acomics.Type.ToString());
+    }
+  }
+
+  public class HentaichanMap : SubclassMap<Hentaichan>
+  {
+    public HentaichanMap()
+    {
+      DiscriminatorValue(Hentaichan.Type.ToString());
     }
   }
 }

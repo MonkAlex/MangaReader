@@ -47,7 +47,6 @@ namespace MangaReader.Entity
         catch (Exception)
         {
           this.Update();
-          session.Flush();
           throw;
         }
       }

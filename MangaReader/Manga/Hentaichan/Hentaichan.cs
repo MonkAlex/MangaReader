@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MangaReader.Services;
 
 namespace MangaReader.Manga.Hentaichan
@@ -20,6 +17,13 @@ namespace MangaReader.Manga.Hentaichan
         Log.Add("Не удалось получить имя манги, текущее название = " + this.ServerName);
       else if (newName != this.ServerName)
         this.ServerName = newName;
+    }
+
+    public override bool IsValid()
+    {
+      return base.IsValid() && !Library.LibraryMangas.Any(m => !Equals(m, this) &&
+                                                               Equals(m.ServerName, this.ServerName) &&
+                                                               Equals(m.GetType().MangaType(), Type));
     }
 
     protected override void UpdateContent()

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -110,11 +111,18 @@ namespace MangaReader.UI
       var db = new Input { Owner = window };
       if (db.ShowDialog() != true)
         return;
-
-      if (!string.IsNullOrWhiteSpace(db.Result.Text))
-        Library.Add(db.Result.Text);
-      foreach (var manga in db.Bookmarks.SelectedItems.OfType<Mangas>())
-        Library.Add(manga.Uri);
+      try
+      {
+        if (!string.IsNullOrWhiteSpace(db.Result.Text))
+          Library.Add(db.Result.Text);
+        foreach (var manga in db.Bookmarks.SelectedItems.OfType<Mangas>())
+          Library.Add(manga.Uri);
+      }
+      catch (Exception ex)
+      {
+        Log.Exception(ex, "Ошибка добавления манги.");
+        MessageBox.Show(ex.Message);
+      }
     }
 
     private static void CanClose(object sender, CanExecuteRoutedEventArgs e)

@@ -22,8 +22,11 @@ namespace MangaReader.Manga.Hentaichan
         var document = new HtmlDocument();
         document.LoadHtml(Page.GetPage(uri));
         var nameNode = document.DocumentNode.SelectSingleNode("//head/title");
-        if (nameNode != null)
-          name = nameNode.InnerText.Replace("Все главы", "").Trim().TrimEnd('-').Trim();
+        const string subString = "Все главы";
+        if (nameNode != null && nameNode.InnerText.Contains(subString))
+        {
+          name = nameNode.InnerText.Replace(subString, string.Empty).Trim().TrimEnd('-').Trim();
+        }
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
       return WebUtility.HtmlDecode(name);

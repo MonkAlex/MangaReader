@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
-using System.Text;
 using HtmlAgilityPack;
 using MangaReader.Account;
 using MangaReader.Services;
@@ -13,14 +11,10 @@ namespace MangaReader.Manga.Acomic
   public static class Getter
   {
 
-    public static CookieClient GetAdultClient(Uri uri)
+    public static CookieClient GetAdultClient()
     {
-      var client = new CookieClient() { Encoding = Encoding.UTF8 };
-      var loginData = new NameValueCollection
-            {
-                {"ageRestrict", "40"}
-            };
-      var result = client.UploadValues(uri, "POST", loginData);
+      var client = new CookieClient();
+      client.Cookie.Add(new Cookie("ageRestrict", "40", "/", "acomics.ru"));
       return client;
     }
 
@@ -35,7 +29,7 @@ namespace MangaReader.Manga.Acomic
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(new Uri(uri.OriginalString + @"/about"), Getter.GetAdultClient(uri)));
+        document.LoadHtml(Page.GetPage(new Uri(uri.OriginalString + @"/about"), Getter.GetAdultClient()));
         var nameNode = document.DocumentNode.SelectSingleNode("//header[@class=\"serial\"]//img");
         if (nameNode != null && nameNode.Attributes.Count > 1)
           name = nameNode.Attributes[1].Value;
@@ -49,7 +43,7 @@ namespace MangaReader.Manga.Acomic
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), Getter.GetAdultClient(manga.Uri)));
+        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), Getter.GetAdultClient()));
         manga.HasVolumes = document.DocumentNode.SelectNodes("//h2[@class=\"serial-chapters-head\"]") != null;
         manga.HasChapters = document.DocumentNode.SelectNodes("//div[@class=\"chapters\"]//a") != null;
       }
@@ -68,7 +62,7 @@ namespace MangaReader.Manga.Acomic
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), Getter.GetAdultClient(manga.Uri)));
+        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), Getter.GetAdultClient()));
 
         var volumeNodes = document.DocumentNode.SelectNodes("//h2[@class=\"serial-chapters-head\"]");
         if (volumeNodes != null)
@@ -123,12 +117,12 @@ namespace MangaReader.Manga.Acomic
     /// <returns>Словарь (ссылка, описание).</returns>
     private static List<MangaPage> GetMangaPages(Uri uri)
     {
-      var links = new List<Uri> { };
-      var description = new List<string> { };
-      var images = new List<Uri> { };
+      var links = new List<Uri>();
+      var description = new List<string>();
+      var images = new List<Uri>();
       try
       {
-        var adultClient = Getter.GetAdultClient(uri);
+        var adultClient = Getter.GetAdultClient();
         var document = new HtmlDocument();
         document.LoadHtml(Page.GetPage(uri, adultClient));
         var last = document.DocumentNode.SelectSingleNode("//nav[@class='serial']//a[@class='read2']").Attributes[1].Value;

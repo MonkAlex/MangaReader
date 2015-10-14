@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Net;
+using System.Text;
 
 namespace MangaReader.Account
 {
   public class CookieClient : WebClient
   {
-
-    internal CookieContainer Cookie = new CookieContainer();
+    internal CookieContainer Cookie { get; set; }
 
     internal Uri ResponseUri;
 
@@ -23,6 +23,12 @@ namespace MangaReader.Account
       var baseResponse = base.GetWebResponse(request);
       this.ResponseUri = baseResponse.ResponseUri;
       return baseResponse;
+    }
+
+    public CookieClient() : base()
+    {
+      this.Cookie = new CookieContainer();
+      this.Encoding = Encoding.UTF8;
     }
   }
 }

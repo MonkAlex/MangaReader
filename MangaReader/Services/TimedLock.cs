@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 // Thanks to Eric Gunnerson for recommending this be a struct rather
 // than a class - avoids a heap allocation.
@@ -58,12 +59,19 @@ namespace MangaReader.Services
     // in order to detect when the object is not freed.)
     private class Sentinel
     {
+      private string stack;
+
+      internal Sentinel()
+      {
+        this.stack = "Undisposed lock" + new StackTrace(1);
+      }
+
       ~Sentinel()
       {
         // If this finalizer runs, someone somewhere failed to
         // call Dispose, which means we've failed to leave
         // a monitor!
-        System.Diagnostics.Debug.Fail("Undisposed lock");
+        Debug.Fail(stack);
       }
     }
     private Sentinel leakDetector;

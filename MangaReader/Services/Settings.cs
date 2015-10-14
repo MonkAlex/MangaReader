@@ -11,7 +11,7 @@ using NHibernate.Linq;
 
 namespace MangaReader.Services
 {
-  public class Settings
+  public static class Settings
   {
     /// <summary>
     /// Язык манги.
@@ -21,7 +21,7 @@ namespace MangaReader.Services
     /// <summary>
     /// Сворачивать в трей.
     /// </summary>
-    public static bool MinimizeToTray = true;
+    public static bool MinimizeToTray { get; set; }
 
     /// <summary>
     /// Частота автообновления библиотеки в часах.
@@ -56,7 +56,7 @@ namespace MangaReader.Services
     /// <summary>
     /// Автообновление программы.
     /// </summary>
-    public static bool UpdateReader = true;
+    public static bool UpdateReader { get; set; }
 
     /// <summary>
     /// Папка загрузки.
@@ -254,5 +254,9 @@ namespace MangaReader.Services
       Japanese
     }
 
+    static Settings()
+    {
+      Load();
+    }
   }
 }

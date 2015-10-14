@@ -23,6 +23,10 @@ namespace MangaReader
 
     private void App_OnStartup(object sender, StartupEventArgs e)
     {
+      this.DispatcherUnhandledException += (o, a) => Log.Exception(a.Exception);
+      AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly;
+      if (Environment.GetCommandLineArgs().Contains("-t"))
+        ShowConsoleWindow();
 
       Update.Initialize();
 
@@ -33,11 +37,6 @@ namespace MangaReader
         Log.Add("Программа уже запущена.");
         Environment.Exit(1);
       }
-
-      this.DispatcherUnhandledException += (o, a) => Log.Exception(a.Exception);
-      AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly;
-      if (Environment.GetCommandLineArgs().Contains("-t"))
-        ShowConsoleWindow();
 
       Mapping.Environment.Initialize();
       Converter.Convert(true);

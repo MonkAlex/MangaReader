@@ -19,15 +19,6 @@ namespace MangaReader.UI
     public Login()
     {
       InitializeComponent();
-      this.Bookmarks.ItemsSource = Grouple.Bookmarks;
-      if (this.ReadManga != null)
-      {
-        this.LoginBox.Text = ReadManga.Login.Name;
-        this.Password.Password = ReadManga.Login.Password;
-      }
-      this.LoginBox.IsEnabled = !Grouple.IsLogined;
-      this.Password.IsEnabled = !Grouple.IsLogined;
-      this.Enter.Content = Grouple.IsLogined ? Strings.Input_Logout : Strings.Input_Login;
     }
 
     private void Login_click(object sender, RoutedEventArgs e)
@@ -61,6 +52,19 @@ namespace MangaReader.UI
 
       if (!(e.MouseDevice.DirectlyOver is TextBlock))
         listBox.SelectedIndex = -1;
+    }
+
+    private void Login_OnLoaded(object sender, RoutedEventArgs e)
+    {
+      this.Bookmarks.ItemsSource = Grouple.Bookmarks;
+      if (this.ReadManga != null)
+      {
+        this.LoginBox.Text = ReadManga.Login.Name;
+        this.Password.Password = ReadManga.Login.Password;
+      }
+      this.LoginBox.IsEnabled = !Grouple.IsLogined;
+      this.Password.IsEnabled = !Grouple.IsLogined;
+      this.Enter.Content = Grouple.IsLogined ? Strings.Input_Logout : Strings.Input_Login;
     }
   }
 }

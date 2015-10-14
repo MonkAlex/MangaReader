@@ -40,7 +40,6 @@ namespace MangaReader
 
       Mapping.Environment.Initialize();
       Converter.Convert(true);
-      Grouple.LoginWhile();
 
       var mainwindow = true ? new Table() as Window : new UI.MainForm.Blazard();
       mainwindow.ShowDialog();

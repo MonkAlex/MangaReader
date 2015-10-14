@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using HtmlAgilityPack;
 using MangaReader.Manga.Grouple;
 using MangaReader.Services;
@@ -47,31 +46,12 @@ namespace MangaReader.Account
     private static readonly CookieClient Client = new CookieClient() { BaseAddress = MainUri.ToString(), Encoding = Encoding.UTF8 };
 
     /// <summary>
-    /// Циклическая попытка залогниться.
-    /// </summary>
-    public static void LoginWhile()
-    {
-      var inOtherThread = new Thread(() =>
-      {
-        Login();
-        while (!IsLogined && SettingLogin.CanLogin)
-        {
-          Thread.Sleep(1000);
-          Login();
-        }
-        LoadBookmarks();
-      });
-      inOtherThread.Start();
-    }
-
-    /// <summary>
     /// Авторизоваться на сайте.
     /// </summary>
     public static void Login()
     {
       if (IsLogined)
         return;
-
 
       if (SettingLogin == null || !SettingLogin.CanLogin)
         return;
@@ -117,6 +97,9 @@ namespace MangaReader.Account
     {
       var bookmarks = new List<Readmanga>();
       var document = new HtmlDocument();
+
+      Login();
+
       using (TimedLock.Lock(ClientLock))
       {
         document.LoadHtml(Page.GetPage(BookmarksUri, Client));

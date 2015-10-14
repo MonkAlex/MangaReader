@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:MangaReader.UI"
              xmlns:properties="clr-namespace:MangaReader.Properties"
              mc:Ignorable="d" 
+             Loaded="Login_OnLoaded"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>

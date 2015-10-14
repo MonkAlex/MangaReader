@@ -43,7 +43,7 @@ namespace MangaReader.Account
     /// <summary>
     /// Клиент с куками авторизованного пользователя.
     /// </summary>
-    private static readonly CookieClient Client = new CookieClient() { BaseAddress = MainUri.ToString(), Encoding = Encoding.UTF8 };
+    private static readonly CookieClient Client = new CookieClient() { BaseAddress = MainUri.ToString() };
 
     /// <summary>
     /// Авторизоваться на сайте.

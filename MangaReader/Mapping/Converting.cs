@@ -16,6 +16,25 @@ namespace MangaReader.Mapping
 
       // to 1.28.5659
       Convert27To28(process);
+
+      // to 1.30.5765
+      Convert29To30(process);
+    }
+
+    private static void Convert29To30(ConverterProcess process)
+    {
+      var version = new Version(1, 30, 5765);
+      if (version.CompareTo(Settings.DatabaseVersion) > 0 && process.Version.CompareTo(version) >= 0)
+      {
+        var setType = Environment.Session.CreateSQLQuery(@"update Login 
+          set Type = 'ec4d4cde-ef54-4b67-af48-1b7909709d5c'");
+        setType.UniqueResult();
+
+/*        var hentaiLogin = Environment.Session.CreateSQLQuery(@"update Login
+          set Type = '03ceff67-1472-438a-a90a-07b44f6ffdc4'
+          where Id = (select Login_id from MangaSetting where MangaName = 'Hentaichan')");
+        hentaiLogin.UniqueResult();*/
+      }
     }
 
     private static void Convert27To28(ConverterProcess process)
@@ -32,8 +51,6 @@ namespace MangaReader.Mapping
           set DefaultCompression = 'Manga'
           where MangaName = 'Acomics'");
         acomicsHas.UniqueResult();
-
-        Settings.MangaSettings.ForEach(s => s.Update());
       }
     }
 

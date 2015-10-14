@@ -144,6 +144,7 @@
     <Compile Include="Manga\Hentaichan\Chapter.cs" />
     <Compile Include="Manga\Hentaichan\Getter.cs" />
     <Compile Include="Manga\Hentaichan\Hentaichan.cs" />
+    <Compile Include="Manga\Hentaichan\HentaichanLogin.cs" />
     <Compile Include="Manga\Hentaichan\MangaPage.cs" />
     <Compile Include="Manga\IDownloadable.cs" />
     <Compile Include="Manga\MangaForm.xaml.cs">
@@ -285,7 +286,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <AppDesigner Include="Properties\" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

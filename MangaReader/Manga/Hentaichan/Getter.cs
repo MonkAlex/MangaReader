@@ -1,14 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+using MangaReader.Account;
 using MangaReader.Services;
 
 namespace MangaReader.Manga.Hentaichan
 {
   public static class Getter
   {
+
+    public static CookieClient GetClient()
+    {
+      var setting = Settings.MangaSettings.SingleOrDefault(s => Equals(s.Manga, Hentaichan.Type));
+      var client = new CookieClient();
+      if (setting != null)
+      {
+        var login = setting.Login as HentaichanLogin;
+        if (login == null || !login.CanLogin)
+        {
+          if (login == null)
+          {
+            login = new HentaichanLogin() {Name = setting.Login.Name, Password = setting.Login.Password};
+            setting.Login = login;
+          }
+
+          login.Login(client);
+        }
+        if (login != null)
+        {
+          client.Cookie.Add(new Cookie("dle_user_id", login.UserId, "/", ".hentaichan.ru"));
+          client.Cookie.Add(new Cookie("dle_password", login.PasswordHash, "/", ".hentaichan.ru"));
+        }
+      }
+      return client;
+    }
+
     /// <summary>
     /// Получить название манги.
     /// </summary>
@@ -38,7 +67,7 @@ namespace MangaReader.Manga.Hentaichan
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(manga.Uri));
+        document.LoadHtml(Page.GetPage(manga.Uri, GetClient()));
 
         var chapterNodes = document.DocumentNode.SelectNodes("//div[@class=\"related_info\"]");
         foreach (var node in chapterNodes)
@@ -50,8 +79,9 @@ namespace MangaReader.Manga.Hentaichan
       }
       catch (NullReferenceException ex)
       {
-        Library.Status = "Возможно требуется регистрация";
-        Log.Exception(ex, manga.Uri.OriginalString);
+        var status = "Возможно требуется регистрация";
+        Library.Status = status;
+        Log.Exception(ex, status, manga.Uri.OriginalString);
       }
 
       manga.Chapters.AddRange(chapters);
@@ -64,7 +94,7 @@ namespace MangaReader.Manga.Hentaichan
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(new Uri(chapter.Uri.OriginalString.Replace("/manga/", "/online/"))));
+        document.LoadHtml(Page.GetPage(new Uri(chapter.Uri.OriginalString.Replace("/manga/", "/online/")), GetClient()));
 
         var imgs = Regex.Match(document.DocumentNode.OuterHtml, @"""(fullimg.*)", RegexOptions.IgnoreCase).Groups[1].Value.Remove(0, 9);
         foreach (Match match in Regex.Matches(imgs, @"""(.*?)"","))

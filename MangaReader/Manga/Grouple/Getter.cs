@@ -26,7 +26,7 @@ namespace MangaReader.Manga.Grouple
     /// <returns>Новая ссылка.</returns>
     public static Uri GetRedirectUri(Uri uri, string page)
     {
-      var client = new CookieClient() { Encoding = Encoding.UTF8 };
+      var client = new CookieClient();
       var cookie = new Cookie
       {
         Name = CookieKey,

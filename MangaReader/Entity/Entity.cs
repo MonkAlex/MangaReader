@@ -46,7 +46,7 @@ namespace MangaReader.Entity
         }
         catch (Exception)
         {
-          this.Update();
+          tranc.Rollback();
           throw;
         }
       }

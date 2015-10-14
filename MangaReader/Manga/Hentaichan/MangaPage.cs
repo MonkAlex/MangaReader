@@ -7,7 +7,7 @@ namespace MangaReader.Manga.Hentaichan
   {
     public MangaPage(Uri uri, Uri imageLink) : base(uri, imageLink)
     {
-      this.Number = Convert.ToInt32(Regex.Match(imageLink.OriginalString, @"/*[0-9]+", RegexOptions.RightToLeft).Value);
+      this.Number = Convert.ToInt32(Regex.Match(imageLink.OriginalString, @"/*([0-9]+)", RegexOptions.RightToLeft).Groups[1].Value);
     }
   }
 }

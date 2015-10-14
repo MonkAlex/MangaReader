@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace MangaReader.Services
@@ -37,8 +38,20 @@ namespace MangaReader.Services
     /// <param name="messages">Сообщение.</param>
     public static void Exception(Exception ex, params string[] messages)
     {
-      var contents = string.Concat(DateTime.Now, "   ", string.Join(Environment.NewLine, messages),
-        Environment.NewLine, ex.ToString(), Environment.NewLine);
+      var contents = string.Concat(DateTime.Now.ToString("O"), "   ", string.Join(Environment.NewLine, messages),
+        Environment.NewLine, ex, Environment.NewLine);
+      Write(contents, ExceptionPath);
+    }
+
+    /// <summary>
+    /// Добавление записи в лог.
+    /// </summary>
+    /// <param name="messages">Сообщение.</param>
+    public static void Exception(params string[] messages)
+    {
+      var stack = new StackTrace(1);
+      var contents = string.Concat(DateTime.Now.ToString("O"), "   ", string.Join(Environment.NewLine, messages),
+        Environment.NewLine, stack.ToString(), Environment.NewLine);
       Write(contents, ExceptionPath);
     }
 

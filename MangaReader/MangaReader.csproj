@@ -190,6 +190,9 @@
     <Compile Include="Services\Settings.cs" />
     <Compile Include="UI\GridSort.cs" />
     <Compile Include="UI\GridViewColumnResize.cs" />
+    <Compile Include="UI\Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\MainForm\Blazard.xaml.cs">
       <DependentUpon>Blazard.xaml</DependentUpon>
     </Compile>
@@ -237,6 +240,10 @@
     <Compile Include="Manga\Grouple\Chapter.cs" />
     <Compile Include="Manga\Grouple\Readmanga.cs" />
     <Page Include="SettingsForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

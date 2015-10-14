@@ -80,8 +80,16 @@ namespace MangaReader.Services
       {
         if (mangaSettings == null)
         {
-          var query = Mapping.Environment.Session.Query<MangaSetting>().ToList();
-          mangaSettings = CreateDefaultMangaSettings(query);
+          if (Mapping.Environment.Initialized)
+          {
+            var query = Mapping.Environment.Session.Query<MangaSetting>().ToList();
+            mangaSettings = CreateDefaultMangaSettings(query);
+          }
+          else
+          {
+            Log.Exception("Запрос MangaSettings до инициализации соединения с базой.");
+            return new List<MangaSetting>();
+          }
         }
         return mangaSettings;
       }

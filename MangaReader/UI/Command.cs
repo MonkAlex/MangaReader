@@ -115,7 +115,7 @@ namespace MangaReader.UI
       {
         if (!string.IsNullOrWhiteSpace(db.Result.Text))
           Library.Add(db.Result.Text);
-        foreach (var manga in db.Bookmarks.SelectedItems.OfType<Mangas>())
+        foreach (var manga in db.LoginBookmarks.Bookmarks.SelectedItems.OfType<Mangas>())
           Library.Add(manga.Uri);
       }
       catch (Exception ex)

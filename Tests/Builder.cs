@@ -21,7 +21,7 @@ namespace MangaReader.Tests
         Uri = Url,
         Status = "example status",
         NeedUpdate = false,
-        Name = "readmanga from example"
+        Name = "readmanga from example" + Guid.NewGuid()
       };
       manga.Save();
       return manga;
@@ -46,7 +46,7 @@ namespace MangaReader.Tests
         Uri = Url,
         Status = "example status",
         NeedUpdate = false,
-        Name = "Acomics from example"
+        Name = "Acomics from example" + Guid.NewGuid()
       };
       manga.Save();
       return manga;

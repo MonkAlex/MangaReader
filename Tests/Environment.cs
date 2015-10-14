@@ -13,17 +13,16 @@ namespace Tests
   [TestClass]
   public class Environment
   {
-    private const string DbFile = "\\test.db";
 
-    public static ISessionFactory SessionFactory;
-    public static ISession Session;
+    internal static ISession Session { get; set; }
 
     [AssemblyInitialize]
     public static void TestInitialize(TestContext context)
     {
-      Initialize();
-      MangaReader.Mapping.Environment.Session = Environment.Session;
+      MangaReader.Mapping.Environment.Initialize();
       Settings.Load();
+
+      Session = MangaReader.Mapping.Environment.Session;
     }
 
     [AssemblyCleanup]
@@ -32,31 +31,5 @@ namespace Tests
 
     }
 
-    public static void Initialize()
-    {
-      // TODO: подумать над другим способом явно подгрузить SQLite.
-      var sqlite = FunctionType.Aggregate;
-      sqlite.Equals(FunctionType.Collation);
-      SessionFactory = CreateSessionFactory();
-      Session = SessionFactory.OpenSession();
-    }
-
-    private static ISessionFactory CreateSessionFactory()
-    {
-      return Fluently
-        .Configure()
-        .Database(SQLiteConfiguration.Standard.UsingFile(Settings.WorkFolder + DbFile))
-        .Mappings(m => m.FluentMappings.AddFromAssemblyOf<MangaReader.Mapping.Environment>())
-        .ExposeConfiguration(BuildSchema)
-        .BuildSessionFactory();
-    }
-
-    private static void BuildSchema(Configuration config)
-    {
-      if (File.Exists(Settings.WorkFolder + DbFile))
-        File.Delete(Settings.WorkFolder + DbFile);
-
-      new SchemaExport(config).Create(false, true);
-    }
   }
 }

@@ -14,19 +14,15 @@ namespace MangaReader.Tests.CRUD
       var newManga = Builder.CreateReadmanga();
       var mangaId = newManga.Id;
       Assert.AreNotEqual(0, newManga.Id);
-      using (var session = Environment.SessionFactory.OpenSession())
-      {
-        var fromDb = session.Get<Mangas>(mangaId);
-        Assert.AreNotEqual(null, fromDb);
-      }
+
+      var fromDb = Environment.Session.Get<Mangas>(mangaId);
+      Assert.AreNotEqual(null, fromDb);
 
       Builder.DeleteReadmanga(newManga);
       Assert.AreEqual(0, newManga.Id);
-      using (var session = Environment.SessionFactory.OpenSession())
-      {
-        var fromDb = session.Get<Mangas>(mangaId);
-        Assert.AreEqual(null, fromDb);
-      }
+
+      fromDb = Environment.Session.Get<Mangas>(mangaId);
+      Assert.AreEqual(null, fromDb);
     }
 
     [TestMethod]
@@ -40,27 +36,18 @@ namespace MangaReader.Tests.CRUD
       newManga.Uri = url;
       Assert.AreEqual(url, newManga.Uri);
 
-      using (var session = Environment.SessionFactory.OpenSession())
-      {
-        var fromDb = session.Get<Mangas>(mangaId);
-        Assert.AreEqual(oldUrl, fromDb.Uri);
-      }
       newManga.Update();
       Assert.AreEqual(oldUrl, newManga.Uri);
-      using (var session = Environment.SessionFactory.OpenSession())
-      {
-        var fromDb = session.Get<Mangas>(mangaId);
-        Assert.AreEqual(oldUrl, fromDb.Uri);
-      }
+
+      var fromDb = Environment.Session.Get<Mangas>(mangaId);
+      Assert.AreEqual(oldUrl, fromDb.Uri);
 
       newManga.Uri = url;
       newManga.Save();
       Assert.AreEqual(url, newManga.Uri);
-      using (var session = Environment.SessionFactory.OpenSession())
-      {
-        var fromDb = session.Get<Mangas>(mangaId);
-        Assert.AreEqual(url, fromDb.Uri);
-      }
+
+      fromDb = Environment.Session.Get<Mangas>(mangaId);
+      Assert.AreEqual(url, fromDb.Uri);
 
       Builder.DeleteAcomics(newManga);
     }

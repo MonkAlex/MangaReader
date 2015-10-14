@@ -130,12 +130,15 @@ namespace MangaReader.Services
     /// </summary>
     public static void Load()
     {
-      MangaSettings.ForEach(a => 
+      if (Mapping.Environment.Initialized)
       {
-        Console.WriteLine("Type {0}, folder {1}", a.MangaName, a.Folder);
-        Console.WriteLine("Type {0}, update or full download {1}", a.MangaName, a.OnlyUpdate);
-        Console.WriteLine("Type {0}, need compress manga {1}", a.MangaName, a.CompressManga);
-      });
+        foreach (var setting in MangaSettings)
+        {
+          Console.WriteLine("Type {0}, folder {1}", setting.MangaName, setting.Folder);
+          Console.WriteLine("Type {0}, update or full download {1}", setting.MangaName, setting.OnlyUpdate);
+          Console.WriteLine("Type {0}, need compress manga {1}", setting.MangaName, setting.CompressManga);
+        }
+      }
 
       var settings = Serializer<object[]>.Load(SettingsPath);
       if (settings == null)

@@ -5,14 +5,14 @@ using System.Threading;
 namespace MangaReader.Services
 {
 
-  enum ConverterState
+  public enum ConverterState
   {
     None,
     Started,
     Completed
   }
 
-  internal class ConverterProcess
+  public class ConverterProcess
   {
     internal double Percent = 0;
     internal bool IsIndeterminate = true;
@@ -20,14 +20,14 @@ namespace MangaReader.Services
     internal Version Version = Settings.DatabaseVersion;
   }
 
-  static class Converter
+  public static class Converter
   {
     public static ConverterProcess Process = new ConverterProcess() 
     { Version = new Version(Settings.AppVersion.Major, Settings.AppVersion.Minor, Settings.AppVersion.Build ) };
 
     public static ConverterState State = ConverterState.None;
 
-    static internal void Convert(bool withDialog)
+    static public void Convert(bool withDialog)
     {
       var dialog = new Converting();
 

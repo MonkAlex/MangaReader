@@ -51,6 +51,8 @@ namespace MangaReader.Mapping
           set DefaultCompression = 'Manga'
           where MangaName = 'Acomics'");
         acomicsHas.UniqueResult();
+
+        Settings.MangaSettings.ForEach(s => s.Update());
       }
     }
 

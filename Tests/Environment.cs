@@ -1,14 +1,7 @@
-﻿using System.Data.SQLite;
-using System.IO;
-using FluentNHibernate.Cfg;
-using FluentNHibernate.Cfg.Db;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHibernate;
-using NHibernate.Cfg;
-using NHibernate.Tool.hbm2ddl;
-using Settings = MangaReader.Services.Settings;
 
-namespace Tests
+namespace MangaReader.Tests
 {
   [TestClass]
   public class Environment
@@ -19,10 +12,10 @@ namespace Tests
     [AssemblyInitialize]
     public static void TestInitialize(TestContext context)
     {
-      MangaReader.Mapping.Environment.Initialize();
-      Settings.Load();
+      Mapping.Environment.Initialize();
+      Services.Converter.Convert(false);
 
-      Session = MangaReader.Mapping.Environment.Session;
+      Session = Mapping.Environment.Session;
     }
 
     [AssemblyCleanup]
@@ -30,6 +23,5 @@ namespace Tests
     {
 
     }
-
   }
 }

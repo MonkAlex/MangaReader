@@ -30,10 +30,15 @@ namespace MangaReader.Mapping
           set Type = 'ec4d4cde-ef54-4b67-af48-1b7909709d5c'");
         setType.UniqueResult();
 
-/*        var hentaiLogin = Environment.Session.CreateSQLQuery(@"update Login
+        var hentaiLogin = Environment.Session.CreateSQLQuery(@"update Login
           set Type = '03ceff67-1472-438a-a90a-07b44f6ffdc4'
           where Id = (select Login_id from MangaSetting where MangaName = 'Hentaichan')");
-        hentaiLogin.UniqueResult();*/
+        hentaiLogin.UniqueResult();
+
+        var groupleLogin = Environment.Session.CreateSQLQuery(@"update Login
+          set Type = '0bbe71b1-16e0-44f4-b7c6-3450e44e9a15'
+          where Id = (select Login_id from MangaSetting where MangaName = 'Readmanga')");
+        groupleLogin.UniqueResult();
       }
     }
 

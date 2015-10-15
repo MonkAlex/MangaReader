@@ -173,6 +173,8 @@ namespace MangaReader
         return "AM";
       if (result.Contains("acomics"))
         return "AC";
+      if (result.Contains("hentaichan"))
+        return "HC";
       return "NA";
     }
 

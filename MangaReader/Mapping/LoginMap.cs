@@ -22,4 +22,12 @@ namespace MangaReader.Mapping
       DiscriminatorValue(Manga.Hentaichan.HentaichanLogin.Type.ToString());
     }
   }
+
+  public class GroupleLoginMap : SubclassMap<Manga.Grouple.GroupleLogin>
+  {
+    public GroupleLoginMap()
+    {
+      DiscriminatorValue(Manga.Grouple.GroupleLogin.Type.ToString());
+    }
+  }
 }

@@ -27,7 +27,7 @@ namespace MangaReader.Manga.Hentaichan
             setting.Login = login;
           }
 
-          login.Login(client);
+          login.DoLogin();
         }
         if (login != null)
         {
@@ -51,10 +51,12 @@ namespace MangaReader.Manga.Hentaichan
         var document = new HtmlDocument();
         document.LoadHtml(Page.GetPage(uri));
         var nameNode = document.DocumentNode.SelectSingleNode("//head/title");
-        const string subString = "Все главы";
-        if (nameNode != null && nameNode.InnerText.Contains(subString))
+        string[] subString = new string[] {"Все главы", "Все части" };
+        if (nameNode != null && subString.Any(s => nameNode.InnerText.Contains(s)))
         {
-          name = nameNode.InnerText.Replace(subString, string.Empty).Trim().TrimEnd('-').Trim();
+          name = subString
+            .Aggregate(nameNode.InnerText, (current, s) => current.Replace(s, string.Empty))
+            .Trim().TrimEnd('-').Trim();
         }
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }

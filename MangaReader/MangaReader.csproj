@@ -133,13 +133,13 @@
     <Compile Include="Account\CookieClient.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Account\Grouple.cs" />
     <Compile Include="Account\Login.cs" />
     <Compile Include="Manga\Acomic\Acomics.cs" />
     <Compile Include="Manga\Acomic\Chapter.cs" />
     <Compile Include="Manga\Acomic\Getter.cs" />
     <Compile Include="Manga\Acomic\MangaPage.cs" />
     <Compile Include="Manga\Chapter.cs" />
+    <Compile Include="Manga\Grouple\GroupleLogin.cs" />
     <Compile Include="Manga\Grouple\MangaPage.cs" />
     <Compile Include="Manga\Hentaichan\Chapter.cs" />
     <Compile Include="Manga\Hentaichan\Getter.cs" />

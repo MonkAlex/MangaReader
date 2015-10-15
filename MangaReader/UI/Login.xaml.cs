@@ -1,12 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Threading;
-using MangaReader.Account;
-using MangaReader.Manga.Grouple;
 using MangaReader.Properties;
 using MangaReader.Services;
 
@@ -19,6 +14,8 @@ namespace MangaReader.UI
   {
     internal MangaSetting Setting { get; set; }
 
+    private bool initialized = false;
+
     public Login(MangaSetting setting)
     {
       InitializeComponent();
@@ -27,7 +24,7 @@ namespace MangaReader.UI
 
     private void Login_click(object sender, RoutedEventArgs e)
     {
-      var logined = Grouple.IsLogined;
+      var logined = Setting.Login.IsLogined;
       if (!logined)
       {
         if (Setting != null)
@@ -36,13 +33,13 @@ namespace MangaReader.UI
           Setting.Login.Password = Password.Password;
           Setting.Save();
         }
-        Grouple.Login();
+        Setting.Login.DoLogin();
       }
       else
-        Grouple.Logout();
-      logined = Grouple.IsLogined;
+        Setting.Login.Logout();
+      logined = Setting.Login.IsLogined;
 
-      this.Bookmarks.ItemsSource = logined ? Grouple.Bookmarks : null;
+      this.Bookmarks.ItemsSource = logined ? Setting.Login.GetBookmarks() : null;
       this.LoginBox.IsEnabled = !logined;
       this.Password.IsEnabled = !logined;
       this.Enter.Content = logined ? Strings.Input_Logout : Strings.Input_Login;
@@ -60,11 +57,14 @@ namespace MangaReader.UI
 
     private void Login_OnLoaded(object sender, RoutedEventArgs e)
     {
+      if (initialized)
+        return;
+
       this.IsEnabled = false;
       
       ThreadStart action = () =>
       {
-        var bookmarks = Grouple.Bookmarks;
+        var bookmarks = Setting.Login.GetBookmarks();
         this.Dispatcher.Invoke(() =>
         {
           this.Bookmarks.ItemsSource = bookmarks;
@@ -73,11 +73,12 @@ namespace MangaReader.UI
             this.LoginBox.Text = Setting.Login.Name;
             this.Password.Password = Setting.Login.Password;
           }
-          this.LoginBox.IsEnabled = !Grouple.IsLogined;
-          this.Password.IsEnabled = !Grouple.IsLogined;
-          this.Enter.Content = Grouple.IsLogined ? Strings.Input_Logout : Strings.Input_Login;
+          this.LoginBox.IsEnabled = !Setting.Login.IsLogined;
+          this.Password.IsEnabled = !Setting.Login.IsLogined;
+          this.Enter.Content = Setting.Login.IsLogined ? Strings.Input_Logout : Strings.Input_Login;
 
           this.IsEnabled = true;
+          this.initialized = true;
         });
       };
 

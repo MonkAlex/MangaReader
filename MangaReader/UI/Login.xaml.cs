@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using MangaReader.Account;
 using MangaReader.Manga.Grouple;
 using MangaReader.Properties;
@@ -56,15 +59,33 @@ namespace MangaReader.UI
 
     private void Login_OnLoaded(object sender, RoutedEventArgs e)
     {
-      this.Bookmarks.ItemsSource = Grouple.Bookmarks;
-      if (this.ReadManga != null)
+      this.IsEnabled = false;
+
+
+      ThreadStart action = () =>
       {
-        this.LoginBox.Text = ReadManga.Login.Name;
-        this.Password.Password = ReadManga.Login.Password;
-      }
-      this.LoginBox.IsEnabled = !Grouple.IsLogined;
-      this.Password.IsEnabled = !Grouple.IsLogined;
-      this.Enter.Content = Grouple.IsLogined ? Strings.Input_Logout : Strings.Input_Login;
+        var bookmarks = Grouple.Bookmarks;
+        this.Dispatcher.Invoke(() =>
+        {
+          this.Bookmarks.ItemsSource = bookmarks;
+          if (this.ReadManga != null)
+          {
+            this.LoginBox.Text = ReadManga.Login.Name;
+            this.Password.Password = ReadManga.Login.Password;
+          }
+          this.LoginBox.IsEnabled = !Grouple.IsLogined;
+          this.Password.IsEnabled = !Grouple.IsLogined;
+          this.Enter.Content = Grouple.IsLogined ? Strings.Input_Logout : Strings.Input_Login;
+
+          this.IsEnabled = true;
+        });
+      };
+
+      Thread _loadThread = null;
+      if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
+        _loadThread = new Thread(action);
+      if (_loadThread.ThreadState == ThreadState.Unstarted)
+        _loadThread.Start();
     }
   }
 }

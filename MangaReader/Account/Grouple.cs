@@ -100,6 +100,9 @@ namespace MangaReader.Account
 
       Login();
 
+      if (!IsLogined)
+        return bookmarks;
+
       using (TimedLock.Lock(ClientLock))
       {
         document.LoadHtml(Page.GetPage(BookmarksUri, Client));

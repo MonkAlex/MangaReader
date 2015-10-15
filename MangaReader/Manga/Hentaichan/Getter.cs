@@ -51,7 +51,7 @@ namespace MangaReader.Manga.Hentaichan
         var document = new HtmlDocument();
         document.LoadHtml(Page.GetPage(uri));
         var nameNode = document.DocumentNode.SelectSingleNode("//head/title");
-        string[] subString = new string[] {"Все главы", "Все части" };
+        string[] subString = {"Все главы", "Все части" };
         if (nameNode != null && subString.Any(s => nameNode.InnerText.Contains(s)))
         {
           name = subString
@@ -69,14 +69,32 @@ namespace MangaReader.Manga.Hentaichan
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(manga.Uri, GetClient()));
-
-        var chapterNodes = document.DocumentNode.SelectNodes("//div[@class=\"related_info\"]");
-        foreach (var node in chapterNodes)
+        var pages = new List<Uri>() {manga.Uri};
+        for (int i = 0; i < pages.Count; i++)
         {
-          var link = node.SelectSingleNode(".//h2//a");
-          var desc = node.SelectSingleNode(".//div[@class=\"related_tag_list\"]");
-          chapters.Add(new Chapter(new Uri(manga.Uri, link.Attributes[0].Value), desc.InnerText));
+          document.LoadHtml(Page.GetPage(pages[i], GetClient()));
+
+          // Посчитать странички.
+          if (i == 0)
+          {
+            var pageNodes = document.DocumentNode.SelectNodes("//div[@id=\"pagination_related\"]//a");
+            if (pageNodes != null)
+            {
+              foreach (var node in pageNodes)
+              {
+                pages.Add(new Uri(manga.Uri + node.Attributes[0].Value));
+              }
+              pages = pages.Distinct().ToList();
+            }
+          }
+
+          var chapterNodes = document.DocumentNode.SelectNodes("//div[@class=\"related_info\"]");
+          foreach (var node in chapterNodes)
+          {
+            var link = node.SelectSingleNode(".//h2//a");
+            var desc = node.SelectSingleNode(".//div[@class=\"related_tag_list\"]");
+            chapters.Add(new Chapter(new Uri(manga.Uri, link.Attributes[0].Value), desc.InnerText));
+          }
         }
       }
       catch (NullReferenceException ex)

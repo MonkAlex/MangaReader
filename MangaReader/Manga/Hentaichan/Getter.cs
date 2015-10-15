@@ -19,7 +19,7 @@ namespace MangaReader.Manga.Hentaichan
       if (setting != null)
       {
         var login = setting.Login as HentaichanLogin;
-        if (login == null || !login.CanLogin)
+        if (login == null || !login.CanLogin || string.IsNullOrWhiteSpace(login.UserId))
         {
           if (login == null)
           {
@@ -29,7 +29,7 @@ namespace MangaReader.Manga.Hentaichan
 
           login.DoLogin();
         }
-        if (login != null)
+        if (!string.IsNullOrWhiteSpace(login.UserId))
         {
           client.Cookie.Add(new Cookie("dle_user_id", login.UserId, "/", ".hentaichan.ru"));
           client.Cookie.Add(new Cookie("dle_password", login.PasswordHash, "/", ".hentaichan.ru"));

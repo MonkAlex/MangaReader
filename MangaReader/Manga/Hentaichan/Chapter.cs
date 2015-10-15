@@ -20,7 +20,9 @@ namespace MangaReader.Manga.Hentaichan
     public Chapter(Uri uri) 
       : base(uri)
     {
-      this.Number = Convert.ToInt32(Regex.Match(uri.OriginalString, @"/*[0-9]+", RegexOptions.RightToLeft).Value);
+      var fromUri = Regex.Match(uri.OriginalString, @"/*(\d+\.\d+|\d+)", RegexOptions.RightToLeft)
+        .Groups[1].Value.Replace(".", string.Empty);
+      this.Number = Convert.ToInt32(fromUri);
     }
   }
 }

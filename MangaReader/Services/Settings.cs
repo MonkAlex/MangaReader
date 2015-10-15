@@ -84,6 +84,7 @@ namespace MangaReader.Services
           {
             var query = Mapping.Environment.Session.Query<MangaSetting>().ToList();
             mangaSettings = CreateDefaultMangaSettings(query);
+            Save();
           }
           else
           {
@@ -169,8 +170,7 @@ namespace MangaReader.Services
           MangaName = type.Name,
           DefaultCompression = Compression.CompressionMode.Manga
         };
-
-        setting.Save();
+        
         query.Add(setting);
       }
       return query;
@@ -184,11 +184,10 @@ namespace MangaReader.Services
 
       try
       {
-        var query = Mapping.Environment.Session.Query<MangaSetting>().ToList();
         if (settings[3] is object[])
         {
           var setting = settings[3] as object[];
-          if (query.FirstOrDefault(a => a.Manga == Readmanga.Type) == null)
+          if (MangaSettings.FirstOrDefault(a => a.Manga == Readmanga.Type) == null)
             new MangaSetting() 
             { 
               Folder = setting[0] as string, 
@@ -196,7 +195,7 @@ namespace MangaReader.Services
               MangaName = "Readmanga", 
               DefaultCompression = Compression.CompressionMode.Volume
             }.Save();
-          if (query.FirstOrDefault(a => a.Manga == Acomics.Type) == null)
+          if (MangaSettings.FirstOrDefault(a => a.Manga == Acomics.Type) == null)
             new MangaSetting() 
             { 
               Folder = setting[1] as string, 
@@ -206,10 +205,9 @@ namespace MangaReader.Services
             }.Save();
         }
         if (settings[1] is bool)
-          query.ForEach(ms => ms.OnlyUpdate = (bool)settings[1]);
+          MangaSettings.ForEach(ms => ms.OnlyUpdate = (bool)settings[1]);
         if (settings[4] is bool)
-          query.ForEach(ms => ms.CompressManga = (bool)settings[4]);
-        query.ForEach(ms => ms.Save());
+          MangaSettings.ForEach(ms => ms.CompressManga = (bool)settings[4]);
         Serializer<object[]>.Save(SettingsPath, settings);
       }
       catch (Exception ex)

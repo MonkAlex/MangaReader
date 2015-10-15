@@ -30,9 +30,9 @@ namespace MangaReader.Manga.Acomic
       {
         var document = new HtmlDocument();
         document.LoadHtml(Page.GetPage(new Uri(uri.OriginalString + @"/about"), Getter.GetAdultClient()));
-        var nameNode = document.DocumentNode.SelectSingleNode("//header[@class=\"serial\"]//img");
-        if (nameNode != null && nameNode.Attributes.Count > 1)
-          name = nameNode.Attributes[1].Value;
+        var nameNode = document.DocumentNode.SelectSingleNode("//head//meta[@property=\"og:title\"]");
+        if (nameNode != null && nameNode.Attributes.Any(a => Equals(a.Name, "content")))
+          name = nameNode.Attributes.Single(a => Equals(a.Name, "content")).Value;
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
       return WebUtility.HtmlDecode(name);

@@ -35,6 +35,7 @@ namespace MangaReader.Mapping
   {
     public AcomicsLoginMap()
     {
+      Map(x => x.PasswordHash).Not.LazyLoad();
       DiscriminatorValue(Manga.Acomic.AcomicsLogin.Type.ToString());
     }
   }

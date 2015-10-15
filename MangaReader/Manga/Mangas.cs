@@ -116,7 +116,7 @@ namespace MangaReader.Manga
       get
       {
         if (Mapping.Environment.Initialized)
-          return Settings.MangaSettings.SingleOrDefault(s => Equals(s.Manga, this.GetType().MangaType()));
+          return Settings.MangaSettings.SingleOrDefault(s => Equals(s.Manga, this.GetType().TypeProperty()));
         throw new Exception("Mappings not initialized.");
       }
     }
@@ -253,7 +253,7 @@ namespace MangaReader.Manga
 
     public virtual string DownloadFolder
     {
-      get { return Settings.MangaSettings.Single(f => f.Manga == this.GetType().MangaType()).Folder; }
+      get { return Settings.MangaSettings.Single(f => f.Manga == this.GetType().TypeProperty()).Folder; }
       set { }
     }
 

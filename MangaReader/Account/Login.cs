@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using MangaReader.Manga;
 using MangaReader.Services;
 
 namespace MangaReader.Account
 {
-  public class Login : Entity.Entity
+  public abstract class Login : Entity.Entity
   {
-    public static Guid Type { get { return Guid.Parse("EC4D4CDE-EF54-4B67-AF48-1B7909709D5C"); } }
+    public static Guid Type { get { return Guid.Empty; } }
+
+    public static Guid Manga { get { return Guid.Empty; } }
 
     public virtual bool IsLogined { get; set; }
 
@@ -57,7 +61,22 @@ namespace MangaReader.Account
       return new List<Mangas>();
     }
 
-    public Login()
+    public static Login Create(Guid manga)
+    {
+      var baseClass = typeof(Login);
+      var types = Assembly.GetAssembly(baseClass).GetTypes()
+        .Where(type => type.IsSubclassOf(baseClass));
+
+      Login login = null;
+      foreach (var type in types)
+      {
+        if (Equals(type.MangaProperty(), manga))
+          login = (Login)Activator.CreateInstance(type);
+      }
+      return login;
+    }
+
+    protected Login()
     {
       this.ClientLock = new object();
     }

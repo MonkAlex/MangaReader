@@ -59,7 +59,7 @@ namespace MangaReader.UI.MainForm
       if (LibraryFilter.OnlyUpdate && !manga.NeedUpdate)
         return false;
 
-      return LibraryFilter.AllowedTypes.Any(t => (t.Value as MangaSetting).Manga == manga.GetType().MangaType()) &&
+      return LibraryFilter.AllowedTypes.Any(t => (t.Value as MangaSetting).Manga == manga.GetType().TypeProperty()) &&
         manga.Name.ToLowerInvariant().Contains(LibraryFilter.Name.ToLowerInvariant());
     }
 

@@ -23,7 +23,7 @@ namespace MangaReader.Manga.Hentaichan
     {
       return base.IsValid() && !Library.LibraryMangas.Any(m => !Equals(m, this) &&
                                                                Equals(m.ServerName, this.ServerName) &&
-                                                               Equals(m.GetType().MangaType(), Type));
+                                                               Equals(m.GetType().TypeProperty(), Type));
     }
 
     protected override void UpdateContent()

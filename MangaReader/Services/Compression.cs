@@ -31,7 +31,7 @@ namespace MangaReader.Services
       CompressionMode? mode = null;
       if (Mapping.Environment.Initialized)
       {
-        var setting = Settings.MangaSettings.SingleOrDefault(s => Equals(s.Manga, manga.GetType().MangaType()));
+        var setting = Settings.MangaSettings.SingleOrDefault(s => Equals(s.Manga, manga.GetType().TypeProperty()));
         if (setting != null)
           mode = setting.DefaultCompression;
       }

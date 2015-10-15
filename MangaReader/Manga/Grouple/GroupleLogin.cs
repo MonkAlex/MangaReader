@@ -14,6 +14,8 @@ namespace MangaReader.Manga.Grouple
   {
     public new static Guid Type { get { return Guid.Parse("0BBE71B1-16E0-44F4-B7C6-3450E44E9A15"); } }
 
+    public new static Guid Manga { get { return Readmanga.Type; } }
+
     public override void DoLogin()
     {
       base.DoLogin();

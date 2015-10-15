@@ -17,6 +17,8 @@ namespace MangaReader.Manga.Hentaichan
   {
     public new static Guid Type { get { return Guid.Parse("03CEFF67-1472-438A-A90A-07B44F6FFDC4"); } }
 
+    public new static Guid Manga { get { return Hentaichan.Type; } }
+
     public virtual string UserId { get; set; }
 
     public virtual string PasswordHash

@@ -23,7 +23,7 @@ namespace MangaReader.Services
 
     public virtual Login Login
     {
-      get { return login ?? (login = new Login()); }
+      get { return login ?? (login = Login.Create(this.Manga)); }
       set { login = value; }
     }
 

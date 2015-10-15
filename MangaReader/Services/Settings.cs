@@ -160,13 +160,13 @@ namespace MangaReader.Services
 
       foreach (var type in types)
       {
-        if (query.Any(s => Equals(s.Manga, type.MangaType())))
+        if (query.Any(s => Equals(s.Manga, type.TypeProperty())))
           continue;
 
         var setting = new MangaSetting
         {
           Folder = Settings.DownloadFolder,
-          Manga = type.MangaType(),
+          Manga = type.TypeProperty(),
           MangaName = type.Name,
           DefaultCompression = Compression.CompressionMode.Manga
         };

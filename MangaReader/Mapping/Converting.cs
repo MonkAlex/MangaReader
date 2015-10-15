@@ -27,7 +27,8 @@ namespace MangaReader.Mapping
       if (version.CompareTo(Settings.DatabaseVersion) > 0 && process.Version.CompareTo(version) >= 0)
       {
         var setType = Environment.Session.CreateSQLQuery(@"update Login 
-          set Type = 'ec4d4cde-ef54-4b67-af48-1b7909709d5c'");
+          set Type = 'f526cd85-7846-4f32-85a7-c57e3983dfb1'
+          where Id = (select Login_id from MangaSetting where MangaName = 'Acomics')");
         setType.UniqueResult();
 
         var hentaiLogin = Environment.Session.CreateSQLQuery(@"update Login

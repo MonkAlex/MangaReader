@@ -98,12 +98,12 @@ namespace MangaReader.Manga.Hentaichan
         var document = new HtmlDocument();
         document.LoadHtml(Page.GetPage(new Uri(chapter.Uri.OriginalString.Replace("/manga/", "/online/")), GetClient()));
 
+        var i = 0;
         var imgs = Regex.Match(document.DocumentNode.OuterHtml, @"""(fullimg.*)", RegexOptions.IgnoreCase).Groups[1].Value.Remove(0, 9);
         foreach (Match match in Regex.Matches(imgs, @"""(.*?)"","))
         {
-          pages.Add(new MangaPage(chapter.Uri, new Uri(match.Groups[1].Value)));
+          pages.Add(new MangaPage(chapter.Uri, new Uri(match.Groups[1].Value), i++));
         }
-
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
 

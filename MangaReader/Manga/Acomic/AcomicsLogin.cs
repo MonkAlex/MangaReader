@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using MangaReader.Account;
 using MangaReader.Services;
@@ -74,7 +73,7 @@ namespace MangaReader.Manga.Acomic
 
       foreach (var node in nodes)
       {
-        var name = node.ChildNodes.Single().InnerText;
+        var name = WebUtility.HtmlDecode(node.ChildNodes.Single().InnerText);
         var url = node.Attributes.Single().Value;
         var manga = new Acomics {Uri = new Uri(this.MainUri, url), Name = name};
         bookmarks.Add(manga);

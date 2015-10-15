@@ -8,7 +8,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using MangaReader.Account;
-using MangaReader.Manga.Grouple;
 using MangaReader.Services;
 
 namespace MangaReader.Manga.Hentaichan
@@ -88,28 +87,46 @@ namespace MangaReader.Manga.Hentaichan
       if (!IsLogined)
         return bookmarks;
 
-      using (TimedLock.Lock(ClientLock))
+      var pages = new List<Uri>() {BookmarksUri};
+
+      for (int i = 0; i < pages.Count; i++)
       {
-        document.LoadHtml(Page.GetPage(BookmarksUri, Client));
-      }
+        using (TimedLock.Lock(ClientLock))
+        {
+          document.LoadHtml(Page.GetPage(pages[i], Client));
+        }
 
-      var nodes = document.DocumentNode
-          .SelectNodes("//div[@class=\"manga_row1\"]");
+        if (i == 0)
+        {
+          var pageNodes = document.DocumentNode.SelectNodes("//div[@class=\"navigation\"]//a");
+          if (pageNodes != null)
+          {
+            foreach (var node in pageNodes)
+            {
+              pages.Add(new Uri(node.Attributes[0].Value));
+            }
+            pages = pages.Distinct().ToList();
+          }
+        }
 
-      if (nodes == null)
-        return bookmarks;
+        var nodes = document.DocumentNode.SelectNodes("//div[@class=\"manga_row1\"]");
 
-      foreach (var html in nodes.Select(n => n.OuterHtml))
-      {
-        var loadedBookmarks = Regex
-            .Matches(html, "href=\"(.*?)\"", RegexOptions.IgnoreCase)
-            .OfType<Group>()
-            .Select(g => g.Captures[0])
-            .OfType<Match>()
-            .Select(m => new Uri(m.Groups[1].Value.Replace("/manga/", "/related/")))
-            .Select(s => new Hentaichan { Uri = s, Name = Getter.GetMangaName(s) })
-            .ToList();
-        bookmarks.AddRange(loadedBookmarks);
+        if (nodes == null)
+          return bookmarks;
+
+        foreach (var html in nodes.Select(n => n.OuterHtml))
+        {
+          var loadedBookmarks = Regex
+              .Matches(html, "href=\"(.*?)\"", RegexOptions.IgnoreCase)
+              .OfType<Group>()
+              .Select(g => g.Captures[0])
+              .OfType<Match>()
+              .Select(m => new Uri(m.Groups[1].Value.Replace("/manga/", "/related/")))
+              .Select(s => new Hentaichan { Uri = s, Name = Getter.GetMangaName(s) })
+              .Where(m => !string.IsNullOrWhiteSpace(m.Name))
+              .ToList();
+          bookmarks.AddRange(loadedBookmarks);
+        }
       }
 
       return bookmarks;

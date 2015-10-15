@@ -20,11 +20,11 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ui:Login Grid.Row="0"
-                  Grid.Column="0"
-                  Grid.RowSpan="3"
-                  Grid.ColumnSpan="2"
-                  x:Name="LoginBookmarks"/>
+        <TabControl Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.RowSpan="3"
+                    Grid.ColumnSpan="2"
+                    x:Name="BookmarksTabs"/>
         <Label Grid.Column="0"
                Grid.Row="3">
             <TextBlock Text="{x:Static properties:Strings.Input_Text}" 

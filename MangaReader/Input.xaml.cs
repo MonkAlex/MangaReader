@@ -1,4 +1,8 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using MangaReader.Services;
+using MangaReader.UI;
 
 namespace MangaReader
 {
@@ -11,6 +15,10 @@ namespace MangaReader
     {
       InitializeComponent();
       Result.Focus();
+      foreach (var setting in Settings.MangaSettings)
+      {
+        this.BookmarksTabs.Items.Add(new TabItem() {Content = new Login(setting), Header = setting.MangaName});
+      }
     }
 
     public string ResponseText

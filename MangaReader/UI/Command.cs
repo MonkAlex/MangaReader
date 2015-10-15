@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using MangaReader.Manga;
 using MangaReader.Properties;
@@ -115,7 +116,12 @@ namespace MangaReader.UI
       {
         if (!string.IsNullOrWhiteSpace(db.Result.Text))
           Library.Add(db.Result.Text);
-        foreach (var manga in db.LoginBookmarks.Bookmarks.SelectedItems.OfType<Mangas>())
+        var dialogMangas = db.BookmarksTabs.Items.SourceCollection.Cast<TabItem>()
+            .Select(t => t.Content)
+            .Cast<Login>()
+            .SelectMany(l => l.Bookmarks.SelectedItems.OfType<Mangas>())
+            .Distinct();
+        foreach (var manga in dialogMangas)
           Library.Add(manga.Uri);
       }
       catch (Exception ex)

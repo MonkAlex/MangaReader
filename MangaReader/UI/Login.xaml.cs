@@ -17,11 +17,12 @@ namespace MangaReader.UI
   /// </summary>
   public partial class Login : UserControl
   {
-    private MangaSetting ReadManga = Settings.MangaSettings.FirstOrDefault(x => x.Manga == Readmanga.Type);
+    internal MangaSetting Setting { get; set; }
 
-    public Login()
+    public Login(MangaSetting setting)
     {
       InitializeComponent();
+      this.Setting = setting;
     }
 
     private void Login_click(object sender, RoutedEventArgs e)
@@ -29,11 +30,11 @@ namespace MangaReader.UI
       var logined = Grouple.IsLogined;
       if (!logined)
       {
-        if (ReadManga != null)
+        if (Setting != null)
         {
-          ReadManga.Login.Name = LoginBox.Text;
-          ReadManga.Login.Password = Password.Password;
-          ReadManga.Save();
+          Setting.Login.Name = LoginBox.Text;
+          Setting.Login.Password = Password.Password;
+          Setting.Save();
         }
         Grouple.Login();
       }
@@ -60,18 +61,17 @@ namespace MangaReader.UI
     private void Login_OnLoaded(object sender, RoutedEventArgs e)
     {
       this.IsEnabled = false;
-
-
+      
       ThreadStart action = () =>
       {
         var bookmarks = Grouple.Bookmarks;
         this.Dispatcher.Invoke(() =>
         {
           this.Bookmarks.ItemsSource = bookmarks;
-          if (this.ReadManga != null)
+          if (this.Setting != null)
           {
-            this.LoginBox.Text = ReadManga.Login.Name;
-            this.Password.Password = ReadManga.Login.Password;
+            this.LoginBox.Text = Setting.Login.Name;
+            this.Password.Password = Setting.Login.Password;
           }
           this.LoginBox.IsEnabled = !Grouple.IsLogined;
           this.Password.IsEnabled = !Grouple.IsLogined;

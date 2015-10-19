@@ -90,6 +90,9 @@
       <HintPath>Library\Iesi.Collections.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Library\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate">
       <HintPath>Library\NHibernate.dll</HintPath>
       <Private>False</Private>
@@ -330,7 +333,9 @@
     <EmbeddedResource Include="Library\NHibernate.dll" />
     <EmbeddedResource Include="Library\System.Data.SQLite.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Library\Newtonsoft.Json.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

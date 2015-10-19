@@ -61,8 +61,7 @@ namespace MangaReader.Services.Config
       new JsonSerializerSettings
       {
         Formatting = Formatting.Indented,
-        //ObjectCreationHandling = ObjectCreationHandling.Replace,
-        Converters = new List<JsonConverter> { new StringEnumConverter() }
+        Converters = new List<JsonConverter> { new StringEnumConverter(), new VersionConverter() }
       };
 
       ConfigStorage storage = null;

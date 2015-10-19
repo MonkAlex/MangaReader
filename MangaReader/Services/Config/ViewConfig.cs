@@ -5,7 +5,15 @@ namespace MangaReader.Services.Config
 {
   public class ViewConfig
   {
+    /// <summary>
+    /// Размеры основного окна и его положение.
+    /// </summary>
     public WindowStates WindowStates { get; set; }
+
+    /// <summary>
+    /// Панель фильтрации.
+    /// </summary>
+    public LibraryFilter LibraryFilter { get; set; }
 
     public void UpdateWindowState(BaseForm main)
     {
@@ -40,6 +48,7 @@ namespace MangaReader.Services.Config
     public ViewConfig()
     {
       this.WindowStates = new WindowStates();
+      this.LibraryFilter = new LibraryFilter();
     }
   }
 

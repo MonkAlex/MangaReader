@@ -317,35 +317,4 @@ namespace MangaReader.Services
     #endregion
 
   }
-
-  public static class LibraryFilter
-  {
-    public static Dictionary<string, object> AllowedTypes 
-    {
-      get { return _allowedTypes; }
-      set { _allowedTypes = value; }
-    }
-
-    public static Dictionary<string, object> AllTypes { get { return _allTypes; } }
-
-    public static readonly Dictionary<string, object> _allTypes = ConfigStorage.Instance.DatabaseConfig.MangaSettings
-      .Select(s => new { s.MangaName, s })
-      .OrderBy(a => a.MangaName)
-      .ToDictionary(a => a.MangaName, a => a.s as object);
-
-    private static Dictionary<string, object> _allowedTypes = new Dictionary<string, object>(AllTypes);
-
-    public static bool Uncompleted { get; set; }
-
-    public static bool OnlyUpdate { get; set; }
-
-    public static string Name { get; set; }
-
-    public static SortDescription SortDescription { get; set; }
-
-    static LibraryFilter()
-    {
-      Name = string.Empty;
-    }
-  }
 }

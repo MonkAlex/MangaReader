@@ -178,6 +178,7 @@
     <Compile Include="Services\Config\ConfigStorage.cs" />
     <Compile Include="Services\Config\Converter.cs" />
     <Compile Include="Services\Config\DatabaseConfig.cs" />
+    <Compile Include="Services\Config\LibraryFilter.cs" />
     <Compile Include="Services\Config\ViewConfig.cs" />
     <Compile Include="Services\Convert.cs" />
     <Compile Include="Services\Converting.xaml.cs">

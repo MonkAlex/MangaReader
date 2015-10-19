@@ -8,6 +8,7 @@ using System.Windows.Input;
 using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services;
+using MangaReader.Services.Config;
 using MangaReader.UI.MainForm;
 using Ookii.Dialogs.Wpf;
 
@@ -160,7 +161,7 @@ namespace MangaReader.UI
       var baseForm = sender as BaseForm;
       if (Library.IsAvaible)
       {
-        Library.ThreadAction(() => Library.Update(baseForm.View.Cast<Mangas>(), LibraryFilter.SortDescription));
+        Library.ThreadAction(() => Library.Update(baseForm.View.Cast<Mangas>(), baseForm.LibraryFilter.SortDescription));
       }
     }
 
@@ -168,7 +169,7 @@ namespace MangaReader.UI
     {
       if (Library.IsAvaible)
       {
-        Library.ThreadAction(() => Library.Update(Library.LibraryMangas, LibraryFilter.SortDescription));
+        Library.ThreadAction(() => Library.Update(Library.LibraryMangas, ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
       }
     }
 

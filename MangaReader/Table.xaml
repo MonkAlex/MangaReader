@@ -2,7 +2,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local ="clr-namespace:MangaReader"
-        xmlns:tb="clr-namespace:Hardcodet.Wpf.TaskbarNotification;assembly=Hardcodet.Wpf.TaskbarNotification"
         xmlns:ui="clr-namespace:MangaReader.UI"
         xmlns:base="clr-namespace:MangaReader.UI.MainForm"
         xmlns:resx="clr-namespace:MangaReader.Properties"
@@ -24,7 +23,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0" DataContext="{Binding LibraryFilter}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -32,14 +31,14 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <ui:MultiSelectComboBox x:Name="MangaType" Grid.Column="3" SelectionChanged="FilterChanged"
-                            ItemsSource="{Binding Path=(services:LibraryFilter.AllTypes), Mode=OneTime}"
-                            SelectedItems="{Binding Path=(services:LibraryFilter.AllowedTypes), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            ItemsSource="{Binding Path=AllTypes, Mode=OneTime}"
+                            SelectedItems="{Binding Path=AllowedTypes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <CheckBox x:Name="Uncompleted" Content="Незавершенная" Grid.Column="2" Click="FilterChanged"
-              IsChecked="{Binding Path=(services:LibraryFilter.Uncompleted), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+              IsChecked="{Binding Path=Uncompleted, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <CheckBox x:Name="OnlyUpdate" Content="Обновляемая" Grid.Column="1" Click="FilterChanged"
-              IsChecked="{Binding Path=(services:LibraryFilter.OnlyUpdate), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+              IsChecked="{Binding Path=OnlyUpdate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBox x:Name="NameFilter" TextWrapping="Wrap" Grid.Column="0" TextChanged="FilterChanged"
-             Text="{Binding Path=(services:LibraryFilter.Name), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+             Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
         <ListView x:Name="FormLibrary" 
               Grid.Row="1"

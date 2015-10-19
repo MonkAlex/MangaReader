@@ -4,7 +4,6 @@
         xmlns:resx="clr-namespace:MangaReader.Properties"
         xmlns:base="clr-namespace:MangaReader.UI.MainForm"
         xmlns:ui="clr-namespace:MangaReader.UI"
-        xmlns:services="clr-namespace:MangaReader.Services"
         Icon="../../Icons/main.ico"
         Title="{x:Static resx:Strings.Title}"  Height="350" Width="525">
     <Grid>
@@ -32,9 +31,9 @@
             </MenuItem>
         </Menu>
 
-        <ui:MultiSelectComboBox x:Name="MangaType" Grid.Row="1" SelectionChanged="FilterChanged"
-                            ItemsSource="{Binding Path=(services:LibraryFilter.AllTypes), Mode=OneTime}"
-                            SelectedItems="{Binding Path=(services:LibraryFilter.AllowedTypes), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <ui:MultiSelectComboBox x:Name="MangaType" Grid.Row="1" SelectionChanged="FilterChanged" DataContext="{Binding LibraryFilter}"
+                            ItemsSource="{Binding Path=AllTypes, Mode=OneTime}"
+                            SelectedItems="{Binding Path=AllowedTypes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <base:BlazardManga x:Name="BlazardManga" Margin="5" Grid.Row="2"/>
     </Grid>
 </base:BaseForm>

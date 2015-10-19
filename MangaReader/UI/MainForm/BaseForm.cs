@@ -21,6 +21,8 @@ namespace MangaReader.UI.MainForm
 
     public ListCollectionView View { get; set; }
 
+    public LibraryFilter LibraryFilter { get; set; }
+
     public BaseForm()
     {
       this.DataContext = this;
@@ -41,11 +43,14 @@ namespace MangaReader.UI.MainForm
         Application.Current.Shutdown(0);
       };
 
+      LibraryFilter = ConfigStorage.Instance.ViewConfig.LibraryFilter;
+
       View = new ListCollectionView(Library.LibraryMangas)
       {
         Filter = Filter,
         CustomSort = new MangasComparer()
       };
+
     }
 
     internal virtual bool Filter(object o)

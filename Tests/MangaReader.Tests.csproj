@@ -49,6 +49,9 @@
     <Reference Include="Iesi.Collections">
       <HintPath>..\MangaReader\Library\Iesi.Collections.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\MangaReader\Library\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\MangaReader\Library\NHibernate.dll</HintPath>
     </Reference>

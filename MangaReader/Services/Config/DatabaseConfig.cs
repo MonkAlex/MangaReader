@@ -6,17 +6,17 @@ using NHibernate.Linq;
 
 namespace MangaReader.Services.Config
 {
-  public class DatabaseConfig
+  public class DatabaseConfig : Entity.Entity
   {
     /// <summary>
     /// Версия базы данных.
     /// </summary>
-    public Version Version { get; set; }
+    public virtual Version Version { get; set; }
 
     /// <summary>
     /// Настройки разных типов манги.
     /// </summary>
-    internal List<MangaSetting> MangaSettings
+    protected internal virtual List<MangaSetting> MangaSettings
     {
       get
       {
@@ -26,7 +26,9 @@ namespace MangaReader.Services.Config
           {
             var query = Mapping.Environment.Session.Query<MangaSetting>().ToList();
             mangaSettings = CreateDefaultMangaSettings(query);
-            ConfigStorage.Instance.Save();
+
+            if (mangaSettings.Except(query).Any())
+              this.mangaSettings.ForEach(s => s.Save());
           }
           else
           {
@@ -39,7 +41,7 @@ namespace MangaReader.Services.Config
       set { }
     }
 
-    private static List<MangaSetting> mangaSettings;
+    private List<MangaSetting> mangaSettings;
 
     /// <summary>
     /// Создать дефолтные настройки для новых типов.

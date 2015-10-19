@@ -161,6 +161,7 @@
     <Compile Include="Manga\MangasComparer.cs" />
     <Compile Include="Manga\Volume.cs" />
     <Compile Include="Mapping\Converting.cs" />
+    <Compile Include="Mapping\DatabaseConfigMap.cs" />
     <Compile Include="Mapping\Environment.cs" />
     <Compile Include="Mapping\LoginMap.cs" />
     <Compile Include="Mapping\MangaSettingMap.cs" />

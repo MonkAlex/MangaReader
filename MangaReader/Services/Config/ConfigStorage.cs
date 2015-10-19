@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using NHibernate.Linq;
 
 namespace MangaReader.Services.Config
 {
@@ -35,7 +36,23 @@ namespace MangaReader.Services.Config
     /// <summary>
     /// Настройки, зависящие от базы данных.
     /// </summary>
-    public DatabaseConfig DatabaseConfig { get; set; }
+    internal DatabaseConfig DatabaseConfig
+    {
+      get
+      {
+        if (databaseConfig == null)
+        {
+          if (Mapping.Environment.Initialized)
+            databaseConfig = Mapping.Environment.Session.Query<DatabaseConfig>().SingleOrCreate();
+          else
+            Log.Exception("Запрос DatabaseConfig до инициализации соединения с базой.");
+        }
+        return databaseConfig;
+      }
+      set { }
+    }
+
+    private DatabaseConfig databaseConfig;
 
     /// <summary>
     /// Папка программы.
@@ -85,6 +102,7 @@ namespace MangaReader.Services.Config
 
     public void Save()
     {
+      this.DatabaseConfig.Save();
       this.DatabaseConfig.MangaSettings.ForEach(s => s.Save());
       var str = JsonConvert.SerializeObject(this);
       File.WriteAllText(SettingsPath, str, Encoding.UTF8);
@@ -94,7 +112,6 @@ namespace MangaReader.Services.Config
     {
       this.AppConfig = new AppConfig();
       this.ViewConfig = new ViewConfig();
-      this.DatabaseConfig = new DatabaseConfig();
     }
   }
 }

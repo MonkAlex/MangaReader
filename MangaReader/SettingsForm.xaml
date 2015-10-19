@@ -1,9 +1,9 @@
 ﻿<Window x:Class="MangaReader.SettingsForm"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:mangaReader="clr-namespace:MangaReader.Services"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:resx="clr-namespace:MangaReader.Properties"
+        xmlns:config="clr-namespace:MangaReader.Services.Config"
         WindowStartupLocation="CenterOwner"
         Icon="Icons/main.ico"
         Title="{x:Static resx:Strings.Library_Action_Settings}"
@@ -15,7 +15,7 @@
                     MethodName="GetValues" 
                     ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="mangaReader:Settings+Languages" />
+                <x:Type TypeName="config:Languages" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Window.Resources>

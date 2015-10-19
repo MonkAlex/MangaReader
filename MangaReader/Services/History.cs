@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using NHibernate.Linq;
 using MangaReader.Manga;
+using MangaReader.Services.Config;
 
 namespace MangaReader.Services
 {
@@ -12,7 +13,7 @@ namespace MangaReader.Services
     /// <summary>
     /// Ссылка на файл лога.
     /// </summary>
-    private static readonly string HistoryFile = Settings.WorkFolder + @".\history";
+    private static readonly string HistoryFile = ConfigStorage.WorkFolder + @".\history";
 
     /// <summary>
     /// Добавление записи в историю.

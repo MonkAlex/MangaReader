@@ -11,6 +11,7 @@ using System.Windows.Threading;
 using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services;
+using MangaReader.Services.Config;
 using MangaReader.UI;
 using MangaReader.UI.MainForm;
 
@@ -30,7 +31,7 @@ namespace MangaReader
     public Table()
     {
       InitializeComponent();
-      Settings.UpdateWindowsState(this);
+      ConfigStorage.Instance.ViewConfig.UpdateWindowState(this);
       _timer = new DispatcherTimer(new TimeSpan(0, 0, 1),
           DispatcherPriority.Background,
           TimerTick,
@@ -83,8 +84,8 @@ namespace MangaReader
       this.TextBlock.Text = Library.Status;
       UpdateButton.Content = Library.IsAvaible ? Strings.Manga_Action_Update : (Library.IsPaused ? Strings.Manga_Action_Restore : Strings.Manga_Action_Pause);
 
-      if (Library.IsAvaible && Settings.AutoUpdateInHours > 0 &&
-        DateTime.Now > Settings.LastUpdate.AddHours(Settings.AutoUpdateInHours))
+      if (Library.IsAvaible && ConfigStorage.Instance.AppConfig.AutoUpdateInHours > 0 &&
+        DateTime.Now > ConfigStorage.Instance.AppConfig.LastUpdate.AddHours(ConfigStorage.Instance.AppConfig.AutoUpdateInHours))
       {
         Log.Add(Strings.AutoUpdate);
         Update_click(this, new RoutedEventArgs());
@@ -131,7 +132,7 @@ namespace MangaReader
 
     private void Window_OnClosing(object sender, CancelEventArgs e)
     {
-      Settings.WindowsState = new object[] { this.Top, this.Left, this.Width, this.Height, this.WindowState };
+      ConfigStorage.Instance.ViewConfig.SaveWindowState(this);
     }
 
     private void ListView_MouseDown(object sender, MouseButtonEventArgs e)
@@ -145,7 +146,7 @@ namespace MangaReader
 
     private void Table_OnStateChanged(object sender, EventArgs e)
     {
-      if (Settings.MinimizeToTray && this.WindowState == WindowState.Minimized)
+      if (ConfigStorage.Instance.AppConfig.MinimizeToTray && this.WindowState == WindowState.Minimized)
         this.Hide();
     }
 

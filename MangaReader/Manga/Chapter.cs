@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Services;
+using MangaReader.Services.Config;
 
 namespace MangaReader.Manga
 {
@@ -65,7 +66,7 @@ namespace MangaReader.Manga
       private set { this.folderPrefix = value; }
     }
 
-    private string folderPrefix = Settings.ChapterPrefix;
+    private string folderPrefix = AppConfig.ChapterPrefix;
 
     public event EventHandler<Mangas> DownloadProgressChanged;
 

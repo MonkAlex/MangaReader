@@ -8,6 +8,7 @@ using Hardcodet.Wpf.TaskbarNotification;
 using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services;
+using MangaReader.Services.Config;
 
 namespace MangaReader.UI.MainForm
 {
@@ -91,7 +92,7 @@ namespace MangaReader.UI.MainForm
 
     private void NotifyIcon_OnTrayMouseDoubleClick(object sender, RoutedEventArgs e)
     {
-      if (Settings.MinimizeToTray)
+      if (ConfigStorage.Instance.AppConfig.MinimizeToTray)
       {
         this.Show();
         this.WindowState = WindowState.Normal;

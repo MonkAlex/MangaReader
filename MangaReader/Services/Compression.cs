@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using MangaReader.Services.Config;
 
 namespace MangaReader.Services
 {
@@ -31,7 +32,7 @@ namespace MangaReader.Services
       CompressionMode? mode = null;
       if (Mapping.Environment.Initialized)
       {
-        var setting = Settings.MangaSettings.SingleOrDefault(s => Equals(s.Manga, manga.GetType().TypeProperty()));
+        var setting = manga.Setting;
         if (setting != null)
           mode = setting.DefaultCompression;
       }
@@ -55,7 +56,7 @@ namespace MangaReader.Services
         return files;
 
       // Нельзя сжимать папку со всей мангой.
-      if (message.Trim(Path.DirectorySeparatorChar) == Settings.DownloadFolder.Trim(Path.DirectorySeparatorChar))
+      if (message.Trim(Path.DirectorySeparatorChar) == AppConfig.DownloadFolder.Trim(Path.DirectorySeparatorChar))
         return files;
 
       Log.Add(string.Format("Compression: Start {0}.", message));
@@ -88,7 +89,7 @@ namespace MangaReader.Services
         return files;
 
       // Нельзя сжимать папку со всей мангой.
-      if (message.Trim(Path.DirectorySeparatorChar) == Settings.DownloadFolder.Trim(Path.DirectorySeparatorChar))
+      if (message.Trim(Path.DirectorySeparatorChar) == AppConfig.DownloadFolder.Trim(Path.DirectorySeparatorChar))
         return files;
 
       Log.Add(string.Format("Compression: Start {0}.", message));
@@ -116,7 +117,7 @@ namespace MangaReader.Services
         return files;
 
       // Нельзя сжимать папку со всей мангой.
-      if (message.Trim(Path.DirectorySeparatorChar) == Settings.DownloadFolder.Trim(Path.DirectorySeparatorChar))
+      if (message.Trim(Path.DirectorySeparatorChar) == AppConfig.DownloadFolder.Trim(Path.DirectorySeparatorChar))
         return files;
 
       Log.Add(string.Format("Compression: Start {0}.", message));

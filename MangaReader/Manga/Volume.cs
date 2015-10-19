@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using MangaReader.Services;
+using MangaReader.Services.Config;
 
 namespace MangaReader.Manga
 {
@@ -43,7 +44,7 @@ namespace MangaReader.Manga
 
     public virtual bool OnlyUpdate { get; set; }
 
-    private string folderPrefix = Settings.VolumePrefix;
+    private string folderPrefix = AppConfig.VolumePrefix;
 
     public event EventHandler<Mangas> DownloadProgressChanged;
 

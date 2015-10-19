@@ -1,20 +1,17 @@
 ﻿using System.Data.SQLite;
 using System.IO;
-using System.Linq;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
-using MangaReader.Services;
-using NHibernate.Linq;
-using Settings = MangaReader.Services.Settings;
+using MangaReader.Services.Config;
 
 namespace MangaReader.Mapping
 {
   public class Environment
   {
-    private const string DbFile = "\\storage.db";
+    private const string DbFile = "storage.db";
 
     private static ISessionFactory SessionFactory;
 
@@ -45,7 +42,7 @@ namespace MangaReader.Mapping
     {
       return Fluently
         .Configure()
-        .Database(SQLiteConfiguration.Standard.UsingFile(Settings.WorkFolder + DbFile))
+        .Database(SQLiteConfiguration.Standard.UsingFile(Path.Combine(ConfigStorage.WorkFolder, DbFile)))
         .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Environment>())
         .ExposeConfiguration(BuildSchema)
         .BuildSessionFactory();
@@ -54,7 +51,7 @@ namespace MangaReader.Mapping
     private static void BuildSchema(Configuration config)
     {
       config.SetInterceptor(new BaseInterceptor());
-      if (File.Exists(Settings.WorkFolder + DbFile))
+      if (File.Exists(Path.Combine(ConfigStorage.WorkFolder, DbFile)))
         new SchemaUpdate(config).Execute(false, true);
       else
         new SchemaExport(config).Create(false, true);

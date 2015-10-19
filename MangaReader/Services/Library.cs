@@ -11,6 +11,7 @@ using Hardcodet.Wpf.TaskbarNotification;
 using MangaReader.Manga;
 using MangaReader.Manga.Acomic;
 using MangaReader.Properties;
+using MangaReader.Services.Config;
 using MangaReader.UI.MainForm;
 using NHibernate.Linq;
 
@@ -21,7 +22,7 @@ namespace MangaReader.Services
     /// <summary>
     /// Ссылка на файл базы.
     /// </summary>
-    private static readonly string DatabaseFile = Settings.WorkFolder + @".\db";
+    private static readonly string DatabaseFile = ConfigStorage.WorkFolder + @".\db";
 
     /// <summary>
     /// Статус библиотеки.
@@ -80,7 +81,7 @@ namespace MangaReader.Services
     /// <param name="context">Контекст.</param>
     internal static void ShowInTray(string message, object context)
     {
-      if (Settings.MinimizeToTray)
+      if (ConfigStorage.Instance.AppConfig.MinimizeToTray)
         using (TimedLock.Lock(TaskbarIconLock))
         {
           using (TimedLock.Lock(DispatcherLock))
@@ -207,7 +208,7 @@ namespace MangaReader.Services
     private static void Convert24To27(ConverterProcess process)
     {
       var version = new Version(1, 27, 5584);
-      if (version.CompareTo(Settings.DatabaseVersion) > 0 && process.Version.CompareTo(version) >= 0)
+      if (version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && process.Version.CompareTo(version) >= 0)
       {
         process.Percent = 0;
         var acomics = Mapping.Environment.Session.Query<Acomics>().ToList();
@@ -309,7 +310,7 @@ namespace MangaReader.Services
       {
         Library.SetTaskbarState(0, TaskbarItemProgressState.None);
         Status = Strings.Library_Status_UpdateComplete;
-        Settings.LastUpdate = DateTime.Now;
+        ConfigStorage.Instance.AppConfig.LastUpdate = DateTime.Now;
       }
     }
 
@@ -327,7 +328,7 @@ namespace MangaReader.Services
 
     public static Dictionary<string, object> AllTypes { get { return _allTypes; } }
 
-    public static readonly Dictionary<string, object> _allTypes = Settings.MangaSettings
+    public static readonly Dictionary<string, object> _allTypes = ConfigStorage.Instance.DatabaseConfig.MangaSettings
       .Select(s => new { s.MangaName, s })
       .OrderBy(a => a.MangaName)
       .ToDictionary(a => a.MangaName, a => a.s as object);

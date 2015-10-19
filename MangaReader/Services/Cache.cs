@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using MangaReader.Manga;
+using MangaReader.Services.Config;
 using NHibernate.Linq;
 
 namespace MangaReader.Services
@@ -14,7 +15,7 @@ namespace MangaReader.Services
     /// <summary>
     /// Ссылка на файл лога.
     /// </summary>
-    private static readonly string CacheFile = Settings.WorkFolder + @".\Cache";
+    private static readonly string CacheFile = ConfigStorage.WorkFolder + @".\Cache";
 
     /// <summary>
     /// Добавление манги в кеш.

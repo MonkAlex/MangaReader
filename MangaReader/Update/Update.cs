@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Windows;
+using MangaReader.Services.Config;
 
 namespace MangaReader.Services
 {
@@ -14,14 +15,14 @@ namespace MangaReader.Services
     private const string UpdateStarted = "update";
     private const string UpdateFinished = "updated";
 
-    private static string UpdateFilename = Settings.WorkFolder + "\\update.exe";
-    private static string UpdateTempFilename = Settings.WorkFolder + "\\update.it";
-    private static string OriginalFilename = Settings.WorkFolder + "\\MangaReader.exe";
-    private static string OriginalTempFilename = Settings.WorkFolder + "\\MangaReader.exe.bak";
+    private static string UpdateFilename = Path.Combine(ConfigStorage.WorkFolder, "update.exe");
+    private static string UpdateTempFilename = Path.Combine(ConfigStorage.WorkFolder, "update.it");
+    private static string OriginalFilename = Path.Combine(ConfigStorage.WorkFolder, "MangaReader.exe");
+    private static string OriginalTempFilename = Path.Combine(ConfigStorage.WorkFolder, "MangaReader.exe.bak");
 
-    internal static Version ClientVersion = Settings.AppVersion;
+    internal static Version ClientVersion = AppConfig.Version;
 
-    internal static Version ServerVersion = Settings.AppVersion;
+    internal static Version ServerVersion = AppConfig.Version;
 
     /// <summary>
     /// Запуск обновления, вызываемый до инициализации программы.
@@ -35,7 +36,7 @@ namespace MangaReader.Services
       if (args.Contains(UpdateFinished))
         Update.Clean();
 
-      if (Settings.UpdateReader)
+      if (ConfigStorage.Instance.AppConfig.UpdateReader)
         Update.StartUpdate();
     }
 
@@ -74,10 +75,10 @@ namespace MangaReader.Services
           {
             Arguments = UpdateStarted,
             FileName = UpdateFilename,
-            WorkingDirectory = Settings.WorkFolder
+            WorkingDirectory = ConfigStorage.WorkFolder
           }
         };
-        Log.Add(string.Format("Update process started: File '{0}', Args '{1}', Folder '{2}'", UpdateFilename, UpdateStarted, Settings.WorkFolder));
+        Log.Add(string.Format("Update process started: File '{0}', Args '{1}', Folder '{2}'", UpdateFilename, UpdateStarted, ConfigStorage.WorkFolder));
         run.Start();
         Application.Current.Shutdown(1);
       }
@@ -95,10 +96,10 @@ namespace MangaReader.Services
         {
           Arguments = UpdateFinished,
           FileName = OriginalFilename,
-          WorkingDirectory = Settings.WorkFolder
+          WorkingDirectory = ConfigStorage.WorkFolder
         }
       };
-      Log.Add(string.Format("Update process finished: File '{0}', Args '{1}', Folder '{2}'", OriginalFilename, UpdateFinished, Settings.WorkFolder));
+      Log.Add(string.Format("Update process finished: File '{0}', Args '{1}', Folder '{2}'", OriginalFilename, UpdateFinished, ConfigStorage.WorkFolder));
       run.Start();
       Application.Current.Shutdown(1);
     }

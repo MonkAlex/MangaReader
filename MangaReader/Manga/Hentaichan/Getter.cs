@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using MangaReader.Account;
 using MangaReader.Services;
+using MangaReader.Services.Config;
 
 namespace MangaReader.Manga.Hentaichan
 {
@@ -14,7 +15,7 @@ namespace MangaReader.Manga.Hentaichan
 
     public static CookieClient GetClient()
     {
-      var setting = Settings.MangaSettings.SingleOrDefault(s => Equals(s.Manga, Hentaichan.Type));
+      var setting = ConfigStorage.Instance.DatabaseConfig.MangaSettings.SingleOrDefault(s => Equals(s.Manga, Hentaichan.Type));
       var client = new CookieClient();
       if (setting != null)
       {

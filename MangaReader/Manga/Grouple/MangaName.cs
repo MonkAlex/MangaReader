@@ -1,4 +1,4 @@
-﻿using MangaReader.Services;
+﻿using MangaReader.Services.Config;
 
 namespace MangaReader.Manga.Grouple
 {
@@ -74,9 +74,9 @@ namespace MangaReader.Manga.Grouple
     /// <returns>Название манги.</returns>
     public override string ToString()
     {
-      if (Settings.Language == Settings.Languages.English)
+      if (ConfigStorage.Instance.AppConfig.Language == Languages.English)
         return English;
-      if (Settings.Language == Settings.Languages.Russian)
+      if (ConfigStorage.Instance.AppConfig.Language == Languages.Russian)
         return Russian;
       return Japanese;
     }

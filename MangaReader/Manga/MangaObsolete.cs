@@ -64,7 +64,10 @@ namespace MangaReader.Manga
     /// </summary>
     public string Folder
     {
-      get { return Page.MakeValidPath(Settings.DownloadFolder + Path.DirectorySeparatorChar + this.Name); }
+      get
+      {
+        throw new NotImplementedException("Obsolete class");
+      }
     }
 
     /// <summary>

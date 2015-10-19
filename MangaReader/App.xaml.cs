@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
-using MangaReader.Account;
 using MangaReader.Services;
+using MangaReader.Services.Config;
+using Converter = MangaReader.Services.Converter;
 
 namespace MangaReader
 {
@@ -17,7 +17,7 @@ namespace MangaReader
   {
     private void App_OnExit(object sender, ExitEventArgs e)
     {
-      Settings.Save();
+      ConfigStorage.Instance.Save();
       Environment.Exit(0);
     }
 

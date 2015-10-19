@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Reflection;
 using System.Threading;
+using MangaReader.Services.Config;
 
 namespace MangaReader.Services
 {
@@ -17,13 +17,13 @@ namespace MangaReader.Services
     internal double Percent = 0;
     internal bool IsIndeterminate = true;
     internal string Status = string.Empty;
-    internal Version Version = Settings.DatabaseVersion;
+    internal Version Version = ConfigStorage.Instance.DatabaseConfig.Version;
   }
 
   public static class Converter
   {
     public static ConverterProcess Process = new ConverterProcess() 
-    { Version = new Version(Settings.AppVersion.Major, Settings.AppVersion.Minor, Settings.AppVersion.Build ) };
+    { Version = new Version(AppConfig.Version.Major, AppConfig.Version.Minor, AppConfig.Version.Build ) };
 
     public static ConverterState State = ConverterState.None;
 
@@ -49,8 +49,7 @@ namespace MangaReader.Services
       Log.Add("Convert started.");
 
       Process.Status = "Convert settings...";
-      Settings.Convert();
-      Settings.Load();
+      Config.Converter.ConvertAll(Process);
 
       Process.Status = "Convert manga...";
 #pragma warning disable 618
@@ -67,7 +66,7 @@ namespace MangaReader.Services
       Library.Convert(Process);
       Log.Add("Convert completed.");
 
-      Settings.DatabaseVersion = Process.Version;
+      ConfigStorage.Instance.DatabaseConfig.Version = Process.Version;
       State = ConverterState.Completed;
     }
   }

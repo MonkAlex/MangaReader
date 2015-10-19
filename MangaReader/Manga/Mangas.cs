@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using FluentNHibernate.Visitors;
 using MangaReader.Properties;
 using MangaReader.Services;
+using MangaReader.Services.Config;
 using NHibernate.Linq;
 
 namespace MangaReader.Manga
@@ -116,7 +117,7 @@ namespace MangaReader.Manga
       get
       {
         if (Mapping.Environment.Initialized)
-          return Settings.MangaSettings.SingleOrDefault(s => Equals(s.Manga, this.GetType().TypeProperty()));
+          return ConfigStorage.Instance.DatabaseConfig.MangaSettings.SingleOrDefault(s => Equals(s.Manga, this.GetType().TypeProperty()));
         throw new Exception("Mappings not initialized.");
       }
     }
@@ -253,7 +254,7 @@ namespace MangaReader.Manga
 
     public virtual string DownloadFolder
     {
-      get { return Settings.MangaSettings.Single(f => f.Manga == this.GetType().TypeProperty()).Folder; }
+      get { return this.Setting.Folder; }
       set { }
     }
 

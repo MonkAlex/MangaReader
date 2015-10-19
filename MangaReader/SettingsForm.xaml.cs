@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using MangaReader.Services;
+using MangaReader.Services.Config;
 
 namespace MangaReader
 {
@@ -12,11 +13,11 @@ namespace MangaReader
     public SettingsForm()
     {
       InitializeComponent();
-      this.UpdateReaderBox.IsChecked = Settings.UpdateReader;
-      this.MinimizeToTray.IsChecked = Settings.MinimizeToTray;
-      this.MangaLanguage.SelectedItem = Settings.Language;
-      this.AutoUpdate.Text = Settings.AutoUpdateInHours.ToString();
-      foreach (var setting in Settings.MangaSettings)
+      this.UpdateReaderBox.IsChecked = ConfigStorage.Instance.AppConfig.UpdateReader;
+      this.MinimizeToTray.IsChecked = ConfigStorage.Instance.AppConfig.MinimizeToTray;
+      this.MangaLanguage.SelectedItem = ConfigStorage.Instance.AppConfig.Language;
+      this.AutoUpdate.Text = ConfigStorage.Instance.AppConfig.AutoUpdateInHours.ToString();
+      foreach (var setting in ConfigStorage.Instance.DatabaseConfig.MangaSettings)
       {
         this.Tabs.Items.Add(new MangaSettings() { DataContext = setting });
       }
@@ -24,15 +25,15 @@ namespace MangaReader
 
     private void SettingsForm_OnClosed(object sender, EventArgs e)
     {
-      Settings.Language = (Settings.Languages)this.MangaLanguage.SelectedItem;
-      Settings.UpdateReader = UpdateReaderBox.IsChecked.Value;
-      Settings.MinimizeToTray = MinimizeToTray.IsChecked.Value;
+      ConfigStorage.Instance.AppConfig.Language = (Languages)this.MangaLanguage.SelectedItem;
+      ConfigStorage.Instance.AppConfig.UpdateReader = UpdateReaderBox.IsChecked.Value;
+      ConfigStorage.Instance.AppConfig.MinimizeToTray = MinimizeToTray.IsChecked.Value;
 
       int hour;
       var hoursInt = int.TryParse(this.AutoUpdate.Text, out hour);
-      Settings.AutoUpdateInHours = hoursInt ? hour : Settings.AutoUpdateInHours;
+      ConfigStorage.Instance.AppConfig.AutoUpdateInHours = hoursInt ? hour : ConfigStorage.Instance.AppConfig.AutoUpdateInHours;
 
-      Settings.Save();
+      ConfigStorage.Instance.Save();
     }
   }
 }

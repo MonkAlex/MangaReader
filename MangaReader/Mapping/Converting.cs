@@ -1,5 +1,6 @@
 ﻿using System;
 using MangaReader.Services;
+using MangaReader.Services.Config;
 
 namespace MangaReader.Mapping
 {
@@ -24,7 +25,7 @@ namespace MangaReader.Mapping
     private static void Convert29To30(ConverterProcess process)
     {
       var version = new Version(1, 30, 5765);
-      if (version.CompareTo(Settings.DatabaseVersion) > 0 && process.Version.CompareTo(version) >= 0)
+      if (version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && process.Version.CompareTo(version) >= 0)
       {
         var setType = Environment.Session.CreateSQLQuery(@"update Login 
           set Type = 'f526cd85-7846-4f32-85a7-c57e3983dfb1'
@@ -46,7 +47,7 @@ namespace MangaReader.Mapping
     private static void Convert27To28(ConverterProcess process)
     {
       var version = new Version(1, 28, 5659);
-      if (version.CompareTo(Settings.DatabaseVersion) > 0 && process.Version.CompareTo(version) >= 0)
+      if (version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && process.Version.CompareTo(version) >= 0)
       {
         var readmangaHas = Environment.Session.CreateSQLQuery(@"update MangaSetting 
           set DefaultCompression = 'Volume'
@@ -58,14 +59,14 @@ namespace MangaReader.Mapping
           where MangaName = 'Acomics'");
         acomicsHas.UniqueResult();
 
-        Settings.MangaSettings.ForEach(s => s.Update());
+        ConfigStorage.Instance.DatabaseConfig.MangaSettings.ForEach(s => s.Update());
       }
     }
 
     private static void Convert24To27(ConverterProcess process)
     {
       var version = new Version(1, 27, 5584);
-      if (version.CompareTo(Settings.DatabaseVersion) > 0 && process.Version.CompareTo(version) >= 0)
+      if (version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && process.Version.CompareTo(version) >= 0)
       {
         var readmangaHas = Environment.Session.CreateSQLQuery(@"update Mangas 
           set HasVolumes = 1, HasChapters = 1
@@ -82,7 +83,7 @@ namespace MangaReader.Mapping
     internal static void ConvertBaseTo24(ConverterProcess process)
     {
       var version = new Version(1, 24);
-      if (version.CompareTo(Settings.DatabaseVersion) > 0 && process.Version.CompareTo(version) >= 0)
+      if (version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && process.Version.CompareTo(version) >= 0)
       {
         var readmangaCompressionMode = Environment.Session.CreateSQLQuery(@"update Mangas 
           set CompressionMode = 'Volume'

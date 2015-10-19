@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using MangaReader.Services.Config;
 
 namespace MangaReader.Services
 {
@@ -14,12 +15,12 @@ namespace MangaReader.Services
     /// <summary>
     /// Ссылка на файл лога.
     /// </summary>
-    private static readonly string LogPath = Settings.WorkFolder + @".\manga.log";
+    private static readonly string LogPath = Path.Combine(ConfigStorage.WorkFolder, "manga.log");
 
     /// <summary>
     /// Ссылка на файл лога исключений.
     /// </summary>
-    private static readonly string ExceptionPath = Settings.WorkFolder + @".\error.log";
+    private static readonly string ExceptionPath = Path.Combine(ConfigStorage.WorkFolder, "error.log");
 
     /// <summary>
     /// Добавление записи в лог.

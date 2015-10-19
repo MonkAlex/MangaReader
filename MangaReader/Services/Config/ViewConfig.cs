@@ -12,11 +12,14 @@ namespace MangaReader.Services.Config
       if (WindowStates == null)
         return;
 
-      main.Top = WindowStates.Top;
-      main.Left = WindowStates.Left;
-      main.Width = WindowStates.Width;
-      main.Height = WindowStates.Height;
       main.WindowState = WindowStates.WindowState;
+      if (WindowStates.CanShow)
+      {
+        main.Top = WindowStates.Top;
+        main.Left = WindowStates.Left;
+        main.Width = WindowStates.Width;
+        main.Height = WindowStates.Height;
+      }
     }
 
     public void SaveWindowState(BaseForm main)
@@ -24,11 +27,14 @@ namespace MangaReader.Services.Config
       if (WindowStates == null)
         WindowStates = new WindowStates();
 
-      WindowStates.Top = main.Top;
-      WindowStates.Left = main.Left;
-      WindowStates.Width = main.Width;
-      WindowStates.Height = main.Height;
-      WindowStates.WindowState = main.WindowState;
+      if (main.WindowState != WindowState.Minimized)
+      {
+        WindowStates.WindowState = main.WindowState;
+        WindowStates.Top = main.Top;
+        WindowStates.Left = main.Left;
+        WindowStates.Width = main.Width;
+        WindowStates.Height = main.Height;
+      }
     }
 
     public ViewConfig()
@@ -43,6 +49,7 @@ namespace MangaReader.Services.Config
     public double Left { get; set; }
     public double Width { get; set; }
     public double Height { get; set; }
+    internal bool CanShow { get { return this.Width != 0 && this.Height != 0; } }
     public WindowState WindowState { get; set; }
   }
 }

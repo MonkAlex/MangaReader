@@ -41,6 +41,8 @@ namespace MangaReader.Services.Config
           ConfigStorage.Instance.ViewConfig.WindowStates.WindowState = (WindowState)((object[])settings[5])[4];
 
           ConfigStorage.Instance.DatabaseConfig.Version = new Version((string)settings[9]);
+
+          Backup.MoveToBackup(ConfigStorage.SettingsOldPath);
         }
         catch (IndexOutOfRangeException) { }
       }

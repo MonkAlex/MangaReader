@@ -92,6 +92,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="NHibernate">
       <HintPath>Library\NHibernate.dll</HintPath>

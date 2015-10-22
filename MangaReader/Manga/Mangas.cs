@@ -248,7 +248,7 @@ namespace MangaReader.Manga
 
     public virtual string Folder
     {
-      get { return Page.MakeValidPath(Path.Combine(this.Setting.Folder, this.Name.Replace(Path.DirectorySeparatorChar, '.'))); }
+      get { return Page.MakeValidPath(Path.Combine(this.Setting.Folder, Page.MakeValidPath(this.Name.Replace(Path.DirectorySeparatorChar, '.')))); }
       set { }
     }
     

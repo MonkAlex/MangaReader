@@ -99,7 +99,7 @@ namespace MangaReader.Services
           process.Percent += 100.0 / mangas.Count;
         using (var tranc = session.BeginTransaction())
         {
-          foreach (var history in histories.Where(h => h.MangaUrl == manga.Uri.OriginalString).ToList())
+          foreach (var history in histories.Where(h => h.MangaUrl == manga.Uri.OriginalString || h.Uri.OriginalString.Contains(manga.Uri.OriginalString)).ToList())
           {
             manga.Histories.Add(history);
           }

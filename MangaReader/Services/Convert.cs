@@ -57,13 +57,14 @@ namespace MangaReader.Services
 #pragma warning restore 618
       Mapping.Converting.ConvertAll(Process);
 
+      Process.Status = "Convert manga list...";
+      Process.Percent = 0;
+      Library.Convert(Process);
+
       Process.Status = "Convert history...";
       Process.Percent = 0;
       History.Convert(Process);
 
-      Process.Status = "Convert manga list...";
-      Process.Percent = 0;
-      Library.Convert(Process);
       Log.Add("Convert completed.");
 
       ConfigStorage.Instance.DatabaseConfig.Version = Process.Version;

@@ -195,6 +195,7 @@ namespace MangaReader.Services
       Log.Add(Strings.Library_Status_MangaRemoved + manga.Name);
     }
 
+#pragma warning disable CS0612 // Obsolete методы используются для конвертации
     /// <summary>
     /// Сконвертировать в новый формат.
     /// </summary>
@@ -239,23 +240,23 @@ namespace MangaReader.Services
       if (process != null && database.Any())
         process.IsIndeterminate = false;
 
+      List<string> mangaUrls;
       using (var session = Environment.OpenSession())
       {
-        var mangaUrls = session.Query<Mangas>().Select(m => m.Uri.ToString()).ToList();
+        mangaUrls = session.Query<Mangas>().Select(m => m.Uri.ToString()).ToList();
+      }
 
-        foreach (var dbstring in database)
-        {
-          if (process != null)
-            process.Percent += 100.0/database.Count;
-          if (!mangaUrls.Contains(dbstring))
-#pragma warning disable CS0612 // Obsolete методы используются для конвертации
-            Mangas.Create(dbstring);
-#pragma warning restore CS0612
-        }
+      foreach (var dbstring in database)
+      {
+        if (process != null)
+          process.Percent += 100.0 / database.Count;
+        if (!mangaUrls.Contains(dbstring))
+          Mangas.Create(dbstring);
       }
 
       Backup.MoveToBackup(DatabaseFile);
     }
+#pragma warning restore CS0612
 
     /// <summary>
     /// Обновить мангу.

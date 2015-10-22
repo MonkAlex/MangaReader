@@ -14,6 +14,7 @@ using MangaReader.Properties;
 using MangaReader.Services.Config;
 using MangaReader.UI.MainForm;
 using NHibernate.Linq;
+using Environment = MangaReader.Mapping.Environment;
 
 namespace MangaReader.Services
 {
@@ -59,7 +60,7 @@ namespace MangaReader.Services
     {
       get
       {
-        return _libraryMangas ?? (_libraryMangas = new ObservableCollection<Mangas>(Mapping.Environment.Session.Query<Mangas>().Where(n => n != null)));
+        return _libraryMangas ?? (_libraryMangas = new ObservableCollection<Mangas>(Environment.Session.Query<Mangas>().Where(n => n != null)));
       }
     }
 
@@ -164,7 +165,7 @@ namespace MangaReader.Services
     /// <param name="uri"></param>
     public static bool Add(Uri uri)
     {
-      if (Mapping.Environment.Session.Query<Mangas>().Any(m => m.Uri == uri))
+      if (Environment.Session.Query<Mangas>().Any(m => m.Uri == uri))
         return false;
 
       var newManga = Mangas.Create(uri);
@@ -211,14 +212,22 @@ namespace MangaReader.Services
       if (version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && process.Version.CompareTo(version) >= 0)
       {
         process.Percent = 0;
-        var acomics = Mapping.Environment.Session.Query<Acomics>().ToList();
-        if (acomics.Any())
-          process.IsIndeterminate = false;
-
-        foreach (var acomic in acomics)
+        using (var session = Environment.OpenSession())
         {
-          process.Percent += 100.0 / acomics.Count;
-          Getter.UpdateContentType(acomic);
+          var acomics = session.Query<Acomics>().ToList();
+          if (acomics.Any())
+            process.IsIndeterminate = false;
+
+          using (var tranc = session.BeginTransaction())
+          {
+            foreach (var acomic in acomics)
+            {
+              process.Percent += 100.0 / acomics.Count;
+              Getter.UpdateContentType(acomic);
+              acomic.Save(session, tranc);
+            }
+            tranc.Commit();
+          }
         }
       }
     }
@@ -230,16 +239,19 @@ namespace MangaReader.Services
       if (process != null && database.Any())
         process.IsIndeterminate = false;
 
-      var mangaUrls = Mapping.Environment.Session.Query<Mangas>().Select(m => m.Uri.ToString()).ToList();
-
-      foreach (var dbstring in database)
+      using (var session = Environment.OpenSession())
       {
-        if (process != null)
-          process.Percent += 100.0 / database.Count;
-        if (!mangaUrls.Contains(dbstring))
+        var mangaUrls = session.Query<Mangas>().Select(m => m.Uri.ToString()).ToList();
+
+        foreach (var dbstring in database)
+        {
+          if (process != null)
+            process.Percent += 100.0/database.Count;
+          if (!mangaUrls.Contains(dbstring))
 #pragma warning disable CS0612 // Obsolete методы используются для конвертации
-          Mangas.Create(dbstring);
+            Mangas.Create(dbstring);
 #pragma warning restore CS0612
+        }
       }
 
       Backup.MoveToBackup(DatabaseFile);

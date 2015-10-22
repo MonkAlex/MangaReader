@@ -5,6 +5,7 @@ using System.Linq;
 using NHibernate.Linq;
 using MangaReader.Manga;
 using MangaReader.Services.Config;
+using Environment = MangaReader.Mapping.Environment;
 
 namespace MangaReader.Services
 {
@@ -23,7 +24,7 @@ namespace MangaReader.Services
     /// <remarks>Используется для сохранения важной информации - открывает новое соединение, дорогая операция.</remarks>
     public static void AddHistory(this Mangas manga, Uri message)
     {
-      using (var session = Mapping.Environment.OpenSession())
+      using (var session = Environment.OpenSession())
       using (var tranc = session.BeginTransaction())
       {
         if (manga.Histories.Any(h => h.Uri == message))
@@ -39,20 +40,14 @@ namespace MangaReader.Services
     /// </summary>
     /// <param name="chapters">Главы.</param>
     /// <returns>Главы, не записанные в историю.</returns>
-    public static List<Chapter> GetNotSavedChapters(IEnumerable<Chapter> chapters)
+    public static List<Chapter> GetNotSavedChapters(List<Chapter> chapters)
     {
-      var result = new List<Chapter>();
+      List<Chapter> result;
       var uris = chapters.Select(c => c.Uri).ToList();
 
-      using (var session = Mapping.Environment.OpenSession())
+      using (var session = Environment.OpenSession())
       {
-        result = chapters
-          .Where(c => uris
-            .Except(session.Query<MangaHistory>()
-              .Where(h => uris.Contains(h.Uri))
-                .Select(h => h.Uri))
-              .Contains(c.Uri))
-            .ToList();
+        result = chapters.Where(c => uris.Except(session.Query<MangaHistory>().Where(h => uris.Contains(h.Uri)).Select(h => h.Uri)).Contains(c.Uri)).ToList();
       }
 
       return result;
@@ -86,24 +81,26 @@ namespace MangaReader.Services
       if (isMangaHistory && !isStringList)
         histories = serializedMangaHistoris;
 
-      var session = Mapping.Environment.Session;
-      var mangas = session.Query<Mangas>().ToList();
-      var historyInDb = session.Query<MangaHistory>().Select(h => h.Uri).ToList();
-      histories = histories.Where(h => !historyInDb.Contains(h.Uri)).Distinct().ToList();
-      if (process != null && histories.Any())
-        process.IsIndeterminate = false;
-
-      foreach (var manga in mangas)
+      using (var session = Environment.OpenSession())
       {
-        if (process != null)
-          process.Percent += 100.0 / mangas.Count;
-        using (var tranc = session.BeginTransaction())
+        var mangas = session.Query<Mangas>().ToList();
+        var historyInDb = session.Query<MangaHistory>().Select(h => h.Uri).ToList();
+        histories = histories.Where(h => !historyInDb.Contains(h.Uri)).Distinct().ToList();
+        if (process != null && histories.Any())
+          process.IsIndeterminate = false;
+
+        foreach (var manga in mangas)
         {
-          foreach (var history in histories.Where(h => h.MangaUrl == manga.Uri.OriginalString || h.Uri.OriginalString.Contains(manga.Uri.OriginalString)).ToList())
+          if (process != null)
+            process.Percent += 100.0 / mangas.Count;
+          using (var tranc = session.BeginTransaction())
           {
-            manga.Histories.Add(history);
+            var mangaHistory = histories.Where(h => h.MangaUrl == manga.Uri.OriginalString || 
+              h.Uri.OriginalString.Contains(manga.Uri.OriginalString)).ToList();
+            foreach (var history in mangaHistory)
+              manga.Histories.Add(history);
+            tranc.Commit();
           }
-          tranc.Commit();
         }
       }
       // ReSharper restore CSharpWarnings::CS0612

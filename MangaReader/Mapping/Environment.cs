@@ -13,27 +13,24 @@ namespace MangaReader.Mapping
   {
     private const string DbFile = "storage.db";
 
-    private static ISessionFactory SessionFactory;
+    private static ISessionFactory sessionFactory;
 
     public static ISession Session;
 
     public static ISession OpenSession()
     {
-      return SessionFactory.OpenSession();
+      return sessionFactory.OpenSession();
     }
 
     public static bool Initialized { get; set; }
 
     public static void Initialize()
     {
-      Initialized = false;
-
       // TODO: подумать над другим способом явно подгрузить SQLite.
-      var sqlite = FunctionType.Aggregate;
-      sqlite.Equals(FunctionType.Collation);
+      Initialized = Equals(FunctionType.Aggregate, FunctionType.Collation);
 
-      SessionFactory = CreateSessionFactory();
-      Session = SessionFactory.OpenSession();
+      sessionFactory = CreateSessionFactory();
+      Session = sessionFactory.OpenSession();
 
       Initialized = true;
     }

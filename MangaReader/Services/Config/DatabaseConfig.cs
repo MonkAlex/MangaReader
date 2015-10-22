@@ -28,7 +28,7 @@ namespace MangaReader.Services.Config
             mangaSettings = CreateDefaultMangaSettings(query);
 
             if (mangaSettings.Except(query).Any())
-              this.mangaSettings.ForEach(s => s.Save());
+              this.mangaSettings.Save();
           }
           else
           {

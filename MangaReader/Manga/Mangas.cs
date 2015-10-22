@@ -248,16 +248,10 @@ namespace MangaReader.Manga
 
     public virtual string Folder
     {
-      get { return Page.MakeValidPath(DownloadFolder + this.Name.Replace(Path.DirectorySeparatorChar, '.')); }
+      get { return Page.MakeValidPath(Path.Combine(this.Setting.Folder, this.Name.Replace(Path.DirectorySeparatorChar, '.'))); }
       set { }
     }
-
-    public virtual string DownloadFolder
-    {
-      get { return this.Setting.Folder; }
-      set { }
-    }
-
+    
     public virtual event EventHandler<Mangas> DownloadProgressChanged;
 
     protected virtual void OnDownloadProgressChanged(Mangas manga)

@@ -103,7 +103,7 @@ namespace MangaReader.Services.Config
     public void Save()
     {
       this.DatabaseConfig.Save();
-      this.DatabaseConfig.MangaSettings.ForEach(s => s.Save());
+      this.DatabaseConfig.MangaSettings.Save();
       var str = JsonConvert.SerializeObject(this);
       File.WriteAllText(SettingsPath, str, Encoding.UTF8);
     }

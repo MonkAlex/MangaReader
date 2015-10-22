@@ -1,17 +1,15 @@
-﻿<TabItem x:Class="MangaReader.Services.MangaSettings"
+﻿<UserControl x:Class="MangaReader.Services.MangaSettings"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-        xmlns:manga="clr-namespace:MangaReader.Manga"
         xmlns:services="clr-namespace:MangaReader.Services"
         xmlns:resx="clr-namespace:MangaReader.Properties"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        Header="{Binding Path=MangaName}"
         mc:Ignorable="d" 
         d:DesignHeight="200" d:DesignWidth="200">
 
-    <TabItem.Resources>
+    <UserControl.Resources>
         <ObjectDataProvider x:Key="CompressionModes"
                     MethodName="GetValues" 
                     ObjectType="{x:Type sys:Enum}">
@@ -19,7 +17,7 @@
                 <x:Type TypeName="services:Compression+CompressionMode" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
-    </TabItem.Resources>
+    </UserControl.Resources>
     <StackPanel>
         <Grid>
             <Grid.RowDefinitions>
@@ -29,8 +27,6 @@
                 <RowDefinition Height="2*"></RowDefinition>
                 <RowDefinition Height="2*"></RowDefinition>
                 <RowDefinition Height="2*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -75,19 +71,6 @@
             <CheckBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3"
                       Content="{x:Static resx:Strings.Settings_Compress}"
                       IsChecked="{Binding CompressManga}"/>
-
-            <Grid Grid.Row="7" Grid.ColumnSpan="3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="1"
-                    IsDefault="True"
-                    x:Name="OkButton" Content="Сохранить" Click="OkButton_OnClick"/>
-                <Button Grid.Column="2"
-                    x:Name="CancelButton" Content="Отмена" Click="CancelButton_OnClick"/>
-            </Grid>
         </Grid>
     </StackPanel>
-</TabItem>
+</UserControl>

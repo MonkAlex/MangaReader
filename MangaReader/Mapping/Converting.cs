@@ -59,7 +59,7 @@ namespace MangaReader.Mapping
           where MangaName = 'Acomics'");
         acomicsHas.UniqueResult();
 
-        ConfigStorage.Instance.DatabaseConfig.MangaSettings.ForEach(s => s.Update());
+        ConfigStorage.Instance.DatabaseConfig.MangaSettings.Update();
       }
     }
 

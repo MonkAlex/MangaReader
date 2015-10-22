@@ -14,7 +14,7 @@ namespace MangaReader.Mapping
       Map(x => x.CompressManga).Not.LazyLoad();
       Map(x => x.OnlyUpdate).Not.LazyLoad();
       Map(x => x.DefaultCompression).Not.LazyLoad();
-      References(x => x.Login).Not.LazyLoad().Cascade.SaveUpdate().Cascade.Refresh();
+      References(x => x.Login).Not.LazyLoad().Cascade.All();
     }
   }
 }

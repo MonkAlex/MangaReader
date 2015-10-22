@@ -42,7 +42,6 @@ namespace MangaReader.Entity
         {
           this.Save(session, tranc);
           tranc.Commit();
-          session.Flush();
         }
         catch (Exception)
         {
@@ -72,7 +71,6 @@ namespace MangaReader.Entity
       }
 
       Mapping.Environment.Session.Refresh(this);
-      Mapping.Environment.Session.Flush();
     }
 
     /// <summary>
@@ -90,7 +88,6 @@ namespace MangaReader.Entity
         var entity = session.Load(this.GetType(), this.Id);
         session.Delete(entity);
         tranc.Commit();
-        session.Flush();
         this.Id = 0;
       }
       return true;

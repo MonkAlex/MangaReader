@@ -4,11 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Windows;
+using MangaReader.Services;
 using MangaReader.Services.Config;
 
-namespace MangaReader.Services
+namespace MangaReader.Update
 {
-  class Update
+  class Updater
   {
     private static Uri LinkToUpdate = new Uri("https://dl.dropboxusercontent.com/u/1945107/RMG/MangaReader.exe");
     private static Uri LinkToVersion = new Uri("https://dl.dropboxusercontent.com/u/1945107/RMG/version.ini");
@@ -28,16 +29,16 @@ namespace MangaReader.Services
     /// Запуск обновления, вызываемый до инициализации программы.
     /// </summary>
     /// <remarks>Завершает обновление и удаляет временные файлы.</remarks>
-    internal static void Initialize()
+    internal static void Initialize(bool visual)
     {
       var args = Environment.GetCommandLineArgs();
       if (args.Contains(UpdateStarted))
-        Update.FinishUpdate();
+        Updater.FinishUpdate();
       if (args.Contains(UpdateFinished))
-        Update.Clean();
+        Updater.Clean();
 
       if (ConfigStorage.Instance.AppConfig.UpdateReader)
-        Update.StartUpdate();
+        Updater.StartUpdate(visual);
     }
 
     /// <summary>
@@ -60,28 +61,38 @@ namespace MangaReader.Services
     /// <summary>
     /// Запуск обновления.
     /// </summary>
-    internal static void StartUpdate()
+    internal static void StartUpdate(bool visual)
     {
-      if (!Update.CheckUpdate())
+      if (!Updater.CheckUpdate())
         return;
 
       using (var client = new WebClient())
       {
-        File.WriteAllBytes(UpdateFilename, client.DownloadData(LinkToUpdate));
-        File.Copy(UpdateFilename, UpdateTempFilename, true);
-        var run = new Process()
+        var taskBytes = client.DownloadDataTaskAsync(LinkToUpdate);
+        if (visual)
         {
-          StartInfo =
+          var owner = WindowHelper.GetMainWindow();
+          var download = new Download(owner);
+          client.DownloadProgressChanged += (sender, args) => download.UpdateStates(args);
+          client.DownloadDataCompleted += (sender, args) => download.Close();
+          download.ShowDialog();
+        }
+        File.WriteAllBytes(UpdateFilename, taskBytes.Result);
+      }
+
+      File.Copy(UpdateFilename, UpdateTempFilename, true);
+      var run = new Process()
+      {
+        StartInfo =
           {
             Arguments = UpdateStarted,
             FileName = UpdateFilename,
             WorkingDirectory = ConfigStorage.WorkFolder
           }
-        };
-        Log.Add(string.Format("Update process started: File '{0}', Args '{1}', Folder '{2}'", UpdateFilename, UpdateStarted, ConfigStorage.WorkFolder));
-        run.Start();
-        Application.Current.Shutdown(1);
-      }
+      };
+      Log.Add(string.Format("Update process started: File '{0}', Args '{1}', Folder '{2}'", UpdateFilename, UpdateStarted, ConfigStorage.WorkFolder));
+      run.Start();
+      Application.Current.Shutdown(1);
     }
 
     /// <summary>

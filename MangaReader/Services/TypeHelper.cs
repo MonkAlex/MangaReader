@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using NHibernate.Util;
 
 namespace MangaReader.Services
@@ -35,6 +36,27 @@ namespace MangaReader.Services
     public static void Save(this IEnumerable<Entity.Entity> query)
     {
       query.ForEach(q => q.Save());
+    }
+
+    /// <summary>
+    /// Перегнать байты в мегабайты.
+    /// </summary>
+    /// <param name="bytes">Байт.</param>
+    /// <returns>Мегабайт.</returns>
+    public static string ToMegaBytes(this long bytes)
+    {
+      return (bytes / 1024d / 1024d).ToString("0.00");
+    }
+  }
+
+  static class WindowHelper
+  {
+    public static Window GetMainWindow(object sender = null, object parameter = null)
+    {
+      var owner = (sender as Window) ?? (parameter as Window);
+      if (owner == null)
+        owner = Application.Current.MainWindow ?? Application.Current.Windows.Cast<Window>().FirstOrDefault();
+      return owner;
     }
   }
 

@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using MangaReader.Services;
 using MangaReader.Services.Config;
+using MangaReader.Update;
 using Converter = MangaReader.Services.Converter;
 
 namespace MangaReader
@@ -28,7 +29,7 @@ namespace MangaReader
       if (Environment.GetCommandLineArgs().Contains("-t"))
         ShowConsoleWindow();
 
-      Update.Initialize();
+      Updater.Initialize(true);
 
       var isSingle = false;
       var mtx = new System.Threading.Mutex(true, "5197317b-a6f6-4a6c-a336-6fbf8642b7bc", out isSingle);

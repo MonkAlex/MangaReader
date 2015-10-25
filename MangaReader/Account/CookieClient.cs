@@ -25,7 +25,7 @@ namespace MangaReader.Account
       return baseResponse;
     }
 
-    public CookieClient() : base()
+    public CookieClient()
     {
       this.Cookie = new CookieContainer();
       this.Encoding = Encoding.UTF8;

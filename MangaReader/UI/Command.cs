@@ -10,6 +10,7 @@ using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.Services.Config;
 using MangaReader.UI.MainForm;
+using MangaReader.Update;
 using Ookii.Dialogs.Wpf;
 
 namespace MangaReader.UI
@@ -109,8 +110,8 @@ namespace MangaReader.UI
 
     private static void DoAdd(object sender, ExecutedRoutedEventArgs e)
     {
-      var window = sender as BaseForm;
-      var db = new Input { Owner = window };
+      var owner = WindowHelper.GetMainWindow(sender);
+      var db = new Input { Owner = owner };
       if (db.ShowDialog() != true)
         return;
       try
@@ -180,8 +181,8 @@ namespace MangaReader.UI
 
     private static void DoShowSettings(object sender, ExecutedRoutedEventArgs e)
     {
-      var window = sender as Window;
-      new SettingsForm { Owner = window }.ShowDialog();
+      var owner = WindowHelper.GetMainWindow(sender);
+      new SettingsForm { Owner = owner }.ShowDialog();
     }
 
     private static void CanOpenFolder(object sender, CanExecuteRoutedEventArgs e)
@@ -233,7 +234,8 @@ namespace MangaReader.UI
       var manga = e.Parameter as Mangas ?? (e.OriginalSource as FrameworkElement).DataContext as Mangas;
       if (manga != null && Library.IsAvaible)
       {
-        new MangaForm { DataContext = manga, Owner = sender as Window }.ShowDialog();
+        var owner = WindowHelper.GetMainWindow(sender);
+        new MangaForm { DataContext = manga, Owner = owner }.ShowDialog();
         (sender as BaseForm).View.Refresh();
       }
     }
@@ -250,8 +252,8 @@ namespace MangaReader.UI
       var manga = Library.SelectedManga;
       if (manga != null && !Equals(filtered.LastOrDefault(), manga))
       {
-        Library.SelectedManga = filtered.Contains(manga) ? 
-          filtered.SkipWhile(m => !Equals(m, manga)).Skip(1).FirstOrDefault() : 
+        Library.SelectedManga = filtered.Contains(manga) ?
+          filtered.SkipWhile(m => !Equals(m, manga)).Skip(1).FirstOrDefault() :
           filtered.FirstOrDefault();
         (e.Source as FrameworkElement).DataContext = Library.SelectedManga;
       }
@@ -285,17 +287,17 @@ namespace MangaReader.UI
     {
       var dialog = new TaskDialog();
       dialog.WindowTitle = "Обновление";
-      var owner = (sender as Window) ?? (e.Parameter as Window);
-      if (owner == null)
-        owner = Application.Current.MainWindow ?? Application.Current.Windows.Cast<Window>().FirstOrDefault();
-      if (Update.CheckUpdate())
+      var owner = WindowHelper.GetMainWindow(sender, e.Parameter);
+      if (Updater.CheckUpdate())
       {
         dialog.MainInstruction = "Запустить процесс обновления?";
-        dialog.Content = string.Format("Доступно обновление с версии {0} на {1}", Update.ClientVersion.ToString(3), Update.ServerVersion.ToString(3));
+        dialog.Content = string.Format("Доступно обновление с версии {0} на {1}", Updater.ClientVersion.ToString(3), Updater.ServerVersion.ToString(3));
         dialog.Buttons.Add(new TaskDialogButton(ButtonType.Yes));
         dialog.Buttons.Add(new TaskDialogButton(ButtonType.No));
         if (dialog.ShowDialog(owner).ButtonType == ButtonType.Yes)
-          Update.StartUpdate();
+        {
+          Updater.StartUpdate(true);
+        }
       }
       else
       {

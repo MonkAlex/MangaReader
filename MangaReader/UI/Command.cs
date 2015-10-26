@@ -121,8 +121,9 @@ namespace MangaReader.UI
         var dialogMangas = db.BookmarksTabs.Items.SourceCollection.Cast<TabItem>()
             .Select(t => t.Content)
             .Cast<Login>()
-            .SelectMany(l => l.Bookmarks.SelectedItems.OfType<Mangas>())
-            .Distinct();
+            .SelectMany(l => l.Bookmarks.SelectedItems.Cast<Mangas>())
+            .Distinct()
+            .ToList();
         foreach (var manga in dialogMangas)
           Library.Add(manga.Uri);
       }

@@ -162,9 +162,8 @@ namespace MangaReader.Manga
 
     public virtual List<Compression.CompressionMode> AllowedCompressionModes { get { return allowedCompressionModes; } }
 
-    private static List<Compression.CompressionMode> allowedCompressionModes = new List<Compression.CompressionMode>(
-      Enum.GetValues(typeof(Compression.CompressionMode))
-            .Cast<Compression.CompressionMode>());
+    private static List<Compression.CompressionMode> allowedCompressionModes = 
+      new List<Compression.CompressionMode>(Enum.GetValues(typeof(Compression.CompressionMode)).Cast<Compression.CompressionMode>());
 
     public virtual Compression.CompressionMode? CompressionMode
     {

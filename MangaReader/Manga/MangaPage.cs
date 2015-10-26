@@ -5,7 +5,7 @@ using MangaReader.Services;
 
 namespace MangaReader.Manga
 {
-  public abstract class MangaPage : IDownloadable
+  public class MangaPage : IDownloadable
   {
 
     #region Свойства
@@ -101,10 +101,12 @@ namespace MangaReader.Manga
     /// </summary>
     /// <param name="uri">Ссылка на страницу.</param>
     /// <param name="imageLink">Ссылка на изображение.</param>
-    protected MangaPage(Uri uri, Uri imageLink)
+    /// <param name="number">Номер страницы.</param>
+    public MangaPage(Uri uri, Uri imageLink, int number)
     {
       this.Uri = uri;
       this.ImageLink = imageLink;
+      this.Number = number;
       this.restartCounter = 0;
     }
 

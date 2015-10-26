@@ -142,15 +142,12 @@
     <Compile Include="Manga\Acomic\AcomicsLogin.cs" />
     <Compile Include="Manga\Acomic\Chapter.cs" />
     <Compile Include="Manga\Acomic\Getter.cs" />
-    <Compile Include="Manga\Acomic\MangaPage.cs" />
     <Compile Include="Manga\Chapter.cs" />
     <Compile Include="Manga\Grouple\GroupleLogin.cs" />
-    <Compile Include="Manga\Grouple\MangaPage.cs" />
     <Compile Include="Manga\Hentaichan\Chapter.cs" />
     <Compile Include="Manga\Hentaichan\Getter.cs" />
     <Compile Include="Manga\Hentaichan\Hentaichan.cs" />
     <Compile Include="Manga\Hentaichan\HentaichanLogin.cs" />
-    <Compile Include="Manga\Hentaichan\MangaPage.cs" />
     <Compile Include="Manga\IDownloadable.cs" />
     <Compile Include="Manga\MangaForm.xaml.cs">
       <DependentUpon>MangaForm.xaml</DependentUpon>

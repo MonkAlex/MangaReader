@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using MangaReader.Account;
 using MangaReader.Services;
@@ -99,7 +100,7 @@ namespace MangaReader.Manga.Acomic
           innerChapters[i].Pages.AddRange(allPages.Where(p => current <= p.Number && p.Number < next));
           innerChapters[i].Number = i + 1;
         }
-        pages.AddRange(allPages.Except(innerChapters.SelectMany(c => c.Pages).Cast<MangaPage>()));
+        pages.AddRange(allPages.Except(innerChapters.SelectMany(c => c.Pages)));
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
 
@@ -148,7 +149,14 @@ namespace MangaReader.Manga.Acomic
       catch (NullReferenceException ex) { Log.Exception(ex, "Ошибка получения списка глав.", uri.ToString()); }
       catch (ArgumentNullException ex) { Log.Exception(ex, "Главы не найдены.", uri.ToString()); }
 
-      return links.Select((t, i) => new MangaPage(t, images[i]) { Name = description[i] }).ToList();
+      var pages = new List<MangaPage>();
+      for (var i = 0; i < links.Count; i++)
+      {
+        var page = links[i];
+        var number = Convert.ToInt32(Regex.Match(page.OriginalString, @"/[-]?[0-9]+", RegexOptions.RightToLeft).Value.Remove(0, 1));
+        pages.Add(new MangaPage(page, images[i], number) {Name = description[i]});
+      }
+      return pages;
     }
   }
 }

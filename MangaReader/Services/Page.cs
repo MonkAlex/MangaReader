@@ -64,7 +64,7 @@ namespace MangaReader
     /// <returns>Содержимое файла.</returns>
     internal static ImageFile DownloadFile(Uri uri)
     {
-      Byte[] result;
+      byte[] result;
       WebResponse response;
       var file = new ImageFile();
       var request = WebRequest.Create(uri);
@@ -72,10 +72,11 @@ namespace MangaReader
       try
       {
         response = request.GetResponse();
-        var ms = new MemoryStream();
-        response.GetResponseStream().CopyTo(ms);
-        result = ms.ToArray();
-        ms.Dispose();
+        using (var ms = new MemoryStream())
+        {
+          response.GetResponseStream().CopyTo(ms);
+          result = ms.ToArray();
+        }
       }
       catch (Exception ex)
       {

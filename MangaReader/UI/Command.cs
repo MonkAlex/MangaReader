@@ -110,8 +110,7 @@ namespace MangaReader.UI
 
     private static void DoAdd(object sender, ExecutedRoutedEventArgs e)
     {
-      var owner = WindowHelper.GetMainWindow(sender);
-      var db = new Input { Owner = owner };
+      var db = new Input { Owner = WindowHelper.Owner };
       if (db.ShowDialog() != true)
         return;
       try
@@ -182,8 +181,7 @@ namespace MangaReader.UI
 
     private static void DoShowSettings(object sender, ExecutedRoutedEventArgs e)
     {
-      var owner = WindowHelper.GetMainWindow(sender);
-      new SettingsForm { Owner = owner }.ShowDialog();
+      new SettingsForm { Owner = WindowHelper.Owner }.ShowDialog();
     }
 
     private static void CanOpenFolder(object sender, CanExecuteRoutedEventArgs e)
@@ -235,8 +233,7 @@ namespace MangaReader.UI
       var manga = e.Parameter as Mangas ?? (e.OriginalSource as FrameworkElement).DataContext as Mangas;
       if (manga != null && Library.IsAvaible)
       {
-        var owner = WindowHelper.GetMainWindow(sender);
-        new MangaForm { DataContext = manga, Owner = owner }.ShowDialog();
+        new MangaForm { DataContext = manga, Owner = WindowHelper.Owner }.ShowDialog();
         (sender as BaseForm).View.Refresh();
       }
     }
@@ -288,7 +285,7 @@ namespace MangaReader.UI
     {
       var dialog = new TaskDialog();
       dialog.WindowTitle = "Обновление";
-      var owner = WindowHelper.GetMainWindow(sender, e.Parameter);
+      var owner = WindowHelper.Owner;
       if (Updater.CheckUpdate())
       {
         dialog.MainInstruction = "Запустить процесс обновления?";

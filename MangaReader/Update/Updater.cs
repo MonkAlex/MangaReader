@@ -71,8 +71,7 @@ namespace MangaReader.Update
         var taskBytes = client.DownloadDataTaskAsync(LinkToUpdate);
         if (visual)
         {
-          var owner = WindowHelper.GetMainWindow();
-          var download = new Download(owner);
+          var download = new Download(WindowHelper.Owner);
           client.DownloadProgressChanged += (sender, args) => download.UpdateStates(args);
           client.DownloadDataCompleted += (sender, args) => download.Close();
           download.ShowDialog();

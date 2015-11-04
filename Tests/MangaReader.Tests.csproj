@@ -83,6 +83,7 @@
     <Compile Include="Compression\MangaCompressionDeleteFolders.cs" />
     <Compile Include="Compression\ArchiveNotInclude.cs" />
     <Compile Include="Compression\CRUD.cs" />
+    <Compile Include="Convertation\Convert.cs" />
     <Compile Include="CRUD\MangaHistory.cs" />
     <Compile Include="CRUD\Manga.cs" />
     <Compile Include="Environment.cs" />
@@ -95,6 +96,16 @@
       <Name>MangaReader</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Convertation\1.12\db" />
+    <None Include="Convertation\1.20\Cache" />
+    <None Include="Convertation\1.20\db" />
+    <None Include="Convertation\1.20\history" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Convertation\1.12\list.txt" />
+  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

@@ -90,11 +90,14 @@ namespace MangaReader.Manga.Hentaichan
           }
 
           var chapterNodes = document.DocumentNode.SelectNodes("//div[@class=\"related_info\"]");
-          foreach (var node in chapterNodes)
+          if (chapterNodes != null)
           {
-            var link = node.SelectSingleNode(".//h2//a");
-            var desc = node.SelectSingleNode(".//div[@class=\"related_tag_list\"]");
-            chapters.Add(new Chapter(new Uri(manga.Uri, link.Attributes[0].Value), desc.InnerText));
+            foreach (var node in chapterNodes)
+            {
+              var link = node.SelectSingleNode(".//h2//a");
+              var desc = node.SelectSingleNode(".//div[@class=\"related_tag_list\"]");
+              chapters.Add(new Chapter(new Uri(manga.Uri, link.Attributes[0].Value), desc.InnerText));
+            }
           }
         }
       }

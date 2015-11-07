@@ -300,7 +300,7 @@ namespace MangaReader.Manga
 
         Func<MangaPage, bool> pagesFilter = p => histories.All(m => m.Uri != p.Uri);
         Func<Chapter, bool> chaptersFilter = ch => histories.All(m => m.Uri != ch.Uri) || ch.Pages.Any(pagesFilter);
-        Func<Volume, bool> volumesFilter = v => histories.All(m => m.Uri != v.Uri) || v.Chapters.Any(chaptersFilter);
+        Func<Volume, bool> volumesFilter = v => v.Chapters.Any(chaptersFilter);
 
         this.ActivePages = this.ActivePages.Where(pagesFilter).ToList();
         this.ActiveChapters = this.ActiveChapters.Where(chaptersFilter).ToList();

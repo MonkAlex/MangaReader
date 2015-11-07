@@ -323,6 +323,7 @@ namespace MangaReader.Manga
               v.OnlyUpdate = this.Setting.OnlyUpdate;
               v.Download(mangaFolder);
               this.AddHistory(v.ActiveChapters.Where(c => c.IsDownloaded).Select(ch => ch.Uri));
+              this.AddHistory(v.ActiveChapters.SelectMany(ch => ch.ActivePages).Where(p => p.IsDownloaded).Select(p => p.Uri));
             });
         Parallel.ForEach(this.ActiveChapters,
           ch =>

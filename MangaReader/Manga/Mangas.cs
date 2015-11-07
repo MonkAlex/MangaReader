@@ -322,7 +322,7 @@ namespace MangaReader.Manga
               v.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged("Downloaded");
               v.OnlyUpdate = this.Setting.OnlyUpdate;
               v.Download(mangaFolder);
-              v.Chapters.ForEach(ch => this.AddHistory(ch.Uri));
+              this.AddHistory(v.ActiveChapters.Where(c => c.IsDownloaded).Select(ch => ch.Uri));
             });
         Parallel.ForEach(this.ActiveChapters,
           ch =>
@@ -331,6 +331,7 @@ namespace MangaReader.Manga
             ch.OnlyUpdate = this.Setting.OnlyUpdate;
             ch.Download(mangaFolder);
             this.AddHistory(ch.Uri);
+            this.AddHistory(ch.ActivePages.Where(c => c.IsDownloaded).Select(p => p.Uri));
           });
         Parallel.ForEach(this.ActivePages,
           p =>

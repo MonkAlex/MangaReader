@@ -24,13 +24,27 @@ namespace MangaReader.Services
     /// <remarks>Используется для сохранения важной информации - открывает новое соединение, дорогая операция.</remarks>
     public static void AddHistory(this Mangas manga, Uri message)
     {
+      AddHistory(manga, new [] { message });
+    }
+
+    /// <summary>
+    /// Добавление записей в историю.
+    /// </summary>
+    /// <param name="manga">Манга, к которой относятся сообщения.</param>
+    /// <param name="messages">Сообщения.</param>
+    /// <remarks>Используется для сохранения важной информации - открывает новое соединение, дорогая операция.</remarks>
+    public static void AddHistory(this Mangas manga, IEnumerable<Uri> messages)
+    {
       using (var session = Environment.OpenSession())
       using (var tranc = session.BeginTransaction())
       {
-        if (manga.Histories.Any(h => h.Uri == message))
-          return;
+        foreach (var message in messages)
+        {
+          if (manga.Histories.Any(h => h.Uri == message))
+            continue;
 
-        manga.Histories.Add(new MangaHistory(message));
+          manga.Histories.Add(new MangaHistory(message));
+        }
         tranc.Commit();
       }
     }

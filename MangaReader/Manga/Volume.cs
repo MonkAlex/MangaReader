@@ -35,7 +35,8 @@ namespace MangaReader.Manga
       set { }
     }
 
-
+    public Uri Uri { get; set; }
+    
     public string Folder
     {
       get { return this.folderPrefix + this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0'); }
@@ -62,12 +63,13 @@ namespace MangaReader.Manga
       this.ActiveChapters = this.Chapters;
       if (this.OnlyUpdate)
       {
-        this.ActiveChapters = History.GetNotSavedChapters(this.ActiveChapters);
+        this.ActiveChapters = History.GetItemsWithoutHistory(this.ActiveChapters);
       }
 
       this.ActiveChapters.ForEach(c =>
       {
         c.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(args);
+        c.OnlyUpdate = this.OnlyUpdate;
         c.Download(volumeFolder);
       });
     }

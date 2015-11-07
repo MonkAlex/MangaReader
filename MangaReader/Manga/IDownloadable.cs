@@ -18,6 +18,11 @@ namespace MangaReader.Manga
     double Downloaded { get; set; }
 
     /// <summary>
+    /// Ссылка на загружаемое содержимое.
+    /// </summary>
+    Uri Uri { get; set; }
+
+    /// <summary>
     /// Папка с мангой.
     /// </summary>
     string Folder { get; }

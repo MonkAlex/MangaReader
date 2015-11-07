@@ -27,6 +27,11 @@ namespace MangaReader.Manga
     public List<MangaPage> Pages { get; set; }
 
     /// <summary>
+    /// Хранилище ссылок на изображения.
+    /// </summary>
+    public List<MangaPage> ActivePages { get; set; }
+
+    /// <summary>
     /// Название главы.
     /// </summary>
     public string Name { get; set; }
@@ -46,7 +51,7 @@ namespace MangaReader.Manga
     /// </summary>
     public bool IsDownloaded
     {
-      get { return this.Pages != null && this.Pages.Any() && this.Pages.All(v => v.IsDownloaded); }
+      get { return this.ActivePages != null && this.ActivePages.Any() && this.ActivePages.All(v => v.IsDownloaded); }
     }
     
     /// <summary>
@@ -54,7 +59,7 @@ namespace MangaReader.Manga
     /// </summary>
     public double Downloaded
     {
-      get { return (this.Pages != null && this.Pages.Any()) ? this.Pages.Average(ch => ch.Downloaded) : 0; }
+      get { return (this.ActivePages != null && this.ActivePages.Any()) ? this.ActivePages.Average(ch => ch.Downloaded) : 0; }
       set { }
     }
 
@@ -65,6 +70,8 @@ namespace MangaReader.Manga
       get { return this.folderPrefix + this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0'); }
       private set { this.folderPrefix = value; }
     }
+
+    public bool OnlyUpdate { get; set; }
 
     private string folderPrefix = AppConfig.ChapterPrefix;
 
@@ -93,13 +100,19 @@ namespace MangaReader.Manga
       if (this.Pages == null || !this.Pages.Any())
         this.UpdatePages();
 
+      this.ActivePages = this.Pages;
+      if (this.OnlyUpdate)
+      {
+        this.ActivePages = History.GetItemsWithoutHistory(this.ActivePages);
+      }
+
       try
       {
         chapterFolder = Page.MakeValidPath(chapterFolder);
         if (!Directory.Exists(chapterFolder))
           Directory.CreateDirectory(chapterFolder);
 
-        Parallel.ForEach(this.Pages, page =>
+        Parallel.ForEach(this.ActivePages, page =>
         {
           page.Download(chapterFolder);
           this.OnDownloadProgressChanged(null);
@@ -155,6 +168,7 @@ namespace MangaReader.Manga
     {
       this.Uri = uri;
       this.Pages = new List<MangaPage>();
+      this.ActivePages = new List<MangaPage>();
       this.restartCounter = 0;
     }
 

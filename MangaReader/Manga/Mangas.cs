@@ -328,6 +328,7 @@ namespace MangaReader.Manga
           ch =>
           {
             ch.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged("Downloaded");
+            ch.OnlyUpdate = this.Setting.OnlyUpdate;
             ch.Download(mangaFolder);
             this.AddHistory(ch.Uri);
           });

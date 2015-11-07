@@ -36,18 +36,18 @@ namespace MangaReader.Services
     }
 
     /// <summary>
-    /// Вернуть главы, которые не записаны в историю.
+    /// Вернуть загружаемые элементы, которые не записаны в историю.
     /// </summary>
-    /// <param name="chapters">Главы.</param>
-    /// <returns>Главы, не записанные в историю.</returns>
-    public static List<Chapter> GetNotSavedChapters(List<Chapter> chapters)
+    /// <param name="items">Список элементов.</param>
+    /// <returns>Элементы, не записанные в историю.</returns>
+    public static List<T> GetItemsWithoutHistory<T>(List<T> items) where T: IDownloadable
     {
-      List<Chapter> result;
-      var uris = chapters.Select(c => c.Uri).ToList();
+      List<T> result;
+      var uris = items.Select(c => c.Uri).ToList();
 
       using (var session = Environment.OpenSession())
       {
-        result = chapters.Where(c => uris.Except(session.Query<MangaHistory>().Where(h => uris.Contains(h.Uri)).Select(h => h.Uri)).Contains(c.Uri)).ToList();
+        result = items.Where(c => uris.Except(session.Query<MangaHistory>().Where(h => uris.Contains(h.Uri)).Select(h => h.Uri)).Contains(c.Uri)).ToList();
       }
 
       return result;

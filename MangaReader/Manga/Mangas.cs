@@ -296,14 +296,15 @@ namespace MangaReader.Manga
       this.ActivePages = this.Pages;
       if (this.Setting.OnlyUpdate)
       {
+        var histories = this.Histories.ToList();
         this.ActivePages = this.ActivePages
-            .Where(p => this.Histories.All(m => m.Uri != p.Uri))
+            .Where(p => histories.All(m => m.Uri != p.Uri))
             .ToList();
         this.ActiveChapters = this.ActiveChapters
-            .Where(ch => this.Histories.All(m => m.Uri != ch.Uri))
+            .Where(ch => histories.All(m => m.Uri != ch.Uri) || ch.Pages.Any(p => histories.All(m => m.Uri != p.Uri)))
             .ToList();
         this.ActiveVolumes = this.ActiveVolumes
-            .Where(v => v.Chapters.Any(ch => this.Histories.All(m => m.Uri != ch.Uri)))
+            .Where(v => v.Chapters.Any(ch => histories.All(m => m.Uri != ch.Uri)))
             .ToList();
       }
 

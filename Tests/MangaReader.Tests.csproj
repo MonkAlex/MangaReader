@@ -89,6 +89,7 @@
     <Compile Include="Environment.cs" />
     <Compile Include="Library\Add.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadmangaMoved.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MangaReader\MangaReader.csproj">

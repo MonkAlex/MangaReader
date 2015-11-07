@@ -9,7 +9,7 @@ using Environment = MangaReader.Mapping.Environment;
 
 namespace MangaReader.Services
 {
-  static class History
+  public static class History
   {
     /// <summary>
     /// Ссылка на файл лога.

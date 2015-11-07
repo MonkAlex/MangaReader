@@ -82,6 +82,7 @@ namespace MangaReader.Manga
           {
             var historyUri = new UriBuilder(history.Uri) { Host = value.Host };
             historyUri.Path = historyUri.Path.Replace(this.uri.AbsolutePath, value.AbsolutePath);
+            historyUri.Port = -1;
             history.Uri = historyUri.Uri;
           }
         }

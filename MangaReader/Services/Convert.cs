@@ -63,7 +63,7 @@ namespace MangaReader.Services
 
       Process.Status = "Convert history...";
       Process.Percent = 0;
-      History.Convert(Process);
+      History.ConvertAll(Process);
 
       Log.Add("Convert completed.");
 

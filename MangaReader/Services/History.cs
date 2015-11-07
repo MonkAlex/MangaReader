@@ -67,10 +67,31 @@ namespace MangaReader.Services
       return result;
     }
 
+    internal static void ConvertAll(ConverterProcess process)
+    {
+      // 1.* To 1.32
+      ConvertBaseTo32(process);
+
+      // to 1.33.5789
+      Convert32To33(process);
+    }
+
+    private static void Convert32To33(ConverterProcess process)
+    {
+      var version = new Version(1, 33, 5789);
+      if (version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && process.Version.CompareTo(version) >= 0)
+      {
+        var removePort = Environment.Session.CreateSQLQuery(@"update MangaHistory
+                                                              set Uri = Replace(Uri, ':80/', '/')
+                                                              where Uri like '%:80/%'");
+        removePort.UniqueResult();
+      }
+    }
+
     /// <summary>
     /// Сконвертировать в новый формат.
     /// </summary>
-    public static void Convert(ConverterProcess process)
+    private static void ConvertBaseTo32(ConverterProcess process)
     {
       if (!File.Exists(HistoryFile))
         return;

@@ -297,15 +297,16 @@ namespace MangaReader.Manga
       if (this.Setting.OnlyUpdate)
       {
         var histories = this.Histories.ToList();
-        this.ActivePages = this.ActivePages
-            .Where(p => histories.All(m => m.Uri != p.Uri))
-            .ToList();
-        this.ActiveChapters = this.ActiveChapters
-            .Where(ch => histories.All(m => m.Uri != ch.Uri) || ch.Pages.Any(p => histories.All(m => m.Uri != p.Uri)))
-            .ToList();
-        this.ActiveVolumes = this.ActiveVolumes
-            .Where(v => v.Chapters.Any(ch => histories.All(m => m.Uri != ch.Uri)))
-            .ToList();
+
+        Func<MangaPage, bool> pagesFilter = p => histories.All(m => m.Uri != p.Uri);
+        Func<Chapter, bool> chaptersFilter = ch => histories.All(m => m.Uri != ch.Uri) || ch.Pages.Any(pagesFilter);
+        Func<Volume, bool> volumesFilter = v => histories.All(m => m.Uri != v.Uri) || v.Chapters.Any(chaptersFilter);
+
+        this.ActivePages = this.ActivePages.Where(pagesFilter).ToList();
+        this.ActiveChapters = this.ActiveChapters.Where(chaptersFilter).ToList();
+        this.ActiveVolumes = this.ActiveVolumes.Where(volumesFilter).ToList();
+
+        histories.Clear();
       }
 
       if (!this.ActiveChapters.Any() && !this.ActiveVolumes.Any() && !this.ActivePages.Any())

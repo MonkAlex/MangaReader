@@ -63,13 +63,21 @@ namespace MangaReader.Manga.Grouple
     public override void Refresh()
     {
       var page = Page.GetPage(this.Uri);
-      if (string.IsNullOrWhiteSpace(page))
+      if (!page.HasContent)
         return;
 
-      // Если на странице редирект - выполняем его и получаем новую ссылку на мангу.
-      if (page.ToLowerInvariant().Contains(Getter.CookieKey))
+      // Если сайт ответил с другого адреса - переписываем текущий адрес.
+      if (page.ResponseUri != this.Uri)
       {
-        var newUri = Getter.GetRedirectUri(this.Uri, page);
+        this.Uri = page.ResponseUri;
+        this.Refresh();
+        return;
+      }
+
+      // Если на странице редирект - выполняем его и получаем новую ссылку на мангу.
+      if (page.Content.ToLowerInvariant().Contains(Getter.CookieKey))
+      {
+        var newUri = Getter.GetRedirectUri(page);
         if (!this.Uri.Equals(newUri))
         {
           this.Uri = newUri;
@@ -78,13 +86,13 @@ namespace MangaReader.Manga.Grouple
         }
       }
 
-      var newName = Getter.GetMangaName(page).ToString();
+      var newName = Getter.GetMangaName(page.Content).ToString();
       if (string.IsNullOrWhiteSpace(newName))
         Log.Add("Не удалось получить имя манги, текущее название = " + this.ServerName);
       else if (newName != this.ServerName)
         this.ServerName = newName;
 
-      this.Status = Getter.GetTranslateStatus(page);
+      this.Status = Getter.GetTranslateStatus(page.Content);
       OnPropertyChanged("IsCompleted");
     }
 
@@ -94,7 +102,7 @@ namespace MangaReader.Manga.Grouple
       this.Chapters.Clear();
       this.Pages.Clear();
 
-      var rmVolumes = Getter.GetLinksOfMangaChapters(Page.GetPage(this.Uri), this.Uri)
+      var rmVolumes = Getter.GetLinksOfMangaChapters(Page.GetPage(this.Uri))
         .Select(cs => new Chapter(cs.Key, cs.Value))
         .GroupBy(c => c.Volume)
         .Select(g =>

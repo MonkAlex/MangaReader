@@ -30,7 +30,7 @@ namespace MangaReader.Manga.Acomic
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(new Uri(uri.OriginalString + @"/about"), Getter.GetAdultClient()));
+        document.LoadHtml(Page.GetPage(new Uri(uri.OriginalString + @"/about"), Getter.GetAdultClient()).Content);
         var nameNode = document.DocumentNode.SelectSingleNode("//head//meta[@property=\"og:title\"]");
         if (nameNode != null && nameNode.Attributes.Any(a => Equals(a.Name, "content")))
           name = nameNode.Attributes.Single(a => Equals(a.Name, "content")).Value;
@@ -44,7 +44,7 @@ namespace MangaReader.Manga.Acomic
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), Getter.GetAdultClient()));
+        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), Getter.GetAdultClient()).Content);
         manga.HasVolumes = document.DocumentNode.SelectNodes("//h2[@class=\"serial-chapters-head\"]") != null;
         manga.HasChapters = document.DocumentNode.SelectNodes("//div[@class=\"chapters\"]//a") != null;
       }
@@ -63,7 +63,7 @@ namespace MangaReader.Manga.Acomic
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), Getter.GetAdultClient()));
+        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), Getter.GetAdultClient()).Content);
 
         var volumeNodes = document.DocumentNode.SelectNodes("//h2[@class=\"serial-chapters-head\"]");
         if (volumeNodes != null)
@@ -125,13 +125,13 @@ namespace MangaReader.Manga.Acomic
       {
         var adultClient = Getter.GetAdultClient();
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(uri, adultClient));
+        document.LoadHtml(Page.GetPage(uri, adultClient).Content);
         var last = document.DocumentNode.SelectSingleNode("//nav[@class='serial']//a[@class='read2']").Attributes[1].Value;
         var count = int.Parse(last.Remove(0, last.LastIndexOf('/') + 1));
         var list = @"http://" + uri.Host + document.DocumentNode.SelectSingleNode("//nav[@class='serial']//a[@class='read3']").Attributes[1].Value;
         for (var i = 0; i < count; i = i + 5)
         {
-          document.LoadHtml(Page.GetPage(new Uri(list + "?skip=" + i), adultClient));
+          document.LoadHtml(Page.GetPage(new Uri(list + "?skip=" + i), adultClient).Content);
           links.AddRange(document.DocumentNode
               .SelectNodes("//div[@class=\"issue\"]//a")
               .Select(r => new Uri(r.Attributes[0].Value))

@@ -62,11 +62,10 @@ namespace MangaReader.Manga.Acomic
 
       using (TimedLock.Lock(ClientLock))
       {
-        document.LoadHtml(Page.GetPage(BookmarksUri, Client));
+        document.LoadHtml(Page.GetPage(BookmarksUri, Client).Content);
       }
 
-      var nodes = document.DocumentNode
-          .SelectNodes("//table[@class=\"decor\"]//a");
+      var nodes = document.DocumentNode.SelectNodes("//table[@class=\"decor\"]//a");
 
       if (nodes == null)
         return bookmarks;

@@ -72,11 +72,11 @@ namespace MangaReader.Manga
       Library.CheckPause();
       try
       {
-        chapterFolder = Page.MakeValidPath(chapterFolder);
+        chapterFolder = DirectoryHelpers.MakeValidPath(chapterFolder);
         if (!Directory.Exists(chapterFolder))
           Directory.CreateDirectory(chapterFolder);
 
-        var file = Page.DownloadFile(this.ImageLink);
+        var file = ImageFile.DownloadFile(this.ImageLink);
         if (!file.Exist)
           throw new Exception("Restart download, downloaded file is corrupted, link = " + this.ImageLink);
         var fileName = this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + file.Extension;

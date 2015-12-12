@@ -181,6 +181,7 @@
     <Compile Include="Services\Converting.xaml.cs">
       <DependentUpon>Converting.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\DirectoryHelpers.cs" />
     <Compile Include="Services\ImageFile.cs" />
     <Compile Include="Services\MangaSetting.cs" />
     <Compile Include="Services\MangaSettings.xaml.cs">

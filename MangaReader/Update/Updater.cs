@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Windows;
+using MangaReader.Account;
 using MangaReader.Services;
 using MangaReader.Services.Config;
 
@@ -49,7 +50,7 @@ namespace MangaReader.Update
     {
       try
       {
-        ServerVersion = new Version(Page.GetPage(LinkToVersion));
+        ServerVersion = new Version(Page.GetPage(LinkToVersion).Content);
         return ServerVersion.CompareTo(ClientVersion) > 0;
       }
       catch (Exception)
@@ -66,7 +67,7 @@ namespace MangaReader.Update
       if (!Updater.CheckUpdate())
         return;
 
-      using (var client = new WebClient())
+      using (var client = new CookieClient())
       {
         var taskBytes = client.DownloadDataTaskAsync(LinkToUpdate);
         if (visual)

@@ -50,7 +50,7 @@ namespace MangaReader.Manga.Hentaichan
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(uri));
+        document.LoadHtml(Page.GetPage(uri).Content);
         var nameNode = document.DocumentNode.SelectSingleNode("//head/title");
         string[] subString = {"Все главы", "Все части" };
         if (nameNode != null && subString.Any(s => nameNode.InnerText.Contains(s)))
@@ -73,7 +73,7 @@ namespace MangaReader.Manga.Hentaichan
         var pages = new List<Uri>() {manga.Uri};
         for (int i = 0; i < pages.Count; i++)
         {
-          document.LoadHtml(Page.GetPage(pages[i], GetClient()));
+          document.LoadHtml(Page.GetPage(pages[i], GetClient()).Content);
 
           // Посчитать странички.
           if (i == 0)
@@ -118,7 +118,7 @@ namespace MangaReader.Manga.Hentaichan
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(new Uri(chapter.Uri.OriginalString.Replace("/manga/", "/online/")), GetClient()));
+        document.LoadHtml(Page.GetPage(new Uri(chapter.Uri.OriginalString.Replace("/manga/", "/online/")), GetClient()).Content);
 
         var i = 0;
         var imgs = Regex.Match(document.DocumentNode.OuterHtml, @"""(fullimg.*)", RegexOptions.IgnoreCase).Groups[1].Value.Remove(0, 9);

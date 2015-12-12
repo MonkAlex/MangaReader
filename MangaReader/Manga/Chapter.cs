@@ -108,7 +108,7 @@ namespace MangaReader.Manga
 
       try
       {
-        chapterFolder = Page.MakeValidPath(chapterFolder);
+        chapterFolder = DirectoryHelpers.MakeValidPath(chapterFolder);
         if (!Directory.Exists(chapterFolder))
           Directory.CreateDirectory(chapterFolder);
 

@@ -54,7 +54,7 @@ namespace MangaReader.Manga.Grouple
 
       using (TimedLock.Lock(ClientLock))
       {
-        document.LoadHtml(Page.GetPage(BookmarksUri, Client));
+        document.LoadHtml(Page.GetPage(BookmarksUri, Client).Content);
       }
 
       var firstOrDefault = document.DocumentNode
@@ -69,7 +69,7 @@ namespace MangaReader.Manga.Grouple
           .Select(g => g.Captures[0])
           .OfType<Match>()
           .Select(m => new Uri(m.Groups[1].Value))
-          .Select(s => new Readmanga() { Uri = s, Name = Getter.GetMangaName(Page.GetPage(s)).ToString() })
+          .Select(s => new Readmanga() { Uri = s, Name = Getter.GetMangaName(Page.GetPage(s).Content).ToString() })
           .ToList();
       bookmarks.AddRange(loadedBookmarks);
       return bookmarks;

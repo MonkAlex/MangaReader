@@ -247,7 +247,7 @@ namespace MangaReader.Manga
 
     public virtual string Folder
     {
-      get { return Page.MakeValidPath(Path.Combine(this.Setting.Folder, Page.MakeValidPath(this.Name.Replace(Path.DirectorySeparatorChar, '.')))); }
+      get { return DirectoryHelpers.MakeValidPath(Path.Combine(this.Setting.Folder, DirectoryHelpers.MakeValidPath(this.Name.Replace(Path.DirectorySeparatorChar, '.')))); }
       set { }
     }
     
@@ -434,7 +434,7 @@ namespace MangaReader.Manga
         if (Directory.Exists(this.Folder))
           throw new DirectoryNotFoundException(
             string.Format("Папка {0} уже существует. Сохранение прервано.", this.Folder));
-        if (!Page.MoveDirectory(dirName, this.Folder))
+        if (!DirectoryHelpers.MoveDirectory(dirName, this.Folder))
           throw new DirectoryNotFoundException(
             string.Format("Не удалось переместить {0} в {1}. Сохранение прервано.", dirName, this.Folder));
       }

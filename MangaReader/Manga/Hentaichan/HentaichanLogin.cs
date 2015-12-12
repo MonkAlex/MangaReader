@@ -93,7 +93,7 @@ namespace MangaReader.Manga.Hentaichan
       {
         using (TimedLock.Lock(ClientLock))
         {
-          document.LoadHtml(Page.GetPage(pages[i], Client));
+          document.LoadHtml(Page.GetPage(pages[i], Client).Content);
         }
 
         if (i == 0)

@@ -21,27 +21,32 @@ namespace MangaReader.Manga.Grouple
     /// <summary>
     /// Получить ссылку с редиректа.
     /// </summary>
-    /// <param name="uri">Исходная ссылка.</param>
     /// <param name="page">Содержимое страницы по ссылке.</param>
     /// <returns>Новая ссылка.</returns>
-    public static Uri GetRedirectUri(Uri uri, string page)
+    public static Uri GetRedirectUri(Page page)
     {
+      var fullUri = page.ResponseUri.OriginalString;
+
       var client = new CookieClient();
       var cookie = new Cookie
       {
         Name = CookieKey,
         Value = "true",
         Expires = DateTime.Today.AddYears(1),
-        Domain = "." + uri.Host
+        Domain = "." + page.ResponseUri.Host
       };
       client.Cookie.Add(cookie);
 
+      // Пытаемся найти переход с обычной манги на взрослую. Или хоть какой то переход.
       var document = new HtmlDocument();
-      document.LoadHtml(page);
+      document.LoadHtml(page.Content);
       var node = document.DocumentNode.SelectSingleNode("//form[@id='red-form']");
-      var actionUri = node.Attributes.FirstOrDefault(a => a.Name == "action").Value;
-      var fullUri = uri.GetLeftPart(UriPartial.Authority) + actionUri;
-      client.UploadValues(fullUri, "POST", new NameValueCollection() { { "_agree", "on" }, { "agree", "on" } });
+      if (node != null)
+      {
+        var actionUri = node.Attributes.FirstOrDefault(a => a.Name == "action").Value;
+        fullUri = page.ResponseUri.GetLeftPart(UriPartial.Authority) + actionUri;
+      }
+      client.UploadValues(fullUri, "POST", new NameValueCollection { { "_agree", "on" }, { "agree", "on" } });
 
       return client.ResponseUri;
     }
@@ -91,10 +96,9 @@ namespace MangaReader.Manga.Grouple
     /// <summary>
     /// Получить ссылки на главы манги.
     /// </summary>
-    /// <param name="mangaMainPage">Содержимое страницы манги.</param>
-    /// <param name="uri">Ссылка на мангу.</param>
+    /// <param name="page">Содержимое страницы манги.</param>
     /// <returns>Словарь (ссылка, описание).</returns>
-    public static Dictionary<Uri, string> GetLinksOfMangaChapters(string mangaMainPage, Uri uri)
+    public static Dictionary<Uri, string> GetLinksOfMangaChapters(Page page)
     {
       var dic = new Dictionary<Uri, string>();
       var links = new List<Uri> { };
@@ -102,26 +106,24 @@ namespace MangaReader.Manga.Grouple
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(mangaMainPage);
-        links = document.DocumentNode
-            .SelectNodes("//div[@class=\"expandable chapters-link\"]//td[@class=\" \"]//a[@href]")
-            .ToList()
+        document.LoadHtml(page.Content);
+        var linkNodes = document.DocumentNode
+          .SelectNodes("//div[@class=\"expandable chapters-link\"]//tr//a[@href]")
+          .Reverse()
+          .ToList();
+        links = linkNodes
             .ConvertAll(r => r.Attributes.ToList().ConvertAll(i => i.Value))
             .SelectMany(j => j)
             .Where(k => k != string.Empty)
-            .Select(s => @"http://" + uri.Host + s + "?mature=1")
-            .Reverse()
+            .Select(s => @"http://" + page.ResponseUri.Host + s + "?mature=1")
             .Select(s => new Uri(s))
             .ToList();
-        description = document.DocumentNode
-            .SelectNodes("//div[@class=\"expandable chapters-link\"]//tr//td[@class=\" \"]")
-            .Reverse()
-            .ToList()
+        description = linkNodes
             .ConvertAll(r => r.InnerText.Replace("\r\n", string.Empty).Trim())
             .ToList();
       }
-      catch (NullReferenceException ex) { Log.Exception(ex, "Ошибка получения списка глав.", uri.ToString()); }
-      catch (ArgumentNullException ex) { Log.Exception(ex, "Главы не найдены.", uri.ToString()); }
+      catch (NullReferenceException ex) { Log.Exception(ex, "Ошибка получения списка глав.", page.ResponseUri.ToString()); }
+      catch (ArgumentNullException ex) { Log.Exception(ex, "Главы не найдены.", page.ResponseUri.ToString()); }
 
       for (var i = 0; i < links.Count; i++)
       {
@@ -140,7 +142,7 @@ namespace MangaReader.Manga.Grouple
     {
       chapter.Pages.Clear();
       var document = new HtmlDocument();
-      document.LoadHtml(Page.GetPage(chapter.Uri));
+      document.LoadHtml(Page.GetPage(chapter.Uri).Content);
 
       var firstOrDefault = document.DocumentNode
           .SelectNodes("//div[@class=\"pageBlock container reader-bottom\"]")

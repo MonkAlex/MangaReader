@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Net;
 using System.Security.Cryptography;
 
 namespace MangaReader.Services
@@ -72,6 +73,37 @@ namespace MangaReader.Services
       }
 
       File.Delete(this.Path);
+    }
+
+    /// <summary>
+    /// Скачать файл.
+    /// </summary>
+    /// <param name="uri">Ссылка на файл.</param>
+    /// <returns>Содержимое файла.</returns>
+    internal static ImageFile DownloadFile(Uri uri)
+    {
+      byte[] result;
+      WebResponse response;
+      var file = new ImageFile();
+      var request = WebRequest.Create(uri);
+
+      try
+      {
+        response = request.GetResponse();
+        using (var ms = new MemoryStream())
+        {
+          response.GetResponseStream().CopyTo(ms);
+          result = ms.ToArray();
+        }
+      }
+      catch (Exception ex)
+      {
+        Log.Exception(ex, string.Format("Загрузка {0} не завершена.", uri));
+        return file;
+      }
+      if (response.ContentLength == result.LongLength)
+        file.Body = result;
+      return file;
     }
   }
 }

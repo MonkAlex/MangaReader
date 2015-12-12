@@ -51,7 +51,7 @@ namespace MangaReader.Services
     {
       var files = new List<string>();
 
-      message = Page.MakeValidPath(message) + Path.DirectorySeparatorChar;
+      message = DirectoryHelpers.MakeValidPath(message) + Path.DirectorySeparatorChar;
       if (!Directory.Exists(message))
         return files;
 
@@ -84,7 +84,7 @@ namespace MangaReader.Services
     {
       var files = new List<string>();
 
-      message = Page.MakeValidPath(message) + Path.DirectorySeparatorChar;
+      message = DirectoryHelpers.MakeValidPath(message) + Path.DirectorySeparatorChar;
       if (!Directory.Exists(message))
         return files;
 
@@ -112,7 +112,7 @@ namespace MangaReader.Services
     {
       var files = new List<string>();
 
-      message = Page.MakeValidPath(message) + Path.DirectorySeparatorChar;
+      message = DirectoryHelpers.MakeValidPath(message) + Path.DirectorySeparatorChar;
       if (!Directory.Exists(message))
         return files;
 

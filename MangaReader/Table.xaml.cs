@@ -176,6 +176,8 @@ namespace MangaReader
         return "AC";
       if (result.Contains("hentaichan"))
         return "HC";
+      if (result.Contains("mintmanga.com"))
+        return "MM";
       return "NA";
     }
 

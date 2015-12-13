@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using MangaReader.Account;
 using MangaReader.Services;
+using Newtonsoft.Json.Linq;
 
 namespace MangaReader.Manga.Grouple
 {
@@ -143,25 +143,23 @@ namespace MangaReader.Manga.Grouple
       chapter.Pages.Clear();
       var document = new HtmlDocument();
       document.LoadHtml(Page.GetPage(chapter.Uri).Content);
-
-      var firstOrDefault = document.DocumentNode
-          .SelectNodes("//div[@class=\"pageBlock container reader-bottom\"]")
-          .FirstOrDefault();
-
-      if (firstOrDefault == null)
+      var node = document.DocumentNode.SelectNodes("//div[@class=\"pageBlock container reader-bottom\"]").FirstOrDefault();
+      if (node == null)
         return;
 
-      var i = 0;
-      var chapterLinksList = Regex
-        .Matches(firstOrDefault.OuterHtml, @"{url:""(.*?)""", RegexOptions.IgnoreCase)
-        .OfType<Group>()
-        .Select(g => g.Captures[0])
-        .OfType<Match>()
-        .Select(m => m.Groups[1].Value)
-        .Select(s => (!Uri.IsWellFormedUriString(s, UriKind.Absolute)) ? (@"http://" + chapter.Uri.Host + s) : s)
-        .Select(s => new MangaPage(chapter.Uri, new Uri(s), i++))
-        .ToList();
-      chapter.Pages.AddRange(chapterLinksList);
+      var initBlock = Regex.Match(node.OuterHtml, @"rm_h\.init\((\[\[.*?\]\])", RegexOptions.IgnoreCase);
+      var jsonParsed = JToken.Parse(initBlock.Groups[1].Value).Children().ToList();
+      for (var i = 0; i < jsonParsed.Count; i++)
+      {
+        var child = jsonParsed[i];
+        var uriString = child[1].ToString() + child[0] + child[2];
+
+        // Фикс страницы с цензурой.
+        if (!Uri.IsWellFormedUriString(uriString, UriKind.Absolute))
+          uriString = (@"http://" + chapter.Uri.Host + uriString);
+
+        chapter.Pages.Add(new MangaPage(chapter.Uri, new Uri(uriString), i));
+      }
     }
   }
 }

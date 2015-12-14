@@ -19,7 +19,7 @@ namespace MangaReader.Tests
       manga = Environment.Session.Get<Readmanga>(manga.Id);
       manga.Refresh();
       manga.Save();
-      var chapters = new List<Chapter> { new Chapter(new Uri("http://adultmanga.ru/btooom_/vol1/1?mature=1")) };
+      var chapters = new List<Chapter> { new Chapter(new Uri("http://mintmanga.com/btooom_/vol1/1?mature=1")) };
       var chartersNotInHistory = Services.History.GetItemsWithoutHistory(chapters);
       Assert.AreEqual(0, chartersNotInHistory.Count);
     }

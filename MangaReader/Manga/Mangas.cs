@@ -477,7 +477,7 @@ namespace MangaReader.Manga
     {
       Mangas manga = null;
 
-      if (url.Host == "readmanga.me" || url.Host == "adultmanga.ru")
+      if (url.Host == "readmanga.me" || url.Host == "adultmanga.ru" || url.Host == "mintmanga.com")
         manga = new Grouple.Readmanga(url);
       if (url.Host == "acomics.ru")
         manga = new Acomic.Acomics(url);

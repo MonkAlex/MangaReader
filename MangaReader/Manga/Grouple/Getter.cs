@@ -147,7 +147,7 @@ namespace MangaReader.Manga.Grouple
       if (node == null)
         return;
 
-      var initBlock = Regex.Match(node.OuterHtml, @"rm_h\.init\((\[\[.*?\]\])", RegexOptions.IgnoreCase);
+      var initBlock = Regex.Match(node.OuterHtml, @"rm_h\.init\([ ]*(\[\[.*?\]\])", RegexOptions.IgnoreCase);
       var jsonParsed = JToken.Parse(initBlock.Groups[1].Value).Children().ToList();
       for (var i = 0; i < jsonParsed.Count; i++)
       {

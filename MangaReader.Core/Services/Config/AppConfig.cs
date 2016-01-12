@@ -29,7 +29,7 @@ namespace MangaReader.Services.Config
     /// <summary>
     /// Время последнего обновления.
     /// </summary>
-    internal DateTime LastUpdate { get; set; }
+    public DateTime LastUpdate { get; set; }
 
     /// <summary>
     /// Версия приложения.

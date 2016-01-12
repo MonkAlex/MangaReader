@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using FluentNHibernate.Visitors;
-using MangaReader.Properties;
+using MangaReader.Core.Properties;
 using MangaReader.Services;
 using MangaReader.Services.Config;
 using NHibernate.Linq;

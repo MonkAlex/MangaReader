@@ -76,38 +76,12 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentNHibernate">
-      <HintPath>Library\FluentNHibernate.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Library\HtmlAgilityPack.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Library\Iesi.Collections.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>Library\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>Library\NHibernate.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Ookii.Dialogs.Wpf">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\Ookii.Dialogs.Wpf.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data.SQLite">
-      <HintPath>Library\System.Data.SQLite.DLL</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
@@ -130,74 +104,30 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Entity\Entity.cs" />
     <Compile Include="Input.xaml.cs">
       <DependentUpon>Input.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Account\CookieClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Account\Login.cs" />
-    <Compile Include="Manga\Acomic\Acomics.cs" />
-    <Compile Include="Manga\Acomic\AcomicsLogin.cs" />
-    <Compile Include="Manga\Acomic\Chapter.cs" />
-    <Compile Include="Manga\Acomic\Getter.cs" />
-    <Compile Include="Manga\Chapter.cs" />
-    <Compile Include="Manga\Grouple\GroupleLogin.cs" />
-    <Compile Include="Manga\Hentaichan\Chapter.cs" />
-    <Compile Include="Manga\Hentaichan\Getter.cs" />
-    <Compile Include="Manga\Hentaichan\Hentaichan.cs" />
-    <Compile Include="Manga\Hentaichan\HentaichanLogin.cs" />
-    <Compile Include="Manga\IDownloadable.cs" />
     <Compile Include="Manga\MangaForm.xaml.cs">
       <DependentUpon>MangaForm.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Manga\Mangas.cs" />
-    <Compile Include="Manga\MangaObsolete.cs" />
-    <Compile Include="Manga\MangaPage.cs" />
-    <Compile Include="Manga\MangasComparer.cs" />
-    <Compile Include="Manga\Volume.cs" />
-    <Compile Include="Mapping\Converting.cs" />
-    <Compile Include="Mapping\DatabaseConfigMap.cs" />
-    <Compile Include="Mapping\Environment.cs" />
-    <Compile Include="Mapping\LoginMap.cs" />
-    <Compile Include="Mapping\MangaSettingMap.cs" />
-    <Compile Include="Mapping\HistoryMap.cs" />
-    <Compile Include="Mapping\Interceptors.cs" />
-    <Compile Include="Mapping\MangaMap.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Services\Backup.cs" />
-    <Compile Include="Services\Config\AppConfig.cs" />
-    <Compile Include="Services\Config\ConfigStorage.cs" />
-    <Compile Include="Services\Config\Converter.cs" />
-    <Compile Include="Services\Config\DatabaseConfig.cs" />
-    <Compile Include="Services\Config\LibraryFilter.cs" />
-    <Compile Include="Services\Config\ViewConfig.cs" />
-    <Compile Include="Services\Convert.cs" />
+    <Compile Include="Services\Config\ViewConfigWPF.cs" />
     <Compile Include="Services\Converting.xaml.cs">
       <DependentUpon>Converting.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\DirectoryHelpers.cs" />
-    <Compile Include="Services\ImageFile.cs" />
-    <Compile Include="Services\MangaSetting.cs" />
+    <Compile Include="Services\ConvertWPF.cs" />
+    <Compile Include="Services\LibraryWPF.cs" />
     <Compile Include="Services\MangaSettings.xaml.cs">
       <DependentUpon>MangaSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\TimedLock.cs" />
-    <Compile Include="Services\Helper.cs" />
+    <Compile Include="Services\WindowHelper.cs" />
     <Compile Include="Table.xaml.cs">
       <DependentUpon>Table.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Manga\MangaHistory.cs" />
-    <Compile Include="Services\Serializer.cs" />
-    <Compile Include="Services\Cache.cs" />
-    <Compile Include="Services\Compression.cs" />
-    <Compile Include="Services\History.cs" />
-    <Compile Include="Services\Library.cs" />
     <Compile Include="UI\GridSort.cs" />
     <Compile Include="UI\GridViewColumnResize.cs" />
     <Compile Include="UI\Login.xaml.cs">
@@ -217,10 +147,10 @@
     <Compile Include="Update\Download.xaml.cs">
       <DependentUpon>Download.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Update\Updater.cs" />
     <Compile Include="SettingsForm.xaml.cs">
       <DependentUpon>SettingsForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Update\UpdaterWPF.cs" />
     <Compile Include="Update\VersionHistory.xaml.cs">
       <DependentUpon>VersionHistory.xaml</DependentUpon>
     </Compile>
@@ -248,10 +178,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Manga\Grouple\Getter.cs" />
-    <Compile Include="Services\Log.cs" />
-    <Compile Include="Manga\Grouple\Chapter.cs" />
-    <Compile Include="Manga\Grouple\Readmanga.cs" />
     <Page Include="SettingsForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -282,8 +208,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Manga\Grouple\MangaName.cs" />
-    <Compile Include="Services\Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -324,12 +248,8 @@
     <Resource Include="Icons\main.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Library\HtmlAgilityPack.dll" />
     <EmbeddedResource Include="Library\Ookii.Dialogs.Wpf.dll" />
     <EmbeddedResource Include="Library\Hardcodet.Wpf.TaskbarNotification.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Update\VersionHistory.txt" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\play.png" />
@@ -340,13 +260,10 @@
     <Resource Include="Icons\yes.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Library\FluentNHibernate.dll" />
-    <EmbeddedResource Include="Library\Iesi.Collections.dll" />
-    <EmbeddedResource Include="Library\NHibernate.dll" />
-    <EmbeddedResource Include="Library\System.Data.SQLite.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Library\Newtonsoft.Json.dll" />
+    <ProjectReference Include="..\MangaReader.Core\MangaReader.Core.csproj">
+      <Project>{744f331a-938a-475a-840a-7fac985ebe61}</Project>
+      <Name>MangaReader.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

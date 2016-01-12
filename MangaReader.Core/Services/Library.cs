@@ -5,14 +5,10 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Windows.Shell;
-using System.Windows.Threading;
-using Hardcodet.Wpf.TaskbarNotification;
 using MangaReader.Manga;
 using MangaReader.Manga.Acomic;
-using MangaReader.Properties;
+using MangaReader.Core.Properties;
 using MangaReader.Services.Config;
-using MangaReader.UI.MainForm;
 using NHibernate.Linq;
 using Environment = MangaReader.Mapping.Environment;
 
@@ -31,27 +27,6 @@ namespace MangaReader.Services
     public static string Status { get; set; }
 
     /// <summary>
-    /// Служба управления UI главного окна.
-    /// </summary>
-    private static Dispatcher formDispatcher;
-
-    private static readonly object DispatcherLock = new object();
-
-    /// <summary>
-    /// Таскбар окна.
-    /// </summary>
-    private static TaskbarItemInfo taskBar;
-
-    private static readonly object TaskbarLock = new object();
-
-    /// <summary>
-    /// Иконка в трее.
-    /// </summary>
-    private static TaskbarIcon taskbarIcon;
-
-    private static readonly object TaskbarIconLock = new object();
-
-    /// <summary>
     /// Признак паузы.
     /// </summary>
     public static bool IsPaused { get; set; }
@@ -60,90 +35,39 @@ namespace MangaReader.Services
     {
       get
       {
-        return _libraryMangas ?? (_libraryMangas = new ObservableCollection<Mangas>(Environment.Session.Query<Mangas>().Where(n => n != null)));
+        return libraryMangas ?? (libraryMangas = new ObservableCollection<Mangas>(Environment.Session.Query<Mangas>().Where(n => n != null)));
       }
     }
 
-    private static ObservableCollection<Mangas> _libraryMangas;
+    private static ObservableCollection<Mangas> libraryMangas;
 
     public static Mangas SelectedManga { get; set; }
 
-    private static Thread _loadThread;
+    private static Thread loadThread;
+
+    private static int mangaIndex;
+
+    private static int mangasCount;
 
     /// <summary>
     /// Библиотека доступна, т.е. не в процессе обновления.
     /// </summary>
-    internal static bool IsAvaible { get { return _loadThread == null || _loadThread.ThreadState == ThreadState.Stopped; } }
-
-    /// <summary>
-    /// Показать сообщение в трее.
-    /// </summary>
-    /// <param name="message">Сообщение.</param>
-    /// <param name="context">Контекст.</param>
-    internal static void ShowInTray(string message, object context)
-    {
-      if (ConfigStorage.Instance.AppConfig.MinimizeToTray)
-        using (TimedLock.Lock(TaskbarIconLock))
-        {
-          using (TimedLock.Lock(DispatcherLock))
-          {
-            formDispatcher.Invoke(() =>
-            {
-              taskbarIcon.ShowBalloonTip(Strings.Title, message, BalloonIcon.Info);
-              taskbarIcon.DataContext = context;
-            });
-          }
-        }
-    }
-
+    public static bool IsAvaible { get { return loadThread == null || loadThread.ThreadState == ThreadState.Stopped; } }
+    
     /// <summary>
     /// Выполнить тяжелое действие изменения библиотеки в отдельном потоке.
     /// </summary>
     /// <param name="action">Выполняемое действие.</param>
     /// <remarks>Только одно действие за раз. Доступность выполнения можно проверить в IsAvaible.</remarks>
-    internal static void ThreadAction(ThreadStart action)
+    public static void ThreadAction(ThreadStart action)
     {
-      if (_loadThread == null || _loadThread.ThreadState == ThreadState.Stopped)
-        _loadThread = new Thread(action);
-      if (_loadThread.ThreadState == ThreadState.Unstarted)
-        _loadThread.Start();
-    }
-
-    /// <summary>
-    /// Установить состояние программы на панели задач.
-    /// </summary>
-    /// <param name="percent">Процент.</param>
-    /// <param name="state">Состояние.</param>
-    internal static void SetTaskbarState(double? percent = null, TaskbarItemProgressState? state = null)
-    {
-      using (TimedLock.Lock(TaskbarLock))
-      {
-        using (TimedLock.Lock(DispatcherLock))
-        {
-          formDispatcher.Invoke(() =>
-          {
-            if (state.HasValue)
-              taskBar.ProgressState = state.Value;
-            if (percent.HasValue)
-              taskBar.ProgressValue = percent.Value;
-          });
-        }
-      }
+      if (loadThread == null || loadThread.ThreadState == ThreadState.Stopped)
+        loadThread = new Thread(action);
+      if (loadThread.ThreadState == ThreadState.Unstarted)
+        loadThread.Start();
     }
 
     #region Методы
-
-    /// <summary>
-    /// Инициализация библиотеки - заполнение массива из кеша.
-    /// </summary>
-    /// <returns></returns>
-    public static void Initialize(BaseForm main)
-    {
-      formDispatcher = main.Dispatcher;
-      taskBar = main.TaskbarItemInfo;
-      taskbarIcon = main.NotifyIcon;
-      SelectedManga = main.View.Cast<Mangas>().FirstOrDefault();
-    }
 
     /// <summary>
     /// Добавить мангу.
@@ -285,29 +209,29 @@ namespace MangaReader.Services
     /// <param name="sort">Сортировка.</param>
     public static void Update(IEnumerable<Mangas> mangas, SortDescription sort)
     {
-      Library.SetTaskbarState(0, TaskbarItemProgressState.Indeterminate);
+      OnUpdateStarted();
       Status = Strings.Library_Status_Update;
       try
       {
-        Library.SetTaskbarState(0, TaskbarItemProgressState.Normal);
-        var mangaIndex = 0;
+        mangaIndex = 0;
         mangas = sort.Direction == ListSortDirection.Ascending ?
           mangas.OrderBy(m => m.Name) :
           mangas.OrderByDescending(m => m.Name);
         var listMangas = mangas.Where(m => m.NeedUpdate).ToList();
+        mangasCount = listMangas.Count;
         foreach (var current in listMangas)
         {
           CheckPause();
 
           Status = Strings.Library_Status_MangaUpdate + current.Name;
-          current.DownloadProgressChanged += (sender, args) =>
-              Library.SetTaskbarState((double)(100 * mangaIndex + args.Downloaded) / (listMangas.Count * 100));
+          current.DownloadProgressChanged += CurrentOnDownloadProgressChanged;
           current.Download();
+          current.DownloadProgressChanged -= CurrentOnDownloadProgressChanged;
           if (current.NeedCompress ?? current.Setting.CompressManga)
             current.Compress();
           mangaIndex++;
           if (current.IsDownloaded)
-            Library.ShowInTray(Strings.Library_Status_MangaUpdate + current.Name + " завершено.", current);
+            OnUpdateMangaCompleted(current);
         }
       }
       catch (AggregateException ae)
@@ -321,13 +245,50 @@ namespace MangaReader.Services
       }
       finally
       {
-        Library.SetTaskbarState(0, TaskbarItemProgressState.None);
+        OnUpdateCompleted();
         Status = Strings.Library_Status_UpdateComplete;
         ConfigStorage.Instance.AppConfig.LastUpdate = DateTime.Now;
       }
     }
 
+    private static void CurrentOnDownloadProgressChanged(object sender, Mangas mangas)
+    {
+      var percent = (double) (100*mangaIndex + mangas.Downloaded)/(mangasCount*100);
+      OnUpdatePercentChanged(percent);
+    }
+
     #endregion
 
+    #region Events
+
+    public static event EventHandler UpdateStarted;
+
+    public static event EventHandler UpdateCompleted;
+
+    public static event EventHandler<double> UpdatePercentChanged;
+
+    public static event EventHandler<Mangas> UpdateMangaCompleted;
+
+    private static void OnUpdateStarted()
+    {
+      UpdateStarted?.Invoke(null, EventArgs.Empty);
+    }
+
+    private static void OnUpdateCompleted()
+    {
+      UpdateCompleted?.Invoke(null, EventArgs.Empty);
+    }
+
+    private static void OnUpdatePercentChanged(double e)
+    {
+      UpdatePercentChanged?.Invoke(null, e);
+    }
+
+    private static void OnUpdateMangaCompleted(Mangas e)
+    {
+      UpdateMangaCompleted?.Invoke(null, e);
+    }
+
+    #endregion
   }
 }

@@ -14,10 +14,10 @@ namespace MangaReader.Services
 
   public class ConverterProcess
   {
-    internal double Percent = 0;
-    internal bool IsIndeterminate = true;
-    internal string Status = string.Empty;
-    internal Version Version = ConfigStorage.Instance.DatabaseConfig.Version;
+    public double Percent = 0;
+    public bool IsIndeterminate = true;
+    public string Status = string.Empty;
+    public Version Version = ConfigStorage.Instance.DatabaseConfig.Version;
   }
 
   public static class Converter
@@ -27,19 +27,13 @@ namespace MangaReader.Services
 
     public static ConverterState State = ConverterState.None;
 
-    static public void Convert(bool withDialog)
+    static public void Convert()
     {
-      var dialog = new Converting();
+      OnConvertStarted();
 
-      if (withDialog)
-        dialog.ShowDialog(JustConvert);
-      else
-        JustConvert();
+      JustConvert();
 
-      if (withDialog)
-      {
-        while (State != ConverterState.Completed) { Thread.Sleep(100); }
-      }
+      OnConvertCompleted();
     }
 
     static private void JustConvert()
@@ -70,5 +64,24 @@ namespace MangaReader.Services
       ConfigStorage.Instance.DatabaseConfig.Version = Process.Version;
       State = ConverterState.Completed;
     }
+
+
+    #region Events
+
+    public static event EventHandler<Action> ConvertStarted;
+
+    public static event EventHandler ConvertCompleted;
+
+    private static void OnConvertStarted()
+    {
+      ConvertStarted?.Invoke(null, JustConvert);
+    }
+
+    private static void OnConvertCompleted()
+    {
+      ConvertCompleted?.Invoke(null, EventArgs.Empty);
+    }
+    
+    #endregion
   }
 }

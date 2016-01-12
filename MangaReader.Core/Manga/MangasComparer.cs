@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace MangaReader.Manga
 {
-  internal class MangasComparer : IComparer<Mangas>, IComparer
+  public class MangasComparer : IComparer<Mangas>, IComparer
   {
     public int Compare(object x, object y)
     {

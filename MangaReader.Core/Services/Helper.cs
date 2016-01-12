@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using NHibernate.Util;
 
 namespace MangaReader.Services
 {
-  static class Helper
+  public static class Helper
   {
     public static Guid TypeProperty(this Type type)
     {
@@ -49,14 +48,7 @@ namespace MangaReader.Services
     }
   }
 
-  static class WindowHelper
-  {
-    public static Window Owner { get { return Application.Current.Windows.Cast<Window>()
-          .Where(w => w.IsLoaded)
-          .OrderBy(w => w.IsActive).LastOrDefault(); } }
-  }
-
-  static class Generic
+  public static class Generic
   {
     public static T SingleOrCreate<T>(this IQueryable<T> query) where T : Entity.Entity, new()
     {

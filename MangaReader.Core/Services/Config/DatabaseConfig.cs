@@ -16,7 +16,7 @@ namespace MangaReader.Services.Config
     /// <summary>
     /// Настройки разных типов манги.
     /// </summary>
-    protected internal virtual List<MangaSetting> MangaSettings
+    public virtual List<MangaSetting> MangaSettings
     {
       get
       {

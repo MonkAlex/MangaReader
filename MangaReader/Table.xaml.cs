@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -146,7 +145,7 @@ namespace MangaReader
 
     private void Table_OnStateChanged(object sender, EventArgs e)
     {
-      if (ConfigStorage.Instance.AppConfig.MinimizeToTray && this.WindowState == WindowState.Minimized)
+      if (ConfigStorage.Instance.AppConfig.MinimizeToTray && this.WindowState == System.Windows.WindowState.Minimized)
         this.Hide();
     }
 

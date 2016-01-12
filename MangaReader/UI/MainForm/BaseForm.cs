@@ -29,7 +29,7 @@ namespace MangaReader.UI.MainForm
       this.TaskbarItemInfo = new TaskbarItemInfo();
       Command.AddMainMenuCommands(this);
       Command.AddMangaCommands(this);
-      this.Initialized += (sender, args) => Library.Initialize(this);
+      this.Initialized += (sender, args) => LibraryWPF.Initialize(this);
 
       this.Loaded += (sender, args) =>
       {
@@ -100,7 +100,7 @@ namespace MangaReader.UI.MainForm
       if (ConfigStorage.Instance.AppConfig.MinimizeToTray)
       {
         this.Show();
-        this.WindowState = WindowState.Normal;
+        this.WindowState = System.Windows.WindowState.Normal;
       }
     }
 

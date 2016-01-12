@@ -11,7 +11,7 @@ namespace MangaReader.Services.Config
 {
   public class ConfigStorage
   {
-    internal static ConfigStorage Instance
+    public static ConfigStorage Instance
     {
       get
       {
@@ -36,7 +36,7 @@ namespace MangaReader.Services.Config
     /// <summary>
     /// Настройки, зависящие от базы данных.
     /// </summary>
-    internal DatabaseConfig DatabaseConfig
+    public DatabaseConfig DatabaseConfig
     {
       get
       {

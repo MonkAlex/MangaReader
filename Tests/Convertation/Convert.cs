@@ -45,7 +45,7 @@ namespace MangaReader.Tests.Convertation
       Assert.AreEqual(75, loadedMangas);
 
       var loadedHistoryRecord = Mapping.Environment.Session.Query<MangaHistory>().Count();
-      Assert.AreEqual(3397, loadedHistoryRecord);
+      Assert.AreEqual(3036, loadedHistoryRecord);
     }
 
     [TestMethod]

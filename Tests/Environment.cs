@@ -13,7 +13,7 @@ namespace MangaReader.Tests
     public static void TestInitialize(TestContext context)
     {
       Mapping.Environment.Initialize();
-      Services.Converter.Convert(false);
+      Services.Converter.Convert();
 
       Session = Mapping.Environment.Session;
     }

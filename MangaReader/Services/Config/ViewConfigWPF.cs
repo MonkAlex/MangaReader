@@ -10,7 +10,7 @@ namespace MangaReader.Services.Config
       if (config.WindowStates == null)
         return;
 
-      main.WindowState = (System.Windows.WindowState)Enum.Parse(typeof(WindowStates), config.WindowStates.WindowState.ToString(), true);
+      main.WindowState = (System.Windows.WindowState)Enum.Parse(typeof(WindowState), config.WindowStates.WindowState.ToString(), true);
       if (config.WindowStates.CanShow)
       {
         main.Top = config.WindowStates.Top;

@@ -23,9 +23,9 @@ namespace MangaReader.Services
       dialog.ShowDialog(e);
     }
 
-    public static void Convert()
+    public static void Init()
     {
-      Converter.Convert();
+      // Просто вызываются подписки на события.
     }
   }
 }

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:resx="clr-namespace:MangaReader.Properties"
-        xmlns:config="clr-namespace:MangaReader.Services.Config"
+        xmlns:config="clr-namespace:MangaReader.Services.Config;assembly=MangaReader.Core"
         WindowStartupLocation="CenterOwner"
         Icon="Icons/main.ico"
         Title="{x:Static resx:Strings.Library_Action_Settings}"

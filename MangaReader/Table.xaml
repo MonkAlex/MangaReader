@@ -5,7 +5,7 @@
         xmlns:ui="clr-namespace:MangaReader.UI"
         xmlns:base="clr-namespace:MangaReader.UI.MainForm"
         xmlns:resx="clr-namespace:MangaReader.Properties"
-        xmlns:services="clr-namespace:MangaReader.Services"
+        xmlns:services="clr-namespace:MangaReader.Services;assembly=MangaReader.Core"
         Closing="Window_OnClosing"
         StateChanged="Table_OnStateChanged"
         Icon="Icons/main.ico"

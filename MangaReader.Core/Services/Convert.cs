@@ -14,16 +14,31 @@ namespace MangaReader.Services
 
   public class ConverterProcess
   {
-    public double Percent = 0;
-    public bool IsIndeterminate = true;
-    public string Status = string.Empty;
-    public Version Version = ConfigStorage.Instance.DatabaseConfig.Version;
+    public double Percent { get; set; }
+    public bool IsIndeterminate { get; set; }
+    public string Status { get; set; }
+    public Version Version { get; set; }
+
+    public ConverterProcess(Version version)
+    {
+      this.Percent = 0;
+      this.IsIndeterminate = true;
+      this.Status = string.Empty;
+      this.Version = version;
+    }
+
+    public ConverterProcess()
+    {
+      this.Percent = 0;
+      this.IsIndeterminate = true;
+      this.Status = string.Empty;
+      this.Version = ConfigStorage.Instance.DatabaseConfig.Version;
+    }
   }
 
   public static class Converter
   {
-    public static ConverterProcess Process = new ConverterProcess() 
-    { Version = new Version(AppConfig.Version.Major, AppConfig.Version.Minor, AppConfig.Version.Build ) };
+    public static ConverterProcess Process = new ConverterProcess(new Version(AppConfig.Version.Major, AppConfig.Version.Minor, AppConfig.Version.Build));
 
     public static ConverterState State = ConverterState.None;
 

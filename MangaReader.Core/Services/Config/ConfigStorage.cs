@@ -36,6 +36,7 @@ namespace MangaReader.Services.Config
     /// <summary>
     /// Настройки, зависящие от базы данных.
     /// </summary>
+    [JsonIgnore]
     public DatabaseConfig DatabaseConfig
     {
       get

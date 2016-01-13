@@ -25,9 +25,9 @@ namespace MangaReader.Update
       new VersionHistory().ShowDialog();
     }
 
-    public static void Initialize()
+    public static void Init()
     {
-      Updater.Initialize();
+      // Просто вызываются подписки на события.
     }
   }
 }

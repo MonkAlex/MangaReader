@@ -1,5 +1,6 @@
 ﻿using System;
 using MangaReader.Services;
+using MangaReader.Services.Config;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHibernate;
 
@@ -36,5 +37,11 @@ namespace MangaReader.Tests
     public Version Version { get; set; }
     public ConvertState State { get; set; }
     public event EventHandler<ConvertState> StateChanged;
+
+    public ReportProcess()
+    {
+      Version = AppConfig.Version;
+      State = ConvertState.None;
+    }
   }
 }

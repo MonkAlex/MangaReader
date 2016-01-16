@@ -6,6 +6,7 @@ using MangaReader.Core;
 using MangaReader.Services;
 using MangaReader.Services.Config;
 using MangaReader.Update;
+using MangaReader.ViewModel;
 
 namespace MangaReader
 {
@@ -24,12 +25,9 @@ namespace MangaReader
     {
       if (Environment.GetCommandLineArgs().Contains("-t"))
         ShowConsoleWindow();
-      Client.Init();
 
-      UpdaterWPF.Init();
-      ConvertWPF.Init();
-
-      Client.Start();
+      var model = new Initialize(new Converting());
+      model.Show();
 
       var mainwindow = true ? new Table() as Window : new UI.MainForm.Blazard();
       mainwindow.ShowDialog();

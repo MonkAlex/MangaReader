@@ -116,12 +116,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\Config\ViewConfigWPF.cs" />
-    <Compile Include="Services\Converting.xaml.cs">
+    <Compile Include="UI\Converting.xaml.cs">
       <DependentUpon>Converting.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\ConvertWPF.cs" />
     <Compile Include="Services\LibraryWPF.cs" />
-    <Compile Include="Services\MangaSettings.xaml.cs">
+    <Compile Include="UI\MangaSettings.xaml.cs">
       <DependentUpon>MangaSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\WindowHelper.cs" />
@@ -154,6 +153,8 @@
     <Compile Include="Update\VersionHistory.xaml.cs">
       <DependentUpon>VersionHistory.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\BaseViewModel.cs" />
+    <Compile Include="ViewModel\Initialize.cs" />
     <Page Include="Input.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -162,11 +163,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Services\Converting.xaml">
+    <Page Include="UI\Converting.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Services\MangaSettings.xaml">
+    <Page Include="UI\MangaSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -123,7 +123,7 @@ namespace MangaReader.Services
     /// <summary>
     /// Сконвертировать в новый формат.
     /// </summary>
-    internal static void Convert(ConverterProcess process)
+    internal static void Convert(IProcess process)
     {
       if (File.Exists(DatabaseFile))
         ConvertBaseTo24(process);
@@ -131,7 +131,7 @@ namespace MangaReader.Services
       Convert24To27(process);
     }
 
-    private static void Convert24To27(ConverterProcess process)
+    private static void Convert24To27(IProcess process)
     {
       var version = new Version(1, 27, 5584);
       if (version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && process.Version.CompareTo(version) >= 0)
@@ -157,7 +157,7 @@ namespace MangaReader.Services
       }
     }
 
-    private static void ConvertBaseTo24(ConverterProcess process)
+    private static void ConvertBaseTo24(IProcess process)
     {
       var database = Serializer<List<string>>.Load(DatabaseFile) ?? new List<string>(File.ReadAllLines(DatabaseFile));
 

@@ -18,7 +18,7 @@ namespace MangaReader.Services
     /// </summary>
     private static readonly string CacheFile = ConfigStorage.WorkFolder + @".\Cache";
 
-    internal static void Convert(ConverterProcess process)
+    internal static void Convert(IProcess process)
     {
       if (!File.Exists(CacheFile))
         return;

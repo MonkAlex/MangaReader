@@ -12,9 +12,9 @@ namespace MangaReader.Core
       AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly.ResolveInternalAssembly;
     }
 
-    public static void Start()
+    public static void Start(IProcess process)
     {
-      Updater.Initialize();
+      Updater.Initialize(process);
 
       var isSingle = false;
       var mtx = new System.Threading.Mutex(true, "5197317b-a6f6-4a6c-a336-6fbf8642b7bc", out isSingle);
@@ -24,8 +24,8 @@ namespace MangaReader.Core
         Environment.Exit(1);
       }
 
-      Mapping.Environment.Initialize();
-      Converter.Convert();
+      Mapping.Environment.Initialize(process);
+      Converter.Convert(process);
     }
   }
 }

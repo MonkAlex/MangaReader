@@ -5,6 +5,7 @@ using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using MangaReader.Services;
 using MangaReader.Services.Config;
 
 namespace MangaReader.Mapping
@@ -24,8 +25,9 @@ namespace MangaReader.Mapping
 
     public static bool Initialized { get; set; }
 
-    public static void Initialize()
+    public static void Initialize(IProcess process)
     {
+      process.Status = "Подключение к базе данных...";
       // TODO: подумать над другим способом явно подгрузить SQLite.
       Initialized = Equals(FunctionType.Aggregate, FunctionType.Collation);
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Windows;
 using MangaReader.Manga.Acomic;
 using MangaReader.Manga.Grouple;
 
@@ -8,7 +7,7 @@ namespace MangaReader.Services.Config
 {
   internal static class Converter
   {
-    internal static void ConvertAll(ConverterProcess process)
+    internal static void ConvertAll(IProcess process)
     {
       // 1.* To 1.30
       ConvertBaseTo30(process);
@@ -18,7 +17,7 @@ namespace MangaReader.Services.Config
     }
 
 #pragma warning disable CS0618 // Type or member is obsolete
-    private static void Convert30To31(ConverterProcess process)
+    private static void Convert30To31(IProcess process)
     {
       var version = new Version(1, 31, 5765);
       if (version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && process.Version.CompareTo(version) >= 0)
@@ -48,7 +47,7 @@ namespace MangaReader.Services.Config
       }
     }
 
-    private static void ConvertBaseTo30(ConverterProcess process)
+    private static void ConvertBaseTo30(IProcess process)
     {
       var version = new Version(1, 30, 5765);
       if (version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && process.Version.CompareTo(version) >= 0)

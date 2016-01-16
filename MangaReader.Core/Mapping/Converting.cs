@@ -7,7 +7,7 @@ namespace MangaReader.Mapping
   internal class Converting
   {
 
-    internal static void ConvertAll(ConverterProcess process)
+    internal static void ConvertAll(IProcess process)
     {
       // 1.* To 1.24
       ConvertBaseTo24(process);
@@ -22,7 +22,7 @@ namespace MangaReader.Mapping
       Convert29To30(process);
     }
 
-    private static void Convert29To30(ConverterProcess process)
+    private static void Convert29To30(IProcess process)
     {
       var version = new Version(1, 30, 5765);
       if (version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && process.Version.CompareTo(version) >= 0)
@@ -44,7 +44,7 @@ namespace MangaReader.Mapping
       }
     }
 
-    private static void Convert27To28(ConverterProcess process)
+    private static void Convert27To28(IProcess process)
     {
       var version = new Version(1, 28, 5659);
       if (version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && process.Version.CompareTo(version) >= 0)
@@ -63,7 +63,7 @@ namespace MangaReader.Mapping
       }
     }
 
-    private static void Convert24To27(ConverterProcess process)
+    private static void Convert24To27(IProcess process)
     {
       var version = new Version(1, 27, 5584);
       if (version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && process.Version.CompareTo(version) >= 0)
@@ -80,7 +80,7 @@ namespace MangaReader.Mapping
       }
     }
 
-    internal static void ConvertBaseTo24(ConverterProcess process)
+    internal static void ConvertBaseTo24(IProcess process)
     {
       var version = new Version(1, 24);
       if (version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && process.Version.CompareTo(version) >= 0)

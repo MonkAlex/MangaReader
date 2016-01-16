@@ -4,18 +4,19 @@
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
         ShowInTaskbar="False"
+        DataContextChanged="Converting_OnDataContextChanged"
+        ResizeMode="CanResize"
         Title="" Height="100" Width="300">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" x:Name="TextBlock" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="0" Text="{Binding Status}"  TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         <ProgressBar Grid.Row="1" 
-                     x:Name="ProgressBar" 
                      Maximum="100"
                      Height="25"
-                     Value="0"
-                     IsIndeterminate="True"/>
+                     Value="{Binding Percent}"
+                     IsIndeterminate="{Binding IsIndeterminate}"/>
     </Grid>
 </Window>

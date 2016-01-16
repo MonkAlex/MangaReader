@@ -67,7 +67,7 @@ namespace MangaReader.Services
       return result;
     }
 
-    internal static void ConvertAll(ConverterProcess process)
+    internal static void ConvertAll(IProcess process)
     {
       // 1.* To 1.32
       ConvertBaseTo32(process);
@@ -76,7 +76,7 @@ namespace MangaReader.Services
       Convert32To33(process);
     }
 
-    private static void Convert32To33(ConverterProcess process)
+    private static void Convert32To33(IProcess process)
     {
       var version = new Version(1, 33, 5789);
       if (version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && process.Version.CompareTo(version) >= 0)
@@ -91,7 +91,7 @@ namespace MangaReader.Services
     /// <summary>
     /// Сконвертировать в новый формат.
     /// </summary>
-    private static void ConvertBaseTo32(ConverterProcess process)
+    private static void ConvertBaseTo32(IProcess process)
     {
       if (!File.Exists(HistoryFile))
         return;

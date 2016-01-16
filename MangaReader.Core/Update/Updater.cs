@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Windows;
 using MangaReader.Account;
 using MangaReader.Services;
 using MangaReader.Services.Config;
@@ -30,7 +28,7 @@ namespace MangaReader.Update
     /// Запуск обновления, вызываемый до инициализации программы.
     /// </summary>
     /// <remarks>Завершает обновление и удаляет временные файлы.</remarks>
-    public static void Initialize()
+    public static void Initialize(IProcess process)
     {
       var args = Environment.GetCommandLineArgs();
       if (args.Contains(UpdateStarted))
@@ -39,7 +37,10 @@ namespace MangaReader.Update
         Updater.Clean();
 
       if (ConfigStorage.Instance.AppConfig.UpdateReader)
+      {
+        process.Status = "Проверка обновлений...";
         Updater.StartUpdate();
+      }
     }
 
     /// <summary>

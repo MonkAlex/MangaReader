@@ -34,12 +34,12 @@ namespace MangaReader.Services.Config
     /// <summary>
     /// Версия приложения.
     /// </summary>
-    internal static Version Version { get { return Assembly.GetExecutingAssembly().GetName().Version; } }
+    public static Version Version { get { return Assembly.GetExecutingAssembly().GetName().Version; } }
 
     /// <summary>
     /// Папка загрузки.
     /// </summary>
-    internal static string DownloadFolder { get { return Path.Combine(ConfigStorage.WorkFolder, "Download"); } }
+    public static string DownloadFolder { get { return Path.Combine(ConfigStorage.WorkFolder, "Download"); } }
 
     /// <summary>
     /// Префикс папки томов.

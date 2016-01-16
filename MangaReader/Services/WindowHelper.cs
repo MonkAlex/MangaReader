@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows;
 
 namespace MangaReader.Services
@@ -9,9 +10,12 @@ namespace MangaReader.Services
     {
       get
       {
-        return Application.Current.Windows.Cast<Window>()
-          .Where(w => w.IsLoaded)
-          .OrderBy(w => w.IsActive).LastOrDefault();
+        return Application.Current.Dispatcher.Invoke(() =>
+        {
+          return Application.Current.Windows.Cast<Window>()
+            .Where(w => w.IsLoaded)
+            .OrderBy(w => w.IsActive).LastOrDefault();
+        });
       }
     }
   }

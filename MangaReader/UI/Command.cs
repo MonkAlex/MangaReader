@@ -11,6 +11,7 @@ using MangaReader.Services;
 using MangaReader.Services.Config;
 using MangaReader.UI.MainForm;
 using MangaReader.Update;
+using MangaReader.ViewModel;
 using Ookii.Dialogs.Wpf;
 
 namespace MangaReader.UI
@@ -294,7 +295,8 @@ namespace MangaReader.UI
         dialog.Buttons.Add(new TaskDialogButton(ButtonType.No));
         if (dialog.ShowDialog(owner).ButtonType == ButtonType.Yes)
         {
-          Updater.StartUpdate();
+          var updateModel = new DownloadUpdate(new Download(owner));
+          updateModel.Show();
         }
       }
       else

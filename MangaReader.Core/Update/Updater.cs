@@ -39,7 +39,7 @@ namespace MangaReader.Update
       if (ConfigStorage.Instance.AppConfig.UpdateReader)
       {
         process.Status = "Проверка обновлений...";
-        Updater.StartUpdate();
+        Updater.StartUpdate(process);
       }
     }
 
@@ -63,7 +63,7 @@ namespace MangaReader.Update
     /// <summary>
     /// Запуск обновления.
     /// </summary>
-    public static void StartUpdate()
+    public static void StartUpdate(IProcess process)
     {
       if (!Updater.CheckUpdate())
         return;
@@ -71,7 +71,11 @@ namespace MangaReader.Update
       using (var client = new CookieClient())
       {
         var taskBytes = client.DownloadDataTaskAsync(LinkToUpdate);
-        OnUpdateDownloadStarted(client);
+        client.DownloadProgressChanged += (sender, args) =>
+        {
+          process.Percent = args.ProgressPercentage;
+          process.Status = string.Format("{0} - {1}/{2} МБ", "Скачивается обновление", args.BytesReceived.ToMegaBytes(), args.TotalBytesToReceive.ToMegaBytes());
+        };
         File.WriteAllBytes(UpdateFilename, taskBytes.Result);
       }
 
@@ -126,21 +130,6 @@ namespace MangaReader.Update
         Log.Exception(exception);
       }
       Log.Add("Update process clean temporary files");
-      OnUpdateCompleted();
-    }
-
-    public static event EventHandler<CookieClient> UpdateDownloadStarted;
-
-    public static event EventHandler UpdateCompleted;
-
-    private static void OnUpdateCompleted()
-    {
-      UpdateCompleted?.Invoke(null, EventArgs.Empty);
-    }
-
-    private static void OnUpdateDownloadStarted(CookieClient e)
-    {
-      UpdateDownloadStarted?.Invoke(null, e);
     }
   }
 }

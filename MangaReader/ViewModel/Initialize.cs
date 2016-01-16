@@ -66,8 +66,6 @@ namespace MangaReader.ViewModel
       base.Load();
 
       Client.Init();
-
-      UpdaterWPF.Init();
     }
 
     public void Show()

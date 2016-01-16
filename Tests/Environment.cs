@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using MangaReader.Services;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHibernate;
 
 namespace MangaReader.Tests
@@ -12,8 +14,9 @@ namespace MangaReader.Tests
     [AssemblyInitialize]
     public static void TestInitialize(TestContext context)
     {
-      Mapping.Environment.Initialize();
-      Services.Converter.Convert();
+      var process = new ReportProcess();
+      Core.Client.Init();
+      Core.Client.Start(process);
 
       Session = Mapping.Environment.Session;
     }
@@ -23,5 +26,15 @@ namespace MangaReader.Tests
     {
 
     }
+  }
+
+  public class ReportProcess : IProcess
+  {
+    public double Percent { get; set; }
+    public bool IsIndeterminate { get; set; }
+    public string Status { get; set; }
+    public Version Version { get; set; }
+    public ConvertState State { get; set; }
+    public event EventHandler<ConvertState> StateChanged;
   }
 }

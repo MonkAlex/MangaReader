@@ -13,7 +13,7 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Text}"/>
-        <ProgressBar Grid.Row="1" Margin="5" Value="{Binding ProgressPercentage}" Maximum="100" MaxHeight="25"/>
+        <TextBlock Grid.Row="0" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Status}"/>
+        <ProgressBar Grid.Row="1" Margin="5" Value="{Binding Percent}" Maximum="100" MaxHeight="25" IsIndeterminate="False"/>
     </Grid>
 </Window>

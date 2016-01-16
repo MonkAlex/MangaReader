@@ -5,7 +5,6 @@
         WindowStartupLocation="CenterScreen"
         ShowInTaskbar="False"
         DataContextChanged="Converting_OnDataContextChanged"
-        ResizeMode="CanResize"
         Title="" Height="100" Width="300">
     <Grid>
         <Grid.RowDefinitions>

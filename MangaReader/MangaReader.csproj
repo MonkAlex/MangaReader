@@ -149,11 +149,11 @@
     <Compile Include="SettingsForm.xaml.cs">
       <DependentUpon>SettingsForm.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Update\UpdaterWPF.cs" />
     <Compile Include="Update\VersionHistory.xaml.cs">
       <DependentUpon>VersionHistory.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\BaseViewModel.cs" />
+    <Compile Include="ViewModel\DownloadUpdate.cs" />
     <Compile Include="ViewModel\Initialize.cs" />
     <Page Include="Input.xaml">
       <SubType>Designer</SubType>

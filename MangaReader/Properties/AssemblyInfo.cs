@@ -6,13 +6,6 @@ using System.Windows;
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
 [assembly: AssemblyTitle("MangaReader")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Intruders")]
-[assembly: AssemblyProduct("MangaReader")]
-[assembly: AssemblyCopyright("Copyright © Intruders 2014-2015")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 
 // Параметр ComVisible со значением FALSE делает типы в сборке невидимыми 
 // для COM-компонентов.  Если требуется обратиться к типу в этой сборке через 
@@ -37,16 +30,3 @@ using System.Windows;
     //(используется, если ресурс не найден на странице, 
     // в приложении или в каких-либо словарях ресурсов для конкретной темы)
 )]
-
-
-// Сведения о версии сборки состоят из следующих четырех значений:
-//
-//      Основной номер версии
-//      Дополнительный номер версии 
-//      Номер построения
-//      Редакция
-//
-// Можно задать все значения или принять номер построения и номер редакции по умолчанию, 
-// используя "*", как показано ниже:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.34.*")]

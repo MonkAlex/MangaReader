@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		README.md = README.md
+		VersionInfo.cs = VersionInfo.cs
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaReader.Core", "MangaReader.Core\MangaReader.Core.csproj", "{744F331A-938A-475A-840A-7FAC985EBE61}"

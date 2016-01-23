@@ -24,6 +24,7 @@ namespace MangaReader.Core
         Environment.Exit(1);
       }
 
+      ResolveAssembly.LoadSql();
       Mapping.Environment.Initialize(process);
       Converter.Convert(process);
     }

@@ -1,5 +1,4 @@
-﻿using System.Data.SQLite;
-using System.IO;
+﻿using System.IO;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
@@ -27,10 +26,9 @@ namespace MangaReader.Mapping
 
     public static void Initialize(IProcess process)
     {
-      process.Status = "Подключение к базе данных...";
-      // TODO: подумать над другим способом явно подгрузить SQLite.
-      Initialized = Equals(FunctionType.Aggregate, FunctionType.Collation);
+      Initialized = false;
 
+      process.Status = "Подключение к базе данных...";
       sessionFactory = CreateSessionFactory();
       Session = sessionFactory.OpenSession();
 

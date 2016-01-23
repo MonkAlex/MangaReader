@@ -5,12 +5,12 @@ using MangaReader.Services.Config;
 
 namespace MangaReader.Services
 {
-  public class Log
+  public static class Log
   {
     /// <summary>
     /// Указатель блокировки.
     /// </summary>
-    private static readonly object LogLock = new object();
+    private static readonly object LogLock;
 
     /// <summary>
     /// Ссылка на файл лога.
@@ -70,9 +70,9 @@ namespace MangaReader.Services
       }
     }
 
-    public Log()
+    static Log()
     {
-      throw new Exception("Use static methods. Dont create log object.");
+      LogLock = "lc?";
     }
   }
 }

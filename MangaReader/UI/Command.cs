@@ -295,7 +295,7 @@ namespace MangaReader.UI
         dialog.Buttons.Add(new TaskDialogButton(ButtonType.No));
         if (dialog.ShowDialog(owner).ButtonType == ButtonType.Yes)
         {
-          var updateModel = new DownloadUpdate(new Download(owner));
+          var updateModel = new DownloadUpdate(new Converting(owner));
           updateModel.Show();
         }
       }

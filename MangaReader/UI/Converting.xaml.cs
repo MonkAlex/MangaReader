@@ -12,6 +12,15 @@ namespace MangaReader.Services
       InitializeComponent();
     }
 
+    public Converting(Window owner) : this()
+    {
+      if (owner != null)
+      {
+        this.Owner = owner;
+        this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+      }
+    }
+
     private void Converting_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
       var oldValue = e.OldValue as IProcess;

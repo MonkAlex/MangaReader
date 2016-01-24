@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using MangaReader.Services;
 
 namespace MangaReader.Core
 {
@@ -54,36 +53,41 @@ namespace MangaReader.Core
     /// <summary>
     /// Загрузка SQLite.
     /// </summary>
-    /// <remarks>
-    /// Используется 
-    /// Precompiled Binaries for 32-bit Windows (.NET Framework 4.5) 
-    /// с адреса 
-    /// https://system.data.sqlite.org/index.html/doc/trunk/www/downloads.wiki
-    /// </remarks>
     internal static void LoadSql()
     {
       foreach (var assembly in AllowedAssemblies())
       {
-        var resourceNames = assembly.GetManifestResourceNames();
-        if (!resourceNames.Any())
-          continue;
-
-        var assemblyFile = "System.Data.SQLite.dll";
-        var resourceName = resourceNames.SingleOrDefault(s => s.EndsWith(assemblyFile));
-        if (string.IsNullOrWhiteSpace(resourceName))
-          continue;
-
-        using (var stream = assembly.GetManifestResourceStream(resourceName))
-        {
-          var block = new byte[stream.Length];
-          stream.Read(block, 0, block.Length);
-          var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), assemblyFile);
-          File.WriteAllBytes(path, block);
-          Assembly.LoadFrom(path);
-          Log.Add(string.Format("Assembly {0} loaded from {1}.", assemblyFile, path));
-        }
+        WriteResourceToFile(assembly, "System.Data.SQLite.dll");
+        WriteResourceToFile(assembly, "sqlite3");
+        WriteResourceToFile(assembly, "sqlite3.dll", "x64");
+        WriteResourceToFile(assembly, "sqlite3.dll", "x86");
+//        Assembly.LoadFrom(path);
       }
     }
 
+    private static string WriteResourceToFile(Assembly assembly, string assemblyName, string subfolder = "")
+    {
+      var resourceNames = assembly.GetManifestResourceNames();
+      if (!resourceNames.Any())
+        return string.Empty;
+
+      var resourcePath = string.IsNullOrWhiteSpace(subfolder) ? assemblyName : string.Format("{0}.{1}", subfolder, assemblyName);
+      var resourceName = resourceNames.SingleOrDefault(s => s.EndsWith(resourcePath));
+      if (string.IsNullOrWhiteSpace(resourceName))
+        return string.Empty;
+
+      using (var stream = assembly.GetManifestResourceStream(resourceName))
+      {
+        var block = new byte[stream.Length];
+        stream.Read(block, 0, block.Length);
+        var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        if (!string.IsNullOrWhiteSpace(subfolder))
+          path = Path.Combine(path, subfolder);
+        Directory.CreateDirectory(path);
+        path = Path.Combine(path, assemblyName);
+        File.WriteAllBytes(path, block);
+        return path;
+      }
+    }
   }
 }

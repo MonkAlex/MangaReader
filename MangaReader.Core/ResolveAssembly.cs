@@ -80,7 +80,7 @@ namespace MangaReader.Core
       {
         var block = new byte[stream.Length];
         stream.Read(block, 0, block.Length);
-        var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         if (!string.IsNullOrWhiteSpace(subfolder))
           path = Path.Combine(path, subfolder);
         Directory.CreateDirectory(path);

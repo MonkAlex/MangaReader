@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaReader", "MangaReader\MangaReader.csproj", "{49B3CB76-DC2D-4707-96CA-3D0DDCCD006B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{744F331A-938A-475A-840A-7FAC985EBE61} = {744F331A-938A-475A-840A-7FAC985EBE61}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaReader.Tests", "Tests\MangaReader.Tests.csproj", "{3B6A42FF-E0CB-4795-9C8E-054BFF696FD3}"
 EndProject
@@ -35,6 +38,7 @@ Global
 		{49B3CB76-DC2D-4707-96CA-3D0DDCCD006B}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{49B3CB76-DC2D-4707-96CA-3D0DDCCD006B}.Debug|Any CPU.Build.0 = Debug|x86
 		{49B3CB76-DC2D-4707-96CA-3D0DDCCD006B}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{49B3CB76-DC2D-4707-96CA-3D0DDCCD006B}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{49B3CB76-DC2D-4707-96CA-3D0DDCCD006B}.Debug|x86.ActiveCfg = Debug|x86
 		{49B3CB76-DC2D-4707-96CA-3D0DDCCD006B}.Debug|x86.Build.0 = Debug|x86
 		{49B3CB76-DC2D-4707-96CA-3D0DDCCD006B}.Publish|Any CPU.ActiveCfg = Publish|x86

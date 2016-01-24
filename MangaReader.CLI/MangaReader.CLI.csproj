@@ -46,10 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\MangaReader.Core\ResolveAssembly.cs">
+      <Link>ResolveAssembly.cs</Link>
+    </Compile>
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="ConsoleProgress.cs" />
+    <Compile Include="Initialize.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -57,9 +61,17 @@
     <ProjectReference Include="..\MangaReader.Core\MangaReader.Core.csproj">
       <Project>{744f331a-938a-475a-840a-7fac985ebe61}</Project>
       <Name>MangaReader.Core</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="lib\MangaReader.Core.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>copy "$(SolutionDir)\MangaReader.Core\bin\$(ConfigurationName)\MangaReader.Core.dll" "$(ProjectDir)\lib"</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

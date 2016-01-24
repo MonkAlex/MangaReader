@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
-using MangaReader.Core;
 
 namespace MangaReader.ViewModel
 {
@@ -9,12 +8,12 @@ namespace MangaReader.ViewModel
     public override void Load()
     {
       base.Load();
-      Client.Init();
+      Core.Client.Init();
     }
 
     public void Show()
     {
-      view.ContentRendered += (sender, args) => Task.Run(() => Client.Start(this));
+      view.ContentRendered += (sender, args) => Task.Run(() => Core.Client.Start(this));
       view.ShowDialog();
     }
 

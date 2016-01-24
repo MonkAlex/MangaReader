@@ -16,7 +16,7 @@ namespace MangaReader.Services
     public VersionHistory()
     {
       InitializeComponent();
-      var assembly = Assembly.GetExecutingAssembly();
+      var assembly = Assembly.GetEntryAssembly();
       using (var reader = new StreamReader(assembly.GetManifestResourceStream("MangaReader.Update.VersionHistory.txt")))
         this.TextBox.Text = reader.ReadToEnd();
       var version = assembly.GetName().Version;

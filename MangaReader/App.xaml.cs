@@ -2,11 +2,6 @@
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
-using MangaReader.Core;
-using MangaReader.Services;
-using MangaReader.Services.Config;
-using MangaReader.Update;
-using MangaReader.ViewModel;
 
 namespace MangaReader
 {
@@ -17,8 +12,8 @@ namespace MangaReader
   {
     private void App_OnExit(object sender, ExitEventArgs e)
     {
-      ConfigStorage.Instance.Save();
-      Environment.Exit(0);
+      var code = Client.Close();
+      Environment.Exit(code);
     }
 
     private void App_OnStartup(object sender, StartupEventArgs e)
@@ -26,11 +21,8 @@ namespace MangaReader
       if (Environment.GetCommandLineArgs().Contains("-t"))
         ShowConsoleWindow();
 
-      var model = new Initialize(new Converting());
-      model.Show();
-
-      var mainwindow = true ? new Table() as Window : new UI.MainForm.Blazard();
-      mainwindow.ShowDialog();
+      AppDomain.CurrentDomain.AssemblyResolve += Core.ResolveAssembly.ResolveInternalAssembly;
+      Client.Run();
     }
 
     #region Консоль

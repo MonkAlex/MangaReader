@@ -8,6 +8,9 @@
 *.DotSettings
 packages.config
 
+# Single-exe build specification
+MangaReader.Core.dll
+
 # Build results
 
 [Dd]ebug/

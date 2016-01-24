@@ -60,7 +60,7 @@ namespace MangaReader.Services.Config
     /// </summary>
     internal static string WorkFolder { get { return workFolder; } }
 
-    private static string workFolder = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+    private static string workFolder = AppDomain.CurrentDomain.BaseDirectory;
 
     /// <summary>
     /// Настройки программы.

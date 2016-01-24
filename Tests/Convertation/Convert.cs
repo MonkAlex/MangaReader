@@ -26,7 +26,7 @@ namespace MangaReader.Tests.Convertation
       }
     }
 
-    [TestMethod]
+    [TestMethod, Ignore]
     public void Convert_1_12_to_main()
     {
       Deploy("1.12");
@@ -48,7 +48,7 @@ namespace MangaReader.Tests.Convertation
       Assert.AreEqual(3036, loadedHistoryRecord);
     }
 
-    [TestMethod]
+    [TestMethod, Ignore]
     public void Convert_1_20_to_main()
     {
       Deploy("1.20");

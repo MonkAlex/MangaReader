@@ -64,7 +64,8 @@ namespace MangaReader.Account
     public static Login Create(Guid manga)
     {
       var baseClass = typeof(Login);
-      var types = Assembly.GetAssembly(baseClass).GetTypes()
+      // TODO: с учетом подключаемых либ - искать надо везде.
+      var types = baseClass.Assembly.GetTypes()
         .Where(type => type.IsSubclassOf(baseClass));
 
       Login login = null;

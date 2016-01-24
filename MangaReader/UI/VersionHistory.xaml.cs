@@ -16,7 +16,8 @@ namespace MangaReader.Services
     public VersionHistory()
     {
       InitializeComponent();
-      var assembly = Assembly.GetEntryAssembly();
+      // TODO: надо отдавать историю как то нормально, через API.
+      var assembly = typeof(Update.Updater).Assembly;
       using (var reader = new StreamReader(assembly.GetManifestResourceStream("MangaReader.Update.VersionHistory.txt")))
         this.TextBox.Text = reader.ReadToEnd();
       var version = assembly.GetName().Version;

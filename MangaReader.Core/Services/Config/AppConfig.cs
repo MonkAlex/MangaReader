@@ -34,7 +34,7 @@ namespace MangaReader.Services.Config
     /// <summary>
     /// Версия приложения.
     /// </summary>
-    public static Version Version { get { return Assembly.GetEntryAssembly().GetName().Version; } }
+    public static Version Version { get { return typeof(AppConfig).Assembly.GetName().Version; } }
 
     /// <summary>
     /// Папка загрузки.

@@ -51,7 +51,8 @@ namespace MangaReader.Services.Config
     private static List<MangaSetting> CreateDefaultMangaSettings(List<MangaSetting> query)
     {
       var baseClass = typeof(Manga.Mangas);
-      var types = Assembly.GetAssembly(baseClass).GetTypes()
+      // TODO: с учетом подключаемых либ - искать надо везде.
+      var types = baseClass.Assembly.GetTypes()
         .Where(type => type.IsSubclassOf(baseClass));
 
       foreach (var type in types)

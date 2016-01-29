@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using MangaReader;
 using MangaReader.Manga.Grouple;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace MangaReader.Tests
+namespace Tests.Entities
 {
   [TestClass]
   public class ReadmangaMoved
@@ -20,7 +21,7 @@ namespace MangaReader.Tests
       manga.Refresh();
       manga.Save();
       var chapters = new List<Chapter> { new Chapter(new Uri("http://mintmanga.com/btooom_/vol1/1?mature=1")) };
-      var chartersNotInHistory = Services.History.GetItemsWithoutHistory(chapters);
+      var chartersNotInHistory = MangaReader.Services.History.GetItemsWithoutHistory(chapters);
       Assert.AreEqual(0, chartersNotInHistory.Count);
     }
   }

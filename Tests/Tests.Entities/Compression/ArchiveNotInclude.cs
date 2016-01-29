@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace MangaReader.Tests.Compression
+namespace Tests.Entities.Compression
 {
   [TestClass]
   public class ArchiveNotInclude
@@ -20,9 +20,9 @@ namespace MangaReader.Tests.Compression
 
       var directory = AddFile(downloadFolder);
       AddFile(directory);
-      Services.Compression.CompressChapters(downloadFolder);
+      MangaReader.Services.Compression.CompressChapters(downloadFolder);
       CheckFiles(downloadFolder, 1, 1);
-      Services.Compression.CompressVolumes(downloadFolder);
+      MangaReader.Services.Compression.CompressVolumes(downloadFolder);
       CheckFiles(downloadFolder, 2, 1, 1);
     }
 
@@ -40,9 +40,9 @@ namespace MangaReader.Tests.Compression
     private void CheckFiles(string downloadFolder, int archiveCount, params int[] filesCount)
     {
       var files = Directory.GetFiles(downloadFolder, "*", SearchOption.AllDirectories);
-      Assert.AreEqual(files.Count(f => f.EndsWith(Services.Compression.ArchiveFormat)), archiveCount);
+      Assert.AreEqual(files.Count(f => f.EndsWith(MangaReader.Services.Compression.ArchiveFormat)), archiveCount);
 
-      var archives = files.Where(n => n.Contains(Services.Compression.ArchiveFormat));
+      var archives = files.Where(n => n.Contains(MangaReader.Services.Compression.ArchiveFormat));
       var count = 0;
       foreach (var archive in archives)
       {

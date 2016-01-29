@@ -2,7 +2,7 @@
 using MangaReader.Manga;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace MangaReader.Tests.CRUD
+namespace Tests.Entities.CRUD
 {
   [TestClass]
   public class Manga

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace MangaReader.Tests.Compression
+namespace Tests.Entities.Compression
 {
   [TestClass]
   public class MangaCompressionDeleteFolders
@@ -21,7 +21,7 @@ namespace MangaReader.Tests.Compression
       var volume = AddFolder(downloadFolder);
       var chapter = AddFolder(volume);
       AddFile(chapter);
-      Services.Compression.CompressManga(downloadFolder);
+      MangaReader.Services.Compression.CompressManga(downloadFolder);
       CheckFiles(downloadFolder, 1, 1);
 
       Assert.IsFalse(Directory.Exists(chapter));
@@ -45,9 +45,9 @@ namespace MangaReader.Tests.Compression
     private void CheckFiles(string downloadFolder, int archiveCount, params int[] filesCount)
     {
       var files = Directory.GetFiles(downloadFolder, "*", SearchOption.AllDirectories);
-      Assert.AreEqual(files.Count(f => f.EndsWith(Services.Compression.ArchiveFormat)), archiveCount);
+      Assert.AreEqual(files.Count(f => f.EndsWith(MangaReader.Services.Compression.ArchiveFormat)), archiveCount);
 
-      var archives = files.Where(n => n.Contains(Services.Compression.ArchiveFormat));
+      var archives = files.Where(n => n.Contains(MangaReader.Services.Compression.ArchiveFormat));
       var count = 0;
       foreach (var archive in archives)
       {

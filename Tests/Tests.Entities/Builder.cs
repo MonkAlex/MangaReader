@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
+using MangaReader;
 using MangaReader.Manga;
 using MangaReader.Manga.Acomic;
 using MangaReader.Manga.Grouple;
 
-namespace MangaReader.Tests
+namespace Tests.Entities
 {
   public static class Builder
   {

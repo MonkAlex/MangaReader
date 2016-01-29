@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace MangaReader.Tests.Library
+namespace Tests.Entities.Library
 {
   [TestClass]
   public class Add
@@ -14,7 +14,7 @@ namespace MangaReader.Tests.Library
       var result = false;
       try
       {
-        result = Services.Library.Add(@"http://example.com/");
+        result = MangaReader.Services.Library.Add(@"http://example.com/");
       }
       catch (Exception)
       {
@@ -31,13 +31,13 @@ namespace MangaReader.Tests.Library
       var result = false;
       var uri = new Uri(@"http://readmanga.me/berserk/");
 
-      var mangas = Services.Library.LibraryMangas.Where(m => Equals(m.Uri, uri)).ToList();
+      var mangas = MangaReader.Services.Library.LibraryMangas.Where(m => Equals(m.Uri, uri)).ToList();
       foreach (var manga in mangas)
-        Services.Library.Remove(manga);
+        MangaReader.Services.Library.Remove(manga);
 
       try
       {
-        result = Services.Library.Add(uri);
+        result = MangaReader.Services.Library.Add(uri);
       }
       catch (Exception)
       {
@@ -47,7 +47,7 @@ namespace MangaReader.Tests.Library
       Assert.IsTrue(result);
 
       // Проверка повторного добавления.
-      result = Services.Library.Add(uri);
+      result = MangaReader.Services.Library.Add(uri);
       Assert.IsFalse(result);
     }
   }

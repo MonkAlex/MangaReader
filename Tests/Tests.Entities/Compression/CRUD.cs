@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace MangaReader.Tests.Compression
+namespace Tests.Entities.Compression
 {
   [TestClass]
   public class CRUD
@@ -19,10 +19,10 @@ namespace MangaReader.Tests.Compression
       Directory.CreateDirectory(downloadFolder);
 
       var directory = AddFile(downloadFolder);
-      Services.Compression.CompressVolumes(downloadFolder);
+      MangaReader.Services.Compression.CompressVolumes(downloadFolder);
       CheckFiles(downloadFolder, 1);
       AddFile(downloadFolder, directory);
-      Services.Compression.CompressVolumes(downloadFolder);
+      MangaReader.Services.Compression.CompressVolumes(downloadFolder);
       CheckFiles(downloadFolder, 2);
     }
 
@@ -40,7 +40,7 @@ namespace MangaReader.Tests.Compression
     private void CheckFiles(string downloadFolder, int filesCount)
     {
       var files = Directory.GetFiles(downloadFolder);
-      Assert.AreEqual(files.Count(f => f.EndsWith(Services.Compression.ArchiveFormat)), 1);
+      Assert.AreEqual(files.Count(f => f.EndsWith(MangaReader.Services.Compression.ArchiveFormat)), 1);
 
       using (var zip = ZipFile.Open(files.Last(), ZipArchiveMode.Update, Encoding.UTF8))
       {

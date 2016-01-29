@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 
 namespace MangaReader.Core
 {
@@ -85,6 +86,17 @@ namespace MangaReader.Core
           path = Path.Combine(path, subfolder);
         Directory.CreateDirectory(path);
         path = Path.Combine(path, assemblyName);
+        if (File.Exists(path))
+        {
+          var readed = File.ReadAllBytes(path);
+          using (var provider = new SHA1CryptoServiceProvider())
+          {
+            var readedHash = provider.ComputeHash(readed);
+            var resourcesHash = provider.ComputeHash(block);
+            if (Enumerable.SequenceEqual(readedHash, resourcesHash))
+              return path;
+          }
+        }
         File.WriteAllBytes(path, block);
         return path;
       }

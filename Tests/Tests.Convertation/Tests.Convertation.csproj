@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3B6A42FF-E0CB-4795-9C8E-054BFF696FD3}</ProjectGuid>
+    <ProjectGuid>{34351109-778E-4999-B0BA-DA8B9CB6E28F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MangaReader.Tests</RootNamespace>
-    <AssemblyName>MangaReader.Tests</AssemblyName>
+    <RootNamespace>Tests.Convertation</RootNamespace>
+    <AssemblyName>Tests.Convertation</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -25,7 +25,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,37 +33,27 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Publish|AnyCPU'">
-    <OutputPath>bin\Publish\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FluentNHibernate">
-      <HintPath>..\MangaReader.Core\Library\FluentNHibernate.dll</HintPath>
+      <HintPath>..\..\MangaReader.Core\Library\FluentNHibernate.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack">
-      <HintPath>..\MangaReader.Core\Library\HtmlAgilityPack.dll</HintPath>
+      <HintPath>..\..\MangaReader.Core\Library\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
-      <HintPath>..\MangaReader.Core\Library\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\MangaReader.Core\Library\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\MangaReader.Core\Library\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\MangaReader.Core\Library\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
-      <HintPath>..\MangaReader.Core\Library\NHibernate.dll</HintPath>
+      <HintPath>..\..\MangaReader.Core\Library\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MangaReader.Core\Library\System.Data.SQLite.dll</HintPath>
+      <HintPath>..\..\MangaReader.Core\Library\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
@@ -82,29 +71,23 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Builder.cs" />
-    <Compile Include="Compression\MangaCompressionDeleteFolders.cs" />
-    <Compile Include="Compression\ArchiveNotInclude.cs" />
-    <Compile Include="Compression\CRUD.cs" />
-    <Compile Include="Convertation\Convert.cs" />
-    <Compile Include="CRUD\MangaHistory.cs" />
-    <Compile Include="CRUD\Manga.cs" />
-    <Compile Include="Environment.cs" />
-    <Compile Include="Library\Add.cs" />
+    <Compile Include="..\Tests.Entities\ReportProcess.cs">
+      <Link>ReportProcess.cs</Link>
+    </Compile>
+    <Compile Include="Convert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadmangaMoved.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Convertation\1.12\db" />
-    <None Include="Convertation\1.20\Cache" />
-    <None Include="Convertation\1.20\db" />
-    <None Include="Convertation\1.20\history" />
+    <None Include="1.12\db" />
+    <None Include="1.20\Cache" />
+    <None Include="1.20\db" />
+    <None Include="1.20\history" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Convertation\1.12\list.txt" />
+    <Content Include="1.12\list.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MangaReader.Core\MangaReader.Core.csproj">
+    <ProjectReference Include="..\..\MangaReader.Core\MangaReader.Core.csproj">
       <Project>{744f331a-938a-475a-840a-7fac985ebe61}</Project>
       <Name>MangaReader.Core</Name>
     </ProjectReference>

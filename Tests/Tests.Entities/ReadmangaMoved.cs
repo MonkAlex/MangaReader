@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MangaReader;
+using MangaReader.Manga;
 using MangaReader.Manga.Grouple;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHibernate.Linq;
+using Chapter = MangaReader.Manga.Grouple.Chapter;
 
 namespace Tests.Entities
 {
@@ -12,6 +16,9 @@ namespace Tests.Entities
     [TestMethod]
     public void CreateWithHistoryAndMove()
     {
+      foreach (var remove in Environment.Session.Query<Mangas>().Where(m => m.ServerName.Contains("btooom")).ToList())
+        MangaReader.Services.Library.Remove(remove);
+
       var manga = Builder.CreateReadmanga();
       manga.Uri = new Uri("http://readmanga.me/btoom");
       manga.Histories.Add(new MangaHistory(new Uri("http://readmanga.me/btoom/vol1/1?mature=1")));

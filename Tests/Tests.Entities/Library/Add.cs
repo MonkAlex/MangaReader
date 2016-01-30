@@ -31,7 +31,7 @@ namespace Tests.Entities.Library
       var result = false;
       var uri = new Uri(@"http://readmanga.me/berserk/");
 
-      var mangas = MangaReader.Services.Library.LibraryMangas.Where(m => Equals(m.Uri, uri)).ToList();
+      var mangas = MangaReader.Services.Library.LibraryMangas.Where(m => m.Uri.AbsoluteUri.Contains("berserk")).ToList();
       foreach (var manga in mangas)
         MangaReader.Services.Library.Remove(manga);
 

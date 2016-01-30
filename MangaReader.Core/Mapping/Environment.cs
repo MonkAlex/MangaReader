@@ -35,6 +35,14 @@ namespace MangaReader.Mapping
       Initialized = true;
     }
 
+    public static void Close()
+    {
+      if (sessionFactory == null || sessionFactory.IsClosed)
+        return;
+
+      sessionFactory.Close();
+    }
+
     private static ISessionFactory CreateSessionFactory()
     {
       return Fluently

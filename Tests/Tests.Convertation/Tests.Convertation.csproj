@@ -74,17 +74,19 @@
     <Compile Include="..\Tests.Entities\ReportProcess.cs">
       <Link>ReportProcess.cs</Link>
     </Compile>
-    <Compile Include="Convert.cs" />
+    <Compile Include="1.12\Convert.cs" />
+    <Compile Include="1.20\Convert.cs" />
+    <Compile Include="Environment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="1.12\db" />
+    <None Include="1.12\history" />
     <None Include="1.20\Cache" />
     <None Include="1.20\db" />
     <None Include="1.20\history" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="1.12\list.txt" />
+    <None Include="1.12\db" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MangaReader.Core\MangaReader.Core.csproj">

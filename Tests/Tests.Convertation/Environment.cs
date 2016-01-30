@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using MangaReader.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Convertation
@@ -13,6 +14,7 @@ namespace Tests.Convertation
     public static void Deploy(string from)
     {
       var directory = new DirectoryInfo(Path.Combine(testsDirectory, from));
+      Log.Add("Copy from", directory, "to", deploymentDirectory);
       if (directory.Exists)
       {
         foreach (var file in directory.GetFiles())

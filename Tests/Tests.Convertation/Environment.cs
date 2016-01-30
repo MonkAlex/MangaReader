@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Reflection;
 using MangaReader.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -14,7 +15,7 @@ namespace Tests.Convertation
     public static void Deploy(string from)
     {
       var directory = new DirectoryInfo(Path.Combine(testsDirectory, from));
-      Log.Add("Copy from", directory, "to", deploymentDirectory);
+      Log.Add(string.Format("Copy from {0} to {1}", directory, deploymentDirectory));
       if (directory.Exists)
       {
         foreach (var file in directory.GetFiles())
@@ -27,8 +28,10 @@ namespace Tests.Convertation
     [AssemblyInitialize]
     public static void TestInitialize(TestContext context)
     {
+      var test = context.GetType().GetField("m_test", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(context);
+      var path = (string)test.GetType().GetProperty("CodeBase", BindingFlags.Public | BindingFlags.Instance).GetValue(test);
       deploymentDirectory = context.DeploymentDirectory;
-      testsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "Tests");
+      testsDirectory = Path.Combine(path, "..", "..", "..");
       TestCleanup();
       BeforeTestClean();
     }

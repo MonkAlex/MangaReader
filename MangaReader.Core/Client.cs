@@ -20,7 +20,7 @@ namespace MangaReader.Core
       Updater.Initialize(process);
 
       var isSingle = false;
-      mutex = new Mutex(true, "5197317b-a6f6-4a6c-a336-6fbf8642b7bc", out isSingle);
+      mutex = new Mutex(false, "5197317b-a6f6-4a6c-a336-6fbf8642b7bc", out isSingle);
       if (!isSingle)
       {
         Log.Add("Программа уже запущена.");

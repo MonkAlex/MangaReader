@@ -31,7 +31,7 @@ namespace Tests.Convertation
       var test = context.GetType().GetField("m_test", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(context);
       var path = (string)test.GetType().GetProperty("CodeBase", BindingFlags.Public | BindingFlags.Instance).GetValue(test);
       deploymentDirectory = context.DeploymentDirectory;
-      testsDirectory = Path.Combine(path, "..", "..", "..");
+      testsDirectory = Path.GetFullPath(Path.Combine(path, "..", "..", "..", ".."));
       TestCleanup();
       BeforeTestClean();
     }

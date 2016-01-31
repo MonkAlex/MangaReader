@@ -12,8 +12,6 @@ namespace Tests.Entities
     [AssemblyInitialize]
     public static void TestInitialize(TestContext context)
     {
-      TestCleanup();
-
       var process = new ReportProcess();
       MangaReader.Core.Client.Init();
       MangaReader.Core.Client.Start(process);

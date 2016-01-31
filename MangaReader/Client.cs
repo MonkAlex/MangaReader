@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using MangaReader.Services;
-using MangaReader.Services.Config;
 using MangaReader.ViewModel;
 
 namespace MangaReader
@@ -16,10 +15,9 @@ namespace MangaReader
       mainwindow.ShowDialog();
     }
 
-    public static int Close()
+    public static void Close()
     {
-      ConfigStorage.Instance.Save();
-      return 0;
+      Core.Client.Close();
     }
   }
 }

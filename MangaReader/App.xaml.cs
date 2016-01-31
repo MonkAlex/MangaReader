@@ -12,8 +12,8 @@ namespace MangaReader
   {
     private void App_OnExit(object sender, ExitEventArgs e)
     {
-      var code = Client.Close();
-      Environment.Exit(code);
+      Client.Close();
+      Current.Shutdown(0);
     }
 
     private void App_OnStartup(object sender, StartupEventArgs e)

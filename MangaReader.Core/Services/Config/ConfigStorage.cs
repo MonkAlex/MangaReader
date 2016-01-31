@@ -109,6 +109,12 @@ namespace MangaReader.Services.Config
       File.WriteAllText(SettingsPath, str, Encoding.UTF8);
     }
 
+    public static void Close()
+    {
+      Instance.databaseConfig = null;
+      _instance = null;
+    }
+
     public ConfigStorage()
     {
       this.AppConfig = new AppConfig();

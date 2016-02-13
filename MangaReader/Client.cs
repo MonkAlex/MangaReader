@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using MangaReader.Services;
+﻿using MangaReader.Services;
 using MangaReader.ViewModel;
 
 namespace MangaReader
@@ -11,12 +10,13 @@ namespace MangaReader
       var model = new Initialize(new Converting());
       model.Show();
 
-      var mainwindow = true ? new Table() as Window : new UI.MainForm.Blazard();
-      mainwindow.ShowDialog();
+      WindowModel.Instance.Show();
+      //var mainwindow = true ? new Table() as Window : new UI.MainForm.Blazard();
     }
 
     public static void Close()
     {
+      WindowModel.Instance.Dispose();
       Core.Client.Close();
     }
   }

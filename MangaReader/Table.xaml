@@ -7,30 +7,13 @@
         xmlns:resx="clr-namespace:MangaReader.Properties"
         xmlns:services="clr-namespace:MangaReader.Services;assembly=MangaReader.Core"
         xmlns:viewModel="clr-namespace:MangaReader.ViewModel"
-        Closing="Window_OnClosing"
-        StateChanged="Table_OnStateChanged"
-        Icon="Icons/main.ico"
         Title="{x:Static resx:Strings.Title}"  Height="350" Width="525">
 
-    <Window.Resources>
+    <base:BaseForm.Resources>
         <local:UpdateImageConverter x:Key="UpdateImageConverter"/>
         <local:CompletedImageConverter x:Key="CompletedImageConverter"/>
         <local:UrlTypeConverter x:Key="UrlTypeConverter"/>
-    </Window.Resources>
-
-    <Window.TaskbarItemInfo>
-        <TaskbarItemInfo>
-            <TaskbarItemInfo.ThumbButtonInfos>
-                <ThumbButtonInfo ImageSource="Icons/play.png" 
-                                 Command="viewModel:TaskbarModel.UpdateAll" 
-                                 Description="{Binding RelativeSource={RelativeSource Self}, Path=Command.Name}"/>
-                <ThumbButtonInfo Visibility="Hidden"/>
-                <ThumbButtonInfo ImageSource="Icons/no.png" 
-                                 Command="viewModel:TaskbarModel.Close" 
-                                 Description="{Binding RelativeSource={RelativeSource Self}, Path=Command.Name}"/>
-            </TaskbarItemInfo.ThumbButtonInfos>
-        </TaskbarItemInfo>
-    </Window.TaskbarItemInfo>
+    </base:BaseForm.Resources>
 
     <Grid>
         <Grid.RowDefinitions>

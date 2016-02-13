@@ -11,7 +11,7 @@ namespace MangaReader.ViewModel
     private bool isIndeterminate;
     private ConvertState state;
     private string status;
-    protected readonly Window view;
+    protected internal Window window { get { return this.view as Window; } }
 
     public event EventHandler<ConvertState> StateChanged;
 
@@ -60,7 +60,6 @@ namespace MangaReader.ViewModel
 
     public ProcessModel(Window view) : base(view)
     {
-      this.view = view;
       this.Percent = 0;
       this.IsIndeterminate = true;
       this.Status = string.Empty;

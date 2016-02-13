@@ -42,5 +42,10 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Margin" Value="4"/>
         </Style>
+
+        <Style x:Key="ContentMenuItem" TargetType="MenuItem">
+            <Setter Property="Header" Value="{Binding Name}"/>
+            <Setter Property="Command" Value="{Binding Command}"/>
+        </Style>
     </Application.Resources>
 </Application>

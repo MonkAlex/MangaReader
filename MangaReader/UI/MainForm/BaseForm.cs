@@ -1,12 +1,6 @@
 ﻿using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Input;
-using System.Windows.Shell;
-using Hardcodet.Wpf.TaskbarNotification;
 using MangaReader.Manga;
-using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.Services.Config;
 
@@ -15,10 +9,8 @@ namespace MangaReader.UI.MainForm
   /// <summary>
   /// Interaction logic for BaseForm.xaml
   /// </summary>
-  public partial class BaseForm : Window
+  public partial class BaseForm : System.Windows.Controls.Page
   {
-    public TaskbarIcon NotifyIcon = new TaskbarIcon{IsEnabled = false};
-
     public ListCollectionView View { get; set; }
 
     public LibraryFilter LibraryFilter { get; set; }
@@ -26,22 +18,9 @@ namespace MangaReader.UI.MainForm
     public BaseForm()
     {
       this.DataContext = this;
-      this.TaskbarItemInfo = new TaskbarItemInfo();
       Command.AddMainMenuCommands(this);
       Command.AddMangaCommands(this);
       this.Initialized += (sender, args) => LibraryWPF.Initialize(this);
-
-      this.Loaded += (sender, args) =>
-      {
-        NotifyIconInitialize();
-      };
-
-      this.Closing += (sender, args) =>
-      {
-        this.NotifyIcon.IsEnabled = false;
-        this.NotifyIcon.Dispose();
-        Application.Current.Shutdown(0);
-      };
 
       LibraryFilter = ConfigStorage.Instance.ViewConfig.LibraryFilter;
 
@@ -68,52 +47,5 @@ namespace MangaReader.UI.MainForm
       return LibraryFilter.AllowedTypes.Any(t => (t.Value as MangaSetting).Manga == manga.GetType().TypeProperty()) &&
         manga.Name.ToLowerInvariant().Contains(LibraryFilter.Name.ToLowerInvariant());
     }
-
-    private void NotifyIconInitialize()
-    {
-      Command.AddMainMenuCommands(this.NotifyIcon);
-      Command.AddMangaCommands(this.NotifyIcon);
-      this.NotifyIcon.ToolTipText = Strings.Title;
-      this.NotifyIcon.Icon = Properties.Resources.main;
-      this.NotifyIcon.TrayMouseDoubleClick += NotifyIcon_OnTrayMouseDoubleClick;
-      this.NotifyIcon.TrayBalloonTipClicked += NotifyIcon_OnTrayBalloonTipClicked;
-
-      var add = new MenuItem() { Header = Strings.Library_Action_Add, Command = ApplicationCommands.New };
-      var settings = new MenuItem() { Command = Command.ShowSettings };
-      var selfUpdate = new MenuItem() { Command = Command.CheckUpdates };
-      var exit = new MenuItem() { Command = ApplicationCommands.Close };
-
-      var menu = new ContextMenu();
-      menu.CommandBindings.Clear();
-      menu.CommandBindings.AddRange(this.NotifyIcon.CommandBindings);
-      menu.Items.Add(add);
-      menu.Items.Add(settings);
-      menu.Items.Add(selfUpdate);
-      menu.Items.Add(exit);
-      this.NotifyIcon.ContextMenu = menu;
-
-      this.NotifyIcon.IsEnabled = true;
-    }
-
-    private void NotifyIcon_OnTrayMouseDoubleClick(object sender, RoutedEventArgs e)
-    {
-      if (ConfigStorage.Instance.AppConfig.MinimizeToTray)
-      {
-        this.Show();
-        this.WindowState = System.Windows.WindowState.Normal;
-      }
-    }
-
-    private void NotifyIcon_OnTrayBalloonTipClicked(object sender, RoutedEventArgs e)
-    {
-      var element = sender as FrameworkElement;
-      if (element == null)
-        return;
-      
-      var downloadable = element.DataContext as IDownloadable;
-      if (downloadable != null)
-        Command.OpenFolder.Execute(downloadable, element);
-    }
-
   }
 }

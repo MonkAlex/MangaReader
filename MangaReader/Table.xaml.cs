@@ -30,7 +30,7 @@ namespace MangaReader
     public Table()
     {
       InitializeComponent();
-      ConfigStorage.Instance.ViewConfig.UpdateWindowState(this);
+      //ConfigStorage.Instance.ViewConfig.UpdateWindowState(this);
       _timer = new DispatcherTimer(new TimeSpan(0, 0, 1),
           DispatcherPriority.Background,
           TimerTick,
@@ -129,11 +129,6 @@ namespace MangaReader
       item.ContextMenu = menu;
     }
 
-    private void Window_OnClosing(object sender, CancelEventArgs e)
-    {
-      ConfigStorage.Instance.ViewConfig.SaveWindowState(this);
-    }
-
     private void ListView_MouseDown(object sender, MouseButtonEventArgs e)
     {
       var listView = sender as ListView;
@@ -141,12 +136,6 @@ namespace MangaReader
       {
         listView.SelectedIndex = -1;
       }
-    }
-
-    private void Table_OnStateChanged(object sender, EventArgs e)
-    {
-      if (ConfigStorage.Instance.AppConfig.MinimizeToTray && this.WindowState == System.Windows.WindowState.Minimized)
-        this.Hide();
     }
 
     private void FilterChanged(object sender, RoutedEventArgs e)

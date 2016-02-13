@@ -44,6 +44,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <OutputPath>bin\Debug\</OutputPath>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -105,6 +106,9 @@
       <DependentUpon>Converting.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\LibraryWPF.cs" />
+    <Compile Include="UI\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\MangaSettings.xaml.cs">
       <DependentUpon>MangaSettings.xaml</DependentUpon>
     </Compile>
@@ -135,14 +139,22 @@
       <DependentUpon>VersionHistory.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\BaseViewModel.cs" />
+    <Compile Include="ViewModel\Commands\AddNewMangaCommand.cs" />
+    <Compile Include="ViewModel\Commands\AppUpdateCommand.cs" />
     <Compile Include="ViewModel\Commands\BaseCommand.cs" />
+    <Compile Include="ViewModel\Commands\ContentMenuItem.cs" />
     <Compile Include="ViewModel\Commands\ExitCommand.cs" />
+    <Compile Include="ViewModel\Commands\OpenFolderCommand.cs" />
+    <Compile Include="ViewModel\Commands\ShowMainWindowCommand.cs" />
+    <Compile Include="ViewModel\Commands\ShowSettingCommand.cs" />
     <Compile Include="ViewModel\Commands\UpdateAllCommand.cs" />
     <Compile Include="ViewModel\Commands\UpdateMangaCommand.cs" />
     <Compile Include="ViewModel\DownloadUpdate.cs" />
     <Compile Include="ViewModel\Initialize.cs" />
+    <Compile Include="ViewModel\Primitive\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModel\ProcessModel.cs" />
-    <Compile Include="ViewModel\TaskbarModel.cs" />
+    <Compile Include="ViewModel\TaskbarIconModel.cs" />
+    <Compile Include="ViewModel\WindowModel.cs" />
     <Page Include="Input.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -152,6 +164,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\Converting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

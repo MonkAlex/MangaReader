@@ -7,6 +7,7 @@ using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services.Config;
 using MangaReader.UI.MainForm;
+using MangaReader.ViewModel;
 
 namespace MangaReader.Services
 {
@@ -20,20 +21,6 @@ namespace MangaReader.Services
     private static readonly object DispatcherLock = new object();
 
     /// <summary>
-    /// Таскбар окна.
-    /// </summary>
-    private static TaskbarItemInfo taskBar;
-
-    private static readonly object TaskbarLock = new object();
-
-    /// <summary>
-    /// Иконка в трее.
-    /// </summary>
-    private static TaskbarIcon taskbarIcon;
-
-    private static readonly object TaskbarIconLock = new object();
-
-    /// <summary>
     /// Показать сообщение в трее.
     /// </summary>
     /// <param name="message">Сообщение.</param>
@@ -41,7 +28,10 @@ namespace MangaReader.Services
     internal static void ShowInTray(string message, object context)
     {
       if (ConfigStorage.Instance.AppConfig.MinimizeToTray)
-        using (TimedLock.Lock(TaskbarIconLock))
+      {
+//        WindowModel.Instance.TaskbarIcon
+      }
+/*      using (TimedLock.Lock(TaskbarIconLock))
         {
           using (TimedLock.Lock(DispatcherLock))
           {
@@ -51,7 +41,7 @@ namespace MangaReader.Services
               taskbarIcon.DataContext = context;
             });
           }
-        }
+        }*/
     }
 
     /// <summary>
@@ -61,7 +51,7 @@ namespace MangaReader.Services
     /// <param name="state">Состояние.</param>
     internal static void SetTaskbarState(double? percent = null, TaskbarItemProgressState? state = null)
     {
-      using (TimedLock.Lock(TaskbarLock))
+/*      using (TimedLock.Lock(TaskbarLock))
       {
         using (TimedLock.Lock(DispatcherLock))
         {
@@ -73,7 +63,7 @@ namespace MangaReader.Services
               taskBar.ProgressValue = percent.Value;
           });
         }
-      }
+      }*/
     }
 
     /// <summary>
@@ -83,8 +73,6 @@ namespace MangaReader.Services
     public static void Initialize(BaseForm main)
     {
       formDispatcher = main.Dispatcher;
-      taskBar = main.TaskbarItemInfo;
-      taskbarIcon = main.NotifyIcon;
       Library.SelectedManga = main.View.Cast<Mangas>().FirstOrDefault();
       Library.UpdateStarted += LibraryOnUpdateStarted;
       Library.UpdateCompleted += LibraryOnUpdateCompleted;

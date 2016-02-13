@@ -11,10 +11,11 @@ namespace MangaReader.ViewModel
 
     }
 
-    public void Show()
+    public override void Show()
     {
-      view.ContentRendered += (sender, args) => Task.Run(() => Updater.StartUpdate(this));
-      view.ShowDialog();
+      base.Show();
+      window.ContentRendered += (sender, args) => Task.Run(() => Updater.StartUpdate(this));
+      window.ShowDialog();
     }
   }
 }

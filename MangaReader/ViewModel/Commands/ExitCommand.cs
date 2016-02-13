@@ -19,8 +19,9 @@ namespace MangaReader.ViewModel.Commands
       else
       {
         Log.Add("Application will be closed.");
-        Application.Current.Shutdown(0);
+        Client.Close();
       }
+      Application.Current.Shutdown(0);
     }
   }
 }

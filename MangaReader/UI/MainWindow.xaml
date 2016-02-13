@@ -1,0 +1,38 @@
+﻿<Window x:Class="MangaReader.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MangaReader.UI"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        Closing="Window_OnClosing"
+        StateChanged="Table_OnStateChanged"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="300" Width="300">
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo>
+            <TaskbarItemInfo.ThumbButtonInfos>
+                <ThumbButtonInfo ImageSource="../Icons/play.png" 
+                                 Command="{Binding UpdateAll}" 
+                                 Description="{Binding RelativeSource={RelativeSource Self}, Path=Command.Name}"/>
+                <ThumbButtonInfo Visibility="Hidden"/>
+                <ThumbButtonInfo ImageSource="../Icons/no.png" 
+                                 Command="{Binding Close}" 
+                                 Description="{Binding RelativeSource={RelativeSource Self}, Path=Command.Name}"/>
+            </TaskbarItemInfo.ThumbButtonInfos>
+        </TaskbarItemInfo>
+    </Window.TaskbarItemInfo>
+    <Grid>
+        <Frame Content="{Binding Content}"/>
+        <tb:TaskbarIcon x:Name="TaskbarIcon" 
+                        DataContext="{Binding TaskbarIcon}" 
+                        ToolTipText="{Binding ToolTipText}"
+                        IconSource="../Icons/main.ico"
+                        DoubleClickCommand="{Binding DoubleClickCommand}">
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu ItemsSource="{Binding ContextMenu}" ItemContainerStyle="{StaticResource ContentMenuItem}"/>
+            </tb:TaskbarIcon.ContextMenu>
+        </tb:TaskbarIcon>
+    </Grid>
+</Window>

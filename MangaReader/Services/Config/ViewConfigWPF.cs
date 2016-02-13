@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Windows;
 using MangaReader.UI.MainForm;
 
 namespace MangaReader.Services.Config
 {
   public static class ViewConfigWPF
   {
-    public static void UpdateWindowState(this ViewConfig config, BaseForm main)
+    public static void UpdateWindowState(this ViewConfig config, Window main)
     {
       if (config.WindowStates == null)
         return;
-
+      
       main.WindowState = (System.Windows.WindowState)Enum.Parse(typeof(WindowState), config.WindowStates.WindowState.ToString(), true);
       if (config.WindowStates.CanShow)
       {
@@ -20,11 +21,11 @@ namespace MangaReader.Services.Config
       }
     }
 
-    public static void SaveWindowState(this ViewConfig config, BaseForm main)
+    public static void SaveWindowState(this ViewConfig config, Window main)
     {
       if (config.WindowStates == null)
         config.WindowStates = new WindowStates();
-
+      
       var state = (WindowState) Enum.Parse(typeof (System.Windows.WindowState), main.WindowState.ToString(), true);
       if (state != WindowState.Minimized)
       {

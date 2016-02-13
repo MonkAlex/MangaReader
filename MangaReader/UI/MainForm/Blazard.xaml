@@ -4,7 +4,6 @@
         xmlns:resx="clr-namespace:MangaReader.Properties"
         xmlns:base="clr-namespace:MangaReader.UI.MainForm"
         xmlns:ui="clr-namespace:MangaReader.UI"
-        Icon="../../Icons/main.ico"
         Title="{x:Static resx:Strings.Title}"  Height="350" Width="525">
     <Grid>
         <Grid.RowDefinitions>

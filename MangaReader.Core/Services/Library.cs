@@ -8,9 +8,9 @@ using System.Threading;
 using MangaReader.Manga;
 using MangaReader.Manga.Acomic;
 using MangaReader.Core.Properties;
+using MangaReader.Mapping;
 using MangaReader.Services.Config;
 using NHibernate.Linq;
-using Environment = MangaReader.Mapping.Environment;
 
 namespace MangaReader.Services
 {
@@ -35,7 +35,7 @@ namespace MangaReader.Services
     {
       get
       {
-        return libraryMangas ?? (libraryMangas = new ObservableCollection<Mangas>(Environment.Session.Query<Mangas>().Where(n => n != null)));
+        return libraryMangas ?? (libraryMangas = new ObservableCollection<Mangas>(Repository.Get<Mangas>().Where(n => n != null)));
       }
     }
 
@@ -89,7 +89,7 @@ namespace MangaReader.Services
     /// <param name="uri"></param>
     public static bool Add(Uri uri)
     {
-      if (Environment.Session.Query<Mangas>().Any(m => m.Uri == uri))
+      if (Repository.Get<Mangas>().Any(m => m.Uri == uri))
         return false;
 
       var newManga = Mangas.Create(uri);
@@ -137,23 +137,13 @@ namespace MangaReader.Services
       if (version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && process.Version.CompareTo(version) >= 0)
       {
         process.Percent = 0;
-        using (var session = Environment.OpenSession())
-        {
-          var acomics = session.Query<Acomics>().ToList();
-          if (acomics.Any())
-            process.IsIndeterminate = false;
+          var acomics = Repository.Get<Acomics>().ToList();
 
-          using (var tranc = session.BeginTransaction())
-          {
-            foreach (var acomic in acomics)
-            {
-              process.Percent += 100.0 / acomics.Count;
-              Getter.UpdateContentType(acomic);
-              acomic.Save(session, tranc);
-            }
-            tranc.Commit();
-          }
+        foreach (var acomic in acomics)
+        {
+          Getter.UpdateContentType(acomic);
         }
+        acomics.SaveAll();
       }
     }
 
@@ -165,7 +155,7 @@ namespace MangaReader.Services
         process.IsIndeterminate = false;
 
       List<string> mangaUrls;
-      using (var session = Environment.OpenSession())
+      using (var session = Mapping.Environment.OpenSession())
       {
         mangaUrls = session.Query<Mangas>().Select(m => m.Uri.ToString()).ToList();
       }

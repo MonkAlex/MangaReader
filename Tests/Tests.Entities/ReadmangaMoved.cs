@@ -4,6 +4,7 @@ using System.Linq;
 using MangaReader;
 using MangaReader.Manga;
 using MangaReader.Manga.Grouple;
+using MangaReader.Mapping;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHibernate.Linq;
 using Chapter = MangaReader.Manga.Grouple.Chapter;

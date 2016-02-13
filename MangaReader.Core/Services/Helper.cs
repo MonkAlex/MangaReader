@@ -29,15 +29,6 @@ namespace MangaReader.Services
     }
     
     /// <summary>
-    /// Сохранить коллекцию в базу.
-    /// </summary>
-    /// <param name="query"></param>
-    public static void Save(this IEnumerable<Entity.Entity> query)
-    {
-      query.ForEach(q => q.Save());
-    }
-
-    /// <summary>
     /// Перегнать байты в мегабайты.
     /// </summary>
     /// <param name="bytes">Байт.</param>

@@ -4,9 +4,8 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using MangaReader.Manga;
+using MangaReader.Mapping;
 using MangaReader.Services.Config;
-using NHibernate.Linq;
-using Environment = MangaReader.Mapping.Environment;
 
 namespace MangaReader.Services
 {
@@ -48,27 +47,14 @@ namespace MangaReader.Services
           globalCollection.AddRange(cache.Where(gm => !globalCollection.Exists(m => m.Uri == gm.Uri)));
       }
 
-      using (var session = Environment.OpenSession())
-      {
-        var fileUrls = globalCollection.Select(m => m.Uri).ToList();
-        var dbMangas = session.Query<Mangas>().ToList();
-        var fromFileInDb = dbMangas.Where(m => fileUrls.Contains(m.Uri)).ToList();
-        if (fromFileInDb.Count == 0)
-          fromFileInDb = globalCollection.ToList();
-        var onlyInDb = dbMangas.Where(m => !fileUrls.Contains(m.Uri)).ToList();
-        globalCollection = fromFileInDb.Concat(onlyInDb).ToList();
-
-        process.IsIndeterminate = false;
-        using (var tranc = session.BeginTransaction())
-        {
-          foreach (var manga in globalCollection)
-          {
-            process.Percent += 100.0/globalCollection.Count;
-            manga.Save(session, tranc);
-          }
-          tranc.Commit();
-        }
-      }
+      var fileUrls = globalCollection.Select(m => m.Uri).ToList();
+      var dbMangas = Repository.Get<Mangas>().ToList();
+      var fromFileInDb = dbMangas.Where(m => fileUrls.Contains(m.Uri)).ToList();
+      if (fromFileInDb.Count == 0)
+        fromFileInDb = globalCollection.ToList();
+      var onlyInDb = dbMangas.Where(m => !fileUrls.Contains(m.Uri)).ToList();
+      globalCollection = fromFileInDb.Concat(onlyInDb).ToList();
+      globalCollection.SaveAll();
 
       Backup.MoveToBackup(CacheFile);
     }

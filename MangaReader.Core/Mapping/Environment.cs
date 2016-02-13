@@ -19,7 +19,9 @@ namespace MangaReader.Mapping
 
     public static ISession OpenSession()
     {
-      return sessionFactory.OpenSession();
+      var session = sessionFactory.OpenSession();
+      session.FlushMode = FlushMode.Commit;
+      return session;
     }
 
     public static bool Initialized { get; set; }
@@ -30,7 +32,7 @@ namespace MangaReader.Mapping
 
       process.Status = "Подключение к базе данных...";
       sessionFactory = CreateSessionFactory();
-      Session = sessionFactory.OpenSession();
+      Session = OpenSession();
 
       Initialized = true;
     }

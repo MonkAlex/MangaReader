@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using MangaReader.Mapping;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using NHibernate.Linq;
@@ -44,7 +45,7 @@ namespace MangaReader.Services.Config
         if (databaseConfig == null)
         {
           if (Mapping.Environment.Initialized)
-            databaseConfig = Mapping.Environment.Session.Query<DatabaseConfig>().SingleOrCreate();
+            databaseConfig = Mapping.Repository.Get<DatabaseConfig>().SingleOrCreate();
           else
             Log.Exception("Запрос DatabaseConfig до инициализации соединения с базой.");
         }
@@ -104,7 +105,7 @@ namespace MangaReader.Services.Config
     public void Save()
     {
       this.DatabaseConfig.Save();
-      this.DatabaseConfig.MangaSettings.Save();
+      this.DatabaseConfig.MangaSettings.SaveAll();
       var str = JsonConvert.SerializeObject(this);
       File.WriteAllText(SettingsPath, str, Encoding.UTF8);
     }

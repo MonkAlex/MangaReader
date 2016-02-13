@@ -1,4 +1,4 @@
-﻿using System;
+﻿using MangaReader.Mapping;
 using NHibernate.Id;
 
 namespace MangaReader.Entity
@@ -35,28 +35,7 @@ namespace MangaReader.Entity
     /// </summary>
     public virtual void Save()
     {
-      var session = Mapping.Environment.Session;
-      using (var tranc = session.BeginTransaction())
-      {
-        try
-        {
-          this.Save(session, tranc);
-          tranc.Commit();
-        }
-        catch (Exception)
-        {
-          tranc.Rollback();
-          throw;
-        }
-      }
-    }
-
-    public virtual void Save(NHibernate.ISession session, NHibernate.ITransaction transaction)
-    {
-      if (this.Id == 0)
-        session.Save(this);
-      else
-        session.Update(this);
+      Repository.Save(this);
     }
 
     /// <summary>

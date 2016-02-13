@@ -1,12 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using MangaReader.Core.Exception;
 
 namespace MangaReader.Services
 {
   public static class DirectoryHelpers
   {
-    internal static bool CopyDirectory(string sourceFolder, string destFolder)
+    private static void CopyDirectory(string sourceFolder, string destFolder)
     {
       try
       {
@@ -24,32 +25,25 @@ namespace MangaReader.Services
         {
           var name = Path.GetFileName(folder);
           var dest = Path.Combine(destFolder, name);
-          if (!CopyDirectory(folder, dest))
-            return false;
+          CopyDirectory(folder, dest);
         }
-        return true;
       }
       catch (Exception e)
       {
-        Log.Exception(e, string.Format("Не удалось скопировать {0} в {1}.", sourceFolder, destFolder));
-        return false;
+        throw new CopyDirectoryFailed("Не удалось скопировать файл или папку. См InnerException.", sourceFolder, destFolder, e);
       }
     }
 
-    internal static bool MoveDirectory(string sourceFolder, string destFolder)
+    internal static void MoveDirectory(string sourceFolder, string destFolder)
     {
       try
       {
-        if (CopyDirectory(sourceFolder, destFolder))
-          Directory.Delete(sourceFolder, true);
-        else
-          throw new Exception(string.Format("Не удалось скопировать {0} в {1}.", sourceFolder, destFolder));
-        return true;
+        CopyDirectory(sourceFolder, destFolder);
+        Directory.Delete(sourceFolder, true);
       }
       catch (Exception ex)
       {
-        Log.Exception(ex, string.Format("Не удалось переместить {0} в {1}.", sourceFolder, destFolder));
-        return false;
+        throw new CopyDirectoryFailed("Не удалось переместить папку. См InnerException.", sourceFolder, destFolder, ex);
       }
     }
 

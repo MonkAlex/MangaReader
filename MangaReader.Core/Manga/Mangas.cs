@@ -6,7 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using FluentNHibernate.Visitors;
+using MangaReader.Core.Exception;
 using MangaReader.Core.Properties;
+using MangaReader.Mapping;
 using MangaReader.Services;
 using MangaReader.Services.Config;
 using NHibernate.Linq;
@@ -432,24 +434,24 @@ namespace MangaReader.Manga
       if (dirName != null && this.Folder != dirName && Directory.Exists(dirName))
       {
         if (Directory.Exists(this.Folder))
-          throw new DirectoryNotFoundException(
-            string.Format("Папка {0} уже существует. Сохранение прервано.", this.Folder));
-        if (!DirectoryHelpers.MoveDirectory(dirName, this.Folder))
-          throw new DirectoryNotFoundException(
-            string.Format("Не удалось переместить {0} в {1}. Сохранение прервано.", dirName, this.Folder));
+          throw new MangaDirectoryExists("Папка уже существует.", this.Folder, this);
+
+        // Копируем папку на новый адрес при изменении имени.
+        DirectoryHelpers.MoveDirectory(dirName, this.Folder);
       }
+
       base.BeforeSave(currentState, previousState, propertyNames);
     }
 
-    public override void Save(NHibernate.ISession session, NHibernate.ITransaction transaction)
+    public override void Save()
     {
       if (!this.IsValid())
-        throw new ValidationException("Нельзя сохранять невалидную сущность", "Сохранение прервано", this.GetType());
+        throw new SaveValidationException("Нельзя сохранять невалидную сущность", this);
 
-      if (session.Query<Mangas>().Any(m => m.Id != this.Id && (m.IsNameChanged ? m.LocalName : m.ServerName) == this.Name))
-        throw new ValidationException("Манга с таким именем уже существует", "Сохранение прервано", this.GetType());
+      if (Repository.Get<Mangas>().Any(m => m.Id != this.Id && (m.IsNameChanged ? m.LocalName : m.ServerName) == this.Name))
+        throw new SaveValidationException("Манга с таким именем уже существует", this);
 
-      base.Save(session, transaction);
+      base.Save();
     }
 
     public override string ToString()

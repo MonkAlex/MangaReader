@@ -20,6 +20,8 @@ namespace MangaReader.CLI
       }
     }
 
+    public ProgressState ProgressState { get; set; }
+
     public bool IsIndeterminate { get; set; }
 
     public string Status

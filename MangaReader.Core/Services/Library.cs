@@ -152,7 +152,7 @@ namespace MangaReader.Services
       var database = Serializer<List<string>>.Load(DatabaseFile) ?? new List<string>(File.ReadAllLines(DatabaseFile));
 
       if (process != null && database.Any())
-        process.IsIndeterminate = false;
+        process.ProgressState = ProgressState.Normal;
 
       List<string> mangaUrls;
       using (var session = Mapping.Environment.OpenSession())

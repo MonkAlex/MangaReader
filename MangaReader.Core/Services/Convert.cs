@@ -40,7 +40,7 @@ namespace MangaReader.Services
   {
     double Percent { get; set; }
 
-    bool IsIndeterminate { get; set; }
+    ProgressState ProgressState { get; set; } 
 
     string Status { get; set; }
 
@@ -56,5 +56,17 @@ namespace MangaReader.Services
     None,
     Started,
     Completed
+  }
+
+  /// <summary>
+  /// Определяет состояние индикатора хода выполнения на панели задач Windows.
+  /// </summary>
+  public enum ProgressState
+  {
+    None,
+    Indeterminate,
+    Normal,
+    Error,
+    Paused,
   }
 }

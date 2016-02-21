@@ -11,6 +11,7 @@ namespace MangaReader.ViewModel.Commands
       if (mainWindow != null)
       {
         mainWindow.Show();
+        mainWindow.Activate();
         if (mainWindow.WindowState == WindowState.Minimized)
           mainWindow.WindowState = WindowState.Normal;
       }

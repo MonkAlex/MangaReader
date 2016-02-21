@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
+using MangaReader.ViewModel.Commands;
 
 namespace MangaReader
 {
@@ -12,8 +13,7 @@ namespace MangaReader
   {
     private void App_OnExit(object sender, ExitEventArgs e)
     {
-      Client.Close();
-      Current.Shutdown(0);
+      new ExitCommand().Execute(sender);
     }
 
     private void App_OnStartup(object sender, StartupEventArgs e)

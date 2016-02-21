@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Shell;
 using MangaReader.Services;
 using MangaReader.Services.Config;
 
@@ -11,6 +12,8 @@ namespace MangaReader.ViewModel
     private bool isIndeterminate;
     private ConvertState state;
     private string status;
+    private ProgressState progressState;
+    private TaskbarItemProgressState taskbarItemProgressState;
     protected internal Window window { get { return this.view as Window; } }
 
     public event EventHandler<ConvertState> StateChanged;
@@ -27,13 +30,23 @@ namespace MangaReader.ViewModel
 
     public bool IsIndeterminate
     {
-      get { return isIndeterminate; }
+      get { return this.ProgressState == ProgressState.Indeterminate; }
+    }
+
+    public ProgressState ProgressState
+    {
+      get { return progressState; }
       set
       {
-        isIndeterminate = value;
+        progressState = value;
         OnPropertyChanged();
+        OnPropertyChanged("IsIndeterminate");
+        Enum.TryParse(value.ToString(), out taskbarItemProgressState);
+        OnPropertyChanged("TaskbarItemProgressState");
       }
     }
+
+    public TaskbarItemProgressState TaskbarItemProgressState { get { return taskbarItemProgressState; } }
 
     public string Status
     {
@@ -61,7 +74,7 @@ namespace MangaReader.ViewModel
     public ProcessModel(Window view) : base(view)
     {
       this.Percent = 0;
-      this.IsIndeterminate = true;
+      this.ProgressState = ProgressState.Indeterminate;
       this.Status = string.Empty;
       this.Version = new Version(AppConfig.Version.Major, AppConfig.Version.Minor, AppConfig.Version.Build);
       this.State = ConvertState.None;

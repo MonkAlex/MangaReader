@@ -63,7 +63,6 @@ namespace MangaReader.UI
       AddCommand(ApplicationCommands.New, DoAdd, CanAdd, element);
       AddCommand(UpdateCurrent, DoUpdateCurrent, CanUpdate, element);
       AddCommand(UpdateAll, DoUpdateAll, CanUpdate, element);
-      AddCommand(ApplicationCommands.Close, DoClose, CanClose, element);
 
       AddCommand(ShowSettings, DoShowSettings, CanShowSettings, element);
 
@@ -131,25 +130,6 @@ namespace MangaReader.UI
       {
         Log.Exception(ex, "Ошибка добавления манги.");
         MessageBox.Show(ex.Message);
-      }
-    }
-
-    private static void CanClose(object sender, CanExecuteRoutedEventArgs e)
-    {
-      e.CanExecute = true;
-    }
-
-    private static void DoClose(object sender, ExecutedRoutedEventArgs e)
-    {
-      Log.Add("Application will be closed.");
-      var window = sender as Window;
-      if (window != null)
-      {
-        window.Close();
-      }
-      else
-      {
-        Application.Current.Shutdown(0);
       }
     }
 

@@ -122,7 +122,7 @@ namespace MangaReader.Services
         var historyInDb = session.Query<MangaHistory>().Select(h => h.Uri).ToList();
         histories = histories.Where(h => !historyInDb.Contains(h.Uri)).Distinct().ToList();
         if (process != null && histories.Any())
-          process.IsIndeterminate = false;
+          process.ProgressState = ProgressState.Normal;
 
         foreach (var manga in mangas)
         {

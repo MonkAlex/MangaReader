@@ -44,6 +44,7 @@ namespace MangaReader.Core
 
     public static void Close()
     {
+//      Library.ThreadAbort();
       ConfigStorage.Instance.Save();
       ConfigStorage.Close();
       Mapping.Environment.Close();

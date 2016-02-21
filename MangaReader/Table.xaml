@@ -7,7 +7,7 @@
         xmlns:resx="clr-namespace:MangaReader.Properties"
         xmlns:services="clr-namespace:MangaReader.Services;assembly=MangaReader.Core"
         xmlns:viewModel="clr-namespace:MangaReader.ViewModel"
-        Title="{x:Static resx:Strings.Title}"  Height="350" Width="525">
+        Title="{x:Static resx:Strings.Title}"  MinHeight="350" MinWidth="525">
 
     <base:BaseForm.Resources>
         <local:UpdateImageConverter x:Key="UpdateImageConverter"/>

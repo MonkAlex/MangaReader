@@ -70,7 +70,7 @@ namespace MangaReader.Update
 
       using (var client = new CookieClient())
       {
-        process.IsIndeterminate = false;
+        process.ProgressState = ProgressState.Normal;
         var taskBytes = client.DownloadDataTaskAsync(LinkToUpdate);
         client.DownloadProgressChanged += (sender, args) =>
         {

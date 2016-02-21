@@ -7,7 +7,7 @@ namespace Tests
   public class ReportProcess : IProcess
   {
     public double Percent { get; set; }
-    public bool IsIndeterminate { get; set; }
+    public ProgressState ProgressState { get; set; }
     public string Status { get; set; }
     public Version Version { get; set; }
     public ConvertState State { get; set; }

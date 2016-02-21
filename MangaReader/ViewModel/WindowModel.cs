@@ -35,7 +35,7 @@ namespace MangaReader.ViewModel
     public override void Show()
     {
       base.Show();
-      this.Content = new Blazard();
+      this.Content = new Table();
       ConfigStorage.Instance.ViewConfig.UpdateWindowState(window);
       window.Show();
     }

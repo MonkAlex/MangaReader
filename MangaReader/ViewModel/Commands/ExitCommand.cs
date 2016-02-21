@@ -18,11 +18,8 @@ namespace MangaReader.ViewModel.Commands
       {
         CommandRunned = true;
 
-        var window = parameter as Window;
-        if (window != null)
-          ConfigStorage.Instance.ViewConfig.SaveWindowState(window);
-
         Log.Add("Application will be closed.");
+        WindowModel.Instance.SaveWindowState();
         Client.Close();
         Application.Current.Exit += (sender, args) => Environment.Exit(args.ApplicationExitCode);
         Application.Current.Shutdown(0);

@@ -38,6 +38,11 @@ namespace MangaReader.ViewModel
       window.Show();
     }
 
+    public void SaveWindowState()
+    {
+      ConfigStorage.Instance.ViewConfig.SaveWindowState(window);
+    }
+
     private WindowModel(Window window) : base(window)
     {
       UpdateAll = new UpdateAllCommand();
@@ -51,7 +56,6 @@ namespace MangaReader.ViewModel
 
     private void WindowOnClosing(object sender, CancelEventArgs cancelEventArgs)
     {
-      ConfigStorage.Instance.ViewConfig.SaveWindowState(window);
       Close.Execute(window);
     }
 

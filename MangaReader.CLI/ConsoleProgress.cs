@@ -8,6 +8,7 @@ namespace MangaReader.CLI
   {
     private double percent;
     private string status;
+    private ConvertState state;
 
     public double Percent
     {
@@ -21,8 +22,6 @@ namespace MangaReader.CLI
     }
 
     public ProgressState ProgressState { get; set; }
-
-    public bool IsIndeterminate { get; set; }
 
     public string Status
     {
@@ -38,7 +37,17 @@ namespace MangaReader.CLI
     }
 
     public Version Version { get; set; }
-    public ConvertState State { get; set; }
+
+    public ConvertState State
+    {
+      get { return state; }
+      set
+      {
+        state = value;
+        OnStateChanged(value);
+      }
+    }
+
     public event EventHandler<ConvertState> StateChanged;
 
     private static void Report(object text)
@@ -48,7 +57,7 @@ namespace MangaReader.CLI
 
     protected virtual void OnStateChanged(ConvertState e)
     {
-      Console.WriteLine(e);
+      Console.WriteLine("ConvertState: " + e);
       StateChanged?.Invoke(this, e);
     }
 

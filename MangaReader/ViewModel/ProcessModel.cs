@@ -9,7 +9,6 @@ namespace MangaReader.ViewModel
   public class ProcessModel : BaseViewModel, IProcess
   {
     private double percent;
-    private bool isIndeterminate;
     private ConvertState state;
     private string status;
     private ProgressState progressState;

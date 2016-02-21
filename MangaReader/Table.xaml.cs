@@ -13,6 +13,7 @@ using MangaReader.Services;
 using MangaReader.Services.Config;
 using MangaReader.UI;
 using MangaReader.UI.MainForm;
+using MangaReader.ViewModel.Commands;
 
 namespace MangaReader
 {
@@ -46,7 +47,7 @@ namespace MangaReader
     {
       if (Library.IsAvaible)
       {
-        Library.ThreadAction(() => Library.Update(View.Cast<Mangas>(), FormLibrary.Items.SortDescriptions.SingleOrDefault()));
+        Library.ThreadAction(() => Library.Update(Model.View.Cast<Mangas>(), FormLibrary.Items.SortDescriptions.SingleOrDefault()));
       }
       else
         Library.IsPaused = !Library.IsPaused;
@@ -70,7 +71,7 @@ namespace MangaReader
       if (downloadable == null)
         return;
 
-      Command.OpenFolder.Execute(downloadable, item);
+      new OpenFolderCommand().Execute(downloadable);
     }
 
     /// <summary>
@@ -104,7 +105,7 @@ namespace MangaReader
       if (manga == null)
         return;
 
-      var openFolder = new MenuItem() { FontWeight = FontWeights.Bold, Command = Command.OpenFolder };
+      var openFolder = new MenuItem() { FontWeight = FontWeights.Bold, Command = new OpenFolderCommand() };
       var update = new MenuItem() { Command = Command.UpdateManga };
       var compress = new MenuItem() { Header = Strings.Manga_Action_Compress, IsEnabled = Library.IsAvaible };
       compress.Click += (o, args) => manga.Compress();
@@ -140,9 +141,9 @@ namespace MangaReader
 
     private void FilterChanged(object sender, RoutedEventArgs e)
     {
-      if (View != null)
+      if (Model.View != null)
       {
-        View.Refresh();
+        Model.View.Refresh();
       }
     }
   }

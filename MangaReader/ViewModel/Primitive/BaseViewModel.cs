@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace MangaReader.ViewModel
+namespace MangaReader.ViewModel.Primitive
 {
   public class BaseViewModel : Primitive.NotifyPropertyChanged
   {

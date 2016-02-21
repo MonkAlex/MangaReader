@@ -138,7 +138,8 @@
     <Compile Include="UI\VersionHistory.xaml.cs">
       <DependentUpon>VersionHistory.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\BaseViewModel.cs" />
+    <Compile Include="ViewModel\MainPageModel.cs" />
+    <Compile Include="ViewModel\Primitive\BaseViewModel.cs" />
     <Compile Include="ViewModel\Commands\AddNewMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\AppUpdateCommand.cs" />
     <Compile Include="ViewModel\Commands\BaseCommand.cs" />
@@ -152,7 +153,7 @@
     <Compile Include="ViewModel\DownloadUpdate.cs" />
     <Compile Include="ViewModel\Initialize.cs" />
     <Compile Include="ViewModel\Primitive\NotifyPropertyChanged.cs" />
-    <Compile Include="ViewModel\ProcessModel.cs" />
+    <Compile Include="ViewModel\Primitive\ProcessModel.cs" />
     <Compile Include="ViewModel\TaskbarIconModel.cs" />
     <Compile Include="ViewModel\WindowModel.cs" />
     <Page Include="Input.xaml">

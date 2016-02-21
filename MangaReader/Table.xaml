@@ -165,11 +165,11 @@
             <Button Content="{x:Static resx:Strings.Library_Action_Add}" 
                 Grid.Column="2"
                 x:Name="AddButton" 
-                Command="New"/>
+                Command="{Binding AddNewManga}"/>
             <Button Content="{x:Static resx:Strings.Library_Action_Settings}"  
                 Grid.Column="3"
                 x:Name="SettingsButton" 
-                Command="ui:Command.ShowSettings"/>
+                Command="{Binding ShowSettings}"/>
         </Grid>
     </Grid>
 </base:BaseForm>

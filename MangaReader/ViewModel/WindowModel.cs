@@ -4,7 +4,9 @@ using System.Windows;
 using System.Windows.Input;
 using MangaReader.Services.Config;
 using MangaReader.UI;
+using MangaReader.UI.MainForm;
 using MangaReader.ViewModel.Commands;
+using MangaReader.ViewModel.Primitive;
 
 namespace MangaReader.ViewModel
 {
@@ -33,7 +35,7 @@ namespace MangaReader.ViewModel
     public override void Show()
     {
       base.Show();
-      this.Content = new Table();
+      this.Content = new Blazard();
       ConfigStorage.Instance.ViewConfig.UpdateWindowState(window);
       window.Show();
     }

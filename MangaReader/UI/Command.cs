@@ -22,10 +22,6 @@ namespace MangaReader.UI
 
     public static RoutedUICommand UpdateAll = new RoutedUICommand("Обновить всё", "UpdateAll", typeof(Command));
 
-    public static RoutedUICommand ShowSettings = new RoutedUICommand(Strings.Library_Action_Settings, "ShowSettings", typeof(Command));
-
-    public static RoutedUICommand OpenFolder = new RoutedUICommand(Strings.Manga_Action_OpenFolder, "OpenFolder", typeof(Command));
-
     public static RoutedUICommand DeleteManga = new RoutedUICommand(Strings.Manga_Action_Remove, "DeleteManga", typeof(Command));
 
     public static RoutedUICommand UpdateManga = new RoutedUICommand(Strings.Manga_Action_Update, "UpdateManga", typeof(Command));
@@ -35,8 +31,6 @@ namespace MangaReader.UI
     public static RoutedUICommand SelectNextManga = new RoutedUICommand("Следующая", "SelectNextManga", typeof(Command));
 
     public static RoutedUICommand SelectPrevManga = new RoutedUICommand("Предыдущая", "SelectPrevManga", typeof(Command));
-
-    public static RoutedUICommand CheckUpdates = new RoutedUICommand(Strings.Library_CheckUpdate, "CheckUpdates", typeof(Command));
 
     public static RoutedUICommand ShowUpdateLog = new RoutedUICommand(Strings.Update_Title, "ShowUpdateLog", typeof(Command));
 
@@ -60,13 +54,9 @@ namespace MangaReader.UI
         <MenuItem Header="Update history"/>
         <MenuItem Header="About"/>
        */
-      AddCommand(ApplicationCommands.New, DoAdd, CanAdd, element);
       AddCommand(UpdateCurrent, DoUpdateCurrent, CanUpdate, element);
       AddCommand(UpdateAll, DoUpdateAll, CanUpdate, element);
 
-      AddCommand(ShowSettings, DoShowSettings, CanShowSettings, element);
-
-      AddCommand(CheckUpdates, DoCheckUpdates, CanCheckUpdates, element);
       AddCommand(ShowUpdateLog, DoShowUpdateLog, CanShowUpdateLog, element);
       AddCommand(ShowAbout, DoShowAbout, CanShowAbout, element);
 
@@ -84,7 +74,6 @@ namespace MangaReader.UI
        * Update
        * Property
        */
-      AddCommand(OpenFolder, DoOpenFolder, CanOpenFolder, element);
       AddCommand(DeleteManga, DoDeleteManga, CanDeleteManga, element);
       AddCommand(UpdateManga, DoUpdateManga, CanUpdateManga, element);
       AddCommand(MangaProperty, DoMangaProperty, CanMangaProperty, element);
@@ -102,37 +91,7 @@ namespace MangaReader.UI
       // Регистрация привязки.
       element.CommandBindings.Add(bind);
     }
-
-    private static void CanAdd(object sender, CanExecuteRoutedEventArgs e)
-    {
-      e.CanExecute = Library.IsAvaible;
-    }
-
-    private static void DoAdd(object sender, ExecutedRoutedEventArgs e)
-    {
-      var db = new Input { Owner = WindowHelper.Owner };
-      if (db.ShowDialog() != true)
-        return;
-      try
-      {
-        if (!string.IsNullOrWhiteSpace(db.Result.Text))
-          Library.Add(db.Result.Text);
-        var dialogMangas = db.BookmarksTabs.Items.SourceCollection.Cast<TabItem>()
-            .Select(t => t.Content)
-            .Cast<Login>()
-            .SelectMany(l => l.Bookmarks.SelectedItems.Cast<Mangas>())
-            .Distinct()
-            .ToList();
-        foreach (var manga in dialogMangas)
-          Library.Add(manga.Uri);
-      }
-      catch (Exception ex)
-      {
-        Log.Exception(ex, "Ошибка добавления манги.");
-        MessageBox.Show(ex.Message);
-      }
-    }
-
+    
     private static void CanUpdate(object sender, CanExecuteRoutedEventArgs e)
     {
       e.CanExecute = Library.IsAvaible;
@@ -143,7 +102,7 @@ namespace MangaReader.UI
       var baseForm = sender as BaseForm;
       if (Library.IsAvaible)
       {
-        Library.ThreadAction(() => Library.Update(baseForm.View.Cast<Mangas>(), baseForm.LibraryFilter.SortDescription));
+        Library.ThreadAction(() => Library.Update(baseForm.Model.View.Cast<Mangas>(), baseForm.Model.LibraryFilter.SortDescription));
       }
     }
 
@@ -153,30 +112,6 @@ namespace MangaReader.UI
       {
         Library.ThreadAction(() => Library.Update(Library.LibraryMangas, ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
       }
-    }
-
-    private static void CanShowSettings(object sender, CanExecuteRoutedEventArgs e)
-    {
-      e.CanExecute = Library.IsAvaible;
-    }
-
-    private static void DoShowSettings(object sender, ExecutedRoutedEventArgs e)
-    {
-      new SettingsForm { Owner = WindowHelper.Owner }.ShowDialog();
-    }
-
-    private static void CanOpenFolder(object sender, CanExecuteRoutedEventArgs e)
-    {
-      e.CanExecute = true;
-    }
-
-    private static void DoOpenFolder(object sender, ExecutedRoutedEventArgs e)
-    {
-      var manga = e.Parameter as IDownloadable ?? (e.OriginalSource as FrameworkElement).DataContext as IDownloadable;
-      if (manga != null && Directory.Exists(manga.Folder))
-        Process.Start(manga.Folder);
-      else
-        Library.Status = Strings.Library_Status_FolderNotFound;
     }
 
     private static void CanDeleteManga(object sender, CanExecuteRoutedEventArgs e)
@@ -215,7 +150,7 @@ namespace MangaReader.UI
       if (manga != null && Library.IsAvaible)
       {
         new MangaForm { DataContext = manga, Owner = WindowHelper.Owner }.ShowDialog();
-        (sender as BaseForm).View.Refresh();
+        (sender as BaseForm).Model.View.Refresh();
       }
     }
 
@@ -227,7 +162,7 @@ namespace MangaReader.UI
     private static void DoSelectNextManga(object sender, ExecutedRoutedEventArgs e)
     {
       var baseForm = sender as BaseForm;
-      var filtered = baseForm.View.Cast<Mangas>().ToList();
+      var filtered = baseForm.Model.View.Cast<Mangas>().ToList();
       var manga = Library.SelectedManga;
       if (manga != null && !Equals(filtered.LastOrDefault(), manga))
       {
@@ -246,7 +181,7 @@ namespace MangaReader.UI
     private static void DoSelectPrevManga(object sender, ExecutedRoutedEventArgs e)
     {
       var baseForm = sender as BaseForm;
-      var filtered = baseForm.View.Cast<Mangas>().ToList();
+      var filtered = baseForm.Model.View.Cast<Mangas>().ToList();
       var manga = Library.SelectedManga;
       if (manga != null && !Equals(filtered.FirstOrDefault(), manga))
       {
@@ -257,38 +192,9 @@ namespace MangaReader.UI
       }
     }
 
-    private static void CanCheckUpdates(object sender, CanExecuteRoutedEventArgs e)
-    {
-      e.CanExecute = Library.IsAvaible;
-    }
-
-    private static void DoCheckUpdates(object sender, ExecutedRoutedEventArgs e)
-    {
-      var dialog = new TaskDialog();
-      dialog.WindowTitle = "Обновление";
-      var owner = WindowHelper.Owner;
-      if (Updater.CheckUpdate())
-      {
-        dialog.MainInstruction = "Запустить процесс обновления?";
-        dialog.Content = string.Format("Доступно обновление с версии {0} на {1}", Updater.ClientVersion.ToString(3), Updater.ServerVersion.ToString(3));
-        dialog.Buttons.Add(new TaskDialogButton(ButtonType.Yes));
-        dialog.Buttons.Add(new TaskDialogButton(ButtonType.No));
-        if (dialog.ShowDialog(owner).ButtonType == ButtonType.Yes)
-        {
-          var updateModel = new DownloadUpdate(new Converting(owner));
-          updateModel.Show();
-        }
-      }
-      else
-      {
-        dialog.MainInstruction = "Обновлений не найдено.";
-        dialog.Buttons.Add(new TaskDialogButton(ButtonType.Ok));
-        dialog.ShowDialog(owner);
-      }
-    }
-
     private static void DoShowUpdateLog(object sender, ExecutedRoutedEventArgs e)
     {
+      // TODO: sender уже не окно.
       new VersionHistory((Window)sender).ShowDialog();
     }
 

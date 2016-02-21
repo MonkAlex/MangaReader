@@ -29,7 +29,7 @@
             </RichTextBox>
         </DockPanel>
         <ToolBarPanel HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
-            <Button Command="{x:Static ui:Command.OpenFolder}" Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
+      <!--      <Button Command="{x:Static ui:Command.OpenFolder}" Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/> -->
             <Button Command="{x:Static ui:Command.DeleteManga}" Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
             <Button Command="{x:Static ui:Command.UpdateManga}" Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
             <Button Command="{x:Static ui:Command.MangaProperty}" Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>

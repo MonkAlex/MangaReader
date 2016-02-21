@@ -14,17 +14,17 @@
 
         <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0">
             <MenuItem Header="Файл">
-                <MenuItem Header="{x:Static resx:Strings.Library_Action_Add}" Command="New"/>
+                <MenuItem Header="{x:Static resx:Strings.Library_Action_Add}" Command="{Binding AddNewManga}"/>
                 <MenuItem Command="{x:Static ui:Command.UpdateCurrent}"/>
                 <MenuItem Command="{x:Static ui:Command.UpdateAll}"/>
-                <MenuItem Command="Close"/>
+                <MenuItem Command="{Binding CloseApplication}"/>
             </MenuItem>
             <MenuItem Header="{x:Static resx:Strings.Library_Action_Settings}">
-                <MenuItem Command="{x:Static ui:Command.ShowSettings}"/>
+                <MenuItem Command="{Binding ShowSettings}"/>
             </MenuItem>
             <MenuItem Header="О программе">
                 <MenuItem Header="Read Me" Command="{x:Static ui:Command.ShowAbout}"/>
-                <MenuItem Command="{x:Static ui:Command.CheckUpdates}"/>
+                <MenuItem Command="{Binding CheckUpdateApplication}"/>
                 <MenuItem Command="{x:Static ui:Command.ShowUpdateLog}"/>
                 <MenuItem Command="{x:Static ui:Command.ShowAbout}"/>
             </MenuItem>

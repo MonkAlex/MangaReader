@@ -29,9 +29,9 @@ namespace MangaReader.UI.MainForm
 
     private void FilterChanged(object sender, RoutedEventArgs e)
     {
-      if (View != null)
+      if (Model.View != null)
       {
-        View.Refresh();
+        Model.View.Refresh();
       }
     }
   }

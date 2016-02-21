@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
 using MangaReader.Update;
+using MangaReader.ViewModel.Primitive;
 
 namespace MangaReader.ViewModel
 {

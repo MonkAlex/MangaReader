@@ -4,7 +4,7 @@ using System.Windows.Shell;
 using MangaReader.Services;
 using MangaReader.Services.Config;
 
-namespace MangaReader.ViewModel
+namespace MangaReader.ViewModel.Primitive
 {
   public class ProcessModel : BaseViewModel, IProcess
   {

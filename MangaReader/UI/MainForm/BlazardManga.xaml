@@ -28,12 +28,12 @@
                 </FlowDocument>
             </RichTextBox>
         </DockPanel>
-        <ToolBarPanel HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
-      <!--      <Button Command="{x:Static ui:Command.OpenFolder}" Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/> -->
+        <!--ToolBarPanel HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+            <Button Command="{x:Static ui:Command.OpenFolder}" Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
             <Button Command="{x:Static ui:Command.DeleteManga}" Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
             <Button Command="{x:Static ui:Command.UpdateManga}" Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
             <Button Command="{x:Static ui:Command.MangaProperty}" Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
-        </ToolBarPanel>
+        </-->
         <ToolBarPanel VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center">
             <Button Content="Prev" Command="{x:Static ui:Command.SelectPrevManga}"/>
             <Button Content="Next" Command="{x:Static ui:Command.SelectNextManga}"/>

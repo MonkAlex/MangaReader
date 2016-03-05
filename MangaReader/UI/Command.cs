@@ -11,12 +11,6 @@ namespace MangaReader.UI
 {
   public static class Command
   {
-    public static RoutedUICommand DeleteManga = new RoutedUICommand(Strings.Manga_Action_Remove, "DeleteManga", typeof(Command));
-
-    public static RoutedUICommand UpdateManga = new RoutedUICommand(Strings.Manga_Action_Update, "UpdateManga", typeof(Command));
-
-    public static RoutedUICommand MangaProperty = new RoutedUICommand(Strings.Manga_Settings, "MangaProperty", typeof(Command));
-
     public static RoutedUICommand SelectNextManga = new RoutedUICommand("Следующая", "SelectNextManga", typeof(Command));
 
     public static RoutedUICommand SelectPrevManga = new RoutedUICommand("Предыдущая", "SelectPrevManga", typeof(Command));
@@ -49,19 +43,6 @@ namespace MangaReader.UI
 
     }
 
-    public static void AddMangaCommands(UIElement element)
-    {
-      /*
-       * Open
-       * Delete
-       * Update
-       * Property
-       */
-      AddCommand(DeleteManga, DoDeleteManga, CanDeleteManga, element);
-      AddCommand(UpdateManga, DoUpdateManga, CanUpdateManga, element);
-      AddCommand(MangaProperty, DoMangaProperty, CanMangaProperty, element);
-    }
-
     private static void AddCommand(ICommand command, ExecutedRoutedEventHandler execute, CanExecuteRoutedEventHandler canExecute, UIElement element)
     {
       // Создание привязки.
@@ -75,46 +56,6 @@ namespace MangaReader.UI
       element.CommandBindings.Add(bind);
     }
     
-    private static void CanDeleteManga(object sender, CanExecuteRoutedEventArgs e)
-    {
-      e.CanExecute = Library.IsAvaible;
-    }
-
-    private static void DoDeleteManga(object sender, ExecutedRoutedEventArgs e)
-    {
-      var manga = e.Parameter as Mangas ?? (e.OriginalSource as FrameworkElement).DataContext as Mangas;
-      Library.Remove(manga);
-    }
-
-    private static void CanUpdateManga(object sender, CanExecuteRoutedEventArgs e)
-    {
-      e.CanExecute = Library.IsAvaible;
-    }
-
-    private static void DoUpdateManga(object sender, ExecutedRoutedEventArgs e)
-    {
-      var manga = e.Parameter as Mangas ?? (e.OriginalSource as FrameworkElement).DataContext as Mangas;
-      if (manga != null && Library.IsAvaible)
-      {
-        Library.ThreadAction(() => Library.Update(manga));
-      }
-    }
-
-    private static void CanMangaProperty(object sender, CanExecuteRoutedEventArgs e)
-    {
-      e.CanExecute = Library.IsAvaible;
-    }
-
-    private static void DoMangaProperty(object sender, ExecutedRoutedEventArgs e)
-    {
-      var manga = e.Parameter as Mangas ?? (e.OriginalSource as FrameworkElement).DataContext as Mangas;
-      if (manga != null && Library.IsAvaible)
-      {
-        new MangaForm { DataContext = manga, Owner = WindowHelper.Owner }.ShowDialog();
-        (sender as BaseForm).Model.View.Refresh();
-      }
-    }
-
     private static void CanSelectNextManga(object sender, CanExecuteRoutedEventArgs e)
     {
       e.CanExecute = true;

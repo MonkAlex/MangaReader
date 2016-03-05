@@ -99,6 +99,7 @@ namespace MangaReader
     /// <param name="e"></param>
     private void ListViewItem_OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
     {
+      /*
       var item = sender as ListViewItem;
 
       var manga = item.DataContext as Mangas;
@@ -128,6 +129,7 @@ namespace MangaReader
       menu.Items.Add(remove);
       menu.Items.Add(settings);
       item.ContextMenu = menu;
+      */
     }
 
     private void ListView_MouseDown(object sender, MouseButtonEventArgs e)

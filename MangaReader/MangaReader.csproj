@@ -139,6 +139,9 @@
       <DependentUpon>VersionHistoryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\Commands\ContextMenuItemHelper.cs" />
+    <Compile Include="ViewModel\Commands\Manga\BaseMangaCommand.cs" />
+    <Compile Include="ViewModel\Commands\Manga\DeleteMangaCommand.cs" />
+    <Compile Include="ViewModel\Commands\Manga\ShowMangaPropertiesCommand.cs" />
     <Compile Include="ViewModel\Commands\ShowUpdateHistoryCommand.cs" />
     <Compile Include="ViewModel\Commands\UpdateVisibleMangaCommand.cs" />
     <Compile Include="ViewModel\MainPageModel.cs" />
@@ -152,7 +155,7 @@
     <Compile Include="ViewModel\Commands\ShowMainWindowCommand.cs" />
     <Compile Include="ViewModel\Commands\ShowSettingCommand.cs" />
     <Compile Include="ViewModel\Commands\UpdateAllCommand.cs" />
-    <Compile Include="ViewModel\Commands\UpdateMangaCommand.cs" />
+    <Compile Include="ViewModel\Commands\Manga\UpdateMangaCommand.cs" />
     <Compile Include="ViewModel\DownloadUpdate.cs" />
     <Compile Include="ViewModel\Initialize.cs" />
     <Compile Include="ViewModel\Primitive\NotifyPropertyChanged.cs" />

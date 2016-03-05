@@ -8,6 +8,7 @@ using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.Services.Config;
 using MangaReader.ViewModel.Commands;
+using MangaReader.ViewModel.Commands.Manga;
 using MangaReader.ViewModel.Primitive;
 
 namespace MangaReader.ViewModel
@@ -17,6 +18,7 @@ namespace MangaReader.ViewModel
     private ICommand showSettings;
     private ICommand addNewManga;
     private ObservableCollection<ContentMenuItem> menu;
+    private ObservableCollection<ContentMenuItem> mangaMenu;
 
     public ListCollectionView View { get; set; }
 
@@ -48,6 +50,16 @@ namespace MangaReader.ViewModel
       set
       {
         menu = value;
+        OnPropertyChanged();
+      }
+    }
+
+    public ObservableCollection<ContentMenuItem> MangaMenu
+    {
+      get { return mangaMenu; }
+      set
+      {
+        mangaMenu = value;
         OnPropertyChanged();
       }
     }
@@ -102,6 +114,14 @@ namespace MangaReader.ViewModel
       this.Menu.Add(file);
       this.Menu.Add(setting);
       this.Menu.Add(about);
+
+      this.MangaMenu = new ObservableCollection<ContentMenuItem>
+      {
+        new OpenFolderCommand(),
+        new UpdateMangaCommand(View),
+        new DeleteMangaCommand(View),
+        new ShowMangaPropertiesCommand(View)
+      };
 
       #endregion
     }

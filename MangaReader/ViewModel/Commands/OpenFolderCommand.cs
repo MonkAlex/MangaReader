@@ -12,7 +12,7 @@ namespace MangaReader.ViewModel.Commands
 
     public override void Execute(object parameter)
     {
-      var manga = parameter as IDownloadable ?? WindowModel.Instance.TaskbarIcon.LastShowed;
+      var manga = parameter as IDownloadable;
       if (manga != null && Directory.Exists(manga.Folder))
         Process.Start(manga.Folder);
       else

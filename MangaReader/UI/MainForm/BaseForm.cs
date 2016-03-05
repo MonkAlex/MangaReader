@@ -20,7 +20,6 @@ namespace MangaReader.UI.MainForm
       this.Model = new MainPageModel(this);
       this.DataContext = Model;
       Command.AddMainMenuCommands(this);
-      Command.AddMangaCommands(this);
       this.Initialized += (sender, args) => LibraryWPF.Initialize(this);
     }
   }

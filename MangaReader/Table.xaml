@@ -45,10 +45,14 @@
               SelectionMode="Single"
               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
               ui:GridViewColumnResize.Enabled="True"
-              ui:GridSort.AutoSort="True" >
+              ui:GridSort.AutoSort="True">
+            <ListView.Resources>
+                <ContextMenu x:Key="Menu" 
+                             ItemsSource="{Binding DataContext.MangaMenu, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}}"
+                             ItemContainerStyle="{StaticResource ContentMenuItem}"/>
+            </ListView.Resources>
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
-                    <EventSetter Event="MouseRightButtonUp" Handler="ListViewItem_OnMouseRightButtonUp"/>
                     <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Mangas_clicked"/>
                     <Setter Property="AllowDrop" Value="True"/>
                     <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
@@ -56,6 +60,7 @@
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                    <Setter Property="ContextMenu" Value="{StaticResource Menu}"/>
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListViewItem}">

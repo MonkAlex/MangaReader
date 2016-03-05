@@ -1,5 +1,4 @@
 ﻿using System;
-using MangaReader.Manga;
 using MangaReader.Services;
 
 namespace MangaReader.ViewModel.Commands.Primitives
@@ -13,17 +12,10 @@ namespace MangaReader.ViewModel.Commands.Primitives
 
     public LibraryBaseCommand()
     {
-      Library.UpdateCompleted += LibraryChanged;
-      Library.UpdateStarted += LibraryChanged;
-      Library.UpdateMangaCompleted += LibraryOnUpdateMangaCompleted;
+      Library.AvaibleChanged += LibraryChanged;
     }
 
-    private void LibraryOnUpdateMangaCompleted(object sender, Mangas mangas)
-    {
-      OnCanExecuteChanged();
-    }
-
-    private void LibraryChanged(object sender, EventArgs eventArgs)
+    private void LibraryChanged(object sender, bool eventArgs)
     {
       OnCanExecuteChanged();
     }

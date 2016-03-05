@@ -7,6 +7,13 @@ namespace MangaReader.Services
 {
   public static class DirectoryHelpers
   {
+    public static bool Equals(string one, string two)
+    {
+      return string.Compare(new DirectoryInfo(one).FullName.TrimEnd('\\'),
+        new DirectoryInfo(two).FullName.TrimEnd('\\'),
+        StringComparison.InvariantCultureIgnoreCase) == 0;
+    }
+
     private static void CopyDirectory(string sourceFolder, string destFolder)
     {
       try

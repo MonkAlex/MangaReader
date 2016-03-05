@@ -5,13 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using FluentNHibernate.Visitors;
 using MangaReader.Core.Exception;
 using MangaReader.Core.Properties;
 using MangaReader.Mapping;
 using MangaReader.Services;
 using MangaReader.Services.Config;
-using NHibernate.Linq;
 
 namespace MangaReader.Manga
 {
@@ -431,7 +429,7 @@ namespace MangaReader.Manga
     protected override void BeforeSave(object[] currentState, object[] previousState, string[] propertyNames)
     {
       var dirName = previousState[propertyNames.ToList().IndexOf("Folder")] as string;
-      if (dirName != null && this.Folder != dirName && Directory.Exists(dirName))
+      if (dirName != null && !DirectoryHelpers.Equals(this.Folder, dirName) && Directory.Exists(dirName))
       {
         if (Directory.Exists(this.Folder))
           throw new MangaDirectoryExists("Папка уже существует.", this.Folder, this);

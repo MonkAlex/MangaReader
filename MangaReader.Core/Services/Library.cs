@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+using MangaReader.Core.Exception;
 using MangaReader.Manga;
 using MangaReader.Manga.Acomic;
 using MangaReader.Core.Properties;
@@ -29,7 +31,15 @@ namespace MangaReader.Services
     /// <summary>
     /// Признак паузы.
     /// </summary>
-    public static bool IsPaused { get; set; }
+    public static bool IsPaused
+    {
+      get { return isPaused; }
+      set
+      {
+        isPaused = value;
+        OnPauseChanged(value);
+      }
+    }
 
     public static ObservableCollection<Mangas> LibraryMangas
     {
@@ -43,28 +53,38 @@ namespace MangaReader.Services
 
     public static Mangas SelectedManga { get; set; }
 
-    private static Thread loadThread;
-
     private static int mangaIndex;
 
     private static int mangasCount;
+    private static bool isAvaible = true;
+    private static bool isPaused;
 
     /// <summary>
     /// Библиотека доступна, т.е. не в процессе обновления.
     /// </summary>
-    public static bool IsAvaible { get { return loadThread == null || loadThread.ThreadState == ThreadState.Stopped; } }
-    
+    public static bool IsAvaible
+    {
+      get { return isAvaible; }
+      private set
+      {
+        isAvaible = value;
+        OnAvaibleChanged(value);
+      }
+    }
+
     /// <summary>
     /// Выполнить тяжелое действие изменения библиотеки в отдельном потоке.
     /// </summary>
     /// <param name="action">Выполняемое действие.</param>
     /// <remarks>Только одно действие за раз. Доступность выполнения можно проверить в IsAvaible.</remarks>
-    public static void ThreadAction(ThreadStart action)
+    public async static void ThreadAction(Action action)
     {
-      if (loadThread == null || loadThread.ThreadState == ThreadState.Stopped)
-        loadThread = new Thread(action);
-      if (loadThread.ThreadState == ThreadState.Unstarted)
-        loadThread.Start();
+      if (!IsAvaible)
+        throw new MangaReaderException("Library not avaible.");
+
+      IsAvaible = false;
+      await Task.Run(action);
+      IsAvaible = true;
     }
 
     #region Методы
@@ -259,6 +279,10 @@ namespace MangaReader.Services
 
     public static event EventHandler<Mangas> UpdateMangaCompleted;
 
+    public static event EventHandler<bool> AvaibleChanged;
+
+    public static event EventHandler<bool> PauseChanged;
+
     private static void OnUpdateStarted()
     {
       UpdateStarted?.Invoke(null, EventArgs.Empty);
@@ -279,6 +303,17 @@ namespace MangaReader.Services
       UpdateMangaCompleted?.Invoke(null, e);
     }
 
+    private static void OnAvaibleChanged(bool e)
+    {
+      AvaibleChanged?.Invoke(null, e);
+    }
+
+    private static void OnPauseChanged(bool e)
+    {
+      PauseChanged?.Invoke(null, e);
+    }
+
     #endregion
+
   }
 }

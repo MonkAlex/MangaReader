@@ -9,6 +9,7 @@ using MangaReader.Services;
 using MangaReader.Services.Config;
 using MangaReader.ViewModel.Commands;
 using MangaReader.ViewModel.Commands.Manga;
+using MangaReader.ViewModel.Commands.Primitives;
 using MangaReader.ViewModel.Primitive;
 
 namespace MangaReader.ViewModel
@@ -120,7 +121,7 @@ namespace MangaReader.ViewModel
         new OpenFolderCommand(),
         new UpdateMangaCommand(View),
         new DeleteMangaCommand(View),
-        new ShowMangaPropertiesCommand(View)
+        new ShowPropertiesMangaCommand(View)
       };
 
       #endregion

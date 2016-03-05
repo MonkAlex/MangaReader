@@ -4,10 +4,11 @@ using System.Windows.Data;
 using MangaReader.Manga;
 using MangaReader.Services;
 using MangaReader.Services.Config;
+using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands
 {
-  public class UpdateVisibleMangaCommand : BaseCommand
+  public class UpdateVisibleMangaCommand : LibraryBaseCommand
   {
     private readonly ListCollectionView view;
 
@@ -26,18 +27,6 @@ namespace MangaReader.ViewModel.Commands
     public UpdateVisibleMangaCommand(ListCollectionView view)
     {
       this.view = view;
-      Library.UpdateCompleted += LibraryChanged;
-      Library.UpdateStarted += LibraryChanged;
-    }
-
-    public override bool CanExecute(object parameter)
-    {
-      return Library.IsAvaible;
-    }
-
-    private void LibraryChanged(object sender, EventArgs eventArgs)
-    {
-      OnCanExecuteChanged();
     }
   }
 }

@@ -138,18 +138,19 @@
     <Compile Include="UI\VersionHistoryView.xaml.cs">
       <DependentUpon>VersionHistoryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\Commands\ContextMenuItemHelper.cs" />
-    <Compile Include="ViewModel\Commands\Manga\BaseMangaCommand.cs" />
+    <Compile Include="ViewModel\Commands\Primitives\ContextMenuItemHelper.cs" />
+    <Compile Include="ViewModel\Commands\Primitives\MangaBaseCommand.cs" />
     <Compile Include="ViewModel\Commands\Manga\DeleteMangaCommand.cs" />
-    <Compile Include="ViewModel\Commands\Manga\ShowMangaPropertiesCommand.cs" />
+    <Compile Include="ViewModel\Commands\Manga\ShowPropertiesMangaCommand.cs" />
+    <Compile Include="ViewModel\Commands\Primitives\LibraryBaseCommand.cs" />
     <Compile Include="ViewModel\Commands\ShowUpdateHistoryCommand.cs" />
     <Compile Include="ViewModel\Commands\UpdateVisibleMangaCommand.cs" />
     <Compile Include="ViewModel\MainPageModel.cs" />
     <Compile Include="ViewModel\Primitive\BaseViewModel.cs" />
     <Compile Include="ViewModel\Commands\AddNewMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\AppUpdateCommand.cs" />
-    <Compile Include="ViewModel\Commands\BaseCommand.cs" />
-    <Compile Include="ViewModel\Commands\ContentMenuItem.cs" />
+    <Compile Include="ViewModel\Commands\Primitives\BaseCommand.cs" />
+    <Compile Include="ViewModel\Commands\Primitives\ContentMenuItem.cs" />
     <Compile Include="ViewModel\Commands\ExitCommand.cs" />
     <Compile Include="ViewModel\Commands\OpenFolderCommand.cs" />
     <Compile Include="ViewModel\Commands\ShowMainWindowCommand.cs" />

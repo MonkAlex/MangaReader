@@ -1,18 +1,14 @@
 ﻿using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.Update;
+using MangaReader.ViewModel.Commands.Primitives;
 using Ookii.Dialogs.Wpf;
 
 namespace MangaReader.ViewModel.Commands
 {
-  public class AppUpdateCommand : BaseCommand
+  public class AppUpdateCommand : LibraryBaseCommand
   {
     public override string Name { get { return Strings.Library_CheckUpdate; } }
-
-    public override bool CanExecute(object parameter)
-    {
-      return Library.IsAvaible;
-    }
 
     public override void Execute(object parameter)
     {

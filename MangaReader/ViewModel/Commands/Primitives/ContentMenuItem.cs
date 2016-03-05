@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace MangaReader.ViewModel.Commands
+namespace MangaReader.ViewModel.Commands.Primitives
 {
   public class ContentMenuItem : Primitive.NotifyPropertyChanged
   {

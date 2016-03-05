@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace MangaReader.ViewModel.Commands
+namespace MangaReader.ViewModel.Commands.Primitives
 {
   public class BaseCommand : ICommand
   {

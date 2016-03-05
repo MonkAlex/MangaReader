@@ -6,17 +6,13 @@ using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.UI;
+using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands
 {
-  public class AddNewMangaCommand : BaseCommand
+  public class AddNewMangaCommand : LibraryBaseCommand
   {
     public override string Name { get { return Strings.Library_Action_Add; } }
-
-    public override bool CanExecute(object parameter)
-    {
-      return Library.IsAvaible;
-    }
 
     public override void Execute(object parameter)
     {

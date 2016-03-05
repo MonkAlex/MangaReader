@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using MangaReader.ViewModel.Commands.Primitives;
 using WindowState = System.Windows.WindowState;
 
 namespace MangaReader.ViewModel.Commands

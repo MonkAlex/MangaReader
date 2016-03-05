@@ -3,6 +3,7 @@ using System.IO;
 using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services;
+using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands
 {

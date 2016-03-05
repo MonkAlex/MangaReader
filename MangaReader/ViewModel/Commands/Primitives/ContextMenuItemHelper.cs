@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MangaReader.ViewModel.Commands
+namespace MangaReader.ViewModel.Commands.Primitives
 {
   public static class ContextMenuItemHelper
   {

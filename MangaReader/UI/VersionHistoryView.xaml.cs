@@ -1,34 +1,25 @@
-﻿using System.IO;
-using System.Reflection;
-using System.Windows;
-using MangaReader.Properties;
+﻿using System.Windows;
 
 namespace MangaReader.Services
 {
   /// <summary>
   /// Логика взаимодействия для VersionHistory.xaml
   /// </summary>
-  public partial class VersionHistory : Window
+  public partial class VersionHistoryView : Window
   {
     /// <summary>
     /// Показать историю, центрировав окно по экрану.
     /// </summary>
-    public VersionHistory()
+    public VersionHistoryView()
     {
       InitializeComponent();
-      // TODO: надо отдавать историю как то нормально, через API.
-      var assembly = typeof(Update.Updater).Assembly;
-      using (var reader = new StreamReader(assembly.GetManifestResourceStream("MangaReader.Update.VersionHistory.txt")))
-        this.TextBox.Text = reader.ReadToEnd();
-      var version = assembly.GetName().Version;
-      this.Label.Text = string.Format(Strings.Update_Label_Version, version.ToString(3));
     }
 
     /// <summary>
     /// Показать историю, центрировав окно по родительскому.
     /// </summary>
     /// <param name="owner">Родительское окно истории изменений.</param>
-    public VersionHistory(Window owner) : this()
+    public VersionHistoryView(Window owner) : this()
     {
       this.Owner = owner;
       if (this.Owner != null)

@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace MangaReader.ViewModel.Commands
@@ -7,6 +7,7 @@ namespace MangaReader.ViewModel.Commands
   {
     private string name;
     private ICommand command;
+    private ObservableCollection<ContentMenuItem> subItems;
 
     public string Name
     {
@@ -28,16 +29,29 @@ namespace MangaReader.ViewModel.Commands
       }
     }
 
-    public ContentMenuItem(ICommand command, string name)
+    public ObservableCollection<ContentMenuItem> SubItems
     {
-      this.Command = command;
-      this.Name = name;
+      get { return subItems; }
+      set
+      {
+        subItems = value;
+        OnPropertyChanged();
+      }
     }
 
-    public ContentMenuItem(BaseCommand command)
+    public ContentMenuItem(BaseCommand command) : this(command, command.Name)
+    {
+    }
+
+    public ContentMenuItem(ICommand command, string name) : this(name)
     {
       this.Command = command;
-      this.Name = command.Name;
+    }
+
+    public ContentMenuItem(string name)
+    {
+      this.Name = name;
+      this.SubItems = new ObservableCollection<ContentMenuItem>();
     }
   }
 }

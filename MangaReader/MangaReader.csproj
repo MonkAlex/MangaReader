@@ -135,9 +135,12 @@
     <Compile Include="SettingsForm.xaml.cs">
       <DependentUpon>SettingsForm.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\VersionHistory.xaml.cs">
-      <DependentUpon>VersionHistory.xaml</DependentUpon>
+    <Compile Include="UI\VersionHistoryView.xaml.cs">
+      <DependentUpon>VersionHistoryView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\Commands\ContextMenuItemHelper.cs" />
+    <Compile Include="ViewModel\Commands\ShowUpdateHistoryCommand.cs" />
+    <Compile Include="ViewModel\Commands\UpdateVisibleMangaCommand.cs" />
     <Compile Include="ViewModel\MainPageModel.cs" />
     <Compile Include="ViewModel\Primitive\BaseViewModel.cs" />
     <Compile Include="ViewModel\Commands\AddNewMangaCommand.cs" />
@@ -155,6 +158,7 @@
     <Compile Include="ViewModel\Primitive\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModel\Primitive\ProcessModel.cs" />
     <Compile Include="ViewModel\TaskbarIconModel.cs" />
+    <Compile Include="ViewModel\VersionHistoryModel.cs" />
     <Compile Include="ViewModel\WindowModel.cs" />
     <Page Include="Input.xaml">
       <SubType>Designer</SubType>
@@ -204,7 +208,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\VersionHistory.xaml">
+    <Page Include="UI\VersionHistoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

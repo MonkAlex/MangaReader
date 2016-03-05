@@ -46,6 +46,7 @@
         <Style x:Key="ContentMenuItem" TargetType="MenuItem">
             <Setter Property="Header" Value="{Binding Name}"/>
             <Setter Property="Command" Value="{Binding Command}"/>
+            <Setter Property="ItemsSource" Value="{Binding SubItems}"/>
         </Style>
     </Application.Resources>
 </Application>

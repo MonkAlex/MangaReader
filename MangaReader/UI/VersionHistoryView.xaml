@@ -1,4 +1,4 @@
-﻿<Window x:Class="MangaReader.Services.VersionHistory"
+﻿<Window x:Class="MangaReader.Services.VersionHistoryView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:properties="clr-namespace:MangaReader.Properties"
@@ -15,11 +15,11 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="TextBox" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap" Text="TextBox" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+        <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap" Text="{Binding History}" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
         <Button Content="Ok" Grid.Row="1" Grid.Column="1" Click="Ok_Click" IsDefault="True"/>
         <StatusBar  Grid.Row="1" Grid.Column="0">
             <StatusBarItem HorizontalContentAlignment="Center">
-                <TextBlock x:Name="Label"/>
+                <TextBlock Text="{Binding Version}"/>
             </StatusBarItem>
         </StatusBar>
 

@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using MangaReader.Manga;
+using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.Services.Config;
 using MangaReader.ViewModel.Commands;
@@ -14,8 +16,7 @@ namespace MangaReader.ViewModel
   {
     private ICommand showSettings;
     private ICommand addNewManga;
-    private ICommand closeApplication;
-    private ICommand checkUpdateApplication;
+    private ObservableCollection<ContentMenuItem> menu;
 
     public ListCollectionView View { get; set; }
 
@@ -41,25 +42,16 @@ namespace MangaReader.ViewModel
       }
     }
 
-    public ICommand CheckUpdateApplication
+    public ObservableCollection<ContentMenuItem> Menu
     {
-      get { return checkUpdateApplication; }
+      get { return menu; }
       set
       {
-        checkUpdateApplication = value;
+        menu = value;
         OnPropertyChanged();
       }
     }
 
-    public ICommand CloseApplication
-    {
-      get { return closeApplication; }
-      set
-      {
-        closeApplication = value;
-        OnPropertyChanged();
-      }
-    }
 
     internal virtual bool Filter(object o)
     {
@@ -89,8 +81,29 @@ namespace MangaReader.ViewModel
 
       this.AddNewManga = new AddNewMangaCommand();
       this.ShowSettings = new ShowSettingCommand();
-      this.CheckUpdateApplication = new AppUpdateCommand();
-      this.CloseApplication = new ExitCommand();
+
+      #region Менюшка
+
+      this.Menu = new ObservableCollection<ContentMenuItem>();
+
+      var file = new ContentMenuItem("Файл");
+      file.SubItems.Add(new AddNewMangaCommand());
+      file.SubItems.Add(new UpdateVisibleMangaCommand(View));
+      file.SubItems.Add(new UpdateAllCommand { Name = "Обновить всё" });
+      file.SubItems.Add(new ExitCommand());
+
+      var setting = new ContentMenuItem(Strings.Library_Action_Settings);
+      setting.SubItems.Add(new ShowSettingCommand());
+
+      var about = new ContentMenuItem("О программе");
+      about.SubItems.Add(new AppUpdateCommand());
+      about.SubItems.Add(new ShowUpdateHistoryCommand());
+
+      this.Menu.Add(file);
+      this.Menu.Add(setting);
+      this.Menu.Add(about);
+
+      #endregion
     }
   }
 }

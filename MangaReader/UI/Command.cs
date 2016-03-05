@@ -1,27 +1,16 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.Services.Config;
 using MangaReader.UI.MainForm;
-using MangaReader.Update;
-using MangaReader.ViewModel;
-using Ookii.Dialogs.Wpf;
 
 namespace MangaReader.UI
 {
   public static class Command
   {
-    public static RoutedUICommand UpdateCurrent = new RoutedUICommand("Обновить", "UpdateCurrent", typeof(Command));
-
-    public static RoutedUICommand UpdateAll = new RoutedUICommand("Обновить всё", "UpdateAll", typeof(Command));
-
     public static RoutedUICommand DeleteManga = new RoutedUICommand(Strings.Manga_Action_Remove, "DeleteManga", typeof(Command));
 
     public static RoutedUICommand UpdateManga = new RoutedUICommand(Strings.Manga_Action_Update, "UpdateManga", typeof(Command));
@@ -31,8 +20,6 @@ namespace MangaReader.UI
     public static RoutedUICommand SelectNextManga = new RoutedUICommand("Следующая", "SelectNextManga", typeof(Command));
 
     public static RoutedUICommand SelectPrevManga = new RoutedUICommand("Предыдущая", "SelectPrevManga", typeof(Command));
-
-    public static RoutedUICommand ShowUpdateLog = new RoutedUICommand(Strings.Update_Title, "ShowUpdateLog", typeof(Command));
 
     public static RoutedUICommand ShowAbout = new RoutedUICommand("О программе", "ShowAbout", typeof(Command));
 
@@ -54,10 +41,6 @@ namespace MangaReader.UI
         <MenuItem Header="Update history"/>
         <MenuItem Header="About"/>
        */
-      AddCommand(UpdateCurrent, DoUpdateCurrent, CanUpdate, element);
-      AddCommand(UpdateAll, DoUpdateAll, CanUpdate, element);
-
-      AddCommand(ShowUpdateLog, DoShowUpdateLog, CanShowUpdateLog, element);
       AddCommand(ShowAbout, DoShowAbout, CanShowAbout, element);
 
       AddCommand(SelectNextManga, DoSelectNextManga, CanSelectNextManga, element);
@@ -92,28 +75,6 @@ namespace MangaReader.UI
       element.CommandBindings.Add(bind);
     }
     
-    private static void CanUpdate(object sender, CanExecuteRoutedEventArgs e)
-    {
-      e.CanExecute = Library.IsAvaible;
-    }
-
-    private static void DoUpdateCurrent(object sender, ExecutedRoutedEventArgs e)
-    {
-      var baseForm = sender as BaseForm;
-      if (Library.IsAvaible)
-      {
-        Library.ThreadAction(() => Library.Update(baseForm.Model.View.Cast<Mangas>(), baseForm.Model.LibraryFilter.SortDescription));
-      }
-    }
-
-    private static void DoUpdateAll(object sender, ExecutedRoutedEventArgs e)
-    {
-      if (Library.IsAvaible)
-      {
-        Library.ThreadAction(() => Library.Update(Library.LibraryMangas, ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
-      }
-    }
-
     private static void CanDeleteManga(object sender, CanExecuteRoutedEventArgs e)
     {
       e.CanExecute = Library.IsAvaible;
@@ -190,17 +151,6 @@ namespace MangaReader.UI
           filtered.FirstOrDefault();
         (e.Source as FrameworkElement).DataContext = Library.SelectedManga;
       }
-    }
-
-    private static void DoShowUpdateLog(object sender, ExecutedRoutedEventArgs e)
-    {
-      // TODO: sender уже не окно.
-      new VersionHistory((Window)sender).ShowDialog();
-    }
-
-    private static void CanShowUpdateLog(object sender, CanExecuteRoutedEventArgs e)
-    {
-      e.CanExecute = true;
     }
 
     private static void CanShowAbout(object sender, CanExecuteRoutedEventArgs e)

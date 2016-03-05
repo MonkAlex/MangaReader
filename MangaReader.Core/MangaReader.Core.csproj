@@ -151,6 +151,7 @@
     <Compile Include="Services\Serializer.cs" />
     <Compile Include="Services\TimedLock.cs" />
     <Compile Include="Update\Updater.cs" />
+    <Compile Include="Update\VersionHistory.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Strings.resx">

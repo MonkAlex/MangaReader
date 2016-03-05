@@ -31,7 +31,6 @@ namespace MangaReader
     public Table()
     {
       InitializeComponent();
-      //ConfigStorage.Instance.ViewConfig.UpdateWindowState(this);
       _timer = new DispatcherTimer(new TimeSpan(0, 0, 1),
           DispatcherPriority.Background,
           TimerTick,
@@ -71,7 +70,9 @@ namespace MangaReader
       if (downloadable == null)
         return;
 
-      new OpenFolderCommand().Execute(downloadable);
+      var defaultCommand = Model.MangaMenu.FirstOrDefault(m => m.IsDefault);
+      if (defaultCommand != null && defaultCommand.Command.CanExecute(downloadable))
+        defaultCommand.Command.Execute(downloadable);
     }
 
     /// <summary>
@@ -90,46 +91,6 @@ namespace MangaReader
         Log.Add(Strings.AutoUpdate);
         Update_click(this, new RoutedEventArgs());
       }
-    }
-
-    /// <summary>
-    /// Клик правой кнопкой.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void ListViewItem_OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
-    {
-      /*
-      var item = sender as ListViewItem;
-
-      var manga = item.DataContext as Mangas;
-      if (manga == null)
-        return;
-
-      var openFolder = new MenuItem() { FontWeight = FontWeights.Bold, Command = new OpenFolderCommand() };
-      var update = new MenuItem() { Command = Command.UpdateManga };
-      var compress = new MenuItem() { Header = Strings.Manga_Action_Compress, IsEnabled = Library.IsAvaible };
-      compress.Click += (o, args) => manga.Compress();
-      var removeHistory = new MenuItem() { Header = Strings.Manga_Action_Remove + " историю", IsEnabled = Library.IsAvaible };
-      removeHistory.Click += (o, agrs) => { manga.Histories.Clear(); manga.Save(); };
-      var remove = new MenuItem() { Command = Command.DeleteManga };
-      var view = new MenuItem() { Header = Strings.Manga_Action_View };
-      view.Click += (o, agrs) => Process.Start(manga.Uri.OriginalString);
-      var needUpdate = new MenuItem() { Header = manga.NeedUpdate ? Strings.Manga_NotUpdate : Strings.Manga_Update, IsEnabled = Library.IsAvaible };
-      needUpdate.Click += (o, args) => { manga.NeedUpdate = !manga.NeedUpdate; manga.Save(); };
-      var settings = new MenuItem() { Command = Command.MangaProperty };
-
-      var menu = new ContextMenu();
-      menu.Items.Add(openFolder);
-      menu.Items.Add(needUpdate);
-      menu.Items.Add(update);
-      menu.Items.Add(compress);
-      menu.Items.Add(view);
-      menu.Items.Add(removeHistory);
-      menu.Items.Add(remove);
-      menu.Items.Add(settings);
-      item.ContextMenu = menu;
-      */
     }
 
     private void ListView_MouseDown(object sender, MouseButtonEventArgs e)

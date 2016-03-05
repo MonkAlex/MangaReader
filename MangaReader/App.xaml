@@ -47,6 +47,7 @@
             <Setter Property="Header" Value="{Binding Name}"/>
             <Setter Property="Command" Value="{Binding Command}"/>
             <Setter Property="ItemsSource" Value="{Binding SubItems}"/>
+            <Setter Property="FontWeight" Value="{Binding FontWeight}"/>
             <Setter Property="CommandParameter" Value="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
         </Style>
     </Application.Resources>

@@ -119,10 +119,15 @@ namespace MangaReader.ViewModel
       this.MangaMenu = new ObservableCollection<ContentMenuItem>
       {
         new OpenFolderCommand(),
+        new ChangeUpdateMangaCommand(View),
         new UpdateMangaCommand(View),
+        new CompressMangaCommand(View),
+        new OpenUrlMangaCommand(View),
+        new HistoryClearMangaCommand(View),
         new DeleteMangaCommand(View),
         new ShowPropertiesMangaCommand(View)
       };
+      this.MangaMenu.First().IsDefault = true;
 
       #endregion
     }

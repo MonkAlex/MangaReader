@@ -138,6 +138,10 @@
     <Compile Include="UI\VersionHistoryView.xaml.cs">
       <DependentUpon>VersionHistoryView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\Commands\Manga\ChangeUpdateMangaCommand.cs" />
+    <Compile Include="ViewModel\Commands\Manga\CompressMangaCommand.cs" />
+    <Compile Include="ViewModel\Commands\Manga\HistoryClearMangaCommand.cs" />
+    <Compile Include="ViewModel\Commands\Manga\OpenUrlMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\Primitives\ContextMenuItemHelper.cs" />
     <Compile Include="ViewModel\Commands\Primitives\MangaBaseCommand.cs" />
     <Compile Include="ViewModel\Commands\Manga\DeleteMangaCommand.cs" />

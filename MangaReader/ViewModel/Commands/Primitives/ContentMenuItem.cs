@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace MangaReader.ViewModel.Commands.Primitives
@@ -8,6 +9,29 @@ namespace MangaReader.ViewModel.Commands.Primitives
     private string name;
     private ICommand command;
     private ObservableCollection<ContentMenuItem> subItems;
+    private FontWeight fontWeight;
+    private bool isDefault;
+
+    public FontWeight FontWeight
+    {
+      get { return fontWeight; }
+      set
+      {
+        fontWeight = value;
+        OnPropertyChanged();
+      }
+    }
+
+    public bool IsDefault
+    {
+      get { return isDefault; }
+      set
+      {
+        isDefault = value;
+        this.FontWeight = value ? FontWeights.Bold : FontWeights.Normal;
+        OnPropertyChanged();
+      }
+    }
 
     public string Name
     {

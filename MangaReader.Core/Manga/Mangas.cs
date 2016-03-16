@@ -420,8 +420,10 @@ namespace MangaReader.Manga
         case Compression.CompressionMode.Chapter:
           Compression.CompressChapters(this.Folder);
           break;
+        case null:
+          throw new InvalidEnumArgumentException("CompressionMode is null", -1, typeof(Compression.CompressionMode));
         default:
-          throw new InvalidEnumArgumentException("CompressionMode", 0, typeof(Compression.CompressionMode));
+          throw new InvalidEnumArgumentException("CompressionMode", (int)this.CompressionMode, typeof(Compression.CompressionMode));
       }
       Library.Status = Strings.Mangas_Compress_Completed;
     }

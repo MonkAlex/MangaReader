@@ -89,6 +89,7 @@
     <Compile Include="Account\Login.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Entity\Entity.cs" />
+    <Compile Include="Exception\EntityException.cs" />
     <Compile Include="Exception\MangaDirectoryExists.cs" />
     <Compile Include="Exception\MangaReaderException.cs" />
     <Compile Include="Exception\CopyDirectoryFailed.cs" />

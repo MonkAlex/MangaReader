@@ -1,5 +1,5 @@
-﻿using MangaReader.Mapping;
-using NHibernate.Id;
+﻿using MangaReader.Core.Exception;
+using MangaReader.Mapping;
 
 namespace MangaReader.Entity
 {
@@ -12,7 +12,7 @@ namespace MangaReader.Entity
         if (id == 0 || value == 0)
           id = value;
         else
-          throw new IdentifierGenerationException("Нельзя изменять ID сущности.");
+          throw new EntityException("Нельзя изменять ID сущности.", this);
       }
       get { return id; }
     }
@@ -24,7 +24,7 @@ namespace MangaReader.Entity
 
     }
 
-    public virtual void BeforeSave(object[] currentState, object[] previousState,
+    internal virtual void BeforeSave(object[] currentState, object[] previousState,
       string[] propertyNames, NHibernate.Type.IType[] types)
     {
       this.BeforeSave(currentState, previousState, propertyNames);

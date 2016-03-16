@@ -11,6 +11,7 @@ namespace MangaReader.Mapping
   {
     public MangaMap()
     {
+      Not.LazyLoad();
       Id(x => x.Id).GeneratedBy.Native();
       Map(x => x.LocalName).Not.LazyLoad();
       Map(x => x.ServerName).Not.LazyLoad();
@@ -33,6 +34,7 @@ namespace MangaReader.Mapping
   {
     public ReadmangaMap()
     {
+      Not.LazyLoad();
       DiscriminatorValue(Readmanga.Type.ToString());
     }
   }
@@ -41,6 +43,7 @@ namespace MangaReader.Mapping
   {
     public AcomicsMap()
     {
+      Not.LazyLoad();
       DiscriminatorValue(Acomics.Type.ToString());
     }
   }
@@ -49,6 +52,7 @@ namespace MangaReader.Mapping
   {
     public HentaichanMap()
     {
+      Not.LazyLoad();
       DiscriminatorValue(Hentaichan.Type.ToString());
     }
   }

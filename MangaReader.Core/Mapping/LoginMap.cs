@@ -6,6 +6,7 @@ namespace MangaReader.Mapping
   {
     public LoginMap()
     {
+      Not.LazyLoad();
       Id(x => x.Id);
       Map(x => x.Name).Not.LazyLoad();
       Map(x => x.Password).Not.LazyLoad();
@@ -17,6 +18,7 @@ namespace MangaReader.Mapping
   {
     public HentaichanLoginMap()
     {
+      Not.LazyLoad();
       Map(x => x.UserId).Not.LazyLoad();
       Map(x => x.PasswordHash).Not.LazyLoad();
       DiscriminatorValue(Manga.Hentaichan.HentaichanLogin.Type.ToString());
@@ -27,6 +29,7 @@ namespace MangaReader.Mapping
   {
     public GroupleLoginMap()
     {
+      Not.LazyLoad();
       DiscriminatorValue(Manga.Grouple.GroupleLogin.Type.ToString());
     }
   }
@@ -35,6 +38,7 @@ namespace MangaReader.Mapping
   {
     public AcomicsLoginMap()
     {
+      Not.LazyLoad();
       Map(x => x.PasswordHash).Not.LazyLoad();
       DiscriminatorValue(Manga.Acomic.AcomicsLogin.Type.ToString());
     }

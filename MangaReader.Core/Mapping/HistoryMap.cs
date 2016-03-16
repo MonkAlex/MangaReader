@@ -6,6 +6,7 @@ namespace MangaReader.Mapping
   {
     public HistoryMap()
     {
+      Not.LazyLoad();
       Id(x => x.Id).GeneratedBy.Native();
       Map(x => x.Uri).Not.LazyLoad();
       Map(x => x.Date).Not.LazyLoad();

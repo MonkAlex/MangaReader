@@ -7,6 +7,7 @@ namespace MangaReader.Mapping
   {
     public MangaSettingMap()
     {
+      Not.LazyLoad();
       Id(x => x.Id);
       Map(x => x.Manga).Not.LazyLoad().Unique();
       Map(x => x.Folder).Not.LazyLoad();

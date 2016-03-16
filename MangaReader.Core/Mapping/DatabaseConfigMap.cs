@@ -7,6 +7,7 @@ namespace MangaReader.Mapping
   {
     public DatabaseConfigMap()
     {
+      Not.LazyLoad();
       Id(x => x.Id);
       Map(x => x.Version);
     }

@@ -23,7 +23,7 @@ namespace MangaReader.Manga
     /// <summary>
     /// Название манги.
     /// </summary>
-    public virtual string Name
+    public string Name
     {
       get { return this.IsNameChanged ? this.LocalName : this.ServerName; }
       set
@@ -37,7 +37,7 @@ namespace MangaReader.Manga
       }
     }
 
-    public virtual string LocalName
+    public string LocalName
     {
       get { return localName ?? ServerName; }
       set { localName = value; }
@@ -45,9 +45,9 @@ namespace MangaReader.Manga
 
     private string localName;
 
-    public virtual string ServerName { get; set; }
+    public string ServerName { get; set; }
 
-    public virtual bool IsNameChanged
+    public bool IsNameChanged
     {
       get { return isNameChanged; }
       set
@@ -97,7 +97,7 @@ namespace MangaReader.Manga
     /// </summary>
     public virtual string Status { get; set; }
 
-    public virtual bool? NeedCompress
+    public bool? NeedCompress
     {
       get { return needCompress; }
       set
@@ -198,7 +198,7 @@ namespace MangaReader.Manga
     /// <summary>
     /// Признак только страниц, даже без глав.
     /// </summary>
-    public virtual bool OnlyPages { get { return !this.HasVolumes && !this.HasChapters; } }
+    public bool OnlyPages { get { return !this.HasVolumes && !this.HasChapters; } }
 
     /// <summary>
     /// Признак наличия глав.
@@ -217,7 +217,7 @@ namespace MangaReader.Manga
     /// <summary>
     /// Статус загрузки.
     /// </summary>
-    public virtual bool IsDownloaded
+    public bool IsDownloaded
     {
       get
       {
@@ -232,7 +232,7 @@ namespace MangaReader.Manga
     /// <summary>
     /// Процент загрузки манги.
     /// </summary>
-    public virtual double Downloaded
+    public double Downloaded
     {
       get
       {
@@ -245,15 +245,15 @@ namespace MangaReader.Manga
     }
 
 
-    public virtual string Folder
+    public string Folder
     {
       get { return DirectoryHelpers.MakeValidPath(Path.Combine(this.Setting.Folder, DirectoryHelpers.MakeValidPath(this.Name.Replace(Path.DirectorySeparatorChar, '.')))); }
       set { }
     }
     
-    public virtual event EventHandler<Mangas> DownloadProgressChanged;
+    public event EventHandler<Mangas> DownloadProgressChanged;
 
-    protected virtual void OnDownloadProgressChanged(Mangas manga)
+    protected void OnDownloadProgressChanged(Mangas manga)
     {
       var handler = DownloadProgressChanged;
       if (handler != null)
@@ -280,7 +280,7 @@ namespace MangaReader.Manga
       this.Volumes.ForEach(v => v.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this));
     }
 
-    public virtual void Download(string mangaFolder = null)
+    public void Download(string mangaFolder = null)
     {
       if (!this.NeedUpdate)
         return;
@@ -362,7 +362,7 @@ namespace MangaReader.Manga
 
     #region INotifyPropertyChanged
 
-    public virtual event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler PropertyChanged;
 
     protected void OnPropertyChanged(string property)
     {
@@ -371,24 +371,6 @@ namespace MangaReader.Manga
       {
         handler(this, new PropertyChangedEventArgs(property));
       }
-    }
-
-    #endregion
-
-    #region Equals
-
-    public override bool Equals(object obj)
-    {
-      if (obj == null)
-        return false;
-
-      var manga = obj as Mangas;
-      return manga == null ? base.Equals(obj) : this.Uri.Equals(manga.Uri);
-    }
-
-    public override int GetHashCode()
-    {
-      return this.Uri.GetHashCode();
     }
 
     #endregion
@@ -406,7 +388,7 @@ namespace MangaReader.Manga
     /// <summary>
     /// Упаковка манги.
     /// </summary>
-    public virtual void Compress()
+    public void Compress()
     {
       Library.Status = Strings.Mangas_Compress_Started + this.Name;
       switch (this.CompressionMode)

@@ -12,7 +12,7 @@ namespace MangaReader.Core.NHibernate
       return Mapping.Session.Query<T>();
     }
 
-    public static void Save<T>(this T obj) where T : Entity.Entity
+    public static void Save<T>(T obj) where T : Entity.Entity
     {
       SaveAll(new [] {obj});
     }

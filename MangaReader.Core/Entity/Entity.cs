@@ -5,9 +5,9 @@ namespace MangaReader.Entity
 {
   public class Entity
   {
-    public virtual int Id
+    public int Id
     {
-      set
+      private set
       {
         if (id == 0 || value == 0)
           id = value;
@@ -24,7 +24,7 @@ namespace MangaReader.Entity
 
     }
 
-    internal virtual void BeforeSave(object[] currentState, object[] previousState,
+    internal void BeforeSave(object[] currentState, object[] previousState,
       string[] propertyNames, NHibernate.Type.IType[] types)
     {
       this.BeforeSave(currentState, previousState, propertyNames);
@@ -70,6 +70,23 @@ namespace MangaReader.Entity
         this.Id = 0;
       }
       return true;
+    }
+
+    public override bool Equals(object obj)
+    {
+      if (obj == null)
+        return false;
+
+      var entity = obj as Entity;
+      if (entity == null)
+        return false;
+
+      return Equals(this.Id, entity.Id) && this.GetType() == entity.GetType();
+    }
+
+    public override int GetHashCode()
+    {
+      return this.Id.GetHashCode()^this.GetType().GetHashCode();
     }
   }
 }

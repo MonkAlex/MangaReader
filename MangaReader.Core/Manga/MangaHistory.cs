@@ -13,9 +13,9 @@ namespace MangaReader
     /// Ссылка на мангу.
     /// Исключительно для десериализации старых данных.
     /// </summary>
-    public virtual string MangaUrl { get; set; }
+    public string MangaUrl { get; set; }
 
-    public virtual string Url
+    public string Url
     {
       get { return Uri == null ? null : Uri.ToString(); }
       set { Uri = value == null ? null : new Uri(value); }
@@ -25,12 +25,12 @@ namespace MangaReader
     /// Ссылка в историю.
     /// </summary>
     [XmlIgnore]
-    public virtual Uri Uri { get; set; }
+    public Uri Uri { get; set; }
 
     /// <summary>
     /// Время добавления.
     /// </summary>
-    public virtual DateTime Date { get; set; }
+    public DateTime Date { get; set; }
 
     #region Equals
 

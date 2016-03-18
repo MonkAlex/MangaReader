@@ -28,6 +28,7 @@ namespace Tests.Convertation
     [AssemblyInitialize]
     public static void TestInitialize(TestContext context)
     {
+      // TODO: Just select test setting file, if it NRE.
       var test = context.GetType().GetField("m_test", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(context);
       var path = (string)test.GetType().GetProperty("CodeBase", BindingFlags.Public | BindingFlags.Instance).GetValue(test);
       deploymentDirectory = context.DeploymentDirectory;

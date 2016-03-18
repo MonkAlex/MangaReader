@@ -1,10 +1,12 @@
-﻿using MangaReader.Core.Exception;
+﻿using System.Xml.Serialization;
+using MangaReader.Core.Exception;
 using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Core.Entity
 {
   public class Entity
   {
+    [XmlIgnore]
     public int Id
     {
       private set

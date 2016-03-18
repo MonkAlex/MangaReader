@@ -7,10 +7,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MangaReader.Core.Exception;
+using MangaReader.Core.NHibernate;
 using MangaReader.Manga;
 using MangaReader.Manga.Acomic;
 using MangaReader.Core.Properties;
-using MangaReader.Mapping;
 using MangaReader.Services.Config;
 using NHibernate.Linq;
 
@@ -175,7 +175,7 @@ namespace MangaReader.Services
         process.ProgressState = ProgressState.Normal;
 
       List<string> mangaUrls;
-      using (var session = Mapping.Environment.OpenSession())
+      using (var session = Mapping.OpenSession())
       {
         mangaUrls = session.Query<Mangas>().Select(m => m.Uri.ToString()).ToList();
       }

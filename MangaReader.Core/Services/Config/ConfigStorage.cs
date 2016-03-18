@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using MangaReader.Mapping;
+using MangaReader.Core.NHibernate;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -42,8 +42,8 @@ namespace MangaReader.Services.Config
       {
         if (databaseConfig == null)
         {
-          if (Mapping.Environment.Initialized)
-            databaseConfig = Mapping.Repository.Get<DatabaseConfig>().SingleOrCreate();
+          if (Mapping.Initialized)
+            databaseConfig = Repository.Get<DatabaseConfig>().SingleOrCreate();
           else
             Log.Exception("Запрос DatabaseConfig до инициализации соединения с базой.");
         }

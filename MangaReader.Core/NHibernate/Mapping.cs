@@ -1,15 +1,15 @@
 ﻿using System.IO;
-using NHibernate;
-using NHibernate.Cfg;
-using NHibernate.Tool.hbm2ddl;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using MangaReader.Services;
 using MangaReader.Services.Config;
+using NHibernate;
+using NHibernate.Cfg;
+using NHibernate.Tool.hbm2ddl;
 
-namespace MangaReader.Mapping
+namespace MangaReader.Core.NHibernate
 {
-  public class Environment
+  public class Mapping
   {
     private const string DbFile = "storage.db";
 
@@ -50,7 +50,7 @@ namespace MangaReader.Mapping
       return Fluently
         .Configure()
         .Database(SQLiteConfiguration.Standard.UsingFile(Path.Combine(ConfigStorage.WorkFolder, DbFile)))
-        .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Environment>())
+        .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Mapping>())
         .ExposeConfiguration(BuildSchema)
         .BuildSessionFactory();
     }

@@ -6,8 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using MangaReader.Core.Exception;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Properties;
-using MangaReader.Mapping;
 using MangaReader.Services;
 using MangaReader.Services.Config;
 
@@ -116,7 +116,7 @@ namespace MangaReader.Manga
     {
       get
       {
-        if (Mapping.Environment.Initialized)
+        if (Mapping.Initialized)
           return ConfigStorage.Instance.DatabaseConfig.MangaSettings.SingleOrDefault(s => Equals(s.Manga, this.GetType().TypeProperty()));
         throw new Exception("Mappings not initialized.");
       }

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using MangaReader.Core.NHibernate;
 using NHibernate.Linq;
 using MangaReader.Manga;
 using MangaReader.Services.Config;
-using Environment = MangaReader.Mapping.Environment;
 
 namespace MangaReader.Services
 {
@@ -35,7 +35,7 @@ namespace MangaReader.Services
     /// <remarks>Используется для сохранения важной информации - открывает новое соединение, дорогая операция.</remarks>
     public static void AddHistory(this Mangas manga, IEnumerable<Uri> messages)
     {
-      using (var session = Environment.OpenSession())
+      using (var session = Mapping.OpenSession())
       using (var tranc = session.BeginTransaction())
       {
         foreach (var message in messages)
@@ -59,7 +59,7 @@ namespace MangaReader.Services
       List<T> result;
       var uris = items.Select(c => c.Uri).ToList();
 
-      using (var session = Environment.OpenSession())
+      using (var session = Mapping.OpenSession())
       {
         result = items.Where(c => uris.Except(session.Query<MangaHistory>().Where(h => uris.Contains(h.Uri)).Select(h => h.Uri)).Contains(c.Uri)).ToList();
       }
@@ -81,7 +81,7 @@ namespace MangaReader.Services
       var version = new Version(1, 33, 5789);
       if (version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && process.Version.CompareTo(version) >= 0)
       {
-        var removePort = Environment.Session.CreateSQLQuery(@"update MangaHistory
+        var removePort = Mapping.Session.CreateSQLQuery(@"update MangaHistory
                                                               set Uri = Replace(Uri, ':80/', '/')
                                                               where Uri like '%:80/%'");
         removePort.UniqueResult();
@@ -116,7 +116,7 @@ namespace MangaReader.Services
       if (isMangaHistory && !isStringList)
         histories = serializedMangaHistoris;
 
-      using (var session = Environment.OpenSession())
+      using (var session = Mapping.OpenSession())
       {
         var mangas = session.Query<Mangas>().ToList();
         var historyInDb = session.Query<MangaHistory>().Select(h => h.Uri).ToList();

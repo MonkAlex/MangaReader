@@ -1,7 +1,7 @@
 ﻿using FluentNHibernate.Mapping;
 using MangaReader.Services.Config;
 
-namespace MangaReader.Mapping
+namespace MangaReader.Core.NHibernate
 {
   public class DatabaseConfigMap : ClassMap<DatabaseConfig>
   {

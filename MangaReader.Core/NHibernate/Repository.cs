@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using MangaReader.Services;
-using NHibernate;
 using NHibernate.Linq;
 
-namespace MangaReader.Mapping
+namespace MangaReader.Core.NHibernate
 {
   public static class Repository
   {
     public static IQueryable<T> Get<T>() where T : Entity.Entity
     {
-      return Environment.Session.Query<T>();
+      return Mapping.Session.Query<T>();
     }
 
     public static void Save<T>(this T obj) where T : Entity.Entity
@@ -25,7 +23,7 @@ namespace MangaReader.Mapping
       if (!list.Any())
         return;
 
-      var session = Environment.Session;
+      var session = Mapping.Session;
       using (var tranc = session.BeginTransaction())
       {
         try
@@ -40,7 +38,7 @@ namespace MangaReader.Mapping
           }
           tranc.Commit();
         }
-        catch (Exception)
+        catch (System.Exception)
         {
           tranc.Rollback();
           throw;

@@ -16,7 +16,7 @@ namespace Tests.Entities
       MangaReader.Core.Client.Init();
       MangaReader.Core.Client.Start(process);
 
-      Session = MangaReader.Mapping.Environment.Session;
+      Session = MangaReader.Core.NHibernate.Mapping.Session;
     }
 
     [AssemblyCleanup]

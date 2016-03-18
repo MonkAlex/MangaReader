@@ -1,5 +1,5 @@
 ﻿using MangaReader.Core.Exception;
-using MangaReader.Mapping;
+using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Entity
 {
@@ -49,7 +49,7 @@ namespace MangaReader.Entity
         return;
       }
 
-      Mapping.Environment.Session.Refresh(this);
+      Mapping.Session.Refresh(this);
     }
 
     /// <summary>
@@ -61,7 +61,7 @@ namespace MangaReader.Entity
       if (this.Id == 0)
         return false;
 
-      var session = Mapping.Environment.Session;
+      var session = Mapping.Session;
       using (var tranc = session.BeginTransaction())
       {
         var entity = session.Load(this.GetType(), this.Id);

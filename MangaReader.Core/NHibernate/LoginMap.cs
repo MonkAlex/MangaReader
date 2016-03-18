@@ -1,6 +1,6 @@
 ﻿using FluentNHibernate.Mapping;
 
-namespace MangaReader.Mapping
+namespace MangaReader.Core.NHibernate
 {
   public class LoginMap : ClassMap<Account.Login>
   {
@@ -8,8 +8,8 @@ namespace MangaReader.Mapping
     {
       Not.LazyLoad();
       Id(x => x.Id);
-      Map(x => x.Name).Not.LazyLoad();
-      Map(x => x.Password).Not.LazyLoad();
+      Map(x => x.Name);
+      Map(x => x.Password);
       DiscriminateSubClassesOnColumn("Type");
     }
   }
@@ -19,8 +19,8 @@ namespace MangaReader.Mapping
     public HentaichanLoginMap()
     {
       Not.LazyLoad();
-      Map(x => x.UserId).Not.LazyLoad();
-      Map(x => x.PasswordHash).Not.LazyLoad();
+      Map(x => x.UserId);
+      Map(x => x.PasswordHash);
       DiscriminatorValue(Manga.Hentaichan.HentaichanLogin.Type.ToString());
     }
   }
@@ -39,7 +39,7 @@ namespace MangaReader.Mapping
     public AcomicsLoginMap()
     {
       Not.LazyLoad();
-      Map(x => x.PasswordHash).Not.LazyLoad();
+      Map(x => x.PasswordHash);
       DiscriminatorValue(Manga.Acomic.AcomicsLogin.Type.ToString());
     }
   }

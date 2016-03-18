@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using MangaReader.Core.NHibernate;
 using MangaReader.Services.Config;
 
 namespace MangaReader.Services
@@ -30,7 +31,7 @@ namespace MangaReader.Services
     public static CompressionMode? GetDefaultCompression(this Mangas manga)
     {
       CompressionMode? mode = null;
-      if (Mapping.Environment.Initialized)
+      if (Mapping.Initialized)
       {
         var setting = manga.Setting;
         if (setting != null)

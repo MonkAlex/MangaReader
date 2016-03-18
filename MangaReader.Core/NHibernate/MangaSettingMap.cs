@@ -1,0 +1,21 @@
+﻿using FluentNHibernate.Mapping;
+using MangaReader.Services;
+
+namespace MangaReader.Core.NHibernate
+{
+  public class MangaSettingMap : ClassMap<MangaSetting>
+  {
+    public MangaSettingMap()
+    {
+      Not.LazyLoad();
+      Id(x => x.Id);
+      Map(x => x.Manga).Unique();
+      Map(x => x.Folder);
+      Map(x => x.MangaName);
+      Map(x => x.CompressManga);
+      Map(x => x.OnlyUpdate);
+      Map(x => x.DefaultCompression);
+      References(x => x.Login).Cascade.All();
+    }
+  }
+}

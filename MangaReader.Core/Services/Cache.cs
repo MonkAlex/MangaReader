@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using MangaReader.Core.NHibernate;
 using MangaReader.Manga;
-using MangaReader.Mapping;
 using MangaReader.Services.Config;
 
 namespace MangaReader.Services

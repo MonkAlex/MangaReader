@@ -4,7 +4,6 @@ using MangaReader;
 using MangaReader.Manga;
 using MangaReader.Manga.Acomic;
 using MangaReader.Manga.Grouple;
-using MangaReader.Mapping;
 
 namespace Tests.Entities
 {

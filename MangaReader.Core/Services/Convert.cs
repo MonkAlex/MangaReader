@@ -1,4 +1,5 @@
 ﻿using System;
+using MangaReader.Core.NHibernate;
 using MangaReader.Services.Config;
 
 namespace MangaReader.Services
@@ -19,7 +20,7 @@ namespace MangaReader.Services
 #pragma warning disable 618
       Cache.Convert(process);
 #pragma warning restore 618
-      Mapping.Converting.ConvertAll(process);
+      Converting.ConvertAll(process);
 
       process.Status = "Конвертация манги...";
       process.Percent = 0;

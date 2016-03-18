@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using MangaReader.Mapping;
+using MangaReader.Core.NHibernate;
 using NHibernate.Linq;
 
 namespace MangaReader.Services.Config
@@ -23,7 +23,7 @@ namespace MangaReader.Services.Config
       {
         if (mangaSettings == null)
         {
-          if (Mapping.Environment.Initialized)
+          if (Mapping.Initialized)
           {
             var query = Repository.Get<MangaSetting>().ToList();
             mangaSettings = CreateDefaultMangaSettings(query);

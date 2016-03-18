@@ -36,7 +36,7 @@ namespace MangaReader.Core
       }
 
       ResolveAssembly.LoadSql();
-      Mapping.Environment.Initialize(process);
+      NHibernate.Mapping.Initialize(process);
       Converter.Convert(process);
       Log.Add(string.Format("Found {0} manga type settings:", ConfigStorage.Instance.DatabaseConfig.MangaSettings.Count));
       ConfigStorage.Instance.DatabaseConfig.MangaSettings.ForEach(s => Log.Add(string.Format("Load settings for {0}, guid {1}.", s.MangaName, s.Manga)));
@@ -47,7 +47,7 @@ namespace MangaReader.Core
 //      Library.ThreadAbort();
       ConfigStorage.Instance.Save();
       ConfigStorage.Close();
-      Mapping.Environment.Close();
+      NHibernate.Mapping.Close();
 
       if (mutex != null && !mutex.SafeWaitHandle.IsClosed)
         mutex.Close();

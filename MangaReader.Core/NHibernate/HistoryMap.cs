@@ -1,6 +1,6 @@
 ﻿using FluentNHibernate.Mapping;
 
-namespace MangaReader.Mapping
+namespace MangaReader.Core.NHibernate
 {
   public class HistoryMap : ClassMap<MangaHistory>
   {
@@ -8,8 +8,8 @@ namespace MangaReader.Mapping
     {
       Not.LazyLoad();
       Id(x => x.Id).GeneratedBy.Native();
-      Map(x => x.Uri).Not.LazyLoad();
-      Map(x => x.Date).Not.LazyLoad();
+      Map(x => x.Uri);
+      Map(x => x.Date);
     }
   }
 }

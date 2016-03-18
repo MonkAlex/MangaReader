@@ -1,7 +1,7 @@
 ﻿using NHibernate;
 using NHibernate.Type;
 
-namespace MangaReader.Mapping
+namespace MangaReader.Core.NHibernate
 {
   class BaseInterceptor : EmptyInterceptor
   {

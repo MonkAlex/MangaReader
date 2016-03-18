@@ -1,6 +1,6 @@
 ﻿using System.Windows;
+using MangaReader.Core.Update;
 using MangaReader.Properties;
-using MangaReader.Update;
 using MangaReader.ViewModel.Primitive;
 
 namespace MangaReader.ViewModel

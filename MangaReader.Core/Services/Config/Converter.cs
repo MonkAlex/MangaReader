@@ -2,8 +2,9 @@
 using System.Linq;
 using MangaReader.Manga.Acomic;
 using MangaReader.Manga.Grouple;
+using MangaReader.Services;
 
-namespace MangaReader.Services.Config
+namespace MangaReader.Core.Services.Config
 {
   internal static class Converter
   {
@@ -84,7 +85,7 @@ namespace MangaReader.Services.Config
           if (settings[4] is bool)
             ConfigStorage.Instance.DatabaseConfig.MangaSettings.ForEach(ms => ms.CompressManga = (bool)settings[4]);
         }
-        catch (Exception ex)
+        catch (System.Exception ex)
         {
           Log.Exception(ex);
         }

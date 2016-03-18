@@ -5,16 +5,18 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using MangaReader.Core.Entity;
 using MangaReader.Core.Exception;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Properties;
+using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 using MangaReader.Services;
-using MangaReader.Services.Config;
 
 namespace MangaReader.Manga
 {
   [XmlInclude(typeof(Grouple.Readmanga)), XmlInclude(typeof(Acomic.Acomics))]
-  public abstract class Mangas : Entity.Entity, INotifyPropertyChanged, IDownloadable
+  public abstract class Mangas : Entity, INotifyPropertyChanged, IDownloadable
   {
     #region Свойства
 

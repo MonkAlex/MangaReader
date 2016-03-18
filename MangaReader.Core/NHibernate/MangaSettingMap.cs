@@ -1,5 +1,5 @@
 ﻿using FluentNHibernate.Mapping;
-using MangaReader.Services;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Core.NHibernate
 {

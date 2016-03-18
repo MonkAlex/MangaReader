@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MangaReader.Core.Entity;
 using NHibernate.Util;
 
 namespace MangaReader.Services
@@ -23,7 +24,7 @@ namespace MangaReader.Services
     /// Перезагрузить коллекцию из базы.
     /// </summary>
     /// <param name="query"></param>
-    public static void Update(this IEnumerable<Entity.Entity> query)
+    public static void Update(this IEnumerable<Entity> query)
     {
       query.ForEach(q => q.Update());
     }
@@ -41,7 +42,7 @@ namespace MangaReader.Services
 
   public static class Generic
   {
-    public static T SingleOrCreate<T>(this IQueryable<T> query) where T : Entity.Entity, new()
+    public static T SingleOrCreate<T>(this IQueryable<T> query) where T : Entity, new()
     {
       var single = query.SingleOrDefault();
       if (single == null)

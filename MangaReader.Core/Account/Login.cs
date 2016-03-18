@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using MangaReader.Core.Entity;
 using MangaReader.Manga;
 using MangaReader.Services;
 
 namespace MangaReader.Account
 {
-  public abstract class Login : Entity.Entity
+  public abstract class Login : Entity
   {
     public static Guid Type { get { return Guid.Empty; } }
 
@@ -30,12 +31,12 @@ namespace MangaReader.Account
     /// <summary>
     /// Указатель блокировки клиента файла.
     /// </summary>
-    protected internal virtual object ClientLock { get; set; }
+    protected internal object ClientLock { get; set; }
 
     /// <summary>
     /// Клиент с куками авторизованного пользователя.
     /// </summary>
-    protected internal virtual CookieClient Client
+    protected internal CookieClient Client
     {
       get { return this.client ?? (this.client = new CookieClient() {BaseAddress = MainUri.ToString()}); }
     }

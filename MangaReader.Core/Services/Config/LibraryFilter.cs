@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 
-namespace MangaReader.Services.Config
+namespace MangaReader.Core.Services.Config
 {
   public class LibraryFilter
   {

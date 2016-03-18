@@ -3,6 +3,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services;

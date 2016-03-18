@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Threading;
+using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
+using MangaReader.Core.Update;
 using MangaReader.Services;
-using MangaReader.Services.Config;
-using MangaReader.Update;
-using Converter = MangaReader.Services.Converter;
+using Converter = MangaReader.Core.Services.Converter;
 
 namespace MangaReader.Core
 {

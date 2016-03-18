@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace MangaReader.Update
+namespace MangaReader.Core.Update
 {
   public static class VersionHistory
   {

@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
+using MangaReader.Core.Services.Config;
 using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services;

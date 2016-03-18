@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 
-namespace MangaReader.Services.Config
+namespace MangaReader.Core.Services.Config
 {
   public class AppConfig
   {

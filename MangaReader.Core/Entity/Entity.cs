@@ -1,7 +1,7 @@
 ﻿using MangaReader.Core.Exception;
 using MangaReader.Core.NHibernate;
 
-namespace MangaReader.Entity
+namespace MangaReader.Core.Entity
 {
   public class Entity
   {
@@ -25,7 +25,7 @@ namespace MangaReader.Entity
     }
 
     internal void BeforeSave(object[] currentState, object[] previousState,
-      string[] propertyNames, NHibernate.Type.IType[] types)
+      string[] propertyNames, global::NHibernate.Type.IType[] types)
     {
       this.BeforeSave(currentState, previousState, propertyNames);
     }

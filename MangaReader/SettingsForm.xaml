@@ -4,6 +4,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:resx="clr-namespace:MangaReader.Properties"
         xmlns:config="clr-namespace:MangaReader.Services.Config;assembly=MangaReader.Core"
+        xmlns:config1="clr-namespace:MangaReader.Core.Services.Config;assembly=MangaReader.Core"
         WindowStartupLocation="CenterOwner"
         Icon="Icons/main.ico"
         Title="{x:Static resx:Strings.Library_Action_Settings}"
@@ -15,7 +16,7 @@
                     MethodName="GetValues" 
                     ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="config:Languages" />
+                <x:Type TypeName="config1:Languages" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Window.Resources>

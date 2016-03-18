@@ -1,8 +1,9 @@
 ﻿using System;
 using MangaReader.Core.NHibernate;
-using MangaReader.Services.Config;
+using MangaReader.Core.Services.Config;
+using MangaReader.Services;
 
-namespace MangaReader.Services
+namespace MangaReader.Core.Services
 {
 
   public static class Converter
@@ -14,7 +15,7 @@ namespace MangaReader.Services
       Log.Add("Convert started.");
 
       process.Status = "Проверка настроек...";
-      Config.Converter.ConvertAll(process);
+      Core.Services.Config.Converter.ConvertAll(process);
 
       process.Status = "Конвертация манги...";
 #pragma warning disable 618

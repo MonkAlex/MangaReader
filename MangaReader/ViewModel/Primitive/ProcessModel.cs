@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Shell;
+using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 using MangaReader.Services;
 using MangaReader.Services.Config;
 

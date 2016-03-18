@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Data;
+using MangaReader.Core.Services.Config;
 using MangaReader.Manga;
 using MangaReader.Services;
 using MangaReader.Services.Config;

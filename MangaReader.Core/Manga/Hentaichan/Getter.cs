@@ -5,8 +5,8 @@ using System.Net;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using MangaReader.Account;
+using MangaReader.Core.Services.Config;
 using MangaReader.Services;
-using MangaReader.Services.Config;
 
 namespace MangaReader.Manga.Hentaichan
 {

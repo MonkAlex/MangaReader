@@ -1,25 +1,26 @@
 ﻿using System;
 using MangaReader.Account;
+using MangaReader.Services;
 
-namespace MangaReader.Services
+namespace MangaReader.Core.Services
 {
   public class MangaSetting : Entity.Entity
   {
-    public virtual Guid Manga { get; set; }
+    public Guid Manga { get; set; }
 
-    public virtual string MangaName { get; set; }
+    public string MangaName { get; set; }
 
-    public virtual string Folder { get; set; }
+    public string Folder { get; set; }
 
     /// <summary>
     /// Сжимать скачанную мангу.
     /// </summary>
-    public virtual bool CompressManga { get; set; }
+    public bool CompressManga { get; set; }
 
     /// <summary>
     /// Обновлять при скачивании (true) или скачивать целиком(false).
     /// </summary>
-    public virtual bool OnlyUpdate { get; set; }
+    public bool OnlyUpdate { get; set; }
 
     public virtual Login Login
     {

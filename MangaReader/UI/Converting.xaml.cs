@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Services
 {

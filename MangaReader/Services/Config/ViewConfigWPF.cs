@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows;
+using MangaReader.Core.Services.Config;
 using MangaReader.UI.MainForm;
+using WindowState = MangaReader.Core.Services.Config.WindowState;
 
 namespace MangaReader.Services.Config
 {

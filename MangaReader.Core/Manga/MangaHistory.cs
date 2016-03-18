@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using MangaReader.Core.Entity;
 
 namespace MangaReader
 {
   // История манги.
-  public class MangaHistory : Entity.Entity
+  public class MangaHistory : Entity
   {
 
     /// <summary>

@@ -1,4 +1,4 @@
-﻿using MangaReader.Services.Config;
+﻿using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Manga.Grouple
 {

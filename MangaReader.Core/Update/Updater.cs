@@ -3,10 +3,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using MangaReader.Account;
+using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 using MangaReader.Services;
-using MangaReader.Services.Config;
 
-namespace MangaReader.Update
+namespace MangaReader.Core.Update
 {
   public class Updater
   {
@@ -54,7 +55,7 @@ namespace MangaReader.Update
         ServerVersion = new Version(Page.GetPage(LinkToVersion).Content);
         return ServerVersion.CompareTo(ClientVersion) > 0;
       }
-      catch (Exception)
+      catch (System.Exception)
       {
         return false;
       }

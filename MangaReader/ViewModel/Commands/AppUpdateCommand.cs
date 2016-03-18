@@ -1,6 +1,6 @@
-﻿using MangaReader.Properties;
+﻿using MangaReader.Core.Update;
+using MangaReader.Properties;
 using MangaReader.Services;
-using MangaReader.Update;
 using MangaReader.ViewModel.Commands.Primitives;
 using Ookii.Dialogs.Wpf;
 

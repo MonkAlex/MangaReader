@@ -11,7 +11,8 @@ using MangaReader.Core.NHibernate;
 using MangaReader.Manga;
 using MangaReader.Manga.Acomic;
 using MangaReader.Core.Properties;
-using MangaReader.Services.Config;
+using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 using NHibernate.Linq;
 
 namespace MangaReader.Services

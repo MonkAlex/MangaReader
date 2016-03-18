@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using MangaReader.Core.Services;
 using MangaReader.Properties;
 using MangaReader.Services;
 

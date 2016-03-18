@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using MangaReader.Core.NHibernate;
-using NHibernate.Linq;
+using MangaReader.Services;
 
-namespace MangaReader.Services.Config
+namespace MangaReader.Core.Services.Config
 {
   public class DatabaseConfig : Entity.Entity
   {
     /// <summary>
     /// Версия базы данных.
     /// </summary>
-    public virtual Version Version { get; set; }
+    public Version Version { get; set; }
 
     /// <summary>
     /// Настройки разных типов манги.
     /// </summary>
-    public virtual List<MangaSetting> MangaSettings
+    public List<MangaSetting> MangaSettings
     {
       get
       {

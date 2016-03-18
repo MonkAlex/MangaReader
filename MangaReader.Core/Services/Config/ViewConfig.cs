@@ -1,4 +1,4 @@
-﻿namespace MangaReader.Services.Config
+﻿namespace MangaReader.Core.Services.Config
 {
   public class ViewConfig
   {

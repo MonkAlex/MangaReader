@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using MangaReader.Services.Config;
+using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Services
 {

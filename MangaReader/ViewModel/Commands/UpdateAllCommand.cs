@@ -1,4 +1,5 @@
 ﻿using System;
+using MangaReader.Core.Services.Config;
 using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.Services.Config;

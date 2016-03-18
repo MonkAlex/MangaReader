@@ -6,7 +6,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using MangaReader.Core.NHibernate;
-using MangaReader.Services.Config;
+using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Services
 {

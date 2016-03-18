@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using MangaReader.Core.Services;
 using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.UI.MainForm;

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using MangaReader.Core.NHibernate;
+using MangaReader.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace MangaReader.Services.Config
+namespace MangaReader.Core.Services.Config
 {
   public class ConfigStorage
   {
@@ -89,7 +90,7 @@ namespace MangaReader.Services.Config
           storage = JsonConvert.DeserializeObject<ConfigStorage>(File.ReadAllText(SettingsPath, Encoding.UTF8));
         }
       }
-      catch (Exception e)
+      catch (System.Exception e)
       {
         Log.Exception(e, "Fail load settings.");
       }

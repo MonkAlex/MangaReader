@@ -22,6 +22,7 @@ namespace MangaReader.ViewModel
     private ICommand addNewManga;
     private ObservableCollection<ContentMenuItem> menu;
     private ObservableCollection<ContentMenuItem> mangaMenu;
+    private ICommand updateWithPause;
 
     public ListCollectionView View { get; set; }
 
@@ -43,6 +44,16 @@ namespace MangaReader.ViewModel
       set
       {
         showSettings = value;
+        OnPropertyChanged();
+      }
+    }
+
+    public ICommand UpdateWithPause
+    {
+      get { return updateWithPause; }
+      set
+      {
+        updateWithPause = value;
         OnPropertyChanged();
       }
     }
@@ -96,6 +107,7 @@ namespace MangaReader.ViewModel
 
       this.AddNewManga = new AddNewMangaCommand();
       this.ShowSettings = new ShowSettingCommand();
+      this.UpdateWithPause = new UpdateWithPauseCommand(View);
 
       #region Менюшка
 

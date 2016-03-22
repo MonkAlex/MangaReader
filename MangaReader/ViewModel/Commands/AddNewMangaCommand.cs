@@ -12,8 +12,6 @@ namespace MangaReader.ViewModel.Commands
 {
   public class AddNewMangaCommand : LibraryBaseCommand
   {
-    public override string Name { get { return Strings.Library_Action_Add; } }
-
     public override void Execute(object parameter)
     {
       var db = new Input { Owner = WindowHelper.Owner };
@@ -37,6 +35,11 @@ namespace MangaReader.ViewModel.Commands
         Log.Exception(ex, "Ошибка добавления манги.");
         MessageBox.Show(ex.Message);
       }
+    }
+
+    public AddNewMangaCommand()
+    {
+      this.Name = Strings.Library_Action_Add;
     }
   }
 }

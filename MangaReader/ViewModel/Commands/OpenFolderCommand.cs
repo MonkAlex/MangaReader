@@ -9,8 +9,6 @@ namespace MangaReader.ViewModel.Commands
 {
   public class OpenFolderCommand : BaseCommand
   {
-    public override string Name { get { return Strings.Manga_Action_OpenFolder; } }
-
     public override void Execute(object parameter)
     {
       var manga = parameter as IDownloadable;
@@ -18,6 +16,11 @@ namespace MangaReader.ViewModel.Commands
         Process.Start(manga.Folder);
       else
         Library.Status = Strings.Library_Status_FolderNotFound;
+    }
+
+    public OpenFolderCommand()
+    {
+      this.Name = Strings.Manga_Action_OpenFolder;
     }
   }
 }

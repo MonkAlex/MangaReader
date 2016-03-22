@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,8 +9,6 @@ using MangaReader.Core.Services.Config;
 using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services;
-using MangaReader.Services.Config;
-using MangaReader.UI;
 using MangaReader.UI.MainForm;
 using MangaReader.ViewModel.Commands;
 
@@ -36,21 +32,6 @@ namespace MangaReader
           DispatcherPriority.Background,
           TimerTick,
           Dispatcher.CurrentDispatcher);
-    }
-
-    /// <summary>
-    /// Обновление библиотеки.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void Update_click(object sender, RoutedEventArgs e)
-    {
-      if (Library.IsAvaible)
-      {
-        Library.ThreadAction(() => Library.Update(Model.View.Cast<Mangas>(), FormLibrary.Items.SortDescriptions.SingleOrDefault()));
-      }
-      else
-        Library.IsPaused = !Library.IsPaused;
     }
 
     /// <summary>
@@ -84,13 +65,12 @@ namespace MangaReader
     private void TimerTick(object sender, EventArgs e)
     {
       this.TextBlock.Text = Library.Status;
-      UpdateButton.Content = Library.IsAvaible ? Strings.Manga_Action_Update : (Library.IsPaused ? Strings.Manga_Action_Restore : Strings.Manga_Action_Pause);
 
       if (Library.IsAvaible && ConfigStorage.Instance.AppConfig.AutoUpdateInHours > 0 &&
         DateTime.Now > ConfigStorage.Instance.AppConfig.LastUpdate.AddHours(ConfigStorage.Instance.AppConfig.AutoUpdateInHours))
       {
         Log.Add(Strings.AutoUpdate);
-        Update_click(this, new RoutedEventArgs());
+        new UpdateWithPauseCommand(Model.View).Execute(sender);
       }
     }
 

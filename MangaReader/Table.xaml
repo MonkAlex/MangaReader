@@ -163,17 +163,13 @@
                     <TextBlock x:Name="TextBlock" TextAlignment="Center" Text="{Binding Path=(services:Library.Status), Mode=TwoWay}"/>
                 </StatusBarItem>
             </StatusBar>
-            <Button Content="{x:Static resx:Strings.Manga_Action_Update}" 
-                Grid.Column="1"
-                x:Name="UpdateButton" 
-                Click="Update_click"/>
+            <Button Grid.Column="1"
+                    Command="{Binding UpdateWithPause}"/>
             <Button Content="{x:Static resx:Strings.Library_Action_Add}" 
                 Grid.Column="2"
-                x:Name="AddButton" 
                 Command="{Binding AddNewManga}"/>
             <Button Content="{x:Static resx:Strings.Library_Action_Settings}"  
                 Grid.Column="3"
-                x:Name="SettingsButton" 
                 Command="{Binding ShowSettings}"/>
         </Grid>
     </Grid>

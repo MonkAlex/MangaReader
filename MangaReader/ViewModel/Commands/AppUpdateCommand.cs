@@ -8,8 +8,6 @@ namespace MangaReader.ViewModel.Commands
 {
   public class AppUpdateCommand : LibraryBaseCommand
   {
-    public override string Name { get { return Strings.Library_CheckUpdate; } }
-
     public override void Execute(object parameter)
     {
       var dialog = new TaskDialog();
@@ -33,6 +31,11 @@ namespace MangaReader.ViewModel.Commands
         dialog.Buttons.Add(new TaskDialogButton(ButtonType.Ok));
         dialog.ShowDialog(owner);
       }
+    }
+
+    public AppUpdateCommand()
+    {
+      this.Name = Strings.Library_CheckUpdate;
     }
   }
 }

@@ -6,6 +6,7 @@
              Exit="App_OnExit">
     <Application.Resources>
         <Style TargetType="Button" x:Key="BaseButton">
+            <Setter Property="Content" Value="{Binding Command.Name, RelativeSource={RelativeSource Self}}"/>
             <Setter Property="MinHeight" Value="25"/>
             <Setter Property="MaxHeight" Value="25"/>
             <Setter Property="Width" Value="75"/>

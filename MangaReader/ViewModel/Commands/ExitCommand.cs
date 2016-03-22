@@ -2,7 +2,6 @@
 using System.Windows;
 using MangaReader.Properties;
 using MangaReader.Services;
-using MangaReader.Services.Config;
 using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands
@@ -10,8 +9,6 @@ namespace MangaReader.ViewModel.Commands
   public class ExitCommand : BaseCommand
   {
     public static bool CommandRunned { get; set; }
-
-    public override string Name { get { return Strings.Library_Exit; } }
 
     public override void Execute(object parameter)
     {
@@ -25,6 +22,11 @@ namespace MangaReader.ViewModel.Commands
         Application.Current.Exit += (sender, args) => Environment.Exit(args.ApplicationExitCode);
         Application.Current.Shutdown(0);
       }
+    }
+
+    public ExitCommand()
+    {
+      this.Name = Strings.Library_Exit;
     }
   }
 }

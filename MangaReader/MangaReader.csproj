@@ -140,6 +140,8 @@
     </Compile>
     <Compile Include="ViewModel\AddNewModel.cs" />
     <Compile Include="ViewModel\Commands\AddManga\AddSelected.cs" />
+    <Compile Include="ViewModel\Commands\AddManga\LoginCommand.cs" />
+    <Compile Include="ViewModel\Commands\AddManga\LogoutCommand.cs" />
     <Compile Include="ViewModel\Commands\ContinueCommand.cs" />
     <Compile Include="ViewModel\Commands\Manga\ChangeUpdateMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\Manga\CompressMangaCommand.cs" />

@@ -1,4 +1,6 @@
-﻿using MangaReader.ViewModel.Commands.Primitives;
+﻿using System.Linq;
+using MangaReader.Services;
+using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands.AddManga
 {
@@ -9,6 +11,11 @@ namespace MangaReader.ViewModel.Commands.AddManga
     public override void Execute(object parameter)
     {
       base.Execute(parameter);
+
+      foreach (var manga in model.Logins.SelectMany(l => l.SelectedBookmarks))
+      {
+        Library.Add(manga.Uri);
+      }
     }
 
     public AddSelected(AddNewModel model)

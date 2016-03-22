@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using MangaReader.Core.Services;
@@ -12,13 +13,13 @@ namespace MangaReader.ViewModel
   {
     protected internal Window window { get { return this.view as Window; } }
 
-    public List<MangaSetting> MangaSettings { get; set; }
+    public List<LoginModel> Logins { get; set; }
 
     public ICommand Add { get; set; }
 
     public AddNewModel(Window view) : base(view)
     {
-      this.MangaSettings = ConfigStorage.Instance.DatabaseConfig.MangaSettings;
+      this.Logins = ConfigStorage.Instance.DatabaseConfig.MangaSettings.Select(s => new LoginModel(view, s)).ToList();
       this.Add = new AddSelected(this);
     }
   }

@@ -6,9 +6,9 @@ namespace MangaReader.ViewModel
 {
   public class Initialize : ProcessModel
   {
-    public override void Load()
+    public override async Task Load()
     {
-      base.Load();
+      await base.Load();
       Core.Client.Init();
     }
 

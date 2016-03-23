@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Threading.Tasks;
+using System.Windows;
 using MangaReader.Core.Update;
 using MangaReader.Properties;
 using MangaReader.ViewModel.Primitive;
@@ -31,9 +32,9 @@ namespace MangaReader.ViewModel
       }
     }
 
-    public override void Load()
+    public override async Task Load()
     {
-      base.Load();
+      await base.Load();
 
       this.History = VersionHistory.GetHistory();
       this.Version = string.Format(Strings.Update_Label_Version, VersionHistory.GetVersion().ToString(3));

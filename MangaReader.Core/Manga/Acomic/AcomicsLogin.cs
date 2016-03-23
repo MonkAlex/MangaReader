@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using HtmlAgilityPack;
 using MangaReader.Account;
 using MangaReader.Services;
@@ -17,11 +18,11 @@ namespace MangaReader.Manga.Acomic
 
     public virtual string PasswordHash { get; set; }
 
-    public override void DoLogin()
+    public override async Task<bool> DoLogin()
     {
-      base.DoLogin();
+      await base.DoLogin();
       if (IsLogined || !this.CanLogin)
-        return;
+        return IsLogined;
 
       var loginData = new NameValueCollection
             {
@@ -35,7 +36,7 @@ namespace MangaReader.Manga.Acomic
       {
         try
         {
-          Client.UploadValues("http://acomics.ru/action/authLogin", "POST", loginData);
+          await Client.UploadValuesTaskAsync("http://acomics.ru/action/authLogin", "POST", loginData);
           this.PasswordHash = Client.Cookie.GetCookies(this.MainUri)
               .Cast<Cookie>()
               .Single(c => c.Name == "hash")
@@ -48,21 +49,23 @@ namespace MangaReader.Manga.Acomic
           this.IsLogined = false;
         }
       }
+      return IsLogined;
     }
 
-    public override List<Mangas> GetBookmarks()
+    public override async Task<List<Mangas>> GetBookmarks()
     {
-      var bookmarks = base.GetBookmarks();
+      var bookmarks = await base.GetBookmarks();
       var document = new HtmlDocument();
 
-      this.DoLogin();
+      await this.DoLogin();
 
       if (!IsLogined)
         return bookmarks;
 
       using (TimedLock.Lock(ClientLock))
       {
-        document.LoadHtml(Page.GetPage(BookmarksUri, Client).Content);
+        var page = await Page.GetPageAsync(BookmarksUri, Client);
+        document.LoadHtml(page.Content);
       }
 
       var nodes = document.DocumentNode.SelectNodes("//table[@class=\"decor\"]//a");

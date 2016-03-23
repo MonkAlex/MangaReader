@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
 using MangaReader.Account;
 using MangaReader.Core.Properties;
 
@@ -22,13 +23,27 @@ namespace MangaReader.Services
     /// <returns>Исходный код страницы.</returns>
     public static Page GetPage(Uri url, CookieClient client = null, int restartCounter = 0)
     {
+      var task = GetPageAsync(url, client, restartCounter);
+      Task.WaitAll(task);
+      return task.Result;
+    }
+
+    /// <summary>
+    /// Получить текст страницы.
+    /// </summary>
+    /// <param name="url">Ссылка на страницу.</param>
+    /// <param name="client">Клиент, если нужен специфичный.</param>
+    /// <param name="restartCounter">Попыток скачивания.</param>
+    /// <returns>Исходный код страницы.</returns>
+    public static async Task<Page> GetPageAsync(Uri url, CookieClient client = null, int restartCounter = 0)
+    {
       try
       {
         if (restartCounter > 3)
           throw new Exception(string.Format("Load failed after {0} counts.", restartCounter));
 
         var webClient = client ?? new CookieClient();
-        var result = webClient.DownloadString(url);
+        var result = await webClient.DownloadStringTaskAsync(url);
         return new Page(result, webClient.ResponseUri);
       }
       catch (UriFormatException ex)
@@ -43,7 +58,7 @@ namespace MangaReader.Services
         if (ex.Status != WebExceptionStatus.Timeout)
           return new Page();
         ++restartCounter;
-        return GetPage(url, client, restartCounter);
+        return await GetPageAsync(url, client, restartCounter);
       }
       catch (Exception ex)
       {

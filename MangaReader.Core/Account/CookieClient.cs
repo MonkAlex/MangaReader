@@ -25,6 +25,13 @@ namespace MangaReader.Account
       return baseResponse;
     }
 
+    protected override WebResponse GetWebResponse(WebRequest request, IAsyncResult result)
+    {
+      var baseResponce = base.GetWebResponse(request, result);
+      this.ResponseUri = baseResponce.ResponseUri;
+      return baseResponce;
+    }
+
     public CookieClient()
     {
       this.Cookie = new CookieContainer();

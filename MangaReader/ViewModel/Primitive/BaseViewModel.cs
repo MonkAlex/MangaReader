@@ -1,31 +1,42 @@
-﻿using System.Windows;
+﻿using System.Threading.Tasks;
+using System.Windows;
 
 namespace MangaReader.ViewModel.Primitive
 {
-  public class BaseViewModel : Primitive.NotifyPropertyChanged
+  public class BaseViewModel : NotifyPropertyChanged
   {
     protected internal FrameworkElement view;
 
-    public virtual void Load()
+    public virtual async Task Load()
     {
 
     }
 
-    public virtual void Unload()
+    public virtual async Task Unload()
     {
 
     }
 
     public virtual void Show()
     {
-      view.DataContext = this;
     }
 
     public BaseViewModel(FrameworkElement view)
     {
-      view.Loaded += (o, a) => this.Load();
-      view.Unloaded += (o, a) => this.Unload();
+      view.DataContext = this;
+      view.Loaded += ViewOnLoaded;
+      view.Unloaded += ViewOnUnloaded;
       this.view = view;
+    }
+
+    private void ViewOnUnloaded(object sender, RoutedEventArgs routedEventArgs)
+    {
+      Application.Current.Dispatcher.InvokeAsync(() => this.Unload());
+    }
+
+    private void ViewOnLoaded(object sender, RoutedEventArgs routedEventArgs)
+    {
+      Application.Current.Dispatcher.InvokeAsync(() => this.Load());
     }
   }
 }

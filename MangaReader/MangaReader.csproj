@@ -90,9 +90,6 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="Client.cs" />
-    <Compile Include="Input.xaml.cs">
-      <DependentUpon>Input.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Manga\MangaForm.xaml.cs">
       <DependentUpon>MangaForm.xaml</DependentUpon>
     </Compile>
@@ -102,6 +99,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\Config\ViewConfigWPF.cs" />
+    <Compile Include="UI\AddNewManga\AddNew.xaml.cs">
+      <DependentUpon>AddNew.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Converting.xaml.cs">
       <DependentUpon>Converting.xaml</DependentUpon>
     </Compile>
@@ -118,7 +118,7 @@
     </Compile>
     <Compile Include="UI\GridSort.cs" />
     <Compile Include="UI\GridViewColumnResize.cs" />
-    <Compile Include="UI\Login.xaml.cs">
+    <Compile Include="UI\AddNewManga\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\MainForm\Blazard.xaml.cs">
@@ -141,7 +141,9 @@
     <Compile Include="ViewModel\AddNewModel.cs" />
     <Compile Include="ViewModel\Commands\AddManga\AddSelected.cs" />
     <Compile Include="ViewModel\Commands\AddManga\LoginCommand.cs" />
+    <Compile Include="ViewModel\Commands\AddManga\LogInOutCommand.cs" />
     <Compile Include="ViewModel\Commands\AddManga\LogoutCommand.cs" />
+    <Compile Include="ViewModel\Commands\AddManga\SelectedItem.cs" />
     <Compile Include="ViewModel\Commands\ContinueCommand.cs" />
     <Compile Include="ViewModel\Commands\Manga\ChangeUpdateMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\Manga\CompressMangaCommand.cs" />
@@ -176,11 +178,11 @@
     <Compile Include="ViewModel\TaskbarIconModel.cs" />
     <Compile Include="ViewModel\VersionHistoryModel.cs" />
     <Compile Include="ViewModel\WindowModel.cs" />
-    <Page Include="Input.xaml">
+    <Page Include="Manga\MangaForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Manga\MangaForm.xaml">
+    <Page Include="UI\AddNewManga\AddNew.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -208,7 +210,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\Login.xaml">
+    <Page Include="UI\AddNewManga\Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -291,6 +293,7 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>xcopy /y /r "$(SolutionDir)MangaReader.Core\bin\$(ConfigurationName)\MangaReader.Core.dll" "$(ProjectDir)Library\*"</PreBuildEvent>

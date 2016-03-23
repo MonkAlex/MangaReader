@@ -1,4 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using MangaReader.Core.Services;
@@ -10,24 +14,90 @@ namespace MangaReader.ViewModel
 {
   public class LoginModel : BaseViewModel
   {
-    public string UserLogin { get; set; }
+    private MangaSetting setting;
+    private bool isEnabled;
 
-    public string Password { get; set; }
+    public FrameworkElement View { get { return view; } }
 
-    public ObservableCollection<Mangas> Bookmarks { get; private set; }
+    public string Header { get; set; }
 
-    public ObservableCollection<Mangas> SelectedBookmarks { get; private set; }
+    public string Login
+    {
+      get { return setting.Login.Name; }
+      set
+      {
+        setting.Login.Name = value;
+        OnPropertyChanged();
+      }
+    }
 
-    public ICommand Login { get; private set; }
+    public string Password
+    {
+      get { return setting.Login.Password; }
+      set
+      {
+        setting.Login.Password = value;
+        OnPropertyChanged();
+      }
+    }
 
-    public ICommand Logout { get; private set; }
+    public bool CanEdit { get { return IsEnabled && !setting.Login.IsLogined; } }
+
+    public bool IsEnabled
+    {
+      get { return isEnabled; }
+      set
+      {
+        isEnabled = value;
+        OnPropertyChanged();
+      }
+    }
+
+    public ObservableCollection<SelectedItem<Mangas>> Bookmarks { get; private set; }
+
+    public ICommand LogInOutCommand { get; private set; }
+
+    public override async Task Load()
+    {
+      await base.Load();
+
+      if (IsEnabled)
+        return;
+
+      await LoadBookmarks();
+
+      this.IsEnabled = true;
+      LoginOnLoginStateChanged(this, setting.Login.IsLogined);
+    }
+
+    private async Task LoadBookmarks()
+    {
+      var bookmarks = await setting.Login.GetBookmarks();
+
+      foreach (var bookmark in bookmarks)
+      {
+        Bookmarks.Add(new SelectedItem<Mangas>(bookmark));
+      }
+    }
 
     public LoginModel(FrameworkElement view, MangaSetting setting) : base(view)
     {
-      this.Login = new LoginCommand(setting);
-      this.Logout = new LogoutCommand(setting);
-      this.Bookmarks = new ObservableCollection<Mangas>();
-      this.SelectedBookmarks = new ObservableCollection<Mangas>();
+      this.setting = setting;
+      this.Header = setting.MangaName;
+      this.LogInOutCommand = new LogInOutCommand(setting);
+      this.Bookmarks = new ObservableCollection<SelectedItem<Mangas>>();
+      this.setting.Login.LoginStateChanged += LoginOnLoginStateChanged;
+    }
+
+    private async void LoginOnLoginStateChanged(object sender, bool b)
+    {
+      OnPropertyChanged(nameof(CanEdit));
+      OnPropertyChanged(nameof(Login));
+      OnPropertyChanged(nameof(Password));
+      if (b && IsEnabled && !Bookmarks.Any())
+      {
+        await LoadBookmarks();
+      }
     }
   }
 }

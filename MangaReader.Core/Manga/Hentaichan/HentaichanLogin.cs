@@ -6,6 +6,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using HtmlAgilityPack;
 using MangaReader.Account;
 using MangaReader.Services;
@@ -44,11 +45,11 @@ namespace MangaReader.Manga.Hentaichan
       }
     }
 
-    public override void DoLogin()
+    public override async Task<bool> DoLogin()
     {
-      base.DoLogin();
+      await base.DoLogin();
       if (IsLogined || !this.CanLogin)
-        return;
+        return IsLogined;
 
       var loginData = new NameValueCollection
             {
@@ -62,7 +63,7 @@ namespace MangaReader.Manga.Hentaichan
       {
         try
         {
-          Client.UploadValues(MainUri, "POST", loginData);
+          await Client.UploadValuesTaskAsync(MainUri, "POST", loginData);
           this.UserId = Client.Cookie.GetCookies(new Uri(@"http:\\hentaichan.ru"))
               .Cast<Cookie>()
               .Single(c => c.Name == "dle_user_id")
@@ -75,14 +76,15 @@ namespace MangaReader.Manga.Hentaichan
           this.IsLogined = false;
         }
       }
+      return IsLogined;
     }
 
-    public override List<Mangas> GetBookmarks()
+    public override async Task<List<Mangas>> GetBookmarks()
     {
-      var bookmarks = base.GetBookmarks();
+      var bookmarks = await base.GetBookmarks();
       var document = new HtmlDocument();
 
-      this.DoLogin();
+      await this.DoLogin();
 
       if (!IsLogined)
         return bookmarks;
@@ -93,7 +95,8 @@ namespace MangaReader.Manga.Hentaichan
       {
         using (TimedLock.Lock(ClientLock))
         {
-          document.LoadHtml(Page.GetPage(pages[i], Client).Content);
+          var page = await Page.GetPageAsync(pages[i], Client);
+          document.LoadHtml(page.Content);
         }
 
         if (i == 0)

@@ -1,8 +1,12 @@
-﻿<Window x:Class="MangaReader.Input"
+﻿<Window x:Class="MangaReader.UI.AddNewManga.AddNew"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MangaReader.UI.AddNewManga"
         xmlns:properties="clr-namespace:MangaReader.Properties"
-        Icon="Icons/main.ico"
+        xmlns:viewModel="clr-namespace:MangaReader.ViewModel"
+        Icon="../../Icons/main.ico"
         Title="{x:Static properties:Strings.Input_Title}" 
         Height="400" Width="400"
         MinHeight="173" MinWidth="400"
@@ -24,21 +28,28 @@
                     Grid.RowSpan="3"
                     Grid.ColumnSpan="2"
                     BorderBrush="Transparent"
-                    x:Name="BookmarksTabs"/>
-        <Label Grid.Column="0"
-               Grid.Row="3">
+                    ItemsSource="{Binding Logins}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Header}"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ContentPresenter Content="{Binding View}"/>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+        <Label Grid.Column="0" Grid.Row="3">
             <TextBlock Text="{x:Static properties:Strings.Input_Text}" 
                        TextWrapping="WrapWithOverflow"/>
         </Label>
-        <TextBox x:Name="Result"
-                 Grid.Column="0"
-                 Grid.Row="4"/>
-        <Button Content="{x:Static properties:Strings.Library_Action_Add}" 
-                Style="{DynamicResource BigButton}"
+        <TextBox Grid.Column="0" Grid.Row="4" Text="{Binding InputText}"/>
+        <Button Style="{DynamicResource BigButton}"
+                Command="{Binding Add}"
                 Grid.Column="1"
                 Grid.Row="3"
                 Grid.RowSpan="2"
-                Click="Add_click" 
                 IsDefault="True"/>
     </Grid>
 </Window>

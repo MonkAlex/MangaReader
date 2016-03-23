@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using HtmlAgilityPack;
 using MangaReader.Account;
 using MangaReader.Services;
@@ -16,11 +17,11 @@ namespace MangaReader.Manga.Grouple
 
     public new static Guid Manga { get { return Readmanga.Type; } }
 
-    public override void DoLogin()
+    public override async Task<bool> DoLogin()
     {
-      base.DoLogin();
+      await base.DoLogin();
       if (IsLogined || !this.CanLogin)
-        return;
+        return IsLogined;
 
       var loginData = new NameValueCollection
             {
@@ -32,7 +33,7 @@ namespace MangaReader.Manga.Grouple
       {
         try
         {
-          var result = Client.UploadValues("internal/auth/j_spring_security_check", "POST", loginData);
+          var result = await Client.UploadValuesTaskAsync("internal/auth/j_spring_security_check", "POST", loginData);
           IsLogined = Encoding.UTF8.GetString(result).Contains("internal/auth/logout");
         }
         catch (Exception ex)
@@ -40,21 +41,23 @@ namespace MangaReader.Manga.Grouple
           Log.Exception(ex);
         }
       }
+      return IsLogined;
     }
 
-    public override List<Mangas> GetBookmarks()
+    public override async Task<List<Mangas>> GetBookmarks()
     {
-      var bookmarks = base.GetBookmarks();
+      var bookmarks = await base.GetBookmarks();
       var document = new HtmlDocument();
 
-      this.DoLogin();
+      await this.DoLogin();
 
       if (!IsLogined)
         return bookmarks;
 
       using (TimedLock.Lock(ClientLock))
       {
-        document.LoadHtml(Page.GetPage(BookmarksUri, Client).Content);
+        var page = await Page.GetPageAsync(BookmarksUri, Client);
+        document.LoadHtml(page.Content);
       }
 
       var firstOrDefault = document.DocumentNode
@@ -69,9 +72,16 @@ namespace MangaReader.Manga.Grouple
           .Select(g => g.Captures[0])
           .OfType<Match>()
           .Select(m => new Uri(m.Groups[1].Value))
-          .Select(s => new Readmanga() { Uri = s, Name = Getter.GetMangaName(Page.GetPage(s).Content).ToString() })
+          .Select(async s =>
+          {
+            var page = await Page.GetPageAsync(s);
+            return new Readmanga() {Uri = s, Name = Getter.GetMangaName(page.Content).ToString()};
+          })
           .ToList();
-      bookmarks.AddRange(loadedBookmarks);
+      foreach (var bookmark in loadedBookmarks)
+      {
+        bookmarks.Add(await bookmark);
+      }
       return bookmarks;
     }
 

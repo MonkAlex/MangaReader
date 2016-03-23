@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using MangaReader.Core.Entity;
 using MangaReader.Manga;
 using MangaReader.Services;
@@ -14,7 +15,17 @@ namespace MangaReader.Account
 
     public static Guid Manga { get { return Guid.Empty; } }
 
-    public virtual bool IsLogined { get; set; }
+    public bool IsLogined
+    {
+      get { return isLogined; }
+      set
+      {
+        isLogined = value;
+        OnLoginStateChanged(value);
+      }
+    }
+
+    public event EventHandler<bool> LoginStateChanged;
 
     public virtual string Name { get; set; }
 
@@ -42,22 +53,24 @@ namespace MangaReader.Account
     }
 
     private CookieClient client;
-    
-    public virtual void DoLogin()
-    {
+    private bool isLogined;
 
+    public virtual async Task<bool> DoLogin()
+    {
+      return false;
     }
 
-    public virtual void Logout()
+    public virtual async Task<bool> Logout()
     {
       IsLogined = false;
       using (TimedLock.Lock(ClientLock))
       {
-        Page.GetPage(LogoutUri, Client);
+        await Page.GetPageAsync(LogoutUri, Client);
       }
+      return true;
     }
 
-    public virtual List<Mangas> GetBookmarks()
+    public virtual async Task<List<Mangas>> GetBookmarks()
     {
       return new List<Mangas>();
     }
@@ -81,6 +94,11 @@ namespace MangaReader.Account
     protected Login()
     {
       this.ClientLock = new object();
+    }
+
+    protected virtual void OnLoginStateChanged(bool e)
+    {
+      LoginStateChanged?.Invoke(this, e);
     }
   }
 }

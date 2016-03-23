@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.ViewModel.Commands.Primitives;
 
@@ -12,15 +14,22 @@ namespace MangaReader.ViewModel.Commands.AddManga
     {
       base.Execute(parameter);
 
-      foreach (var manga in model.Logins.SelectMany(l => l.SelectedBookmarks))
+      Uri uri;
+      if (Uri.TryCreate(model.InputText, UriKind.Absolute, out uri))
+        Library.Add(uri);
+
+      var selectedItems = model.Logins.SelectMany(l => l.Bookmarks.Where(b => b.IsSelected));
+      foreach (var manga in selectedItems)
       {
-        Library.Add(manga.Uri);
+        Library.Add(manga.Value.Uri);
       }
+      model.window.Close();
     }
 
     public AddSelected(AddNewModel model)
     {
       this.model = model;
+      this.Name = Strings.Library_Action_Add;
     }
   }
 }

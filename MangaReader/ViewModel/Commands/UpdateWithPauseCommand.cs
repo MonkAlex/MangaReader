@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Data;
+using MangaReader.Services;
 using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands
@@ -66,9 +67,14 @@ namespace MangaReader.ViewModel.Commands
 
     private void UpdateOnCanExecuteChanged(object sender, EventArgs eventArgs)
     {
-      if (this.Update.CanExecute(sender) && this.ActiveCommand != this.Update)
+      if (this.Update.CanExecute(sender))
       {
-        this.ActiveCommand = this.Update;
+        if (this.ActiveCommand != this.Update)
+          this.ActiveCommand = this.Update;
+      }
+      else if (this.ActiveCommand == this.Update)
+      {
+        this.ActiveCommand = Library.IsPaused ? this.Continue : this.Pause;
       }
     }
   }

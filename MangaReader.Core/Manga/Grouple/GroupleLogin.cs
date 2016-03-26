@@ -44,9 +44,9 @@ namespace MangaReader.Manga.Grouple
       return IsLogined;
     }
 
-    public override async Task<List<Mangas>> GetBookmarks()
+    protected override async Task<List<Mangas>> DownloadBookmarks()
     {
-      var bookmarks = await base.GetBookmarks();
+      var bookmarks = await base.DownloadBookmarks();
       var document = new HtmlDocument();
 
       await this.DoLogin();
@@ -64,7 +64,11 @@ namespace MangaReader.Manga.Grouple
           .SelectNodes("//div[@class=\"bookmarks-lists\"]");
 
       if (firstOrDefault == null || firstOrDefault.FirstOrDefault() == null)
+      {
+        Log.Add(string.Format("Bookmarks from '{0}' not found.", this.MainUri));
         return bookmarks;
+      }
+
 
       var loadedBookmarks = Regex
           .Matches(firstOrDefault.FirstOrDefault().OuterHtml, @"href='(.*?)'", RegexOptions.IgnoreCase)

@@ -70,7 +70,15 @@ namespace MangaReader.Account
       return true;
     }
 
-    public virtual async Task<List<Mangas>> GetBookmarks()
+    public async Task<List<Mangas>> GetBookmarks()
+    {
+      Log.Add(string.Format("Start load bookmarks from '{0}'.", this.MainUri));
+      var bookmarks = await DownloadBookmarks();
+      Log.Add(string.Format("Finish load bookmarks from '{0}'.", this.MainUri));
+      return bookmarks;
+    }
+
+    protected virtual async Task<List<Mangas>> DownloadBookmarks()
     {
       return new List<Mangas>();
     }

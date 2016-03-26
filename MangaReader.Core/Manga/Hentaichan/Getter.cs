@@ -32,8 +32,8 @@ namespace MangaReader.Manga.Hentaichan
         }
         if (!string.IsNullOrWhiteSpace(login.UserId))
         {
-          client.Cookie.Add(new Cookie("dle_user_id", login.UserId, "/", ".hentaichan.ru"));
-          client.Cookie.Add(new Cookie("dle_password", login.PasswordHash, "/", ".hentaichan.ru"));
+          client.Cookie.Add(new Cookie("dle_user_id", login.UserId, "/", ".hentaichan.me"));
+          client.Cookie.Add(new Cookie("dle_password", login.PasswordHash, "/", ".hentaichan.me"));
         }
       }
       return client;
@@ -50,14 +50,16 @@ namespace MangaReader.Manga.Hentaichan
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(uri).Content);
+        var page = Page.GetPage(uri);
+        document.LoadHtml(page.Content);
         var nameNode = document.DocumentNode.SelectSingleNode("//head/title");
         string[] subString = {"Все главы", "Все части" };
         if (nameNode != null && subString.Any(s => nameNode.InnerText.Contains(s)))
         {
           name = subString
             .Aggregate(nameNode.InnerText, (current, s) => current.Replace(s, string.Empty))
-            .Trim().TrimEnd('-').Trim();
+            .Trim().TrimEnd('-').Trim()
+            .Replace("\\'", "'");
         }
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }

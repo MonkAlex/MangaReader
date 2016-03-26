@@ -64,7 +64,7 @@ namespace MangaReader.Manga.Hentaichan
         try
         {
           await Client.UploadValuesTaskAsync(MainUri, "POST", loginData);
-          this.UserId = Client.Cookie.GetCookies(new Uri(@"http:\\hentaichan.ru"))
+          this.UserId = Client.Cookie.GetCookies(new Uri(@"http:\\hentaichan.me"))
               .Cast<Cookie>()
               .Single(c => c.Name == "dle_user_id")
               .Value;
@@ -79,9 +79,9 @@ namespace MangaReader.Manga.Hentaichan
       return IsLogined;
     }
 
-    public override async Task<List<Mangas>> GetBookmarks()
+    protected override async Task<List<Mangas>> DownloadBookmarks()
     {
-      var bookmarks = await base.GetBookmarks();
+      var bookmarks = await base.DownloadBookmarks();
       var document = new HtmlDocument();
 
       await this.DoLogin();
@@ -89,7 +89,7 @@ namespace MangaReader.Manga.Hentaichan
       if (!IsLogined)
         return bookmarks;
 
-      var pages = new List<Uri>() {BookmarksUri};
+      var pages = new List<Uri>() { BookmarksUri };
 
       for (int i = 0; i < pages.Count; i++)
       {
@@ -115,21 +115,23 @@ namespace MangaReader.Manga.Hentaichan
         var nodes = document.DocumentNode.SelectNodes("//div[@class=\"manga_row1\"]");
 
         if (nodes == null)
-          return bookmarks;
-
-        foreach (var html in nodes.Select(n => n.OuterHtml))
         {
-          var loadedBookmarks = Regex
-              .Matches(html, "href=\"(.*?)\"", RegexOptions.IgnoreCase)
-              .OfType<Group>()
-              .Select(g => g.Captures[0])
-              .OfType<Match>()
-              .Select(m => new Uri(m.Groups[1].Value.Replace("/manga/", "/related/")))
-              .Select(s => new Hentaichan { Uri = s, Name = Getter.GetMangaName(s) })
-              .Where(m => !string.IsNullOrWhiteSpace(m.Name))
-              .ToList();
-          bookmarks.AddRange(loadedBookmarks);
+          Log.Add(string.Format("Bookmarks from '{0}' not found.", this.MainUri));
+          return bookmarks;
         }
+
+        var mangas = nodes
+          .Select(n => n.OuterHtml)
+          .SelectMany(h => Regex.Matches(h, "href=\"(.*?)\"", RegexOptions.IgnoreCase)
+                             .OfType<Group>()
+                             .Select(g => g.Captures[0])
+                             .OfType<Match>()
+                             .Select(m => new Uri(m.Groups[1].Value.Replace("/manga/", "/related/"))))
+          .Select(u => new Hentaichan { Uri = u, Name = Getter.GetMangaName(u) })
+          .Where(m => !string.IsNullOrWhiteSpace(m.Name))
+          .ToList();
+
+        bookmarks.AddRange(mangas);
       }
 
       return bookmarks;
@@ -137,9 +139,9 @@ namespace MangaReader.Manga.Hentaichan
 
     public HentaichanLogin()
     {
-      this.MainUri = new Uri(@"http://hentaichan.ru/index.php");
+      this.MainUri = new Uri(@"http://hentaichan.me/index.php");
       this.LogoutUri = new Uri(this.MainUri + "?action=logout");
-      this.BookmarksUri = new Uri(@"http://hentaichan.ru/favorites/");
+      this.BookmarksUri = new Uri(@"http://hentaichan.me/favorites/");
     }
   }
 }

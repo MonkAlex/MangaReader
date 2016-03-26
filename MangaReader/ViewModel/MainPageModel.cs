@@ -114,13 +114,13 @@ namespace MangaReader.ViewModel
       this.Menu = new ObservableCollection<ContentMenuItem>();
 
       var file = new ContentMenuItem("Файл");
-      file.SubItems.Add(new AddNewMangaCommand());
+      file.SubItems.Add((BaseCommand)this.AddNewManga);
       file.SubItems.Add(new UpdateVisibleMangaCommand(View));
       file.SubItems.Add(new UpdateAllCommand { Name = "Обновить всё" });
       file.SubItems.Add(new ExitCommand());
 
       var setting = new ContentMenuItem(Strings.Library_Action_Settings);
-      setting.SubItems.Add(new ShowSettingCommand());
+      setting.SubItems.Add((BaseCommand)ShowSettings);
 
       var about = new ContentMenuItem("О программе");
       about.SubItems.Add(new AppUpdateCommand());

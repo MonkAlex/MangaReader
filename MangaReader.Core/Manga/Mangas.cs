@@ -467,7 +467,7 @@ namespace MangaReader.Manga
         manga = new Grouple.Readmanga(url);
       if (url.Host == "acomics.ru")
         manga = new Acomic.Acomics(url);
-      if (url.Host == "hentaichan.ru")
+      if (url.Host == "hentaichan.ru" || url.Host == "hentaichan.me")
         manga = new Hentaichan.Hentaichan(url);
 
       if (manga != null && manga.IsValid())

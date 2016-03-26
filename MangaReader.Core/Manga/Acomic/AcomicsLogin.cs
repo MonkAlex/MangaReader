@@ -52,9 +52,9 @@ namespace MangaReader.Manga.Acomic
       return IsLogined;
     }
 
-    public override async Task<List<Mangas>> GetBookmarks()
+    protected override async Task<List<Mangas>> DownloadBookmarks()
     {
-      var bookmarks = await base.GetBookmarks();
+      var bookmarks = await base.DownloadBookmarks();
       var document = new HtmlDocument();
 
       await this.DoLogin();
@@ -71,7 +71,10 @@ namespace MangaReader.Manga.Acomic
       var nodes = document.DocumentNode.SelectNodes("//table[@class=\"decor\"]//a");
 
       if (nodes == null)
+      {
+        Log.Add(string.Format("Bookmarks from '{0}' not found.", this.MainUri));
         return bookmarks;
+      }
 
       foreach (var node in nodes)
       {

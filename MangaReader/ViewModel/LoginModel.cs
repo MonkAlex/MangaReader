@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -76,7 +74,8 @@ namespace MangaReader.ViewModel
 
       foreach (var bookmark in bookmarks)
       {
-        Bookmarks.Add(new SelectedItem<Mangas>(bookmark));
+        if (!Bookmarks.Any(b => Equals(b.Value.Uri, bookmark.Uri)))
+          Bookmarks.Add(new SelectedItem<Mangas>(bookmark));
       }
     }
 

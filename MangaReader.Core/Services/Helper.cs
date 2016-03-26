@@ -28,7 +28,7 @@ namespace MangaReader.Services
     {
       query.ForEach(q => q.Update());
     }
-    
+
     /// <summary>
     /// Перегнать байты в мегабайты.
     /// </summary>

@@ -28,7 +28,7 @@ namespace MangaReader.Manga.Hentaichan
             setting.Login = login;
           }
 
-          login.DoLogin();
+          login.DoLogin().Wait();
         }
         if (!string.IsNullOrWhiteSpace(login.UserId))
         {

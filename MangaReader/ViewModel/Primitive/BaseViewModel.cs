@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
 namespace MangaReader.ViewModel.Primitive
 {
@@ -7,12 +6,12 @@ namespace MangaReader.ViewModel.Primitive
   {
     protected internal FrameworkElement view;
 
-    public virtual async Task Load()
+    public virtual void Load()
     {
 
     }
 
-    public virtual async Task Unload()
+    public virtual void Unload()
     {
 
     }
@@ -31,12 +30,12 @@ namespace MangaReader.ViewModel.Primitive
 
     private void ViewOnUnloaded(object sender, RoutedEventArgs routedEventArgs)
     {
-      Application.Current.Dispatcher.InvokeAsync(() => this.Unload());
+      Application.Current.Dispatcher.InvokeAsync(this.Unload);
     }
 
     private void ViewOnLoaded(object sender, RoutedEventArgs routedEventArgs)
     {
-      Application.Current.Dispatcher.InvokeAsync(() => this.Load());
+      Application.Current.Dispatcher.InvokeAsync(this.Load);
     }
   }
 }

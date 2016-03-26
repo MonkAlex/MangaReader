@@ -55,9 +55,9 @@ namespace MangaReader.ViewModel
 
     public ICommand LogInOutCommand { get; private set; }
 
-    public override async Task Load()
+    public override async void Load()
     {
-      await base.Load();
+      base.Load();
 
       if (IsEnabled)
         return;

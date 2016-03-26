@@ -28,9 +28,9 @@ namespace MangaReader.ViewModel
       }
     }
 
-    public override async Task Load()
+    public override void Load()
     {
-      await base.Load();
+      base.Load();
 
       foreach (var setting in ConfigStorage.Instance.DatabaseConfig.MangaSettings)
       {

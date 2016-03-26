@@ -55,10 +55,7 @@ namespace MangaReader.Account
     private CookieClient client;
     private bool isLogined;
 
-    public virtual async Task<bool> DoLogin()
-    {
-      return false;
-    }
+    public abstract Task<bool> DoLogin();
 
     public virtual async Task<bool> Logout()
     {
@@ -78,10 +75,7 @@ namespace MangaReader.Account
       return bookmarks;
     }
 
-    protected virtual async Task<List<Mangas>> DownloadBookmarks()
-    {
-      return new List<Mangas>();
-    }
+    protected abstract Task<List<Mangas>> DownloadBookmarks();
 
     public static Login Create(Guid manga)
     {

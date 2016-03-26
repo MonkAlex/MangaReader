@@ -47,7 +47,6 @@ namespace MangaReader.Manga.Hentaichan
 
     public override async Task<bool> DoLogin()
     {
-      await base.DoLogin();
       if (IsLogined || !this.CanLogin)
         return IsLogined;
 
@@ -81,7 +80,7 @@ namespace MangaReader.Manga.Hentaichan
 
     protected override async Task<List<Mangas>> DownloadBookmarks()
     {
-      var bookmarks = await base.DownloadBookmarks();
+      var bookmarks = new List<Mangas>();
       var document = new HtmlDocument();
 
       await this.DoLogin();

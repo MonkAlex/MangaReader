@@ -32,9 +32,9 @@ namespace MangaReader.ViewModel
       }
     }
 
-    public override async Task Load()
+    public override void Load()
     {
-      await base.Load();
+      base.Load();
 
       this.History = VersionHistory.GetHistory();
       this.Version = string.Format(Strings.Update_Label_Version, VersionHistory.GetVersion().ToString(3));

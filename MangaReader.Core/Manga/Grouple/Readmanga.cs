@@ -117,25 +117,5 @@ namespace MangaReader.Manga.Grouple
     }
 
     #endregion
-
-    #region Конструктор
-
-    /// <summary>
-    /// Открыть мангу.
-    /// </summary>
-    /// <param name="url">Ссылка на мангу.</param>
-    public Readmanga(Uri url)
-      : this()
-    {
-      this.Uri = url;
-      this.Refresh();
-    }
-
-    public Readmanga()
-      : base()
-    {
-    }
-
-    #endregion
   }
 }

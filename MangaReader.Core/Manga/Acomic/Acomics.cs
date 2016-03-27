@@ -58,24 +58,5 @@ namespace MangaReader.Manga.Acomic
 
     #endregion
 
-    #region Конструктор
-
-    /// <summary>
-    /// Открыть мангу.
-    /// </summary>
-    /// <param name="url">Ссылка на мангу.</param>
-    public Acomics(Uri url)
-      : this()
-    {
-      this.Uri = url;
-      this.Refresh();
-    }
-
-    public Acomics()
-      : base()
-    {
-    }
-
-    #endregion
   }
 }

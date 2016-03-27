@@ -23,7 +23,34 @@ namespace MangaReader.Services
     /// <returns>Исходный код страницы.</returns>
     public static Page GetPage(Uri url, CookieClient client = null, int restartCounter = 0)
     {
-      return GetPageAsync(url, client, restartCounter).Result;
+      try
+      {
+        if (restartCounter > 3)
+          throw new Exception(string.Format("Load failed after {0} counts.", restartCounter));
+
+        var webClient = client ?? new CookieClient();
+        var content = webClient.DownloadString(url);
+        return new Page(content, webClient.ResponseUri);
+      }
+      catch (UriFormatException ex)
+      {
+        Log.Exception(ex, "Некорректная ссылка:", url.ToString());
+        return new Page();
+      }
+      catch (WebException ex)
+      {
+        Library.Status = Strings.Page_GetPage_InternetOff;
+        Log.Exception(ex, Strings.Page_GetPage_InternetOff, ", ссылка:", url.ToString());
+        if (ex.Status != WebExceptionStatus.Timeout)
+          return new Page();
+        ++restartCounter;
+        return GetPage(url, client, restartCounter);
+      }
+      catch (Exception ex)
+      {
+        Log.Exception(ex, ", ссылка:", url.ToString());
+        return new Page();
+      }
     }
 
     /// <summary>

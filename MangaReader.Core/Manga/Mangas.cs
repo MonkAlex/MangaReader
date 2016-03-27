@@ -464,16 +464,26 @@ namespace MangaReader.Manga
       Mangas manga = null;
 
       if (url.Host == "readmanga.me" || url.Host == "adultmanga.ru" || url.Host == "mintmanga.com")
-        manga = new Grouple.Readmanga(url);
+        manga = new Grouple.Readmanga();
       if (url.Host == "acomics.ru")
-        manga = new Acomic.Acomics(url);
+        manga = new Acomic.Acomics();
       if (url.Host == "hentaichan.ru" || url.Host == "hentaichan.me")
-        manga = new Hentaichan.Hentaichan(url);
+        manga = new Hentaichan.Hentaichan();
 
-      if (manga != null && manga.IsValid())
-        manga.Save();
+      if (manga != null)
+      {
+        manga.Created(url);
+        if (manga.IsValid())
+          manga.Save();
+      }
 
       return manga;
+    }
+
+    protected virtual void Created(Uri url)
+    {
+      this.Uri = url;
+      this.Refresh();
     }
 
     protected Mangas()

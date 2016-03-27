@@ -42,26 +42,5 @@ namespace MangaReader.Manga.Hentaichan
 
       base.UpdateContent();
     }
-
-    #region Конструктор
-
-    /// <summary>
-    /// Открыть мангу.
-    /// </summary>
-    /// <param name="url">Ссылка на мангу.</param>
-    public Hentaichan(Uri url)
-      : this()
-    {
-      this.Uri = url;
-      this.Refresh();
-    }
-
-    public Hentaichan()
-      : base()
-    {
-    }
-
-    #endregion
-
   }
 }

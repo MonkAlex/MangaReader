@@ -1,6 +1,4 @@
 ﻿using MangaReader.Properties;
-using MangaReader.Services;
-using MangaReader.UI.AddNewManga;
 using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands
@@ -9,7 +7,7 @@ namespace MangaReader.ViewModel.Commands
   {
     public override void Execute(object parameter)
     {
-      var vm = new AddNewModel(new AddNew() {Owner = WindowHelper.Owner});
+      var vm = new AddNewModel();
       vm.Show();
     }
 

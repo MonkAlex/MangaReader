@@ -1,22 +1,22 @@
 ﻿using System.Threading.Tasks;
-using System.Windows;
 using MangaReader.Core.Update;
+using MangaReader.UI.Services;
 using MangaReader.ViewModel.Primitive;
 
 namespace MangaReader.ViewModel
 {
   public class DownloadUpdate : ProcessModel
   {
-    public DownloadUpdate(Window view) : base(view)
-    {
-
-    }
-
     public override void Show()
     {
       base.Show();
-      window.ContentRendered += (sender, args) => Task.Run(() => Updater.StartUpdate(this));
-      window.ShowDialog();
+
+      var window = ViewService.Instance.TryGet(this);
+      if (window != null)
+      {
+        window.ContentRendered += (sender, args) => Task.Run(() => Updater.StartUpdate(this));
+        window.ShowDialog();
+      }
     }
   }
 }

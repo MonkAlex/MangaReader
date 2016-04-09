@@ -15,8 +15,6 @@ namespace MangaReader.ViewModel
     private MangaSetting setting;
     private bool isEnabled;
 
-    public FrameworkElement View { get { return view; } }
-
     public string Header { get; set; }
 
     public string Login
@@ -79,7 +77,7 @@ namespace MangaReader.ViewModel
       }
     }
 
-    public LoginModel(FrameworkElement view, MangaSetting setting) : base(view)
+    public LoginModel(MangaSetting setting)
     {
       this.setting = setting;
       this.Header = setting.MangaName;

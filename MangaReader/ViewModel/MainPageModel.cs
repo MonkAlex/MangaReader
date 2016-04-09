@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using MangaReader.Core.Services;
@@ -8,7 +7,6 @@ using MangaReader.Core.Services.Config;
 using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services;
-using MangaReader.Services.Config;
 using MangaReader.ViewModel.Commands;
 using MangaReader.ViewModel.Commands.Manga;
 using MangaReader.ViewModel.Commands.Primitives;
@@ -95,7 +93,7 @@ namespace MangaReader.ViewModel
         manga.Name.ToLowerInvariant().Contains(LibraryFilter.Name.ToLowerInvariant());
     }
 
-    public MainPageModel(FrameworkElement view) : base(view)
+    public MainPageModel()
     {
       LibraryFilter = ConfigStorage.Instance.ViewConfig.LibraryFilter;
 

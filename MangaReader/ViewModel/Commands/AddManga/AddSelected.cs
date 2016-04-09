@@ -23,7 +23,7 @@ namespace MangaReader.ViewModel.Commands.AddManga
       {
         Library.Add(manga.Value.Uri);
       }
-      model.window.Close();
+      model.Close();
     }
 
     public AddSelected(AddNewModel model)

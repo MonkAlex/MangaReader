@@ -1,7 +1,6 @@
-﻿using System.Threading.Tasks;
-using System.Windows;
-using MangaReader.Core.Update;
+﻿using MangaReader.Core.Update;
 using MangaReader.Properties;
+using MangaReader.UI.Services;
 using MangaReader.ViewModel.Primitive;
 
 namespace MangaReader.ViewModel
@@ -10,7 +9,6 @@ namespace MangaReader.ViewModel
   {
     private string history;
     private string version;
-    protected internal Window window { get { return this.view as Window; } }
 
     public string History
     {
@@ -44,12 +42,9 @@ namespace MangaReader.ViewModel
     {
       base.Show();
 
-      window.ShowDialog();
-    }
-
-    public VersionHistoryModel(Window window) : base(window)
-    {
-
+      var window = ViewService.Instance.TryGet(this);
+      if (window != null)
+        window.ShowDialog();
     }
   }
 }

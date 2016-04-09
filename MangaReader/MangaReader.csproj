@@ -135,9 +135,12 @@
     <Compile Include="SettingsForm.xaml.cs">
       <DependentUpon>SettingsForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Services\SimpleDictionary.cs" />
+    <Compile Include="UI\Services\ViewResolver.cs" />
     <Compile Include="UI\VersionHistoryView.xaml.cs">
       <DependentUpon>VersionHistoryView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Services\ViewService.cs" />
     <Compile Include="ViewModel\AddNewModel.cs" />
     <Compile Include="ViewModel\Commands\AddManga\AddSelected.cs" />
     <Compile Include="ViewModel\Commands\AddManga\LoginCommand.cs" />

@@ -3,8 +3,6 @@ using System.Windows;
 using System.Windows.Shell;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
-using MangaReader.Services;
-using MangaReader.Services.Config;
 
 namespace MangaReader.ViewModel.Primitive
 {
@@ -15,7 +13,6 @@ namespace MangaReader.ViewModel.Primitive
     private string status;
     private ProgressState progressState;
     private TaskbarItemProgressState taskbarItemProgressState;
-    protected internal Window window { get { return this.view as Window; } }
 
     public event EventHandler<ConvertState> StateChanged;
 
@@ -72,7 +69,7 @@ namespace MangaReader.ViewModel.Primitive
       }
     }
 
-    public ProcessModel(Window view) : base(view)
+    public ProcessModel()
     {
       this.Percent = 0;
       this.ProgressState = ProgressState.Indeterminate;

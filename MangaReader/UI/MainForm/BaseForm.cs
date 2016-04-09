@@ -17,7 +17,8 @@ namespace MangaReader.UI.MainForm
 
     public BaseForm()
     {
-      this.Model = new MainPageModel(this);
+      ViewModel.Primitive.BaseViewModel.SubToViewModel(this);
+      this.Model = new MainPageModel();
       this.DataContext = Model;
       Command.AddMainMenuCommands(this);
       this.Initialized += (sender, args) => LibraryWPF.Initialize(this);

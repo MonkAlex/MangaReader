@@ -6,6 +6,7 @@ using MangaReader.Core.Services.Config;
 using MangaReader.Services.Config;
 using MangaReader.UI;
 using MangaReader.UI.MainForm;
+using MangaReader.UI.Services;
 using MangaReader.ViewModel.Commands;
 using MangaReader.ViewModel.Primitive;
 
@@ -13,7 +14,7 @@ namespace MangaReader.ViewModel
 {
   public class WindowModel : ProcessModel, IDisposable
   {
-    private static Lazy<WindowModel> lazyModel = new Lazy<WindowModel>(() => new WindowModel(new MainWindow())); 
+    private static Lazy<WindowModel> lazyModel = new Lazy<WindowModel>(() => new WindowModel()); 
     public static WindowModel Instance { get { return lazyModel.Value; } }
 
     private object content;
@@ -37,35 +38,43 @@ namespace MangaReader.ViewModel
     {
       base.Show();
       this.Content = new Table();
-      ConfigStorage.Instance.ViewConfig.UpdateWindowState(window);
-      window.Show();
+      var window = ViewService.Instance.TryGet(this);
+      if (window != null)
+      {
+        window.StateChanged += (o, a) => WindowOnStateChanged(window, a);
+        window.Closing += (o, a) => WindowOnClosing(window, a);
+
+        TaskbarIcon = new TaskbarIconModel(window.FindName("TaskbarIcon"));
+
+        ConfigStorage.Instance.ViewConfig.UpdateWindowState(window);
+        window.Show();
+      }
     }
 
     public void SaveWindowState()
     {
-      ConfigStorage.Instance.ViewConfig.SaveWindowState(window);
+      var window = ViewService.Instance.TryGet(this);
+      if (window != null)
+      {
+        ConfigStorage.Instance.ViewConfig.SaveWindowState(window);
+      }
     }
 
-    private WindowModel(Window window) : base(window)
+    private WindowModel()
     {
       UpdateAll = new UpdateAllCommand();
       Close = new ExitCommand();
-
-      window.StateChanged += WindowOnStateChanged;
-      window.Closing += WindowOnClosing;
-
-      TaskbarIcon = new TaskbarIconModel(this.view.FindName("TaskbarIcon"));
     }
 
-    private void WindowOnClosing(object sender, CancelEventArgs cancelEventArgs)
+    private void WindowOnClosing(Window sender, CancelEventArgs cancelEventArgs)
     {
-      Close.Execute(window);
+      Close.Execute(sender);
     }
 
-    private void WindowOnStateChanged(object sender, EventArgs eventArgs)
+    private void WindowOnStateChanged(Window sender, EventArgs eventArgs)
     {
-      if (ConfigStorage.Instance.AppConfig.MinimizeToTray && window.WindowState == System.Windows.WindowState.Minimized)
-        window.Hide();
+      if (ConfigStorage.Instance.AppConfig.MinimizeToTray && sender.WindowState == System.Windows.WindowState.Minimized)
+        sender.Hide();
     }
 
     public void Dispose()

@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
+using MangaReader.ViewModel.Primitive;
 
 namespace MangaReader.UI.AddNewManga
 {
@@ -11,6 +12,7 @@ namespace MangaReader.UI.AddNewManga
     public Login()
     {
       InitializeComponent();
+      BaseViewModel.SubToViewModel(this);
     }
 
     private void Bookmarks_OnMouseUp(object sender, MouseButtonEventArgs e)

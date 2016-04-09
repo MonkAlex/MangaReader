@@ -11,15 +11,10 @@ namespace MangaReader.Services
     public Converting()
     {
       InitializeComponent();
-    }
-
-    public Converting(Window owner) : this()
-    {
-      if (owner != null)
-      {
-        this.Owner = owner;
+      ViewModel.Primitive.BaseViewModel.SubToViewModel(this);
+      this.Owner = WindowHelper.Owner;
+      if (this.Owner != null)
         this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-      }
     }
 
     private void Converting_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)

@@ -20,10 +20,7 @@ namespace MangaReader.ViewModel.Commands
         dialog.Buttons.Add(new TaskDialogButton(ButtonType.Yes));
         dialog.Buttons.Add(new TaskDialogButton(ButtonType.No));
         if (dialog.ShowDialog(owner).ButtonType == ButtonType.Yes)
-        {
-          var updateModel = new DownloadUpdate(new Converting(owner));
-          updateModel.Show();
-        }
+          new DownloadUpdate().Show();
       }
       else
       {

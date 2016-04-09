@@ -13,15 +13,8 @@ namespace MangaReader.Services
     public VersionHistoryView()
     {
       InitializeComponent();
-    }
-
-    /// <summary>
-    /// Показать историю, центрировав окно по родительскому.
-    /// </summary>
-    /// <param name="owner">Родительское окно истории изменений.</param>
-    public VersionHistoryView(Window owner) : this()
-    {
-      this.Owner = owner;
+      ViewModel.Primitive.BaseViewModel.SubToViewModel(this);
+      this.Owner = WindowHelper.Owner;
       if (this.Owner != null)
         this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
     }

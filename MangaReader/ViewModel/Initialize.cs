@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using System.Windows;
+using MangaReader.UI.Services;
 using MangaReader.ViewModel.Primitive;
 
 namespace MangaReader.ViewModel
@@ -15,13 +15,12 @@ namespace MangaReader.ViewModel
     public override void Show()
     {
       base.Show();
-      window.ContentRendered += (sender, args) => Task.Run(() => Core.Client.Start(this));
-      window.ShowDialog();
-    }
-
-    public Initialize(Window view) : base(view)
-    {
-      
+      var window = ViewService.Instance.TryGet(this);
+      if (window != null)
+      {
+        window.ContentRendered += (sender, args) => Task.Run(() => Core.Client.Start(this));
+        window.ShowDialog();
+      }
     }
   }
 }

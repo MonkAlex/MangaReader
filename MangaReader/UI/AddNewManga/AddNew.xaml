@@ -36,7 +36,7 @@
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate>
-                    <ContentPresenter Content="{Binding View}"/>
+                    <local:Login/>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>

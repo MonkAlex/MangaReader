@@ -10,7 +10,7 @@ namespace MangaReader.ViewModel.Commands
     {
       base.Execute(parameter);
 
-      new VersionHistoryModel(new VersionHistoryView(WindowHelper.Owner)).Show();
+      new VersionHistoryModel().Show();
     }
 
     public ShowUpdateHistoryCommand()

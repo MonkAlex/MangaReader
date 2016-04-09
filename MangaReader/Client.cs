@@ -1,4 +1,4 @@
-﻿using MangaReader.Services;
+﻿using MangaReader.UI.Services;
 using MangaReader.ViewModel;
 
 namespace MangaReader
@@ -7,7 +7,9 @@ namespace MangaReader
   {
     public static void Run()
     {
-      var model = new Initialize(new Converting());
+      ViewResolver.Instance.ViewInit();
+
+      var model = new Initialize();
       model.Show();
 
       WindowModel.Instance.Show();

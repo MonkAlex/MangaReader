@@ -10,6 +10,7 @@ namespace MangaReader.UI
     public MainWindow()
     {
       InitializeComponent();
+      ViewModel.Primitive.BaseViewModel.SubToViewModel(this);
     }
   }
 }

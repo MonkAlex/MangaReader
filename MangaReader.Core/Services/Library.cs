@@ -136,8 +136,9 @@ namespace MangaReader.Services
 
       manga.Delete();
 
-      Status = Strings.Library_Status_MangaRemoved + manga.Name;
-      Log.Add(Strings.Library_Status_MangaRemoved + manga.Name);
+      var removed = Strings.Library_Status_MangaRemoved + manga.Name;
+      Status = removed;
+      Log.Add(removed);
     }
 
 #pragma warning disable CS0612 // Obsolete методы используются для конвертации

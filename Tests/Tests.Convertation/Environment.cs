@@ -15,7 +15,7 @@ namespace Tests.Convertation
     public static void Deploy(string from)
     {
       var directory = new DirectoryInfo(Path.Combine(testsDirectory, from));
-      Log.Add(string.Format("Copy from {0} to {1}", directory, deploymentDirectory));
+      Log.AddFormat("Copy from {0} to {1}", directory, deploymentDirectory);
       if (directory.Exists)
       {
         foreach (var file in directory.GetFiles())

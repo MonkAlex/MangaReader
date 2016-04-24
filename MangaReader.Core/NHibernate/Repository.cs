@@ -30,7 +30,7 @@ namespace MangaReader.Core.NHibernate
         {
           foreach (var o in list)
           {
-            Log.Add(string.Format("Save {0} with id {1}.", o.GetType().Name, o.Id));
+            Log.AddFormat("Save {0} with id {1}.", o.GetType().Name, o.Id);
             if (o.Id == 0)
               session.Save(o);
             else

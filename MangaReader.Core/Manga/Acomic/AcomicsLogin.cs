@@ -71,7 +71,7 @@ namespace MangaReader.Manga.Acomic
 
       if (nodes == null)
       {
-        Log.Add(string.Format("Bookmarks from '{0}' not found.", this.MainUri));
+        Log.AddFormat("Bookmarks from '{0}' not found.", this.MainUri);
         return bookmarks;
       }
 

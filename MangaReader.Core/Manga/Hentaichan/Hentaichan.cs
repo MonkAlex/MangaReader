@@ -20,7 +20,7 @@ namespace MangaReader.Manga.Hentaichan
 
       var newName = Getter.GetMangaName(this.Uri);
       if (string.IsNullOrWhiteSpace(newName))
-        Log.Add("Не удалось получить имя манги, текущее название = " + this.ServerName);
+        Log.AddFormat("Не удалось получить имя манги, текущее название - '{0}'.", this.ServerName);
       else if (newName != this.ServerName)
         this.ServerName = newName;
     }

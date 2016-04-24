@@ -69,9 +69,9 @@ namespace MangaReader.Account
 
     public async Task<List<Mangas>> GetBookmarks()
     {
-      Log.Add(string.Format("Start load bookmarks from '{0}'.", this.MainUri));
+      Log.AddFormat("Start load bookmarks from '{0}'.", this.MainUri);
       var bookmarks = await DownloadBookmarks();
-      Log.Add(string.Format("Finish load bookmarks from '{0}'.", this.MainUri));
+      Log.AddFormat("Finish load bookmarks from '{0}'.", this.MainUri);
       return bookmarks;
     }
 

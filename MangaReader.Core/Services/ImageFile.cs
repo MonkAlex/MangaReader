@@ -62,13 +62,13 @@ namespace MangaReader.Services
     }
 
     /// <summary>
-    /// Сохранить файл на диск.
+    /// Удалить файл с диска.
     /// </summary>
     public virtual void Delete()
     {
       if (string.IsNullOrWhiteSpace(this.Path) || !File.Exists(this.Path))
       {
-        Log.Add("ImageFile not found.", this.Path, this.Hash);
+        Log.AddFormat("ImageFile not found. Path - '{0}', Hash - '{1}'.", this.Path, this.Hash);
         return;
       }
 

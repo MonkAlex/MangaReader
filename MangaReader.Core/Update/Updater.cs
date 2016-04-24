@@ -53,10 +53,13 @@ namespace MangaReader.Core.Update
       try
       {
         ServerVersion = new Version(Page.GetPage(LinkToVersion).Content);
-        return ServerVersion.CompareTo(ClientVersion) > 0;
+        var hasUpdate = ServerVersion.CompareTo(ClientVersion) > 0;
+        Log.AddFormat(hasUpdate ? "Client version {0} can be updated to {1}." : "Update not found, current version - {0}.", ClientVersion, ServerVersion);
+        return hasUpdate;
       }
       catch (System.Exception)
       {
+        Log.AddFormat("Version check failed. Current version - {0}.", ClientVersion);
         return false;
       }
     }
@@ -91,7 +94,7 @@ namespace MangaReader.Core.Update
             WorkingDirectory = ConfigStorage.WorkFolder
           }
       };
-      Log.Add(string.Format("Update process started: File '{0}', Args '{1}', Folder '{2}'", UpdateFilename, UpdateStarted, ConfigStorage.WorkFolder));
+      Log.AddFormat("Update process started: File '{0}', Args '{1}', Folder '{2}'", UpdateFilename, UpdateStarted, ConfigStorage.WorkFolder);
       run.Start();
       Environment.Exit(1);
     }
@@ -111,7 +114,7 @@ namespace MangaReader.Core.Update
           WorkingDirectory = ConfigStorage.WorkFolder
         }
       };
-      Log.Add(string.Format("Update process finished: File '{0}', Args '{1}', Folder '{2}'", OriginalFilename, UpdateFinished, ConfigStorage.WorkFolder));
+      Log.AddFormat("Update process finished: File '{0}', Args '{1}', Folder '{2}'", OriginalFilename, UpdateFinished, ConfigStorage.WorkFolder);
       run.Start();
       Environment.Exit(1);
     }

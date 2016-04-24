@@ -21,7 +21,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
       }
       else
       {
-        Log.Add("Cannot run manga command", parameter);
+        Log.AddFormat("Cannot run manga command '{0}' with parameter '{1}'.", this, parameter);
       }
     }
 

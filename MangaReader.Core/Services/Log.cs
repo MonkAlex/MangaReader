@@ -25,10 +25,21 @@ namespace MangaReader.Services
     /// <summary>
     /// Добавление записи в лог.
     /// </summary>
-    /// <param name="messages">Сообщение.</param>
-    public static void Add(params object[] messages)
+    /// <param name="message">Сообщение.</param>
+    public static void Add(string message)
     {
-      var contents = string.Concat(DateTime.Now.ToString("O"), "   ", string.Join(Environment.NewLine, messages), Environment.NewLine);
+      var contents = string.Concat(DateTime.Now.ToString("O"), "   ", message, Environment.NewLine);
+      Write(contents, LogPath);
+    }
+
+    /// <summary>
+    /// Добавление записи в лог.
+    /// </summary>
+    /// <param name="format">Строка с форматированием.</param>
+    /// <param name="args">Параметры форматирования.</param>
+    public static void AddFormat(string format, params object[] args)
+    {
+      var contents = string.Concat(DateTime.Now.ToString("O"), "   ", string.Format(format, args), Environment.NewLine);
       Write(contents, LogPath);
     }
 
@@ -72,6 +83,7 @@ namespace MangaReader.Services
 
     static Log()
     {
+      // Mono fix
       LogLock = "lc?";
     }
   }

@@ -25,7 +25,7 @@ namespace MangaReader.UI.Services
         }
         else
         {
-          Log.Add(string.Format("Not resolve {0} type.", key.GetType().FullName));
+          Log.AddFormat("Not resolve {0} type.", key.GetType().FullName);
         }
       }
       return value;

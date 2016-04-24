@@ -315,7 +315,7 @@ namespace MangaReader.Manga
       if (!this.ActiveChapters.Any() && !this.ActiveVolumes.Any() && !this.ActivePages.Any())
         return;
 
-      Log.Add("Download start " + this.Name);
+      Log.AddFormat("Download start '{0}'.", this.Name);
 
       // Формируем путь к главе вида Папка_манги\Том_001\Глава_0001
       try
@@ -346,7 +346,7 @@ namespace MangaReader.Manga
             this.AddHistory(p.Uri);
           });
         this.Save();
-        Log.Add("Download end " + this.Name);
+        Log.AddFormat("Download end '{0}'.", this.Name);
       }
 
       catch (AggregateException ae)

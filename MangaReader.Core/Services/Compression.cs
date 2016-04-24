@@ -60,7 +60,7 @@ namespace MangaReader.Services
       if (message.Trim(Path.DirectorySeparatorChar) == AppConfig.DownloadFolder.Trim(Path.DirectorySeparatorChar))
         return files;
 
-      Log.Add(string.Format("Compression: Start {0}.", message));
+      Log.AddFormat("Compression: Start {0}.", message);
       var volumes = Directory.GetDirectories(message);
       foreach (var volume in volumes)
       {
@@ -73,7 +73,7 @@ namespace MangaReader.Services
           DeleteCompressedFiles(files, chapter);
         }
       }
-      Log.Add(string.Format("Compression: End {0}.", message));
+      Log.AddFormat("Compression: End {0}.", message);
       return files;
     }
 
@@ -93,7 +93,7 @@ namespace MangaReader.Services
       if (message.Trim(Path.DirectorySeparatorChar) == AppConfig.DownloadFolder.Trim(Path.DirectorySeparatorChar))
         return files;
 
-      Log.Add(string.Format("Compression: Start {0}.", message));
+      Log.AddFormat("Compression: Start {0}.", message);
       var volumes = Directory.GetDirectories(message);
       foreach (var volume in volumes)
       {
@@ -101,7 +101,7 @@ namespace MangaReader.Services
         files = AddToArchive(acr, volume);
         DeleteCompressedFiles(files, volume);
       }
-      Log.Add(string.Format("Compression: End {0}.", message));
+      Log.AddFormat("Compression: End {0}.", message);
       return files;
     }
 
@@ -121,11 +121,11 @@ namespace MangaReader.Services
       if (message.Trim(Path.DirectorySeparatorChar) == AppConfig.DownloadFolder.Trim(Path.DirectorySeparatorChar))
         return files;
 
-      Log.Add(string.Format("Compression: Start {0}.", message));
+      Log.AddFormat("Compression: Start {0}.", message);
       var acr = string.Concat(message, GetFolderName(message), ArchiveFormat);
       files = AddToArchive(acr, message);
       DeleteCompressedFiles(files, message);
-      Log.Add(string.Format("Compression: End {0}.", message));
+      Log.AddFormat("Compression: End {0}.", message);
       return files;
     }
 
@@ -150,7 +150,7 @@ namespace MangaReader.Services
     {
       var archiveMode = File.Exists(archive) ? ZipArchiveMode.Update : ZipArchiveMode.Create;
       if (archiveMode == ZipArchiveMode.Update)
-        Log.Add(string.Format("Compression: archive {0} already exists, add folder {1}.", archive, folder));
+        Log.AddFormat("Compression: archive {0} already exists, add folder {1}.", archive, folder);
       try
       {
         var packedFiles = new List<string>();

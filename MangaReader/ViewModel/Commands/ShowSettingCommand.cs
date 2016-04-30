@@ -1,5 +1,4 @@
 ﻿using MangaReader.Properties;
-using MangaReader.Services;
 using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands
@@ -8,7 +7,7 @@ namespace MangaReader.ViewModel.Commands
   {
     public override void Execute(object parameter)
     {
-      new SettingsForm { Owner = WindowHelper.Owner }.ShowDialog();
+      new SettingModel().Show();
     }
 
     public ShowSettingCommand()

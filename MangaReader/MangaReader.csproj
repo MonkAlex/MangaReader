@@ -158,11 +158,13 @@
     <Compile Include="ViewModel\Commands\Manga\DeleteMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\Manga\ShowPropertiesMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\Primitives\LibraryBaseCommand.cs" />
+    <Compile Include="ViewModel\Commands\Setting\SaveSettingsCommand.cs" />
     <Compile Include="ViewModel\Commands\ShowUpdateHistoryCommand.cs" />
     <Compile Include="ViewModel\Commands\UpdateVisibleMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\UpdateWithPauseCommand.cs" />
     <Compile Include="ViewModel\LoginModel.cs" />
     <Compile Include="ViewModel\MainPageModel.cs" />
+    <Compile Include="ViewModel\MangaSettingModel.cs" />
     <Compile Include="ViewModel\Primitive\BaseViewModel.cs" />
     <Compile Include="ViewModel\Commands\AddNewMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\AppUpdateCommand.cs" />
@@ -178,6 +180,7 @@
     <Compile Include="ViewModel\Initialize.cs" />
     <Compile Include="ViewModel\Primitive\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModel\Primitive\ProcessModel.cs" />
+    <Compile Include="ViewModel\SettingModel.cs" />
     <Compile Include="ViewModel\TaskbarIconModel.cs" />
     <Compile Include="ViewModel\VersionHistoryModel.cs" />
     <Compile Include="ViewModel\WindowModel.cs" />

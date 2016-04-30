@@ -15,7 +15,10 @@ namespace MangaReader
   {
     public SettingsForm()
     {
+      Owner = WindowHelper.Owner;
       InitializeComponent();
+      ViewModel.Primitive.BaseViewModel.SubToViewModel(this);
+      /*
       this.UpdateReaderBox.IsChecked = ConfigStorage.Instance.AppConfig.UpdateReader;
       this.MinimizeToTray.IsChecked = ConfigStorage.Instance.AppConfig.MinimizeToTray;
       this.MangaLanguage.SelectedItem = ConfigStorage.Instance.AppConfig.Language;
@@ -24,8 +27,9 @@ namespace MangaReader
       {
         this.Tabs.Items.Add(new TabItem() {Content = new MangaSettings() { DataContext = setting }, Header = setting.MangaName });
       }
+      */
     }
-
+    /*
     private void OkButton_OnClick(object sender, RoutedEventArgs e)
     {
       try
@@ -58,5 +62,6 @@ namespace MangaReader
       if (this.DialogResult != true)
         ConfigStorage.Instance.DatabaseConfig.MangaSettings.Update();
     }
+    */
   }
 }

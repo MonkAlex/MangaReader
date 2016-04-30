@@ -17,6 +17,7 @@ namespace MangaReader.UI.Services
       AddOrReplace(typeof(ViewModel.WindowModel), typeof(MangaReader.UI.MainWindow));
       AddOrReplace(typeof(ViewModel.VersionHistoryModel), typeof(MangaReader.Services.VersionHistoryView));
       AddOrReplace(typeof(ViewModel.Setting.SettingModel), typeof(MangaReader.SettingsForm));
+      AddOrReplace(typeof(ViewModel.Setting.AppSettingModel), typeof(MangaReader.UI.AppSettingView));
       AddOrReplace(typeof(ViewModel.Setting.MangaSettingModel), typeof(MangaReader.UI.MangaSettings));
 
       // Пока явно забиваемся на Table.

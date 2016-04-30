@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="MangaReader.UI.AppSettingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:resx="clr-namespace:MangaReader.Properties"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="450">
+    <StackPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="45*"></ColumnDefinition>
+                <ColumnDefinition Width="15*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" 
+                   TextTrimming="WordEllipsis" 
+                   Text="{x:Static resx:Strings.Settings_Language}" 
+                   VerticalAlignment="Center"/>
+            <ComboBox Grid.Row="0" Grid.Column="1" 
+                  IsSynchronizedWithCurrentItem="True" 
+                  ItemsSource="{Binding Languages}" 
+                                  SelectedItem="{Binding Language}"
+                  VerticalAlignment="Center" 
+                  HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                   TextWrapping="Wrap" 
+                   TextTrimming="WordEllipsis" 
+                   Text="{x:Static resx:Strings.Settings_LanguageHint}" 
+                   VerticalAlignment="Center"/>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" 
+                   TextTrimming="WordEllipsis" 
+                   Text="{x:Static resx:Strings.Settings_UpdateEver}" 
+                   VerticalAlignment="Center"/>
+            <TextBox Grid.Row="2" Grid.Column="1" 
+                  Text="{Binding AutoUpdateHours}"
+                  VerticalAlignment="Center" 
+                  HorizontalAlignment="Left"/>
+            <TextBlock Grid.Row="2" Grid.Column="1" 
+                   TextTrimming="WordEllipsis" 
+                   Text="{x:Static resx:Strings.Settings_Hours}" 
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Right"/>
+
+            <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                                  IsChecked="{Binding UpdateReader}"
+                  Content="{x:Static resx:Strings.Settings_UpdateReader}" 
+                  VerticalAlignment="Center"/>
+            <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+                                  IsChecked="{Binding MinimizeToTray}"
+                  Content="{x:Static resx:Strings.Settings_MinimizeToTray}" 
+                  VerticalAlignment="Center"/>
+        </Grid>
+    </StackPanel>
+</UserControl>

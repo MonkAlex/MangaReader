@@ -1,6 +1,8 @@
-﻿using MangaReader.Core.Services.Config;
+﻿using System.Linq;
+using MangaReader.Core.Services.Config;
 using MangaReader.UI.Services;
 using MangaReader.ViewModel.Commands.Primitives;
+using MangaReader.ViewModel.Setting;
 
 namespace MangaReader.ViewModel.Commands.Setting
 {
@@ -12,13 +14,8 @@ namespace MangaReader.ViewModel.Commands.Setting
     {
       base.Execute(parameter);
 
-      ConfigStorage.Instance.AppConfig.Language = settingModel.Language;
-      ConfigStorage.Instance.AppConfig.UpdateReader = settingModel.UpdateReader;
-      ConfigStorage.Instance.AppConfig.MinimizeToTray = settingModel.MinimizeToTray;
-
-      int hour;
-      if (int.TryParse(settingModel.AutoUpdateHours, out hour))
-        ConfigStorage.Instance.AppConfig.AutoUpdateInHours = hour;
+      foreach (var mangaSetting in settingModel.Views)
+        mangaSetting.Save();
 
       ConfigStorage.Instance.Save();
 

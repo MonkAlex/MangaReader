@@ -102,6 +102,9 @@
     <Compile Include="UI\AddNewManga\AddNew.xaml.cs">
       <DependentUpon>AddNew.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\AppSettingView.xaml.cs">
+      <DependentUpon>AppSettingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Converting.xaml.cs">
       <DependentUpon>Converting.xaml</DependentUpon>
     </Compile>
@@ -142,6 +145,7 @@
     </Compile>
     <Compile Include="UI\Services\ViewService.cs" />
     <Compile Include="ViewModel\AddNewModel.cs" />
+    <Compile Include="ViewModel\Setting\AppSettingModel.cs" />
     <Compile Include="ViewModel\Commands\AddManga\AddSelected.cs" />
     <Compile Include="ViewModel\Commands\AddManga\LoginCommand.cs" />
     <Compile Include="ViewModel\Commands\AddManga\LogInOutCommand.cs" />
@@ -164,7 +168,7 @@
     <Compile Include="ViewModel\Commands\UpdateWithPauseCommand.cs" />
     <Compile Include="ViewModel\LoginModel.cs" />
     <Compile Include="ViewModel\MainPageModel.cs" />
-    <Compile Include="ViewModel\MangaSettingModel.cs" />
+    <Compile Include="ViewModel\Setting\MangaSettingModel.cs" />
     <Compile Include="ViewModel\Primitive\BaseViewModel.cs" />
     <Compile Include="ViewModel\Commands\AddNewMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\AppUpdateCommand.cs" />
@@ -180,7 +184,8 @@
     <Compile Include="ViewModel\Initialize.cs" />
     <Compile Include="ViewModel\Primitive\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModel\Primitive\ProcessModel.cs" />
-    <Compile Include="ViewModel\SettingModel.cs" />
+    <Compile Include="ViewModel\Setting\SettingModel.cs" />
+    <Compile Include="ViewModel\Setting\SettingViewModel.cs" />
     <Compile Include="ViewModel\TaskbarIconModel.cs" />
     <Compile Include="ViewModel\VersionHistoryModel.cs" />
     <Compile Include="ViewModel\WindowModel.cs" />
@@ -189,6 +194,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\AddNewManga\AddNew.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\AppSettingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,5 +1,6 @@
 ﻿using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
+using MangaReader.ViewModel.Setting;
 
 namespace MangaReader.ViewModel.Commands
 {

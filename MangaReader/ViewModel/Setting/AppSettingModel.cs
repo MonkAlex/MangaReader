@@ -1,15 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows.Input;
 using MangaReader.Core.Services.Config;
-using MangaReader.UI.Services;
-using MangaReader.ViewModel.Commands.Setting;
-using MangaReader.ViewModel.Primitive;
+using MangaReader.Services;
 
-namespace MangaReader.ViewModel
+namespace MangaReader.ViewModel.Setting
 {
-  public class SettingModel : BaseViewModel
+  public class AppSettingModel : SettingViewModel
   {
     private bool updateReader;
     private bool minimizeToTray;
@@ -58,36 +53,28 @@ namespace MangaReader.ViewModel
       }
     }
 
-    public ObservableCollection<MangaSettingModel> MangaSetting { get; private set; }
-
-    public ICommand Save { get; private set; }
-
-    public SettingModel()
+    public override void Save()
     {
-      this.Languages = new List<Languages>(System.Enum.GetValues(typeof(Languages)).OfType<Languages>());
-      this.MangaSetting = new ObservableCollection<MangaSettingModel>();
-      this.Save = new SaveSettingsCommand(this);
+      base.Save();
+
+      ConfigStorage.Instance.AppConfig.Language = Language;
+      ConfigStorage.Instance.AppConfig.UpdateReader = UpdateReader;
+      ConfigStorage.Instance.AppConfig.MinimizeToTray = MinimizeToTray;
+
+      int hour;
+      if (int.TryParse(AutoUpdateHours, out hour))
+        ConfigStorage.Instance.AppConfig.AutoUpdateInHours = hour;
     }
 
-    public override void Load()
+    public AppSettingModel()
     {
-      base.Load();
+      this.Header = "Основные настройки";
+      this.Languages = Generic.GetEnumValues<Languages>();
 
       this.UpdateReader = ConfigStorage.Instance.AppConfig.UpdateReader;
       this.MinimizeToTray = ConfigStorage.Instance.AppConfig.MinimizeToTray;
       this.Language = ConfigStorage.Instance.AppConfig.Language;
       this.AutoUpdateHours = ConfigStorage.Instance.AppConfig.AutoUpdateInHours.ToString();
-    }
-
-    public override void Show()
-    {
-      base.Show();
-
-      var window = ViewService.Instance.TryGet(this);
-      if (window != null)
-      {
-        window.ShowDialog();
-      }
     }
   }
 }

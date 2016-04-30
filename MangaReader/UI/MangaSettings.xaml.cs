@@ -1,8 +1,8 @@
-﻿using Ookii.Dialogs.Wpf;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
+using Ookii.Dialogs.Wpf;
 
-namespace MangaReader.Services
+namespace MangaReader.UI
 {
   /// <summary>
   /// Interaction logic for MangaSettings.xaml
@@ -12,6 +12,7 @@ namespace MangaReader.Services
     public MangaSettings()
     {
       InitializeComponent();
+      ViewModel.Primitive.BaseViewModel.SubToViewModel(this);
     }
 
     private void ChangeFolder_OnClick(object sender, RoutedEventArgs e)

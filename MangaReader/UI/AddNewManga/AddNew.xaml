@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:MangaReader.UI.AddNewManga"
         xmlns:properties="clr-namespace:MangaReader.Properties"
         xmlns:viewModel="clr-namespace:MangaReader.ViewModel"
-        Icon="../../Icons/main.ico"
         Title="{x:Static properties:Strings.Input_Title}" 
         Height="400" Width="400"
         MinHeight="173" MinWidth="400"

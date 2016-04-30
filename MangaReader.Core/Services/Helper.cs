@@ -53,5 +53,10 @@ namespace MangaReader.Services
 
       return single;
     }
+
+    public static List<T> GetEnumValues<T>()
+    {
+      return new List<T>(Enum.GetValues(typeof(T)).OfType<T>());
+    }
   }
 }

@@ -145,6 +145,8 @@
     </Compile>
     <Compile Include="UI\Services\ViewService.cs" />
     <Compile Include="ViewModel\AddNewModel.cs" />
+    <Compile Include="ViewModel\Manga\MangaBaseModel.cs" />
+    <Compile Include="ViewModel\Manga\MangaViewModel.cs" />
     <Compile Include="ViewModel\Setting\AppSettingModel.cs" />
     <Compile Include="ViewModel\Commands\AddManga\AddSelected.cs" />
     <Compile Include="ViewModel\Commands\AddManga\LoginCommand.cs" />
@@ -175,7 +177,7 @@
     <Compile Include="ViewModel\Commands\Primitives\BaseCommand.cs" />
     <Compile Include="ViewModel\Commands\Primitives\ContentMenuItem.cs" />
     <Compile Include="ViewModel\Commands\ExitCommand.cs" />
-    <Compile Include="ViewModel\Commands\OpenFolderCommand.cs" />
+    <Compile Include="ViewModel\Commands\Manga\OpenFolderCommand.cs" />
     <Compile Include="ViewModel\Commands\ShowMainWindowCommand.cs" />
     <Compile Include="ViewModel\Commands\ShowSettingCommand.cs" />
     <Compile Include="ViewModel\Commands\UpdateAllCommand.cs" />

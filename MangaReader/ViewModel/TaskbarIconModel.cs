@@ -6,6 +6,7 @@ using Hardcodet.Wpf.TaskbarNotification;
 using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.ViewModel.Commands;
+using MangaReader.ViewModel.Commands.Manga;
 using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel

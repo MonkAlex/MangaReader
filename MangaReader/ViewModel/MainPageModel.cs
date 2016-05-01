@@ -10,6 +10,7 @@ using MangaReader.Services;
 using MangaReader.ViewModel.Commands;
 using MangaReader.ViewModel.Commands.Manga;
 using MangaReader.ViewModel.Commands.Primitives;
+using MangaReader.ViewModel.Manga;
 using MangaReader.ViewModel.Primitive;
 
 namespace MangaReader.ViewModel
@@ -90,9 +91,11 @@ namespace MangaReader.ViewModel
 
     internal virtual bool Filter(object o)
     {
-      var manga = o as Mangas;
-      if (manga == null)
+      var mangaModel = o as MangaBaseModel;
+      if (mangaModel == null)
         return false;
+
+      var manga = mangaModel.Manga;
 
       if (LibraryFilter.Uncompleted && manga.IsCompleted)
         return false;
@@ -108,10 +111,10 @@ namespace MangaReader.ViewModel
     {
       LibraryFilter = ConfigStorage.Instance.ViewConfig.LibraryFilter;
 
-      View = new ListCollectionView(Library.LibraryMangas)
+      View = new ListCollectionView(Library.LibraryMangas.Select(m => new MangaViewModel(m)).ToList())
       {
         Filter = Filter,
-        CustomSort = new MangasComparer()
+        CustomSort = new MangaViewModel(null)
       };
 
       this.AddNewManga = new AddNewMangaCommand();

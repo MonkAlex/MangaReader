@@ -1,11 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
+﻿using System.Linq;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
-using MangaReader.Manga;
 using MangaReader.UI.MainForm;
+using MangaReader.ViewModel.Manga;
 
 namespace MangaReader
 {
@@ -33,7 +30,7 @@ namespace MangaReader
       if (item == null)
         return;
 
-      var downloadable = item.DataContext as IDownloadable;
+      var downloadable = item.DataContext as MangaViewModel;
       if (downloadable == null)
         return;
 
@@ -51,97 +48,5 @@ namespace MangaReader
       }
     }
   }
-
-  [ValueConversion(typeof(string), typeof(string))]
-  public class UrlTypeConverter : IValueConverter
-  {
-    #region IValueConverter Members
-
-    public object Convert(object value, Type targetType, object parameter,
-        System.Globalization.CultureInfo culture)
-    {
-      var result = value == null ? string.Empty : value.ToString();
-      if (result.Contains("readmanga"))
-        return "RM";
-      if (result.Contains("adultmanga"))
-        return "AM";
-      if (result.Contains("acomics"))
-        return "AC";
-      if (result.Contains("hentaichan"))
-        return "HC";
-      if (result.Contains("mintmanga.com"))
-        return "MM";
-      return "NA";
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter,
-        System.Globalization.CultureInfo culture)
-    {
-      throw new NotSupportedException();
-    }
-
-    #endregion
-  }
-
-  [ValueConversion(typeof(bool), typeof(string))]
-  public class CompletedImageConverter : IValueConverter
-  {
-    #region IValueConverter Members
-
-    public object Convert(object value, Type targetType, object parameter,
-        System.Globalization.CultureInfo culture)
-    {
-      var result = "Icons/play.png";
-      switch ((bool)value)
-      {
-        case true:
-          result = "Icons/stop.png";
-          break;
-
-        case false:
-          result = "Icons/play.png";
-          break;
-      }
-      return result;
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter,
-        System.Globalization.CultureInfo culture)
-    {
-      throw new NotSupportedException();
-    }
-
-    #endregion
-  }
-
-  [ValueConversion(typeof(bool), typeof(string))]
-  public class UpdateImageConverter : IValueConverter
-  {
-    #region IValueConverter Members
-
-    public object Convert(object value, Type targetType, object parameter,
-        System.Globalization.CultureInfo culture)
-    {
-      var result = "Icons/play.png";
-      switch ((bool)value)
-      {
-        case true:
-          result = "Icons/yes.png";
-          break;
-
-        case false:
-          result = "Icons/no.png";
-          break;
-      }
-      return result;
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter,
-        System.Globalization.CultureInfo culture)
-    {
-      throw new NotSupportedException();
-    }
-
-    #endregion
-  }
+  
 }

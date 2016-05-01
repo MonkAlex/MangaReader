@@ -1,6 +1,7 @@
 ﻿using System.Windows.Data;
 using MangaReader.Manga;
 using MangaReader.Services;
+using MangaReader.ViewModel.Manga;
 
 namespace MangaReader.ViewModel.Commands.Primitives
 {
@@ -8,15 +9,20 @@ namespace MangaReader.ViewModel.Commands.Primitives
   {
     protected readonly ListCollectionView View;
 
+    protected bool NeedRefresh { get; set; }
+
     public override void Execute(object parameter)
     {
       base.Execute(parameter);
 
-      var manga = parameter as Mangas;
-      if (manga != null)
+      var manga = parameter as MangaViewModel;
+      if (manga != null && manga.Manga != null)
       {
-        this.Execute(manga);
-        View.Refresh();
+        this.Execute(manga.Manga);
+
+        if (NeedRefresh)
+          View.Refresh();
+
         OnCanExecuteChanged();
       }
       else
@@ -33,6 +39,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
     public MangaBaseCommand(ListCollectionView view)
     {
       this.View = view;
+      this.NeedRefresh = true;
     }
   }
 }

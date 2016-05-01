@@ -5,22 +5,22 @@ using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.ViewModel.Commands.Primitives;
 
-namespace MangaReader.ViewModel.Commands
+namespace MangaReader.ViewModel.Commands.Manga
 {
-  public class OpenFolderCommand : BaseCommand
+  public class OpenFolderCommand : MangaBaseCommand
   {
-    public override void Execute(object parameter)
+    public override void Execute(Mangas manga)
     {
-      var manga = parameter as IDownloadable;
       if (manga != null && Directory.Exists(manga.Folder))
         Process.Start(manga.Folder);
       else
         Library.Status = Strings.Library_Status_FolderNotFound;
     }
 
-    public OpenFolderCommand()
+    public OpenFolderCommand() : base(null)
     {
       this.Name = Strings.Manga_Action_OpenFolder;
+      this.NeedRefresh = false;
     }
   }
 }

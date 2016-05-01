@@ -113,7 +113,6 @@
     <Compile Include="Manga\MangaObsolete.cs" />
     <Compile Include="Manga\MangaPage.cs" />
     <Compile Include="Manga\Mangas.cs" />
-    <Compile Include="Manga\MangasComparer.cs" />
     <Compile Include="Manga\Volume.cs" />
     <Compile Include="NHibernate\Converting.cs" />
     <Compile Include="NHibernate\DatabaseConfigMap.cs" />

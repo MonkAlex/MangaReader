@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 using MangaReader.Manga;
 using MangaReader.Services;
@@ -22,6 +23,14 @@ namespace MangaReader.UI.MainForm
       this.DataContext = Model;
       Command.AddMainMenuCommands(this);
       this.Initialized += (sender, args) => LibraryWPF.Initialize(this);
+    }
+
+    protected void FilterChanged(object sender, RoutedEventArgs e)
+    {
+      if (Model.View != null)
+      {
+        Model.View.Refresh();
+      }
     }
   }
 }

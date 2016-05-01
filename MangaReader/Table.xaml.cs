@@ -50,14 +50,6 @@ namespace MangaReader
         listView.SelectedIndex = -1;
       }
     }
-
-    private void FilterChanged(object sender, RoutedEventArgs e)
-    {
-      if (Model.View != null)
-      {
-        Model.View.Refresh();
-      }
-    }
   }
 
   [ValueConversion(typeof(string), typeof(string))]

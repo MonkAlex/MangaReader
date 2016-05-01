@@ -22,6 +22,7 @@ namespace MangaReader.Services
       Library.UpdateMangaCompleted += LibraryOnUpdateMangaCompleted;
       Library.UpdatePercentChanged += LibraryOnUpdatePercentChanged;
       Library.PauseChanged += LibraryOnPauseChanged;
+      Library.StatusChanged += (sender, s) => main.Model.LibraryStatus = s;
     }
 
     private static ProgressState beforePause = ProgressState.None;

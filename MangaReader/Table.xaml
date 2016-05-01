@@ -5,8 +5,6 @@
         xmlns:ui="clr-namespace:MangaReader.UI"
         xmlns:base="clr-namespace:MangaReader.UI.MainForm"
         xmlns:resx="clr-namespace:MangaReader.Properties"
-        xmlns:services="clr-namespace:MangaReader.Services;assembly=MangaReader.Core"
-        xmlns:viewModel="clr-namespace:MangaReader.ViewModel"
         Title="{x:Static resx:Strings.Title}"  MinHeight="350" MinWidth="525">
 
     <base:BaseForm.Resources>
@@ -160,7 +158,7 @@
             </Grid.ColumnDefinitions>
             <StatusBar x:Name="StatusBar" Grid.Column="0">
                 <StatusBarItem>
-                    <TextBlock x:Name="TextBlock" TextAlignment="Center" Text="{Binding Path=(services:Library.Status), Mode=TwoWay}"/>
+                    <TextBlock x:Name="TextBlock" TextAlignment="Center" Text="{Binding LibraryStatus}"/>
                 </StatusBarItem>
             </StatusBar>
             <Button Grid.Column="1"

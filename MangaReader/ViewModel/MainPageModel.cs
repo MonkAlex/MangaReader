@@ -21,6 +21,17 @@ namespace MangaReader.ViewModel
     private ObservableCollection<ContentMenuItem> menu;
     private ObservableCollection<ContentMenuItem> mangaMenu;
     private ICommand updateWithPause;
+    private string libraryStatus;
+
+    public string LibraryStatus
+    {
+      get { return libraryStatus; }
+      set
+      {
+        libraryStatus = value;
+        OnPropertyChanged();
+      }
+    }
 
     public ListCollectionView View { get; set; }
 

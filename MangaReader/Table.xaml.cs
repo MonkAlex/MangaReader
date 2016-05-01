@@ -4,13 +4,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Threading;
-using MangaReader.Core.Services.Config;
 using MangaReader.Manga;
-using MangaReader.Properties;
-using MangaReader.Services;
 using MangaReader.UI.MainForm;
-using MangaReader.ViewModel.Commands;
 
 namespace MangaReader
 {
@@ -19,19 +14,9 @@ namespace MangaReader
   /// </summary>
   public partial class Table : BaseForm
   {
-    /// <summary>
-    /// Таймер на обновление формы.
-    /// </summary>
-    // ReSharper disable once NotAccessedField.Local
-    private static DispatcherTimer _timer;
-
     public Table()
     {
       InitializeComponent();
-      _timer = new DispatcherTimer(new TimeSpan(0, 0, 1),
-          DispatcherPriority.Background,
-          TimerTick,
-          Dispatcher.CurrentDispatcher);
     }
 
     /// <summary>
@@ -55,23 +40,6 @@ namespace MangaReader
       var defaultCommand = Model.MangaMenu.FirstOrDefault(m => m.IsDefault);
       if (defaultCommand != null && defaultCommand.Command.CanExecute(downloadable))
         defaultCommand.Command.Execute(downloadable);
-    }
-
-    /// <summary>
-    /// Обработчик таймера, вешаем всякие обработки формы.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void TimerTick(object sender, EventArgs e)
-    {
-      this.TextBlock.Text = Library.Status;
-
-      if (Library.IsAvaible && ConfigStorage.Instance.AppConfig.AutoUpdateInHours > 0 &&
-        DateTime.Now > ConfigStorage.Instance.AppConfig.LastUpdate.AddHours(ConfigStorage.Instance.AppConfig.AutoUpdateInHours))
-      {
-        Log.Add(Strings.AutoUpdate);
-        new UpdateWithPauseCommand(Model.View).Execute(sender);
-      }
     }
 
     private void ListView_MouseDown(object sender, MouseButtonEventArgs e)

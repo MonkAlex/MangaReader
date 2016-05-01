@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using MangaReader.Core.Exception;
 using MangaReader.Core.NHibernate;
 using MangaReader.Manga;
@@ -25,9 +26,22 @@ namespace MangaReader.Services
     private static readonly string DatabaseFile = ConfigStorage.WorkFolder + @".\db";
 
     /// <summary>
+    /// Таймер для автообновления манги.
+    /// </summary>
+    private static readonly Timer Timer = new Timer(TimerTick, null, new TimeSpan(0, 1, 0), new TimeSpan(0, 1, 0));
+
+    /// <summary>
     /// Статус библиотеки.
     /// </summary>
-    public static string Status { get; set; }
+    public static string Status
+    {
+      get { return status; }
+      set
+      {
+        status = value;
+        OnStatusChanged(value);
+      }
+    }
 
     /// <summary>
     /// Признак паузы.
@@ -59,6 +73,7 @@ namespace MangaReader.Services
     private static int mangasCount;
     private static bool isAvaible = true;
     private static bool isPaused;
+    private static string status;
 
     /// <summary>
     /// Библиотека доступна, т.е. не в процессе обновления.
@@ -139,6 +154,21 @@ namespace MangaReader.Services
       var removed = Strings.Library_Status_MangaRemoved + manga.Name;
       Status = removed;
       Log.Add(removed);
+    }
+
+    private static void TimerTick(object sender)
+    {
+      if (IsAvaible && ConfigStorage.Instance.AppConfig.AutoUpdateInHours > 0 &&
+        DateTime.Now > ConfigStorage.Instance.AppConfig.LastUpdate.AddHours(ConfigStorage.Instance.AppConfig.AutoUpdateInHours))
+      {
+        Log.AddFormat("{0} Время последнего обновления - {1}, частота обновления - каждые {2} часов.",
+          Strings.AutoUpdate, ConfigStorage.Instance.AppConfig.LastUpdate, ConfigStorage.Instance.AppConfig.AutoUpdateInHours);
+
+        if (IsAvaible)
+        {
+          ThreadAction(() => Update(LibraryMangas, ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
+        }
+      }
     }
 
 #pragma warning disable CS0612 // Obsolete методы используются для конвертации
@@ -285,6 +315,8 @@ namespace MangaReader.Services
 
     public static event EventHandler<bool> PauseChanged;
 
+    public static event EventHandler<string> StatusChanged;
+
     private static void OnUpdateStarted()
     {
       UpdateStarted?.Invoke(null, EventArgs.Empty);
@@ -313,6 +345,11 @@ namespace MangaReader.Services
     private static void OnPauseChanged(bool e)
     {
       PauseChanged?.Invoke(null, e);
+    }
+
+    private static void OnStatusChanged(string e)
+    {
+      StatusChanged?.Invoke(null, e);
     }
 
     #endregion

@@ -1,10 +1,9 @@
 ﻿using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
-using MangaReader.UI.MainForm;
 using MangaReader.ViewModel.Manga;
 
-namespace MangaReader
+namespace MangaReader.UI.MainForm
 {
   /// <summary>
   /// Логика взаимодействия для Table.xaml

@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using Ookii.Dialogs.Wpf;
 
-namespace MangaReader.UI
+namespace MangaReader.UI.Setting
 {
   /// <summary>
   /// Interaction logic for MangaSettings.xaml

@@ -5,6 +5,7 @@
         xmlns:base="clr-namespace:MangaReader.UI.MainForm"
         xmlns:ui="clr-namespace:MangaReader.UI"
         xmlns:manga="clr-namespace:MangaReader.ViewModel.Manga"
+        xmlns:mangaUi="clr-namespace:MangaReader.UI.Manga"
         Title="{x:Static resx:Strings.Title}">
     <Grid>
         <Grid.RowDefinitions>
@@ -27,7 +28,7 @@
                     <Setter Property="Focusable" Value="False"/>
                 </Style>
                 <DataTemplate DataType="{x:Type manga:MangaViewModel}">
-                    <base:BlazardManga Height="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}}"/>
+                    <mangaUi:BlazardManga Height="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}}"/>
                 </DataTemplate>
             </ListView.Resources>
             

@@ -1,14 +1,14 @@
 ﻿using System.Windows;
 using MangaReader.Services;
 
-namespace MangaReader
+namespace MangaReader.UI.Manga
 {
   /// <summary>
-  /// Логика взаимодействия для SettingsForm.xaml
+  /// Логика взаимодействия для MangaForm.xaml
   /// </summary>
-  public partial class SettingsForm : Window
+  public partial class MangaForm : Window
   {
-    public SettingsForm()
+    public MangaForm()
     {
       Owner = WindowHelper.Owner;
       InitializeComponent();

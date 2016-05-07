@@ -1,6 +1,7 @@
 ﻿using System.Windows;
+using MangaReader.Services;
 
-namespace MangaReader.Services
+namespace MangaReader.UI
 {
   /// <summary>
   /// Логика взаимодействия для VersionHistory.xaml

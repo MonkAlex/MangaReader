@@ -1,9 +1,5 @@
-﻿using System.Linq;
-using System.Windows;
-using System.Windows.Data;
-using MangaReader.Manga;
+﻿using System.Windows;
 using MangaReader.Services;
-using MangaReader.Services.Config;
 using MangaReader.ViewModel;
 
 namespace MangaReader.UI.MainForm

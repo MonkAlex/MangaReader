@@ -90,7 +90,7 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="Client.cs" />
-    <Compile Include="Manga\MangaForm.xaml.cs">
+    <Compile Include="UI\Manga\MangaForm.xaml.cs">
       <DependentUpon>MangaForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
@@ -102,7 +102,7 @@
     <Compile Include="UI\AddNewManga\AddNew.xaml.cs">
       <DependentUpon>AddNew.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\AppSettingView.xaml.cs">
+    <Compile Include="UI\Setting\AppSettingView.xaml.cs">
       <DependentUpon>AppSettingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Converting.xaml.cs">
@@ -112,11 +112,11 @@
     <Compile Include="UI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\MangaSettings.xaml.cs">
+    <Compile Include="UI\Setting\MangaSettings.xaml.cs">
       <DependentUpon>MangaSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\WindowHelper.cs" />
-    <Compile Include="Table.xaml.cs">
+    <Compile Include="UI\MainForm\Table.xaml.cs">
       <DependentUpon>Table.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\GridSort.cs" />
@@ -129,13 +129,13 @@
     </Compile>
     <Compile Include="UI\MainForm\BaseForm.cs" />
     <Compile Include="UI\Command.cs" />
-    <Compile Include="UI\MainForm\BlazardManga.xaml.cs">
+    <Compile Include="UI\Manga\BlazardManga.xaml.cs">
       <DependentUpon>BlazardManga.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\MultiSelectComboBox.xaml.cs">
       <DependentUpon>MultiSelectComboBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SettingsForm.xaml.cs">
+    <Compile Include="UI\Setting\SettingsForm.xaml.cs">
       <DependentUpon>SettingsForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Services\SimpleDictionary.cs" />
@@ -193,7 +193,7 @@
     <Compile Include="ViewModel\TaskbarIconModel.cs" />
     <Compile Include="ViewModel\VersionHistoryModel.cs" />
     <Compile Include="ViewModel\WindowModel.cs" />
-    <Page Include="Manga\MangaForm.xaml">
+    <Page Include="UI\Manga\MangaForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -201,7 +201,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\AppSettingView.xaml">
+    <Page Include="UI\Setting\AppSettingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -213,11 +213,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\MangaSettings.xaml">
+    <Page Include="UI\Setting\MangaSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Table.xaml">
+    <Page Include="UI\MainForm\Table.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -225,7 +225,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="SettingsForm.xaml">
+    <Page Include="UI\Setting\SettingsForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -237,7 +237,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\MainForm\BlazardManga.xaml">
+    <Page Include="UI\Manga\BlazardManga.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

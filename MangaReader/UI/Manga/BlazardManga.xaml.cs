@@ -1,13 +1,13 @@
 ﻿using System.Windows.Controls;
 
-namespace MangaReader.UI
+namespace MangaReader.UI.Manga
 {
   /// <summary>
-  /// Interaction logic for AppSettingView.xaml
+  /// Interaction logic for BlazardManga.xaml
   /// </summary>
-  public partial class AppSettingView : UserControl
+  public partial class BlazardManga : UserControl
   {
-    public AppSettingView()
+    public BlazardManga()
     {
       InitializeComponent();
       ViewModel.Primitive.BaseViewModel.SubToViewModel(this);

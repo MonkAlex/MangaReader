@@ -1,8 +1,8 @@
 ﻿using System.Windows.Data;
 using MangaReader.Manga;
 using MangaReader.Properties;
-using MangaReader.Services;
 using MangaReader.ViewModel.Commands.Primitives;
+using MangaReader.ViewModel.Manga;
 
 namespace MangaReader.ViewModel.Commands.Manga
 {
@@ -12,7 +12,7 @@ namespace MangaReader.ViewModel.Commands.Manga
     {
       base.Execute(manga);
 
-      new MangaForm { DataContext = manga, Owner = WindowHelper.Owner }.ShowDialog();
+      new MangaCardModel(manga).Show();
     }
 
     public ShowPropertiesMangaCommand(ListCollectionView view) : base(view)

@@ -57,13 +57,14 @@ namespace MangaReader.ViewModel.Setting
     {
       base.Save();
 
-      ConfigStorage.Instance.AppConfig.Language = Language;
-      ConfigStorage.Instance.AppConfig.UpdateReader = UpdateReader;
-      ConfigStorage.Instance.AppConfig.MinimizeToTray = MinimizeToTray;
+      var appConfig = ConfigStorage.Instance.AppConfig;
+      appConfig.Language = Language;
+      appConfig.UpdateReader = UpdateReader;
+      appConfig.MinimizeToTray = MinimizeToTray;
 
       int hour;
       if (int.TryParse(AutoUpdateHours, out hour))
-        ConfigStorage.Instance.AppConfig.AutoUpdateInHours = hour;
+        appConfig.AutoUpdateInHours = hour;
     }
 
     public AppSettingModel()
@@ -71,10 +72,11 @@ namespace MangaReader.ViewModel.Setting
       this.Header = "Основные настройки";
       this.Languages = Generic.GetEnumValues<Languages>();
 
-      this.UpdateReader = ConfigStorage.Instance.AppConfig.UpdateReader;
-      this.MinimizeToTray = ConfigStorage.Instance.AppConfig.MinimizeToTray;
-      this.Language = ConfigStorage.Instance.AppConfig.Language;
-      this.AutoUpdateHours = ConfigStorage.Instance.AppConfig.AutoUpdateInHours.ToString();
+      var appConfig = ConfigStorage.Instance.AppConfig;
+      this.UpdateReader = appConfig.UpdateReader;
+      this.MinimizeToTray = appConfig.MinimizeToTray;
+      this.Language = appConfig.Language;
+      this.AutoUpdateHours = appConfig.AutoUpdateInHours.ToString();
     }
   }
 }

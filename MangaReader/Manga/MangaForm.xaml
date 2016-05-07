@@ -1,16 +1,11 @@
 ﻿<Window x:Class="MangaReader.Manga.MangaForm"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:services="clr-namespace:MangaReader.Manga"
         xmlns:resx="clr-namespace:MangaReader.Properties"
-        DataContextChanged="MangaForm_OnDataContextChanged"
         WindowStartupLocation="CenterOwner"
         WindowStyle="None"
         ShowInTaskbar="False"
-        Title="MangaForm" Height="170" Width="400">
-    <Window.Resources>
-        <services:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
-    </Window.Resources>
+        Title="{Binding Name}" Height="170" Width="400">
     <StackPanel>
         <Grid>
             <Grid.RowDefinitions>
@@ -27,29 +22,29 @@
                 <ColumnDefinition Width="30*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-              x:Name="MangaNameIsChanged" IsChecked="{Binding Path=IsNameChanged}"
-              Content="Разрешить переименовывание"/>
+                      IsChecked="{Binding Path=CanChangeName}"
+                      Content="Разрешить переименовывание"/>
             <Label Grid.Row="0" Grid.Column="0"
-           x:Name="MangaNameLabel" Content="Название манги: "/>
+                   Content="Название манги: "/>
             <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
-             x:Name="MangaName" Text="{Binding Path=Name}" IsReadOnly="{Binding Path=IsNameChanged, Converter={StaticResource InverseBooleanConverter}}"/>
+                     Text="{Binding Path=Name}" IsReadOnly="{Binding NameIsReadonly}"/>
             <Label Grid.Row="2" Grid.Column="0"
-             x:Name="MangaFolderLabel" Content="Манга скачивается в: "/>
+                   Content="Манга скачивается в: "/>
             <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
-             x:Name="MangaFolder" Text="{Binding Path=Folder}" IsReadOnly="True"/>
+                     Text="{Binding Path=Folder}" IsReadOnly="True"/>
             <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
-              x:Name="NeedCompress" IsChecked="{Binding Path=NeedCompress}" IsThreeState="True"
-              Content="{x:Static resx:Strings.Settings_Compress}" />
+                      IsChecked="{Binding Path=NeedCompress}" IsThreeState="True"
+                      Content="{x:Static resx:Strings.Settings_Compress}" />
             <ComboBox Grid.Row="3" Grid.Column="2" x:Name="CompressBox" 
-              ItemsSource="{Binding Path=AllowedCompressionModes}" 
-              SelectedItem="{Binding Path=CompressionMode}"/>
+                      ItemsSource="{Binding Path=CompressionModes}" 
+                      SelectedItem="{Binding Path=CompressionMode}"/>
 
             <Button Grid.Row="5" Grid.Column="1"
             IsDefault="True"
-            x:Name="OkButton" Content="Принять" Click="OkButton_OnClick"/>
+            Command="{Binding Save}"/>
             <Button Grid.Row="5" Grid.Column="2"
             IsCancel="True"
-            x:Name="CancelButton" Content="Отмена" Click="CancelButton_OnClick"/>
+            Content="Отмена"/>
         </Grid>
     </StackPanel>
 </Window>

@@ -13,6 +13,7 @@ namespace MangaReader.ViewModel.Manga
     private string completedIcon;
     private string needUpdateIcon;
     private double downloaded;
+    private string status;
 
     public string Type
     {
@@ -63,7 +64,17 @@ namespace MangaReader.ViewModel.Manga
         OnPropertyChanged();
       }
     }
-    
+
+    public string Status
+    {
+      get { return status; }
+      set
+      {
+        status = value;
+        OnPropertyChanged();
+      }
+    }
+
     private void MangaOnPropertyChanged(object sender, PropertyChangedEventArgs args)
     {
       if (args.PropertyName == nameof(Manga.Name))
@@ -76,6 +87,8 @@ namespace MangaReader.ViewModel.Manga
         SetType(Manga.Uri);
       if (args.PropertyName == nameof(Manga.NeedUpdate))
         SetNeedUpdate(Manga.NeedUpdate);
+      if (args.PropertyName == nameof(Manga.Status))
+        this.Status = Manga.Status;
     }
 
     private void SetCompletedIcon(bool isCompleted)
@@ -150,6 +163,7 @@ namespace MangaReader.ViewModel.Manga
         SetCompletedIcon(Manga.IsCompleted);
         SetType(Manga.Uri);
         SetNeedUpdate(Manga.NeedUpdate);
+        this.Status = Manga.Status;
         Manga.PropertyChanged += MangaOnPropertyChanged;
       }
     }

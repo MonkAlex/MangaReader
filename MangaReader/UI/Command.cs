@@ -11,10 +11,6 @@ namespace MangaReader.UI
 {
   public static class Command
   {
-    public static RoutedUICommand SelectNextManga = new RoutedUICommand("Следующая", "SelectNextManga", typeof(Command));
-
-    public static RoutedUICommand SelectPrevManga = new RoutedUICommand("Предыдущая", "SelectPrevManga", typeof(Command));
-
     public static RoutedUICommand ShowAbout = new RoutedUICommand("О программе", "ShowAbout", typeof(Command));
 
     public static void AddMainMenuCommands(UIElement element)
@@ -36,11 +32,7 @@ namespace MangaReader.UI
         <MenuItem Header="About"/>
        */
       AddCommand(ShowAbout, DoShowAbout, CanShowAbout, element);
-
-      AddCommand(SelectNextManga, DoSelectNextManga, CanSelectNextManga, element);
-      AddCommand(SelectPrevManga, DoSelectPrevManga, CanSelectPrevManga, element);
-
-
+      
     }
 
     private static void AddCommand(ICommand command, ExecutedRoutedEventHandler execute, CanExecuteRoutedEventHandler canExecute, UIElement element)
@@ -54,46 +46,6 @@ namespace MangaReader.UI
 
       // Регистрация привязки.
       element.CommandBindings.Add(bind);
-    }
-    
-    private static void CanSelectNextManga(object sender, CanExecuteRoutedEventArgs e)
-    {
-      e.CanExecute = true;
-    }
-
-    private static void DoSelectNextManga(object sender, ExecutedRoutedEventArgs e)
-    {
-#warning Blazard form
-/*      var baseForm = sender as BaseForm;
-            var filtered = baseForm.Model.View.Cast<Mangas>().ToList();
-            var manga = Library.SelectedManga;
-            if (manga != null && !Equals(filtered.LastOrDefault(), manga))
-            {
-              Library.SelectedManga = filtered.Contains(manga) ?
-                filtered.SkipWhile(m => !Equals(m, manga)).Skip(1).FirstOrDefault() :
-                filtered.FirstOrDefault();
-              (e.Source as FrameworkElement).DataContext = Library.SelectedManga;
-            }*/
-    }
-
-    private static void CanSelectPrevManga(object sender, CanExecuteRoutedEventArgs e)
-    {
-      e.CanExecute = true;
-    }
-
-    private static void DoSelectPrevManga(object sender, ExecutedRoutedEventArgs e)
-    {
-#warning Blazard form
-/*      var baseForm = sender as BaseForm;
-            var filtered = baseForm.Model.View.Cast<Mangas>().ToList();
-            var manga = Library.SelectedManga;
-            if (manga != null && !Equals(filtered.FirstOrDefault(), manga))
-            {
-              Library.SelectedManga = filtered.Contains(manga) ?
-                filtered.TakeWhile(m => !Equals(m, manga)).LastOrDefault() :
-                filtered.FirstOrDefault();
-              (e.Source as FrameworkElement).DataContext = Library.SelectedManga;
-            }*/
     }
 
     private static void CanShowAbout(object sender, CanExecuteRoutedEventArgs e)

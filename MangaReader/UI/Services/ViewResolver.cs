@@ -22,7 +22,8 @@ namespace MangaReader.UI.Services
       AddOrReplace(typeof(ViewModel.Manga.MangaCardModel), typeof(MangaReader.Manga.MangaForm));
 
       // Пока явно забиваемся на Table.
-      AddOrReplace(typeof(ViewModel.MainPageModel), typeof(MangaReader.Table));
+      AddOrReplace(typeof(ViewModel.MainPageModel), typeof(MangaReader.UI.MainForm.Blazard));
+//      AddOrReplace(typeof(ViewModel.MainPageModel), typeof(MangaReader.Table));
     }
   }
 }

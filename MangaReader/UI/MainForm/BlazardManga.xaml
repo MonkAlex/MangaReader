@@ -11,14 +11,10 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <DockPanel HorizontalAlignment="Stretch" Margin="5" LastChildFill="False" Grid.Column="1" Grid.Row="0" VerticalAlignment="Stretch">
+        <DockPanel HorizontalAlignment="Stretch" Margin="5" LastChildFill="True" Grid.Column="1" VerticalAlignment="Stretch">
             <Image VerticalAlignment="Stretch" Width="Auto"/>
             <RichTextBox VerticalAlignment="Stretch" Width="Auto" IsReadOnly="True">
-                <FlowDocument>
+                <FlowDocument PageWidth="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type RichTextBox}}}">
                     <Paragraph>
                         <Run Text="{Binding Path=Name}"/>
                     </Paragraph>
@@ -28,15 +24,8 @@
                 </FlowDocument>
             </RichTextBox>
         </DockPanel>
-        <!--ToolBarPanel HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
-            <Button Command="{x:Static ui:Command.OpenFolder}" Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
-            <Button Command="{x:Static ui:Command.DeleteManga}" Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
-            <Button Command="{x:Static ui:Command.UpdateManga}" Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
-            <Button Command="{x:Static ui:Command.MangaProperty}" Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
-        </-->
-        <ToolBarPanel VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center">
-            <Button Content="Prev" Command="{x:Static ui:Command.SelectPrevManga}"/>
-            <Button Content="Next" Command="{x:Static ui:Command.SelectNextManga}"/>
+        <ToolBarPanel HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.Column="0">
+            <ListView BorderThickness="0" ItemsSource="{Binding MangaMenu}" ItemContainerStyle="{StaticResource ListViewItemButton}"/>
         </ToolBarPanel>
     </Grid>
 </UserControl>

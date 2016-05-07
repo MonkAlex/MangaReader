@@ -19,7 +19,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <ui:MultiSelectComboBox x:Name="MangaType" Grid.Column="3" SelectionChanged="FilterChanged"
+            <ui:MultiSelectComboBox Grid.Column="3" SelectionChanged="FilterChanged"
                             ItemsSource="{Binding Path=AllTypes, Mode=OneTime}"
                             SelectedItems="{Binding Path=AllowedTypes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <CheckBox x:Name="Uncompleted" Content="Незавершенная" Grid.Column="2" Click="FilterChanged"
@@ -37,11 +37,6 @@
               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
               ui:GridViewColumnResize.Enabled="True"
               ui:GridSort.AutoSort="True">
-            <ListView.Resources>
-                <ContextMenu x:Key="Menu" 
-                             ItemsSource="{Binding DataContext.MangaMenu, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}}"
-                             ItemContainerStyle="{StaticResource ContentMenuItem}"/>
-            </ListView.Resources>
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Mangas_clicked"/>
@@ -51,7 +46,11 @@
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                    <Setter Property="ContextMenu" Value="{StaticResource Menu}"/>
+                    <Setter Property="ContextMenu">
+                        <Setter.Value>
+                            <ContextMenu ItemsSource="{Binding MangaMenu}" ItemContainerStyle="{StaticResource ContentMenuItem}"/>
+                        </Setter.Value>
+                    </Setter>
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListViewItem}">

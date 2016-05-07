@@ -19,10 +19,11 @@ namespace MangaReader.ViewModel.Commands.Primitives
       if (manga != null && manga.Manga != null)
       {
         this.Execute(manga.Manga);
-
+#warning Blazard - disable refresh
+        /*
         if (NeedRefresh)
           View.Refresh();
-
+          */
         OnCanExecuteChanged();
       }
       else

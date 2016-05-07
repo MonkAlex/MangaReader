@@ -22,7 +22,6 @@ namespace MangaReader.ViewModel
     private ICommand showSettings;
     private ICommand addNewManga;
     private ObservableCollection<ContentMenuItem> menu;
-    private ObservableCollection<ContentMenuItem> mangaMenu;
     private ICommand updateWithPause;
     private string libraryStatus;
 
@@ -81,17 +80,6 @@ namespace MangaReader.ViewModel
         OnPropertyChanged();
       }
     }
-
-    public ObservableCollection<ContentMenuItem> MangaMenu
-    {
-      get { return mangaMenu; }
-      set
-      {
-        mangaMenu = value;
-        OnPropertyChanged();
-      }
-    }
-
 
     internal virtual bool Filter(object o)
     {
@@ -162,19 +150,6 @@ namespace MangaReader.ViewModel
       this.Menu.Add(file);
       this.Menu.Add(setting);
       this.Menu.Add(about);
-
-      this.MangaMenu = new ObservableCollection<ContentMenuItem>
-      {
-        new OpenFolderCommand(),
-        new ChangeUpdateMangaCommand(View),
-        new UpdateMangaCommand(View),
-        new CompressMangaCommand(View),
-        new OpenUrlMangaCommand(View),
-        new HistoryClearMangaCommand(View),
-        new DeleteMangaCommand(View),
-        new ShowPropertiesMangaCommand(View)
-      };
-      this.MangaMenu.First().IsDefault = true;
 
       #endregion
     }

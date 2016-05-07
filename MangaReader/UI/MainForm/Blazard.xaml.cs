@@ -1,4 +1,6 @@
-﻿using MangaReader.Services;
+﻿using System.Linq;
+using MangaReader.Services;
+using MangaReader.ViewModel.Manga;
 
 namespace MangaReader.UI.MainForm
 {
@@ -11,8 +13,6 @@ namespace MangaReader.UI.MainForm
     public Blazard()
     {
       InitializeComponent();
-#warning Blazard form
-//      this.BlazardManga.DataContext = Library.SelectedManga;
     }
   }
 }

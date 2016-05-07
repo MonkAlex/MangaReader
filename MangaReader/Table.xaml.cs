@@ -34,7 +34,7 @@ namespace MangaReader
       if (downloadable == null)
         return;
 
-      var defaultCommand = Model.MangaMenu.FirstOrDefault(m => m.IsDefault);
+      var defaultCommand = downloadable.MangaMenu.FirstOrDefault(m => m.IsDefault);
       if (defaultCommand != null && defaultCommand.Command.CanExecute(downloadable))
         defaultCommand.Command.Execute(downloadable);
     }

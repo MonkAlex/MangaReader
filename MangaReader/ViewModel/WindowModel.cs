@@ -37,7 +37,7 @@ namespace MangaReader.ViewModel
     public override void Show()
     {
       base.Show();
-      this.Content = new Table();
+      this.Content = new Blazard();
       var window = ViewService.Instance.TryGet(this);
       if (window != null)
       {

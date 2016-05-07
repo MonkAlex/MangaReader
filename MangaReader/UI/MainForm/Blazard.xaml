@@ -4,12 +4,14 @@
         xmlns:resx="clr-namespace:MangaReader.Properties"
         xmlns:base="clr-namespace:MangaReader.UI.MainForm"
         xmlns:ui="clr-namespace:MangaReader.UI"
+        xmlns:manga="clr-namespace:MangaReader.ViewModel.Manga"
         Title="{x:Static resx:Strings.Title}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0"
@@ -18,6 +20,18 @@
         <ui:MultiSelectComboBox x:Name="MangaType" Grid.Row="1" SelectionChanged="FilterChanged" DataContext="{Binding LibraryFilter}"
                             ItemsSource="{Binding Path=AllTypes, Mode=OneTime}"
                             SelectedItems="{Binding Path=AllowedTypes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <base:BlazardManga x:Name="BlazardManga" Margin="5" Grid.Row="2"/>
+        <ListView BorderThickness="0" Margin="5" ItemsSource="{Binding View}" Grid.Row="2">
+            <ListView.Resources>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Focusable" Value="False"/>
+                </Style>
+                <DataTemplate DataType="{x:Type manga:MangaViewModel}">
+                    <base:BlazardManga Height="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}}"/>
+                </DataTemplate>
+            </ListView.Resources>
+            
+        </ListView>
+
     </Grid>
 </base:BaseForm>

@@ -11,8 +11,13 @@ namespace MangaReader.ViewModel.Commands.Manga
   {
     public override void Execute(Mangas manga)
     {
-      if (manga != null && Directory.Exists(manga.Folder))
-        Process.Start(manga.Folder);
+      this.Execute(manga);
+    }
+
+    public void Execute(IDownloadable parameter)
+    {
+      if (parameter != null && Directory.Exists(parameter.Folder))
+        Process.Start(parameter.Folder);
       else
         Library.Status = Strings.Library_Status_FolderNotFound;
     }

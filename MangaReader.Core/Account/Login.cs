@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using MangaReader.Core.Entity;
-using MangaReader.Manga;
-using MangaReader.Services;
+using MangaReader.Core.Manga;
+using MangaReader.Core.Services;
 
-namespace MangaReader.Account
+namespace MangaReader.Core.Account
 {
-  public abstract class Login : Entity
+  public abstract class Login : Entity.Entity
   {
     public static Guid Type { get { return Guid.Empty; } }
 

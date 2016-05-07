@@ -1,5 +1,5 @@
-﻿using MangaReader.Properties;
-using MangaReader.Services;
+﻿using MangaReader.Core.Services;
+using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands

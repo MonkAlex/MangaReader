@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+
 // Thanks to Eric Gunnerson for recommending this be a struct rather
 // than a class - avoids a heap allocation.
 // Thanks to Change Gillespie and Jocelyn Coulmance for pointing out
@@ -9,7 +10,7 @@ using System.Threading;
 // me invent a way of using a struct in both release and debug builds
 // without losing the debug leak tracking.
 
-namespace MangaReader.Services
+namespace MangaReader.Core.Services
 {
   public struct TimedLock : IDisposable
   {

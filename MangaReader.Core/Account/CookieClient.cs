@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text;
 
-namespace MangaReader.Account
+namespace MangaReader.Core.Account
 {
   public class CookieClient : WebClient
   {

@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using System.IO;
-using MangaReader.Manga;
+using MangaReader.Core.Manga;
+using MangaReader.Core.Services;
 using MangaReader.Properties;
-using MangaReader.Services;
 using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands.Manga

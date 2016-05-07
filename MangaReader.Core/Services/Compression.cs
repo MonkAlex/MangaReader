@@ -1,14 +1,14 @@
-﻿using MangaReader.Manga;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services.Config;
 
-namespace MangaReader.Services
+namespace MangaReader.Core.Services
 {
   public static class Compression
   {
@@ -192,7 +192,7 @@ namespace MangaReader.Services
         Log.Exception(ex, text);
         return new List<string>();
       }
-      catch (Exception ex)
+      catch (System.Exception ex)
       {
         Log.Exception(ex);
 

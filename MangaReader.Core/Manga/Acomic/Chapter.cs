@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace MangaReader.Manga.Acomic
+namespace MangaReader.Core.Manga.Acomic
 {
   /// <summary>
   /// Глава.
   /// </summary>
-  public class Chapter : MangaReader.Manga.Chapter
+  public class Chapter : Core.Manga.Chapter
   {
 
     #region Конструктор

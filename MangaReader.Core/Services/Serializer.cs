@@ -1,8 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Xml.Serialization;
 
-namespace MangaReader.Services
+namespace MangaReader.Core.Services
 {
 
   class Serializer<T>
@@ -41,7 +40,7 @@ namespace MangaReader.Services
           retVal = (T)formatter.Deserialize(stream);
         }
       }
-      catch (Exception)
+      catch (System.Exception)
       {
         return default(T);
       }

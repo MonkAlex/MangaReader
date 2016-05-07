@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using MangaReader.Core.Properties;
-using MangaReader.Services;
+using MangaReader.Core.Services;
 
-namespace MangaReader.Manga.Grouple
+namespace MangaReader.Core.Manga.Grouple
 {
   /// <summary>
   /// Манга.

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using MangaReader.Manga;
+using MangaReader.Core.Manga;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Entities.CRUD
@@ -19,7 +19,7 @@ namespace Tests.Entities.CRUD
       Assert.AreNotEqual(0, history.Id);
       Assert.AreNotEqual(null, manga.Histories.FirstOrDefault());
 
-      var mangaHistory = Environment.Session.Get<MangaReader.MangaHistory>(historyId);
+      var mangaHistory = Environment.Session.Get<MangaReader.Core.Manga.MangaHistory>(historyId);
       Assert.AreNotEqual(null, mangaHistory);
 
       var mangas = Environment.Session.Get<Mangas>(mangaId);
@@ -28,7 +28,7 @@ namespace Tests.Entities.CRUD
       Builder.DeleteMangaHistory(manga);
       Builder.DeleteAcomics(manga);
 
-      mangaHistory = Environment.Session.Get<MangaReader.MangaHistory>(historyId);
+      mangaHistory = Environment.Session.Get<MangaReader.Core.Manga.MangaHistory>(historyId);
       Assert.AreEqual(null, mangaHistory);
 
       mangas = Environment.Session.Get<Mangas>(mangaId);
@@ -51,14 +51,14 @@ namespace Tests.Entities.CRUD
       history.Update();
       Assert.AreEqual(oldUrl, history.Uri);
 
-      var mangaHistory = Environment.Session.Get<MangaReader.MangaHistory>(historyId);
+      var mangaHistory = Environment.Session.Get<MangaReader.Core.Manga.MangaHistory>(historyId);
       Assert.AreEqual(oldUrl, mangaHistory.Uri);
 
       history.Uri = url;
       history.Save();
       Assert.AreEqual(url, history.Uri);
 
-      mangaHistory = Environment.Session.Get<MangaReader.MangaHistory>(historyId);
+      mangaHistory = Environment.Session.Get<MangaReader.Core.Manga.MangaHistory>(historyId);
       Assert.AreEqual(url, mangaHistory.Uri);
 
       Builder.DeleteMangaHistory(manga);

@@ -3,8 +3,6 @@ using System.Threading;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using MangaReader.Core.Update;
-using MangaReader.Services;
-using Converter = MangaReader.Core.Services.Converter;
 
 namespace MangaReader.Core
 {
@@ -38,7 +36,7 @@ namespace MangaReader.Core
 
       ResolveAssembly.LoadSql();
       NHibernate.Mapping.Initialize(process);
-      Converter.Convert(process);
+      Services.Converter.Convert(process);
       Log.AddFormat("Found {0} manga type settings:", ConfigStorage.Instance.DatabaseConfig.MangaSettings.Count);
       ConfigStorage.Instance.DatabaseConfig.MangaSettings.ForEach(s => Log.AddFormat("Load settings for {0}, guid {1}.", s.MangaName, s.Manga));
     }

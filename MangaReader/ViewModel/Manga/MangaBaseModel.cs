@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using MangaReader.Manga;
+using MangaReader.Core.Manga;
 using MangaReader.ViewModel.Commands.Manga;
 using MangaReader.ViewModel.Commands.Primitives;
 using MangaReader.ViewModel.Primitive;

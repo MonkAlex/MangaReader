@@ -1,6 +1,6 @@
 ﻿using MangaReader.Core.Services.Config;
 
-namespace MangaReader.Manga.Grouple
+namespace MangaReader.Core.Manga.Grouple
 {
   public class MangaName
   {

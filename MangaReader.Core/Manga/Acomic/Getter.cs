@@ -4,10 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
-using MangaReader.Account;
-using MangaReader.Services;
+using MangaReader.Core.Account;
+using MangaReader.Core.Services;
 
-namespace MangaReader.Manga.Acomic
+namespace MangaReader.Core.Manga.Acomic
 {
   public static class Getter
   {
@@ -48,7 +48,7 @@ namespace MangaReader.Manga.Acomic
         manga.HasVolumes = document.DocumentNode.SelectNodes("//h2[@class=\"serial-chapters-head\"]") != null;
         manga.HasChapters = document.DocumentNode.SelectNodes("//div[@class=\"chapters\"]//a") != null;
       }
-      catch (Exception){}
+      catch (System.Exception){}
     }
 
     /// <summary>

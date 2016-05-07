@@ -1,7 +1,7 @@
 ﻿using System;
 using MangaReader.Core;
+using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
-using MangaReader.Manga;
 
 namespace MangaReader.CLI
 {

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MangaReader;
-using MangaReader.Manga;
-using MangaReader.Manga.Grouple;
+using MangaReader.Core.Manga;
+using MangaReader.Core.Manga.Grouple;
+using MangaReader.Core.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHibernate.Linq;
-using Chapter = MangaReader.Manga.Grouple.Chapter;
+using Chapter = MangaReader.Core.Manga.Grouple.Chapter;
 
 namespace Tests.Entities
 {
@@ -17,7 +17,7 @@ namespace Tests.Entities
     public void CreateWithHistoryAndMove()
     {
       foreach (var remove in Environment.Session.Query<Mangas>().Where(m => m.ServerName.Contains("btooom")).ToList())
-        MangaReader.Services.Library.Remove(remove);
+        MangaReader.Core.Services.Library.Remove(remove);
 
       var manga = Builder.CreateReadmanga();
       manga.Uri = new Uri("http://readmanga.me/btoom");
@@ -28,7 +28,7 @@ namespace Tests.Entities
       manga.Refresh();
       manga.Save();
       var chapters = new List<Chapter> { new Chapter(new Uri("http://mintmanga.com/btooom_/vol1/1?mature=1")) };
-      var chartersNotInHistory = MangaReader.Services.History.GetItemsWithoutHistory(chapters);
+      var chartersNotInHistory = History.GetItemsWithoutHistory(chapters);
       Assert.AreEqual(0, chartersNotInHistory.Count);
     }
   }

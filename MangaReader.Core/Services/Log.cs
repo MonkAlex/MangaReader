@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using MangaReader.Core.Services.Config;
 
-namespace MangaReader.Services
+namespace MangaReader.Core.Services
 {
   public static class Log
   {
@@ -48,7 +48,7 @@ namespace MangaReader.Services
     /// </summary>
     /// <param name="ex">Исключение.</param>
     /// <param name="messages">Сообщение.</param>
-    public static void Exception(Exception ex, params string[] messages)
+    public static void Exception(System.Exception ex, params string[] messages)
     {
       var contents = string.Concat(DateTime.Now.ToString("O"), "   ", string.Join(Environment.NewLine, messages),
         Environment.NewLine, ex, Environment.NewLine);

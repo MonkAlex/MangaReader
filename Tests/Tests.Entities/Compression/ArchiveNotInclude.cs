@@ -20,9 +20,9 @@ namespace Tests.Entities.Compression
 
       var directory = AddFile(downloadFolder);
       AddFile(directory);
-      MangaReader.Services.Compression.CompressChapters(downloadFolder);
+      MangaReader.Core.Services.Compression.CompressChapters(downloadFolder);
       CheckFiles(downloadFolder, 1, 1);
-      MangaReader.Services.Compression.CompressVolumes(downloadFolder);
+      MangaReader.Core.Services.Compression.CompressVolumes(downloadFolder);
       CheckFiles(downloadFolder, 2, 1, 1);
     }
 
@@ -40,9 +40,9 @@ namespace Tests.Entities.Compression
     private void CheckFiles(string downloadFolder, int archiveCount, params int[] filesCount)
     {
       var files = Directory.GetFiles(downloadFolder, "*", SearchOption.AllDirectories);
-      Assert.AreEqual(files.Count(f => f.EndsWith(MangaReader.Services.Compression.ArchiveFormat)), archiveCount);
+      Assert.AreEqual(files.Count(f => f.EndsWith(MangaReader.Core.Services.Compression.ArchiveFormat)), archiveCount);
 
-      var archives = files.Where(n => n.Contains(MangaReader.Services.Compression.ArchiveFormat));
+      var archives = files.Where(n => n.Contains(MangaReader.Core.Services.Compression.ArchiveFormat));
       var count = 0;
       foreach (var archive in archives)
       {

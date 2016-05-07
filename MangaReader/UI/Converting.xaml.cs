@@ -1,7 +1,8 @@
 ﻿using System.Windows;
 using MangaReader.Core.Services;
+using MangaReader.Services;
 
-namespace MangaReader.Services
+namespace MangaReader.UI
 {
   /// <summary>
   /// Логика взаимодействия для Converting.xaml

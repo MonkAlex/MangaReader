@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Windows.Data;
-using MangaReader.Manga;
+using MangaReader.Core.Manga;
 using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
 

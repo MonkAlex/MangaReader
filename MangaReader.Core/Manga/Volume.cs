@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
-using MangaReader.Services;
 
-namespace MangaReader.Manga
+namespace MangaReader.Core.Manga
 {
   public class Volume : IDownloadable
   {

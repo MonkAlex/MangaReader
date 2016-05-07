@@ -1,8 +1,8 @@
 ﻿using FluentNHibernate.Mapping;
-using MangaReader.Manga;
-using MangaReader.Manga.Acomic;
-using MangaReader.Manga.Grouple;
-using MangaReader.Manga.Hentaichan;
+using MangaReader.Core.Manga;
+using MangaReader.Core.Manga.Acomic;
+using MangaReader.Core.Manga.Grouple;
+using MangaReader.Core.Manga.Hentaichan;
 
 namespace MangaReader.Core.NHibernate
 {

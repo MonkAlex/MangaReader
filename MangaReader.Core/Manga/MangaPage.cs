@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using MangaReader.Services;
+using MangaReader.Core.Services;
 
-namespace MangaReader.Manga
+namespace MangaReader.Core.Manga
 {
   public class MangaPage : IDownloadable
   {
@@ -67,7 +67,7 @@ namespace MangaReader.Manga
       this.IsDownloaded = false;
 
       if (restartCounter > 3)
-        throw new Exception(string.Format("Load failed after {0} counts.", restartCounter));
+        throw new System.Exception(string.Format("Load failed after {0} counts.", restartCounter));
 
       Library.CheckPause();
       try
@@ -78,13 +78,13 @@ namespace MangaReader.Manga
 
         var file = ImageFile.DownloadFile(this.ImageLink);
         if (!file.Exist)
-          throw new Exception("Restart download, downloaded file is corrupted, link = " + this.ImageLink);
+          throw new System.Exception("Restart download, downloaded file is corrupted, link = " + this.ImageLink);
         var fileName = this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + file.Extension;
         file.Save(Path.Combine(chapterFolder, fileName));
         this.IsDownloaded = true;
         this.OnDownloadProgressChanged(null);
       }
-      catch (Exception ex)
+      catch (System.Exception ex)
       {
         Log.Exception(ex, this.Uri.OriginalString);
         ++restartCounter;

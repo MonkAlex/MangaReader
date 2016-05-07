@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-using MangaReader.Services;
+using MangaReader.Core.Services;
 using MangaReader.ViewModel.Primitive;
 
 namespace MangaReader.UI.Services

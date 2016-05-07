@@ -1,6 +1,5 @@
 ﻿using System.Linq;
-using MangaReader;
-using MangaReader.Manga;
+using MangaReader.Core.Manga;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHibernate.Linq;
 

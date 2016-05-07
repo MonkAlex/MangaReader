@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MangaReader.Manga
+namespace MangaReader.Core.Manga
 {
   public interface IDownloadable
   {

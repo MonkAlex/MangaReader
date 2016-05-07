@@ -1,4 +1,4 @@
-﻿using MangaReader.Services;
+﻿using MangaReader.Core.Services;
 
 namespace MangaReader.ViewModel.Commands.Primitives
 {

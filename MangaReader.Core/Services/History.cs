@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
-using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using NHibernate.Linq;
-using MangaReader.Manga;
 
-namespace MangaReader.Services
+namespace MangaReader.Core.Services
 {
   public static class History
   {

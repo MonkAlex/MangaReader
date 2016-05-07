@@ -4,10 +4,10 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
-using MangaReader.Services;
 
-namespace MangaReader.Manga
+namespace MangaReader.Core.Manga
 {
   /// <summary>
   /// Глава.
@@ -93,7 +93,7 @@ namespace MangaReader.Manga
     public virtual void Download(string downloadFolder)
     {
       if (restartCounter > 3)
-        throw new Exception(string.Format("Load failed after {0} counts.", restartCounter));
+        throw new System.Exception(string.Format("Load failed after {0} counts.", restartCounter));
 
       var chapterFolder = Path.Combine(downloadFolder, this.Folder);
 
@@ -126,7 +126,7 @@ namespace MangaReader.Manga
         ++restartCounter;
         Download(downloadFolder);
       }
-      catch (Exception ex)
+      catch (System.Exception ex)
       {
         Log.Exception(ex, this.Uri.ToString(), this.Name);
         ++restartCounter;

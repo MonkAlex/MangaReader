@@ -5,18 +5,16 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using MangaReader.Core.Entity;
 using MangaReader.Core.Exception;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Properties;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
-using MangaReader.Services;
 
-namespace MangaReader.Manga
+namespace MangaReader.Core.Manga
 {
   [XmlInclude(typeof(Grouple.Readmanga)), XmlInclude(typeof(Acomic.Acomics))]
-  public abstract class Mangas : Entity, INotifyPropertyChanged, IDownloadable
+  public abstract class Mangas : Entity.Entity, INotifyPropertyChanged, IDownloadable
   {
     #region Свойства
 
@@ -120,7 +118,7 @@ namespace MangaReader.Manga
       {
         if (Mapping.Initialized)
           return ConfigStorage.Instance.DatabaseConfig.MangaSettings.SingleOrDefault(s => Equals(s.Manga, this.GetType().TypeProperty()));
-        throw new Exception("Mappings not initialized.");
+        throw new System.Exception("Mappings not initialized.");
       }
     }
 
@@ -354,7 +352,7 @@ namespace MangaReader.Manga
         foreach (var ex in ae.InnerExceptions)
           Log.Exception(ex);
       }
-      catch (Exception ex)
+      catch (System.Exception ex)
       {
         Log.Exception(ex);
       }

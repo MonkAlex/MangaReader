@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using Hardcodet.Wpf.TaskbarNotification;
-using MangaReader.Manga;
+using MangaReader.Core.Manga;
 using MangaReader.Properties;
 using MangaReader.ViewModel.Commands;
 using MangaReader.ViewModel.Commands.Manga;

@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
-using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
-using MangaReader.Manga;
 
-namespace MangaReader.Services
+namespace MangaReader.Core.Services
 {
   [Obsolete("Класс нужен только для старых данных.")]
   public static class Cache
@@ -27,7 +26,7 @@ namespace MangaReader.Services
 
       var obsoleteManga = File.Exists(CacheFile) ?
 #pragma warning disable CS0612 // Obsolete методы используются для конвертации
-          Serializer<ObservableCollection<Manga.Manga>>.Load(CacheFile) :
+          Serializer<ObservableCollection<MangaReader.Manga.Manga>>.Load(CacheFile) :
 #pragma warning restore CS0612
           null;
       if (obsoleteManga != null)

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Linq;
-using MangaReader;
-using MangaReader.Manga;
-using MangaReader.Manga.Acomic;
-using MangaReader.Manga.Grouple;
+using MangaReader.Core.Manga;
+using MangaReader.Core.Manga.Acomic;
+using MangaReader.Core.Manga.Grouple;
 
 namespace Tests.Entities
 {

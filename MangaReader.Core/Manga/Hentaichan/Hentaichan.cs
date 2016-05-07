@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using MangaReader.Core.NHibernate;
-using MangaReader.Services;
+using MangaReader.Core.Services;
 
-namespace MangaReader.Manga.Hentaichan
+namespace MangaReader.Core.Manga.Hentaichan
 {
   public class Hentaichan : Mangas
   {

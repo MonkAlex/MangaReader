@@ -4,11 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
-using MangaReader.Account;
+using MangaReader.Core.Account;
+using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
-using MangaReader.Services;
 
-namespace MangaReader.Manga.Hentaichan
+namespace MangaReader.Core.Manga.Hentaichan
 {
   public static class Getter
   {

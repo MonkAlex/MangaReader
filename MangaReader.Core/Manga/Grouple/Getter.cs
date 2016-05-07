@@ -5,11 +5,11 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
-using MangaReader.Account;
-using MangaReader.Services;
+using MangaReader.Core.Account;
+using MangaReader.Core.Services;
 using Newtonsoft.Json.Linq;
 
-namespace MangaReader.Manga.Grouple
+namespace MangaReader.Core.Manga.Grouple
 {
   public static class Getter
   {

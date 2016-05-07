@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Threading;
 using MangaReader.Core.Exception;
+using MangaReader.Core.Manga;
+using MangaReader.Core.Manga.Acomic;
 using MangaReader.Core.NHibernate;
-using MangaReader.Manga;
-using MangaReader.Manga.Acomic;
 using MangaReader.Core.Properties;
-using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using NHibernate.Linq;
 
-namespace MangaReader.Services
+namespace MangaReader.Core.Services
 {
   public static class Library
   {
@@ -267,7 +264,7 @@ namespace MangaReader.Services
         foreach (var ex in ae.InnerExceptions)
           Log.Exception(ex);
       }
-      catch (Exception ex)
+      catch (System.Exception ex)
       {
         Log.Exception(ex);
       }

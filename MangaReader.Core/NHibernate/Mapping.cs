@@ -3,7 +3,6 @@ using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
-using MangaReader.Services;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;

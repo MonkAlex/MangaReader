@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using MangaReader.Services;
+using MangaReader.Core.Services;
 using NHibernate.Linq;
 
 namespace MangaReader.Core.NHibernate

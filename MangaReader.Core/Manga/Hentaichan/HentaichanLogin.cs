@@ -8,10 +8,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
-using MangaReader.Account;
-using MangaReader.Services;
+using MangaReader.Core.Account;
+using MangaReader.Core.Services;
 
-namespace MangaReader.Manga.Hentaichan
+namespace MangaReader.Core.Manga.Hentaichan
 {
   public class HentaichanLogin : Login
   {
@@ -69,7 +69,7 @@ namespace MangaReader.Manga.Hentaichan
               .Value;
           this.IsLogined = true;
         }
-        catch (Exception ex)
+        catch (System.Exception ex)
         {
           Log.Exception(ex);
           this.IsLogined = false;

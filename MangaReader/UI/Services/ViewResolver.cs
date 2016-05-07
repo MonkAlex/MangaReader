@@ -10,8 +10,8 @@ namespace MangaReader.UI.Services
 
     public void ViewInit()
     {
-      AddOrReplace(typeof(ViewModel.Initialize), typeof(MangaReader.Services.Converting));
-      AddOrReplace(typeof(ViewModel.DownloadUpdate), typeof(MangaReader.Services.Converting));
+      AddOrReplace(typeof(ViewModel.Initialize), typeof(MangaReader.UI.Converting));
+      AddOrReplace(typeof(ViewModel.DownloadUpdate), typeof(MangaReader.UI.Converting));
       AddOrReplace(typeof(ViewModel.LoginModel), typeof(MangaReader.UI.AddNewManga.Login));
       AddOrReplace(typeof(ViewModel.AddNewModel), typeof(MangaReader.UI.AddNewManga.AddNew));
       AddOrReplace(typeof(ViewModel.WindowModel), typeof(MangaReader.UI.MainWindow));

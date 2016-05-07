@@ -6,10 +6,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
-using MangaReader.Account;
-using MangaReader.Services;
+using MangaReader.Core.Account;
+using MangaReader.Core.Services;
 
-namespace MangaReader.Manga.Grouple
+namespace MangaReader.Core.Manga.Grouple
 {
   public class GroupleLogin : Login
   {
@@ -35,7 +35,7 @@ namespace MangaReader.Manga.Grouple
           var result = await Client.UploadValuesTaskAsync("internal/auth/j_spring_security_check", "POST", loginData);
           IsLogined = Encoding.UTF8.GetString(result).Contains("internal/auth/logout");
         }
-        catch (Exception ex)
+        catch (System.Exception ex)
         {
           Log.Exception(ex);
         }

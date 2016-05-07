@@ -1,6 +1,5 @@
 ﻿using System;
-using MangaReader.Account;
-using MangaReader.Services;
+using MangaReader.Core.Account;
 
 namespace MangaReader.Core.Services
 {

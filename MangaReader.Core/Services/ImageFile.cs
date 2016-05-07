@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 
-namespace MangaReader.Services
+namespace MangaReader.Core.Services
 {
   public class ImageFile
   {
@@ -96,7 +96,7 @@ namespace MangaReader.Services
           result = ms.ToArray();
         }
       }
-      catch (Exception ex)
+      catch (System.Exception ex)
       {
         Log.Exception(ex, string.Format("Загрузка {0} не завершена.", uri));
         return file;

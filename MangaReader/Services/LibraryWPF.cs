@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Linq;
+using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
-using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.UI.MainForm;
 using MangaReader.ViewModel;
-using MangaReader.ViewModel.Manga;
 
 namespace MangaReader.Services
 {

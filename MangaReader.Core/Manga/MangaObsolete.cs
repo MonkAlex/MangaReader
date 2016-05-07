@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Text.RegularExpressions;
 using MangaReader.Core.Properties;
-using MangaReader.Services;
 
 namespace MangaReader.Manga
 {
@@ -131,15 +128,6 @@ namespace MangaReader.Manga
     /// Обновить информацию о манге - название, главы, обложка.
     /// </summary>
     public void Refresh()
-    {
-      throw new NotImplementedException("Obsolete class");
-    }
-
-    /// <summary>
-    /// Получить список глав.
-    /// </summary>
-    /// <returns>Список глав.</returns>
-    public List<Chapter> GetAllChapters()
     {
       throw new NotImplementedException("Obsolete class");
     }

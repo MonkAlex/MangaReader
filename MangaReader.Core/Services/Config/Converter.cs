@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Linq;
-using MangaReader.Manga.Acomic;
-using MangaReader.Manga.Grouple;
-using MangaReader.Services;
+using MangaReader.Core.Manga.Acomic;
+using MangaReader.Core.Manga.Grouple;
 
 namespace MangaReader.Core.Services.Config
 {

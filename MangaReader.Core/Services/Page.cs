@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using MangaReader.Account;
+using MangaReader.Core.Account;
 using MangaReader.Core.Properties;
 
-namespace MangaReader.Services
+namespace MangaReader.Core.Services
 {
   public class Page
   {
@@ -26,7 +26,7 @@ namespace MangaReader.Services
       try
       {
         if (restartCounter > 3)
-          throw new Exception(string.Format("Load failed after {0} counts.", restartCounter));
+          throw new System.Exception(string.Format("Load failed after {0} counts.", restartCounter));
 
         var webClient = client ?? new CookieClient();
         var content = webClient.DownloadString(url);
@@ -46,7 +46,7 @@ namespace MangaReader.Services
         ++restartCounter;
         return GetPage(url, client, restartCounter);
       }
-      catch (Exception ex)
+      catch (System.Exception ex)
       {
         Log.Exception(ex, ", ссылка:", url.ToString());
         return new Page();
@@ -65,7 +65,7 @@ namespace MangaReader.Services
       try
       {
         if (restartCounter > 3)
-          throw new Exception(string.Format("Load failed after {0} counts.", restartCounter));
+          throw new System.Exception(string.Format("Load failed after {0} counts.", restartCounter));
 
         var webClient = client ?? new CookieClient();
         var task = webClient.DownloadStringTaskAsync(url).ConfigureAwait(false);
@@ -85,7 +85,7 @@ namespace MangaReader.Services
         ++restartCounter;
         return await GetPageAsync(url, client, restartCounter).ConfigureAwait(false);
       }
-      catch (Exception ex)
+      catch (System.Exception ex)
       {
         Log.Exception(ex, ", ссылка:", url.ToString());
         return new Page();

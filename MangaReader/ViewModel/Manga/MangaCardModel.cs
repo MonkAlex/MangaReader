@@ -2,8 +2,8 @@
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Input;
-using MangaReader.Manga;
-using MangaReader.Services;
+using MangaReader.Core.Manga;
+using MangaReader.Core.Services;
 using MangaReader.UI.Services;
 using MangaReader.ViewModel.Commands.Manga;
 

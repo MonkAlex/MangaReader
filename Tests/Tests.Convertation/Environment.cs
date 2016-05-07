@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Reflection;
-using MangaReader.Services;
+using MangaReader.Core.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Convertation

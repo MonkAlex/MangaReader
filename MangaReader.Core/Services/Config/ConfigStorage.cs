@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using MangaReader.Core.NHibernate;
-using MangaReader.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 

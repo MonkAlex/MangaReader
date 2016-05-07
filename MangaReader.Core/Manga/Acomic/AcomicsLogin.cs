@@ -5,10 +5,10 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
-using MangaReader.Account;
-using MangaReader.Services;
+using MangaReader.Core.Account;
+using MangaReader.Core.Services;
 
-namespace MangaReader.Manga.Acomic
+namespace MangaReader.Core.Manga.Acomic
 {
   public class AcomicsLogin : Login
   {
@@ -42,7 +42,7 @@ namespace MangaReader.Manga.Acomic
               .Value;
           this.IsLogined = true;
         }
-        catch (Exception ex)
+        catch (System.Exception ex)
         {
           Log.Exception(ex);
           this.IsLogined = false;

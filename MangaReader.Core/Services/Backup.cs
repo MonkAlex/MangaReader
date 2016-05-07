@@ -1,9 +1,8 @@
-using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 
-namespace MangaReader.Services
+namespace MangaReader.Core.Services
 {
   internal class Backup
   {
@@ -25,7 +24,7 @@ namespace MangaReader.Services
         }
         File.Move(fileName, backupFileName);
       }
-      catch (Exception ex)
+      catch (System.Exception ex)
       {
         Log.Exception(ex, "Перемещение файла не удалось, пытаемся скопировать.");
         try
@@ -34,7 +33,7 @@ namespace MangaReader.Services
             File.Copy(backupFileName, GetNewBackupFileName(backupFileName));
           File.Copy(fileName, backupFileName, true);
         }
-        catch (Exception subException)
+        catch (System.Exception subException)
         {
           Log.Exception(subException, "Создание копии вместо перемещения тоже не удалось.");
         }

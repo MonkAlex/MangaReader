@@ -1,11 +1,5 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
-using MangaReader.Manga;
-using MangaReader.Properties;
-using MangaReader.Services;
-using MangaReader.Services.Config;
-using MangaReader.UI.MainForm;
 
 namespace MangaReader.UI
 {

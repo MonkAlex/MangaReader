@@ -1,5 +1,5 @@
 ﻿using System;
-using MangaReader.Manga;
+using MangaReader.Core.Manga;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Entities.CRUD

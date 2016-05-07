@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using MangaReader.Manga;
+using MangaReader.Core.Manga;
 
 namespace MangaReader.ViewModel.Manga
 {

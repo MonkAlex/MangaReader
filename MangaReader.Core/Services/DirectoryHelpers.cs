@@ -3,7 +3,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using MangaReader.Core.Exception;
 
-namespace MangaReader.Services
+namespace MangaReader.Core.Services
 {
   public static class DirectoryHelpers
   {
@@ -35,7 +35,7 @@ namespace MangaReader.Services
           CopyDirectory(folder, dest);
         }
       }
-      catch (Exception e)
+      catch (System.Exception e)
       {
         throw new CopyDirectoryFailed("Не удалось скопировать файл или папку. См InnerException.", sourceFolder, destFolder, e);
       }
@@ -48,7 +48,7 @@ namespace MangaReader.Services
         CopyDirectory(sourceFolder, destFolder);
         Directory.Delete(sourceFolder, true);
       }
-      catch (Exception ex)
+      catch (System.Exception ex)
       {
         throw new CopyDirectoryFailed("Не удалось переместить папку. См InnerException.", sourceFolder, destFolder, ex);
       }

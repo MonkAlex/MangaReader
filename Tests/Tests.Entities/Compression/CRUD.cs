@@ -19,10 +19,10 @@ namespace Tests.Entities.Compression
       Directory.CreateDirectory(downloadFolder);
 
       var directory = AddFile(downloadFolder);
-      MangaReader.Services.Compression.CompressVolumes(downloadFolder);
+      MangaReader.Core.Services.Compression.CompressVolumes(downloadFolder);
       CheckFiles(downloadFolder, 1);
       AddFile(downloadFolder, directory);
-      MangaReader.Services.Compression.CompressVolumes(downloadFolder);
+      MangaReader.Core.Services.Compression.CompressVolumes(downloadFolder);
       CheckFiles(downloadFolder, 2);
     }
 
@@ -40,7 +40,7 @@ namespace Tests.Entities.Compression
     private void CheckFiles(string downloadFolder, int filesCount)
     {
       var files = Directory.GetFiles(downloadFolder);
-      Assert.AreEqual(files.Count(f => f.EndsWith(MangaReader.Services.Compression.ArchiveFormat)), 1);
+      Assert.AreEqual(files.Count(f => f.EndsWith(MangaReader.Core.Services.Compression.ArchiveFormat)), 1);
 
       using (var zip = ZipFile.Open(files.Last(), ZipArchiveMode.Update, Encoding.UTF8))
       {

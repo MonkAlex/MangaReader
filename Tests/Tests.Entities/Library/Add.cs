@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
-using MangaReader.Manga;
-using MangaReader.Manga.Grouple;
+using MangaReader.Core.Manga.Grouple;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Entities.Library
@@ -16,7 +15,7 @@ namespace Tests.Entities.Library
       var result = false;
       try
       {
-        result = MangaReader.Services.Library.Add(@"http://example.com/");
+        result = MangaReader.Core.Services.Library.Add(@"http://example.com/");
       }
       catch (Exception)
       {
@@ -38,11 +37,11 @@ namespace Tests.Entities.Library
         .Where(m => m.Uri.AbsoluteUri.Contains("berserk"))
         .ToList();
       foreach (var manga in mangas)
-        MangaReader.Services.Library.Remove(manga);
+        MangaReader.Core.Services.Library.Remove(manga);
 
       try
       {
-        result = MangaReader.Services.Library.Add(uri);
+        result = MangaReader.Core.Services.Library.Add(uri);
       }
       catch (Exception)
       {
@@ -52,7 +51,7 @@ namespace Tests.Entities.Library
       Assert.IsTrue(result);
 
       // Проверка повторного добавления.
-      result = MangaReader.Services.Library.Add(uri);
+      result = MangaReader.Core.Services.Library.Add(uri);
       Assert.IsFalse(result);
     }
   }

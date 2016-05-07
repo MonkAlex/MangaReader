@@ -1,5 +1,5 @@
 ﻿using System.Windows.Data;
-using MangaReader.Manga;
+using MangaReader.Core.Manga;
 using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands.Manga

@@ -1,10 +1,8 @@
-﻿using System;
+﻿using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
+using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
-using MangaReader.Manga;
 using MangaReader.Properties;
-using MangaReader.Services;
-using MangaReader.Services.Config;
 using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands

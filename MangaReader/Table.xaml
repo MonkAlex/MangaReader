@@ -156,12 +156,10 @@
             </StatusBar>
             <Button Grid.Column="1"
                     Command="{Binding UpdateWithPause}"/>
-            <Button Content="{x:Static resx:Strings.Library_Action_Add}" 
-                Grid.Column="2"
-                Command="{Binding AddNewManga}"/>
-            <Button Content="{x:Static resx:Strings.Library_Action_Settings}"  
-                Grid.Column="3"
-                Command="{Binding ShowSettings}"/>
+            <Button Grid.Column="2" 
+                    Command="{Binding AddNewManga}"/>
+            <Button Grid.Column="3"
+                    Command="{Binding ShowSettings}"/>
         </Grid>
     </Grid>
 </base:BaseForm>

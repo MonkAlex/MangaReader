@@ -13,11 +13,11 @@ namespace MangaReader.ViewModel.Commands.AddManga
       return base.CanExecute(parameter) && (!setting.Login.IsLogined || setting.Login.CanLogin);
     }
 
-    public override void Execute(object parameter)
+    public async override void Execute(object parameter)
     {
       base.Execute(parameter);
 
-      setting.Login.DoLogin();
+      await setting.Login.DoLogin();
     }
 
     public LoginCommand(MangaSetting setting)

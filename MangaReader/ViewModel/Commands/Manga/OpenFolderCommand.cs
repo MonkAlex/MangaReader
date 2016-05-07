@@ -17,6 +17,11 @@ namespace MangaReader.ViewModel.Commands.Manga
         Library.Status = Strings.Library_Status_FolderNotFound;
     }
 
+    public override bool CanExecute(object parameter)
+    {
+      return true;
+    }
+
     public OpenFolderCommand() : base(null)
     {
       this.Name = Strings.Manga_Action_OpenFolder;

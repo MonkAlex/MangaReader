@@ -17,7 +17,8 @@ namespace MangaReader.Services
     /// <returns></returns>
     public static void Initialize(BaseForm main)
     {
-      Library.SelectedManga = main.Model.View.Cast<MangaViewModel>().Select(vm => vm.Manga).FirstOrDefault();
+#warning Blazard form
+//    Library.SelectedManga = main.Model.View.Cast<MangaViewModel>().Select(vm => vm.Manga).FirstOrDefault();
       Library.UpdateStarted += LibraryOnUpdateStarted;
       Library.UpdateCompleted += LibraryOnUpdateCompleted;
       Library.UpdateMangaCompleted += LibraryOnUpdateMangaCompleted;

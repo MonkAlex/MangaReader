@@ -1,7 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using MangaReader.Manga;
@@ -35,6 +37,8 @@ namespace MangaReader.ViewModel
     }
 
     public ListCollectionView View { get; set; }
+
+    public ObservableCollection<MangaViewModel> MangaViewModels { get; private set; } 
 
     public LibraryFilter LibraryFilter { get; set; }
 
@@ -107,11 +111,28 @@ namespace MangaReader.ViewModel
         manga.Name.ToLowerInvariant().Contains(LibraryFilter.Name.ToLowerInvariant());
     }
 
+    private void LibraryOnMangaDeleted(object sender, Mangas mangas)
+    {
+      var model = this.MangaViewModels.SingleOrDefault(m => Equals(m.Manga, mangas));
+      if (model != null)
+        this.MangaViewModels.Remove(model);
+    }
+
+    private void LibraryOnMangaAdded(object sender, Mangas mangas)
+    {
+      var model = this.MangaViewModels.SingleOrDefault(m => Equals(m.Manga, mangas));
+      if (model == null)
+        this.MangaViewModels.Add(new MangaViewModel(mangas));
+    }
+
     public MainPageModel()
     {
       LibraryFilter = ConfigStorage.Instance.ViewConfig.LibraryFilter;
+      this.MangaViewModels = new ObservableCollection<MangaViewModel>(Repository.Get<Mangas>().Select(m => new MangaViewModel(m)));
+      Library.MangaAdded += LibraryOnMangaAdded;
+      Library.MangaDeleted += LibraryOnMangaDeleted;
 
-      View = new ListCollectionView(Library.LibraryMangas.Select(m => new MangaViewModel(m)).ToList())
+      View = new ListCollectionView(MangaViewModels)
       {
         Filter = Filter,
         CustomSort = new MangaViewModel(null)

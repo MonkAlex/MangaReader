@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MangaReader.Core.NHibernate;
 using MangaReader.Services;
 
 namespace MangaReader.Manga.Hentaichan
@@ -27,9 +28,13 @@ namespace MangaReader.Manga.Hentaichan
 
     public override bool IsValid()
     {
-      return base.IsValid() && !Library.LibraryMangas.Any(m => !Equals(m, this) &&
-                                                               Equals(m.ServerName, this.ServerName) &&
-                                                               Equals(m.GetType().TypeProperty(), Type));
+      var baseValidation = base.IsValid();
+      if (!baseValidation)
+        return false;
+
+      var doubles = Repository.Get<Hentaichan>().Any(m => m.Id != this.Id && m.ServerName == this.ServerName);
+
+      return !doubles;
     }
 
     protected override void UpdateContent()

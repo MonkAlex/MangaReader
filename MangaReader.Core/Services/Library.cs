@@ -56,18 +56,6 @@ namespace MangaReader.Services
       }
     }
 
-    public static ObservableCollection<Mangas> LibraryMangas
-    {
-      get
-      {
-        return libraryMangas ?? (libraryMangas = new ObservableCollection<Mangas>(Repository.Get<Mangas>().Where(n => n != null)));
-      }
-    }
-
-    private static ObservableCollection<Mangas> libraryMangas;
-
-    public static Mangas SelectedManga { get; set; }
-
     private static int mangaIndex;
 
     private static int mangasCount;
@@ -132,8 +120,8 @@ namespace MangaReader.Services
       if (newManga == null || !newManga.IsValid())
         return false;
 
+      OnMangaAdded(newManga);
       Status = Strings.Library_Status_MangaAdded + newManga.Name;
-      LibraryMangas.Add(newManga);
       return true;
     }
 
@@ -146,10 +134,8 @@ namespace MangaReader.Services
       if (manga == null)
         return;
 
-      if (LibraryMangas.Contains(manga))
-        LibraryMangas.Remove(manga);
-
       manga.Delete();
+      OnMangaDeleted(manga);
 
       var removed = Strings.Library_Status_MangaRemoved + manga.Name;
       Status = removed;
@@ -166,7 +152,7 @@ namespace MangaReader.Services
 
         if (IsAvaible)
         {
-          ThreadAction(() => Update(LibraryMangas, ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
+          ThreadAction(() => Update(Repository.Get<Mangas>(), ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
         }
       }
     }
@@ -317,6 +303,10 @@ namespace MangaReader.Services
 
     public static event EventHandler<string> StatusChanged;
 
+    public static event EventHandler<Mangas> MangaAdded;
+
+    public static event EventHandler<Mangas> MangaDeleted;
+
     private static void OnUpdateStarted()
     {
       UpdateStarted?.Invoke(null, EventArgs.Empty);
@@ -352,7 +342,16 @@ namespace MangaReader.Services
       StatusChanged?.Invoke(null, e);
     }
 
-    #endregion
+    private static void OnMangaAdded(Mangas e)
+    {
+      MangaAdded?.Invoke(null, e);
+    }
 
+    private static void OnMangaDeleted(Mangas e)
+    {
+      MangaDeleted?.Invoke(null, e);
+    }
+
+    #endregion
   }
 }

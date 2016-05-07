@@ -14,6 +14,11 @@ namespace MangaReader.ViewModel.Commands.Manga
       Process.Start(manga.Uri.OriginalString);
     }
 
+    public override bool CanExecute(object parameter)
+    {
+      return true;
+    }
+
     public OpenUrlMangaCommand(ListCollectionView view) : base(view)
     {
       this.Name = Strings.Manga_Action_View;

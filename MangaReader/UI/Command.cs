@@ -63,16 +63,17 @@ namespace MangaReader.UI
 
     private static void DoSelectNextManga(object sender, ExecutedRoutedEventArgs e)
     {
-      var baseForm = sender as BaseForm;
-      var filtered = baseForm.Model.View.Cast<Mangas>().ToList();
-      var manga = Library.SelectedManga;
-      if (manga != null && !Equals(filtered.LastOrDefault(), manga))
-      {
-        Library.SelectedManga = filtered.Contains(manga) ?
-          filtered.SkipWhile(m => !Equals(m, manga)).Skip(1).FirstOrDefault() :
-          filtered.FirstOrDefault();
-        (e.Source as FrameworkElement).DataContext = Library.SelectedManga;
-      }
+#warning Blazard form
+/*      var baseForm = sender as BaseForm;
+            var filtered = baseForm.Model.View.Cast<Mangas>().ToList();
+            var manga = Library.SelectedManga;
+            if (manga != null && !Equals(filtered.LastOrDefault(), manga))
+            {
+              Library.SelectedManga = filtered.Contains(manga) ?
+                filtered.SkipWhile(m => !Equals(m, manga)).Skip(1).FirstOrDefault() :
+                filtered.FirstOrDefault();
+              (e.Source as FrameworkElement).DataContext = Library.SelectedManga;
+            }*/
     }
 
     private static void CanSelectPrevManga(object sender, CanExecuteRoutedEventArgs e)
@@ -82,16 +83,17 @@ namespace MangaReader.UI
 
     private static void DoSelectPrevManga(object sender, ExecutedRoutedEventArgs e)
     {
-      var baseForm = sender as BaseForm;
-      var filtered = baseForm.Model.View.Cast<Mangas>().ToList();
-      var manga = Library.SelectedManga;
-      if (manga != null && !Equals(filtered.FirstOrDefault(), manga))
-      {
-        Library.SelectedManga = filtered.Contains(manga) ?
-          filtered.TakeWhile(m => !Equals(m, manga)).LastOrDefault() :
-          filtered.FirstOrDefault();
-        (e.Source as FrameworkElement).DataContext = Library.SelectedManga;
-      }
+#warning Blazard form
+/*      var baseForm = sender as BaseForm;
+            var filtered = baseForm.Model.View.Cast<Mangas>().ToList();
+            var manga = Library.SelectedManga;
+            if (manga != null && !Equals(filtered.FirstOrDefault(), manga))
+            {
+              Library.SelectedManga = filtered.Contains(manga) ?
+                filtered.TakeWhile(m => !Equals(m, manga)).LastOrDefault() :
+                filtered.FirstOrDefault();
+              (e.Source as FrameworkElement).DataContext = Library.SelectedManga;
+            }*/
     }
 
     private static void CanShowAbout(object sender, CanExecuteRoutedEventArgs e)

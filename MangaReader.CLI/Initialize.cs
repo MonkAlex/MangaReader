@@ -1,6 +1,7 @@
 ﻿using System;
 using MangaReader.Core;
-using MangaReader.Services;
+using MangaReader.Core.NHibernate;
+using MangaReader.Manga;
 
 namespace MangaReader.CLI
 {
@@ -11,7 +12,7 @@ namespace MangaReader.CLI
       Client.Init();
       Client.Start(new ConsoleProgress());
 
-      foreach (var manga in Library.LibraryMangas)
+      foreach (var manga in Repository.Get<Mangas>())
       {
         Console.WriteLine("{0}:{1}", manga.Id, manga);
       }

@@ -1,5 +1,7 @@
 ﻿using System;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services.Config;
+using MangaReader.Manga;
 using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.Services.Config;
@@ -16,7 +18,7 @@ namespace MangaReader.ViewModel.Commands
 
       if (Library.IsAvaible)
       {
-        Library.ThreadAction(() => Library.Update(Library.LibraryMangas, ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
+        Library.ThreadAction(() => Library.Update(Repository.Get<Mangas>(), ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
       }
     }
 

@@ -11,7 +11,8 @@ namespace MangaReader.UI.MainForm
     public Blazard()
     {
       InitializeComponent();
-      this.BlazardManga.DataContext = Library.SelectedManga;
+#warning Blazard form
+//      this.BlazardManga.DataContext = Library.SelectedManga;
     }
   }
 }

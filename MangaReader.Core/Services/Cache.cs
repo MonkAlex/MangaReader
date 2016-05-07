@@ -26,7 +26,7 @@ namespace MangaReader.Core.Services
 
       var obsoleteManga = File.Exists(CacheFile) ?
 #pragma warning disable CS0612 // Obsolete методы используются для конвертации
-          Serializer<ObservableCollection<MangaReader.Manga.Manga>>.Load(CacheFile) :
+          Serializer<ObservableCollection<Manga.Manga>>.Load(CacheFile) :
 #pragma warning restore CS0612
           null;
       if (obsoleteManga != null)

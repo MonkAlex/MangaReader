@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using MangaReader.Core.Properties;
 
-namespace MangaReader.Manga
+namespace MangaReader.Core.Manga
 {
   /// <summary>
   /// Манга.

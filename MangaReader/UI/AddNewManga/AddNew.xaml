@@ -43,7 +43,7 @@
             <TextBlock Text="{x:Static properties:Strings.Input_Text}" 
                        TextWrapping="WrapWithOverflow"/>
         </Label>
-        <TextBox Grid.Column="0" Grid.Row="4" Text="{Binding InputText}"/>
+        <TextBox Grid.Column="0" Grid.Row="4" Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}"/>
         <Button Style="{DynamicResource BigButton}"
                 Command="{Binding Add}"
                 Grid.Column="1"

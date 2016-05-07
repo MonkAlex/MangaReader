@@ -19,11 +19,11 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBox Grid.Column="0"
-                 Text="{Binding Login}"
+                 Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"
                  IsEnabled="{Binding CanEdit}"
                  Grid.Row="0"/>
         <TextBox Grid.Column="0"
-                 Text="{Binding Password}"
+                 Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
                  IsEnabled="{Binding CanEdit}"
                  Grid.Row="1"/>
         <Button x:Name="Enter" 

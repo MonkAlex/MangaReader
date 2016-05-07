@@ -36,6 +36,7 @@ namespace MangaReader.ViewModel.Commands.Manga
       catch (Exception ex)
       {
         MessageBox.Show(ex.Message);
+        model.Manga.Update();
       }
     }
 

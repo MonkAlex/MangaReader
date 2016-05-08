@@ -39,8 +39,8 @@ namespace MangaReader.ViewModel
     public override void Show()
     {
       base.Show();
-      this.Content = new Blazard() {DataContext = new MainPageModel()};
-      var window = ViewService.Instance.TryGet(this);
+      //this.Content = new Blazard() {DataContext = new MainPageModel()};
+      var window = ViewService.Instance.TryGet<System.Windows.Window>(this);
       if (window != null)
       {
         window.StateChanged += (o, a) => WindowOnStateChanged(window, a);
@@ -51,11 +51,12 @@ namespace MangaReader.ViewModel
         ConfigStorage.Instance.ViewConfig.UpdateWindowState(window);
         window.Show();
       }
+      new MainPageModel().Show();
     }
 
     public void SaveWindowState()
     {
-      var window = ViewService.Instance.TryGet(this);
+      var window = ViewService.Instance.TryGet<System.Windows.Window>(this);
       if (window != null)
       {
         ConfigStorage.Instance.ViewConfig.SaveWindowState(window);

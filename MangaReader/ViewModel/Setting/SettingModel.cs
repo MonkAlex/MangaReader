@@ -30,7 +30,7 @@ namespace MangaReader.ViewModel.Setting
     {
       base.Show();
 
-      var window = ViewService.Instance.TryGet(this);
+      var window = ViewService.Instance.TryGet<System.Windows.Window>(this);
       if (window != null)
       {
         window.ShowDialog();

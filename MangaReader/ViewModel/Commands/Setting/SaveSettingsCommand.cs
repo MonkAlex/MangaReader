@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using MangaReader.Core.Services.Config;
+﻿using MangaReader.Core.Services.Config;
 using MangaReader.UI.Services;
 using MangaReader.ViewModel.Commands.Primitives;
 using MangaReader.ViewModel.Setting;
@@ -19,7 +18,7 @@ namespace MangaReader.ViewModel.Commands.Setting
 
       ConfigStorage.Instance.Save();
 
-      var window = ViewService.Instance.TryGet(settingModel);
+      var window = ViewService.Instance.TryGet<System.Windows.Window>(settingModel);
       if (window != null)
         window.Close();
     }

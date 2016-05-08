@@ -7,6 +7,7 @@ using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using MangaReader.Properties;
+using MangaReader.UI.Services;
 using MangaReader.ViewModel.Commands;
 using MangaReader.ViewModel.Commands.Primitives;
 using MangaReader.ViewModel.Manga;
@@ -113,6 +114,8 @@ namespace MangaReader.ViewModel
     public override void Show()
     {
       base.Show();
+
+      WindowModel.Instance.Content = ViewService.Instance.TryGet<System.Windows.FrameworkElement>(this);
     }
 
     public MainPageModel()

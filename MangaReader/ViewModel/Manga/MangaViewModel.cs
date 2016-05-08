@@ -93,15 +93,15 @@ namespace MangaReader.ViewModel.Manga
 
     private void SetCompletedIcon(bool isCompleted)
     {
-      var result = "Icons/play.png";
+      var result = "pack://application:,,,/Icons/play.png";
       switch (isCompleted)
       {
         case true:
-          result = "Icons/stop.png";
+          result = "pack://application:,,,/Icons/stop.png";
           break;
 
         case false:
-          result = "Icons/play.png";
+          result = "pack://application:,,,/Icons/play.png";
           break;
       }
       this.CompletedIcon = result;
@@ -126,15 +126,15 @@ namespace MangaReader.ViewModel.Manga
 
     private void SetNeedUpdate(bool needUpdate)
     {
-      var result = "Icons/play.png";
+      var result = "pack://application:,,,/Icons/play.png";
       switch (needUpdate)
       {
         case true:
-          result = "Icons/yes.png";
+          result = "pack://application:,,,/Icons/yes.png";
           break;
 
         case false:
-          result = "Icons/no.png";
+          result = "pack://application:,,,/Icons/no.png";
           break;
       }
       this.NeedUpdateIcon = result;

@@ -54,9 +54,7 @@ namespace MangaReader.ViewModel.Primitive
         sender.Unloaded += model.ViewOnUnloaded;
         if (sender.IsLoaded)
           model.ViewOnLoaded(sender, new RoutedEventArgs());
-        var window = sender as Window;
-        if (window != null)
-          ViewService.Instance.AddOrReplace(model, window);
+        ViewService.Instance.AddOrReplace(model, sender);
       }
 
     }

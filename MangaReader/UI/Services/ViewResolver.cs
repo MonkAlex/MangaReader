@@ -22,10 +22,10 @@ namespace MangaReader.UI.Services
       AddOrReplace(typeof(ViewModel.Manga.MangaCardModel), typeof(MangaReader.UI.Manga.MangaForm));
 
       // Пока явно забиваемся на Table.
-      //AddOrReplace(typeof(ViewModel.MainPageModel), typeof(MangaReader.UI.MainForm.Table));
+      AddOrReplace(typeof(ViewModel.MainPageModel), typeof(MangaReader.UI.MainForm.Table));
       
       // Blazard
-      AddOrReplace(typeof(ViewModel.MainPageModel), typeof(MangaReader.UI.MainForm.Blazard));
+      //AddOrReplace(typeof(ViewModel.MainPageModel), typeof(MangaReader.UI.MainForm.Blazard));
       AddOrReplace(typeof(ViewModel.Manga.MangaViewModel), typeof(MangaReader.UI.Manga.BlazardManga));
     }
   }

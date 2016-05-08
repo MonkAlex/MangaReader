@@ -97,7 +97,7 @@ namespace MangaReader.ViewModel.Manga
     {
       base.Show();
 
-      var window = ViewService.Instance.TryGet(this);
+      var window = ViewService.Instance.TryGet<System.Windows.Window>(this);
       if (window != null)
       {
         window.ShowDialog();
@@ -106,7 +106,7 @@ namespace MangaReader.ViewModel.Manga
 
     public void Close()
     {
-      var window = ViewService.Instance.TryGet(this);
+      var window = ViewService.Instance.TryGet<System.Windows.Window>(this);
       if (window != null)
       {
         window.Close();

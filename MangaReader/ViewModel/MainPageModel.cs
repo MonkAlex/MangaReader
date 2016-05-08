@@ -110,12 +110,18 @@ namespace MangaReader.ViewModel
         this.MangaViewModels.Add(new MangaViewModel(mangas));
     }
 
+    public override void Show()
+    {
+      base.Show();
+    }
+
     public MainPageModel()
     {
       LibraryFilter = ConfigStorage.Instance.ViewConfig.LibraryFilter;
       this.MangaViewModels = new ObservableCollection<MangaViewModel>(Repository.Get<Mangas>().Select(m => new MangaViewModel(m)));
       Library.MangaAdded += LibraryOnMangaAdded;
       Library.MangaDeleted += LibraryOnMangaDeleted;
+      Library.StatusChanged += (sender, s) => LibraryStatus = s;
 
       View = new ListCollectionView(MangaViewModels)
       {

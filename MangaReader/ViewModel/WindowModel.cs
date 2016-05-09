@@ -39,7 +39,6 @@ namespace MangaReader.ViewModel
     public override void Show()
     {
       base.Show();
-      //this.Content = new Blazard() {DataContext = new MainPageModel()};
       var window = ViewService.Instance.TryGet<System.Windows.Window>(this);
       if (window != null)
       {

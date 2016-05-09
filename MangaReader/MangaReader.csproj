@@ -138,6 +138,10 @@
     </Compile>
     <Compile Include="UI\Services\SimpleDictionary.cs" />
     <Compile Include="UI\Services\ViewResolver.cs" />
+    <Compile Include="UI\Skin\Blazard.cs" />
+    <Compile Include="UI\Skin\Default.cs" />
+    <Compile Include="UI\Skin\Skins.cs" />
+    <Compile Include="UI\Skin\SkinSetting.cs" />
     <Compile Include="UI\VersionHistoryView.xaml.cs">
       <DependentUpon>VersionHistoryView.xaml</DependentUpon>
     </Compile>

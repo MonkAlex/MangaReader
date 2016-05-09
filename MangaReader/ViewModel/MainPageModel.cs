@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -115,6 +116,9 @@ namespace MangaReader.ViewModel
     {
       base.Show();
 
+      var skin = UI.Skin.Skins.GetSkinSetting(Guid.Parse("6D4F6E00-950B-4FC2-A114-2A3A60BF9648"));
+      skin.Init();
+      Log.AddFormat("Selected skin - '{0}'.", skin.Name);
       WindowModel.Instance.Content = ViewService.Instance.TryGet<System.Windows.FrameworkElement>(this);
     }
 

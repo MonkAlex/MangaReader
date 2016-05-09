@@ -46,7 +46,7 @@ namespace MangaReader.Core
       return null;
     }
 
-    private static List<Assembly> AllowedAssemblies()
+    internal static List<Assembly> AllowedAssemblies()
     {
       return AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith("MangaReader")).ToList();
     }

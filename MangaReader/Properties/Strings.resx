@@ -261,4 +261,7 @@
   <data name="Manga_Action_Restore" xml:space="preserve">
     <value>Продолжить</value>
   </data>
+  <data name="Settings_Skin" xml:space="preserve">
+    <value>Скин (изменяется после перезапуска)</value>
+  </data>
 </root>

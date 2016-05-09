@@ -11,7 +11,7 @@
 
     public Default()
     {
-      this.Name = "Простой список (по умолчанию)";
+      this.Name = "Стандартный";
       this.Guid = DefaultGuid;
     }
   }

@@ -12,6 +12,11 @@
     /// </summary>
     public LibraryFilter LibraryFilter { get; set; }
 
+    /// <summary>
+    /// Уникальный идентификатор выбранного скина.
+    /// </summary>
+    public System.Guid SkinGuid { get; set; }
+
     public ViewConfig()
     {
       this.WindowStates = new WindowStates();

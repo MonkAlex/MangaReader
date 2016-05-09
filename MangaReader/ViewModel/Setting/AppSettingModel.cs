@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
+using MangaReader.UI.Skin;
 
 namespace MangaReader.ViewModel.Setting
 {
@@ -10,6 +11,7 @@ namespace MangaReader.ViewModel.Setting
     private bool minimizeToTray;
     private Languages language;
     private string autoUpdateHours;
+    private ISkinSetting skin;
 
     public bool UpdateReader
     {
@@ -53,6 +55,18 @@ namespace MangaReader.ViewModel.Setting
       }
     }
 
+    public ISkinSetting Skin
+    {
+      get { return skin; }
+      set
+      {
+        skin = value;
+        OnPropertyChanged();
+      }
+    }
+
+    public IReadOnlyList<ISkinSetting> SkinSettings { get; private set; } 
+
     public override void Save()
     {
       base.Save();
@@ -65,18 +79,22 @@ namespace MangaReader.ViewModel.Setting
       int hour;
       if (int.TryParse(AutoUpdateHours, out hour))
         appConfig.AutoUpdateInHours = hour;
+
+      ConfigStorage.Instance.ViewConfig.SkinGuid = Skin.Guid;
     }
 
     public AppSettingModel()
     {
       this.Header = "Основные настройки";
       this.Languages = Generic.GetEnumValues<Languages>();
+      this.SkinSettings = Skins.SkinSettings;
 
       var appConfig = ConfigStorage.Instance.AppConfig;
       this.UpdateReader = appConfig.UpdateReader;
       this.MinimizeToTray = appConfig.MinimizeToTray;
       this.Language = appConfig.Language;
       this.AutoUpdateHours = appConfig.AutoUpdateInHours.ToString();
+      this.Skin = Skins.GetSkinSetting(ConfigStorage.Instance.ViewConfig.SkinGuid);
     }
   }
 }

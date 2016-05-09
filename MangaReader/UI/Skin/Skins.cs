@@ -6,7 +6,14 @@ namespace MangaReader.UI.Skin
 {
   public class Skins
   {
-    public static IEnumerable<ISkinSetting> GetSkinSettings()
+    private static IReadOnlyList<ISkinSetting> skinSettings;
+
+    public static IReadOnlyList<ISkinSetting> SkinSettings
+    {
+      get { return skinSettings ?? (skinSettings = GetSkinSettings().ToList().AsReadOnly()); }
+    }
+
+    private static IEnumerable<ISkinSetting> GetSkinSettings()
     {
       var types = Core.ResolveAssembly.AllowedAssemblies()
           .SelectMany(a => a.GetTypes())
@@ -20,7 +27,7 @@ namespace MangaReader.UI.Skin
     public static ISkinSetting GetSkinSetting(Guid guid)
     {
       ISkinSetting defaultSkin = null;
-      foreach (var setting in GetSkinSettings())
+      foreach (var setting in SkinSettings)
       {
         if (setting.Guid == Default.DefaultGuid)
           defaultSkin = setting;

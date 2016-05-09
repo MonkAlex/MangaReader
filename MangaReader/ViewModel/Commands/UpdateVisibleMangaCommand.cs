@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Windows.Data;
-using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using MangaReader.ViewModel.Commands.Primitives;
+using MangaReader.ViewModel.Manga;
 
 namespace MangaReader.ViewModel.Commands
 {
@@ -17,7 +17,7 @@ namespace MangaReader.ViewModel.Commands
 
       if (Library.IsAvaible)
       {
-        Library.ThreadAction(() => Library.Update(view.Cast<Mangas>(), ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
+        Library.ThreadAction(() => Library.Update(view.OfType<MangaBaseModel>().Select(m => m.Manga), ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
       }
     }
 

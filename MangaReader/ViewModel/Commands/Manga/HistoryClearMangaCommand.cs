@@ -1,5 +1,4 @@
-﻿using System.Windows.Data;
-using MangaReader.Core.Manga;
+﻿using MangaReader.Core.Manga;
 using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
 
@@ -14,7 +13,7 @@ namespace MangaReader.ViewModel.Commands.Manga
       manga.Save();
     }
 
-    public HistoryClearMangaCommand(ListCollectionView view) : base(view)
+    public HistoryClearMangaCommand()
     {
       this.Name = Strings.Manga_Action_Remove + " историю";
     }

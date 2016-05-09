@@ -1,5 +1,4 @@
-﻿using System.Windows.Data;
-using MangaReader.Core.Manga;
+﻿using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.ViewModel.Manga;
 
@@ -7,8 +6,6 @@ namespace MangaReader.ViewModel.Commands.Primitives
 {
   public class MangaBaseCommand : LibraryBaseCommand
   {
-    protected readonly ListCollectionView View;
-
     protected bool NeedRefresh { get; set; }
 
     public override void Execute(object parameter)
@@ -19,11 +16,10 @@ namespace MangaReader.ViewModel.Commands.Primitives
       if (manga != null && manga.Manga != null)
       {
         this.Execute(manga.Manga);
-#warning Blazard - disable refresh
-        /*
+
         if (NeedRefresh)
-          View.Refresh();
-          */
+          WindowModel.Instance.Refresh();
+
         OnCanExecuteChanged();
       }
       else
@@ -37,9 +33,8 @@ namespace MangaReader.ViewModel.Commands.Primitives
       
     }
 
-    public MangaBaseCommand(ListCollectionView view)
+    public MangaBaseCommand()
     {
-      this.View = view;
       this.NeedRefresh = true;
     }
   }

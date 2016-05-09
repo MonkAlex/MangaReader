@@ -1,5 +1,4 @@
-﻿using System.Windows.Data;
-using MangaReader.Core.Manga;
+﻿using MangaReader.Core.Manga;
 using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
 using MangaReader.ViewModel.Manga;
@@ -15,7 +14,7 @@ namespace MangaReader.ViewModel.Commands.Manga
       new MangaCardModel(manga).Show();
     }
 
-    public ShowPropertiesMangaCommand(ListCollectionView view) : base(view)
+    public ShowPropertiesMangaCommand()
     {
       this.Name = Strings.Manga_Settings;
     }

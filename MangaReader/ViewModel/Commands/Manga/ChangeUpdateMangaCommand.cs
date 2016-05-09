@@ -1,5 +1,4 @@
-﻿using System.Windows.Data;
-using MangaReader.Core.Manga;
+﻿using MangaReader.Core.Manga;
 using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands.Manga
@@ -14,7 +13,7 @@ namespace MangaReader.ViewModel.Commands.Manga
       manga.Save();
     }
 
-    public ChangeUpdateMangaCommand(ListCollectionView view) : base(view)
+    public ChangeUpdateMangaCommand()
     {
       this.Name = "Сменить статус обновления";
     }

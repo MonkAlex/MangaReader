@@ -2,7 +2,7 @@
 
 namespace MangaReader.UI.Skin
 {
-  public abstract class SkinSetting<T> : ISkinSetting
+  public abstract class SkinSetting
   {
     public string Name { get; set; }
 
@@ -19,12 +19,5 @@ namespace MangaReader.UI.Skin
     {
       this.Name = "Нужно переопределить имя в конструкторе.";
     } 
-  }
-
-  public interface ISkinSetting
-  {
-    string Name { get; set; }
-    Guid Guid { get; set; }
-    void Init();
   }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Windows.Data;
 using MangaReader.Core.Manga;
 using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
@@ -19,9 +18,10 @@ namespace MangaReader.ViewModel.Commands.Manga
       return true;
     }
 
-    public OpenUrlMangaCommand(ListCollectionView view) : base(view)
+    public OpenUrlMangaCommand()
     {
       this.Name = Strings.Manga_Action_View;
+      this.NeedRefresh = false;
     }
   }
 }

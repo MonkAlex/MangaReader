@@ -1,6 +1,6 @@
 ﻿namespace MangaReader.UI.Skin
 {
-  public class Blazard : SkinSetting<MainForm.Blazard>
+  public class Blazard : SkinSetting
   {
     public override void Init()
     {

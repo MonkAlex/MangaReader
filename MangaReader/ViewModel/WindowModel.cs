@@ -7,7 +7,6 @@ using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using MangaReader.Properties;
 using MangaReader.Services.Config;
-using MangaReader.UI.MainForm;
 using MangaReader.UI.Services;
 using MangaReader.ViewModel.Commands;
 using MangaReader.ViewModel.Primitive;
@@ -20,6 +19,7 @@ namespace MangaReader.ViewModel
     public static WindowModel Instance { get { return lazyModel.Value; } }
 
     private object content;
+    private MainPageModel model;
     public ICommand UpdateAll { get; set; }
 
     public ICommand Close { get; set; }
@@ -50,7 +50,8 @@ namespace MangaReader.ViewModel
         ConfigStorage.Instance.ViewConfig.UpdateWindowState(window);
         window.Show();
       }
-      new MainPageModel().Show();
+      model = new MainPageModel();
+      model.Show();
     }
 
     public void SaveWindowState()
@@ -118,6 +119,12 @@ namespace MangaReader.ViewModel
     {
       if (ConfigStorage.Instance.AppConfig.MinimizeToTray && sender.WindowState == System.Windows.WindowState.Minimized)
         sender.Hide();
+    }
+
+    public void Refresh()
+    {
+      if (model != null && model.View != null)
+        model.View.Refresh();
     }
 
     public void Dispose()

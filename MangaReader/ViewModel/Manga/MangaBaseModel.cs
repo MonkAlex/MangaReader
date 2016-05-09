@@ -30,13 +30,13 @@ namespace MangaReader.ViewModel.Manga
       this.MangaMenu = new ObservableCollection<ContentMenuItem>
       {
         new OpenFolderCommand(),
-        new ChangeUpdateMangaCommand(null),
-        new UpdateMangaCommand(null),
-        new CompressMangaCommand(null),
-        new OpenUrlMangaCommand(null),
-        new HistoryClearMangaCommand(null),
-        new DeleteMangaCommand(null),
-        new ShowPropertiesMangaCommand(null)
+        new ChangeUpdateMangaCommand(),
+        new UpdateMangaCommand(),
+        new CompressMangaCommand(),
+        new OpenUrlMangaCommand(),
+        new HistoryClearMangaCommand(),
+        new DeleteMangaCommand(),
+        new ShowPropertiesMangaCommand()
       };
       this.MangaMenu.First().IsDefault = true;
     }

@@ -6,27 +6,27 @@ namespace MangaReader.UI.Skin
 {
   public class Skins
   {
-    private static IReadOnlyList<ISkinSetting> skinSettings;
+    private static IReadOnlyList<SkinSetting> skinSettings;
 
-    public static IReadOnlyList<ISkinSetting> SkinSettings
+    public static IReadOnlyList<SkinSetting> SkinSettings
     {
       get { return skinSettings ?? (skinSettings = GetSkinSettings().ToList().AsReadOnly()); }
     }
 
-    private static IEnumerable<ISkinSetting> GetSkinSettings()
+    private static IEnumerable<SkinSetting> GetSkinSettings()
     {
       var types = Core.ResolveAssembly.AllowedAssemblies()
           .SelectMany(a => a.GetTypes())
-          .Where(t => t.IsClass && !t.IsAbstract && t.GetInterfaces().Contains(typeof(ISkinSetting)));
+          .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(SkinSetting)));
       foreach (var type in types)
       {
-        yield return (ISkinSetting)Activator.CreateInstance(type);
+        yield return (SkinSetting)Activator.CreateInstance(type);
       }
     }
 
-    public static ISkinSetting GetSkinSetting(Guid guid)
+    public static SkinSetting GetSkinSetting(Guid guid)
     {
-      ISkinSetting defaultSkin = null;
+      SkinSetting defaultSkin = null;
       foreach (var setting in SkinSettings)
       {
         if (setting.Guid == Default.DefaultGuid)

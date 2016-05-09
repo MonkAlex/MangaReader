@@ -27,7 +27,7 @@ namespace MangaReader.ViewModel.Commands.Manga
       return true;
     }
 
-    public OpenFolderCommand() : base(null)
+    public OpenFolderCommand()
     {
       this.Name = Strings.Manga_Action_OpenFolder;
       this.NeedRefresh = false;

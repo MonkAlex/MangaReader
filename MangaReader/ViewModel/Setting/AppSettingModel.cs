@@ -11,7 +11,7 @@ namespace MangaReader.ViewModel.Setting
     private bool minimizeToTray;
     private Languages language;
     private string autoUpdateHours;
-    private ISkinSetting skin;
+    private SkinSetting skin;
 
     public bool UpdateReader
     {
@@ -55,7 +55,7 @@ namespace MangaReader.ViewModel.Setting
       }
     }
 
-    public ISkinSetting Skin
+    public SkinSetting Skin
     {
       get { return skin; }
       set
@@ -65,7 +65,7 @@ namespace MangaReader.ViewModel.Setting
       }
     }
 
-    public IReadOnlyList<ISkinSetting> SkinSettings { get; private set; } 
+    public IReadOnlyList<SkinSetting> SkinSettings { get; private set; } 
 
     public override void Save()
     {

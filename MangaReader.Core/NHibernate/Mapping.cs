@@ -44,11 +44,9 @@ namespace MangaReader.Core.NHibernate
         return;
 
       Log.Add("Closing database connect.");
-      if (Session.IsDirty())
-      {
-        Log.Add("Closing database connect : Session is dirty, force flush.");
-        Session.Flush();
-      }
+
+      Initialized = false;
+      Session.Close();
       sessionFactory.Close();
     }
 

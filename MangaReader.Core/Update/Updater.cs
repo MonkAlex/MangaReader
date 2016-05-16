@@ -41,6 +41,8 @@ namespace MangaReader.Core.Update
         process.Status = "Проверка обновлений...";
         Updater.StartUpdate(process);
       }
+      else
+        Log.AddFormat("Current version - {0}.", ClientVersion);
     }
 
     /// <summary>

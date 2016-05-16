@@ -29,10 +29,11 @@ namespace MangaReader.Core.NHibernate
     public static void Initialize(IProcess process)
     {
       Initialized = false;
-
+      Log.Add("Connect to database...");
       process.Status = "Подключение к базе данных...";
       sessionFactory = CreateSessionFactory();
       Session = OpenSession();
+      Log.Add("Connect to database completed.");
 
       Initialized = true;
     }
@@ -42,6 +43,12 @@ namespace MangaReader.Core.NHibernate
       if (sessionFactory == null || sessionFactory.IsClosed)
         return;
 
+      Log.Add("Closing database connect.");
+      if (Session.IsDirty())
+      {
+        Log.Add("Closing database connect : Session is dirty, force flush.");
+        Session.Flush();
+      }
       sessionFactory.Close();
     }
 
@@ -61,7 +68,10 @@ namespace MangaReader.Core.NHibernate
       if (File.Exists(Path.Combine(ConfigStorage.WorkFolder, DbFile)))
         new SchemaUpdate(config).Execute(false, true);
       else
+      {
+        Log.Add("Database file not found, create new database.");
         new SchemaExport(config).Create(false, true);
+      }
     }
   }
 }

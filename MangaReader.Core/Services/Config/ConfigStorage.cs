@@ -95,7 +95,10 @@ namespace MangaReader.Core.Services.Config
       }
 
       if (storage == null)
+      {
         storage = new ConfigStorage();
+        Log.Add("Settings not found, create new default settings file.");
+      }
 
       _instance = storage;
     }
@@ -106,6 +109,7 @@ namespace MangaReader.Core.Services.Config
       this.DatabaseConfig.MangaSettings.SaveAll();
       var str = JsonConvert.SerializeObject(this);
       File.WriteAllText(SettingsPath, str, Encoding.UTF8);
+      Log.Add("Settings saved.");
     }
 
     public static void Close()

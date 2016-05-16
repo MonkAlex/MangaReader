@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Core
 {
@@ -56,14 +57,15 @@ namespace MangaReader.Core
     /// </summary>
     internal static void LoadSql()
     {
+      var files = new List<string>();
       foreach (var assembly in AllowedAssemblies())
       {
-        WriteResourceToFile(assembly, "System.Data.SQLite.dll");
-        WriteResourceToFile(assembly, "sqlite3");
-        WriteResourceToFile(assembly, "sqlite3.dll", "x64");
-        WriteResourceToFile(assembly, "sqlite3.dll", "x86");
-//        Assembly.LoadFrom(path);
+        files.Add(WriteResourceToFile(assembly, "System.Data.SQLite.dll"));
+        files.Add(WriteResourceToFile(assembly, "sqlite3"));
+        files.Add(WriteResourceToFile(assembly, "sqlite3.dll", "x64"));
+        files.Add(WriteResourceToFile(assembly, "sqlite3.dll", "x86"));
       }
+      Log.AddFormat("SQL libraries loaded from: {0}", string.Join(Environment.NewLine, files.Where(s => !string.IsNullOrWhiteSpace(s))));
     }
 
     private static string WriteResourceToFile(Assembly assembly, string assemblyName, string subfolder = "")

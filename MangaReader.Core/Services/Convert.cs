@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using MangaReader.Core.Convertation;
+using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services.Config;
 
@@ -14,12 +18,11 @@ namespace MangaReader.Core.Services
       Log.Add("Convert started.");
 
       process.Status = "Проверка настроек...";
-      Core.Services.Config.Converter.ConvertAll(process);
+      Convert<ConfigConverter>(process);
 
       process.Status = "Конвертация манги...";
-#pragma warning disable 618
-      Cache.Convert(process);
-#pragma warning restore 618
+      Convert<CacheConverter>(process);
+
       Converting.ConvertAll(process);
 
       process.Status = "Конвертация манги...";
@@ -34,6 +37,23 @@ namespace MangaReader.Core.Services
 
       ConfigStorage.Instance.DatabaseConfig.Version = process.Version;
       process.State = ConvertState.Completed;
+    }
+
+    private static void Convert<T>(IProcess process) where T : BaseConverter
+    {
+      var converters = new List<T>();
+      foreach (var assembly in ResolveAssembly.AllowedAssemblies())
+      {
+        converters.AddRange(assembly.GetTypes()
+          .Where(t => !t.IsAbstract && t.IsAssignableFrom(typeof(T)))
+          .Select(Activator.CreateInstance)
+          .OfType<T>());
+      }
+      converters = converters.OrderBy(c => c.Version).ToList();
+      foreach (var converter in converters)
+      {
+        converter.Convert(process);
+      }
     }
   }
 

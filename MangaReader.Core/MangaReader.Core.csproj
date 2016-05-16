@@ -91,6 +91,10 @@
     </Compile>
     <Compile Include="Account\Login.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="Convertation\Config\From30to31.cs" />
+    <Compile Include="Convertation\Config\FromBaseTo30.cs" />
+    <Compile Include="Convertation\Primitives\BaseConverter.cs" />
+    <Compile Include="Convertation\Primitives\ConfigConverter.cs" />
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Exception\EntityException.cs" />
     <Compile Include="Exception\MangaDirectoryExists.cs" />
@@ -134,11 +138,10 @@
     </Compile>
     <Compile Include="ResolveAssembly.cs" />
     <Compile Include="Services\Backup.cs" />
-    <Compile Include="Services\Cache.cs" />
+    <Compile Include="Convertation\CacheConverter.cs" />
     <Compile Include="Services\Compression.cs" />
     <Compile Include="Services\Config\AppConfig.cs" />
     <Compile Include="Services\Config\ConfigStorage.cs" />
-    <Compile Include="Services\Config\Converter.cs" />
     <Compile Include="Services\Config\DatabaseConfig.cs" />
     <Compile Include="Services\Config\LibraryFilter.cs" />
     <Compile Include="Services\Config\ViewConfig.cs" />

@@ -66,9 +66,6 @@ namespace MangaReader.Core.Services.Config
     /// </summary>
     private static string SettingsPath { get { return Path.Combine(WorkFolder, "settings.json"); } }
 
-    [Obsolete("Только для конвертации.")]
-    internal static readonly string SettingsOldPath = WorkFolder + "\\settings.xml";
-
     public static void Load()
     {
       if (_instance != null)

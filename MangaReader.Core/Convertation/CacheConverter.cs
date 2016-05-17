@@ -27,7 +27,6 @@ namespace MangaReader.Core.Convertation
     {
       base.ProtectedConvert(process);
 
-      Log.AddFormat("Get {0} manga settings before manga converts.:", ConfigStorage.Instance.DatabaseConfig.MangaSettings.Count);
       var globalCollection = new List<Mangas>();
 
 #pragma warning disable CS0612 // Obsolete методы используются для конвертации

@@ -1,4 +1,5 @@
 ﻿using System;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 
 namespace MangaReader.Core.Convertation.Primitives
@@ -27,5 +28,12 @@ namespace MangaReader.Core.Convertation.Primitives
     {
       
     }
+
+    protected void RunSql(string command)
+    {
+      var query = Mapping.Session.CreateSQLQuery(command);
+      query.UniqueResult();
+    }
+
   }
 }

@@ -62,11 +62,7 @@ namespace Tests.Entities
 
     public static void CreateMangaHistory(Mangas manga)
     {
-      var history = new MangaHistory()
-      {
-        Date = DateTime.Today,
-        Uri = Url
-      };
+      var history = new MangaHistory(Url);
       manga.Histories.Add(history);
       manga.Save();
     }

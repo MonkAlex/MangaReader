@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Services.Config;
 
@@ -30,7 +29,7 @@ namespace MangaReader.Core.Services
 
       process.Status = "Конвертация истории...";
       process.Percent = 0;
-      History.ConvertAll(process);
+      Convert<HistoryConverter>(process);
 
       Log.Add("Convert completed.");
 

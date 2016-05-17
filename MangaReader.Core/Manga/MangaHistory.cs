@@ -61,12 +61,14 @@ namespace MangaReader.Core.Manga
       return messages.Select(message => new MangaHistory(new Uri(message))).ToList();
     }
 
-    public MangaHistory() { }
+    protected MangaHistory()
+    {
+      this.Date = DateTime.Now;
+    }
 
-    public MangaHistory(Uri message)
+    public MangaHistory(Uri message) : this()
     {
       this.Uri = message;
-      this.Date = DateTime.Now;
     }
   }
 }

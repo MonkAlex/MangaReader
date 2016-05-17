@@ -97,9 +97,12 @@
     <Compile Include="Convertation\Database\From27To28.cs" />
     <Compile Include="Convertation\Database\From29To30.cs" />
     <Compile Include="Convertation\Database\FromBaseTo24.cs" />
+    <Compile Include="Convertation\Mangas\From24To27.cs" />
+    <Compile Include="Convertation\Mangas\FromBaseTo24Db.cs" />
     <Compile Include="Convertation\Primitives\BaseConverter.cs" />
     <Compile Include="Convertation\Primitives\ConfigConverter.cs" />
     <Compile Include="Convertation\Primitives\DatabaseConverter.cs" />
+    <Compile Include="Convertation\Primitives\MangasConverter.cs" />
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Exception\EntityException.cs" />
     <Compile Include="Exception\MangaDirectoryExists.cs" />
@@ -142,7 +145,7 @@
     </Compile>
     <Compile Include="ResolveAssembly.cs" />
     <Compile Include="Services\Backup.cs" />
-    <Compile Include="Convertation\CacheConverter.cs" />
+    <Compile Include="Convertation\Mangas\FromBaseTo24Cache.cs" />
     <Compile Include="Services\Compression.cs" />
     <Compile Include="Services\Config\AppConfig.cs" />
     <Compile Include="Services\Config\ConfigStorage.cs" />

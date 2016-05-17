@@ -1,27 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
-using MangaReader.Core.Manga.Acomic;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Properties;
 using MangaReader.Core.Services.Config;
-using NHibernate.Linq;
 
 namespace MangaReader.Core.Services
 {
   public static class Library
   {
-    /// <summary>
-    /// Ссылка на файл базы.
-    /// </summary>
-    private static readonly string DatabaseFile = ConfigStorage.WorkFolder + @".\db";
-
     /// <summary>
     /// Таймер для автообновления манги.
     /// </summary>
@@ -153,59 +145,6 @@ namespace MangaReader.Core.Services
         }
       }
     }
-
-#pragma warning disable CS0612 // Obsolete методы используются для конвертации
-    /// <summary>
-    /// Сконвертировать в новый формат.
-    /// </summary>
-    internal static void Convert(IProcess process)
-    {
-      if (File.Exists(DatabaseFile))
-        ConvertBaseTo24(process);
-
-      Convert24To27(process);
-    }
-
-    private static void Convert24To27(IProcess process)
-    {
-      var version = new Version(1, 27, 5584);
-      if (version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && process.Version.CompareTo(version) >= 0)
-      {
-        process.Percent = 0;
-          var acomics = Repository.Get<Acomics>().ToList();
-
-        foreach (var acomic in acomics)
-        {
-          Getter.UpdateContentType(acomic);
-        }
-        acomics.SaveAll();
-      }
-    }
-
-    private static void ConvertBaseTo24(IProcess process)
-    {
-      var database = Serializer<List<string>>.Load(DatabaseFile) ?? new List<string>(File.ReadAllLines(DatabaseFile));
-
-      if (process != null && database.Any())
-        process.ProgressState = ProgressState.Normal;
-
-      List<string> mangaUrls;
-      using (var session = Mapping.OpenSession())
-      {
-        mangaUrls = session.Query<Mangas>().Select(m => m.Uri.ToString()).ToList();
-      }
-
-      foreach (var dbstring in database)
-      {
-        if (process != null)
-          process.Percent += 100.0 / database.Count;
-        if (!mangaUrls.Contains(dbstring))
-          Mangas.Create(dbstring);
-      }
-
-      Backup.MoveToBackup(DatabaseFile);
-    }
-#pragma warning restore CS0612
 
     /// <summary>
     /// Обновить мангу.

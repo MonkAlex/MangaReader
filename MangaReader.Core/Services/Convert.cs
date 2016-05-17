@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
-using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Services
@@ -23,14 +22,11 @@ namespace MangaReader.Core.Services
       Log.AddFormat("Get {0} manga settings before manga converts.", ConfigStorage.Instance.DatabaseConfig.MangaSettings.Count);
 
       process.Status = "Конвертация манги...";
-      Convert<CacheConverter>(process);
+      process.Percent = 0;
+      Convert<MangasConverter>(process);
 
       process.Status = "Конвертация базы данных...";
       Convert<DatabaseConverter>(process);
-
-      process.Status = "Конвертация манги...";
-      process.Percent = 0;
-      Library.Convert(process);
 
       process.Status = "Конвертация истории...";
       process.Percent = 0;
@@ -48,7 +44,7 @@ namespace MangaReader.Core.Services
       foreach (var assembly in ResolveAssembly.AllowedAssemblies())
       {
         converters.AddRange(assembly.GetTypes()
-          .Where(t => !t.IsAbstract && (t.IsSubclassOf(typeof(T)) || t.IsEquivalentTo(typeof(T))))
+          .Where(t => !t.IsAbstract && t.IsClass && typeof(T).IsAssignableFrom(t))
           .Select(Activator.CreateInstance)
           .OfType<T>());
       }

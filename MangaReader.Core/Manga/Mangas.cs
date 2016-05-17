@@ -446,17 +446,6 @@ namespace MangaReader.Core.Manga
     /// </summary>
     /// <param name="url">Ссылка на мангу.</param>
     /// <returns>Манга.</returns>
-    [Obsolete]
-    public static Mangas Create(string url)
-    {
-      return Create(new Uri(url));
-    }
-
-    /// <summary>
-    /// Создать мангу по ссылке.
-    /// </summary>
-    /// <param name="url">Ссылка на мангу.</param>
-    /// <returns>Манга.</returns>
     public static Mangas Create(Uri url)
     {
       Mangas manga = null;

@@ -4,14 +4,13 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using MangaReader.Core.Convertation.Primitives;
-using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
-namespace MangaReader.Core.Convertation
+namespace MangaReader.Core.Convertation.Mangas
 {
-  public class CacheConverter : BaseConverter
+  public class FromBaseTo24Cache : MangasConverter
   {
     /// <summary>
     /// Ссылка на файл лога.
@@ -27,7 +26,7 @@ namespace MangaReader.Core.Convertation
     {
       base.ProtectedConvert(process);
 
-      var globalCollection = new List<Mangas>();
+      var globalCollection = new List<Manga.Mangas>();
 
 #pragma warning disable CS0612 // Obsolete методы используются для конвертации
       var obsoleteManga = Serializer<ObservableCollection<Manga.Manga>>.Load(CacheFile);
@@ -43,12 +42,12 @@ namespace MangaReader.Core.Convertation
         }));
       }
 
-      var cache = Serializer<ObservableCollection<Mangas>>.Load(CacheFile);
+      var cache = Serializer<ObservableCollection<Manga.Mangas>>.Load(CacheFile);
       if (cache != null)
         globalCollection.AddRange(cache.Where(gm => !globalCollection.Exists(m => m.Uri == gm.Uri)));
 
       var fileUrls = globalCollection.Select(m => m.Uri).ToList();
-      var dbMangas = Repository.Get<Mangas>().ToList();
+      var dbMangas = Repository.Get<Manga.Mangas>().ToList();
       var fromFileInDb = dbMangas.Where(m => fileUrls.Contains(m.Uri)).ToList();
       if (fromFileInDb.Count == 0)
         fromFileInDb = globalCollection.ToList();
@@ -57,6 +56,11 @@ namespace MangaReader.Core.Convertation
       globalCollection.SaveAll();
 
       Backup.MoveToBackup(CacheFile);
+    }
+
+    public FromBaseTo24Cache()
+    {
+      this.Version = new Version(1, 0, 0);
     }
   }
 }

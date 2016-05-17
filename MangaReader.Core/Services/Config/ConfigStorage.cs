@@ -102,8 +102,12 @@ namespace MangaReader.Core.Services.Config
 
     public void Save()
     {
-      this.DatabaseConfig.Save();
-      this.DatabaseConfig.MangaSettings.SaveAll();
+      if (Mapping.Initialized)
+      {
+        this.DatabaseConfig.Save();
+        this.DatabaseConfig.MangaSettings.SaveAll();
+      }
+
       var str = JsonConvert.SerializeObject(this);
       File.WriteAllText(SettingsPath, str, Encoding.UTF8);
       Log.Add("Settings saved.");

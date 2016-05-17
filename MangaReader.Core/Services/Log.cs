@@ -51,7 +51,7 @@ namespace MangaReader.Core.Services
     public static void Exception(System.Exception ex, params string[] messages)
     {
       var contents = string.Concat(DateTime.Now.ToString("O"), "   ", string.Join(Environment.NewLine, messages),
-        Environment.NewLine, ex, Environment.NewLine);
+        Environment.NewLine, ex, Environment.NewLine, Environment.NewLine);
       Write(contents, ExceptionPath);
     }
 
@@ -63,7 +63,7 @@ namespace MangaReader.Core.Services
     {
       var stack = new StackTrace(1);
       var contents = string.Concat(DateTime.Now.ToString("O"), "   ", string.Join(Environment.NewLine, messages),
-        Environment.NewLine, stack.ToString(), Environment.NewLine);
+        Environment.NewLine, stack.ToString(), Environment.NewLine, Environment.NewLine);
       Write(contents, ExceptionPath);
     }
 

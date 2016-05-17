@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using MangaReader.Core.Account;
+using MangaReader.Core.Convertation;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 

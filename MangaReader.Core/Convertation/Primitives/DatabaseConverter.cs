@@ -11,5 +11,10 @@ namespace MangaReader.Core.Convertation.Primitives
         Version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && 
         process.Version.CompareTo(Version) >= 0;
     }
+
+    protected DatabaseConverter()
+    {
+      this.Name = "Конвертация базы данных...";
+    }
   }
 }

@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using MangaReader.Core.Convertation;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using NHibernate;

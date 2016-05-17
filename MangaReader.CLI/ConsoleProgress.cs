@@ -1,5 +1,5 @@
 ﻿using System;
-using MangaReader.Core.Services;
+using MangaReader.Core.Convertation;
 using MangaReader.Core.Services.Config;
 
 namespace MangaReader.CLI

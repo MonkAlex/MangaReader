@@ -45,6 +45,7 @@ namespace MangaReader.Core.Convertation.Mangas
     public FromBaseTo24Db()
     {
       this.Version = new Version(1, 0, 1);
+      this.CanReportProcess = true;
     }
   }
 }

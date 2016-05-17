@@ -2,6 +2,9 @@
 {
   public abstract class MangasConverter : BaseConverter
   {
-
+    protected MangasConverter()
+    {
+      this.Name = "Конвертация манги...";
+    }
   }
 }

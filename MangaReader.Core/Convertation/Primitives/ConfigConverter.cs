@@ -15,5 +15,10 @@ namespace MangaReader.Core.Convertation.Primitives
         process.Version.CompareTo(this.Version) >= 0 &&
         File.Exists(SettingsOldPath);
     }
+
+    protected ConfigConverter()
+    {
+      this.Name = "Проверка настроек...";
+    }
   }
 }

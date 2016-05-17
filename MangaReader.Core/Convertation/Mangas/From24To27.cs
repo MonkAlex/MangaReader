@@ -21,7 +21,6 @@ namespace MangaReader.Core.Convertation.Mangas
     {
       base.ProtectedConvert(process);
 
-      process.Percent = 0;
       var acomics = Repository.Get<Acomics>().ToList();
       foreach (var acomic in acomics)
       {
@@ -34,6 +33,7 @@ namespace MangaReader.Core.Convertation.Mangas
     public From24To27()
     {
       this.Version = new Version(1, 27, 5584);
+      this.CanReportProcess = true;
     }
   }
 }

@@ -99,6 +99,7 @@
     <Compile Include="Convertation\Database\FromBaseTo24.cs" />
     <Compile Include="Convertation\History\From32To33.cs" />
     <Compile Include="Convertation\History\FromBaseTo32.cs" />
+    <Compile Include="Convertation\IProcess.cs" />
     <Compile Include="Convertation\Mangas\From24To27.cs" />
     <Compile Include="Convertation\Mangas\FromBaseTo24Db.cs" />
     <Compile Include="Convertation\Primitives\BaseConverter.cs" />
@@ -155,7 +156,7 @@
     <Compile Include="Services\Config\DatabaseConfig.cs" />
     <Compile Include="Services\Config\LibraryFilter.cs" />
     <Compile Include="Services\Config\ViewConfig.cs" />
-    <Compile Include="Services\Convert.cs" />
+    <Compile Include="Convertation\Convert.cs" />
     <Compile Include="Services\DirectoryHelpers.cs" />
     <Compile Include="Services\Helper.cs" />
     <Compile Include="Services\History.cs" />

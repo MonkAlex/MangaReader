@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Shell;
-using MangaReader.Core.Services;
+using MangaReader.Core.Convertation;
 using MangaReader.Core.Services.Config;
 
 namespace MangaReader.ViewModel.Primitive
@@ -38,9 +38,9 @@ namespace MangaReader.ViewModel.Primitive
       {
         progressState = value;
         OnPropertyChanged();
-        OnPropertyChanged("IsIndeterminate");
+        OnPropertyChanged(nameof(IsIndeterminate));
         Enum.TryParse(value.ToString(), out taskbarItemProgressState);
-        OnPropertyChanged("TaskbarItemProgressState");
+        OnPropertyChanged(nameof(TaskbarItemProgressState));
       }
     }
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using MangaReader.Core.Convertation.Primitives;
@@ -67,6 +66,11 @@ namespace MangaReader.Core.Convertation.History
       }
 
       Backup.MoveToBackup(HistoryFile);
+    }
+
+    public FromBaseTo32()
+    {
+      this.CanReportProcess = true;
     }
   }
 }

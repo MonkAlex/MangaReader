@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using MangaReader.Core.Convertation.Primitives;
+using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
-namespace MangaReader.Core.Services
+namespace MangaReader.Core.Convertation
 {
 
   public static class Converter
@@ -15,20 +16,13 @@ namespace MangaReader.Core.Services
 
       Log.Add("Convert started.");
 
-      process.Status = "Проверка настроек...";
       Convert<ConfigConverter>(process);
 
-      Log.AddFormat("Get {0} manga settings before manga converts.", ConfigStorage.Instance.DatabaseConfig.MangaSettings.Count);
+      Log.AddFormat("Found {0} manga type settings:", ConfigStorage.Instance.DatabaseConfig.MangaSettings.Count);
+      ConfigStorage.Instance.DatabaseConfig.MangaSettings.ForEach(s => Log.AddFormat("Load settings for {0}, guid {1}.", s.MangaName, s.Manga));
 
-      process.Status = "Конвертация манги...";
-      process.Percent = 0;
       Convert<MangasConverter>(process);
-
-      process.Status = "Конвертация базы данных...";
       Convert<DatabaseConverter>(process);
-
-      process.Status = "Конвертация истории...";
-      process.Percent = 0;
       Convert<HistoryConverter>(process);
 
       Log.Add("Convert completed.");
@@ -50,24 +44,12 @@ namespace MangaReader.Core.Services
       converters = converters.OrderBy(c => c.Version).ToList();
       foreach (var converter in converters)
       {
+        process.Status = converter.Name;
+        process.Percent = 0;
+        process.ProgressState = converter.CanReportProcess ? ProgressState.Normal : ProgressState.Indeterminate;
         converter.Convert(process);
       }
     }
-  }
-
-  public interface IProcess
-  {
-    double Percent { get; set; }
-
-    ProgressState ProgressState { get; set; } 
-
-    string Status { get; set; }
-
-    Version Version { get; set; }
-
-    ConvertState State { get; set; }
-
-    event EventHandler<ConvertState> StateChanged;
   }
 
   public enum ConvertState

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -120,6 +121,25 @@ namespace MangaReader.ViewModel
       skin.Init();
       Log.AddFormat("Selected skin - '{0}'.", skin.Name);
       WindowModel.Instance.Content = ViewService.Instance.TryGet<System.Windows.FrameworkElement>(this);
+    }
+
+    public override void Load()
+    {
+      base.Load();
+
+      this.LibraryFilter.PropertyChanged += LibraryFilterOnPropertyChanged;
+    }
+
+    public override void Unload()
+    {
+      base.Unload();
+
+      this.LibraryFilter.PropertyChanged -= LibraryFilterOnPropertyChanged;
+    }
+
+    private void LibraryFilterOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+    {
+      View.Refresh();
     }
 
     public MainPageModel()

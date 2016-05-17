@@ -1,54 +1,105 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using Newtonsoft.Json;
 
 namespace MangaReader.Core.Services.Config
 {
-  public class LibraryFilter
+  public class LibraryFilter : INotifyPropertyChanged
   {
-    public static Dictionary<string, object> AllowedTypes
+    [JsonIgnore]
+    public Dictionary<string, object> AllowedTypes
     {
       get
       {
-        if (_allowedTypes == null)
+        if (allowedTypes == null)
         {
-          _allowedTypes = new Dictionary<string, object>(AllTypes);
+          allowedTypes = new Dictionary<string, object>(AllTypes);
         }
-        return _allowedTypes;
+        return allowedTypes;
       }
-      set { _allowedTypes = value; }
+      set
+      {
+        allowedTypes = value;
+        OnPropertyChanged();
+      }
     }
 
-    public static Dictionary<string, object> AllTypes
+    [JsonIgnore]
+    public Dictionary<string, object> AllTypes
     {
       get
       {
-        if (_allTypes == null)
+        if (allTypes == null)
         {
-          _allTypes = ConfigStorage.Instance.DatabaseConfig.MangaSettings
+          allTypes = ConfigStorage.Instance.DatabaseConfig.MangaSettings
             .Select(s => new { s.MangaName, s })
             .OrderBy(a => a.MangaName)
             .ToDictionary(a => a.MangaName, a => a.s as object);
         }
-        return _allTypes;
+        return allTypes;
       }
     }
 
-    private static Dictionary<string, object> _allTypes;
+    private Dictionary<string, object> allTypes;
 
-    private static Dictionary<string, object> _allowedTypes;
+    private Dictionary<string, object> allowedTypes;
+    private bool uncompleted;
+    private bool onlyUpdate;
+    private string name;
+    private SortDescription sortDescription;
 
-    public bool Uncompleted { get; set; }
+    public bool Uncompleted
+    {
+      get { return uncompleted; }
+      set
+      {
+        uncompleted = value;
+        OnPropertyChanged();
+      }
+    }
 
-    public bool OnlyUpdate { get; set; }
+    public bool OnlyUpdate
+    {
+      get { return onlyUpdate; }
+      set
+      {
+        onlyUpdate = value;
+        OnPropertyChanged();
+      }
+    }
 
-    public string Name { get; set; }
+    public string Name
+    {
+      get { return name; }
+      set
+      {
+        name = value;
+        OnPropertyChanged();
+      }
+    }
 
-    public SortDescription SortDescription { get; set; }
+    public SortDescription SortDescription
+    {
+      get { return sortDescription; }
+      set
+      {
+        sortDescription = value;
+        OnPropertyChanged();
+      }
+    }
 
     public LibraryFilter()
     {
       Name = string.Empty;
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
   }
 }

@@ -121,10 +121,14 @@ namespace MangaReader.UI
       if (SelectedItems == null)
         SelectedItems = new Dictionary<string, object>();
       SelectedItems.Clear();
+
+      var newSelectedItems = new Dictionary<string, object>();
       foreach (var node in _nodeList.Where(node => node.IsSelected && node.Title != _All && this.ItemsSource.Count > 0))
       {
-        SelectedItems.Add(node.Title, this.ItemsSource[node.Title]);
+        newSelectedItems.Add(node.Title, this.ItemsSource[node.Title]);
       }
+
+      SelectedItems = newSelectedItems;
 
       var handler = SelectionChanged;
       if (handler != null)

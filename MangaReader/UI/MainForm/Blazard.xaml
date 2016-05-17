@@ -18,9 +18,7 @@
         <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0"
               ItemsSource="{Binding Menu}" ItemContainerStyle="{StaticResource ContentMenuItem}"/>
 
-        <ui:MultiSelectComboBox x:Name="MangaType" Grid.Row="1" SelectionChanged="FilterChanged" DataContext="{Binding LibraryFilter}"
-                            ItemsSource="{Binding Path=AllTypes, Mode=OneTime}"
-                            SelectedItems="{Binding Path=AllowedTypes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <base:Filter Grid.Row="1" DataContext="{Binding LibraryFilter}"/>
         <ListView BorderThickness="0" Margin="5" ItemsSource="{Binding View}" Grid.Row="2">
             <ListView.Resources>
                 <Style TargetType="ListViewItem">

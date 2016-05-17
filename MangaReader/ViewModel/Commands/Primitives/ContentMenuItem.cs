@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 
@@ -11,6 +13,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
     private ObservableCollection<ContentMenuItem> subItems;
     private FontWeight fontWeight;
     private bool isDefault;
+    private BaseCommand baseCommand;
 
     public FontWeight FontWeight
     {
@@ -65,6 +68,14 @@ namespace MangaReader.ViewModel.Commands.Primitives
 
     public ContentMenuItem(BaseCommand command) : this(command, command.Name)
     {
+      this.baseCommand = command;
+      this.baseCommand.PropertyChanged += CommandOnPropertyChanged;
+    }
+
+    private void CommandOnPropertyChanged(object sender, PropertyChangedEventArgs args)
+    {
+      if (args.PropertyName == nameof(baseCommand.Name))
+        this.Name = baseCommand.Name;
     }
 
     public ContentMenuItem(ICommand command, string name) : this(name)

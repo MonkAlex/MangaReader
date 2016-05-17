@@ -1,4 +1,5 @@
 ﻿using MangaReader.Core.Manga;
+using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands.Manga
@@ -11,11 +12,13 @@ namespace MangaReader.ViewModel.Commands.Manga
 
       manga.NeedUpdate = !manga.NeedUpdate;
       manga.Save();
+
+      this.Name = manga.NeedUpdate ? Strings.Manga_NotUpdate : Strings.Manga_Update;
     }
 
-    public ChangeUpdateMangaCommand()
+    public ChangeUpdateMangaCommand(bool needUpdate)
     {
-      this.Name = "Сменить статус обновления";
+      this.Name = needUpdate ? Strings.Manga_NotUpdate : Strings.Manga_Update;
     }
   }
 }

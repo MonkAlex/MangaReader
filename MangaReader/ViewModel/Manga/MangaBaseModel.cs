@@ -30,7 +30,7 @@ namespace MangaReader.ViewModel.Manga
       this.MangaMenu = new ObservableCollection<ContentMenuItem>
       {
         new OpenFolderCommand(),
-        new ChangeUpdateMangaCommand(),
+        new ChangeUpdateMangaCommand(manga != null ? manga.NeedUpdate : false),
         new UpdateMangaCommand(),
         new CompressMangaCommand(),
         new OpenUrlMangaCommand(),

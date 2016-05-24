@@ -13,6 +13,7 @@ namespace Tests.Entities
     public static void TestInitialize(TestContext context)
     {
       var process = new ReportProcess();
+      MangaReader.Core.Services.Config.ConfigStorage.Instance.AppConfig.UpdateReader = false;
       MangaReader.Core.Client.Init();
       MangaReader.Core.Client.Start(process);
 

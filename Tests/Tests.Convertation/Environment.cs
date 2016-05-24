@@ -34,6 +34,7 @@ namespace Tests.Convertation
       deploymentDirectory = context.DeploymentDirectory;
       testsDirectory = Path.GetFullPath(Path.Combine(path, "..", "..", "..", ".."));
       BeforeTestClean();
+      MangaReader.Core.Services.Config.ConfigStorage.Instance.AppConfig.UpdateReader = false;
     }
 
     public static void BeforeTestClean()

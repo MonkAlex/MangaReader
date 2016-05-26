@@ -91,6 +91,7 @@
     <Compile Include="Environment.cs" />
     <Compile Include="Library\Add.cs" />
     <Compile Include="Manga\AcomicsStructure.cs" />
+    <Compile Include="Manga\HentaichanStructure.cs" />
     <Compile Include="Manga\ReadmangaChapterCounts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Manga\ReadmangaMoved.cs" />

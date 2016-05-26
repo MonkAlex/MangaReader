@@ -15,6 +15,10 @@ namespace MangaReader.Core.Manga.Hentaichan
       get { return base.AllowedCompressionModes.Where(m => !Equals(m, Compression.CompressionMode.Chapter)).ToList(); }
     }
 
+    public override bool HasVolumes { get { return false; } }
+
+    public override bool HasChapters { get { return true; } }
+
     public override void Refresh()
     {
       base.Refresh();

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using MangaReader.Core.Account;
+using MangaReader.Core.Exception;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
@@ -12,6 +14,7 @@ namespace MangaReader.Core.Manga.Hentaichan
 {
   public static class Getter
   {
+    private static readonly string AdultOnly = "Доступ ограничен. Только зарегистрированные пользователи подтвердившие, что им 18 лет.";
 
     public static CookieClient GetClient()
     {
@@ -75,7 +78,10 @@ namespace MangaReader.Core.Manga.Hentaichan
         var pages = new List<Uri>() {manga.Uri};
         for (int i = 0; i < pages.Count; i++)
         {
-          document.LoadHtml(Page.GetPage(pages[i], GetClient()).Content);
+          var content = Page.GetPage(pages[i], GetClient()).Content;
+          if (content.Contains(AdultOnly))
+            throw new GetSiteInfoException(AdultOnly, manga);
+          document.LoadHtml(content);
 
           // Посчитать странички.
           if (i == 0)
@@ -108,6 +114,11 @@ namespace MangaReader.Core.Manga.Hentaichan
         var status = "Возможно требуется регистрация";
         Library.Status = status;
         Log.Exception(ex, status, manga.Uri.OriginalString);
+      }
+      catch (GetSiteInfoException ex)
+      {
+        Library.Status = string.Format("{0}. {1}", manga.Name, AdultOnly);
+        Log.Exception(ex);
       }
 
       manga.Chapters.AddRange(chapters);

@@ -21,6 +21,32 @@ namespace MangaReader.Core.Manga.Hentaichan
 
     public virtual string UserId { get; set; }
 
+    public override string Name
+    {
+      get { return name; }
+      set
+      {
+        if (name == value)
+          return;
+
+        name = value;
+        this.UserId = string.Empty;
+      }
+    }
+
+    public override string Password
+    {
+      get { return password; }
+      set
+      {
+        if (password == value)
+          return;
+
+        password = value;
+        this.PasswordHash = string.Empty;
+      }
+    }
+
     public virtual string PasswordHash
     {
       get
@@ -33,6 +59,8 @@ namespace MangaReader.Core.Manga.Hentaichan
     }
 
     private string hash = string.Empty;
+    private string password;
+    private string name;
 
     public virtual string GetPasswordHash()
     {

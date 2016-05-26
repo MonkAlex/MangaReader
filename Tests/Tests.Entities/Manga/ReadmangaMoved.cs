@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHibernate.Linq;
 using Chapter = MangaReader.Core.Manga.Grouple.Chapter;
 
-namespace Tests.Entities
+namespace Tests.Entities.Manga
 {
   [TestClass]
   public class ReadmangaMoved

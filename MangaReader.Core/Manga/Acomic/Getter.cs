@@ -11,6 +11,9 @@ namespace MangaReader.Core.Manga.Acomic
 {
   public static class Getter
   {
+    private static readonly string VolumeClassName = "serial-chapters-head";
+    private static readonly string VolumeXPath = string.Format("//*[@class=\"{0}\"]", VolumeClassName);
+    private static readonly string ChapterXPath = "//div[@class=\"chapters\"]//a";
 
     public static CookieClient GetAdultClient()
     {
@@ -45,8 +48,8 @@ namespace MangaReader.Core.Manga.Acomic
       {
         var document = new HtmlDocument();
         document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), Getter.GetAdultClient()).Content);
-        manga.HasVolumes = document.DocumentNode.SelectNodes("//h2[@class=\"serial-chapters-head\"]") != null;
-        manga.HasChapters = document.DocumentNode.SelectNodes("//div[@class=\"chapters\"]//a") != null;
+        manga.HasVolumes = document.DocumentNode.SelectNodes(VolumeXPath) != null;
+        manga.HasChapters = document.DocumentNode.SelectNodes(ChapterXPath) != null;
       }
       catch (System.Exception){}
     }
@@ -65,7 +68,7 @@ namespace MangaReader.Core.Manga.Acomic
         var document = new HtmlDocument();
         document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), Getter.GetAdultClient()).Content);
 
-        var volumeNodes = document.DocumentNode.SelectNodes("//h2[@class=\"serial-chapters-head\"]");
+        var volumeNodes = document.DocumentNode.SelectNodes(VolumeXPath);
         if (volumeNodes != null)
           for (var i = 0; i < volumeNodes.Count; i++)
           {
@@ -75,7 +78,7 @@ namespace MangaReader.Core.Manga.Acomic
             var skipped = volume.ParentNode.ChildNodes
               .SkipWhile(cn => cn.PreviousSibling != volume);
             var volumeChapterNodes = skipped
-              .TakeWhile(cn => cn.Name != "h2");
+              .TakeWhile(cn => !cn.Attributes.Any() || cn.Attributes[0].Value != VolumeClassName);
             var volumeChapters = volumeChapterNodes
               .Select(cn => cn.SelectNodes(".//a"))
               .SelectMany(cn => cn)
@@ -86,7 +89,7 @@ namespace MangaReader.Core.Manga.Acomic
 
         if (volumeNodes == null || !volumes.Any())
         {
-          var nodes = document.DocumentNode.SelectNodes("//div[@class=\"chapters\"]//a");
+          var nodes = document.DocumentNode.SelectNodes(ChapterXPath);
           if (nodes != null)
             chapters.AddRange(nodes.Select(cn => new Chapter(new Uri(cn.Attributes[0].Value), (cn.Attributes.Count > 1 ? cn.Attributes[1].Value : cn.InnerText))));
         }

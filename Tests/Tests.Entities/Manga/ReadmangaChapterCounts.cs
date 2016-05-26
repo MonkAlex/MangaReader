@@ -12,28 +12,28 @@ namespace Tests.Entities.Manga
     public void AddEmptyReadmanga()
     {
       var chapters = GetCountOfChapters("http://readmanga.me/_my_name_");
-      Assert.AreEqual(chapters, 0);
+      Assert.AreEqual(0, chapters);
     }
 
     [TestMethod]
     public void AddSingleReadmanga()
     {
       var chapters = GetCountOfChapters("http://readmanga.me/traeh");
-      Assert.AreEqual(chapters, 1);
+      Assert.AreEqual(1, chapters);
     }
 
     [TestMethod]
     public void AddReadmangaWithoutExtra()
     {
       var chapters = GetCountOfChapters("http://readmanga.me/hack__xxxx");
-      Assert.AreEqual(chapters, 10);
+      Assert.AreEqual(10, chapters);
     }
 
     [TestMethod]
     public void AddReadmangaWithExtra()
     {
       var chapters = GetCountOfChapters("http://readmanga.me/anima");
-      Assert.AreEqual(chapters, 59);
+      Assert.AreEqual(59, chapters);
     }
 
     private int GetCountOfChapters(string url)

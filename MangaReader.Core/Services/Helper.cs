@@ -44,7 +44,7 @@ namespace MangaReader.Core.Services
     public static T SingleOrCreate<T>(this IQueryable<T> query) where T : Entity.Entity, new()
     {
       var single = query.SingleOrDefault();
-      if (single == null)
+      if (Equals(single, default(T)))
       {
         single = new T();
         single.Save();

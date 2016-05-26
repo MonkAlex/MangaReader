@@ -16,6 +16,7 @@ namespace MangaReader.CLI
       {
         Console.WriteLine("{0}:{1}", manga.Id, manga);
       }
+      Core.Services.Config.ConfigStorage.Instance.Save();
     }
   }
 }

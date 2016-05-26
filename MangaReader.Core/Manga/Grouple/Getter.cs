@@ -108,7 +108,7 @@ namespace MangaReader.Core.Manga.Grouple
         var document = new HtmlDocument();
         document.LoadHtml(page.Content);
         var linkNodes = document.DocumentNode
-          .SelectNodes("//div[@class=\"expandable chapters-link\"]//tr//a[@href]")
+          .SelectNodes("//div[@class=\"expandable chapters-link\"]//a[@href]")
           .Reverse()
           .ToList();
         links = linkNodes

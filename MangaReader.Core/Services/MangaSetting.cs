@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MangaReader.Core.Account;
 
 namespace MangaReader.Core.Services
@@ -31,10 +32,15 @@ namespace MangaReader.Core.Services
 
     public virtual Compression.CompressionMode DefaultCompression { get; set; }
 
+    public Uri MainUri { get; set; }
+
+    public IList<Uri> MangaSettingUris { get; set; } 
+
     public MangaSetting()
     {
       this.CompressManga = true;
       this.OnlyUpdate = true;
+      this.MangaSettingUris = new List<Uri>();
     }
   }
 }

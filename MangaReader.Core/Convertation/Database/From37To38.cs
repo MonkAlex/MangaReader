@@ -1,5 +1,8 @@
 ﻿using System;
 using MangaReader.Core.Convertation.Primitives;
+using MangaReader.Core.Manga.Acomic;
+using MangaReader.Core.Manga.Grouple;
+using MangaReader.Core.Manga.Hentaichan;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
@@ -26,6 +29,37 @@ namespace MangaReader.Core.Convertation.Database
                  where hex(Manga) = '{4}'", readmanga[0], (bool)readmanga[1] ? 1 : 0, (bool)readmanga[2] ? 1 : 0, 
                  readmanga[3], "EF91AC64B3BD8640BE17BB1DBE7A7656"));
         ConfigStorage.Instance.DatabaseConfig.MangaSettings.Update();
+      }
+
+      foreach (var setting in ConfigStorage.Instance.DatabaseConfig.MangaSettings)
+      {
+        if (setting.MainUri != null)
+          continue;
+
+        if (setting.Manga == Hentaichan.Type)
+        {
+          setting.MainUri = new Uri("http://hentaichan.me/");
+          setting.MangaSettingUris.Add(setting.MainUri);
+          setting.MangaSettingUris.Add(new Uri("http://hentaichan.ru/"));
+        }
+        if (setting.Manga == Readmanga.Type)
+        {
+          setting.MainUri = new Uri("http://readmanga.me/");
+          setting.MangaSettingUris.Add(setting.MainUri);
+          setting.MangaSettingUris.Add(new Uri("http://readmanga.ru/"));
+        }
+        if (setting.Manga == Mintmanga.Type)
+        {
+          setting.MainUri = new Uri("http://mintmanga.com/");
+          setting.MangaSettingUris.Add(setting.MainUri);
+          setting.MangaSettingUris.Add(new Uri("http://adultmanga.ru/"));
+        }
+        if (setting.Manga == Acomics.Type)
+        {
+          setting.MainUri = new Uri("http://acomics.ru/");
+          setting.MangaSettingUris.Add(setting.MainUri);
+        }
+        setting.Save();
       }
     }
 

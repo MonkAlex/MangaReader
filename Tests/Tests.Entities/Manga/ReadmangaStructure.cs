@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Tests.Entities.Manga
 {
   [TestClass]
-  public class ReadmangaChapterCounts
+  public class ReadmangaStructure
   {
     [TestMethod]
     public void AddEmptyReadmanga()

@@ -14,6 +14,8 @@ namespace MangaReader.ViewModel.Setting
     private string login;
     private string password;
 
+    internal int LoginId { get; }
+
     public List<Compression.CompressionMode> CompressionModes { get; private set; }
 
     public Compression.CompressionMode DefaultCompression
@@ -92,6 +94,7 @@ namespace MangaReader.ViewModel.Setting
     {
       this.mangaSetting = setting;
       this.Header = setting.MangaName;
+      this.LoginId = this.mangaSetting.Login.Id;
       this.CompressionModes = Generic.GetEnumValues<Compression.CompressionMode>();
 
       this.CompressManga = this.mangaSetting.CompressManga;

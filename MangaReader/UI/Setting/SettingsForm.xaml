@@ -14,7 +14,9 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TabControl x:Name="Tabs" BorderBrush="Transparent" ItemsSource="{Binding Views}" SelectedIndex="0">
+        <TabControl BorderBrush="Transparent" 
+                    ItemsSource="{Binding Views}" 
+                    SelectedItem="{Binding SelectedModel}">
             <TabControl.Resources>
                 <DataTemplate DataType="{x:Type setting:AppSettingModel}">
                     <ui:AppSettingView/>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using MangaReader.Core.Services.Config;
 using MangaReader.UI.Services;
@@ -9,9 +10,21 @@ namespace MangaReader.ViewModel.Setting
 {
   public class SettingModel : BaseViewModel
   {
+    private SettingViewModel selectedModel;
     public AppSettingModel AppSetting { get; private set; }
 
     public ObservableCollection<SettingViewModel> Views { get; private set; }
+
+    public SettingViewModel SelectedModel
+    {
+      get { return selectedModel; }
+      set
+      {
+        SyncLoginOnModelChange(selectedModel);
+        selectedModel = value;
+        OnPropertyChanged();
+      }
+    }
 
     public ICommand Save { get; private set; }
 
@@ -24,6 +37,24 @@ namespace MangaReader.ViewModel.Setting
       this.Views.Add(this.AppSetting);
       foreach (var setting in ConfigStorage.Instance.DatabaseConfig.MangaSettings)
         this.Views.Add(new MangaSettingModel(setting));
+      this.SelectedModel = this.AppSetting;
+    }
+
+    private void SyncLoginOnModelChange(SettingViewModel model)
+    {
+      var mangaSettings = model as MangaSettingModel;
+      if (mangaSettings != null)
+      {
+        var someLoginView = this.Views
+          .OfType<MangaSettingModel>()
+          .Where(m => !Equals(m, mangaSettings) && Equals(m.LoginId, mangaSettings.LoginId))
+          .ToList();
+        foreach (var settingModel in someLoginView)
+        {
+          settingModel.Login = mangaSettings.Login;
+          settingModel.Password = mangaSettings.Password;
+        }
+      }
     }
 
     public override void Show()

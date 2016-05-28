@@ -15,7 +15,7 @@ namespace MangaReader.Core.Manga.Grouple
   {
     public new static Guid Type { get { return Guid.Parse("0BBE71B1-16E0-44F4-B7C6-3450E44E9A15"); } }
 
-    public new static Guid Manga { get { return Readmanga.Type; } }
+    public new static Guid[] Manga { get { return new Guid[2] {Readmanga.Type, Mintmanga.Type}; } }
 
     public override async Task<bool> DoLogin()
     {
@@ -78,7 +78,9 @@ namespace MangaReader.Core.Manga.Grouple
           .Select(async s =>
           {
             var page = await Page.GetPageAsync(s);
-            return new Readmanga() {Uri = s, Name = Getter.GetMangaName(page.Content).ToString()};
+            var manga = Mangas.Create(s);
+            manga.Name = Getter.GetMangaName(page.Content).ToString();
+            return manga;
           })
           .ToList();
       foreach (var bookmark in loadedBookmarks)

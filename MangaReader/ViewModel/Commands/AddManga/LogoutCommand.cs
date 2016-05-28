@@ -1,4 +1,4 @@
-﻿using MangaReader.Core.Services;
+﻿using MangaReader.Core.Account;
 using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
 
@@ -6,23 +6,23 @@ namespace MangaReader.ViewModel.Commands.AddManga
 {
   public class LogoutCommand : BaseCommand
   {
-    private MangaSetting setting;
+    private Login login;
 
     public override bool CanExecute(object parameter)
     {
-      return base.CanExecute(parameter) && setting.Login.IsLogined;
+      return base.CanExecute(parameter) && login.IsLogined;
     }
 
     public async override void Execute(object parameter)
     {
       base.Execute(parameter);
 
-      await setting.Login.Logout();
+      await login.Logout();
     }
 
-    public LogoutCommand(MangaSetting setting)
+    public LogoutCommand(Login login)
     {
-      this.setting = setting;
+      this.login = login;
       this.Name = Strings.Input_Logout;
     }
   }

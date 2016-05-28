@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using MangaReader.Core.Account;
 using MangaReader.Core.Manga;
-using MangaReader.Core.Services;
 using MangaReader.ViewModel.Commands.AddManga;
 using MangaReader.ViewModel.Primitive;
 
@@ -11,32 +11,32 @@ namespace MangaReader.ViewModel
 {
   public class LoginModel : BaseViewModel
   {
-    private MangaSetting setting;
+    private Login login;
     private bool isEnabled;
 
     public string Header { get; set; }
 
     public string Login
     {
-      get { return setting.Login.Name; }
+      get { return login.Name; }
       set
       {
-        setting.Login.Name = value;
+        login.Name = value;
         OnPropertyChanged();
       }
     }
 
     public string Password
     {
-      get { return setting.Login.Password; }
+      get { return login.Password; }
       set
       {
-        setting.Login.Password = value;
+        login.Password = value;
         OnPropertyChanged();
       }
     }
 
-    public bool CanEdit { get { return IsEnabled && !setting.Login.IsLogined; } }
+    public bool CanEdit { get { return IsEnabled && !login.IsLogined; } }
 
     public bool IsEnabled
     {
@@ -62,12 +62,12 @@ namespace MangaReader.ViewModel
       await LoadBookmarks();
 
       this.IsEnabled = true;
-      LoginOnLoginStateChanged(this, setting.Login.IsLogined);
+      LoginOnLoginStateChanged(this, login.IsLogined);
     }
 
     private async Task LoadBookmarks()
     {
-      var bookmarks = await setting.Login.GetBookmarks();
+      var bookmarks = await login.GetBookmarks();
 
       foreach (var bookmark in bookmarks)
       {
@@ -76,13 +76,13 @@ namespace MangaReader.ViewModel
       }
     }
 
-    public LoginModel(MangaSetting setting)
+    public LoginModel(Login login, string name)
     {
-      this.setting = setting;
-      this.Header = setting.MangaName;
-      this.LogInOutCommand = new LogInOutCommand(setting);
+      this.login = login;
+      this.Header = name;
+      this.LogInOutCommand = new LogInOutCommand(this.login);
       this.Bookmarks = new ObservableCollection<SelectedItem<Mangas>>();
-      this.setting.Login.LoginStateChanged += LoginOnLoginStateChanged;
+      this.login.LoginStateChanged += LoginOnLoginStateChanged;
     }
 
     private async void LoginOnLoginStateChanged(object sender, bool b)

@@ -35,7 +35,7 @@ namespace MangaReader.Core.Convertation.Mangas
 
       foreach (var dbstring in database)
       {
-        Manga.Mangas.Create(new Uri(dbstring));
+        Manga.Mangas.CreateFromWeb(new Uri(dbstring));
         process.Percent += 100.0 / database.Count;
       }
 

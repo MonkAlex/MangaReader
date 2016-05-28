@@ -9,6 +9,8 @@ namespace Tests.Entities
   public static class Builder
   {
     private static readonly Uri Url = new Uri("http://example.com");
+    private static readonly Uri ReadmangaUri = new Uri("http://readmanga.me");
+    private static readonly Uri AcomicsUri = new Uri("http://acomics.ru");
 
     /// <summary>
     /// Создать мангу.
@@ -16,13 +18,10 @@ namespace Tests.Entities
     /// <returns></returns>
     public static Readmanga CreateReadmanga()
     {
-      var manga = new Readmanga
-      {
-        Uri = Url,
-        Status = "example status",
-        NeedUpdate = false,
-        Name = "readmanga from example" + Guid.NewGuid()
-      };
+      var manga = Mangas.Create(ReadmangaUri) as Readmanga;
+      manga.Status = "example status";
+      manga.NeedUpdate = false;
+      manga.Name = "readmanga from example" + Guid.NewGuid();
       manga.Save();
       return manga;
     }
@@ -41,13 +40,10 @@ namespace Tests.Entities
 
     public static Acomics CreateAcomics()
     {
-      var manga = new Acomics
-      {
-        Uri = Url,
-        Status = "example status",
-        NeedUpdate = false,
-        Name = "Acomics from example" + Guid.NewGuid()
-      };
+      var manga = Mangas.Create(AcomicsUri) as Acomics;
+      manga.Status = "example status";
+      manga.NeedUpdate = false;
+      manga.Name = "Acomics from example" + Guid.NewGuid();
       manga.Save();
       return manga;
     }

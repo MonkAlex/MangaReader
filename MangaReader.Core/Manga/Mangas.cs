@@ -444,22 +444,38 @@ namespace MangaReader.Core.Manga
     /// <summary>
     /// Создать мангу по ссылке.
     /// </summary>
-    /// <param name="url">Ссылка на мангу.</param>
+    /// <param name="uri">Ссылка на мангу.</param>
     /// <returns>Манга.</returns>
-    public static Mangas Create(Uri url)
+    public static Mangas Create(Uri uri)
     {
       Mangas manga = null;
 
-      if (url.Host == "readmanga.me" || url.Host == "adultmanga.ru" || url.Host == "mintmanga.com")
+      if (uri.Host == "readmanga.me" || uri.Host == "readmanga.ru")
         manga = new Grouple.Readmanga();
-      if (url.Host == "acomics.ru")
+      if (uri.Host == "adultmanga.ru" || uri.Host == "mintmanga.com")
+        manga = new Grouple.Mintmanga();
+      if (uri.Host == "acomics.ru")
         manga = new Acomic.Acomics();
-      if (url.Host == "hentaichan.ru" || url.Host == "hentaichan.me")
+      if (uri.Host == "hentaichan.ru" || uri.Host == "hentaichan.me")
         manga = new Hentaichan.Hentaichan();
 
       if (manga != null)
+        manga.Uri = uri;
+
+      return manga;
+    }
+
+    /// <summary>
+    /// Создать мангу по ссылке, загрузив необходимую информацию с сайта.
+    /// </summary>
+    /// <param name="uri">Ссылка на мангу.</param>
+    /// <returns></returns>
+    public static Mangas CreateFromWeb(Uri uri)
+    {
+      var manga = Create(uri);
+      if (manga != null)
       {
-        manga.Created(url);
+        manga.Created(uri);
         if (manga.IsValid())
           manga.Save();
       }

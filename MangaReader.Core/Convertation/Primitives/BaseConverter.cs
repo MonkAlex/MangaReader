@@ -36,10 +36,10 @@ namespace MangaReader.Core.Convertation.Primitives
       
     }
 
-    protected void RunSql(string command)
+    protected object RunSql(string command)
     {
       var query = Mapping.Session.CreateSQLQuery(command);
-      query.UniqueResult();
+      return query.UniqueResult();
     }
   }
 }

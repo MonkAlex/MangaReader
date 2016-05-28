@@ -33,14 +33,7 @@ namespace MangaReader.Core.Convertation
 
     private static void Convert<T>(IProcess process) where T : BaseConverter
     {
-      var converters = new List<T>();
-      foreach (var assembly in ResolveAssembly.AllowedAssemblies())
-      {
-        converters.AddRange(assembly.GetTypes()
-          .Where(t => !t.IsAbstract && t.IsClass && typeof(T).IsAssignableFrom(t))
-          .Select(Activator.CreateInstance)
-          .OfType<T>());
-      }
+      var converters = new List<T>(Generic.GetAllTypes<T>().Select(Activator.CreateInstance).OfType<T>());
       converters = converters.OrderBy(c => c.Version).ToList();
       foreach (var converter in converters)
       {

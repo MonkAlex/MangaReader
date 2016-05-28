@@ -39,6 +39,15 @@ namespace MangaReader.Core.NHibernate
     }
   }
 
+  public class MintmangaMap : SubclassMap<Mintmanga>
+  {
+    public MintmangaMap()
+    {
+      Not.LazyLoad();
+      DiscriminatorValue(Mintmanga.Type.ToString());
+    }
+  }
+
   public class AcomicsMap : SubclassMap<Acomics>
   {
     public AcomicsMap()

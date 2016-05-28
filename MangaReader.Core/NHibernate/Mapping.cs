@@ -10,7 +10,7 @@ using NHibernate.Tool.hbm2ddl;
 
 namespace MangaReader.Core.NHibernate
 {
-  public class Mapping
+  public static class Mapping
   {
     private const string DbFile = "storage.db";
 
@@ -56,7 +56,7 @@ namespace MangaReader.Core.NHibernate
       return Fluently
         .Configure()
         .Database(SQLiteConfiguration.Standard.UsingFile(Path.Combine(ConfigStorage.WorkFolder, DbFile)))
-        .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Mapping>())
+        .Mappings(m => m.FluentMappings.AddFromAssemblyOf<BaseInterceptor>())
         .ExposeConfiguration(BuildSchema)
         .BuildSessionFactory();
     }

@@ -1,4 +1,4 @@
-﻿using MangaReader.Core.Services;
+﻿using MangaReader.Core.Account;
 using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands.AddManga
@@ -30,12 +30,15 @@ namespace MangaReader.ViewModel.Commands.AddManga
       ActiveCommand.Execute(parameter);
     }
 
-    public LogInOutCommand(MangaSetting setting)
+    public LogInOutCommand(Login login)
     {
-      this.Login = new LoginCommand(setting);
-      this.Logout = new LogoutCommand(setting);
-      LoginOnLoginStateChanged(this, setting.Login.IsLogined);
-      setting.Login.LoginStateChanged += LoginOnLoginStateChanged;
+      this.Login = new LoginCommand(login);
+      this.Logout = new LogoutCommand(login);
+      if (login != null)
+      {
+        LoginOnLoginStateChanged(this, login.IsLogined);
+        login.LoginStateChanged += LoginOnLoginStateChanged;
+      }
     }
 
     private void LoginOnLoginStateChanged(object sender, bool b)

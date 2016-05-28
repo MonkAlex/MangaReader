@@ -11,7 +11,7 @@ namespace MangaReader.Core.Account
   {
     public static Guid Type { get { return Guid.Empty; } }
 
-    public static Guid Manga { get { return Guid.Empty; } }
+    public static Guid[] Manga { get { return new Guid[0]; } }
 
     public bool IsLogined
     {
@@ -79,18 +79,19 @@ namespace MangaReader.Core.Account
 
     protected abstract Task<List<Mangas>> DownloadBookmarks();
 
-    public static Login Create(Guid manga)
+    public static Login Get(Guid manga)
     {
-      var baseClass = typeof(Login);
-      // TODO: с учетом подключаемых либ - искать надо везде.
-      var types = baseClass.Assembly.GetTypes()
-        .Where(type => type.IsSubclassOf(baseClass));
+      var types = Generic.GetAllTypes<Login>();
 
       Login login = null;
       foreach (var type in types)
       {
-        if (Equals(type.MangaProperty(), manga))
-          login = (Login)Activator.CreateInstance(type);
+        if (type.MangaProperty().Contains(manga))
+        {
+          login = NHibernate.Repository.Get<Login>().ToList().SingleOrDefault(l => l.GetType() == type);
+          if (login == null)
+            login = (Login)Activator.CreateInstance(type);
+        }
       }
       return login;
     }

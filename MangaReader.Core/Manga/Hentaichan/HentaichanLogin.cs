@@ -17,7 +17,7 @@ namespace MangaReader.Core.Manga.Hentaichan
   {
     public new static Guid Type { get { return Guid.Parse("03CEFF67-1472-438A-A90A-07B44F6FFDC4"); } }
 
-    public new static Guid Manga { get { return Hentaichan.Type; } }
+    public new static Guid[] Manga { get { return new Guid[1] {Hentaichan.Type}; } }
 
     public virtual string UserId { get; set; }
 
@@ -154,7 +154,12 @@ namespace MangaReader.Core.Manga.Hentaichan
                              .Select(g => g.Captures[0])
                              .OfType<Match>()
                              .Select(m => new Uri(m.Groups[1].Value.Replace("/manga/", "/related/"))))
-          .Select(u => new Hentaichan { Uri = u, Name = Getter.GetMangaName(u) })
+          .Select(u =>
+          {
+            var manga = Mangas.Create(u);
+            manga.Name = Getter.GetMangaName(u);
+            return manga;
+          })
           .Where(m => !string.IsNullOrWhiteSpace(m.Name))
           .ToList();
 

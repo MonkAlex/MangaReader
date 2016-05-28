@@ -105,7 +105,7 @@ namespace MangaReader.Core.Services
       if (Repository.Get<Mangas>().Any(m => m.Uri == uri))
         return false;
 
-      var newManga = Mangas.Create(uri);
+      var newManga = Mangas.CreateFromWeb(uri);
       if (newManga == null || !newManga.IsValid())
         return false;
 

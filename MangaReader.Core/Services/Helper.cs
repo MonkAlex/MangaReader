@@ -13,10 +13,10 @@ namespace MangaReader.Core.Services
       return find is Guid ? (Guid)find : Guid.Empty;
     }
 
-    public static Guid MangaProperty(this Type type)
+    public static Guid[] MangaProperty(this Type type)
     {
       var find = type.GetProperty("Manga").GetValue(null);
-      return find is Guid ? (Guid)find : Guid.Empty;
+      return find is Guid[] ? (Guid[])find : new Guid[0];
     }
 
     /// <summary>
@@ -51,6 +51,17 @@ namespace MangaReader.Core.Services
       }
 
       return single;
+    }
+
+    public static List<Type> GetAllTypes<T>()
+    {
+      var types = new List<Type>();
+      foreach (var assembly in ResolveAssembly.AllowedAssemblies())
+      {
+        types.AddRange(assembly.GetTypes()
+          .Where(t => !t.IsAbstract && t.IsClass && typeof(T).IsAssignableFrom(t)));
+      }
+      return types;
     }
 
     public static List<T> GetEnumValues<T>()

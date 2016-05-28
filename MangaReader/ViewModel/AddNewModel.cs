@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using MangaReader.Core.Services.Config;
 using MangaReader.UI.Services;
@@ -29,9 +30,10 @@ namespace MangaReader.ViewModel
     {
       base.Load();
 
-      foreach (var setting in ConfigStorage.Instance.DatabaseConfig.MangaSettings)
+      foreach (var settings in ConfigStorage.Instance.DatabaseConfig.MangaSettings.GroupBy(s => s.Login))
       {
-        this.Logins.Add(new LoginModel(setting));
+        var name = string.Join(" \\ ", settings.Select(s => s.MangaName));
+        this.Logins.Add(new LoginModel(settings.Key, name));
       }
     }
 

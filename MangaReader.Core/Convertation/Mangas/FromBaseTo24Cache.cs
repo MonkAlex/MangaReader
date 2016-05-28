@@ -33,12 +33,13 @@ namespace MangaReader.Core.Convertation.Mangas
 #pragma warning restore CS0612
       if (obsoleteManga != null)
       {
-        globalCollection.AddRange(obsoleteManga.Select(manga => new Manga.Grouple.Readmanga()
+        globalCollection.AddRange(obsoleteManga.Select(manga =>
         {
-          Name = manga.Name,
-          Uri = new Uri(manga.Url),
-          Status = manga.Status,
-          NeedUpdate = manga.NeedUpdate
+          var mangas = Manga.Mangas.Create(new Uri(manga.Url));
+          mangas.Name = manga.Name;
+          mangas.Status = manga.Status;
+          mangas.NeedUpdate = manga.NeedUpdate;
+          return mangas;
         }));
       }
 

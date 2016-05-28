@@ -59,7 +59,7 @@ namespace Tests.Entities.Manga
 
     private Acomics GetManga(string uri)
     {
-      var manga = Mangas.Create(new Uri(uri)) as Acomics;
+      var manga = Mangas.CreateFromWeb(new Uri(uri)) as Acomics;
       Getter.UpdateContent(manga);
       return manga;
     }

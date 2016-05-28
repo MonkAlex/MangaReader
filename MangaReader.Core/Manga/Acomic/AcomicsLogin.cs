@@ -14,7 +14,7 @@ namespace MangaReader.Core.Manga.Acomic
   {
     public new static Guid Type { get { return Guid.Parse("F526CD85-7846-4F32-85A7-C57E3983DFB1"); } }
 
-    public new static Guid Manga { get { return Acomics.Type; } }
+    public new static Guid[] Manga { get { return new Guid[1] {Acomics.Type}; } }
 
     public virtual string PasswordHash { get; set; }
 
@@ -79,7 +79,8 @@ namespace MangaReader.Core.Manga.Acomic
       {
         var name = WebUtility.HtmlDecode(node.ChildNodes.Single().InnerText);
         var url = node.Attributes.Single().Value;
-        var manga = new Acomics {Uri = new Uri(this.MainUri, url), Name = name};
+        var manga = Mangas.Create(new Uri(this.MainUri, url));
+        manga.Name = name;
         bookmarks.Add(manga);
       }
 

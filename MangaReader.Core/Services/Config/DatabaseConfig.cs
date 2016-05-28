@@ -49,27 +49,26 @@ namespace MangaReader.Core.Services.Config
     /// <returns>Коллекция всех настроек.</returns>
     private static List<MangaSetting> CreateDefaultMangaSettings(List<MangaSetting> query)
     {
-      var baseClass = typeof(Manga.Mangas);
-      // TODO: с учетом подключаемых либ - искать надо везде.
-      var types = baseClass.Assembly.GetTypes()
-        .Where(type => type.IsSubclassOf(baseClass));
+      var types = Generic.GetAllTypes<Manga.Mangas>();
+      var settings = new List<MangaSetting>(query);
 
       foreach (var type in types)
       {
-        if (query.Any(s => Equals(s.Manga, type.TypeProperty())))
+        var typeProperty = type.TypeProperty();
+        if (settings.Any(s => Equals(s.Manga, typeProperty)))
           continue;
 
         var setting = new MangaSetting
         {
           Folder = AppConfig.DownloadFolder,
-          Manga = type.TypeProperty(),
+          Manga = typeProperty,
           MangaName = type.Name,
           DefaultCompression = Compression.CompressionMode.Manga
         };
 
-        query.Add(setting);
+        settings.Add(setting);
       }
-      return query;
+      return settings;
     }
 
     public DatabaseConfig()

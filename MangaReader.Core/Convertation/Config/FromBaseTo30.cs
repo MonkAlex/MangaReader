@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Manga.Acomic;
@@ -10,6 +11,11 @@ namespace MangaReader.Core.Convertation.Config
 {
   public class FromBaseTo30 : ConfigConverter
   {
+    protected override bool ProtectedCanConvert(IProcess process)
+    {
+      return base.ProtectedCanConvert(process) && File.Exists(SettingsOldPath);
+    }
+
     protected override void ProtectedConvert(IProcess process)
     {
       base.ProtectedConvert(process);

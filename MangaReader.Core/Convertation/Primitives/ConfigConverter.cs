@@ -12,8 +12,7 @@ namespace MangaReader.Core.Convertation.Primitives
     {
       return base.ProtectedCanConvert(process) && 
         this.Version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 &&
-        process.Version.CompareTo(this.Version) >= 0 &&
-        File.Exists(SettingsOldPath);
+        process.Version.CompareTo(this.Version) >= 0;
     }
 
     protected ConfigConverter()

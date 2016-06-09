@@ -1,10 +1,9 @@
 ﻿using System;
 using MangaReader.Core.Convertation.Primitives;
-using MangaReader.Core.Services;
 
-namespace MangaReader.Core.Convertation.Database
+namespace MangaReader.Core.Convertation.Config
 {
-  public class From29To30 : DatabaseConverter
+  public class From29To30 : ConfigConverter
   {
     protected override void ProtectedConvert(IProcess process)
     {

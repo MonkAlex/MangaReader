@@ -6,9 +6,9 @@ using MangaReader.Core.Manga.Hentaichan;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
-namespace MangaReader.Core.Convertation.Database
+namespace MangaReader.Core.Convertation.Config
 {
-  public class From37To38 : DatabaseConverter
+  public class From37To38 : ConfigConverter
   {
     protected override void ProtectedConvert(IProcess process)
     {

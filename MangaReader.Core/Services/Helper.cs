@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MangaReader.Core.Manga;
+using MangaReader.Core.Services.Config;
 using NHibernate.Util;
 
 namespace MangaReader.Core.Services
@@ -67,6 +69,19 @@ namespace MangaReader.Core.Services
     public static List<T> GetEnumValues<T>()
     {
       return new List<T>(Enum.GetValues(typeof(T)).OfType<T>());
+    }
+
+    public static Uri GetMangaMainUri<T>() where T : Mangas
+    {
+      if (NHibernate.Mapping.Initialized)
+      {
+        var setting = ConfigStorage.Instance.DatabaseConfig.MangaSettings.SingleOrDefault(s => s.Manga == typeof (T).TypeProperty());
+        return setting.Login.MainUri;
+      }
+      else
+      {
+        return null;
+      }
     }
   }
 }

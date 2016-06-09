@@ -450,15 +450,15 @@ namespace MangaReader.Core.Manga
     {
       Mangas manga = null;
 
-      if (uri.Host == "readmanga.me" || uri.Host == "readmanga.ru")
-        manga = new Grouple.Readmanga();
-      if (uri.Host == "adultmanga.ru" || uri.Host == "mintmanga.com")
-        manga = new Grouple.Mintmanga();
-      if (uri.Host == "acomics.ru")
-        manga = new Acomic.Acomics();
-      if (uri.Host == "hentaichan.ru" || uri.Host == "hentaichan.me")
-        manga = new Hentaichan.Hentaichan();
-
+      var setting  = ConfigStorage.Instance.DatabaseConfig.MangaSettings
+        .SingleOrDefault(s => s.MangaSettingUris.Any(u => Equals(u.Host, uri.Host)));
+      if (setting != null)
+      {
+        var type = Generic.GetAllTypes<Mangas>().SingleOrDefault(t => t.TypeProperty() == setting.Manga);
+        if (type != null)
+          manga = Activator.CreateInstance(type) as Mangas;
+      }
+      
       if (manga != null)
         manga.Uri = uri;
 

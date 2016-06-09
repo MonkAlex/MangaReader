@@ -110,6 +110,7 @@ namespace MangaReader.ViewModel.Manga
     private void SetType(Uri uri)
     {
       var s = uri == null ? string.Empty : uri.ToString();
+#warning 55, перевести на типы
       var result = "NA";
       if (s.Contains("readmanga"))
         result = "RM";

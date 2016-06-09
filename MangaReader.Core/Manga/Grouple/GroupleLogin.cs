@@ -92,9 +92,10 @@ namespace MangaReader.Core.Manga.Grouple
 
     public GroupleLogin()
     {
+#warning 55
       this.MainUri = new Uri(@"http://grouple.ru/");
-      this.LogoutUri = new Uri(this.MainUri + "internal/auth/logout");
-      this.BookmarksUri = new Uri(@"http://grouple.ru/private/bookmarks");
+      this.LogoutUri = new Uri(this.MainUri, "internal/auth/logout");
+      this.BookmarksUri = new Uri(this.MainUri, "private/bookmarks");
     }
   }
 }

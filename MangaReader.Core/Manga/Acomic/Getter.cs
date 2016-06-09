@@ -18,6 +18,7 @@ namespace MangaReader.Core.Manga.Acomic
     public static CookieClient GetAdultClient()
     {
       var client = new CookieClient();
+#warning 55
       client.Cookie.Add(new Cookie("ageRestrict", "40", "/", "acomics.ru"));
       return client;
     }

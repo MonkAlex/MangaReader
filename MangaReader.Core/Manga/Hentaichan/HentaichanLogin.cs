@@ -90,8 +90,8 @@ namespace MangaReader.Core.Manga.Hentaichan
       {
         try
         {
-          await Client.UploadValuesTaskAsync(MainUri, "POST", loginData);
-          this.UserId = Client.Cookie.GetCookies(new Uri(@"http:\\hentaichan.me"))
+          await Client.UploadValuesTaskAsync(new Uri(MainUri, "index.php"), "POST", loginData);
+          this.UserId = Client.Cookie.GetCookies(this.MainUri)
               .Cast<Cookie>()
               .Single(c => c.Name == "dle_user_id")
               .Value;
@@ -171,9 +171,9 @@ namespace MangaReader.Core.Manga.Hentaichan
 
     public HentaichanLogin()
     {
-      this.MainUri = new Uri(@"http://hentaichan.me/index.php");
-      this.LogoutUri = new Uri(this.MainUri + "?action=logout");
-      this.BookmarksUri = new Uri(@"http://hentaichan.me/favorites/");
+      this.MainUri = new Uri(@"http://hentaichan.me/");
+      this.LogoutUri = new Uri(this.MainUri, "index.php?action=logout");
+      this.BookmarksUri = new Uri(this.MainUri, "favorites/");
     }
   }
 }

@@ -35,7 +35,7 @@ namespace MangaReader.Core.Manga.Acomic
       {
         try
         {
-          await Client.UploadValuesTaskAsync("http://acomics.ru/action/authLogin", "POST", loginData);
+          await Client.UploadValuesTaskAsync(new Uri(this.MainUri + "action/authLogin"), "POST", loginData);
           this.PasswordHash = Client.Cookie.GetCookies(this.MainUri)
               .Cast<Cookie>()
               .Single(c => c.Name == "hash")
@@ -89,6 +89,7 @@ namespace MangaReader.Core.Manga.Acomic
 
     public AcomicsLogin()
     {
+#warning 55, без понятия на что завязывать.
       this.MainUri = new Uri("http://acomics.ru/");
       this.LogoutUri = new Uri(this.MainUri + "auth/logout");
       this.BookmarksUri = new Uri(this.MainUri + "settings/subscribes");

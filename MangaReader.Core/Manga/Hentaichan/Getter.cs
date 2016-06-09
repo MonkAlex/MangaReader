@@ -35,6 +35,7 @@ namespace MangaReader.Core.Manga.Hentaichan
         }
         if (!string.IsNullOrWhiteSpace(login.UserId))
         {
+#warning 55, проверить, насколько критично точное совпадение и на что это влияет
           client.Cookie.Add(new Cookie("dle_user_id", login.UserId, "/", ".hentaichan.me"));
           client.Cookie.Add(new Cookie("dle_password", login.PasswordHash, "/", ".hentaichan.me"));
         }

@@ -17,6 +17,10 @@ namespace MangaReader.Core.Manga.Grouple
 
     public new static Guid[] Manga { get { return new Guid[2] {Readmanga.Type, Mintmanga.Type}; } }
 
+    public override Uri MainUri { get; set; }
+    public override Uri LogoutUri { get { return new Uri(this.MainUri, "internal/auth/logout"); } }
+    public override Uri BookmarksUri { get { return new Uri(this.MainUri, "private/bookmarks"); } }
+
     public override async Task<bool> DoLogin()
     {
       if (IsLogined || !this.CanLogin)
@@ -92,10 +96,8 @@ namespace MangaReader.Core.Manga.Grouple
 
     public GroupleLogin()
     {
-#warning 55
+      // Адрес может быть переопределен в базе. Это только дефолтное значение.
       this.MainUri = new Uri(@"http://grouple.ru/");
-      this.LogoutUri = new Uri(this.MainUri, "internal/auth/logout");
-      this.BookmarksUri = new Uri(this.MainUri, "private/bookmarks");
     }
   }
 }

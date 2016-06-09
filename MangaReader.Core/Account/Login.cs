@@ -31,11 +31,11 @@ namespace MangaReader.Core.Account
 
     public virtual bool CanLogin { get { return !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Password); } }
 
-    public virtual Uri MainUri { get; set; }
+    public abstract Uri MainUri { get; set; }
 
-    public virtual Uri LogoutUri { get; set; }
+    public abstract Uri LogoutUri { get; }
 
-    public virtual Uri BookmarksUri { get; set; }
+    public abstract Uri BookmarksUri { get; }
 
     /// <summary>
     /// Указатель блокировки клиента файла.

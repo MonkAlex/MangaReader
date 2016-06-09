@@ -41,23 +41,27 @@ namespace MangaReader.Core.Convertation.Config
           setting.MainUri = new Uri("http://hentaichan.me/");
           setting.MangaSettingUris.Add(setting.MainUri);
           setting.MangaSettingUris.Add(new Uri("http://hentaichan.ru/"));
+          setting.Login.MainUri = setting.MainUri;
         }
         if (setting.Manga == Readmanga.Type)
         {
           setting.MainUri = new Uri("http://readmanga.me/");
           setting.MangaSettingUris.Add(setting.MainUri);
           setting.MangaSettingUris.Add(new Uri("http://readmanga.ru/"));
+          setting.Login.MainUri = new Uri(@"http://grouple.ru/");
         }
         if (setting.Manga == Mintmanga.Type)
         {
           setting.MainUri = new Uri("http://mintmanga.com/");
           setting.MangaSettingUris.Add(setting.MainUri);
           setting.MangaSettingUris.Add(new Uri("http://adultmanga.ru/"));
+          setting.Login.MainUri = new Uri(@"http://grouple.ru/");
         }
         if (setting.Manga == Acomics.Type)
         {
           setting.MainUri = new Uri("http://acomics.ru/");
           setting.MangaSettingUris.Add(setting.MainUri);
+          setting.Login.MainUri = setting.MainUri;
         }
         setting.Save();
       }

@@ -14,9 +14,13 @@ namespace MangaReader.Core.Manga.Acomic
   {
     public new static Guid Type { get { return Guid.Parse("F526CD85-7846-4F32-85A7-C57E3983DFB1"); } }
 
-    public new static Guid[] Manga { get { return new Guid[1] {Acomics.Type}; } }
+    public new static Guid[] Manga { get { return new Guid[1] { Acomics.Type }; } }
 
     public virtual string PasswordHash { get; set; }
+
+    public override Uri MainUri { get; set; }
+    public override Uri LogoutUri { get { return new Uri(this.MainUri, "auth/logout"); } }
+    public override Uri BookmarksUri { get { return new Uri(this.MainUri, "settings/subscribes"); } }
 
     public override async Task<bool> DoLogin()
     {
@@ -89,10 +93,8 @@ namespace MangaReader.Core.Manga.Acomic
 
     public AcomicsLogin()
     {
-#warning 55, без понятия на что завязывать.
+      // Адрес может быть переопределен в базе. Это только дефолтное значение.
       this.MainUri = new Uri("http://acomics.ru/");
-      this.LogoutUri = new Uri(this.MainUri + "auth/logout");
-      this.BookmarksUri = new Uri(this.MainUri + "settings/subscribes");
     }
   }
 }

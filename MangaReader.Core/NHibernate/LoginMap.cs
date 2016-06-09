@@ -10,6 +10,7 @@ namespace MangaReader.Core.NHibernate
       Id(x => x.Id);
       Map(x => x.Name);
       Map(x => x.Password);
+      Map(x => x.MainUri);
       DiscriminateSubClassesOnColumn("Type");
     }
   }

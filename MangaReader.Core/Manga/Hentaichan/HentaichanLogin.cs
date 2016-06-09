@@ -47,6 +47,10 @@ namespace MangaReader.Core.Manga.Hentaichan
       }
     }
 
+    public override Uri MainUri { get; set; }
+    public override Uri LogoutUri { get { return new Uri(this.MainUri, "index.php?action=logout"); } }
+    public override Uri BookmarksUri { get { return new Uri(this.MainUri, "favorites/"); } }
+
     public virtual string PasswordHash
     {
       get
@@ -171,9 +175,8 @@ namespace MangaReader.Core.Manga.Hentaichan
 
     public HentaichanLogin()
     {
+      // Адрес может быть переопределен в базе. Это только дефолтное значение.
       this.MainUri = new Uri(@"http://hentaichan.me/");
-      this.LogoutUri = new Uri(this.MainUri, "index.php?action=logout");
-      this.BookmarksUri = new Uri(this.MainUri, "favorites/");
     }
   }
 }

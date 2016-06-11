@@ -102,6 +102,7 @@
     <Compile Include="Convertation\History\FromBaseTo32.cs" />
     <Compile Include="Convertation\IProcess.cs" />
     <Compile Include="Convertation\Mangas\From24To27.cs" />
+    <Compile Include="Convertation\Mangas\From37To38.cs" />
     <Compile Include="Convertation\Mangas\FromBaseTo24Db.cs" />
     <Compile Include="Convertation\Primitives\BaseConverter.cs" />
     <Compile Include="Convertation\Primitives\ConfigConverter.cs" />

@@ -76,16 +76,7 @@ namespace MangaReader.Core.Manga
       get { return this.uri; }
       set
       {
-        if (this.uri != null && !Equals(this.uri, value))
-        {
-          foreach (var history in this.Histories)
-          {
-            var historyUri = new UriBuilder(history.Uri) { Host = value.Host };
-            historyUri.Path = historyUri.Path.Replace(this.uri.AbsolutePath, value.AbsolutePath);
-            historyUri.Port = -1;
-            history.Uri = historyUri.Uri;
-          }
-        }
+        UpdateUri(value);
         this.uri = value;
       }
     }
@@ -440,12 +431,26 @@ namespace MangaReader.Core.Manga
     {
       return this.Name;
     }
+    
+    private void UpdateUri(Uri value)
+    {
+      if (this.uri != null && !Equals(this.uri, value))
+      {
+        foreach (var history in this.Histories)
+        {
+          var historyUri = new UriBuilder(history.Uri) { Host = value.Host, Port = -1 };
+          historyUri.Path = historyUri.Path.Replace(this.uri.AbsolutePath, value.AbsolutePath);
+          history.Uri = historyUri.Uri;
+        }
+      }
+    }
 
     /// <summary>
     /// Создать мангу по ссылке.
     /// </summary>
     /// <param name="uri">Ссылка на мангу.</param>
     /// <returns>Манга.</returns>
+    /// <remarks>Не сохранена в базе, требует заполнения полей.</remarks>
     public static Mangas Create(Uri uri)
     {
       Mangas manga = null;
@@ -469,7 +474,8 @@ namespace MangaReader.Core.Manga
     /// Создать мангу по ссылке, загрузив необходимую информацию с сайта.
     /// </summary>
     /// <param name="uri">Ссылка на мангу.</param>
-    /// <returns></returns>
+    /// <returns>Манга.</returns>
+    /// <remarks>Сохранена в базе, если была создана валидная манга.</remarks>
     public static Mangas CreateFromWeb(Uri uri)
     {
       var manga = Create(uri);

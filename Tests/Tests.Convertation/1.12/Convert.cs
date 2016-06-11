@@ -20,7 +20,7 @@ namespace Tests.Convertation._1._12
       Assert.AreEqual(75, loadedMangas);
 
       var loadedHistoryRecord = MangaReader.Core.NHibernate.Mapping.Session.Query<MangaHistory>().Count();
-      Assert.AreEqual(3036, loadedHistoryRecord);
+      Assert.AreEqual(5494, loadedHistoryRecord);
     }
 
     [TestInitialize]

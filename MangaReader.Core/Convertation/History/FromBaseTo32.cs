@@ -63,7 +63,7 @@ namespace MangaReader.Core.Convertation.History
           var hosts = setting.MangaSettingUris.Where(s => !Equals(s, setting.MainUri)).Select(s => s.Host).ToList();
           foreach (var host in hosts)
           {
-            if (history.MangaUrl.Contains(host))
+            if (history.MangaUrl != null && history.MangaUrl.Contains(host))
               history.MangaUrl = history.MangaUrl.Replace(host, setting.MainUri.Host);
             if (history.Uri.Host == host)
             {

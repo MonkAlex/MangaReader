@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using MangaReader.Core.Convertation.Primitives;
@@ -52,11 +53,31 @@ namespace MangaReader.Core.Convertation.History
       if (histories.Any())
         process.ProgressState = ProgressState.Normal;
 
+      // Актуализируем старые ссылки, с учетом переездов сайтов.
+      foreach (var history in histories)
+      {
+        var settings = ConfigStorage.Instance.DatabaseConfig.MangaSettings
+          .Where(s => s.MangaSettingUris.Select(u => u.Host).Contains(history.Uri.Host));
+        foreach (var setting in settings)
+        {
+          var hosts = setting.MangaSettingUris.Where(s => !Equals(s, setting.MainUri)).Select(s => s.Host).ToList();
+          foreach (var host in hosts)
+          {
+            if (history.MangaUrl.Contains(host))
+              history.MangaUrl = history.MangaUrl.Replace(host, setting.MainUri.Host);
+            if (history.Uri.Host == host)
+            {
+              var builder = new UriBuilder(history.Uri) { Host = setting.MainUri.Host, Port = -1 };
+              history.Uri = builder.Uri;
+            }
+          }
+        }
+      }
+
       using (var tranc = Mapping.Session.BeginTransaction())
       {
         foreach (var manga in mangas)
         {
-#warning 55, надо старую сконвертить
           process.Percent += 100.0 / mangas.Count;
           var mangaHistory = histories.Where(h => h.MangaUrl == manga.Uri.OriginalString ||
             h.Uri.OriginalString.Contains(manga.Uri.OriginalString)).ToList();

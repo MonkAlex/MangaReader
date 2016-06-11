@@ -14,10 +14,6 @@ namespace MangaReader.Core.Convertation.Config
     {
       base.ProtectedConvert(process);
 
-      RunSql(@"update Mangas
-               set Type = '64ac91ef-bdb3-4086-be17-bb1dbe7a7656'
-               where Uri like '%mintmanga.com%' or Uri like '%adultmanga.ru%'");
-
       // Use 'select hex(Manga), MangaName from MangaSetting' to see blob code.
       var readmanga = RunSql(@"select Folder, CompressManga, OnlyUpdate, DefaultCompression 
                                from MangaSetting 

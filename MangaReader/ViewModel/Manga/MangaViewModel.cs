@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using MangaReader.Core.Manga;
+using MangaReader.Core.Services.Config;
 
 namespace MangaReader.ViewModel.Manga
 {
@@ -84,7 +86,7 @@ namespace MangaReader.ViewModel.Manga
       if (args.PropertyName == nameof(Manga.IsCompleted))
         SetCompletedIcon(Manga.IsCompleted);
       if (args.PropertyName == nameof(Manga.Uri))
-        SetType(Manga.Uri);
+        SetType(Manga);
       if (args.PropertyName == nameof(Manga.NeedUpdate))
         SetNeedUpdate(Manga.NeedUpdate);
       if (args.PropertyName == nameof(Manga.Status))
@@ -107,20 +109,16 @@ namespace MangaReader.ViewModel.Manga
       this.CompletedIcon = result;
     }
 
-    private void SetType(Uri uri)
+    private void SetType(Mangas manga)
     {
-      var s = uri == null ? string.Empty : uri.ToString();
-#warning 55, перевести на типы
       var result = "NA";
-      if (s.Contains("readmanga"))
+      if (manga is Core.Manga.Grouple.Readmanga)
         result = "RM";
-      if (s.Contains("adultmanga"))
-        result = "AM";
-      if (s.Contains("acomics"))
+      if (manga is Core.Manga.Acomic.Acomics)
         result = "AC";
-      if (s.Contains("hentaichan"))
+      if (manga is Core.Manga.Hentaichan.Hentaichan)
         result = "HC";
-      if (s.Contains("mintmanga.com"))
+      if (manga is Core.Manga.Grouple.Mintmanga)
         result = "MM";
       this.Type = result;
     }
@@ -162,7 +160,7 @@ namespace MangaReader.ViewModel.Manga
         this.Name = Manga.Name;
         this.Downloaded = Manga.Downloaded;
         SetCompletedIcon(Manga.IsCompleted);
-        SetType(Manga.Uri);
+        SetType(Manga);
         SetNeedUpdate(Manga.NeedUpdate);
         this.Status = Manga.Status;
         Manga.PropertyChanged += MangaOnPropertyChanged;

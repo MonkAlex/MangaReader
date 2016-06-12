@@ -33,6 +33,7 @@ namespace MangaReader.ViewModel.Commands
     public AppUpdateCommand()
     {
       this.Name = Strings.Library_CheckUpdate;
+      this.Icon = "pack://application:,,,/Icons/Main/update_app.png";
     }
   }
 }

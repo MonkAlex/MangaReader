@@ -27,6 +27,7 @@ namespace MangaReader.ViewModel.Commands
     public ExitCommand()
     {
       this.Name = Strings.Library_Exit;
+      this.Icon = "pack://application:,,,/Icons/Main/close_app.png";
     }
   }
 }

@@ -15,6 +15,7 @@ namespace MangaReader.ViewModel.Commands
     public OpenWikiCommand()
     {
       this.Name = "Справка";
+      this.Icon = "pack://application:,,,/Icons/Main/wiki.png";
     }
   }
 }

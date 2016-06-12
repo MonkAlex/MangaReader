@@ -16,6 +16,7 @@ namespace MangaReader.ViewModel.Commands
     public ShowUpdateHistoryCommand()
     {
       this.Name = Strings.Update_Title;
+      this.Icon = "pack://application:,,,/Icons/Main/show_history.png";
     }
   }
 }

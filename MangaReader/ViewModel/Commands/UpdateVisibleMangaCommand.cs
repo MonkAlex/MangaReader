@@ -25,6 +25,7 @@ namespace MangaReader.ViewModel.Commands
     {
       this.view = view;
       this.Name = "Обновить";
+      this.Icon = "pack://application:,,,/Icons/Main/update_any.png";
     }
   }
 }

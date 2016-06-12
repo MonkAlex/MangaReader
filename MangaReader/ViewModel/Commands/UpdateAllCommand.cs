@@ -23,6 +23,7 @@ namespace MangaReader.ViewModel.Commands
     public UpdateAllCommand()
     {
       this.Name = Strings.Manga_Action_Update;
+      this.Icon = "pack://application:,,,/Icons/Main/update_any.png";
     }
   }
 }

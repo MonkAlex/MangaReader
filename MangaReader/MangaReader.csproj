@@ -338,6 +338,15 @@
     <Resource Include="Icons\Manga\start_update.png" />
     <Resource Include="Icons\Manga\www.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Main\add_manga.png" />
+    <Resource Include="Icons\Main\close_app.png" />
+    <Resource Include="Icons\Main\settings.png" />
+    <Resource Include="Icons\Main\show_history.png" />
+    <Resource Include="Icons\Main\update_any.png" />
+    <Resource Include="Icons\Main\update_app.png" />
+    <Resource Include="Icons\Main\wiki.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>xcopy /y /r "$(SolutionDir)MangaReader.Core\bin\$(ConfigurationName)\MangaReader.Core.dll" "$(ProjectDir)Library\*"</PreBuildEvent>

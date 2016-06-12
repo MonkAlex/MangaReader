@@ -14,6 +14,7 @@ namespace MangaReader.ViewModel.Commands
     public AddNewMangaCommand()
     {
       this.Name = Strings.Library_Action_Add;
+      this.Icon = "pack://application:,,,/Icons/Main/add_manga.png";
     }
   }
 }

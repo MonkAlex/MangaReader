@@ -20,6 +20,7 @@ namespace MangaReader.ViewModel.Commands
         activeCommand = value;
         OnCanExecuteChanged();
         this.Name = activeCommand.Name;
+        this.Icon = activeCommand.Icon;
       }
     }
 

@@ -166,7 +166,7 @@ namespace MangaReader.ViewModel
 
       var file = new ContentMenuItem("Файл");
       file.SubItems.Add((BaseCommand)this.AddNewManga);
-      file.SubItems.Add(new UpdateVisibleMangaCommand(View));
+      file.SubItems.Add((BaseCommand)this.UpdateWithPause);
       file.SubItems.Add(new UpdateAllCommand { Name = "Обновить всё" });
       file.SubItems.Add(new ExitCommand());
 

@@ -22,6 +22,7 @@ namespace MangaReader.ViewModel.Commands
     public PauseCommand()
     {
       this.Name = Strings.Manga_Action_Pause;
+      this.Icon = "pack://application:,,,/Icons/Main/pause.png";
       Library.PauseChanged += (o, a) => this.OnCanExecuteChanged();
       Library.AvaibleChanged += (o, a) => this.OnCanExecuteChanged();
     }

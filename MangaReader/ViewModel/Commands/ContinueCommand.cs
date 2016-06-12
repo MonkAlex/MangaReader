@@ -21,6 +21,7 @@ namespace MangaReader.ViewModel.Commands
     public ContinueCommand()
     {
       this.Name = Strings.Manga_Action_Restore;
+      this.Icon = "pack://application:,,,/Icons/Main/play.png";
       Library.PauseChanged += (o, a) => this.OnCanExecuteChanged();
       Library.AvaibleChanged += (o, a) => this.OnCanExecuteChanged();
     }

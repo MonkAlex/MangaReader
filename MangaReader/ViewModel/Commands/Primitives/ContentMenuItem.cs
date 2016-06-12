@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using MangaReader.ViewModel.Primitive;
 
 namespace MangaReader.ViewModel.Commands.Primitives
 {
@@ -14,7 +15,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
     private FontWeight fontWeight;
     private bool isDefault;
     private BaseCommand baseCommand;
-    private string icon;
+    private ImageSourceVM icon;
 
     public FontWeight FontWeight
     {
@@ -47,7 +48,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
       }
     }
 
-    public string Icon
+    public ImageSourceVM Icon
     {
       get { return icon; }
       set
@@ -80,7 +81,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
     public ContentMenuItem(BaseCommand command) : this(command, command.Name)
     {
       this.baseCommand = command;
-      this.Icon = command.Icon;
+      this.Icon = new ImageSourceVM(command.Icon);
       this.baseCommand.PropertyChanged += CommandOnPropertyChanged;
     }
 
@@ -89,7 +90,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
       if (args.PropertyName == nameof(baseCommand.Name))
         this.Name = baseCommand.Name;
       if (args.PropertyName == nameof(baseCommand.Icon))
-        this.Icon = baseCommand.Icon;
+        this.Icon = new ImageSourceVM(baseCommand.Icon);
     }
 
     public ContentMenuItem(ICommand command, string name) : this(name)

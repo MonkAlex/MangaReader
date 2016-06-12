@@ -157,6 +157,7 @@
     <Compile Include="ViewModel\Manga\MangaBaseModel.cs" />
     <Compile Include="ViewModel\Manga\MangaCardModel.cs" />
     <Compile Include="ViewModel\Manga\MangaViewModel.cs" />
+    <Compile Include="ViewModel\Primitive\ImageSourceVM.cs" />
     <Compile Include="ViewModel\Setting\AppSettingModel.cs" />
     <Compile Include="ViewModel\Commands\AddManga\AddSelected.cs" />
     <Compile Include="ViewModel\Commands\AddManga\LoginCommand.cs" />

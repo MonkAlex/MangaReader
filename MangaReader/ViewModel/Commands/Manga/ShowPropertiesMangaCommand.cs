@@ -17,6 +17,7 @@ namespace MangaReader.ViewModel.Commands.Manga
     public ShowPropertiesMangaCommand()
     {
       this.Name = Strings.Manga_Settings;
+      this.Icon = "pack://application:,,,/Icons/Manga/settings.png";
     }
   }
 }

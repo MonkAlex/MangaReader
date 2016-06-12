@@ -30,6 +30,7 @@ namespace MangaReader.ViewModel.Commands.Manga
     public OpenFolderCommand()
     {
       this.Name = Strings.Manga_Action_OpenFolder;
+      this.Icon = "pack://application:,,,/Icons/Manga/open_folder.png";
       this.NeedRefresh = false;
     }
   }

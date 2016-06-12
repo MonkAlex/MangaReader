@@ -16,6 +16,7 @@ namespace MangaReader.ViewModel.Commands.Manga
     public CompressMangaCommand()
     {
       this.Name = Strings.Manga_Action_Compress;
+      this.Icon = "pack://application:,,,/Icons/Manga/compress.png";
     }
   }
 }

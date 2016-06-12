@@ -176,6 +176,7 @@ namespace MangaReader.ViewModel
       var about = new ContentMenuItem("О программе");
       about.SubItems.Add(new AppUpdateCommand());
       about.SubItems.Add(new ShowUpdateHistoryCommand());
+      about.SubItems.Add(new OpenWikiCommand());
 
       this.Menu.Add(file);
       this.Menu.Add(setting);

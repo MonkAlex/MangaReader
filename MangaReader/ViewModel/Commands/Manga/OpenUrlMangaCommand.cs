@@ -21,6 +21,7 @@ namespace MangaReader.ViewModel.Commands.Manga
     public OpenUrlMangaCommand()
     {
       this.Name = Strings.Manga_Action_View;
+      this.Icon = "pack://application:,,,/Icons/Manga/www.png";
       this.NeedRefresh = false;
     }
   }

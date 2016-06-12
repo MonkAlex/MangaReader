@@ -9,6 +9,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
   public class BaseCommand : ICommand, INotifyPropertyChanged
   {
     private string name;
+    private string icon;
 
     public string Name
     {
@@ -16,6 +17,16 @@ namespace MangaReader.ViewModel.Commands.Primitives
       set
       {
         name = value;
+        OnPropertyChanged();
+      }
+    }
+
+    public string Icon
+    {
+      get { return icon; }
+      set
+      {
+        icon = value;
         OnPropertyChanged();
       }
     }

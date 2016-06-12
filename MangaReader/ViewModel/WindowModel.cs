@@ -69,6 +69,7 @@ namespace MangaReader.ViewModel
       UpdateAll = new UpdateAllCommand();
       Close = new ExitCommand();
       
+      ProgressState = ProgressState.None;
       Library.UpdateStarted += LibraryOnUpdateStarted;
       Library.UpdateCompleted += LibraryOnUpdateCompleted;
       Library.UpdateMangaCompleted += LibraryOnUpdateMangaCompleted;

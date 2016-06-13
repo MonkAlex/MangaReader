@@ -153,7 +153,12 @@
     <Compile Include="UI\Services\ViewService.cs" />
     <Compile Include="ViewModel\AddNewModel.cs" />
     <Compile Include="ViewModel\Commands\Manga\MangaSaveCommand.cs" />
+    <Compile Include="ViewModel\Commands\Navigation\FirstMangaCommand.cs" />
+    <Compile Include="ViewModel\Commands\Navigation\LastMangaCommand.cs" />
+    <Compile Include="ViewModel\Commands\Navigation\NextMangaCommand.cs" />
+    <Compile Include="ViewModel\Commands\Navigation\PreviousMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\OpenWikiCommand.cs" />
+    <Compile Include="ViewModel\Commands\Primitives\NavigationCommand.cs" />
     <Compile Include="ViewModel\Manga\MangaBaseModel.cs" />
     <Compile Include="ViewModel\Manga\MangaCardModel.cs" />
     <Compile Include="ViewModel\Manga\MangaViewModel.cs" />
@@ -350,6 +355,12 @@
   <ItemGroup>
     <Resource Include="Icons\Main\pause.png" />
     <Resource Include="Icons\Main\play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Navigation\end.png" />
+    <Resource Include="Icons\Navigation\next.png" />
+    <Resource Include="Icons\Navigation\previous.png" />
+    <Resource Include="Icons\Navigation\skip_to_start.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

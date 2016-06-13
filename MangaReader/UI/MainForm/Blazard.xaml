@@ -3,8 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:resx="clr-namespace:MangaReader.Properties"
         xmlns:base="clr-namespace:MangaReader.UI.MainForm"
-        xmlns:ui="clr-namespace:MangaReader.UI"
-        xmlns:manga="clr-namespace:MangaReader.ViewModel.Manga"
         xmlns:mangaUi="clr-namespace:MangaReader.UI.Manga"
         Title="{x:Static resx:Strings.Title}">
     <Grid>
@@ -13,24 +11,23 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0"
               ItemsSource="{Binding Menu}" ItemContainerStyle="{StaticResource ContentMenuItem}"/>
 
         <base:Filter Grid.Row="1" DataContext="{Binding LibraryFilter}"/>
-        <ListView BorderThickness="0" Margin="5" ItemsSource="{Binding View}" Grid.Row="2">
-            <ListView.Resources>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    <Setter Property="Focusable" Value="False"/>
-                </Style>
-                <DataTemplate DataType="{x:Type manga:MangaViewModel}">
-                    <mangaUi:BlazardManga Height="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}}"/>
-                </DataTemplate>
-            </ListView.Resources>
-            
-        </ListView>
+        <mangaUi:BlazardManga Grid.Row="2" DataContext="{Binding View.CurrentItem}"/>
+        <ToolBarPanel HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Row="3" Orientation="Horizontal">
+            <ListView BorderThickness="0" ItemsSource="{Binding NavigationMenu}" ItemContainerStyle="{StaticResource ListViewItemButton}">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+        </ToolBarPanel>
 
     </Grid>
 </base:BaseForm>

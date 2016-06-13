@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -11,6 +12,8 @@ using MangaReader.Core.Services.Config;
 using MangaReader.Properties;
 using MangaReader.UI.Services;
 using MangaReader.ViewModel.Commands;
+using MangaReader.ViewModel.Commands.Manga;
+using MangaReader.ViewModel.Commands.Navigation;
 using MangaReader.ViewModel.Commands.Primitives;
 using MangaReader.ViewModel.Manga;
 using MangaReader.ViewModel.Primitive;
@@ -81,6 +84,8 @@ namespace MangaReader.ViewModel
       }
     }
 
+    public ObservableCollection<ContentMenuItem> NavigationMenu { get; set; } 
+
     internal virtual bool Filter(object o)
     {
       var mangaModel = o as MangaBaseModel;
@@ -139,7 +144,10 @@ namespace MangaReader.ViewModel
 
     private void LibraryFilterOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
     {
+      var old = View.CurrentItem;
       View.Refresh();
+      if (!View.MoveCurrentTo(old))
+        View.MoveCurrentToFirst();
     }
 
     public MainPageModel()
@@ -155,6 +163,7 @@ namespace MangaReader.ViewModel
         Filter = Filter,
         CustomSort = new MangaViewModel(null)
       };
+      View.MoveCurrentToFirst();
 
       this.AddNewManga = new AddNewMangaCommand();
       this.ShowSettings = new ShowSettingCommand();
@@ -183,6 +192,12 @@ namespace MangaReader.ViewModel
       this.Menu.Add(about);
 
       #endregion
+
+      this.NavigationMenu = new ObservableCollection<ContentMenuItem>();
+      this.NavigationMenu.Add(new FirstMangaCommand(View));
+      this.NavigationMenu.Add(new PreviousMangaCommand(View));
+      this.NavigationMenu.Add(new NextMangaCommand(View));
+      this.NavigationMenu.Add(new LastMangaCommand(View));
     }
   }
 }

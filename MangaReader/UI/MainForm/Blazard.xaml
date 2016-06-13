@@ -28,6 +28,23 @@
                 </ListView.ItemsPanel>
             </ListView>
         </ToolBarPanel>
-
+        <StatusBar Grid.Row="4" DataContext="{Binding LastDownload}">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem Grid.Column="0" HorizontalContentAlignment="Stretch">
+                <ProgressBar Maximum="100" Value="{Binding Downloaded}" Height="16" />
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="1">
+                <TextBlock Text="{Binding Name}"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </base:BaseForm>

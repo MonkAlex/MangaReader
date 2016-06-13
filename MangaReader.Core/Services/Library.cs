@@ -188,6 +188,7 @@ namespace MangaReader.Core.Services
           CheckPause();
 
           Status = Strings.Library_Status_MangaUpdate + current.Name;
+          OnUpdateMangaStarted(current);
           current.DownloadProgressChanged += CurrentOnDownloadProgressChanged;
           current.Download();
           current.DownloadProgressChanged -= CurrentOnDownloadProgressChanged;
@@ -230,6 +231,8 @@ namespace MangaReader.Core.Services
     public static event EventHandler UpdateCompleted;
 
     public static event EventHandler<double> UpdatePercentChanged;
+
+    public static event EventHandler<Mangas> UpdateMangaStarted;
 
     public static event EventHandler<Mangas> UpdateMangaCompleted;
 
@@ -286,6 +289,11 @@ namespace MangaReader.Core.Services
     private static void OnMangaDeleted(Mangas e)
     {
       MangaDeleted?.Invoke(null, e);
+    }
+
+    private static void OnUpdateMangaStarted(Mangas e)
+    {
+      UpdateMangaStarted?.Invoke(null, e);
     }
 
     #endregion

@@ -27,6 +27,7 @@ namespace MangaReader.ViewModel
     private ObservableCollection<ContentMenuItem> menu;
     private ICommand updateWithPause;
     private string libraryStatus;
+    private Mangas lastDownload;
 
     public string LibraryStatus
     {
@@ -43,6 +44,16 @@ namespace MangaReader.ViewModel
     public ObservableCollection<MangaViewModel> MangaViewModels { get; private set; } 
 
     public LibraryFilter LibraryFilter { get; set; }
+
+    public Mangas LastDownload
+    {
+      get { return lastDownload; }
+      set
+      {
+        lastDownload = value;
+        OnPropertyChanged();
+      }
+    }
 
     public ICommand AddNewManga
     {
@@ -117,6 +128,16 @@ namespace MangaReader.ViewModel
       if (model == null)
         this.MangaViewModels.Add(new MangaViewModel(mangas));
     }
+    
+    private void LibraryOnUpdateMangaStarted(object sender, Mangas mangas)
+    {
+      this.LastDownload = mangas;
+    }
+
+    private void LibraryOnUpdateMangaCompleted(object sender, Mangas mangas)
+    {
+      this.LastDownload = null;
+    }
 
     public override void Show()
     {
@@ -157,6 +178,8 @@ namespace MangaReader.ViewModel
       Library.MangaAdded += LibraryOnMangaAdded;
       Library.MangaDeleted += LibraryOnMangaDeleted;
       Library.StatusChanged += (sender, s) => LibraryStatus = s;
+      Library.UpdateMangaStarted += LibraryOnUpdateMangaStarted;
+      Library.UpdateMangaCompleted += LibraryOnUpdateMangaCompleted;
 
       View = new ListCollectionView(MangaViewModels)
       {

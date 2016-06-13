@@ -35,12 +35,7 @@ namespace MangaReader.Core.Manga.Acomic
     /// </summary>
     public override void Refresh()
     {
-      var newName = Getter.GetMangaName(this.Uri);
-      if (string.IsNullOrWhiteSpace(newName))
-        Log.AddFormat("Не удалось получить имя манги, текущее название - '{0}'.", this.ServerName);
-      else if (newName != this.ServerName)
-        this.ServerName = newName;
-
+      Getter.UpdateNameAndStatus(this);
       Getter.UpdateContentType(this);
       OnPropertyChanged("IsCompleted");
     }

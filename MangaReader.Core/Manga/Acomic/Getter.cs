@@ -24,23 +24,39 @@ namespace MangaReader.Core.Manga.Acomic
     }
 
     /// <summary>
-    /// Получить название манги.
+    /// Обновить название и статус манги.
     /// </summary>
-    /// <param name="uri">Ссылка на мангу.</param>
-    /// <returns>Название манги.</returns>
-    public static string GetMangaName(Uri uri)
+    /// <param name="manga">Манга.</param>
+    public static void UpdateNameAndStatus(Acomics manga)
     {
-      var name = string.Empty;
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(new Uri(uri.OriginalString + @"/about"), Getter.GetAdultClient()).Content);
+        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/about"), Getter.GetAdultClient()).Content);
         var nameNode = document.DocumentNode.SelectSingleNode("//head//meta[@property=\"og:title\"]");
         if (nameNode != null && nameNode.Attributes.Any(a => Equals(a.Name, "content")))
-          name = nameNode.Attributes.Single(a => Equals(a.Name, "content")).Value;
+        {
+          var name = WebUtility.HtmlDecode(nameNode.Attributes.Single(a => Equals(a.Name, "content")).Value);
+          if (string.IsNullOrWhiteSpace(name))
+            Log.AddFormat("Не удалось получить имя манги, текущее название - '{0}'.", manga.ServerName);
+          else if (name != manga.ServerName)
+            manga.ServerName = name;
+        }
+
+        var content = document.GetElementbyId("contentMargin");
+        if (content != null)
+        {
+          var summary = string.Empty;
+          var status = WebUtility.HtmlDecode(content.SelectSingleNode(".//h2").InnerText).ToLowerInvariant().Contains("(закончен)");
+          manga.IsCompleted = status;
+          var nodes = content.SelectNodes(".//div[@class=\"about-summary\"]//p");
+          summary = nodes.Aggregate(summary, (current, node) =>
+            current + Regex.Replace(node.InnerText.Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
+          summary = WebUtility.HtmlDecode(summary);
+          manga.Status = summary;
+        }
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
-      return WebUtility.HtmlDecode(name);
     }
 
     public static void UpdateContentType(Acomics manga)
@@ -82,6 +98,7 @@ namespace MangaReader.Core.Manga.Acomic
               .TakeWhile(cn => !cn.Attributes.Any() || cn.Attributes[0].Value != VolumeClassName);
             var volumeChapters = volumeChapterNodes
               .Select(cn => cn.SelectNodes(".//a"))
+              .Where(cn => cn != null)
               .SelectMany(cn => cn)
               .Select(cn => new Chapter(new Uri(cn.Attributes[0].Value), (cn.Attributes.Count > 1 ? cn.Attributes[1].Value : cn.InnerText)));
             newVolume.Chapters.AddRange(volumeChapters);

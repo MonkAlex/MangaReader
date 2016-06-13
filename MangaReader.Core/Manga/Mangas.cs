@@ -86,7 +86,15 @@ namespace MangaReader.Core.Manga
     /// <summary>
     /// Статус манги.
     /// </summary>
-    public virtual string Status { get; set; }
+    public virtual string Status
+    {
+      get { return status; }
+      set
+      {
+        status = value;
+        OnPropertyChanged(nameof(Status));
+      }
+    }
 
     public bool? NeedCompress
     {
@@ -172,6 +180,7 @@ namespace MangaReader.Core.Manga
     }
 
     private Compression.CompressionMode? compressionMode;
+    private string status;
 
     /// <summary>
     /// Статус корректности манги.

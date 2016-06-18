@@ -2,7 +2,6 @@
 using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.ViewModel.Commands.Primitives;
-using Ookii.Dialogs.Wpf;
 
 namespace MangaReader.ViewModel.Commands
 {
@@ -10,23 +9,17 @@ namespace MangaReader.ViewModel.Commands
   {
     public override void Execute(object parameter)
     {
-      var dialog = new TaskDialog();
-      dialog.WindowTitle = "Обновление";
-      var owner = WindowHelper.Owner;
+      var title = "Обновление";
+
       if (Updater.CheckUpdate())
       {
-        dialog.MainInstruction = "Запустить процесс обновления?";
-        dialog.Content = string.Format("Доступно обновление с версии {0} на {1}", Updater.ClientVersion.ToString(3), Updater.ServerVersion.ToString(3));
-        dialog.Buttons.Add(new TaskDialogButton(ButtonType.Yes));
-        dialog.Buttons.Add(new TaskDialogButton(ButtonType.No));
-        if (dialog.ShowDialog(owner).ButtonType == ButtonType.Yes)
+        var note = string.Format("Доступно обновление с версии {0} на {1}", Updater.ClientVersion, Updater.ServerVersion);
+        if (Dialogs.ShowYesNoDialog(title, "Запустить процесс обновления?", note))
           new DownloadUpdate().Show();
       }
       else
       {
-        dialog.MainInstruction = "Обновлений не найдено.";
-        dialog.Buttons.Add(new TaskDialogButton(ButtonType.Ok));
-        dialog.ShowDialog(owner);
+        Dialogs.ShowInfo(title, "Обновлений не найдено.");
       }
     }
 

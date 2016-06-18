@@ -92,6 +92,7 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="Client.cs" />
+    <Compile Include="Services\Dialogs.cs" />
     <Compile Include="UI\MainForm\Filter.xaml.cs">
       <DependentUpon>Filter.xaml</DependentUpon>
     </Compile>

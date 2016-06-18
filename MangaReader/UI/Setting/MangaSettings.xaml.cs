@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using Ookii.Dialogs.Wpf;
+using MangaReader.Services;
 
 namespace MangaReader.UI.Setting
 {
@@ -17,9 +17,7 @@ namespace MangaReader.UI.Setting
 
     private void ChangeFolder_OnClick(object sender, RoutedEventArgs e)
     {
-      var dialog = new VistaFolderBrowserDialog();
-      if (dialog.ShowDialog() == true)
-        this.FolderPath.Text = dialog.SelectedPath + System.IO.Path.DirectorySeparatorChar;
+      this.FolderPath.Text = Dialogs.SelectFolder(this.FolderPath.Text);
     }
   }
 }

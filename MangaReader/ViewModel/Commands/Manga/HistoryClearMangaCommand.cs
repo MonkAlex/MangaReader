@@ -2,7 +2,6 @@
 using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.ViewModel.Commands.Primitives;
-using Ookii.Dialogs.Wpf;
 
 namespace MangaReader.ViewModel.Commands.Manga
 {
@@ -12,13 +11,9 @@ namespace MangaReader.ViewModel.Commands.Manga
     {
       base.Execute(manga);
 
-      var dialog = new TaskDialog();
-      dialog.WindowTitle = "Удаление истории";
-      dialog.MainInstruction = string.Format("Удалить историю {0}?", manga.Name);
-      dialog.Content = "После удаления истории манга будет скачиваться целиком.";
-      dialog.Buttons.Add(new TaskDialogButton(ButtonType.Yes));
-      dialog.Buttons.Add(new TaskDialogButton(ButtonType.No));
-      if (dialog.ShowDialog(WindowHelper.Owner).ButtonType == ButtonType.Yes)
+      var text = string.Format("Удалить историю {0}?", manga.Name);
+      var clear = Dialogs.ShowYesNoDialog("Удаление истории", text, "После удаления истории манга будет скачиваться целиком.");
+      if (clear)
       {
         manga.Histories.Clear();
         manga.Save();

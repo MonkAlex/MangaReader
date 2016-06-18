@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Linq;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Manga.Acomic;
 using MangaReader.Core.Manga.Grouple;
 using MangaReader.Core.Manga.Hentaichan;
-using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Convertation.Config
@@ -14,17 +14,15 @@ namespace MangaReader.Core.Convertation.Config
     {
       base.ProtectedConvert(process);
 
-      // Use 'select hex(Manga), MangaName from MangaSetting' to see blob code.
-      var readmanga = RunSql(@"select Folder, CompressManga, OnlyUpdate, DefaultCompression 
-                               from MangaSetting 
-                               where hex(Manga) = 'F4BB982C46DBC447AB0EF207E283142D'") as object[];
+      var readmanga = ConfigStorage.Instance.DatabaseConfig.MangaSettings.SingleOrDefault(s => Readmanga.Type == s.Manga);
+      var mintmanga = ConfigStorage.Instance.DatabaseConfig.MangaSettings.Single(s => Mintmanga.Type == s.Manga);
       if (readmanga != null)
       {
-        RunSql(string.Format(@"update MangaSetting
-                 set Folder = '{0}', CompressManga = '{1}', OnlyUpdate = '{2}', DefaultCompression = '{3}'
-                 where hex(Manga) = '{4}'", readmanga[0], (bool)readmanga[1] ? 1 : 0, (bool)readmanga[2] ? 1 : 0, 
-                 readmanga[3], "EF91AC64B3BD8640BE17BB1DBE7A7656"));
-        ConfigStorage.Instance.DatabaseConfig.MangaSettings.Update();
+        mintmanga.Folder = readmanga.Folder;
+        mintmanga.CompressManga = readmanga.CompressManga;
+        mintmanga.OnlyUpdate = readmanga.OnlyUpdate;
+        mintmanga.DefaultCompression = readmanga.DefaultCompression;
+        mintmanga.Save();
       }
 
       foreach (var setting in ConfigStorage.Instance.DatabaseConfig.MangaSettings)

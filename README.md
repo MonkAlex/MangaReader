@@ -1,12 +1,32 @@
-MangaReader
+# MangaReader
 
 [![Supported platforms][badge-platforms]][Releases] [![Latest release][badge-release]][Releases] [![Open issues][badge-issues]][Issues] 
 
 Build : [![Build Status][badge-tfs]][TFS] | Tests : [![Tests Status][badge-test]][TFS]
 
-  [Releases]: https://github.com/MonkAlex/MangaReader/releases "MangaReader Releases"
-  [Issues]: https://github.com/MonkAlex/MangaReader/issues "MangaReader Issues"
-  [TFS]: https://monkalex.visualstudio.com/DefaultCollection/MangaReader "MangaReader TFS"
+***
+
+Программа предназначеня для скачивания манги с онлайн читалок.
+
+На текущий момент поддерживаются:
+1. [ReadManga](readmanga.me)
+2. [MintManga](mintmanga.com) (бывший adultmanga.ru)
+3. [Hentaichan](hentaichan.me)
+4. [Acomics](acomics.ru)
+
+Больше информации по поддержке сайтов - в [справке][Wiki].
+
+***
+
+Всё добро под лицензией [MIT][License]
+
+***
+
+  [Releases]: ../releases "Releases"
+  [Issues]: ../issues "Issues"
+  [Wiki]: ../wiki "Wiki"
+  [License] ../blob/master/LICENSE "License"
+  [TFS]: https://monkalex.visualstudio.com/DefaultCollection/MangaReader "TFS"
   [badge-platforms]: https://img.shields.io/badge/platform-Windows%20WPF%20%7C%20Linux%20(mono%20CLI)-green.svg "Supported platforms"
   [badge-release]: https://img.shields.io/github/release/MonkAlex/MangaReader.svg "Latest release"
   [badge-issues]: https://img.shields.io/github/issues/MonkAlex/MangaReader.svg "Open issues"

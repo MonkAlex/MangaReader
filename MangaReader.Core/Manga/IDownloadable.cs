@@ -1,7 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MangaReader.Core.Manga
 {
+  public interface IDownloadableContainer<out T> : IDownloadable where T : IDownloadable
+  {
+    /// <summary>
+    /// Загружаемое содержимое.
+    /// </summary>
+    IEnumerable<T> Container { get; }
+  }
+
   public interface IDownloadable
   {
 

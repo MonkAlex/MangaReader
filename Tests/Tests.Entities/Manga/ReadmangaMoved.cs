@@ -27,9 +27,9 @@ namespace Tests.Entities.Manga
       manga = Environment.Session.Get<Readmanga>(manga.Id);
       manga.Refresh();
       manga.Save();
-      var chapters = new List<Chapter> { new Chapter(new Uri("http://mintmanga.com/btooom_/vol1/1?mature=1")) };
+      var chapters = new Volume() { Chapters = new List<MangaReader.Core.Manga.Chapter> {new Chapter(new Uri("http://mintmanga.com/btooom_/vol1/1?mature=1"))}};
       var chartersNotInHistory = History.GetItemsWithoutHistory(chapters);
-      Assert.AreEqual(0, chartersNotInHistory.Count);
+      Assert.AreEqual(0, chartersNotInHistory.Count());
     }
   }
 }

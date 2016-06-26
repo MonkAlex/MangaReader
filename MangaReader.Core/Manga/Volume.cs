@@ -8,7 +8,7 @@ using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Manga
 {
-  public class Volume : IDownloadable
+  public class Volume : IDownloadableContainer<Chapter>
   {
     public string Name { get; set; }
 
@@ -17,6 +17,8 @@ namespace MangaReader.Core.Manga
     public List<Chapter> Chapters { get; set; }
 
     public List<Chapter> ActiveChapters { get; set; }
+
+    public IEnumerable<Chapter> Container { get { return this.Chapters; } }
 
     /// <summary>
     /// Статус загрузки.
@@ -63,7 +65,7 @@ namespace MangaReader.Core.Manga
       this.ActiveChapters = this.Chapters;
       if (this.OnlyUpdate)
       {
-        this.ActiveChapters = History.GetItemsWithoutHistory(this.ActiveChapters);
+        this.ActiveChapters = History.GetItemsWithoutHistory(this).ToList();
       }
 
       this.ActiveChapters.ForEach(c =>

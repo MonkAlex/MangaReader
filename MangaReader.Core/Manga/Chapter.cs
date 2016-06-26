@@ -12,7 +12,7 @@ namespace MangaReader.Core.Manga
   /// <summary>
   /// Глава.
   /// </summary>
-  public class Chapter : IDownloadable
+  public class Chapter : IDownloadableContainer<MangaPage>
   {
     #region Свойства
 
@@ -30,6 +30,8 @@ namespace MangaReader.Core.Manga
     /// Хранилище ссылок на изображения.
     /// </summary>
     public List<MangaPage> ActivePages { get; set; }
+
+    public IEnumerable<MangaPage> Container { get { return this.Pages; } }
 
     /// <summary>
     /// Название главы.
@@ -103,7 +105,7 @@ namespace MangaReader.Core.Manga
       this.ActivePages = this.Pages;
       if (this.OnlyUpdate)
       {
-        this.ActivePages = History.GetItemsWithoutHistory(this.ActivePages);
+        this.ActivePages = History.GetItemsWithoutHistory(this).ToList();
       }
 
       try
@@ -173,6 +175,5 @@ namespace MangaReader.Core.Manga
     }
 
     #endregion
-
   }
 }

@@ -10,30 +10,6 @@ namespace MangaReader.Core.Services
   public static class History
   {
     /// <summary>
-    /// Добавление записи в историю.
-    /// </summary>
-    /// <param name="manga">Манга, к которой относится сообщение.</param>
-    /// <param name="message">Сообщение.</param>
-    public static void AddHistory(this Mangas manga, Uri message)
-    {
-      AddHistory(manga, new[] { message });
-    }
-
-    /// <summary>
-    /// Добавление записей в историю.
-    /// </summary>
-    /// <param name="manga">Манга, к которой относятся сообщения.</param>
-    /// <param name="messages">Сообщения.</param>
-    public static void AddHistory(this Mangas manga, IEnumerable<Uri> messages)
-    {
-      var list = messages.Where(message => !manga.Histories.Any(h => h.Uri == message)).ToList();
-      foreach (var message in list)
-      {
-        manga.Histories.Add(new MangaHistory(message));
-      }
-    }
-
-    /// <summary>
     /// Вернуть загружаемые элементы, которые не записаны в историю.
     /// </summary>
     /// <param name="items">Список элементов.</param>

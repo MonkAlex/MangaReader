@@ -125,7 +125,41 @@ namespace MangaReader.Core.Manga
     /// История манги.
     /// </summary>
     [XmlIgnore]
-    public virtual IList<MangaHistory> Histories { get; set; }
+    public virtual IEnumerable<MangaHistory> Histories
+    {
+      get { return histories; }
+    }
+
+    public void AddHistory(Uri message)
+    {
+      AddHistory(new [] { new MangaHistory(message)});
+    }
+
+    public void AddHistory(IEnumerable<Uri> messages)
+    {
+      AddHistory(messages.Select(m => new MangaHistory(m)));
+    }
+
+    public void AddHistory(IEnumerable<MangaHistory> history)
+    {
+      lock (histories)
+      {
+        var list = history.Where(message => !histories.Any(h => h.Uri == message.Uri)).ToList();
+        foreach (var mangaHistory in list)
+        {
+          histories.Add(mangaHistory);
+        }
+      }
+    }
+
+    public void ClearHistory()
+    {
+      lock (histories)
+      {
+        histories.Clear();
+      }
+    }
+
 
     [XmlIgnore]
     public virtual List<Volume> Volumes { get; set; }
@@ -181,6 +215,7 @@ namespace MangaReader.Core.Manga
 
     private Compression.CompressionMode? compressionMode;
     private string status;
+    private ICollection<MangaHistory> histories;
 
     /// <summary>
     /// Статус корректности манги.
@@ -506,7 +541,7 @@ namespace MangaReader.Core.Manga
 
     protected Mangas()
     {
-      this.Histories = new List<MangaHistory>();
+      this.histories = new List<MangaHistory>();
       this.Chapters = new List<Chapter>();
       this.Volumes = new List<Volume>();
       this.Pages = new List<MangaPage>();

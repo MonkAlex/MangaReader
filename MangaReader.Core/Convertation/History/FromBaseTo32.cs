@@ -81,8 +81,7 @@ namespace MangaReader.Core.Convertation.History
           process.Percent += 100.0 / mangas.Count;
           var mangaHistory = histories.Where(h => h.MangaUrl == manga.Uri.OriginalString ||
             h.Uri.OriginalString.Contains(manga.Uri.OriginalString)).ToList();
-          foreach (var history in mangaHistory)
-            manga.Histories.Add(history);
+          manga.AddHistory(mangaHistory);
         }
         tranc.Commit();
       }

@@ -1,4 +1,4 @@
-# MangaReader
+п»ї# MangaReader
 
 [![Supported platforms][badge-platforms]][Releases] [![Latest release][badge-release]][Releases] [![Open issues][badge-issues]][Issues] 
 
@@ -6,26 +6,26 @@ Build : [![Build Status][badge-tfs]][TFS] | Tests : [![Tests Status][badge-test]
 
 ***
 
-Программа предназначеня для скачивания манги с онлайн читалок.
+РџСЂРѕРіСЂР°РјРјР° РїСЂРµРґРЅР°Р·РЅР°С‡РµРЅСЏ РґР»СЏ СЃРєР°С‡РёРІР°РЅРёСЏ РјР°РЅРіРё СЃ РѕРЅР»Р°Р№РЅ С‡РёС‚Р°Р»РѕРє.
 
-На текущий момент поддерживаются:
-1. [ReadManga](readmanga.me)
-2. [MintManga](mintmanga.com) (бывший adultmanga.ru)
-3. [Hentaichan](hentaichan.me)
-4. [Acomics](acomics.ru)
+РќР° С‚РµРєСѓС‰РёР№ РјРѕРјРµРЅС‚ РїРѕРґРґРµСЂР¶РёРІР°СЋС‚СЃСЏ:
+1. [ReadManga](http://readmanga.me)
+2. [MintManga](http://mintmanga.com) (Р±С‹РІС€РёР№ adultmanga.ru)
+3. [Hentaichan](http://hentaichan.me)
+4. [Acomics](http://acomics.ru)
 
-Больше информации по поддержке сайтов - в [справке][Wiki].
-
-***
-
-Всё добро под лицензией [MIT][License]
+Р‘РѕР»СЊС€Рµ РёРЅС„РѕСЂРјР°С†РёРё РїРѕ РїРѕРґРґРµСЂР¶РєРµ СЃР°Р№С‚РѕРІ - РІ [СЃРїСЂР°РІРєРµ][Wiki].
 
 ***
 
-  [Releases]: ../releases "Releases"
-  [Issues]: ../issues "Issues"
-  [Wiki]: ../wiki "Wiki"
-  [License] ../blob/master/LICENSE "License"
+Р’СЃС‘ РґРѕР±СЂРѕ РїРѕРґ Р»РёС†РµРЅР·РёРµР№ [MIT][License]
+
+***
+
+  [Releases]: ../../releases "Releases"
+  [Issues]: ../../issues "Issues"
+  [Wiki]: ../../wiki "Wiki"
+  [License] LICENSE "License"
   [TFS]: https://monkalex.visualstudio.com/DefaultCollection/MangaReader "TFS"
   [badge-platforms]: https://img.shields.io/badge/platform-Windows%20WPF%20%7C%20Linux%20(mono%20CLI)-green.svg "Supported platforms"
   [badge-release]: https://img.shields.io/github/release/MonkAlex/MangaReader.svg "Latest release"

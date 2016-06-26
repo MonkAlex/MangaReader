@@ -92,6 +92,7 @@
     <Compile Include="Library\Add.cs" />
     <Compile Include="Manga\AcomicsStructure.cs" />
     <Compile Include="Manga\HentaichanStructure.cs" />
+    <Compile Include="Manga\MangaHistoryMultithread.cs" />
     <Compile Include="Manga\MintmangaStructure.cs" />
     <Compile Include="Manga\ReadmangaStructure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

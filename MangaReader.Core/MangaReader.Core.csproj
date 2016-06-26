@@ -201,9 +201,10 @@
     <EmbeddedResource Include="Library\System.Data.SQLite.dll" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Update\VersionHistory.txt" />
+    <EmbeddedResource Include="..\CHANGELOG.md">
+      <Link>Update\CHANGELOG.md</Link>
+    </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Library\x64\sqlite3.dll" />
     <EmbeddedResource Include="Library\x86\sqlite3.dll" />

@@ -12,7 +12,7 @@ namespace MangaReader.Core.Update
     public static string GetHistory()
     {
       var text = string.Empty;
-      var history = Assembly.GetManifestResourceNames().SingleOrDefault(r => r.EndsWith("Update.VersionHistory.txt"));
+      var history = Assembly.GetManifestResourceNames().SingleOrDefault(r => r.EndsWith("Update.CHANGELOG.md"));
       if (history == null)
         return text;
 

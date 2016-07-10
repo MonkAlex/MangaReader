@@ -65,7 +65,7 @@ namespace MangaReader.Core.Manga
       this.ActiveChapters = this.Chapters;
       if (this.OnlyUpdate)
       {
-        this.ActiveChapters = History.GetItemsWithoutHistory(this).ToList();
+        this.ActiveChapters = History.GetItemsWithoutHistory(this);
       }
 
       this.ActiveChapters.ForEach(c =>

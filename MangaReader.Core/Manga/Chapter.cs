@@ -105,7 +105,7 @@ namespace MangaReader.Core.Manga
       this.ActivePages = this.Pages;
       if (this.OnlyUpdate)
       {
-        this.ActivePages = History.GetItemsWithoutHistory(this).ToList();
+        this.ActivePages = History.GetItemsWithoutHistory(this);
       }
 
       try

@@ -14,25 +14,28 @@ namespace MangaReader.Core.Services
     /// </summary>
     /// <param name="container">Контейнер.</param>
     /// <returns>Элементы, не записанные в историю.</returns>
-    public static IEnumerable<T> GetItemsWithoutHistory<T>(IDownloadableContainer<T> container) where T : IDownloadable
+    public static List<T> GetItemsWithoutHistory<T>(IDownloadableContainer<T> container) where T : IDownloadable
     {
-      if (!container.Container.Any())
-        return container.Container;
+      var internalContainer = container.Container.ToList();
+      if (!internalContainer.Any())
+        return internalContainer;
 
-      var uris = container.Container.Select(c => c.Uri).ToList();
+      var uris = internalContainer.Select(c => c.Uri).ToList();
       List<Uri> exists;
       using (var session = Mapping.OpenSession())
       {
         // В многопоточном коде нельзя обращаться к одной сессии.
         exists = session.Query<MangaHistory>().Where(h => uris.Contains(h.Uri)).Select(h => h.Uri).ToList();
       }
-      foreach (var item in container.Container.OfType<IDownloadableContainer<IDownloadable>>())
+
+      foreach (var item in internalContainer.OfType<IDownloadableContainer<IDownloadable>>())
       {
         var wh = GetItemsWithoutHistory(item);
         if (wh.Any())
           exists.Remove(item.Uri);
       }
-      return container.Container.Where(c => uris.Except(exists).Contains(c.Uri)).ToList();
+      
+      return internalContainer.Where(c => uris.Except(exists).Contains(c.Uri)).ToList();
     }
   }
 }

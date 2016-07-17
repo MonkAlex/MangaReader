@@ -93,7 +93,7 @@ namespace MangaReader.Core.Manga.Grouple
         this.ServerName = newName;
 
       this.Status = Getter.GetTranslateStatus(page.Content);
-      OnPropertyChanged("IsCompleted");
+      OnPropertyChanged(nameof(IsCompleted));
     }
 
     protected override void UpdateContent()

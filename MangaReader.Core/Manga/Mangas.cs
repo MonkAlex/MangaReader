@@ -32,8 +32,8 @@ namespace MangaReader.Core.Manga
           this.LocalName = value;
         else
           this.ServerName = value;
-        OnPropertyChanged("Name");
-        OnPropertyChanged("Folder");
+        OnPropertyChanged();
+        OnPropertyChanged(nameof(Folder));
       }
     }
 
@@ -53,9 +53,9 @@ namespace MangaReader.Core.Manga
       set
       {
         isNameChanged = value;
-        OnPropertyChanged("IsNameChanged");
-        OnPropertyChanged("Name");
-        OnPropertyChanged("Folder");
+        OnPropertyChanged();
+        OnPropertyChanged(nameof(Name));
+        OnPropertyChanged(nameof(Folder));
       }
     }
 
@@ -92,7 +92,7 @@ namespace MangaReader.Core.Manga
       set
       {
         status = value;
-        OnPropertyChanged(nameof(Status));
+        OnPropertyChanged();
       }
     }
 
@@ -102,7 +102,7 @@ namespace MangaReader.Core.Manga
       set
       {
         needCompress = value;
-        OnPropertyChanged("NeedCompress");
+        OnPropertyChanged();
       }
     }
 
@@ -188,7 +188,7 @@ namespace MangaReader.Core.Manga
       set
       {
         needUpdate = value;
-        OnPropertyChanged("NeedUpdate");
+        OnPropertyChanged();
       }
     }
 
@@ -356,7 +356,7 @@ namespace MangaReader.Core.Manga
         Parallel.ForEach(this.ActiveVolumes,
             v =>
             {
-              v.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged("Downloaded");
+              v.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged(nameof(Downloaded));
               v.OnlyUpdate = this.Setting.OnlyUpdate;
               v.Download(mangaFolder);
               this.AddHistory(v.ActiveChapters.Where(c => c.IsDownloaded).Select(ch => ch.Uri));
@@ -365,7 +365,7 @@ namespace MangaReader.Core.Manga
         Parallel.ForEach(this.ActiveChapters,
           ch =>
           {
-            ch.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged("Downloaded");
+            ch.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged(nameof(Downloaded));
             ch.OnlyUpdate = this.Setting.OnlyUpdate;
             ch.Download(mangaFolder);
             this.AddHistory(ch.Uri);
@@ -374,7 +374,7 @@ namespace MangaReader.Core.Manga
         Parallel.ForEach(this.ActivePages,
           p =>
           {
-            p.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged("Downloaded");
+            p.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged(nameof(Downloaded));
             p.Download(mangaFolder);
             this.AddHistory(p.Uri);
           });
@@ -399,13 +399,9 @@ namespace MangaReader.Core.Manga
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    protected void OnPropertyChanged(string property)
+    protected void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
     {
-      var handler = PropertyChanged;
-      if (handler != null)
-      {
-        handler(this, new PropertyChangedEventArgs(property));
-      }
+      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
     #endregion
@@ -440,14 +436,14 @@ namespace MangaReader.Core.Manga
         case null:
           throw new InvalidEnumArgumentException("CompressionMode is null", -1, typeof(Compression.CompressionMode));
         default:
-          throw new InvalidEnumArgumentException("CompressionMode", (int)this.CompressionMode, typeof(Compression.CompressionMode));
+          throw new InvalidEnumArgumentException(nameof(CompressionMode), (int)this.CompressionMode, typeof(Compression.CompressionMode));
       }
       Library.Status = Strings.Mangas_Compress_Completed;
     }
 
     protected override void BeforeSave(object[] currentState, object[] previousState, string[] propertyNames)
     {
-      var dirName = previousState[propertyNames.ToList().IndexOf("Folder")] as string;
+      var dirName = previousState[propertyNames.ToList().IndexOf(nameof(Folder))] as string;
       if (dirName != null && !DirectoryHelpers.Equals(this.Folder, dirName) && Directory.Exists(dirName))
       {
         if (Directory.Exists(this.Folder))

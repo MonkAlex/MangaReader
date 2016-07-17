@@ -37,7 +37,7 @@ namespace MangaReader.Core.Manga
       set
       {
         _needUpdate = value;
-        OnPropertyChanged("NeedUpdate");
+        OnPropertyChanged(nameof(NeedUpdate));
       }
     }
 

@@ -14,18 +14,24 @@ namespace MangaReader.Core.Convertation.Config
     {
       base.ProtectedConvert(process);
 
-      var readmanga = ConfigStorage.Instance.DatabaseConfig.MangaSettings.SingleOrDefault(s => Readmanga.Type == s.Manga);
-      var mintmanga = ConfigStorage.Instance.DatabaseConfig.MangaSettings.Single(s => Mintmanga.Type == s.Manga);
+      var settings = ConfigStorage.Instance.DatabaseConfig.MangaSettings;
+      var readmanga = settings.SingleOrDefault(s => Readmanga.Type == s.Manga);
+      var mintmanga = settings.SingleOrDefault(s => Mintmanga.Type == s.Manga);
       if (readmanga != null)
       {
-        mintmanga.Folder = readmanga.Folder;
-        mintmanga.CompressManga = readmanga.CompressManga;
-        mintmanga.OnlyUpdate = readmanga.OnlyUpdate;
-        mintmanga.DefaultCompression = readmanga.DefaultCompression;
-        mintmanga.Save();
+        if (mintmanga == null)
+          Services.Log.Add("Не найдены настройки для конвертации нового типа mintmanga.");
+        else
+        {
+          mintmanga.Folder = readmanga.Folder;
+          mintmanga.CompressManga = readmanga.CompressManga;
+          mintmanga.OnlyUpdate = readmanga.OnlyUpdate;
+          mintmanga.DefaultCompression = readmanga.DefaultCompression;
+          mintmanga.Save();
+        }
       }
 
-      foreach (var setting in ConfigStorage.Instance.DatabaseConfig.MangaSettings)
+      foreach (var setting in settings)
       {
         if (setting.MainUri != null)
           continue;

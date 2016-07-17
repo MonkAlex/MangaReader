@@ -37,7 +37,7 @@ namespace MangaReader.Core.Manga.Acomic
     {
       Getter.UpdateNameAndStatus(this);
       Getter.UpdateContentType(this);
-      OnPropertyChanged("IsCompleted");
+      OnPropertyChanged(nameof(IsCompleted));
     }
 
     protected override void UpdateContent()

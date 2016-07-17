@@ -26,12 +26,6 @@ namespace MangaReader.Core.Entity
 
     }
 
-    internal void BeforeSave(object[] currentState, object[] previousState,
-      string[] propertyNames, global::NHibernate.Type.IType[] types)
-    {
-      this.BeforeSave(currentState, previousState, propertyNames);
-    }
-
     /// <summary>
     /// Сохранить в базу.
     /// </summary>

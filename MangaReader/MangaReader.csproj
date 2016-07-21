@@ -370,7 +370,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>xcopy /y /r "$(SolutionDir)MangaReader.Core\bin\$(ConfigurationName)\MangaReader.Core.dll" "$(ProjectDir)Library\*"</PreBuildEvent>
+    <PreBuildEvent>xcopy /y /r "$(ProjectDir)..\MangaReader.Core\bin\$(ConfigurationName)\MangaReader.Core.dll" "$(ProjectDir)Library\*"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

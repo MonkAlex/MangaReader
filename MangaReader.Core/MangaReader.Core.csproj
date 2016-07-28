@@ -183,36 +183,14 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Library\FluentNHibernate.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Library\HtmlAgilityPack.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Library\Iesi.Collections.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Library\Newtonsoft.Json.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Library\NHibernate.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Library\System.Data.SQLite.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="..\CHANGELOG.md">
       <Link>Update\CHANGELOG.md</Link>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Library\x64\sqlite3.dll" />
-    <EmbeddedResource Include="Library\x86\sqlite3.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Library\sqlite3" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y /r /e $(ProjectDir)\Library $(TargetDir)</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

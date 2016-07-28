@@ -327,9 +327,6 @@
     <Resource Include="Icons\yes.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Library\MangaReader.Core.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\MangaReader.Core\MangaReader.Core.csproj">
       <Project>{744f331a-938a-475a-840a-7fac985ebe61}</Project>
       <Name>MangaReader.Core</Name>
@@ -370,7 +367,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>xcopy /y /r "$(ProjectDir)..\MangaReader.Core\bin\$(ConfigurationName)\MangaReader.Core.dll" "$(ProjectDir)Library\*"</PreBuildEvent>
+    <PostBuildEvent>xcopy /y /r /e "$(ProjectDir)..\MangaReader.Core\bin\$(ConfigurationName)" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

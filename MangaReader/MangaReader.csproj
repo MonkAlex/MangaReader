@@ -85,9 +85,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="..\MangaReader.Core\ResolveAssembly.cs">
-      <Link>ResolveAssembly.cs</Link>
-    </Compile>
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
@@ -315,10 +312,6 @@
     <Resource Include="Icons\main.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Library\Ookii.Dialogs.Wpf.dll" />
-    <EmbeddedResource Include="Library\Hardcodet.Wpf.TaskbarNotification.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Icons\play.png" />
     <Resource Include="Icons\stop.png" />
   </ItemGroup>
@@ -367,7 +360,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y /r /e "$(ProjectDir)..\MangaReader.Core\bin\$(ConfigurationName)" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y /r /e "$(ProjectDir)..\MangaReader.Core\bin\$(ConfigurationName)" "$(TargetDir)"
+xcopy /y /r /e $(ProjectDir)\Library $(TargetDir)</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

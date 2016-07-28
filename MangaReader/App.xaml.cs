@@ -21,7 +21,6 @@ namespace MangaReader
       if (Environment.GetCommandLineArgs().Contains("-t"))
         ShowConsoleWindow();
 
-      AppDomain.CurrentDomain.AssemblyResolve += Core.ResolveAssembly.ResolveInternalAssembly;
       Client.Run();
     }
 

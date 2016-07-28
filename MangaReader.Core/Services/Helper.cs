@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services.Config;
 using NHibernate.Util;
@@ -39,6 +40,17 @@ namespace MangaReader.Core.Services
     {
       return (bytes / 1024d / 1024d).ToString("0.00");
     }
+
+    /// <summary>
+    /// Получить сборки, которые относятся к приложению.
+    /// </summary>
+    /// <returns>Сборки.</returns>
+    /// <remarks>В текущей реализации - по namespace.</remarks>
+    public static List<Assembly> AllowedAssemblies()
+    {
+      return AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith("MangaReader")).ToList();
+    }
+
   }
 
   public static class Generic
@@ -58,7 +70,7 @@ namespace MangaReader.Core.Services
     public static List<Type> GetAllTypes<T>()
     {
       var types = new List<Type>();
-      foreach (var assembly in ResolveAssembly.AllowedAssemblies())
+      foreach (var assembly in Helper.AllowedAssemblies())
       {
         types.AddRange(assembly.GetTypes()
           .Where(t => !t.IsAbstract && t.IsClass && typeof(T).IsAssignableFrom(t)));

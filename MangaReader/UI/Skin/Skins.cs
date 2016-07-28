@@ -15,7 +15,7 @@ namespace MangaReader.UI.Skin
 
     private static IEnumerable<SkinSetting> GetSkinSettings()
     {
-      var types = Core.ResolveAssembly.AllowedAssemblies()
+      var types = Core.Services.Helper.AllowedAssemblies()
           .SelectMany(a => a.GetTypes())
           .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(SkinSetting)));
       foreach (var type in types)

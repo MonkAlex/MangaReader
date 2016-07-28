@@ -6,7 +6,6 @@ namespace MangaReader.CLI
   {
     static void Main(string[] args)
     {
-      AppDomain.CurrentDomain.AssemblyResolve += Core.ResolveAssembly.ResolveInternalAssembly;
       Initialize.Run();
     }
   }

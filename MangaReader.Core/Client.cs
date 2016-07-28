@@ -14,7 +14,6 @@ namespace MangaReader.Core
     public static void Init()
     {
       AppDomain.CurrentDomain.UnhandledException += (o, a) => Log.Exception(a.ExceptionObject as System.Exception);
-      AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly.ResolveInternalAssembly;
     }
 
     public static void Start(IProcess process)
@@ -35,7 +34,6 @@ namespace MangaReader.Core
         }
       }
 
-      ResolveAssembly.LoadSql();
       NHibernate.Mapping.Initialize(process);
       Converter.Convert(process);
     }

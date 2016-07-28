@@ -360,8 +360,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y /r /e "$(ProjectDir)..\MangaReader.Core\bin\$(ConfigurationName)" "$(TargetDir)"
-xcopy /y /r /e $(ProjectDir)\Library $(TargetDir)</PostBuildEvent>
+    <PostBuildEvent>xcopy /y /r /e "$(ProjectDir)..\MangaReader.Core\bin\$(ConfigurationName)" "$(TargetDir)\lib"
+xcopy /y /r /e "$(ProjectDir)\Library" "$(TargetDir)\lib"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

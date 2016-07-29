@@ -9,15 +9,16 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using MangaReader.Core.Account;
+using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 
-namespace MangaReader.Core.Manga.Hentaichan
+namespace Hentaichan
 {
   public class HentaichanLogin : Login
   {
     public new static Guid Type { get { return Guid.Parse("03CEFF67-1472-438A-A90A-07B44F6FFDC4"); } }
 
-    public new static Guid[] Manga { get { return new Guid[1] {Hentaichan.Type}; } }
+    public new static Guid[] Manga { get { return new Guid[1] { Hentaichan.Type }; } }
 
     public virtual string UserId { get; set; }
 

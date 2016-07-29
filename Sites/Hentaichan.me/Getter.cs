@@ -6,10 +6,11 @@ using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using MangaReader.Core.Account;
 using MangaReader.Core.Exception;
+using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
-namespace MangaReader.Core.Manga.Hentaichan
+namespace Hentaichan
 {
   public static class Getter
   {

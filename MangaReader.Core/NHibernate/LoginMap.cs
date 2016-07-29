@@ -15,17 +15,6 @@ namespace MangaReader.Core.NHibernate
     }
   }
 
-  public class HentaichanLoginMap : SubclassMap<Manga.Hentaichan.HentaichanLogin>
-  {
-    public HentaichanLoginMap()
-    {
-      Not.LazyLoad();
-      Map(x => x.UserId);
-      Map(x => x.PasswordHash);
-      DiscriminatorValue(Manga.Hentaichan.HentaichanLogin.Type.ToString());
-    }
-  }
-
   public class GroupleLoginMap : SubclassMap<Manga.Grouple.GroupleLogin>
   {
     public GroupleLoginMap()

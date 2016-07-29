@@ -56,9 +56,17 @@ namespace MangaReader.Core.NHibernate
       return Fluently
         .Configure()
         .Database(SQLiteConfiguration.Standard.UsingFile(Path.Combine(ConfigStorage.WorkFolder, DbFile)))
-        .Mappings(m => m.FluentMappings.AddFromAssemblyOf<BaseInterceptor>())
+        .Mappings(LoadPlugins)
         .ExposeConfiguration(BuildSchema)
         .BuildSessionFactory();
+    }
+
+    private static void LoadPlugins(MappingConfiguration config)
+    {
+      foreach (var assembly in Helper.AllowedAssemblies())
+      {
+        config.FluentMappings.AddFromAssembly(assembly);
+      }
     }
 
     private static void BuildSchema(Configuration config)

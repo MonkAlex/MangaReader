@@ -2,7 +2,6 @@
 using MangaReader.Core.Manga;
 using MangaReader.Core.Manga.Acomic;
 using MangaReader.Core.Manga.Grouple;
-using MangaReader.Core.Manga.Hentaichan;
 
 namespace MangaReader.Core.NHibernate
 {
@@ -54,15 +53,6 @@ namespace MangaReader.Core.NHibernate
     {
       Not.LazyLoad();
       DiscriminatorValue(Acomics.Type.ToString());
-    }
-  }
-
-  public class HentaichanMap : SubclassMap<Hentaichan>
-  {
-    public HentaichanMap()
-    {
-      Not.LazyLoad();
-      DiscriminatorValue(Hentaichan.Type.ToString());
     }
   }
 }

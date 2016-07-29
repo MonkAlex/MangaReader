@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaReader", "MangaReader\MangaReader.csproj", "{49B3CB76-DC2D-4707-96CA-3D0DDCCD006B}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -35,6 +35,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.API", "Tests\Tests.AP
 	ProjectSection(ProjectDependencies) = postProject
 		{744F331A-938A-475A-840A-7FAC985EBE61} = {744F331A-938A-475A-840A-7FAC985EBE61}
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sites", "Sites", "{E12FEFB3-A8AD-45A1-B82D-3078D2CE9979}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hentaichan.me", "Sites\Hentaichan.me\Hentaichan.me.csproj", "{8BD693BA-7F23-4D27-9E16-84C1A154BD03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -157,6 +161,24 @@ Global
 		{6F6A15E8-5E83-47EC-9A65-CC24E07859C3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6F6A15E8-5E83-47EC-9A65-CC24E07859C3}.Release|x86.ActiveCfg = Release|Any CPU
 		{6F6A15E8-5E83-47EC-9A65-CC24E07859C3}.Release|x86.Build.0 = Release|Any CPU
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03}.Debug|x86.Build.0 = Debug|Any CPU
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03}.Publish|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03}.Publish|Any CPU.Build.0 = Release|Any CPU
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03}.Publish|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03}.Publish|Mixed Platforms.Build.0 = Release|Any CPU
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03}.Publish|x86.ActiveCfg = Release|Any CPU
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03}.Publish|x86.Build.0 = Release|Any CPU
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03}.Release|x86.ActiveCfg = Release|Any CPU
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -165,5 +187,6 @@ Global
 		{3B6A42FF-E0CB-4795-9C8E-054BFF696FD3} = {B036F0D7-124C-4FC8-B596-21456DFEFB0D}
 		{34351109-778E-4999-B0BA-DA8B9CB6E28F} = {B036F0D7-124C-4FC8-B596-21456DFEFB0D}
 		{6F6A15E8-5E83-47EC-9A65-CC24E07859C3} = {B036F0D7-124C-4FC8-B596-21456DFEFB0D}
+		{8BD693BA-7F23-4D27-9E16-84C1A154BD03} = {E12FEFB3-A8AD-45A1-B82D-3078D2CE9979}
 	EndGlobalSection
 EndGlobal

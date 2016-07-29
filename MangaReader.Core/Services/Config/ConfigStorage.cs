@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using System.IO;
+using System.Linq;
 using System.Text;
 using MangaReader.Core.NHibernate;
 using Newtonsoft.Json;
@@ -62,6 +65,11 @@ namespace MangaReader.Core.Services.Config
     private static string workFolder = AppDomain.CurrentDomain.BaseDirectory;
 
     /// <summary>
+    /// Подключенные плагины.
+    /// </summary>
+    internal static IEnumerable<IPlugin> Plugins { get { return ImportPlugins(); } }
+
+    /// <summary>
     /// Настройки программы.
     /// </summary>
     private static string SettingsPath { get { return Path.Combine(WorkFolder, "settings.json"); } }
@@ -98,6 +106,22 @@ namespace MangaReader.Core.Services.Config
       }
 
       _instance = storage;
+    }
+
+    private static IEnumerable<IPlugin> ImportPlugins()
+    {
+      var catalog = new DirectoryCatalog(Path.Combine(ConfigStorage.WorkFolder, "lib"));
+      var container = new CompositionContainer(catalog);
+
+      try
+      {
+        return container.GetExportedValues<IPlugin>();
+      }
+      catch (ChangeRejectedException ex)
+      {
+        Log.Exception(ex, "Error on plugin loading.");
+      }
+      return Enumerable.Empty<IPlugin>();
     }
 
     public void Save()

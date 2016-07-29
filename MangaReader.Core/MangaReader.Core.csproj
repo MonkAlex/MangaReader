@@ -66,6 +66,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite">
       <HintPath>Library\System.Data.SQLite.dll</HintPath>
@@ -128,10 +129,6 @@
     <Compile Include="Manga\Grouple\MangaName.cs" />
     <Compile Include="Manga\Grouple\Mintmanga.cs" />
     <Compile Include="Manga\Grouple\Readmanga.cs" />
-    <Compile Include="Manga\Hentaichan\Chapter.cs" />
-    <Compile Include="Manga\Hentaichan\Getter.cs" />
-    <Compile Include="Manga\Hentaichan\Hentaichan.cs" />
-    <Compile Include="Manga\Hentaichan\HentaichanLogin.cs" />
     <Compile Include="Manga\IDownloadable.cs" />
     <Compile Include="Manga\MangaHistory.cs" />
     <Compile Include="Manga\MangaObsolete.cs" />
@@ -158,6 +155,7 @@
     <Compile Include="Services\Config\AppConfig.cs" />
     <Compile Include="Services\Config\ConfigStorage.cs" />
     <Compile Include="Services\Config\DatabaseConfig.cs" />
+    <Compile Include="IPlugin.cs" />
     <Compile Include="Services\Config\LibraryFilter.cs" />
     <Compile Include="Services\Config\ViewConfig.cs" />
     <Compile Include="Convertation\Convert.cs" />

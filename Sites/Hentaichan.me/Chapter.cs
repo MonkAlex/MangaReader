@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace MangaReader.Core.Manga.Hentaichan
+namespace Hentaichan
 {
-  public class Chapter : Core.Manga.Chapter
+  public class Chapter : MangaReader.Core.Manga.Chapter
   {
     protected override void UpdatePages()
     {

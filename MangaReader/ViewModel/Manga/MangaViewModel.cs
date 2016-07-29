@@ -116,8 +116,9 @@ namespace MangaReader.ViewModel.Manga
         result = "RM";
       if (manga is Core.Manga.Acomic.Acomics)
         result = "AC";
-      if (manga is Core.Manga.Hentaichan.Hentaichan)
-        result = "HC";
+#warning Ещё косяк, который должен уйти в плагины
+//      if (manga is Core.Manga.Hentaichan.Hentaichan)
+//        result = "HC";
       if (manga is Core.Manga.Grouple.Mintmanga)
         result = "MM";
       this.Type = result;

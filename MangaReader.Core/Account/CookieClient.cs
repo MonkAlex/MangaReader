@@ -6,9 +6,9 @@ namespace MangaReader.Core.Account
 {
   public class CookieClient : WebClient
   {
-    internal CookieContainer Cookie { get; set; }
+    public CookieContainer Cookie { get; set; }
 
-    internal Uri ResponseUri;
+    public Uri ResponseUri;
 
     protected override WebRequest GetWebRequest(Uri address)
     {

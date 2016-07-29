@@ -105,6 +105,10 @@
       <Project>{744f331a-938a-475a-840a-7fac985ebe61}</Project>
       <Name>MangaReader.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Sites\Hentaichan.me\Hentaichan.me.csproj">
+      <Project>{8bd693ba-7f23-4d27-9e16-84c1a154bd03}</Project>
+      <Name>Hentaichan.me</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 
-namespace MangaReader.Core.Manga.Hentaichan
+namespace Hentaichan
 {
   public class Hentaichan : Mangas
   {

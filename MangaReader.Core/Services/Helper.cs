@@ -48,7 +48,9 @@ namespace MangaReader.Core.Services
     /// <remarks>В текущей реализации - по namespace.</remarks>
     public static List<Assembly> AllowedAssemblies()
     {
-      return AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith("MangaReader")).ToList();
+      var byName = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith("MangaReader")).ToList();
+      byName.AddRange(ConfigStorage.Plugins.Select(p => p.Assembly));
+      return byName;
     }
 
   }

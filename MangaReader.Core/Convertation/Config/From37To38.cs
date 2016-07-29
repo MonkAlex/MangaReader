@@ -3,7 +3,6 @@ using System.Linq;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Manga.Acomic;
 using MangaReader.Core.Manga.Grouple;
-using MangaReader.Core.Manga.Hentaichan;
 using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Convertation.Config
@@ -36,13 +35,15 @@ namespace MangaReader.Core.Convertation.Config
         if (setting.MainUri != null)
           continue;
 
+#warning не забыть починить
+        /*
         if (setting.Manga == Hentaichan.Type)
         {
           setting.MainUri = new Uri("http://hentaichan.me/");
           setting.MangaSettingUris.Add(setting.MainUri);
           setting.MangaSettingUris.Add(new Uri("http://hentaichan.ru/"));
           setting.Login.MainUri = setting.MainUri;
-        }
+        }*/
         if (setting.Manga == Readmanga.Type)
         {
           setting.MainUri = new Uri("http://readmanga.me/");

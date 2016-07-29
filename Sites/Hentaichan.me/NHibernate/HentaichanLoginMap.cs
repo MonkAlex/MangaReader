@@ -1,16 +1,7 @@
 ﻿using FluentNHibernate.Mapping;
 
-namespace Hentaichan
+namespace Hentaichan.NHibernate
 {
-  public class HentaichanMap : SubclassMap<Hentaichan>
-  {
-    public HentaichanMap()
-    {
-      Not.LazyLoad();
-      DiscriminatorValue(Hentaichan.Type.ToString());
-    }
-  }
-
   public class HentaichanLoginMap : SubclassMap<HentaichanLogin>
   {
     public HentaichanLoginMap()

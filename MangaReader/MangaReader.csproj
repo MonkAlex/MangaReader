@@ -360,7 +360,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y /r /e "$(ProjectDir)\..\MangaReader.Core\bin\$(ConfigurationName)" "$(TargetDir)\lib"
+    <PostBuildEvent>md "$(TargetDir)\lib"
+xcopy /y /r /e "$(ProjectDir)\..\MangaReader.Core\bin\$(ConfigurationName)" "$(TargetDir)\lib"
 xcopy /y /r /e "$(ProjectDir)\Library" "$(TargetDir)\lib"
 xcopy /y /r /e "$(ProjectDir)\..\Sites\Bin\$(ConfigurationName)" "$(TargetDir)\lib"</PostBuildEvent>
   </PropertyGroup>

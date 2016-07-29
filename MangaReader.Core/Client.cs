@@ -34,6 +34,7 @@ namespace MangaReader.Core
         }
       }
 
+      ConfigStorage.RefreshPlugins();
       NHibernate.Mapping.Initialize(process);
       Converter.Convert(process);
     }

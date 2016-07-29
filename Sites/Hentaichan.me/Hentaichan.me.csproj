@@ -51,10 +51,12 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="Chapter.cs" />
+    <Compile Include="Convertation\HentaichanFrom37To38.cs" />
     <Compile Include="Getter.cs" />
     <Compile Include="Hentaichan.cs" />
     <Compile Include="HentaichanLogin.cs" />
-    <Compile Include="HentaichanMap.cs" />
+    <Compile Include="NHibernate\HentaichanLoginMap.cs" />
+    <Compile Include="NHibernate\HentaichanMap.cs" />
     <Compile Include="HentaichanPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

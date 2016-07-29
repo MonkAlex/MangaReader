@@ -67,12 +67,19 @@ namespace MangaReader.Core.Services.Config
     /// <summary>
     /// Подключенные плагины.
     /// </summary>
-    internal static IEnumerable<IPlugin> Plugins { get { return ImportPlugins(); } }
+    internal static IList<IPlugin> Plugins { get { return plugins; } }
+
+    private static IList<IPlugin> plugins; 
 
     /// <summary>
     /// Настройки программы.
     /// </summary>
     private static string SettingsPath { get { return Path.Combine(WorkFolder, "settings.json"); } }
+
+    /// <summary>
+    /// Папка с либами программы.
+    /// </summary>
+    internal static string LibPath { get { return Path.Combine(WorkFolder, "lib"); } }
 
     public static void Load()
     {
@@ -108,18 +115,29 @@ namespace MangaReader.Core.Services.Config
       _instance = storage;
     }
 
-    private static IEnumerable<IPlugin> ImportPlugins()
+    internal static void RefreshPlugins()
     {
-      var catalog = new DirectoryCatalog(Path.Combine(ConfigStorage.WorkFolder, "lib"));
-      var container = new CompositionContainer(catalog);
+      var result = new List<IPlugin>();
 
-      try
+      result.AddRange(GetPluginsFrom(ConfigStorage.WorkFolder));
+      result.AddRange(GetPluginsFrom(ConfigStorage.LibPath));
+
+      plugins = result;
+    }
+
+    private static IEnumerable<IPlugin> GetPluginsFrom(string path)
+    {
+      if (Directory.Exists(path))
       {
-        return container.GetExportedValues<IPlugin>();
-      }
-      catch (ChangeRejectedException ex)
-      {
-        Log.Exception(ex, "Error on plugin loading.");
+        try
+        {
+          var container = new CompositionContainer(new DirectoryCatalog(path));
+          return container.GetExportedValues<IPlugin>();
+        }
+        catch (System.Exception ex)
+        {
+          Log.Exception(ex, string.Format("Plugins from {0} cannot be loaded.", path));
+        }
       }
       return Enumerable.Empty<IPlugin>();
     }

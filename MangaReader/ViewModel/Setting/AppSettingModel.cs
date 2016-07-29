@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using MangaReader.UI.Skin;
@@ -80,7 +81,9 @@ namespace MangaReader.ViewModel.Setting
       if (int.TryParse(AutoUpdateHours, out hour))
         appConfig.AutoUpdateInHours = hour;
 
-      ConfigStorage.Instance.ViewConfig.SkinGuid = Skin.Guid;
+      var viewConfig = ConfigStorage.Instance.ViewConfig;
+      if (Skin.Guid != Default.DefaultGuid || viewConfig.SkinGuid != Guid.Empty)
+        viewConfig.SkinGuid = Skin.Guid;
     }
 
     public AppSettingModel()

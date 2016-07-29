@@ -16,14 +16,14 @@ namespace MangaReader.ViewModel.Commands.Setting
     {
       base.Execute(parameter);
 
-      var skinChanged = ConfigStorage.Instance.ViewConfig.SkinGuid != settingModel.AppSetting.Skin.Guid;
+      var skinGuid = ConfigStorage.Instance.ViewConfig.SkinGuid;
 
       foreach (var mangaSetting in settingModel.Views)
         mangaSetting.Save();
 
       ConfigStorage.Instance.Save();
 
-      if (skinChanged)
+      if (skinGuid != ConfigStorage.Instance.ViewConfig.SkinGuid)
       {
         var restart = Dialogs.ShowYesNoDialog("Перезапуск", "Перезапустить программу?", "Необходим перезапуск для применения новых настроек.");
         if (restart)

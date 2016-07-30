@@ -119,6 +119,7 @@
     <Compile Include="Exception\SaveValidationException.cs" />
     <Compile Include="Manga\Acomic\Acomics.cs" />
     <Compile Include="Manga\Acomic\AcomicsLogin.cs" />
+    <Compile Include="Manga\Acomic\AcomicsPlugin.cs" />
     <Compile Include="Manga\Acomic\Chapter.cs" />
     <Compile Include="Manga\Acomic\Getter.cs" />
     <Compile Include="Manga\Chapter.cs" />
@@ -128,7 +129,9 @@
     <Compile Include="Manga\Grouple\GroupleManga.cs" />
     <Compile Include="Manga\Grouple\MangaName.cs" />
     <Compile Include="Manga\Grouple\Mintmanga.cs" />
+    <Compile Include="Manga\Grouple\MintmangaPlugin.cs" />
     <Compile Include="Manga\Grouple\Readmanga.cs" />
+    <Compile Include="Manga\Grouple\ReadmangaPlugin.cs" />
     <Compile Include="Manga\IDownloadable.cs" />
     <Compile Include="Manga\MangaHistory.cs" />
     <Compile Include="Manga\MangaObsolete.cs" />

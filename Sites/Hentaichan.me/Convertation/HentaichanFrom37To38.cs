@@ -12,8 +12,8 @@ namespace Hentaichan.Convertation
     {
       base.ProtectedConvert(process);
 
-      var setting = ConfigStorage.Instance.DatabaseConfig.MangaSettings.SingleOrDefault(s => s.MainUri == null && s.Manga == Hentaichan.Type);
-      if (setting != null)
+      var setting = ConfigStorage.GetPlugin<Hentaichan>().GetSettings();
+      if (setting != null && setting.MainUri == null)
       {
         setting.MainUri = new Uri("http://hentaichan.me/");
         setting.MangaSettingUris.Add(setting.MainUri);

@@ -25,9 +25,6 @@ namespace MangaReader.Core.Services.Config
           {
             var query = Repository.Get<MangaSetting>().ToList();
             mangaSettings = CreateDefaultMangaSettings(query);
-
-            if (mangaSettings.Except(query).Any())
-              this.mangaSettings.SaveAll();
           }
           else
           {
@@ -49,23 +46,23 @@ namespace MangaReader.Core.Services.Config
     /// <returns>Коллекция всех настроек.</returns>
     private static List<MangaSetting> CreateDefaultMangaSettings(List<MangaSetting> query)
     {
-      var types = Generic.GetAllTypes<Manga.Mangas>();
       var settings = new List<MangaSetting>(query);
-
-      foreach (var type in types)
+      var plugins = ConfigStorage.Plugins;
+      foreach (var plugin in plugins)
       {
-        var typeProperty = type.TypeProperty();
-        if (settings.Any(s => Equals(s.Manga, typeProperty)))
+        if (settings.Any(s => Equals(s.Manga, plugin.MangaGuid)))
           continue;
 
         var setting = new MangaSetting
         {
           Folder = AppConfig.DownloadFolder,
-          Manga = typeProperty,
-          MangaName = type.Name,
-          DefaultCompression = Compression.CompressionMode.Manga
+          Manga = plugin.MangaGuid,
+          MangaName = plugin.MangaType.Name,
+          DefaultCompression = Compression.CompressionMode.Manga,
+          Login = plugin.GetLogin()
         };
 
+        setting.Save();
         settings.Add(setting);
       }
       return settings;

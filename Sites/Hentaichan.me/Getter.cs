@@ -18,7 +18,7 @@ namespace Hentaichan
 
     public static CookieClient GetClient()
     {
-      var setting = ConfigStorage.Instance.DatabaseConfig.MangaSettings.SingleOrDefault(s => Equals(s.Manga, Hentaichan.Type));
+      var setting = ConfigStorage.GetPlugin<Hentaichan>().GetSettings();
       var client = new CookieClient();
       if (setting != null)
       {

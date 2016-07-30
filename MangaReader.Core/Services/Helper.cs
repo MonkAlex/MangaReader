@@ -16,12 +16,6 @@ namespace MangaReader.Core.Services
       return find is Guid ? (Guid)find : Guid.Empty;
     }
 
-    public static Guid[] MangaProperty(this Type type)
-    {
-      var find = type.GetProperty("Manga").GetValue(null);
-      return find is Guid[] ? (Guid[])find : new Guid[0];
-    }
-
     /// <summary>
     /// Перезагрузить коллекцию из базы.
     /// </summary>
@@ -50,6 +44,7 @@ namespace MangaReader.Core.Services
     {
       var byName = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith("MangaReader")).ToList();
       byName.AddRange(ConfigStorage.Plugins.Select(p => p.Assembly));
+      byName = byName.Distinct().ToList();
       return byName;
     }
 

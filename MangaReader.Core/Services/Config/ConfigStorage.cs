@@ -60,14 +60,14 @@ namespace MangaReader.Core.Services.Config
     /// <summary>
     /// Папка программы.
     /// </summary>
-    internal static string WorkFolder { get { return workFolder; } }
+    public static string WorkFolder { get { return workFolder; } }
 
     private static string workFolder = AppDomain.CurrentDomain.BaseDirectory;
 
     /// <summary>
     /// Подключенные плагины.
     /// </summary>
-    internal static IList<IPlugin> Plugins { get { return plugins; } }
+    public static IList<IPlugin> Plugins { get { return plugins; } }
 
     private static IList<IPlugin> plugins; 
 
@@ -79,7 +79,7 @@ namespace MangaReader.Core.Services.Config
     /// <summary>
     /// Папка с либами программы.
     /// </summary>
-    internal static string LibPath { get { return Path.Combine(WorkFolder, "lib"); } }
+    public static string LibPath { get { return Path.Combine(WorkFolder, "lib"); } }
 
     public static void Load()
     {
@@ -115,7 +115,17 @@ namespace MangaReader.Core.Services.Config
       _instance = storage;
     }
 
-    internal static void RefreshPlugins()
+    public static IPlugin GetPlugin<T>() where T : Core.Manga.Mangas
+    {
+      return Plugins.SingleOrDefault(p => p.MangaType == typeof (T));
+    }
+
+    public static IPlugin GetPlugin(Guid mangaGuid)
+    {
+      return Plugins.SingleOrDefault(p => p.MangaGuid == mangaGuid);
+    }
+
+    public static void RefreshPlugins()
     {
       var result = new List<IPlugin>();
 

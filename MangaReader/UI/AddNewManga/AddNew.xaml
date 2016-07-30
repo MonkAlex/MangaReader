@@ -27,6 +27,7 @@
                     Grid.RowSpan="3"
                     Grid.ColumnSpan="2"
                     BorderBrush="Transparent"
+                    SelectedIndex="0"
                     ItemsSource="{Binding Logins}">
             <TabControl.ItemTemplate>
                 <DataTemplate>

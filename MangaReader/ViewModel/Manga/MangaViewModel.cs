@@ -114,9 +114,9 @@ namespace MangaReader.ViewModel.Manga
       var result = "NA";
       if (manga is Core.Manga.Grouple.Readmanga)
         result = "RM";
-      if (manga is Core.Manga.Acomic.Acomics)
-        result = "AC";
 #warning Ещё косяк, который должен уйти в плагины
+//      if (manga is Core.Manga.Acomic.Acomics)
+//        result = "AC";
 //      if (manga is Core.Manga.Hentaichan.Hentaichan)
 //        result = "HC";
       if (manga is Core.Manga.Grouple.Mintmanga)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using MangaReader.Core.Convertation.Primitives;
-using MangaReader.Core.Manga.Acomic;
 using MangaReader.Core.Manga.Grouple;
 using MangaReader.Core.Services.Config;
 
@@ -48,12 +47,6 @@ namespace MangaReader.Core.Convertation.Config
           setting.MangaSettingUris.Add(setting.MainUri);
           setting.MangaSettingUris.Add(new Uri("http://adultmanga.ru/"));
           setting.Login.MainUri = new Uri(@"http://grouple.ru/");
-        }
-        if (setting.Manga == Acomics.Type)
-        {
-          setting.MainUri = new Uri("http://acomics.ru/");
-          setting.MangaSettingUris.Add(setting.MainUri);
-          setting.Login.MainUri = setting.MainUri;
         }
         setting.Save();
       }

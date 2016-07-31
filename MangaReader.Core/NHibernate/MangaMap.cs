@@ -1,6 +1,5 @@
 ﻿using FluentNHibernate.Mapping;
 using MangaReader.Core.Manga;
-using MangaReader.Core.Manga.Acomic;
 using MangaReader.Core.Manga.Grouple;
 
 namespace MangaReader.Core.NHibernate
@@ -44,15 +43,6 @@ namespace MangaReader.Core.NHibernate
     {
       Not.LazyLoad();
       DiscriminatorValue(Mintmanga.Type.ToString());
-    }
-  }
-
-  public class AcomicsMap : SubclassMap<Acomics>
-  {
-    public AcomicsMap()
-    {
-      Not.LazyLoad();
-      DiscriminatorValue(Acomics.Type.ToString());
     }
   }
 }

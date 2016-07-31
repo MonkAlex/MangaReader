@@ -6,15 +6,14 @@ using System.Net;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using MangaReader.Core.Account;
+using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 
-namespace MangaReader.Core.Manga.Acomic
+namespace Acomics
 {
   public class AcomicsLogin : Login
   {
     public new static Guid Type { get { return Guid.Parse("F526CD85-7846-4F32-85A7-C57E3983DFB1"); } }
-
-    public new static Guid[] Manga { get { return new Guid[1] { Acomics.Type }; } }
 
     public virtual string PasswordHash { get; set; }
 

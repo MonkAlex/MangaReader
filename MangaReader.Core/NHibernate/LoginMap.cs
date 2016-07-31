@@ -23,14 +23,4 @@ namespace MangaReader.Core.NHibernate
       DiscriminatorValue(Manga.Grouple.GroupleLogin.Type.ToString());
     }
   }
-
-  public class AcomicsLoginMap : SubclassMap<Manga.Acomic.AcomicsLogin>
-  {
-    public AcomicsLoginMap()
-    {
-      Not.LazyLoad();
-      Map(x => x.PasswordHash);
-      DiscriminatorValue(Manga.Acomic.AcomicsLogin.Type.ToString());
-    }
-  }
 }

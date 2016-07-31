@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using MangaReader.Core.Services;
 
-namespace MangaReader.Core.Manga.Acomic
+namespace Acomics
 {
   /// <summary>
   /// Манга.
   /// </summary>
-  public class Acomics : Mangas
+  public class Acomics : MangaReader.Core.Manga.Mangas
   {
     #region Свойства
 

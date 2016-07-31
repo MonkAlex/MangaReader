@@ -34,6 +34,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Publish|AnyCPU'">
+    <OutputPath>bin\Publish\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="FluentNHibernate">
       <HintPath>..\..\MangaReader.Core\Library\FluentNHibernate.dll</HintPath>
@@ -93,6 +102,10 @@
     <ProjectReference Include="..\..\MangaReader.Core\MangaReader.Core.csproj">
       <Project>{744f331a-938a-475a-840a-7fac985ebe61}</Project>
       <Name>MangaReader.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Sites\Acomics.ru\Acomics.ru.csproj">
+      <Project>{3aabf85f-414f-4429-a1ab-812213771755}</Project>
+      <Name>Acomics.ru</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

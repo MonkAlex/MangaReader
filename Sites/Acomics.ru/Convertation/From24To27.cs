@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
+using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
-using MangaReader.Core.Manga.Acomic;
 using MangaReader.Core.NHibernate;
-using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
-namespace MangaReader.Core.Convertation.Mangas
+namespace Acomics.Convertation
 {
   public class From24To27 : MangasConverter
   {

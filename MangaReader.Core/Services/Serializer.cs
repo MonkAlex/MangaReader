@@ -1,5 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
+using MangaReader.Core.Manga;
+using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Services
 {
@@ -32,6 +36,12 @@ namespace MangaReader.Core.Services
       T retVal;
 
       var formatter = new XmlSerializer(type);
+
+      if (type == typeof(ObservableCollection<Mangas>))
+      {
+        var subTypes = ConfigStorage.Plugins.Select(p => p.MangaType).Distinct().ToArray();
+        formatter = new XmlSerializer(type, subTypes);
+      }
 
       try
       {

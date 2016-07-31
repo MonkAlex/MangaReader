@@ -5,9 +5,10 @@ using System.Net;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using MangaReader.Core.Account;
+using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 
-namespace MangaReader.Core.Manga.Acomic
+namespace Acomics
 {
   public static class Getter
   {
@@ -78,7 +79,7 @@ namespace MangaReader.Core.Manga.Acomic
     public static void UpdateContent(Acomics manga)
     {
       var volumes = new List<Volume>();
-      var chapters = new List<Chapter>();
+      var chapters = new List<MangaReader.Core.Manga.Chapter>();
       var pages = new List<MangaPage>();
       try
       {
@@ -113,7 +114,7 @@ namespace MangaReader.Core.Manga.Acomic
         }
 
         var allPages = GetMangaPages(manga.Uri);
-        var innerChapters = chapters.Count == 0 ? volumes.SelectMany(v => v.Chapters).Cast<Chapter>().ToList() : chapters;
+        var innerChapters = chapters.Count == 0 ? volumes.SelectMany(v => v.Chapters).ToList() : chapters;
         for (int i = 0; i < innerChapters.Count; i++)
         {
           var current = innerChapters[i].Number;

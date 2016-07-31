@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using MangaReader.Core.Manga;
-using MangaReader.Core.Manga.Acomic;
 using MangaReader.Core.Manga.Grouple;
 
 namespace Tests.Entities
@@ -38,9 +37,9 @@ namespace Tests.Entities
       manga.Delete();
     }
 
-    public static Acomics CreateAcomics()
+    public static Acomics.Acomics CreateAcomics()
     {
-      var manga = Mangas.Create(AcomicsUri) as Acomics;
+      var manga = Mangas.Create(AcomicsUri) as Acomics.Acomics;
       manga.Status = "example status";
       manga.NeedUpdate = false;
       manga.Name = "Acomics from example" + Guid.NewGuid();
@@ -48,7 +47,7 @@ namespace Tests.Entities
       return manga;
     }
 
-    public static void DeleteAcomics(Acomics manga)
+    public static void DeleteAcomics(Acomics.Acomics manga)
     {
       if (manga == null)
         return;

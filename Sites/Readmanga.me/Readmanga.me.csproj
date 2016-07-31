@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8BD693BA-7F23-4D27-9E16-84C1A154BD03}</ProjectGuid>
+    <ProjectGuid>{D4BD1A69-EBDB-451E-B0FC-4E79644232B8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Hentaichan</RootNamespace>
-    <AssemblyName>Hentaichan.me</AssemblyName>
+    <RootNamespace>Readmanga.me</RootNamespace>
+    <AssemblyName>Readmanga.me</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,14 +39,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentNHibernate">
-      <HintPath>..\..\MangaReader.Core\Library\FluentNHibernate.dll</HintPath>
-    </Reference>
-    <Reference Include="HtmlAgilityPack">
-      <HintPath>..\..\MangaReader.Core\Library\HtmlAgilityPack.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -56,29 +49,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\VersionInfo.cs">
-      <Link>Properties\VersionInfo.cs</Link>
-    </Compile>
-    <Compile Include="Chapter.cs" />
-    <Compile Include="Convertation\HentaichanFrom37To38.cs" />
-    <Compile Include="Getter.cs" />
-    <Compile Include="Hentaichan.cs" />
-    <Compile Include="HentaichanLogin.cs" />
-    <Compile Include="NHibernate\HentaichanLoginMap.cs" />
-    <Compile Include="NHibernate\HentaichanMap.cs" />
-    <Compile Include="HentaichanPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\MangaReader.Core\MangaReader.Core.csproj">
-      <Project>{744f331a-938a-475a-840a-7fac985ebe61}</Project>
-      <Name>MangaReader.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy /y /r /e "$(TargetPath)" "$(ProjectDir)\..\Bin\$(ConfigurationName)\"</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

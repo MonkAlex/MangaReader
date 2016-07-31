@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
@@ -13,7 +14,11 @@ namespace MangaReader.Core
 
     public static void Init()
     {
+      // Все необработанные - логгируем.
       AppDomain.CurrentDomain.UnhandledException += (o, a) => Log.Exception(a.ExceptionObject as System.Exception);
+
+      // Все необработанные в тасках (и забытые) - пробрасываем наружу, пусть пока падает в такой ситуации, чем зависает.
+      TaskScheduler.UnobservedTaskException += (o, a) => { a.SetObserved(); throw a.Exception; };
     }
 
     public static void Start(IProcess process)

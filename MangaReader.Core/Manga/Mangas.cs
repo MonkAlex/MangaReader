@@ -115,8 +115,13 @@ namespace MangaReader.Core.Manga
       get
       {
         if (Mapping.Initialized)
-          return ConfigStorage.Instance.DatabaseConfig.MangaSettings.SingleOrDefault(s => Equals(s.Manga, this.GetType().TypeProperty()));
-        throw new System.Exception("Mappings not initialized.");
+        {
+          var plugin = ConfigStorage.Plugins.SingleOrDefault(p => p.MangaType == this.GetType());
+          if (plugin == null)
+            throw new MangaReaderException(string.Format("Plugin for {0} manga type not found.", this.GetType()));
+          return plugin.GetSettings();
+        }
+        throw new MangaReaderException("Mappings not initialized.");
       }
     }
 
@@ -131,7 +136,7 @@ namespace MangaReader.Core.Manga
 
     public void AddHistory(Uri message)
     {
-      AddHistory(new [] { new MangaHistory(message)});
+      AddHistory(new[] { new MangaHistory(message) });
     }
 
     public void AddHistory(IEnumerable<Uri> messages)
@@ -195,7 +200,7 @@ namespace MangaReader.Core.Manga
 
     public virtual List<Compression.CompressionMode> AllowedCompressionModes { get { return allowedCompressionModes; } }
 
-    private static List<Compression.CompressionMode> allowedCompressionModes = 
+    private static List<Compression.CompressionMode> allowedCompressionModes =
       new List<Compression.CompressionMode>(Enum.GetValues(typeof(Compression.CompressionMode)).Cast<Compression.CompressionMode>());
 
     public virtual Compression.CompressionMode? CompressionMode
@@ -284,7 +289,7 @@ namespace MangaReader.Core.Manga
       get { return DirectoryHelpers.MakeValidPath(Path.Combine(this.Setting.Folder, DirectoryHelpers.MakeValidPath(this.Name.Replace(Path.DirectorySeparatorChar, '.')))); }
       set { }
     }
-    
+
     public event EventHandler<Mangas> DownloadProgressChanged;
 
     protected void OnDownloadProgressChanged(Mangas manga)
@@ -470,7 +475,7 @@ namespace MangaReader.Core.Manga
     {
       return this.Name;
     }
-    
+
     private void UpdateUri(Uri value)
     {
       if (this.uri != null && !Equals(this.uri, value))
@@ -494,15 +499,15 @@ namespace MangaReader.Core.Manga
     {
       Mangas manga = null;
 
-      var setting  = ConfigStorage.Instance.DatabaseConfig.MangaSettings
+      var setting = ConfigStorage.Instance.DatabaseConfig.MangaSettings
         .SingleOrDefault(s => s.MangaSettingUris.Any(u => Equals(u.Host, uri.Host)));
       if (setting != null)
       {
-        var type = Generic.GetAllTypes<Mangas>().SingleOrDefault(t => t.TypeProperty() == setting.Manga);
-        if (type != null)
-          manga = Activator.CreateInstance(type) as Mangas;
+        var plugin = ConfigStorage.Plugins.SingleOrDefault(p => Equals(p.GetSettings(), setting));
+        if (plugin != null)
+          manga = Activator.CreateInstance(plugin.MangaType) as Mangas;
       }
-      
+
       if (manga != null)
         manga.Uri = uri;
 

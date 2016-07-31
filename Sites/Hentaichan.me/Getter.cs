@@ -35,7 +35,7 @@ namespace Hentaichan
         }
         if (!string.IsNullOrWhiteSpace(login.UserId))
         {
-          var host = Generic.GetMangaMainUri<Hentaichan>().Host;
+          var host = Generic.GetLoginMainUri<Hentaichan>().Host;
           client.Cookie.Add(new Cookie("dle_user_id", login.UserId, "/", host));
           client.Cookie.Add(new Cookie("dle_password", login.PasswordHash, "/", host));
         }

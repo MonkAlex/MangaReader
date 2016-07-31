@@ -18,7 +18,7 @@ namespace Acomics
 
     public static CookieClient GetAdultClient()
     {
-      var host = Generic.GetMangaMainUri<Acomics>().Host;
+      var host = Generic.GetLoginMainUri<Acomics>().Host;
       var client = new CookieClient();
       client.Cookie.Add(new Cookie("ageRestrict", "40", "/", host));
       return client;

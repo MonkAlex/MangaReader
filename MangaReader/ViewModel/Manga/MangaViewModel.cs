@@ -112,17 +112,9 @@ namespace MangaReader.ViewModel.Manga
     private void SetType(Mangas manga)
     {
       var result = "NA";
-#warning Ещё косяк, который должен уйти в плагины
-      /*
-      if (manga is Core.Manga.Grouple.Readmanga)
-        result = "RM";
-      if (manga is Core.Manga.Acomic.Acomics)
-        result = "AC";
-      if (manga is Core.Manga.Hentaichan.Hentaichan)
-        result = "HC";
-      if (manga is Core.Manga.Grouple.Mintmanga)
-        result = "MM";
-        */
+      var plugin = ConfigStorage.Plugins.SingleOrDefault(p => p.MangaType == manga.GetType());
+      if (plugin != null)
+        result = plugin.ShortName;
       this.Type = result;
     }
 

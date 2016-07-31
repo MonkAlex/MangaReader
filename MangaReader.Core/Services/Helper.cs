@@ -10,12 +10,6 @@ namespace MangaReader.Core.Services
 {
   public static class Helper
   {
-    public static Guid TypeProperty(this Type type)
-    {
-      var find = type.GetProperty("Type").GetValue(null);
-      return find is Guid ? (Guid)find : Guid.Empty;
-    }
-
     /// <summary>
     /// Перезагрузить коллекцию из базы.
     /// </summary>
@@ -80,17 +74,20 @@ namespace MangaReader.Core.Services
       return new List<T>(Enum.GetValues(typeof(T)).OfType<T>());
     }
 
-    public static Uri GetMangaMainUri<T>() where T : Mangas
+    public static Uri GetLoginMainUri<T>() where T : Mangas
     {
       if (NHibernate.Mapping.Initialized)
       {
-        var setting = ConfigStorage.Instance.DatabaseConfig.MangaSettings.SingleOrDefault(s => s.Manga == typeof (T).TypeProperty());
-        return setting.Login.MainUri;
+        var plugin = ConfigStorage.GetPlugin<T>();
+        if (plugin != null)
+        {
+          var login = plugin.GetLogin();
+          if (login != null)
+            return login.MainUri;
+        }
       }
-      else
-      {
-        return null;
-      }
+
+      return null;
     }
   }
 }

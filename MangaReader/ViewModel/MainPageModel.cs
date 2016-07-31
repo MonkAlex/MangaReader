@@ -111,7 +111,7 @@ namespace MangaReader.ViewModel
       if (LibraryFilter.OnlyUpdate && !manga.NeedUpdate)
         return false;
 
-      return LibraryFilter.AllowedTypes.Any(t => (t.Value as MangaSetting).Manga == manga.GetType().TypeProperty()) &&
+      return LibraryFilter.AllowedTypes.Any(t => Equals(t.Value as MangaSetting, manga.Setting)) &&
         manga.Name.ToLowerInvariant().Contains(LibraryFilter.Name.ToLowerInvariant());
     }
 

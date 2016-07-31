@@ -91,6 +91,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Account\Login.cs" />
+    <Compile Include="BasePlugin.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Convertation\Config\From30to31.cs" />
     <Compile Include="Convertation\Config\FromBaseTo30.cs" />

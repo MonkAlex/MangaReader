@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace MangaReader.Core.Manga.Grouple
+namespace Grouple
 {
   /// <summary>
   /// Глава.
   /// </summary>
-  public class Chapter : Core.Manga.Chapter
+  public class Chapter : MangaReader.Core.Manga.Chapter
   {
     #region Свойства
 

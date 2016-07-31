@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MangaReader.Core.Manga.Grouple
+namespace Grouple
 {
   public class Mintmanga : GroupleManga
   {

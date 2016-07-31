@@ -2,11 +2,12 @@
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Reflection;
+using MangaReader.Core;
 using MangaReader.Core.Account;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
-namespace MangaReader.Core.Manga.Grouple
+namespace Grouple
 {
   [Export(typeof(IPlugin))]
   public class ReadmangaPlugin : IPlugin

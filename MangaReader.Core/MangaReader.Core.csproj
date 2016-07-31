@@ -97,7 +97,6 @@
     <Compile Include="Convertation\Database\From24To27.cs" />
     <Compile Include="Convertation\Config\From27To28.cs" />
     <Compile Include="Convertation\Config\From29To30.cs" />
-    <Compile Include="Convertation\Config\From37To38.cs" />
     <Compile Include="Convertation\Database\FromBaseTo24.cs" />
     <Compile Include="Convertation\History\From32To33.cs" />
     <Compile Include="Convertation\History\FromBaseTo32.cs" />
@@ -117,15 +116,6 @@
     <Compile Include="Exception\CopyDirectoryFailed.cs" />
     <Compile Include="Exception\SaveValidationException.cs" />
     <Compile Include="Manga\Chapter.cs" />
-    <Compile Include="Manga\Grouple\Chapter.cs" />
-    <Compile Include="Manga\Grouple\Getter.cs" />
-    <Compile Include="Manga\Grouple\GroupleLogin.cs" />
-    <Compile Include="Manga\Grouple\GroupleManga.cs" />
-    <Compile Include="Manga\Grouple\MangaName.cs" />
-    <Compile Include="Manga\Grouple\Mintmanga.cs" />
-    <Compile Include="Manga\Grouple\MintmangaPlugin.cs" />
-    <Compile Include="Manga\Grouple\Readmanga.cs" />
-    <Compile Include="Manga\Grouple\ReadmangaPlugin.cs" />
     <Compile Include="Manga\IDownloadable.cs" />
     <Compile Include="Manga\MangaHistory.cs" />
     <Compile Include="Manga\MangaObsolete.cs" />

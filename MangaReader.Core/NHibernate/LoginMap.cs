@@ -14,13 +14,4 @@ namespace MangaReader.Core.NHibernate
       DiscriminateSubClassesOnColumn("Type");
     }
   }
-
-  public class GroupleLoginMap : SubclassMap<Manga.Grouple.GroupleLogin>
-  {
-    public GroupleLoginMap()
-    {
-      Not.LazyLoad();
-      DiscriminatorValue(Manga.Grouple.GroupleLogin.Type.ToString());
-    }
-  }
 }

@@ -6,10 +6,11 @@ using System.Net;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using MangaReader.Core.Account;
+using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using Newtonsoft.Json.Linq;
 
-namespace MangaReader.Core.Manga.Grouple
+namespace Grouple
 {
   public static class Getter
   {

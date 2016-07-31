@@ -40,7 +40,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sites", "Sites", "{E12FEFB3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hentaichan.me", "Sites\Hentaichan.me\Hentaichan.me.csproj", "{8BD693BA-7F23-4D27-9E16-84C1A154BD03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Readmanga.me", "Sites\Readmanga.me\Readmanga.me.csproj", "{D4BD1A69-EBDB-451E-B0FC-4E79644232B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grouple.ru", "Sites\Grouple.ru\Grouple.ru.csproj", "{D4BD1A69-EBDB-451E-B0FC-4E79644232B8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acomics.ru", "Sites\Acomics.ru\Acomics.ru.csproj", "{3AABF85F-414F-4429-A1AB-812213771755}"
 EndProject

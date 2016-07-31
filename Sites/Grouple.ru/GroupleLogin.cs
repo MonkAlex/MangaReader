@@ -7,9 +7,10 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using MangaReader.Core.Account;
+using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 
-namespace MangaReader.Core.Manga.Grouple
+namespace Grouple
 {
   public class GroupleLogin : Login
   {

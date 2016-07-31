@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
+using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
-using MangaReader.Core.Manga.Grouple;
 using MangaReader.Core.Services.Config;
 
-namespace MangaReader.Core.Convertation.Config
+namespace Grouple.Convertation
 {
   public class From37To38 : ConfigConverter
   {
@@ -18,7 +18,7 @@ namespace MangaReader.Core.Convertation.Config
       if (readmanga != null)
       {
         if (mintmanga == null)
-          Services.Log.Add("Не найдены настройки для конвертации нового типа mintmanga.");
+          MangaReader.Core.Services.Log.Add("Не найдены настройки для конвертации нового типа mintmanga.");
         else
         {
           mintmanga.Folder = readmanga.Folder;

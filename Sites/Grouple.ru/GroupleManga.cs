@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using MangaReader.Core.Manga;
 using MangaReader.Core.Properties;
 using MangaReader.Core.Services;
 
-namespace MangaReader.Core.Manga.Grouple
+namespace Grouple
 {
   /// <summary>
   /// Манга.

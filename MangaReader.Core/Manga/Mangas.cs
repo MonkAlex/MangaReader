@@ -13,7 +13,6 @@ using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Manga
 {
-  [XmlInclude(typeof(Grouple.Readmanga))/*, XmlInclude(typeof(Acomic.Acomics))*/]
   public abstract class Mangas : Entity.Entity, INotifyPropertyChanged, IDownloadable
   {
     #region Свойства

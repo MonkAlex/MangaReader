@@ -1,5 +1,4 @@
 ﻿using System;
-using MangaReader.Core.Manga.Grouple;
 using MangaReader.Core.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -18,7 +17,7 @@ namespace Tests.Entities.Manga
 
     private int GetCountOfChapters(string url)
     {
-      return Getter.GetLinksOfMangaChapters(Page.GetPage(new Uri(url))).Count;
+      return Grouple.Getter.GetLinksOfMangaChapters(Page.GetPage(new Uri(url))).Count;
     }
   }
 }

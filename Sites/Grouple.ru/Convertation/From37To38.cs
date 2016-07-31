@@ -29,25 +29,23 @@ namespace Grouple.Convertation
         }
       }
 
-      foreach (var setting in settings)
+      var setting = ConfigStorage.GetPlugin<Readmanga>().GetSettings();
+      if (setting != null && setting.MainUri == null)
       {
-        if (setting.MainUri != null)
-          continue;
+        setting.MainUri = new Uri("http://readmanga.me/");
+        setting.MangaSettingUris.Add(setting.MainUri);
+        setting.MangaSettingUris.Add(new Uri("http://readmanga.ru/"));
+        setting.Login.MainUri = new Uri(@"http://grouple.ru/");
+        setting.Save();
+      }
 
-        if (setting.Manga == Readmanga.Type)
-        {
-          setting.MainUri = new Uri("http://readmanga.me/");
-          setting.MangaSettingUris.Add(setting.MainUri);
-          setting.MangaSettingUris.Add(new Uri("http://readmanga.ru/"));
-          setting.Login.MainUri = new Uri(@"http://grouple.ru/");
-        }
-        if (setting.Manga == Mintmanga.Type)
-        {
-          setting.MainUri = new Uri("http://mintmanga.com/");
-          setting.MangaSettingUris.Add(setting.MainUri);
-          setting.MangaSettingUris.Add(new Uri("http://adultmanga.ru/"));
-          setting.Login.MainUri = new Uri(@"http://grouple.ru/");
-        }
+      setting = ConfigStorage.GetPlugin<Mintmanga>().GetSettings();
+      if (setting != null && setting.MainUri == null)
+      {
+        setting.MainUri = new Uri("http://mintmanga.com/");
+        setting.MangaSettingUris.Add(setting.MainUri);
+        setting.MangaSettingUris.Add(new Uri("http://adultmanga.ru/"));
+        setting.Login.MainUri = new Uri(@"http://grouple.ru/");
         setting.Save();
       }
     }

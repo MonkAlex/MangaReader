@@ -102,7 +102,7 @@ namespace MangaReader.Core.Services
     /// <param name="uri"></param>
     public static bool Add(Uri uri)
     {
-      if (Repository.Get<Mangas>().Any(m => m.Uri == uri))
+      if (Repository.Get<IManga>().Any(m => m.Uri == uri))
         return false;
 
       var newManga = Mangas.CreateFromWeb(uri);
@@ -118,7 +118,7 @@ namespace MangaReader.Core.Services
     /// Удалить мангу.
     /// </summary>
     /// <param name="manga"></param>
-    public static void Remove(Mangas manga)
+    public static void Remove(IManga manga)
     {
       if (manga == null)
         return;
@@ -141,7 +141,7 @@ namespace MangaReader.Core.Services
 
         if (IsAvaible)
         {
-          ThreadAction(() => Update(Repository.Get<Mangas>(), ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
+          ThreadAction(() => Update(Repository.Get<IManga>(), ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
         }
       }
     }
@@ -150,7 +150,7 @@ namespace MangaReader.Core.Services
     /// Обновить мангу.
     /// </summary>
     /// <param name="manga">Обновляемая манга.</param>
-    public static void Update(Mangas manga)
+    public static void Update(IManga manga)
     {
       Update(Enumerable.Repeat(manga, 1), new SortDescription());
     }
@@ -171,7 +171,7 @@ namespace MangaReader.Core.Services
     /// </summary>
     /// <param name="mangas">Обновляемая манга.</param>
     /// <param name="sort">Сортировка.</param>
-    public static void Update(IEnumerable<Mangas> mangas, SortDescription sort)
+    public static void Update(IEnumerable<IManga> mangas, SortDescription sort)
     {
       OnUpdateStarted();
       Status = Strings.Library_Status_Update;
@@ -216,7 +216,7 @@ namespace MangaReader.Core.Services
       }
     }
 
-    private static void CurrentOnDownloadProgressChanged(object sender, Mangas mangas)
+    private static void CurrentOnDownloadProgressChanged(object sender, IManga mangas)
     {
       var percent = (double) (100*mangaIndex + mangas.Downloaded)/(mangasCount*100);
       OnUpdatePercentChanged(percent);
@@ -232,9 +232,9 @@ namespace MangaReader.Core.Services
 
     public static event EventHandler<double> UpdatePercentChanged;
 
-    public static event EventHandler<Mangas> UpdateMangaStarted;
+    public static event EventHandler<IManga> UpdateMangaStarted;
 
-    public static event EventHandler<Mangas> UpdateMangaCompleted;
+    public static event EventHandler<IManga> UpdateMangaCompleted;
 
     public static event EventHandler<bool> AvaibleChanged;
 
@@ -242,9 +242,9 @@ namespace MangaReader.Core.Services
 
     public static event EventHandler<string> StatusChanged;
 
-    public static event EventHandler<Mangas> MangaAdded;
+    public static event EventHandler<IManga> MangaAdded;
 
-    public static event EventHandler<Mangas> MangaDeleted;
+    public static event EventHandler<IManga> MangaDeleted;
 
     private static void OnUpdateStarted()
     {
@@ -261,7 +261,7 @@ namespace MangaReader.Core.Services
       UpdatePercentChanged?.Invoke(null, e);
     }
 
-    private static void OnUpdateMangaCompleted(Mangas e)
+    private static void OnUpdateMangaCompleted(IManga e)
     {
       UpdateMangaCompleted?.Invoke(null, e);
     }
@@ -281,17 +281,17 @@ namespace MangaReader.Core.Services
       StatusChanged?.Invoke(null, e);
     }
 
-    private static void OnMangaAdded(Mangas e)
+    private static void OnMangaAdded(IManga e)
     {
       MangaAdded?.Invoke(null, e);
     }
 
-    private static void OnMangaDeleted(Mangas e)
+    private static void OnMangaDeleted(IManga e)
     {
       MangaDeleted?.Invoke(null, e);
     }
 
-    private static void OnUpdateMangaStarted(Mangas e)
+    private static void OnUpdateMangaStarted(IManga e)
     {
       UpdateMangaStarted?.Invoke(null, e);
     }

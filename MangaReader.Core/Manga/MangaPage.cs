@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using MangaReader.Core.Exception;
 using MangaReader.Core.Services;
 
 namespace MangaReader.Core.Manga
@@ -45,9 +46,9 @@ namespace MangaReader.Core.Manga
 
     public string Folder { get; private set; }
 
-    public event EventHandler<Mangas> DownloadProgressChanged;
+    public event EventHandler<IManga> DownloadProgressChanged;
 
-    protected void OnDownloadProgressChanged(Mangas e)
+    protected void OnDownloadProgressChanged(IManga e)
     {
       var handler = DownloadProgressChanged;
       if (handler != null)
@@ -67,7 +68,7 @@ namespace MangaReader.Core.Manga
       this.IsDownloaded = false;
 
       if (restartCounter > 3)
-        throw new System.Exception(string.Format("Load failed after {0} counts.", restartCounter));
+        throw new DownloadAttemptFailed(restartCounter, this);
 
       Library.CheckPause();
       try

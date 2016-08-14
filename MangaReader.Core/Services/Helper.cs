@@ -74,7 +74,7 @@ namespace MangaReader.Core.Services
       return new List<T>(Enum.GetValues(typeof(T)).OfType<T>());
     }
 
-    public static Uri GetLoginMainUri<T>() where T : Mangas
+    public static Uri GetLoginMainUri<T>() where T : IManga
     {
       if (NHibernate.Mapping.Initialized)
       {

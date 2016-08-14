@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using MangaReader.Core.Exception;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
@@ -77,9 +78,9 @@ namespace MangaReader.Core.Manga
 
     private string folderPrefix = AppConfig.ChapterPrefix;
 
-    public event EventHandler<Mangas> DownloadProgressChanged;
+    public event EventHandler<IManga> DownloadProgressChanged;
 
-    protected void OnDownloadProgressChanged(Mangas e)
+    protected void OnDownloadProgressChanged(IManga e)
     {
       var handler = DownloadProgressChanged;
       if (handler != null)
@@ -95,7 +96,7 @@ namespace MangaReader.Core.Manga
     public virtual void Download(string downloadFolder)
     {
       if (restartCounter > 3)
-        throw new System.Exception(string.Format("Load failed after {0} counts.", restartCounter));
+        throw new DownloadAttemptFailed(restartCounter, this);
 
       var chapterFolder = Path.Combine(downloadFolder, this.Folder);
 
@@ -151,16 +152,6 @@ namespace MangaReader.Core.Manga
     #endregion
 
     #region Конструктор
-
-    public static T Create<T>(Uri uri, string desc) where T : Chapter
-    {
-      return (T)Activator.CreateInstance(typeof(T), new object[] {uri, desc});
-    }
-
-    public static T Create<T>(Uri uri) where T : Chapter
-    {
-      return (T)Activator.CreateInstance(typeof(T), new object[] { uri });
-    }
 
     /// <summary>
     /// Глава манги.

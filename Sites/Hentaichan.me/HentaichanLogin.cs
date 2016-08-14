@@ -109,9 +109,9 @@ namespace Hentaichan
       return IsLogined;
     }
 
-    protected override async Task<List<Mangas>> DownloadBookmarks()
+    protected override async Task<List<IManga>> DownloadBookmarks()
     {
-      var bookmarks = new List<Mangas>();
+      var bookmarks = new List<IManga>();
       var document = new HtmlDocument();
 
       await this.DoLogin();

@@ -7,7 +7,7 @@ namespace MangaReader.ViewModel.Commands.Manga
 {
   public class UpdateMangaCommand : MangaBaseCommand
   {
-    public override void Execute(Mangas parameter)
+    public override void Execute(IManga parameter)
     {
       Library.ThreadAction(() => Library.Update(parameter));
     }

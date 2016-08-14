@@ -9,7 +9,7 @@ namespace MangaReader.ViewModel.Manga
 {
   public class MangaBaseModel : BaseViewModel
   {
-    public readonly Mangas Manga;
+    public readonly IManga Manga;
 
     private ObservableCollection<ContentMenuItem> mangaMenu;
 
@@ -24,7 +24,7 @@ namespace MangaReader.ViewModel.Manga
     }
 
 
-    public MangaBaseModel(Mangas manga)
+    public MangaBaseModel(IManga manga)
     {
       this.Manga = manga;
       this.MangaMenu = new ObservableCollection<ContentMenuItem>

@@ -4,7 +4,7 @@ using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Core.Entity
 {
-  public class Entity
+  public class Entity : IEntity
   {
     [XmlIgnore]
     public int Id

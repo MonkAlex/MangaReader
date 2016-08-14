@@ -63,7 +63,7 @@ namespace MangaReader.Core.Account
       return true;
     }
 
-    public async Task<List<Mangas>> GetBookmarks()
+    public async Task<List<IManga>> GetBookmarks()
     {
       if (this.CanLogin)
       {
@@ -72,10 +72,10 @@ namespace MangaReader.Core.Account
         Log.AddFormat("Finish load bookmarks from '{0}'.", this.MainUri);
         return bookmarks;
       }
-      return new List<Mangas>();
+      return new List<IManga>();
     }
 
-    protected abstract Task<List<Mangas>> DownloadBookmarks();
+    protected abstract Task<List<IManga>> DownloadBookmarks();
     
     public static T Get<T>() where T : Login
     {

@@ -12,11 +12,11 @@ namespace MangaReader.Core.Exception
       return string.Format("{0} Адрес: '{1}'.", base.FormatMessage(), Uri);
     }
 
-    public GetSiteInfoException(string message, Mangas entity) : this(message, entity.Uri, entity)
+    public GetSiteInfoException(string message, IManga entity) : this(message, entity.Uri, entity)
     {
     }
 
-    public GetSiteInfoException(string message, Uri uri, Entity.Entity entity) : base(message, entity)
+    public GetSiteInfoException(string message, Uri uri, Entity.IEntity entity) : base(message, entity)
     {
       this.Uri = uri;
     }

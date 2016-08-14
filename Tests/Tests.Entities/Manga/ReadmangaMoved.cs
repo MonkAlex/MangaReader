@@ -14,7 +14,7 @@ namespace Tests.Entities.Manga
     [TestMethod]
     public void CreateWithHistoryAndMove()
     {
-      foreach (var remove in Environment.Session.Query<Mangas>().Where(m => m.ServerName.Contains("btooom")).ToList())
+      foreach (var remove in Environment.Session.Query<IManga>().Where(m => m.ServerName.Contains("btooom")).ToList())
         MangaReader.Core.Services.Library.Remove(remove);
 
       var manga = Builder.CreateReadmanga();

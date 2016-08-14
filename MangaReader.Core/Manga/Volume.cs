@@ -49,9 +49,9 @@ namespace MangaReader.Core.Manga
 
     private string folderPrefix = AppConfig.VolumePrefix;
 
-    public event EventHandler<Mangas> DownloadProgressChanged;
+    public event EventHandler<IManga> DownloadProgressChanged;
 
-    protected void OnDownloadProgressChanged(Mangas e)
+    protected void OnDownloadProgressChanged(IManga e)
     {
       var handler = DownloadProgressChanged;
       if (handler != null)

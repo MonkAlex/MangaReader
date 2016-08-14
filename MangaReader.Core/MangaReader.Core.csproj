@@ -110,6 +110,8 @@
     <Compile Include="Convertation\Primitives\HistoryConverter.cs" />
     <Compile Include="Convertation\Primitives\MangasConverter.cs" />
     <Compile Include="Entity\Entity.cs" />
+    <Compile Include="Entity\IEntity.cs" />
+    <Compile Include="Exception\DownloadAttemptFailed.cs" />
     <Compile Include="Exception\EntityException.cs" />
     <Compile Include="Exception\GetSiteInfoException.cs" />
     <Compile Include="Exception\MangaDirectoryExists.cs" />
@@ -117,7 +119,9 @@
     <Compile Include="Exception\CopyDirectoryFailed.cs" />
     <Compile Include="Exception\SaveValidationException.cs" />
     <Compile Include="Manga\Chapter.cs" />
+    <Compile Include="Manga\ICompressible.cs" />
     <Compile Include="Manga\IDownloadable.cs" />
+    <Compile Include="Manga\IManga.cs" />
     <Compile Include="Manga\MangaHistory.cs" />
     <Compile Include="Manga\MangaObsolete.cs" />
     <Compile Include="Manga\MangaPage.cs" />

@@ -115,7 +115,7 @@ namespace MangaReader.Core.Services.Config
       _instance = storage;
     }
 
-    public static IPlugin GetPlugin<T>() where T : Core.Manga.Mangas
+    public static IPlugin GetPlugin<T>() where T : Core.Manga.IManga
     {
       return Plugins.SingleOrDefault(p => p.MangaType == typeof (T));
     }

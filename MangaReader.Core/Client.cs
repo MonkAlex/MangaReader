@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MangaReader.Core.Convertation;
+using MangaReader.Core.Exception;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using MangaReader.Core.Update;
@@ -31,7 +32,7 @@ namespace MangaReader.Core
       {
         try
         {
-          Log.Exception(new ApplicationException("Программа уже запущена."));
+          Log.Exception(new MangaReaderException("Программа уже запущена."));
         }
         finally
         {

@@ -54,14 +54,14 @@ namespace Tests.Entities
       manga.Delete();
     }
 
-    public static void CreateMangaHistory(Mangas manga)
+    public static void CreateMangaHistory(IManga manga)
     {
       var history = new MangaReader.Core.Manga.MangaHistory(Url);
       manga.AddHistory(history.Uri);
       manga.Save();
     }
 
-    public static void DeleteMangaHistory(Mangas manga)
+    public static void DeleteMangaHistory(IManga manga)
     {
       manga.ClearHistory();
       manga.Save();

@@ -8,7 +8,7 @@ namespace MangaReader.ViewModel.Commands.Manga
 {
   public class DeleteMangaCommand : MangaBaseCommand
   {
-    public override void Execute(Mangas parameter)
+    public override void Execute(IManga parameter)
     {
       base.Execute(parameter);
 

@@ -22,7 +22,7 @@ namespace MangaReader.Core.NHibernate
       Map(x => x.Folder);
       Map(x => x.NeedCompress);
       Map(x => x.CompressionMode);
-      HasMany(x => x.Histories).AsBag().Cascade.AllDeleteOrphan();
+      HasMany(x => x.Histories).AsBag().Cascade.AllDeleteOrphan().Not.LazyLoad();
       DiscriminateSubClassesOnColumn("Type");
     }
   }

@@ -28,7 +28,7 @@ namespace MangaReader.Core.Services
     /// </summary>
     /// <param name="manga">Манга.</param>
     /// <returns>Режим упаковки.</returns>
-    public static CompressionMode? GetDefaultCompression(this Mangas manga)
+    public static CompressionMode? GetDefaultCompression(this IManga manga)
     {
       CompressionMode? mode = null;
       if (Mapping.Initialized)

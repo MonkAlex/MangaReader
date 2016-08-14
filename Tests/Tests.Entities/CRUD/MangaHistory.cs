@@ -22,7 +22,7 @@ namespace Tests.Entities.CRUD
       var mangaHistory = Environment.Session.Get<MangaReader.Core.Manga.MangaHistory>(historyId);
       Assert.AreNotEqual(null, mangaHistory);
 
-      var mangas = Environment.Session.Get<Mangas>(mangaId);
+      var mangas = Environment.Session.Get<IManga>(mangaId);
       Assert.AreNotEqual(null, mangas);
 
       Builder.DeleteMangaHistory(manga);
@@ -31,7 +31,7 @@ namespace Tests.Entities.CRUD
       mangaHistory = Environment.Session.Get<MangaReader.Core.Manga.MangaHistory>(historyId);
       Assert.AreEqual(null, mangaHistory);
 
-      mangas = Environment.Session.Get<Mangas>(mangaId);
+      mangas = Environment.Session.Get<IManga>(mangaId);
       Assert.AreEqual(null, mangas);
     }
 

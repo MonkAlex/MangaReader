@@ -16,7 +16,7 @@ namespace Tests.Convertation._1._20
       MangaReader.Core.Client.Init();
       MangaReader.Core.Client.Start(new ReportProcess());
 
-      var loadedMangas = MangaReader.Core.NHibernate.Mapping.Session.Query<Mangas>().Count();
+      var loadedMangas = MangaReader.Core.NHibernate.Mapping.Session.Query<IManga>().Count();
       Assert.AreEqual(159, loadedMangas);
 
       var loadedHistoryRecord = MangaReader.Core.NHibernate.Mapping.Session.Query<MangaHistory>().Count();

@@ -95,7 +95,7 @@ namespace MangaReader.ViewModel
       Percent = i;
     }
 
-    private void LibraryOnUpdateMangaCompleted(object sender, Mangas mangas)
+    private void LibraryOnUpdateMangaCompleted(object sender, IManga mangas)
     {
       TaskbarIcon.ShowInTray(Strings.Library_Status_MangaUpdate + mangas.Name + " завершено.", mangas);
     }

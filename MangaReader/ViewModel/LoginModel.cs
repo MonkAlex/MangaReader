@@ -48,7 +48,7 @@ namespace MangaReader.ViewModel
       }
     }
 
-    public ObservableCollection<SelectedItem<Mangas>> Bookmarks { get; private set; }
+    public ObservableCollection<SelectedItem<IManga>> Bookmarks { get; }
 
     public ICommand LogInOutCommand { get; private set; }
 
@@ -72,7 +72,7 @@ namespace MangaReader.ViewModel
       foreach (var bookmark in bookmarks)
       {
         if (!Bookmarks.Any(b => Equals(b.Value.Uri, bookmark.Uri)))
-          Bookmarks.Add(new SelectedItem<Mangas>(bookmark));
+          Bookmarks.Add(new SelectedItem<IManga>(bookmark));
       }
     }
 
@@ -81,7 +81,7 @@ namespace MangaReader.ViewModel
       this.login = login;
       this.Header = name;
       this.LogInOutCommand = new LogInOutCommand(this.login);
-      this.Bookmarks = new ObservableCollection<SelectedItem<Mangas>>();
+      this.Bookmarks = new ObservableCollection<SelectedItem<IManga>>();
       this.login.LoginStateChanged += LoginOnLoginStateChanged;
     }
 

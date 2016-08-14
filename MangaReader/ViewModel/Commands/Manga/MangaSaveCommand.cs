@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using MangaReader.Core.Exception;
 using MangaReader.ViewModel.Commands.Primitives;
 using MangaReader.ViewModel.Manga;
 
@@ -33,7 +34,7 @@ namespace MangaReader.ViewModel.Commands.Manga
         manga.Save();
         model.Close();
       }
-      catch (Exception ex)
+      catch (MangaReaderException ex)
       {
         MessageBox.Show(ex.Message);
         model.Manga.Update();

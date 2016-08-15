@@ -15,13 +15,8 @@ namespace Hentaichan
 
     public override Guid MangaGuid { get { return Hentaichan.Type; } }
 
-    public override Guid LoginGuid { get { return HentaichanLogin.Type; } }
+    public override Type LoginType { get { return typeof(HentaichanLogin); } }
 
     public override Type MangaType { get { return typeof (Hentaichan); } }
-
-    public override Login GetLogin()
-    {
-      return Login.Get<HentaichanLogin>();
-    }
   }
 }

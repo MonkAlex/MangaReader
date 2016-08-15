@@ -77,9 +77,12 @@ namespace MangaReader.Core.Account
 
     protected abstract Task<List<IManga>> DownloadBookmarks();
     
-    public static T Get<T>() where T : Login
+    public static Login Get(Type type)
     {
-      return NHibernate.Repository.Get<T>().SingleOrDefault() ?? Activator.CreateInstance<T>();
+      var fromdb = NHibernate.Repository.Get<Login>().ToList().SingleOrDefault(l => l.GetType() == type);
+      if (fromdb == null)
+        fromdb = (Login)Activator.CreateInstance(type);
+      return fromdb;
     }
 
     protected Login()

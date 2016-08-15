@@ -81,9 +81,9 @@ namespace MangaReader.Core.Services
         var plugin = ConfigStorage.GetPlugin<T>();
         if (plugin != null)
         {
-          var login = plugin.GetLogin();
+          var login = plugin.GetSettings();
           if (login != null)
-            return login.MainUri;
+            return login.Login.MainUri;
         }
       }
 

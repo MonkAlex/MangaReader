@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MangaReader.Core.Account;
 using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Core.Services.Config
@@ -59,7 +60,7 @@ namespace MangaReader.Core.Services.Config
           Manga = plugin.MangaGuid,
           MangaName = plugin.Name,
           DefaultCompression = Compression.CompressionMode.Manga,
-          Login = plugin.GetLogin()
+          Login = Login.Get(plugin.LoginType)
         };
 
         setting.Save();

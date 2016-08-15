@@ -13,10 +13,6 @@ namespace Grouple
     public override Assembly Assembly { get { return Assembly.GetAssembly(this.GetType()); } }
     public override Guid MangaGuid { get { return Readmanga.Type; } }
     public override Type MangaType { get { return typeof(Readmanga); } }
-    public override Guid LoginGuid { get { return GroupleLogin.Type; } }
-    public override Login GetLogin()
-    {
-      return Login.Get<GroupleLogin>();
-    }
+    public override Type LoginType { get { return typeof(GroupleLogin); } }
   }
 }

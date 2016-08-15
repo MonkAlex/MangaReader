@@ -1,4 +1,5 @@
-﻿using MangaReader.Core.Manga;
+﻿using System;
+using MangaReader.Core.Manga;
 
 namespace MangaReader.Core.Exception
 {
@@ -10,15 +11,26 @@ namespace MangaReader.Core.Exception
 
     public IDownloadable Downloadable { get; }
 
+    public string Folder { get; }
+
+    public Uri Uri { get; }
+
     public override string FormatMessage()
     {
-      return string.Format("{0}. Download '{1}' to '{2}'.", string.Format(Error, Count), Downloadable.Uri, Downloadable.Folder);
+      return string.Format("{0}. Download '{1}' to '{2}'.", string.Format(Error, Count), Uri, Folder);
     }
 
-    public DownloadAttemptFailed(int count, IDownloadable downloadable) : base()
+    public DownloadAttemptFailed(int count, IDownloadable downloadable) : this(count, downloadable.Uri)
+    {
+      Downloadable = downloadable;
+      Folder = downloadable.Folder;
+    }
+
+    public DownloadAttemptFailed(int count, Uri uri) : base()
     {
       Count = count;
-      Downloadable = downloadable;
+      Uri = uri;
+      Folder = "memory";
     }
   }
 }

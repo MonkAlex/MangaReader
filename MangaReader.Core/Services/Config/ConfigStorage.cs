@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
 using System.Text;
+using MangaReader.Core.Exception;
 using MangaReader.Core.NHibernate;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -141,8 +141,17 @@ namespace MangaReader.Core.Services.Config
       {
         try
         {
+          var result = new List<IPlugin>();
           var container = new CompositionContainer(new DirectoryCatalog(path));
-          return container.GetExportedValues<IPlugin>();
+          result.AddRange(container.GetExportedValues<IPlugin>());
+          var imanga = typeof(Core.Manga.IManga);
+          foreach (var plugin in result)
+          {
+            if (!imanga.IsAssignableFrom(plugin.MangaType))
+              throw new MangaReaderException($"Type in property {nameof(plugin.MangaType)} of " +
+                                             $"type {plugin.GetType()} must be implement {imanga} interface.");
+          }
+          return result;
         }
         catch (System.Exception ex)
         {

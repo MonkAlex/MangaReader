@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using MangaReader.Core.Account;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
@@ -18,8 +17,7 @@ namespace MangaReader.Core
     public abstract Assembly Assembly { get; }
     public abstract Guid MangaGuid { get; }
     public abstract Type MangaType { get; }
-    public abstract Guid LoginGuid { get; }
-    public abstract Login GetLogin();
+    public abstract Type LoginType { get; }
 
     public virtual MangaSetting GetSettings()
     {

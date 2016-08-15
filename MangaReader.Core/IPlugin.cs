@@ -12,9 +12,7 @@
 
     System.Type MangaType { get; }
 
-    System.Guid LoginGuid { get; }
-
-    MangaReader.Core.Account.Login GetLogin();
+    System.Type LoginType { get; }
 
     MangaReader.Core.Services.MangaSetting GetSettings();
   }

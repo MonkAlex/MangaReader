@@ -10,6 +10,13 @@ namespace MangaReader.Core.Account
 
     public Uri ResponseUri;
 
+    private static readonly Lazy<IWebProxy> SystemProxy = new Lazy<IWebProxy>(() =>
+    {
+      var proxy = WebRequest.GetSystemWebProxy();
+      proxy.Credentials = CredentialCache.DefaultCredentials;
+      return proxy;
+    });
+
     protected override WebRequest GetWebRequest(Uri address)
     {
       var request = base.GetWebRequest(address);
@@ -36,6 +43,7 @@ namespace MangaReader.Core.Account
     {
       this.Cookie = new CookieContainer();
       this.Encoding = Encoding.UTF8;
+      this.Proxy = SystemProxy.Value;
     }
   }
 }

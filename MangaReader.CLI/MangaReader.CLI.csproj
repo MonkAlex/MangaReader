@@ -57,6 +57,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\MangaReader.Core\Loader.cs">
+      <Link>Loader.cs</Link>
+    </Compile>
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
@@ -76,9 +79,10 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>md "$(TargetDir)\lib"
+md "$(TargetDir)\Plugins"
 xcopy /y /r /e "$(ProjectDir)\..\MangaReader.Core\bin\$(ConfigurationName)" "$(TargetDir)\lib"
 xcopy /y /r /e "$(ProjectDir)\Library" "$(TargetDir)\lib"
-xcopy /y /r /e "$(ProjectDir)\..\Sites\Bin\$(ConfigurationName)" "$(TargetDir)\lib"</PostBuildEvent>
+xcopy /y /r /e "$(ProjectDir)\..\Sites\Bin\$(ConfigurationName)" "$(TargetDir)\Plugins"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

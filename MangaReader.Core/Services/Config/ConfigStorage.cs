@@ -60,9 +60,7 @@ namespace MangaReader.Core.Services.Config
     /// <summary>
     /// Папка программы.
     /// </summary>
-    public static string WorkFolder { get { return workFolder; } }
-
-    private static string workFolder = AppDomain.CurrentDomain.BaseDirectory;
+    public static string WorkFolder { get { return Loader.WorkFolder; } }
 
     /// <summary>
     /// Подключенные плагины.
@@ -79,7 +77,12 @@ namespace MangaReader.Core.Services.Config
     /// <summary>
     /// Папка с либами программы.
     /// </summary>
-    public static string LibPath { get { return Path.Combine(WorkFolder, "lib"); } }
+    public static string LibPath { get { return Loader.LibPath; } }
+
+    /// <summary>
+    /// Папка с плагинами программы.
+    /// </summary>
+    public static string PluginPath { get { return Loader.PluginPath; } }
 
     public static void Load()
     {
@@ -130,7 +133,7 @@ namespace MangaReader.Core.Services.Config
       var result = new List<IPlugin>();
 
       result.AddRange(GetPluginsFrom(ConfigStorage.WorkFolder));
-      result.AddRange(GetPluginsFrom(ConfigStorage.LibPath));
+      result.AddRange(GetPluginsFrom(ConfigStorage.PluginPath));
 
       plugins = result;
     }

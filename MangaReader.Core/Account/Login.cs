@@ -9,8 +9,6 @@ namespace MangaReader.Core.Account
 {
   public abstract class Login : Entity.Entity
   {
-    public static Guid Type { get { return Guid.Empty; } }
-
     public bool IsLogined
     {
       get { return isLogined; }

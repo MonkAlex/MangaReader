@@ -16,8 +16,6 @@ namespace Hentaichan
 {
   public class HentaichanLogin : Login
   {
-    public new static Guid Type { get { return Guid.Parse("03CEFF67-1472-438A-A90A-07B44F6FFDC4"); } }
-
     public virtual string UserId { get; set; }
 
     public override string Name

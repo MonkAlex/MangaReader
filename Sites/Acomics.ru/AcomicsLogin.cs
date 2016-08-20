@@ -13,8 +13,6 @@ namespace Acomics
 {
   public class AcomicsLogin : Login
   {
-    public new static Guid Type { get { return Guid.Parse("F526CD85-7846-4F32-85A7-C57E3983DFB1"); } }
-
     public virtual string PasswordHash { get; set; }
 
     public override Uri MainUri { get; set; }

@@ -9,7 +9,7 @@ namespace Hentaichan.NHibernate
       Not.LazyLoad();
       Map(x => x.UserId);
       Map(x => x.PasswordHash);
-      DiscriminatorValue(HentaichanLogin.Type.ToString());
+      DiscriminatorValue("03CEFF67-1472-438A-A90A-07B44F6FFDC4");
     }
   }
 }

@@ -14,8 +14,6 @@ namespace Grouple
 {
   public class GroupleLogin : Login
   {
-    public new static Guid Type { get { return Guid.Parse("0BBE71B1-16E0-44F4-B7C6-3450E44E9A15"); } }
-
     public override Uri MainUri { get; set; }
     public override Uri LogoutUri { get { return new Uri(this.MainUri, "internal/auth/logout"); } }
     public override Uri BookmarksUri { get { return new Uri(this.MainUri, "private/bookmarks"); } }

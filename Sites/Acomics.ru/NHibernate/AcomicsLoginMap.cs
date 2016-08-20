@@ -8,7 +8,7 @@ namespace Acomics.NHibernate
     {
       Not.LazyLoad();
       Map(x => x.PasswordHash);
-      DiscriminatorValue(AcomicsLogin.Type.ToString());
+      DiscriminatorValue("F526CD85-7846-4F32-85A7-C57E3983DFB1");
     }
   }
 }

@@ -7,7 +7,7 @@ namespace Grouple.NHibernate
     public GroupleLoginMap()
     {
       Not.LazyLoad();
-      DiscriminatorValue("0BBE71B1-16E0-44F4-B7C6-3450E44E9A15");
+      DiscriminatorValue("0bbe71b1-16e0-44f4-b7c6-3450e44e9a15");
     }
   }
 }

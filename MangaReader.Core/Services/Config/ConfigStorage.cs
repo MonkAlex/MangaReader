@@ -146,18 +146,25 @@ namespace MangaReader.Core.Services.Config
         {
           var result = new List<IPlugin>();
           var container = new CompositionContainer(new DirectoryCatalog(path));
-          result.AddRange(container.GetExportedValues<IPlugin>());
           var imanga = typeof (Manga.IManga);
           var ilogin = typeof (Account.ILogin);
-          foreach (var plugin in result)
+          foreach (var plugin in container.GetExportedValues<IPlugin>())
           {
-            if (!imanga.IsAssignableFrom(plugin.MangaType))
-              throw new MangaReaderException($"Type in property {nameof(plugin.MangaType)} of " +
-                                             $"type {plugin.GetType()} must be implement {imanga} interface.");
+            try
+            {
+              if (!imanga.IsAssignableFrom(plugin.MangaType))
+                throw new MangaReaderException($"Type in property {nameof(plugin.MangaType)} of " +
+                                               $"type {plugin.GetType()} must be implement {imanga} interface.");
 
-            if (!ilogin.IsAssignableFrom(plugin.LoginType))
-              throw new MangaReaderException($"Type in property {nameof(plugin.LoginType)} of " +
-                                             $"type {plugin.GetType()} must be implement {ilogin} interface.");
+              if (!ilogin.IsAssignableFrom(plugin.LoginType))
+                throw new MangaReaderException($"Type in property {nameof(plugin.LoginType)} of " +
+                                               $"type {plugin.GetType()} must be implement {ilogin} interface.");
+              result.Add(plugin);
+            }
+            catch (MangaReaderException mre)
+            {
+              Log.Exception(mre);
+            }
           }
           return result;
         }

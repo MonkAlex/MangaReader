@@ -9,7 +9,7 @@ namespace MangaReader.Core.Entity
     [XmlIgnore]
     public int Id
     {
-      private set
+      set
       {
         if (id == 0 || value == 0)
           id = value;

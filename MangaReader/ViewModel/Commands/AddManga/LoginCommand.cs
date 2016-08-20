@@ -6,7 +6,7 @@ namespace MangaReader.ViewModel.Commands.AddManga
 {
   public class LoginCommand : BaseCommand
   {
-    private Login login;
+    private ILogin login;
 
     public override bool CanExecute(object parameter)
     {
@@ -20,7 +20,7 @@ namespace MangaReader.ViewModel.Commands.AddManga
       await login.DoLogin();
     }
 
-    public LoginCommand(Login login)
+    public LoginCommand(ILogin login)
     {
       this.login = login;
       this.Name = Strings.Input_Login;

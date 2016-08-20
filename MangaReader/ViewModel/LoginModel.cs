@@ -11,7 +11,7 @@ namespace MangaReader.ViewModel
 {
   public class LoginModel : BaseViewModel
   {
-    private Login login;
+    private ILogin login;
     private bool isEnabled;
 
     public string Header { get; set; }
@@ -76,7 +76,7 @@ namespace MangaReader.ViewModel
       }
     }
 
-    public LoginModel(Login login, string name)
+    public LoginModel(ILogin login, string name)
     {
       this.login = login;
       this.Header = name;

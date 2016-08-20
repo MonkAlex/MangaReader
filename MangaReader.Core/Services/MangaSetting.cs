@@ -22,7 +22,7 @@ namespace MangaReader.Core.Services
     /// </summary>
     public bool OnlyUpdate { get; set; }
 
-    public virtual Login Login { get; set; }
+    public virtual ILogin Login { get; set; }
 
     public virtual Compression.CompressionMode DefaultCompression { get; set; }
 

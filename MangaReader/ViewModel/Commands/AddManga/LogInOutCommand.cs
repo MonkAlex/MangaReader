@@ -30,7 +30,7 @@ namespace MangaReader.ViewModel.Commands.AddManga
       ActiveCommand.Execute(parameter);
     }
 
-    public LogInOutCommand(Login login)
+    public LogInOutCommand(ILogin login)
     {
       this.Login = new LoginCommand(login);
       this.Logout = new LogoutCommand(login);

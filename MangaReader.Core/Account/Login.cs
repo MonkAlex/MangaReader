@@ -7,7 +7,7 @@ using MangaReader.Core.Services;
 
 namespace MangaReader.Core.Account
 {
-  public abstract class Login : Entity.Entity
+  public abstract class Login : Entity.Entity, ILogin
   {
     public bool IsLogined
     {
@@ -75,11 +75,11 @@ namespace MangaReader.Core.Account
 
     protected abstract Task<List<IManga>> DownloadBookmarks();
     
-    public static Login Get(Type type)
+    public static ILogin Get(Type type)
     {
-      var fromdb = NHibernate.Repository.Get<Login>().ToList().SingleOrDefault(l => l.GetType() == type);
+      var fromdb = NHibernate.Repository.Get<ILogin>().ToList().SingleOrDefault(l => l.GetType() == type);
       if (fromdb == null)
-        fromdb = (Login)Activator.CreateInstance(type);
+        fromdb = (ILogin)Activator.CreateInstance(type);
       return fromdb;
     }
 

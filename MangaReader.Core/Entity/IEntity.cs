@@ -5,7 +5,7 @@
     /// <summary>
     /// Уникальный идентификатор сущности.
     /// </summary>
-    int Id { get; }
+    int Id { get; set; }
 
     /// <summary>
     /// Сохранить в базу.

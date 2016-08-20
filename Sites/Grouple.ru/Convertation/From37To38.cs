@@ -13,8 +13,8 @@ namespace Grouple.Convertation
       base.ProtectedConvert(process);
 
       var settings = ConfigStorage.Instance.DatabaseConfig.MangaSettings;
-      var readmanga = settings.SingleOrDefault(s => Readmanga.Type == s.Manga);
-      var mintmanga = settings.SingleOrDefault(s => Mintmanga.Type == s.Manga);
+      var readmanga = settings.SingleOrDefault(s => ReadmangaPlugin.Manga == s.Manga);
+      var mintmanga = settings.SingleOrDefault(s => MintmangaPlugin.Manga == s.Manga);
       if (readmanga != null)
       {
         if (mintmanga == null)

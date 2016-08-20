@@ -12,8 +12,6 @@ namespace Acomics
   {
     #region Свойства
 
-    public new static Guid Type { get { return Guid.Parse("F090B9A2-1400-4F5E-B298-18CD35341C34"); } }
-
     public override List<Compression.CompressionMode> AllowedCompressionModes
     {
       get

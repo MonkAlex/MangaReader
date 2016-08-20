@@ -17,8 +17,6 @@ namespace MangaReader.Core.Manga
   {
     #region Свойства
 
-    public static Guid Type { get { return Guid.Empty; } }
-
     /// <summary>
     /// Название манги.
     /// </summary>

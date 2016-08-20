@@ -9,8 +9,6 @@ namespace Hentaichan
 {
   public class Hentaichan : Mangas
   {
-    public new static Guid Type { get { return Guid.Parse("6F2A3ACC-70B2-4FF3-9BCB-0E3D15971FDE"); } }
-
     public override List<Compression.CompressionMode> AllowedCompressionModes
     {
       get { return base.AllowedCompressionModes.Where(m => !Equals(m, Compression.CompressionMode.Chapter)).ToList(); }

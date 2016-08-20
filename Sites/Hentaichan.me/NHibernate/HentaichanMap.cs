@@ -7,7 +7,7 @@ namespace Hentaichan.NHibernate
     public HentaichanMap()
     {
       Not.LazyLoad();
-      DiscriminatorValue(Hentaichan.Type.ToString());
+      DiscriminatorValue(HentaichanPlugin.Manga.ToString());
     }
   }
 }

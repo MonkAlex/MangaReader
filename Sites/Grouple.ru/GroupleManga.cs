@@ -15,8 +15,6 @@ namespace Grouple
   {
     #region Свойства
 
-    public new static Guid Type { get { return Guid.Empty; } }
-
     /// <summary>
     /// Статус перевода.
     /// </summary>

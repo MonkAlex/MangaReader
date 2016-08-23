@@ -87,9 +87,7 @@
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Account\CookieClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Account\CookieClient.cs" />
     <Compile Include="Account\ILogin.cs" />
     <Compile Include="Account\Login.cs" />
     <Compile Include="BasePlugin.cs" />

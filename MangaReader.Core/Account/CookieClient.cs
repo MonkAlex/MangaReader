@@ -4,6 +4,7 @@ using System.Text;
 
 namespace MangaReader.Core.Account
 {
+  [System.ComponentModel.DesignerCategory("Code")]
   public class CookieClient : WebClient
   {
     public CookieContainer Cookie { get; set; }

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using MangaReader.Core.Convertation;
@@ -6,6 +7,7 @@ using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using NHibernate;
 using NHibernate.Cfg;
+using NHibernate.Mapping;
 using NHibernate.Tool.hbm2ddl;
 
 namespace MangaReader.Core.NHibernate
@@ -71,6 +73,13 @@ namespace MangaReader.Core.NHibernate
 
     private static void BuildSchema(Configuration config)
     {
+      foreach (var source in config.ClassMappings.Where(m => m.HasSubclasses))
+      {
+        source.Where = string.Format("{0} in ('{1}')", 
+          source.Discriminator.ColumnIterator.Single().Text,
+          string.Join("', '", source.SubclassIterator.Select(i => i.DiscriminatorValue)));
+      }
+
       config.SetInterceptor(new BaseInterceptor());
       if (File.Exists(Path.Combine(ConfigStorage.WorkFolder, DbFile)))
         new SchemaUpdate(config).Execute(false, true);

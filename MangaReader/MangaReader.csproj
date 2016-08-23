@@ -51,11 +51,6 @@
     <OutputPath>bin\Release\</OutputPath>
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Publish|AnyCPU'">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <OutputPath>bin\Publish\</OutputPath>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ookii.Dialogs.Wpf">
       <SpecificVersion>False</SpecificVersion>
@@ -373,8 +368,8 @@
        Other similar extension points exist, see Microsoft.Common.targets.
   -->
   <Target Name="BeforeBuild">
-    <MakeDir Directories="$(TargetDir)\lib"/>
-    <MakeDir Directories="$(TargetDir)\Plugins"/>
+    <MakeDir Directories="$(TargetDir)\lib" />
+    <MakeDir Directories="$(TargetDir)\Plugins" />
   </Target>
   <Target Name="AfterBuild">
   </Target>

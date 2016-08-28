@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+using MangaReader.Core;
 using MangaReader.Core.Account;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
@@ -12,7 +13,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Grouple
 {
-  public static class Getter
+  public class Parser : ISiteParser
   {
     /// <summary>
     /// Ключ с куками для редиректа.
@@ -53,57 +54,85 @@ namespace Grouple
     }
 
     /// <summary>
-    /// Получить название манги.
+    /// Получить ссылки на все изображения в главе.
     /// </summary>
-    /// <param name="mangaMainPage">Содержимое страницы манги.</param>
-    /// <returns>Мультиязыковый класс с именем манги.</returns>
-    public static MangaName GetMangaName(string mangaMainPage)
+    /// <param name="chapter">Глава.</param>
+    /// <returns>Список ссылок на изображения главы.</returns>
+    internal static void UpdatePages(Chapter chapter)
     {
-      var name = new MangaName();
+      chapter.Pages.Clear();
+      var document = new HtmlDocument();
+      document.LoadHtml(Page.GetPage(chapter.Uri).Content);
+      var node = document.DocumentNode.SelectNodes("//div[@class=\"pageBlock container reader-bottom\"]").FirstOrDefault();
+      if (node == null)
+        return;
+
+      var initBlock = Regex.Match(node.OuterHtml, @"rm_h\.init\([ ]*(\[\[.*?\]\])", RegexOptions.IgnoreCase);
+      var jsonParsed = JToken.Parse(initBlock.Groups[1].Value).Children().ToList();
+      for (var i = 0; i < jsonParsed.Count; i++)
+      {
+        var child = jsonParsed[i];
+        var uriString = child[1].ToString() + child[0] + child[2];
+
+        // Фикс страницы с цензурой.
+        if (!Uri.IsWellFormedUriString(uriString, UriKind.Absolute))
+          uriString = (@"http://" + chapter.Uri.Host + uriString);
+
+        chapter.Pages.Add(new MangaPage(chapter.Uri, new Uri(uriString), i));
+      }
+    }
+
+    public void UpdateNameAndStatus(IManga manga)
+    {
+      var page = Page.GetPage(manga.Uri);
+      var localizedName = new MangaName();
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(mangaMainPage);
+        document.LoadHtml(page.Content);
         var japNode = document.DocumentNode.SelectSingleNode("//span[@class='jp-name']");
         if (japNode != null)
-          name.Japanese = WebUtility.HtmlDecode(japNode.InnerText);
+          localizedName.Japanese = WebUtility.HtmlDecode(japNode.InnerText);
         var engNode = document.DocumentNode.SelectSingleNode("//span[@class='eng-name']");
         if (engNode != null)
-          name.English = WebUtility.HtmlDecode(engNode.InnerText);
+          localizedName.English = WebUtility.HtmlDecode(engNode.InnerText);
         var rusNode = document.DocumentNode.SelectSingleNode("//span[@class='name']");
         if (rusNode != null)
-          name.Russian = WebUtility.HtmlDecode(rusNode.InnerText);
+          localizedName.Russian = WebUtility.HtmlDecode(rusNode.InnerText);
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
-      return name;
-    }
 
-    public static string GetTranslateStatus(string mangaMainPage)
-    {
+      var name = localizedName.ToString();
+      if (string.IsNullOrWhiteSpace(name))
+        Log.AddFormat("Не удалось получить имя манги, текущее название - '{0}'.", manga.ServerName);
+      else if (name != manga.ServerName)
+        manga.ServerName = name;
+
       var status = string.Empty;
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(mangaMainPage);
+        document.LoadHtml(page.Content);
         var nodes = document.DocumentNode.SelectNodes("//div[@class=\"subject-meta col-sm-7\"]//p");
         if (nodes != null)
           status = nodes.Aggregate(status, (current, node) =>
               current + Regex.Replace(node.InnerText.Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
-      return status;
+      manga.Status = status;
     }
 
-    /// <summary>
-    /// Получить ссылки на главы манги.
-    /// </summary>
-    /// <param name="page">Содержимое страницы манги.</param>
-    /// <returns>Словарь (ссылка, описание).</returns>
-    public static Dictionary<Uri, string> GetLinksOfMangaChapters(Page page)
+    public void UpdateContentType(IManga manga)
+    {
+      // Content type cannot be changed.
+    }
+
+    public void UpdateContent(IManga manga)
     {
       var dic = new Dictionary<Uri, string>();
       var links = new List<Uri> { };
       var description = new List<string> { };
+      var page = Page.GetPage(manga.Uri);
       try
       {
         var document = new HtmlDocument();
@@ -131,36 +160,17 @@ namespace Grouple
         dic.Add(links[i], description[i]);
       }
 
-      return dic;
-    }
+      var rmVolumes = dic
+        .Select(cs => new Chapter(cs.Key, cs.Value))
+        .GroupBy(c => c.Volume)
+        .Select(g =>
+        {
+          var v = new Volume(g.Key);
+          v.Chapters.AddRange(g);
+          return v;
+        });
 
-    /// <summary>
-    /// Получить ссылки на все изображения в главе.
-    /// </summary>
-    /// <param name="chapter">Глава.</param>
-    /// <returns>Список ссылок на изображения главы.</returns>
-    internal static void UpdatePages(Chapter chapter)
-    {
-      chapter.Pages.Clear();
-      var document = new HtmlDocument();
-      document.LoadHtml(Page.GetPage(chapter.Uri).Content);
-      var node = document.DocumentNode.SelectNodes("//div[@class=\"pageBlock container reader-bottom\"]").FirstOrDefault();
-      if (node == null)
-        return;
-
-      var initBlock = Regex.Match(node.OuterHtml, @"rm_h\.init\([ ]*(\[\[.*?\]\])", RegexOptions.IgnoreCase);
-      var jsonParsed = JToken.Parse(initBlock.Groups[1].Value).Children().ToList();
-      for (var i = 0; i < jsonParsed.Count; i++)
-      {
-        var child = jsonParsed[i];
-        var uriString = child[1].ToString() + child[0] + child[2];
-
-        // Фикс страницы с цензурой.
-        if (!Uri.IsWellFormedUriString(uriString, UriKind.Absolute))
-          uriString = (@"http://" + chapter.Uri.Host + uriString);
-
-        chapter.Pages.Add(new MangaPage(chapter.Uri, new Uri(uriString), i));
-      }
+      manga.Volumes.AddRange(rmVolumes);
     }
   }
 }

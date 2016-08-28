@@ -9,6 +9,8 @@ namespace Hentaichan
 {
   public class Hentaichan : Mangas
   {
+    private static Parser parser = new Parser();
+
     public override List<Compression.CompressionMode> AllowedCompressionModes
     {
       get { return base.AllowedCompressionModes.Where(m => !Equals(m, Compression.CompressionMode.Chapter)).ToList(); }
@@ -22,11 +24,7 @@ namespace Hentaichan
     {
       base.Refresh();
 
-      var newName = Getter.GetMangaName(this.Uri);
-      if (string.IsNullOrWhiteSpace(newName))
-        Log.AddFormat("Не удалось получить имя манги, текущее название - '{0}'.", this.ServerName);
-      else if (newName != this.ServerName)
-        this.ServerName = newName;
+      parser.UpdateNameAndStatus(this);
     }
 
     public override bool IsValid()
@@ -46,7 +44,7 @@ namespace Hentaichan
       this.Chapters.Clear();
       this.Volumes.Clear();
 
-      Getter.UpdateContent(this);
+      parser.UpdateContent(this);
 
       base.UpdateContent();
     }

@@ -107,6 +107,7 @@
     <Compile Include="Exception\MangaReaderException.cs" />
     <Compile Include="Exception\CopyDirectoryFailed.cs" />
     <Compile Include="Exception\SaveValidationException.cs" />
+    <Compile Include="ISiteParser.cs" />
     <Compile Include="Loader.cs" />
     <Compile Include="Manga\Chapter.cs" />
     <Compile Include="Manga\ICompressible.cs" />

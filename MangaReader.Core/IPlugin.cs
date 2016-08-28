@@ -9,5 +9,6 @@
     System.Type MangaType { get; }
     System.Type LoginType { get; }
     Services.MangaSetting GetSettings();
+    ISiteParser GetParser();
   }
 }

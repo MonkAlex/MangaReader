@@ -13,6 +13,9 @@ namespace Grouple
   /// </summary>
   public abstract class GroupleManga : Mangas
   {
+
+    private static Parser parser = new Parser();
+
     #region Свойства
 
     /// <summary>
@@ -74,9 +77,9 @@ namespace Grouple
       }
 
       // Если на странице редирект - выполняем его и получаем новую ссылку на мангу.
-      if (page.Content.ToLowerInvariant().Contains(Getter.CookieKey))
+      if (page.Content.ToLowerInvariant().Contains(Parser.CookieKey))
       {
-        var newUri = Getter.GetRedirectUri(page);
+        var newUri = Parser.GetRedirectUri(page);
         if (!this.Uri.Equals(newUri))
         {
           this.Uri = newUri;
@@ -85,13 +88,7 @@ namespace Grouple
         }
       }
 
-      var newName = Getter.GetMangaName(page.Content).ToString();
-      if (string.IsNullOrWhiteSpace(newName))
-        Log.AddFormat("Не удалось получить имя манги, текущее название - '{0}'.", this.ServerName);
-      else if (newName != this.ServerName)
-        this.ServerName = newName;
-
-      this.Status = Getter.GetTranslateStatus(page.Content);
+      parser.UpdateNameAndStatus(this);
       OnPropertyChanged(nameof(IsCompleted));
     }
 
@@ -101,17 +98,8 @@ namespace Grouple
       this.Chapters.Clear();
       this.Pages.Clear();
 
-      var rmVolumes = Getter.GetLinksOfMangaChapters(Page.GetPage(this.Uri))
-        .Select(cs => new Chapter(cs.Key, cs.Value))
-        .GroupBy(c => c.Volume)
-        .Select(g =>
-        {
-          var v = new Volume(g.Key);
-          v.Chapters.AddRange(g);
-          return v;
-        });
+      parser.UpdateContent(this);
 
-      this.Volumes.AddRange(rmVolumes);
       base.UpdateContent();
     }
     

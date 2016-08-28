@@ -1,5 +1,7 @@
 ﻿using System;
-using MangaReader.Core.Services;
+using System.Linq;
+using Grouple;
+using MangaReader.Core.Manga;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Entities.Manga
@@ -7,6 +9,8 @@ namespace Tests.Entities.Manga
   [TestClass]
   public class ReadmangaStructure
   {
+    private Parser parser = new Parser();
+
     [TestMethod]
     public void AddEmptyReadmanga()
     {
@@ -37,7 +41,9 @@ namespace Tests.Entities.Manga
 
     private int GetCountOfChapters(string url)
     {
-      return Grouple.Getter.GetLinksOfMangaChapters(Page.GetPage(new Uri(url))).Count;
+      var manga = Mangas.Create(new Uri(url));
+      parser.UpdateContent(manga);
+      return manga.Volumes.Sum(v => v.Chapters.Count);
     }
   }
 }

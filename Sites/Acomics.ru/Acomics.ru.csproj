@@ -56,7 +56,7 @@
     <Compile Include="Chapter.cs" />
     <Compile Include="Convertation\AcomicsFrom37To38.cs" />
     <Compile Include="Convertation\From24To27.cs" />
-    <Compile Include="Getter.cs" />
+    <Compile Include="Parser.cs" />
     <Compile Include="NHibernate\AcomicsLoginMap.cs" />
     <Compile Include="NHibernate\AcomicsMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

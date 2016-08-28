@@ -52,7 +52,7 @@
     </Compile>
     <Compile Include="Chapter.cs" />
     <Compile Include="Convertation\HentaichanFrom37To38.cs" />
-    <Compile Include="Getter.cs" />
+    <Compile Include="Parser.cs" />
     <Compile Include="Hentaichan.cs" />
     <Compile Include="HentaichanLogin.cs" />
     <Compile Include="NHibernate\HentaichanLoginMap.cs" />

@@ -15,5 +15,9 @@ namespace Grouple
     public override Guid MangaGuid { get { return Manga; } }
     public override Type MangaType { get { return typeof(Readmanga); } }
     public override Type LoginType { get { return typeof(GroupleLogin); } }
+    public override ISiteParser GetParser()
+    {
+      return new Parser();
+    }
   }
 }

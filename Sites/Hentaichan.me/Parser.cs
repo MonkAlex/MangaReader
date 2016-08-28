@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+using MangaReader.Core;
 using MangaReader.Core.Account;
 using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
@@ -12,7 +13,7 @@ using MangaReader.Core.Services.Config;
 
 namespace Hentaichan
 {
-  public static class Getter
+  public class Parser : ISiteParser
   {
     private static readonly string AdultOnly = "Доступ ограничен. Только зарегистрированные пользователи подтвердившие, что им 18 лет.";
 
@@ -43,21 +44,16 @@ namespace Hentaichan
       return client;
     }
 
-    /// <summary>
-    /// Получить название манги.
-    /// </summary>
-    /// <param name="uri">Ссылка на мангу.</param>
-    /// <returns>Название манги.</returns>
-    public static string GetMangaName(Uri uri)
+    public void UpdateNameAndStatus(IManga manga)
     {
       var name = string.Empty;
       try
       {
         var document = new HtmlDocument();
-        var page = Page.GetPage(uri);
+        var page = Page.GetPage(manga.Uri);
         document.LoadHtml(page.Content);
         var nameNode = document.DocumentNode.SelectSingleNode("//head/title");
-        string[] subString = {"Все главы", "Все части" };
+        string[] subString = { "Все главы", "Все части" };
         if (nameNode != null && subString.Any(s => nameNode.InnerText.Contains(s)))
         {
           name = subString
@@ -67,10 +63,19 @@ namespace Hentaichan
         }
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
-      return WebUtility.HtmlDecode(name);
+      name = WebUtility.HtmlDecode(name);
+      if (string.IsNullOrWhiteSpace(name))
+        Log.AddFormat("Не удалось получить имя манги, текущее название - '{0}'.", manga.ServerName);
+      else if (name != manga.ServerName)
+        manga.ServerName = name;
     }
 
-    public static void UpdateContent(Hentaichan manga)
+    public void UpdateContentType(IManga manga)
+    {
+      // Content type cannot be changed.
+    }
+
+    public void UpdateContent(IManga manga)
     {
       var chapters = new List<Chapter>();
       try
@@ -125,7 +130,7 @@ namespace Hentaichan
       manga.Chapters.AddRange(chapters);
     }
 
-    public static void UpdatePages(Chapter chapter)
+    public static void UpdatePages(MangaReader.Core.Manga.Chapter chapter)
     {
       chapter.Pages.Clear();
       var pages = new List<MangaPage>();

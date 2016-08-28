@@ -4,19 +4,20 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+using MangaReader.Core;
 using MangaReader.Core.Account;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 
 namespace Acomics
 {
-  public static class Getter
+  public class Parser : ISiteParser
   {
     private static readonly string VolumeClassName = "serial-chapters-head";
     private static readonly string VolumeXPath = string.Format("//*[@class=\"{0}\"]", VolumeClassName);
     private static readonly string ChapterXPath = "//div[@class=\"chapters\"]//a";
 
-    public static CookieClient GetAdultClient()
+    public CookieClient GetAdultClient()
     {
       var host = Generic.GetLoginMainUri<Acomics>().Host;
       var client = new CookieClient();
@@ -28,12 +29,12 @@ namespace Acomics
     /// Обновить название и статус манги.
     /// </summary>
     /// <param name="manga">Манга.</param>
-    public static void UpdateNameAndStatus(Acomics manga)
+    public void UpdateNameAndStatus(IManga manga)
     {
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/about"), Getter.GetAdultClient()).Content);
+        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/about"), this.GetAdultClient()).Content);
         var nameNode = document.DocumentNode.SelectSingleNode("//head//meta[@property=\"og:title\"]");
         if (nameNode != null && nameNode.Attributes.Any(a => Equals(a.Name, "content")))
         {
@@ -60,12 +61,12 @@ namespace Acomics
       catch (NullReferenceException ex) { Log.Exception(ex); }
     }
 
-    public static void UpdateContentType(Acomics manga)
+    public void UpdateContentType(IManga manga)
     {
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), Getter.GetAdultClient()).Content);
+        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), this.GetAdultClient()).Content);
         manga.HasVolumes = document.DocumentNode.SelectNodes(VolumeXPath) != null;
         manga.HasChapters = document.DocumentNode.SelectNodes(ChapterXPath) != null;
       }
@@ -76,7 +77,7 @@ namespace Acomics
     /// Получить содержание манги - тома и главы.
     /// </summary>
     /// <param name="manga">Манга.</param>
-    public static void UpdateContent(Acomics manga)
+    public void UpdateContent(IManga manga)
     {
       var volumes = new List<Volume>();
       var chapters = new List<MangaReader.Core.Manga.Chapter>();
@@ -84,7 +85,7 @@ namespace Acomics
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), Getter.GetAdultClient()).Content);
+        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), this.GetAdultClient()).Content);
 
         var volumeNodes = document.DocumentNode.SelectNodes(VolumeXPath);
         if (volumeNodes != null)
@@ -138,14 +139,14 @@ namespace Acomics
     /// </summary>
     /// <param name="uri">Ссылка на мангу.</param>
     /// <returns>Словарь (ссылка, описание).</returns>
-    private static List<MangaPage> GetMangaPages(Uri uri)
+    private List<MangaPage> GetMangaPages(Uri uri)
     {
       var links = new List<Uri>();
       var description = new List<string>();
       var images = new List<Uri>();
       try
       {
-        var adultClient = Getter.GetAdultClient();
+        var adultClient = this.GetAdultClient();
         var document = new HtmlDocument();
         document.LoadHtml(Page.GetPage(uri, adultClient).Content);
         var last = document.DocumentNode.SelectSingleNode("//nav[@class='serial']//a[@class='read2']").Attributes[1].Value;

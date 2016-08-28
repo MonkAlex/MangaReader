@@ -23,5 +23,7 @@ namespace MangaReader.Core
     {
       return ConfigStorage.Instance.DatabaseConfig.MangaSettings.Single(m => Equals(m.Manga, this.MangaGuid));
     }
+
+    public abstract ISiteParser GetParser();
   }
 }

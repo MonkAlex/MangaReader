@@ -21,9 +21,10 @@ namespace Acomics.Convertation
       base.ProtectedConvert(process);
 
       var acomics = Repository.Get<Acomics>().ToList();
+      var parser = new Parser();
       foreach (var acomic in acomics)
       {
-        Getter.UpdateContentType(acomic);
+        parser.UpdateContentType(acomic);
         process.Percent += 100.0 / acomics.Count;
       }
       acomics.SaveAll();

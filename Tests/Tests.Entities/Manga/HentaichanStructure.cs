@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Hentaichan;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services.Config;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,6 +10,8 @@ namespace Tests.Entities.Manga
   [TestClass]
   public class HentaichanStructure
   {
+    Parser parser = new Parser();
+
     [TestMethod]
     public void AddHentaichanMultiPages()
     {
@@ -21,7 +24,7 @@ namespace Tests.Entities.Manga
     {
       CreateLogin();
       var manga = Mangas.CreateFromWeb(new Uri(url)) as Hentaichan.Hentaichan;
-      Hentaichan.Getter.UpdateContent(manga);
+      parser.UpdateContent(manga);
       return manga;
     }
 

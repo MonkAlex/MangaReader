@@ -7,7 +7,7 @@ namespace Hentaichan
   {
     protected override void UpdatePages()
     {
-      Getter.UpdatePages(this);
+      Parser.UpdatePages(this);
       base.UpdatePages();
     }
 

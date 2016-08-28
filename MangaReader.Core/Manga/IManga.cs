@@ -19,6 +19,22 @@ namespace MangaReader.Core.Manga
 
     MangaSetting Setting { get; }
 
+    #region Content
+
+    bool HasChapters { get; set; }
+
+    bool HasVolumes { get; set; }
+
+    List<Volume> Volumes { get; set; }
+
+    List<Chapter> Chapters { get; set; }
+
+    List<MangaPage> Pages { get; set; }
+
+    #endregion
+
+    #region History
+
     IEnumerable<MangaHistory> Histories { get; }
 
     void AddHistory(Uri message);
@@ -29,6 +45,8 @@ namespace MangaReader.Core.Manga
 
     void ClearHistory();
 
+    #endregion
+    
     bool NeedUpdate { get; set; }
 
     bool IsValid();

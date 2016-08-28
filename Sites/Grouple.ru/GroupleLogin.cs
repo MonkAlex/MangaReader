@@ -63,25 +63,21 @@ namespace Grouple
         return bookmarks;
       }
 
-
+      var parser = new Parser();
       var loadedBookmarks = Regex
           .Matches(firstOrDefault.FirstOrDefault().OuterHtml, @"href='(.*?)'", RegexOptions.IgnoreCase)
           .OfType<Group>()
           .Select(g => g.Captures[0])
           .OfType<Match>()
           .Select(m => new Uri(m.Groups[1].Value))
-          .Select(async s =>
+          .Select(s =>
           {
-            var mangaPage = await Page.GetPageAsync(s);
             var manga = Mangas.Create(s);
-            manga.Name = Getter.GetMangaName(mangaPage.Content).ToString();
+            parser.UpdateNameAndStatus(manga);
             return manga;
           })
           .ToList();
-      foreach (var bookmark in loadedBookmarks)
-      {
-        bookmarks.Add(await bookmark);
-      }
+      bookmarks.AddRange(loadedBookmarks);
       return bookmarks;
     }
 

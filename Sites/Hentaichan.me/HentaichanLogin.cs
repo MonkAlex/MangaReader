@@ -142,6 +142,7 @@ namespace Hentaichan
           return bookmarks;
         }
 
+        var parser = new Parser();
         var mangas = nodes
           .Select(n => n.OuterHtml)
           .SelectMany(h => Regex.Matches(h, "href=\"(.*?)\"", RegexOptions.IgnoreCase)
@@ -152,7 +153,7 @@ namespace Hentaichan
           .Select(u =>
           {
             var manga = Mangas.Create(u);
-            manga.Name = Getter.GetMangaName(u);
+            parser.UpdateNameAndStatus(manga);
             return manga;
           })
           .Where(m => !string.IsNullOrWhiteSpace(m.Name))

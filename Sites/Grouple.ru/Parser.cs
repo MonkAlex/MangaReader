@@ -13,7 +13,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Grouple
 {
-  public class Parser : ISiteParser
+  public class Parser : BaseSiteParser
   {
     /// <summary>
     /// Ключ с куками для редиректа.
@@ -82,7 +82,7 @@ namespace Grouple
       }
     }
 
-    public void UpdateNameAndStatus(IManga manga)
+    public override void UpdateNameAndStatus(IManga manga)
     {
       var page = Page.GetPage(manga.Uri);
       var localizedName = new MangaName();
@@ -102,11 +102,7 @@ namespace Grouple
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
 
-      var name = localizedName.ToString();
-      if (string.IsNullOrWhiteSpace(name))
-        Log.AddFormat("Не удалось получить имя манги, текущее название - '{0}'.", manga.ServerName);
-      else if (name != manga.ServerName)
-        manga.ServerName = name;
+      this.UpdateName(manga, localizedName.ToString());
 
       var status = string.Empty;
       try
@@ -122,12 +118,7 @@ namespace Grouple
       manga.Status = status;
     }
 
-    public void UpdateContentType(IManga manga)
-    {
-      // Content type cannot be changed.
-    }
-
-    public void UpdateContent(IManga manga)
+    public override void UpdateContent(IManga manga)
     {
       var dic = new Dictionary<Uri, string>();
       var links = new List<Uri> { };

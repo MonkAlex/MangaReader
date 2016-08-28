@@ -13,9 +13,6 @@ namespace Grouple
   /// </summary>
   public abstract class GroupleManga : Mangas
   {
-
-    private static Parser parser = new Parser();
-
     #region Свойства
 
     /// <summary>
@@ -40,20 +37,12 @@ namespace Grouple
     /// <summary>
     /// Признак наличия глав.
     /// </summary>
-    public override bool HasChapters
-    {
-      get { return true; }
-      set { }
-    }
+    public override bool HasChapters { get { return true; } }
 
     /// <summary>
     /// Признак наличия томов.
     /// </summary>
-    public override bool HasVolumes
-    {
-      get { return true; }
-      set { }
-    }
+    public override bool HasVolumes { get { return true; } }
 
     #endregion
 
@@ -77,9 +66,9 @@ namespace Grouple
       }
 
       // Если на странице редирект - выполняем его и получаем новую ссылку на мангу.
-      if (page.Content.ToLowerInvariant().Contains(Parser.CookieKey))
+      if (page.Content.ToLowerInvariant().Contains(Grouple.Parser.CookieKey))
       {
-        var newUri = Parser.GetRedirectUri(page);
+        var newUri = Grouple.Parser.GetRedirectUri(page);
         if (!this.Uri.Equals(newUri))
         {
           this.Uri = newUri;
@@ -88,21 +77,9 @@ namespace Grouple
         }
       }
 
-      parser.UpdateNameAndStatus(this);
-      OnPropertyChanged(nameof(IsCompleted));
+      base.Refresh();
     }
 
-    protected override void UpdateContent()
-    {
-      this.Volumes.Clear();
-      this.Chapters.Clear();
-      this.Pages.Clear();
-
-      parser.UpdateContent(this);
-
-      base.UpdateContent();
-    }
-    
     #endregion
   }
 }

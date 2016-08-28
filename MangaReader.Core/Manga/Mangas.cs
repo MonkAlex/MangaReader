@@ -105,6 +105,21 @@ namespace MangaReader.Core.Manga
 
     private bool? needCompress = null;
 
+    public virtual ISiteParser Parser
+    {
+      get
+      {
+        if (Mapping.Initialized)
+        {
+          var plugin = ConfigStorage.Plugins.SingleOrDefault(p => p.MangaType == this.GetType());
+          if (plugin == null)
+            throw new MangaReaderException(string.Format("Plugin for {0} manga type not found.", this.GetType()));
+          return plugin.GetParser();
+        }
+        throw new MangaReaderException("Mappings not initialized.");
+      }
+    }
+
     /// <summary>
     /// Настройки манги.
     /// </summary>
@@ -312,6 +327,12 @@ namespace MangaReader.Core.Manga
       if (this.Volumes == null)
         throw new ArgumentNullException("Volumes");
 
+      this.Volumes.Clear();
+      this.Chapters.Clear();
+      this.Pages.Clear();
+
+      Parser.UpdateContent(this);
+
       this.Pages.ForEach(p => p.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this));
       this.Chapters.ForEach(ch => ch.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this));
       this.Volumes.ForEach(v => v.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this));
@@ -415,7 +436,9 @@ namespace MangaReader.Core.Manga
     /// </summary>
     public virtual void Refresh()
     {
-
+      Parser.UpdateNameAndStatus(this);
+      Parser.UpdateContentType(this);
+      OnPropertyChanged(nameof(IsCompleted));
     }
 
     /// <summary>

@@ -81,6 +81,7 @@
     <Compile Include="Account\ILogin.cs" />
     <Compile Include="Account\Login.cs" />
     <Compile Include="BasePlugin.cs" />
+    <Compile Include="BaseSiteParser.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Convertation\Config\From30to31.cs" />
     <Compile Include="Convertation\Config\FromBaseTo30.cs" />

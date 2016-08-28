@@ -11,7 +11,7 @@ using MangaReader.Core.Services;
 
 namespace Acomics
 {
-  public class Parser : ISiteParser
+  public class Parser : BaseSiteParser
   {
     private static readonly string VolumeClassName = "serial-chapters-head";
     private static readonly string VolumeXPath = string.Format("//*[@class=\"{0}\"]", VolumeClassName);
@@ -29,7 +29,7 @@ namespace Acomics
     /// Обновить название и статус манги.
     /// </summary>
     /// <param name="manga">Манга.</param>
-    public void UpdateNameAndStatus(IManga manga)
+    public override void UpdateNameAndStatus(IManga manga)
     {
       try
       {
@@ -39,10 +39,7 @@ namespace Acomics
         if (nameNode != null && nameNode.Attributes.Any(a => Equals(a.Name, "content")))
         {
           var name = WebUtility.HtmlDecode(nameNode.Attributes.Single(a => Equals(a.Name, "content")).Value);
-          if (string.IsNullOrWhiteSpace(name))
-            Log.AddFormat("Не удалось получить имя манги, текущее название - '{0}'.", manga.ServerName);
-          else if (name != manga.ServerName)
-            manga.ServerName = name;
+          this.UpdateName(manga, name);
         }
 
         var content = document.GetElementbyId("contentMargin");
@@ -61,7 +58,7 @@ namespace Acomics
       catch (NullReferenceException ex) { Log.Exception(ex); }
     }
 
-    public void UpdateContentType(IManga manga)
+    public override void UpdateContentType(IManga manga)
     {
       try
       {
@@ -77,7 +74,7 @@ namespace Acomics
     /// Получить содержание манги - тома и главы.
     /// </summary>
     /// <param name="manga">Манга.</param>
-    public void UpdateContent(IManga manga)
+    public override void UpdateContent(IManga manga)
     {
       var volumes = new List<Volume>();
       var chapters = new List<MangaReader.Core.Manga.Chapter>();

@@ -13,7 +13,7 @@ using MangaReader.Core.Services.Config;
 
 namespace Hentaichan
 {
-  public class Parser : ISiteParser
+  public class Parser : BaseSiteParser
   {
     private static readonly string AdultOnly = "Доступ ограничен. Только зарегистрированные пользователи подтвердившие, что им 18 лет.";
 
@@ -44,7 +44,7 @@ namespace Hentaichan
       return client;
     }
 
-    public void UpdateNameAndStatus(IManga manga)
+    public override void UpdateNameAndStatus(IManga manga)
     {
       var name = string.Empty;
       try
@@ -64,18 +64,11 @@ namespace Hentaichan
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
       name = WebUtility.HtmlDecode(name);
-      if (string.IsNullOrWhiteSpace(name))
-        Log.AddFormat("Не удалось получить имя манги, текущее название - '{0}'.", manga.ServerName);
-      else if (name != manga.ServerName)
-        manga.ServerName = name;
+
+      this.UpdateName(manga, name);
     }
 
-    public void UpdateContentType(IManga manga)
-    {
-      // Content type cannot be changed.
-    }
-
-    public void UpdateContent(IManga manga)
+    public override void UpdateContent(IManga manga)
     {
       var chapters = new List<Chapter>();
       try

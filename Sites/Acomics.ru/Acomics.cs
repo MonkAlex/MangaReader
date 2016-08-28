@@ -10,8 +10,6 @@ namespace Acomics
   /// </summary>
   public class Acomics : MangaReader.Core.Manga.Mangas
   {
-    private static Parser parser = new Parser();
-
     #region Свойства
 
     public override List<Compression.CompressionMode> AllowedCompressionModes
@@ -24,31 +22,6 @@ namespace Acomics
             Equals(m, Compression.CompressionMode.Manga))
           .ToList();
       }
-    }
-
-    #endregion
-
-    #region Методы
-
-    /// <summary>
-    /// Обновить информацию о манге - название, главы, обложка.
-    /// </summary>
-    public override void Refresh()
-    {
-      parser.UpdateNameAndStatus(this);
-      parser.UpdateContentType(this);
-      OnPropertyChanged(nameof(IsCompleted));
-    }
-
-    protected override void UpdateContent()
-    {
-      this.Pages.Clear();
-      this.Chapters.Clear();
-      this.Volumes.Clear();
-
-      parser.UpdateContent(this);
-
-      base.UpdateContent();
     }
 
     #endregion

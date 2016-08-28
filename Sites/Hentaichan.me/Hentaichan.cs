@@ -9,8 +9,6 @@ namespace Hentaichan
 {
   public class Hentaichan : Mangas
   {
-    private static Parser parser = new Parser();
-
     public override List<Compression.CompressionMode> AllowedCompressionModes
     {
       get { return base.AllowedCompressionModes.Where(m => !Equals(m, Compression.CompressionMode.Chapter)).ToList(); }
@@ -19,13 +17,6 @@ namespace Hentaichan
     public override bool HasVolumes { get { return false; } }
 
     public override bool HasChapters { get { return true; } }
-
-    public override void Refresh()
-    {
-      base.Refresh();
-
-      parser.UpdateNameAndStatus(this);
-    }
 
     public override bool IsValid()
     {
@@ -37,16 +28,6 @@ namespace Hentaichan
 
       return !doubles;
     }
-
-    protected override void UpdateContent()
-    {
-      this.Pages.Clear();
-      this.Chapters.Clear();
-      this.Volumes.Clear();
-
-      parser.UpdateContent(this);
-
-      base.UpdateContent();
-    }
+    
   }
 }

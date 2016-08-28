@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MangaReader.Core.Account;
@@ -12,6 +13,8 @@ namespace MangaReader.ViewModel
   {
     private ILogin login;
     private bool isEnabled;
+
+    public int LoginId { get; }
 
     public string Login
     {
@@ -33,7 +36,7 @@ namespace MangaReader.ViewModel
       }
     }
 
-    public bool CanEdit { get { return IsEnabled && !login.IsLogined; } }
+    public bool CanEdit { get { return IsEnabled && HasLogin && !login.IsLogined; } }
 
     public bool IsEnabled
     {
@@ -47,6 +50,8 @@ namespace MangaReader.ViewModel
     }
 
     public bool HasLogin { get; set; }
+
+    public bool HasError { get { return !HasLogin; } }
 
     public ICommand LogInOutCommand { get; private set; }
 
@@ -62,6 +67,7 @@ namespace MangaReader.ViewModel
       if (login != null)
       {
         this.login = login;
+        this.LoginId = login.Id;
         this.LogInOutCommand = new LogInOutCommand(this.login);
         this.login.LoginStateChanged += LoginOnLoginStateChanged;
         HasLogin = true;
@@ -75,6 +81,15 @@ namespace MangaReader.ViewModel
       OnPropertyChanged(nameof(CanEdit));
       OnPropertyChanged(nameof(Login));
       OnPropertyChanged(nameof(Password));
+    }
+
+    public void Save()
+    {
+      if (this.login != null)
+      {
+        this.login.Name = this.Login;
+        this.login.Password = this.Password;
+      }
     }
   }
 }

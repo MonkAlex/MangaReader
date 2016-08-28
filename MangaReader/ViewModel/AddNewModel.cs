@@ -30,7 +30,8 @@ namespace MangaReader.ViewModel
     {
       base.Load();
 
-      foreach (var settings in ConfigStorage.Instance.DatabaseConfig.MangaSettings.GroupBy(s => s.Login))
+      foreach (var settings in ConfigStorage.Instance.DatabaseConfig.MangaSettings
+                                 .GroupBy(s => s.Login).Where(s => s.Key != null))
       {
         var name = string.Join(" \\ ", settings.Select(s => s.MangaName));
         this.BookmarksModels.Add(new AddBookmarksModel(settings.Key, name));

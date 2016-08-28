@@ -73,7 +73,7 @@ namespace MangaReader.Core.NHibernate
 
     private static void BuildSchema(Configuration config)
     {
-      foreach (var source in config.ClassMappings.Where(m => m.HasSubclasses))
+      foreach (var source in config.ClassMappings.Where(m => m.Discriminator != null && m is RootClass))
       {
         source.Where = string.Format("{0} in ('{1}')", 
           source.Discriminator.ColumnIterator.Single().Text,

@@ -7,8 +7,11 @@
              xmlns:properties="clr-namespace:MangaReader.Properties"
              IsEnabled="{Binding IsEnabled}"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+             d:DesignHeight="60" d:DesignWidth="300">
+  <UserControl.Resources>
+    <BooleanToVisibilityConverter x:Key="B2V"/>
+  </UserControl.Resources>
+  <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
@@ -20,17 +23,25 @@
         <TextBox Grid.Column="0"
                  Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"
                  IsEnabled="{Binding CanEdit}"
+                 Visibility="{Binding HasLogin, Converter={StaticResource B2V}}"
                  Grid.Row="0"/>
         <TextBox Grid.Column="0"
                  Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
                  IsEnabled="{Binding CanEdit}"
+                 Visibility="{Binding HasLogin, Converter={StaticResource B2V}}"
                  Grid.Row="1"/>
         <Button x:Name="Enter" 
+                Visibility="{Binding HasLogin, Converter={StaticResource B2V}}"
                 Style="{DynamicResource BigButton}"
                 Grid.Row="0"
                 Grid.RowSpan="2"
                 Grid.Column="1"
                 Command="{Binding LogInOutCommand}"
                 IsDefault="True"/>
+    <TextBlock Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               Visibility="{Binding HasError, Converter={StaticResource B2V}}"
+               Text="Логин не найден. Попоробуйте обновить программу."/>
     </Grid>
 </UserControl>

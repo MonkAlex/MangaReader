@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:resx="clr-namespace:MangaReader.Properties"
+        xmlns:addNewManga="clr-namespace:MangaReader.UI.AddNewManga"
         mc:Ignorable="d" 
         d:DesignHeight="200" d:DesignWidth="500">
 
@@ -23,14 +24,8 @@
                 <ColumnDefinition Width="30*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0"
-             Content="Логин: "/>
-            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
-             Text="{Binding Path=Login, UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Grid.Row="1" Grid.Column="0"
-             Content="Пароль: "/>
-            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
-             Text="{Binding Path=Password, UpdateSourceTrigger=PropertyChanged}"/>
+          <addNewManga:Login Grid.Row="0" Grid.RowSpan="2"
+                             Grid.Column="0" Grid.ColumnSpan="3" DataContext="{Binding Login}"/>
 
             <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3">
                 <Grid.ColumnDefinitions>

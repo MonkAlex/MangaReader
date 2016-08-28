@@ -47,12 +47,12 @@ namespace MangaReader.ViewModel.Setting
       {
         var someLoginView = this.Views
           .OfType<MangaSettingModel>()
-          .Where(m => !Equals(m, mangaSettings) && Equals(m.LoginId, mangaSettings.LoginId))
+          .Where(m => !Equals(m, mangaSettings) && Equals(m.Login.LoginId, mangaSettings.Login.LoginId))
           .ToList();
         foreach (var settingModel in someLoginView)
         {
-          settingModel.Login = mangaSettings.Login;
-          settingModel.Password = mangaSettings.Password;
+          settingModel.Login.Login = mangaSettings.Login.Login;
+          mangaSettings.Login.Password = mangaSettings.Login.Password;
         }
       }
     }

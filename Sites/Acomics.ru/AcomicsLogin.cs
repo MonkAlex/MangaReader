@@ -32,22 +32,19 @@ namespace Acomics
                 {"check", "1"}
             };
 
-      using (TimedLock.Lock(this.ClientLock))
+      try
       {
-        try
-        {
-          await Client.UploadValuesTaskAsync(new Uri(this.MainUri + "action/authLogin"), "POST", loginData);
-          this.PasswordHash = Client.Cookie.GetCookies(this.MainUri)
-              .Cast<Cookie>()
-              .Single(c => c.Name == "hash")
-              .Value;
-          this.IsLogined = true;
-        }
-        catch (System.Exception ex)
-        {
-          Log.Exception(ex);
-          this.IsLogined = false;
-        }
+        await GetClient().UploadValuesTaskAsync(new Uri(this.MainUri + "action/authLogin"), "POST", loginData);
+        this.PasswordHash = ClientCookie.GetCookies(this.MainUri)
+            .Cast<Cookie>()
+            .Single(c => c.Name == "hash")
+            .Value;
+        this.IsLogined = true;
+      }
+      catch (System.Exception ex)
+      {
+        Log.Exception(ex);
+        this.IsLogined = false;
       }
       return IsLogined;
     }
@@ -62,11 +59,8 @@ namespace Acomics
       if (!IsLogined)
         return bookmarks;
 
-      using (TimedLock.Lock(ClientLock))
-      {
-        var page = await Page.GetPageAsync(BookmarksUri, Client);
-        document.LoadHtml(page.Content);
-      }
+      var page = await Page.GetPageAsync(BookmarksUri, GetClient());
+      document.LoadHtml(page.Content);
 
       var nodes = document.DocumentNode.SelectNodes("//table[@class=\"decor\"]//a");
 

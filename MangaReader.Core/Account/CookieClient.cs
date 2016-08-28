@@ -40,11 +40,15 @@ namespace MangaReader.Core.Account
       return baseResponce;
     }
 
-    public CookieClient()
+    public CookieClient() : this(new CookieContainer())
     {
-      this.Cookie = new CookieContainer();
       this.Encoding = Encoding.UTF8;
       this.Proxy = SystemProxy.Value;
+    }
+
+    public CookieClient(CookieContainer cookie)
+    {
+      this.Cookie = cookie;
     }
   }
 }

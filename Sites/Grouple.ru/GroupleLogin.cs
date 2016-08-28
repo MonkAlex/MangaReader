@@ -29,17 +29,14 @@ namespace Grouple
                 {"j_password", this.Password},
                 {"remember_me", "checked"}
             };
-      using (TimedLock.Lock(ClientLock))
+      try
       {
-        try
-        {
-          var result = await Client.UploadValuesTaskAsync("internal/auth/j_spring_security_check", "POST", loginData);
-          IsLogined = Encoding.UTF8.GetString(result).Contains("internal/auth/logout");
-        }
-        catch (System.Exception ex)
-        {
-          Log.Exception(ex);
-        }
+        var result = await GetClient().UploadValuesTaskAsync("internal/auth/j_spring_security_check", "POST", loginData);
+        IsLogined = Encoding.UTF8.GetString(result).Contains("internal/auth/logout");
+      }
+      catch (System.Exception ex)
+      {
+        Log.Exception(ex);
       }
       return IsLogined;
     }
@@ -54,11 +51,8 @@ namespace Grouple
       if (!IsLogined)
         return bookmarks;
 
-      using (TimedLock.Lock(ClientLock))
-      {
-        var page = await Page.GetPageAsync(BookmarksUri, Client);
-        document.LoadHtml(page.Content);
-      }
+      var page = await Page.GetPageAsync(BookmarksUri, GetClient());
+      document.LoadHtml(page.Content);
 
       var firstOrDefault = document.DocumentNode
           .SelectNodes("//div[@class=\"bookmarks-lists\"]");
@@ -78,9 +72,9 @@ namespace Grouple
           .Select(m => new Uri(m.Groups[1].Value))
           .Select(async s =>
           {
-            var page = await Page.GetPageAsync(s);
+            var mangaPage = await Page.GetPageAsync(s);
             var manga = Mangas.Create(s);
-            manga.Name = Getter.GetMangaName(page.Content).ToString();
+            manga.Name = Getter.GetMangaName(mangaPage.Content).ToString();
             return manga;
           })
           .ToList();

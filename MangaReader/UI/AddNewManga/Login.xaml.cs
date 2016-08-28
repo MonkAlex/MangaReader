@@ -14,15 +14,5 @@ namespace MangaReader.UI.AddNewManga
       InitializeComponent();
       BaseViewModel.SubToViewModel(this);
     }
-
-    private void Bookmarks_OnMouseUp(object sender, MouseButtonEventArgs e)
-    {
-      var listBox = sender as ListBox;
-      if (listBox == null || listBox.SelectedItems.Count == 0)
-        return;
-
-      if (!(e.MouseDevice.DirectlyOver is TextBlock))
-        listBox.SelectedIndex = -1;
-    }
   }
 }

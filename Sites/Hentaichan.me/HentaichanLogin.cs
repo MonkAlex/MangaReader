@@ -87,22 +87,19 @@ namespace Hentaichan
                 {"image", "%D0%92%D1%85%D0%BE%D0%B4"}
             };
 
-      using (TimedLock.Lock(this.ClientLock))
+      try
       {
-        try
-        {
-          await Client.UploadValuesTaskAsync(new Uri(MainUri, "index.php"), "POST", loginData);
-          this.UserId = Client.Cookie.GetCookies(this.MainUri)
-              .Cast<Cookie>()
-              .Single(c => c.Name == "dle_user_id")
-              .Value;
-          this.IsLogined = true;
-        }
-        catch (System.Exception ex)
-        {
-          Log.Exception(ex);
-          this.IsLogined = false;
-        }
+        await GetClient().UploadValuesTaskAsync(new Uri(MainUri, "index.php"), "POST", loginData);
+        this.UserId = ClientCookie.GetCookies(this.MainUri)
+            .Cast<Cookie>()
+            .Single(c => c.Name == "dle_user_id")
+            .Value;
+        this.IsLogined = true;
+      }
+      catch (System.Exception ex)
+      {
+        Log.Exception(ex);
+        this.IsLogined = false;
       }
       return IsLogined;
     }
@@ -121,11 +118,8 @@ namespace Hentaichan
 
       for (int i = 0; i < pages.Count; i++)
       {
-        using (TimedLock.Lock(ClientLock))
-        {
-          var page = await Page.GetPageAsync(pages[i], Client);
-          document.LoadHtml(page.Content);
-        }
+        var page = await Page.GetPageAsync(pages[i], GetClient());
+        document.LoadHtml(page.Content);
 
         if (i == 0)
         {

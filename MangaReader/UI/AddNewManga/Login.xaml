@@ -16,7 +16,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBox Grid.Column="0"
                  Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"
@@ -33,28 +32,5 @@
                 Grid.Column="1"
                 Command="{Binding LogInOutCommand}"
                 IsDefault="True"/>
-        <ListBox Grid.Column="0"
-                 Grid.ColumnSpan="2"
-                 Grid.Row="2"
-                 ItemsSource="{Binding Bookmarks}"
-                 SelectionMode="Multiple"
-                 MouseUp="Bookmarks_OnMouseUp">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
-                    <Setter Property="ContentTemplate">
-                        <Setter.Value>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Value}"/>
-                            </DataTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Style.Resources>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="LightSlateGray"/>
-                    </Style.Resources>
-                </Style>
-            </ListBox.ItemContainerStyle>
-        </ListBox>
     </Grid>
 </UserControl>

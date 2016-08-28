@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
@@ -34,19 +35,15 @@ namespace MangaReader.Core.Account
     public abstract Uri BookmarksUri { get; }
 
     /// <summary>
-    /// Указатель блокировки клиента файла.
+    /// Печеньки с авторизацией.
     /// </summary>
-    protected internal object ClientLock { get; set; }
+    protected internal CookieContainer ClientCookie { get; set; }
 
-    /// <summary>
-    /// Клиент с куками авторизованного пользователя.
-    /// </summary>
-    protected internal CookieClient Client
+    protected internal CookieClient GetClient()
     {
-      get { return this.client ?? (this.client = new CookieClient() {BaseAddress = MainUri.ToString()}); }
+      return new CookieClient(this.ClientCookie) { BaseAddress = MainUri.ToString() };
     }
-
-    private CookieClient client;
+    
     private bool isLogined;
 
     public abstract Task<bool> DoLogin();
@@ -54,10 +51,7 @@ namespace MangaReader.Core.Account
     public virtual async Task<bool> Logout()
     {
       IsLogined = false;
-      using (TimedLock.Lock(ClientLock))
-      {
-        await Page.GetPageAsync(LogoutUri, Client);
-      }
+      await Page.GetPageAsync(LogoutUri, GetClient());
       return true;
     }
 
@@ -85,7 +79,7 @@ namespace MangaReader.Core.Account
 
     protected Login()
     {
-      this.ClientLock = new object();
+      this.ClientCookie = new CookieContainer();
     }
 
     protected virtual void OnLoginStateChanged(bool e)

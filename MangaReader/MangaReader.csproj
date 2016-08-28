@@ -148,6 +148,7 @@
       <DependentUpon>VersionHistoryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Services\ViewService.cs" />
+    <Compile Include="ViewModel\AddBookmarksModel.cs" />
     <Compile Include="ViewModel\AddNewModel.cs" />
     <Compile Include="ViewModel\Commands\Manga\MangaSaveCommand.cs" />
     <Compile Include="ViewModel\Commands\Navigation\FirstMangaCommand.cs" />

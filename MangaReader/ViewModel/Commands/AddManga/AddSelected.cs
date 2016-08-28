@@ -19,7 +19,7 @@ namespace MangaReader.ViewModel.Commands.AddManga
       if (Uri.TryCreate(model.InputText, UriKind.Absolute, out uri))
         Library.Add(uri);
 
-      var selectedItems = model.Logins.SelectMany(l => l.Bookmarks.Where(b => b.IsSelected));
+      var selectedItems = model.BookmarksModels.SelectMany(l => l.Bookmarks.Where(b => b.IsSelected));
       foreach (var manga in selectedItems)
       {
         Library.Add(manga.Value.Uri);

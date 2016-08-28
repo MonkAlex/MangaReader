@@ -12,7 +12,7 @@ namespace MangaReader.ViewModel
   {
     private string inputText;
 
-    public ObservableCollection<LoginModel> Logins { get; set; }
+    public ObservableCollection<AddBookmarksModel> BookmarksModels { get; set; }
 
     public ICommand Add { get; set; }
 
@@ -33,7 +33,7 @@ namespace MangaReader.ViewModel
       foreach (var settings in ConfigStorage.Instance.DatabaseConfig.MangaSettings.GroupBy(s => s.Login))
       {
         var name = string.Join(" \\ ", settings.Select(s => s.MangaName));
-        this.Logins.Add(new LoginModel(settings.Key, name));
+        this.BookmarksModels.Add(new AddBookmarksModel(settings.Key, name));
       }
     }
 
@@ -60,7 +60,7 @@ namespace MangaReader.ViewModel
     public AddNewModel()
     {
       this.Add = new AddSelected(this);
-      this.Logins = new ObservableCollection<LoginModel>();
+      this.BookmarksModels = new ObservableCollection<AddBookmarksModel>();
     }
   }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MangaReader.Core.Account;
@@ -13,8 +12,6 @@ namespace MangaReader.ViewModel
   {
     private ILogin login;
     private bool isEnabled;
-
-    public string Header { get; set; }
 
     public string Login
     {
@@ -45,55 +42,39 @@ namespace MangaReader.ViewModel
       {
         isEnabled = value;
         OnPropertyChanged();
+        OnPropertyChanged(nameof(CanEdit));
       }
     }
 
-    public ObservableCollection<SelectedItem<IManga>> Bookmarks { get; }
+    public bool HasLogin { get; set; }
 
     public ICommand LogInOutCommand { get; private set; }
 
-    public override async void Load()
+    public async Task<List<IManga>> GetBookmarks()
     {
-      base.Load();
-
-      if (IsEnabled)
-        return;
-
-      await LoadBookmarks();
-
-      this.IsEnabled = true;
-      LoginOnLoginStateChanged(this, login.IsLogined);
+      if (login != null)
+        return await login.GetBookmarks();
+      return new List<IManga>();
     }
 
-    private async Task LoadBookmarks()
+    public LoginModel(ILogin login)
     {
-      var bookmarks = await login.GetBookmarks();
-
-      foreach (var bookmark in bookmarks)
+      if (login != null)
       {
-        if (!Bookmarks.Any(b => Equals(b.Value.Uri, bookmark.Uri)))
-          Bookmarks.Add(new SelectedItem<IManga>(bookmark));
+        this.login = login;
+        this.LogInOutCommand = new LogInOutCommand(this.login);
+        this.login.LoginStateChanged += LoginOnLoginStateChanged;
+        HasLogin = true;
       }
+      else
+        HasLogin = false;
     }
 
-    public LoginModel(ILogin login, string name)
-    {
-      this.login = login;
-      this.Header = name;
-      this.LogInOutCommand = new LogInOutCommand(this.login);
-      this.Bookmarks = new ObservableCollection<SelectedItem<IManga>>();
-      this.login.LoginStateChanged += LoginOnLoginStateChanged;
-    }
-
-    private async void LoginOnLoginStateChanged(object sender, bool b)
+    private void LoginOnLoginStateChanged(object sender, bool b)
     {
       OnPropertyChanged(nameof(CanEdit));
       OnPropertyChanged(nameof(Login));
       OnPropertyChanged(nameof(Password));
-      if (b && IsEnabled && !Bookmarks.Any())
-      {
-        await LoadBookmarks();
-      }
     }
   }
 }

@@ -42,12 +42,13 @@ namespace MangaReader.Core.Account
 
     public CookieClient() : this(new CookieContainer())
     {
-      this.Encoding = Encoding.UTF8;
-      this.Proxy = SystemProxy.Value;
+
     }
 
     public CookieClient(CookieContainer cookie)
     {
+      this.Encoding = Encoding.UTF8;
+      this.Proxy = SystemProxy.Value;
       this.Cookie = cookie;
     }
   }

@@ -2,7 +2,7 @@
 
 [![Supported platforms][badge-platforms]][Releases] [![Latest release][badge-release]][Releases] [![Open issues][badge-issues]][Issues] 
 
-[![Build status](https://ci.appveyor.com/api/projects/status/p6ge2s4cahiryuxn/branch/master?svg=true)](https://ci.appveyor.com/project/MonkAlex/mangareader/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/p6ge2s4cahiryuxn/branch/master?svg=true)](https://ci.appveyor.com/project/MonkAlex/mangareader/branch/master) [![codecov](https://codecov.io/gh/MonkAlex/MangaReader/branch/master/graph/badge.svg)](https://codecov.io/gh/MonkAlex/MangaReader)
 ***
 
 Программа предназначеня для скачивания манги с онлайн читалок.

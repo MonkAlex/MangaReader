@@ -188,7 +188,7 @@ namespace Tests.Convertation._1._20
       Assert.AreEqual(68, loadedHistoryRecord.Count(h => h.Url.Contains("the_knight_of_cydonia")));
 
       Assert.AreEqual(loadedMangas.Sum(m => m.Histories.Count()), loadedHistoryRecord.Count());
-      Assert.AreEqual(17857, loadedHistoryRecord.Count);
+      Assert.AreEqual(17839, loadedHistoryRecord.Count);
     }
 
     [TestInitialize]

@@ -16,7 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		CHANGELOG.md = CHANGELOG.md
-		local.testsettings = local.testsettings
 		README.md = README.md
 		VersionInfo.cs = VersionInfo.cs
 	EndProjectSection
@@ -31,9 +30,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaReader.CLI", "MangaRea
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B036F0D7-124C-4FC8-B596-21456DFEFB0D}"
-	ProjectSection(SolutionItems) = preProject
-		local.testsettings = local.testsettings
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Entities", "Tests\Tests.Entities\Tests.Entities.csproj", "{3B6A42FF-E0CB-4795-9C8E-054BFF696FD3}"
 EndProject

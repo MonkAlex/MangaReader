@@ -25,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -72,12 +73,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\Tests.Entities\Environment.cs">
+      <Link>Environment.cs</Link>
+    </Compile>
     <Compile Include="..\Tests.Entities\ReportProcess.cs">
       <Link>ReportProcess.cs</Link>
     </Compile>
     <Compile Include="1.12\Convert.cs" />
     <Compile Include="1.20\Convert.cs" />
-    <Compile Include="Environment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

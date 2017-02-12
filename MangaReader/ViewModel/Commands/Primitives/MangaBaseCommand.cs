@@ -28,7 +28,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
       }
     }
 
-    public virtual void Execute(Mangas manga)
+    public virtual void Execute(IManga manga)
     {
       
     }

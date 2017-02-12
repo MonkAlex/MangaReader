@@ -21,10 +21,10 @@ namespace MangaReader
       if (Environment.GetCommandLineArgs().Contains("-t"))
         ShowConsoleWindow();
 
-      AppDomain.CurrentDomain.AssemblyResolve += Core.ResolveAssembly.ResolveInternalAssembly;
+      Core.Loader.Init();
       Client.Run();
     }
-
+    
     #region Консоль
 
     public static void ShowConsoleWindow()

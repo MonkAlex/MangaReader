@@ -16,11 +16,11 @@ namespace Tests.Convertation._1._12
       MangaReader.Core.Client.Init();
       MangaReader.Core.Client.Start(new ReportProcess());
 
-      var loadedMangas = MangaReader.Core.NHibernate.Mapping.Session.Query<Mangas>().Count();
+      var loadedMangas = MangaReader.Core.NHibernate.Mapping.Session.Query<IManga>().Count();
       Assert.AreEqual(75, loadedMangas);
 
       var loadedHistoryRecord = MangaReader.Core.NHibernate.Mapping.Session.Query<MangaHistory>().Count();
-      Assert.AreEqual(5494, loadedHistoryRecord);
+      Assert.AreEqual(6129, loadedHistoryRecord);
     }
 
     [TestInitialize]

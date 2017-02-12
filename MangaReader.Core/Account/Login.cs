@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 
 namespace MangaReader.Core.Account
 {
-  public abstract class Login : Entity.Entity
+  public abstract class Login : Entity.Entity, ILogin
   {
-    public static Guid Type { get { return Guid.Empty; } }
-
-    public static Guid[] Manga { get { return new Guid[0]; } }
-
     public bool IsLogined
     {
       get { return isLogined; }
@@ -38,19 +35,15 @@ namespace MangaReader.Core.Account
     public abstract Uri BookmarksUri { get; }
 
     /// <summary>
-    /// Указатель блокировки клиента файла.
+    /// Печеньки с авторизацией.
     /// </summary>
-    protected internal object ClientLock { get; set; }
+    protected internal CookieContainer ClientCookie { get; set; }
 
-    /// <summary>
-    /// Клиент с куками авторизованного пользователя.
-    /// </summary>
-    protected internal CookieClient Client
+    protected internal CookieClient GetClient()
     {
-      get { return this.client ?? (this.client = new CookieClient() {BaseAddress = MainUri.ToString()}); }
+      return new CookieClient(this.ClientCookie) { BaseAddress = MainUri.ToString() };
     }
-
-    private CookieClient client;
+    
     private bool isLogined;
 
     public abstract Task<bool> DoLogin();
@@ -58,14 +51,11 @@ namespace MangaReader.Core.Account
     public virtual async Task<bool> Logout()
     {
       IsLogined = false;
-      using (TimedLock.Lock(ClientLock))
-      {
-        await Page.GetPageAsync(LogoutUri, Client);
-      }
+      await Page.GetPageAsync(LogoutUri, GetClient());
       return true;
     }
 
-    public async Task<List<Mangas>> GetBookmarks()
+    public async Task<List<IManga>> GetBookmarks()
     {
       if (this.CanLogin)
       {
@@ -74,31 +64,22 @@ namespace MangaReader.Core.Account
         Log.AddFormat("Finish load bookmarks from '{0}'.", this.MainUri);
         return bookmarks;
       }
-      return new List<Mangas>();
+      return new List<IManga>();
     }
 
-    protected abstract Task<List<Mangas>> DownloadBookmarks();
-
-    public static Login Get(Guid manga)
+    protected abstract Task<List<IManga>> DownloadBookmarks();
+    
+    public static ILogin Get(Type type)
     {
-      var types = Generic.GetAllTypes<Login>();
-
-      Login login = null;
-      foreach (var type in types)
-      {
-        if (type.MangaProperty().Contains(manga))
-        {
-          login = NHibernate.Repository.Get<Login>().ToList().SingleOrDefault(l => l.GetType() == type);
-          if (login == null)
-            login = (Login)Activator.CreateInstance(type);
-        }
-      }
-      return login;
+      var fromdb = NHibernate.Repository.Get<ILogin>().ToList().SingleOrDefault(l => l.GetType() == type);
+      if (fromdb == null)
+        fromdb = (ILogin)Activator.CreateInstance(type);
+      return fromdb;
     }
 
     protected Login()
     {
-      this.ClientLock = new object();
+      this.ClientCookie = new CookieContainer();
     }
 
     protected virtual void OnLoginStateChanged(bool e)

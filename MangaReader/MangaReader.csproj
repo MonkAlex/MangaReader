@@ -51,11 +51,6 @@
     <OutputPath>bin\Release\</OutputPath>
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Publish|AnyCPU'">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <OutputPath>bin\Publish\</OutputPath>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ookii.Dialogs.Wpf">
       <SpecificVersion>False</SpecificVersion>
@@ -85,8 +80,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="..\MangaReader.Core\ResolveAssembly.cs">
-      <Link>ResolveAssembly.cs</Link>
+    <Compile Include="..\MangaReader.Core\Loader.cs">
+      <Link>Loader.cs</Link>
     </Compile>
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
@@ -153,6 +148,7 @@
       <DependentUpon>VersionHistoryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Services\ViewService.cs" />
+    <Compile Include="ViewModel\AddBookmarksModel.cs" />
     <Compile Include="ViewModel\AddNewModel.cs" />
     <Compile Include="ViewModel\Commands\Manga\MangaSaveCommand.cs" />
     <Compile Include="ViewModel\Commands\Navigation\FirstMangaCommand.cs" />
@@ -315,19 +311,12 @@
     <Resource Include="Icons\main.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Library\Ookii.Dialogs.Wpf.dll" />
-    <EmbeddedResource Include="Library\Hardcodet.Wpf.TaskbarNotification.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Icons\play.png" />
     <Resource Include="Icons\stop.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\no.png" />
     <Resource Include="Icons\yes.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Library\MangaReader.Core.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MangaReader.Core\MangaReader.Core.csproj">
@@ -370,13 +359,19 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>xcopy /y /r "$(ProjectDir)..\MangaReader.Core\bin\$(ConfigurationName)\MangaReader.Core.dll" "$(ProjectDir)Library\*"</PreBuildEvent>
+    <PostBuildEvent>
+      xcopy /y /r /e "$(ProjectDir)\..\MangaReader.Core\bin\$(ConfigurationName)" "$(TargetDir)\lib"
+      xcopy /y /r /e "$(ProjectDir)\Library" "$(TargetDir)\lib"
+      xcopy /y /r /e "$(ProjectDir)\..\Sites\Bin\$(ConfigurationName)" "$(TargetDir)\Plugins"
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
+  -->
   <Target Name="BeforeBuild">
+    <MakeDir Directories="$(TargetDir)\lib" />
+    <MakeDir Directories="$(TargetDir)\Plugins" />
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  -->
 </Project>

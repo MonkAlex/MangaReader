@@ -14,13 +14,13 @@ namespace Tests.Entities.CRUD
       var mangaId = newManga.Id;
       Assert.AreNotEqual(0, newManga.Id);
 
-      var fromDb = Environment.Session.Get<Mangas>(mangaId);
+      var fromDb = Environment.Session.Get<IManga>(mangaId);
       Assert.AreNotEqual(null, fromDb);
 
       Builder.DeleteReadmanga(newManga);
       Assert.AreEqual(0, newManga.Id);
 
-      fromDb = Environment.Session.Get<Mangas>(mangaId);
+      fromDb = Environment.Session.Get<IManga>(mangaId);
       Assert.AreEqual(null, fromDb);
     }
 
@@ -38,14 +38,14 @@ namespace Tests.Entities.CRUD
       newManga.Update();
       Assert.AreEqual(oldUrl, newManga.Uri);
 
-      var fromDb = Environment.Session.Get<Mangas>(mangaId);
+      var fromDb = Environment.Session.Get<IManga>(mangaId);
       Assert.AreEqual(oldUrl, fromDb.Uri);
 
       newManga.Uri = url;
       newManga.Save();
       Assert.AreEqual(url, newManga.Uri);
 
-      fromDb = Environment.Session.Get<Mangas>(mangaId);
+      fromDb = Environment.Session.Get<IManga>(mangaId);
       Assert.AreEqual(url, fromDb.Uri);
 
       Builder.DeleteAcomics(newManga);

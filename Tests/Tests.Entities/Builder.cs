@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using MangaReader.Core.Manga;
-using MangaReader.Core.Manga.Acomic;
-using MangaReader.Core.Manga.Grouple;
 
 namespace Tests.Entities
 {
@@ -16,9 +14,9 @@ namespace Tests.Entities
     /// Создать мангу.
     /// </summary>
     /// <returns></returns>
-    public static Readmanga CreateReadmanga()
+    public static Grouple.Readmanga CreateReadmanga()
     {
-      var manga = Mangas.Create(ReadmangaUri) as Readmanga;
+      var manga = Mangas.Create(ReadmangaUri) as Grouple.Readmanga;
       manga.Status = "example status";
       manga.NeedUpdate = false;
       manga.Name = "readmanga from example" + Guid.NewGuid();
@@ -30,7 +28,7 @@ namespace Tests.Entities
     /// Удалить мангу.
     /// </summary>
     /// <param name="manga"></param>
-    public static void DeleteReadmanga(Readmanga manga)
+    public static void DeleteReadmanga(Grouple.Readmanga manga)
     {
       if (manga == null)
         return;
@@ -38,9 +36,9 @@ namespace Tests.Entities
       manga.Delete();
     }
 
-    public static Acomics CreateAcomics()
+    public static Acomics.Acomics CreateAcomics()
     {
-      var manga = Mangas.Create(AcomicsUri) as Acomics;
+      var manga = Mangas.Create(AcomicsUri) as Acomics.Acomics;
       manga.Status = "example status";
       manga.NeedUpdate = false;
       manga.Name = "Acomics from example" + Guid.NewGuid();
@@ -48,7 +46,7 @@ namespace Tests.Entities
       return manga;
     }
 
-    public static void DeleteAcomics(Acomics manga)
+    public static void DeleteAcomics(Acomics.Acomics manga)
     {
       if (manga == null)
         return;
@@ -56,14 +54,14 @@ namespace Tests.Entities
       manga.Delete();
     }
 
-    public static void CreateMangaHistory(Mangas manga)
+    public static void CreateMangaHistory(IManga manga)
     {
       var history = new MangaReader.Core.Manga.MangaHistory(Url);
       manga.AddHistory(history.Uri);
       manga.Save();
     }
 
-    public static void DeleteMangaHistory(Mangas manga)
+    public static void DeleteMangaHistory(IManga manga)
     {
       manga.ClearHistory();
       manga.Save();

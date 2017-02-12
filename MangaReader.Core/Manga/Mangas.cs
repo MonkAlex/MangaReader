@@ -13,12 +13,9 @@ using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Manga
 {
-  [XmlInclude(typeof(Grouple.Readmanga)), XmlInclude(typeof(Acomic.Acomics))]
-  public abstract class Mangas : Entity.Entity, INotifyPropertyChanged, IDownloadable
+  public abstract class Mangas : Entity.Entity, INotifyPropertyChanged, IManga
   {
     #region Свойства
-
-    public static Guid Type { get { return Guid.Empty; } }
 
     /// <summary>
     /// Название манги.
@@ -108,6 +105,21 @@ namespace MangaReader.Core.Manga
 
     private bool? needCompress = null;
 
+    public virtual ISiteParser Parser
+    {
+      get
+      {
+        if (Mapping.Initialized)
+        {
+          var plugin = ConfigStorage.Plugins.SingleOrDefault(p => p.MangaType == this.GetType());
+          if (plugin == null)
+            throw new MangaReaderException(string.Format("Plugin for {0} manga type not found.", this.GetType()));
+          return plugin.GetParser();
+        }
+        throw new MangaReaderException("Mappings not initialized.");
+      }
+    }
+
     /// <summary>
     /// Настройки манги.
     /// </summary>
@@ -116,8 +128,13 @@ namespace MangaReader.Core.Manga
       get
       {
         if (Mapping.Initialized)
-          return ConfigStorage.Instance.DatabaseConfig.MangaSettings.SingleOrDefault(s => Equals(s.Manga, this.GetType().TypeProperty()));
-        throw new System.Exception("Mappings not initialized.");
+        {
+          var plugin = ConfigStorage.Plugins.SingleOrDefault(p => p.MangaType == this.GetType());
+          if (plugin == null)
+            throw new MangaReaderException(string.Format("Plugin for {0} manga type not found.", this.GetType()));
+          return plugin.GetSettings();
+        }
+        throw new MangaReaderException("Mappings not initialized.");
       }
     }
 
@@ -132,7 +149,7 @@ namespace MangaReader.Core.Manga
 
     public void AddHistory(Uri message)
     {
-      AddHistory(new [] { new MangaHistory(message)});
+      AddHistory(new[] { new MangaHistory(message) });
     }
 
     public void AddHistory(IEnumerable<Uri> messages)
@@ -196,7 +213,7 @@ namespace MangaReader.Core.Manga
 
     public virtual List<Compression.CompressionMode> AllowedCompressionModes { get { return allowedCompressionModes; } }
 
-    private static List<Compression.CompressionMode> allowedCompressionModes = 
+    private static List<Compression.CompressionMode> allowedCompressionModes =
       new List<Compression.CompressionMode>(Enum.GetValues(typeof(Compression.CompressionMode)).Cast<Compression.CompressionMode>());
 
     public virtual Compression.CompressionMode? CompressionMode
@@ -285,10 +302,10 @@ namespace MangaReader.Core.Manga
       get { return DirectoryHelpers.MakeValidPath(Path.Combine(this.Setting.Folder, DirectoryHelpers.MakeValidPath(this.Name.Replace(Path.DirectorySeparatorChar, '.')))); }
       set { }
     }
-    
-    public event EventHandler<Mangas> DownloadProgressChanged;
 
-    protected void OnDownloadProgressChanged(Mangas manga)
+    public event EventHandler<IManga> DownloadProgressChanged;
+
+    protected void OnDownloadProgressChanged(IManga manga)
     {
       var handler = DownloadProgressChanged;
       if (handler != null)
@@ -309,6 +326,12 @@ namespace MangaReader.Core.Manga
 
       if (this.Volumes == null)
         throw new ArgumentNullException("Volumes");
+
+      this.Volumes.Clear();
+      this.Chapters.Clear();
+      this.Pages.Clear();
+
+      Parser.UpdateContent(this);
 
       this.Pages.ForEach(p => p.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this));
       this.Chapters.ForEach(ch => ch.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this));
@@ -413,7 +436,9 @@ namespace MangaReader.Core.Manga
     /// </summary>
     public virtual void Refresh()
     {
-
+      Parser.UpdateNameAndStatus(this);
+      Parser.UpdateContentType(this);
+      OnPropertyChanged(nameof(IsCompleted));
     }
 
     /// <summary>
@@ -443,14 +468,17 @@ namespace MangaReader.Core.Manga
 
     protected override void BeforeSave(object[] currentState, object[] previousState, string[] propertyNames)
     {
-      var dirName = previousState[propertyNames.ToList().IndexOf(nameof(Folder))] as string;
-      if (dirName != null && !DirectoryHelpers.Equals(this.Folder, dirName) && Directory.Exists(dirName))
+      if (previousState != null)
       {
-        if (Directory.Exists(this.Folder))
-          throw new MangaDirectoryExists("Папка уже существует.", this.Folder, this);
+        var dirName = previousState[propertyNames.ToList().IndexOf(nameof(Folder))] as string;
+        if (dirName != null && !DirectoryHelpers.Equals(this.Folder, dirName) && Directory.Exists(dirName))
+        {
+          if (Directory.Exists(this.Folder))
+            throw new MangaDirectoryExists("Папка уже существует.", this.Folder, this);
 
-        // Копируем папку на новый адрес при изменении имени.
-        DirectoryHelpers.MoveDirectory(dirName, this.Folder);
+          // Копируем папку на новый адрес при изменении имени.
+          DirectoryHelpers.MoveDirectory(dirName, this.Folder);
+        }
       }
 
       base.BeforeSave(currentState, previousState, propertyNames);
@@ -461,7 +489,7 @@ namespace MangaReader.Core.Manga
       if (!this.IsValid())
         throw new SaveValidationException("Нельзя сохранять невалидную сущность", this);
 
-      if (Repository.Get<Mangas>().Any(m => m.Id != this.Id && (m.IsNameChanged ? m.LocalName : m.ServerName) == this.Name))
+      if (Repository.Get<IManga>().Any(m => m.Id != this.Id && (m.IsNameChanged ? m.LocalName : m.ServerName) == this.Name))
         throw new SaveValidationException("Манга с таким именем уже существует", this);
 
       base.Save();
@@ -471,7 +499,7 @@ namespace MangaReader.Core.Manga
     {
       return this.Name;
     }
-    
+
     private void UpdateUri(Uri value)
     {
       if (this.uri != null && !Equals(this.uri, value))
@@ -491,19 +519,19 @@ namespace MangaReader.Core.Manga
     /// <param name="uri">Ссылка на мангу.</param>
     /// <returns>Манга.</returns>
     /// <remarks>Не сохранена в базе, требует заполнения полей.</remarks>
-    public static Mangas Create(Uri uri)
+    public static IManga Create(Uri uri)
     {
-      Mangas manga = null;
+      IManga manga = null;
 
-      var setting  = ConfigStorage.Instance.DatabaseConfig.MangaSettings
+      var setting = ConfigStorage.Instance.DatabaseConfig.MangaSettings
         .SingleOrDefault(s => s.MangaSettingUris.Any(u => Equals(u.Host, uri.Host)));
       if (setting != null)
       {
-        var type = Generic.GetAllTypes<Mangas>().SingleOrDefault(t => t.TypeProperty() == setting.Manga);
-        if (type != null)
-          manga = Activator.CreateInstance(type) as Mangas;
+        var plugin = ConfigStorage.Plugins.SingleOrDefault(p => Equals(p.GetSettings(), setting));
+        if (plugin != null)
+          manga = Activator.CreateInstance(plugin.MangaType) as IManga;
       }
-      
+
       if (manga != null)
         manga.Uri = uri;
 
@@ -516,12 +544,16 @@ namespace MangaReader.Core.Manga
     /// <param name="uri">Ссылка на мангу.</param>
     /// <returns>Манга.</returns>
     /// <remarks>Сохранена в базе, если была создана валидная манга.</remarks>
-    public static Mangas CreateFromWeb(Uri uri)
+    public static IManga CreateFromWeb(Uri uri)
     {
       var manga = Create(uri);
       if (manga != null)
       {
-        manga.Created(uri);
+        // Только для местной реализации - вызвать Created\Refresh.
+        var mangas = manga as Mangas;
+        if (mangas != null)
+          mangas.Created(uri);
+
         if (manga.IsValid())
           manga.Save();
       }

@@ -27,7 +27,7 @@ namespace MangaReader.ViewModel
     private ObservableCollection<ContentMenuItem> menu;
     private ICommand updateWithPause;
     private string libraryStatus;
-    private Mangas lastDownload;
+    private IDownloadable lastDownload;
 
     public string LibraryStatus
     {
@@ -45,7 +45,7 @@ namespace MangaReader.ViewModel
 
     public LibraryFilter LibraryFilter { get; set; }
 
-    public Mangas LastDownload
+    public IDownloadable LastDownload
     {
       get { return lastDownload; }
       set
@@ -111,30 +111,30 @@ namespace MangaReader.ViewModel
       if (LibraryFilter.OnlyUpdate && !manga.NeedUpdate)
         return false;
 
-      return LibraryFilter.AllowedTypes.Any(t => (t.Value as MangaSetting).Manga == manga.GetType().TypeProperty()) &&
+      return LibraryFilter.AllowedTypes.Any(t => Equals(t.Value as MangaSetting, manga.Setting)) &&
         manga.Name.ToLowerInvariant().Contains(LibraryFilter.Name.ToLowerInvariant());
     }
 
-    private void LibraryOnMangaDeleted(object sender, Mangas mangas)
+    private void LibraryOnMangaDeleted(object sender, IManga mangas)
     {
       var model = this.MangaViewModels.SingleOrDefault(m => Equals(m.Manga, mangas));
       if (model != null)
         this.MangaViewModels.Remove(model);
     }
 
-    private void LibraryOnMangaAdded(object sender, Mangas mangas)
+    private void LibraryOnMangaAdded(object sender, IManga mangas)
     {
       var model = this.MangaViewModels.SingleOrDefault(m => Equals(m.Manga, mangas));
       if (model == null)
         this.MangaViewModels.Add(new MangaViewModel(mangas));
     }
     
-    private void LibraryOnUpdateMangaStarted(object sender, Mangas mangas)
+    private void LibraryOnUpdateMangaStarted(object sender, IDownloadable mangas)
     {
       this.LastDownload = mangas;
     }
 
-    private void LibraryOnUpdateMangaCompleted(object sender, Mangas mangas)
+    private void LibraryOnUpdateMangaCompleted(object sender, IDownloadable mangas)
     {
       this.LastDownload = null;
     }
@@ -174,7 +174,7 @@ namespace MangaReader.ViewModel
     public MainPageModel()
     {
       LibraryFilter = ConfigStorage.Instance.ViewConfig.LibraryFilter;
-      this.MangaViewModels = new ObservableCollection<MangaViewModel>(Repository.Get<Mangas>().Select(m => new MangaViewModel(m)));
+      this.MangaViewModels = new ObservableCollection<MangaViewModel>(Repository.Get<IManga>().Select(m => new MangaViewModel(m)));
       Library.MangaAdded += LibraryOnMangaAdded;
       Library.MangaDeleted += LibraryOnMangaDeleted;
       Library.StatusChanged += (sender, s) => LibraryStatus = s;

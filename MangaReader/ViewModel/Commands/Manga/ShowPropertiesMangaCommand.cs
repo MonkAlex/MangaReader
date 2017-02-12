@@ -7,7 +7,7 @@ namespace MangaReader.ViewModel.Commands.Manga
 {
   public class ShowPropertiesMangaCommand : MangaBaseCommand
   {
-    public override void Execute(Mangas manga)
+    public override void Execute(IManga manga)
     {
       base.Execute(manga);
 

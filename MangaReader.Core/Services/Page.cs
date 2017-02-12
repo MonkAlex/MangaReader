@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using MangaReader.Core.Account;
+using MangaReader.Core.Exception;
 using MangaReader.Core.Properties;
 
 namespace MangaReader.Core.Services
@@ -26,7 +27,7 @@ namespace MangaReader.Core.Services
       try
       {
         if (restartCounter > 3)
-          throw new System.Exception(string.Format("Load failed after {0} counts.", restartCounter));
+          throw new DownloadAttemptFailed(restartCounter, url);
 
         var webClient = client ?? new CookieClient();
         var content = webClient.DownloadString(url);
@@ -65,7 +66,7 @@ namespace MangaReader.Core.Services
       try
       {
         if (restartCounter > 3)
-          throw new System.Exception(string.Format("Load failed after {0} counts.", restartCounter));
+          throw new DownloadAttemptFailed(restartCounter, url);
 
         var webClient = client ?? new CookieClient();
         var task = webClient.DownloadStringTaskAsync(url).ConfigureAwait(false);

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition.Hosting;
 using System.IO;
+using System.Linq;
 using System.Text;
+using MangaReader.Core.Exception;
 using MangaReader.Core.NHibernate;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -57,14 +60,29 @@ namespace MangaReader.Core.Services.Config
     /// <summary>
     /// Папка программы.
     /// </summary>
-    internal static string WorkFolder { get { return workFolder; } }
+    public static string WorkFolder { get { return Loader.WorkFolder; } }
 
-    private static string workFolder = AppDomain.CurrentDomain.BaseDirectory;
+    /// <summary>
+    /// Подключенные плагины.
+    /// </summary>
+    public static IList<IPlugin> Plugins { get { return plugins; } }
+
+    private static IList<IPlugin> plugins; 
 
     /// <summary>
     /// Настройки программы.
     /// </summary>
     private static string SettingsPath { get { return Path.Combine(WorkFolder, "settings.json"); } }
+
+    /// <summary>
+    /// Папка с либами программы.
+    /// </summary>
+    public static string LibPath { get { return Loader.LibPath; } }
+
+    /// <summary>
+    /// Папка с плагинами программы.
+    /// </summary>
+    public static string PluginPath { get { return Loader.PluginPath; } }
 
     public static void Load()
     {
@@ -98,6 +116,64 @@ namespace MangaReader.Core.Services.Config
       }
 
       _instance = storage;
+    }
+
+    public static IPlugin GetPlugin<T>() where T : Core.Manga.IManga
+    {
+      return Plugins.SingleOrDefault(p => p.MangaType == typeof (T));
+    }
+
+    public static IPlugin GetPlugin(Guid mangaGuid)
+    {
+      return Plugins.SingleOrDefault(p => p.MangaGuid == mangaGuid);
+    }
+
+    public static void RefreshPlugins()
+    {
+      var result = new List<IPlugin>();
+
+      result.AddRange(GetPluginsFrom(ConfigStorage.WorkFolder));
+      result.AddRange(GetPluginsFrom(ConfigStorage.PluginPath));
+
+      plugins = result;
+    }
+
+    private static IEnumerable<IPlugin> GetPluginsFrom(string path)
+    {
+      if (Directory.Exists(path))
+      {
+        try
+        {
+          var result = new List<IPlugin>();
+          var container = new CompositionContainer(new DirectoryCatalog(path));
+          var imanga = typeof (Manga.IManga);
+          var ilogin = typeof (Account.ILogin);
+          foreach (var plugin in container.GetExportedValues<IPlugin>())
+          {
+            try
+            {
+              if (!imanga.IsAssignableFrom(plugin.MangaType))
+                throw new MangaReaderException($"Type in property {nameof(plugin.MangaType)} of " +
+                                               $"type {plugin.GetType()} must be implement {imanga} interface.");
+
+              if (!ilogin.IsAssignableFrom(plugin.LoginType))
+                throw new MangaReaderException($"Type in property {nameof(plugin.LoginType)} of " +
+                                               $"type {plugin.GetType()} must be implement {ilogin} interface.");
+              result.Add(plugin);
+            }
+            catch (MangaReaderException mre)
+            {
+              Log.Exception(mre);
+            }
+          }
+          return result;
+        }
+        catch (System.Exception ex)
+        {
+          Log.Exception(ex, string.Format("Plugins from {0} cannot be loaded.", path));
+        }
+      }
+      return Enumerable.Empty<IPlugin>();
     }
 
     public void Save()

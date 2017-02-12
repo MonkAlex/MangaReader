@@ -11,10 +11,8 @@ namespace MangaReader.ViewModel.Setting
     private bool onlyUpdate;
     private bool compressManga;
     private string folder;
-    private string login;
-    private string password;
 
-    internal int LoginId { get; }
+    public LoginModel Login { get; }
 
     public List<Compression.CompressionMode> CompressionModes { get; private set; }
 
@@ -58,51 +56,28 @@ namespace MangaReader.ViewModel.Setting
       }
     }
 
-    public string Login
-    {
-      get { return login; }
-      set
-      {
-        login = value;
-        OnPropertyChanged();
-      }
-    }
-
-    public string Password
-    {
-      get { return password; }
-      set
-      {
-        password = value;
-        OnPropertyChanged();
-      }
-    }
-
     public override void Save()
     {
       base.Save();
 
       this.mangaSetting.CompressManga = this.CompressManga;
       this.mangaSetting.DefaultCompression = this.DefaultCompression;
-      this.mangaSetting.Folder  = this.Folder;
+      this.mangaSetting.Folder = this.Folder;
       this.mangaSetting.OnlyUpdate = this.OnlyUpdate;
-      this.mangaSetting.Login.Name = this.Login;
-      this.mangaSetting.Login.Password = this.Password;
+      this.Login.Save();
     }
 
     public MangaSettingModel(MangaSetting setting)
     {
       this.mangaSetting = setting;
       this.Header = setting.MangaName;
-      this.LoginId = this.mangaSetting.Login.Id;
       this.CompressionModes = Generic.GetEnumValues<Compression.CompressionMode>();
 
       this.CompressManga = this.mangaSetting.CompressManga;
       this.DefaultCompression = this.mangaSetting.DefaultCompression;
       this.Folder = this.mangaSetting.Folder;
       this.OnlyUpdate = this.mangaSetting.OnlyUpdate;
-      this.Login = this.mangaSetting.Login.Name;
-      this.Password = this.mangaSetting.Login.Password;
+      this.Login = new LoginModel(this.mangaSetting.Login) {IsEnabled = true};
     }
   }
 }

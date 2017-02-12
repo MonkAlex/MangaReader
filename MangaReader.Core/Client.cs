@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using MangaReader.Core.Convertation;
+using MangaReader.Core.Exception;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using MangaReader.Core.Update;
@@ -13,8 +15,11 @@ namespace MangaReader.Core
 
     public static void Init()
     {
+      // Все необработанные - логгируем.
       AppDomain.CurrentDomain.UnhandledException += (o, a) => Log.Exception(a.ExceptionObject as System.Exception);
-      AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly.ResolveInternalAssembly;
+
+      // Все необработанные в тасках (и забытые) - пробрасываем наружу, пусть пока падает в такой ситуации, чем зависает.
+      TaskScheduler.UnobservedTaskException += (o, a) => { a.SetObserved(); throw a.Exception; };
     }
 
     public static void Start(IProcess process)
@@ -27,7 +32,7 @@ namespace MangaReader.Core
       {
         try
         {
-          Log.Exception(new ApplicationException("Программа уже запущена."));
+          Log.Exception(new MangaReaderException("Программа уже запущена."));
         }
         finally
         {
@@ -35,7 +40,7 @@ namespace MangaReader.Core
         }
       }
 
-      ResolveAssembly.LoadSql();
+      ConfigStorage.RefreshPlugins();
       NHibernate.Mapping.Initialize(process);
       Converter.Convert(process);
     }

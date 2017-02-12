@@ -27,17 +27,13 @@
                     Grid.RowSpan="3"
                     Grid.ColumnSpan="2"
                     BorderBrush="Transparent"
-                    ItemsSource="{Binding Logins}">
+                    SelectedIndex="0"
+                    ItemsSource="{Binding BookmarksModels}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Header}"/>
                 </DataTemplate>
             </TabControl.ItemTemplate>
-            <TabControl.ContentTemplate>
-                <DataTemplate>
-                    <local:Login/>
-                </DataTemplate>
-            </TabControl.ContentTemplate>
         </TabControl>
         <Label Grid.Column="0" Grid.Row="3">
             <TextBlock Text="{x:Static properties:Strings.Input_Text}" 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using MangaReader.Core.Manga.Grouple;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Entities.Library
@@ -32,7 +31,7 @@ namespace Tests.Entities.Library
       var result = false;
       var uri = new Uri(@"http://readmanga.me/berserk/");
 
-      var mangas = MangaReader.Core.NHibernate.Repository.Get<Readmanga>()
+      var mangas = MangaReader.Core.NHibernate.Repository.Get<Grouple.Readmanga>()
         .ToList()
         .Where(m => m.Uri.AbsoluteUri.Contains("berserk"))
         .ToList();

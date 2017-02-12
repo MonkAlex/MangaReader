@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using MangaReader.Core.Convertation;
@@ -6,6 +7,7 @@ using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using NHibernate;
 using NHibernate.Cfg;
+using NHibernate.Mapping;
 using NHibernate.Tool.hbm2ddl;
 
 namespace MangaReader.Core.NHibernate
@@ -56,13 +58,28 @@ namespace MangaReader.Core.NHibernate
       return Fluently
         .Configure()
         .Database(SQLiteConfiguration.Standard.UsingFile(Path.Combine(ConfigStorage.WorkFolder, DbFile)))
-        .Mappings(m => m.FluentMappings.AddFromAssemblyOf<BaseInterceptor>())
+        .Mappings(LoadPlugins)
         .ExposeConfiguration(BuildSchema)
         .BuildSessionFactory();
     }
 
+    private static void LoadPlugins(MappingConfiguration config)
+    {
+      foreach (var assembly in Helper.AllowedAssemblies())
+      {
+        config.FluentMappings.AddFromAssembly(assembly);
+      }
+    }
+
     private static void BuildSchema(Configuration config)
     {
+      foreach (var source in config.ClassMappings.Where(m => m.Discriminator != null && m is RootClass))
+      {
+        source.Where = string.Format("{0} in ('{1}')", 
+          source.Discriminator.ColumnIterator.Single().Text,
+          string.Join("', '", source.SubclassIterator.Select(i => i.DiscriminatorValue)));
+      }
+
       config.SetInterceptor(new BaseInterceptor());
       if (File.Exists(Path.Combine(ConfigStorage.WorkFolder, DbFile)))
         new SchemaUpdate(config).Execute(false, true);

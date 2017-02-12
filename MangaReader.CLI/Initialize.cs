@@ -12,7 +12,7 @@ namespace MangaReader.CLI
       Client.Init();
       Client.Start(new ConsoleProgress());
 
-      foreach (var manga in Repository.Get<Mangas>())
+      foreach (var manga in Repository.Get<IManga>())
       {
         Console.WriteLine("{0}:{1}", manga.Id, manga);
       }

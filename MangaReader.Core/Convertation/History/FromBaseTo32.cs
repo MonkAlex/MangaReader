@@ -47,7 +47,7 @@ namespace MangaReader.Core.Convertation.History
 #pragma warning restore CS0612
       // ReSharper restore CSharpWarnings::CS0612
 
-      var mangas = Repository.Get<Manga.Mangas>().ToList();
+      var mangas = Repository.Get<Manga.IManga>().ToList();
       var historyInDb = Repository.Get<MangaHistory>().Select(h => h.Uri).ToList();
       histories = histories.Where(h => !historyInDb.Contains(h.Uri)).Distinct().ToList();
       if (histories.Any())
@@ -82,6 +82,31 @@ namespace MangaReader.Core.Convertation.History
           var mangaHistory = histories.Where(h => h.MangaUrl == manga.Uri.OriginalString ||
             h.Uri.OriginalString.Contains(manga.Uri.OriginalString)).ToList();
           manga.AddHistory(mangaHistory);
+          histories.RemoveAll(h => mangaHistory.Contains(h));
+        }
+        tranc.Commit();
+      }
+
+      using (var tranc = Mapping.Session.BeginTransaction())
+      {
+        foreach (var history in histories.GroupBy(h => new Uri(h.Uri, "..")))
+        {
+          var manga = Manga.Mangas.Create(history.Key);
+          if (manga == null)
+            continue;
+
+          manga.Refresh();
+          if (manga.Uri == history.Key)
+            continue;
+
+          manga = Repository.Get<IManga>().FirstOrDefault(m => m.Uri == manga.Uri);
+          if (manga == null)
+            continue;
+
+          foreach (var record in history)
+            record.Uri = new Uri(record.Uri.OriginalString
+              .Replace(history.Key.OriginalString.TrimEnd('/'), manga.Uri.OriginalString.TrimEnd('/')));
+          manga.AddHistory(history);
         }
         tranc.Commit();
       }

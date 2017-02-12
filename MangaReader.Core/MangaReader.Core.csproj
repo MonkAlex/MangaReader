@@ -34,16 +34,6 @@
     <Prefer32Bit>false</Prefer32Bit>
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Publish|AnyCPU'">
-    <OutputPath>bin\Publish\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="FluentNHibernate">
       <HintPath>Library\FluentNHibernate.dll</HintPath>
@@ -66,6 +56,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite">
       <HintPath>Library\System.Data.SQLite.dll</HintPath>
@@ -86,22 +77,21 @@
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Account\CookieClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Account\CookieClient.cs" />
+    <Compile Include="Account\ILogin.cs" />
     <Compile Include="Account\Login.cs" />
+    <Compile Include="BasePlugin.cs" />
+    <Compile Include="BaseSiteParser.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Convertation\Config\From30to31.cs" />
     <Compile Include="Convertation\Config\FromBaseTo30.cs" />
     <Compile Include="Convertation\Database\From24To27.cs" />
     <Compile Include="Convertation\Config\From27To28.cs" />
     <Compile Include="Convertation\Config\From29To30.cs" />
-    <Compile Include="Convertation\Config\From37To38.cs" />
     <Compile Include="Convertation\Database\FromBaseTo24.cs" />
     <Compile Include="Convertation\History\From32To33.cs" />
     <Compile Include="Convertation\History\FromBaseTo32.cs" />
     <Compile Include="Convertation\IProcess.cs" />
-    <Compile Include="Convertation\Mangas\From24To27.cs" />
     <Compile Include="Convertation\Mangas\From37To38.cs" />
     <Compile Include="Convertation\Mangas\FromBaseTo24Db.cs" />
     <Compile Include="Convertation\Primitives\BaseConverter.cs" />
@@ -110,29 +100,20 @@
     <Compile Include="Convertation\Primitives\HistoryConverter.cs" />
     <Compile Include="Convertation\Primitives\MangasConverter.cs" />
     <Compile Include="Entity\Entity.cs" />
+    <Compile Include="Entity\IEntity.cs" />
+    <Compile Include="Exception\DownloadAttemptFailed.cs" />
     <Compile Include="Exception\EntityException.cs" />
     <Compile Include="Exception\GetSiteInfoException.cs" />
     <Compile Include="Exception\MangaDirectoryExists.cs" />
     <Compile Include="Exception\MangaReaderException.cs" />
     <Compile Include="Exception\CopyDirectoryFailed.cs" />
     <Compile Include="Exception\SaveValidationException.cs" />
-    <Compile Include="Manga\Acomic\Acomics.cs" />
-    <Compile Include="Manga\Acomic\AcomicsLogin.cs" />
-    <Compile Include="Manga\Acomic\Chapter.cs" />
-    <Compile Include="Manga\Acomic\Getter.cs" />
+    <Compile Include="ISiteParser.cs" />
+    <Compile Include="Loader.cs" />
     <Compile Include="Manga\Chapter.cs" />
-    <Compile Include="Manga\Grouple\Chapter.cs" />
-    <Compile Include="Manga\Grouple\Getter.cs" />
-    <Compile Include="Manga\Grouple\GroupleLogin.cs" />
-    <Compile Include="Manga\Grouple\GroupleManga.cs" />
-    <Compile Include="Manga\Grouple\MangaName.cs" />
-    <Compile Include="Manga\Grouple\Mintmanga.cs" />
-    <Compile Include="Manga\Grouple\Readmanga.cs" />
-    <Compile Include="Manga\Hentaichan\Chapter.cs" />
-    <Compile Include="Manga\Hentaichan\Getter.cs" />
-    <Compile Include="Manga\Hentaichan\Hentaichan.cs" />
-    <Compile Include="Manga\Hentaichan\HentaichanLogin.cs" />
+    <Compile Include="Manga\ICompressible.cs" />
     <Compile Include="Manga\IDownloadable.cs" />
+    <Compile Include="Manga\IManga.cs" />
     <Compile Include="Manga\MangaHistory.cs" />
     <Compile Include="Manga\MangaObsolete.cs" />
     <Compile Include="Manga\MangaPage.cs" />
@@ -152,13 +133,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="ResolveAssembly.cs" />
     <Compile Include="Services\Backup.cs" />
     <Compile Include="Convertation\Mangas\FromBaseTo24Cache.cs" />
     <Compile Include="Services\Compression.cs" />
     <Compile Include="Services\Config\AppConfig.cs" />
     <Compile Include="Services\Config\ConfigStorage.cs" />
     <Compile Include="Services\Config\DatabaseConfig.cs" />
+    <Compile Include="IPlugin.cs" />
     <Compile Include="Services\Config\LibraryFilter.cs" />
     <Compile Include="Services\Config\ViewConfig.cs" />
     <Compile Include="Convertation\Convert.cs" />
@@ -183,36 +164,14 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Library\FluentNHibernate.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Library\HtmlAgilityPack.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Library\Iesi.Collections.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Library\Newtonsoft.Json.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Library\NHibernate.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Library\System.Data.SQLite.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="..\CHANGELOG.md">
       <Link>Update\CHANGELOG.md</Link>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Library\x64\sqlite3.dll" />
-    <EmbeddedResource Include="Library\x86\sqlite3.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Library\sqlite3" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y /r /e $(ProjectDir)\Library $(TargetDir)</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

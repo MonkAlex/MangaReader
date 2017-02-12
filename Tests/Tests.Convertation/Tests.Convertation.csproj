@@ -94,6 +94,10 @@
       <Project>{744f331a-938a-475a-840a-7fac985ebe61}</Project>
       <Name>MangaReader.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Sites\Acomics.ru\Acomics.ru.csproj">
+      <Project>{3aabf85f-414f-4429-a1ab-812213771755}</Project>
+      <Name>Acomics.ru</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -36,16 +36,6 @@
     <Prefer32Bit>false</Prefer32Bit>
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Publish|AnyCPU'">
-    <OutputPath>bin\Publish\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,8 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\MangaReader.Core\ResolveAssembly.cs">
-      <Link>ResolveAssembly.cs</Link>
+    <Compile Include="..\MangaReader.Core\Loader.cs">
+      <Link>Loader.cs</Link>
     </Compile>
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
@@ -76,18 +66,20 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <EmbeddedResource Include="lib\MangaReader.Core.dll" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>xcopy /y /r "$(ProjectDir)..\MangaReader.Core\bin\$(ConfigurationName)\MangaReader.Core.dll" "$(ProjectDir)lib\*"</PreBuildEvent>
+    <PostBuildEvent>
+      xcopy /y /r /e "$(ProjectDir)\..\MangaReader.Core\bin\$(ConfigurationName)" "$(TargetDir)\lib"
+      xcopy /y /r /e "$(ProjectDir)\..\Sites\Bin\$(ConfigurationName)" "$(TargetDir)\Plugins"
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
+  -->
   <Target Name="BeforeBuild">
+    <MakeDir Directories="$(TargetDir)\lib" />
+    <MakeDir Directories="$(TargetDir)\Plugins" />
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  -->
 </Project>

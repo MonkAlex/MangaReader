@@ -9,9 +9,9 @@ namespace MangaReader.ViewModel.Commands.Manga
 {
   public class OpenFolderCommand : MangaBaseCommand
   {
-    public override void Execute(Mangas manga)
+    public override void Execute(IManga manga)
     {
-      this.Execute(manga);
+      this.Execute(manga as IDownloadable);
     }
 
     public void Execute(IDownloadable parameter)

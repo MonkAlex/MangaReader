@@ -113,7 +113,7 @@ namespace MangaReader.ViewModel.Manga
       }
     }
 
-    public MangaCardModel(Mangas manga) : base(manga)
+    public MangaCardModel(IManga manga) : base(manga)
     {
       if (Manga != null)
       {
@@ -123,7 +123,8 @@ namespace MangaReader.ViewModel.Manga
         this.NeedCompress = Manga.NeedCompress;
         this.CompressionModes = new List<Compression.CompressionMode>(Manga.AllowedCompressionModes);
         this.CompressionMode = Manga.CompressionMode;
-        Manga.PropertyChanged += MangaOnPropertyChanged;
+        if (Manga is INotifyPropertyChanged)
+          ((INotifyPropertyChanged)Manga).PropertyChanged += MangaOnPropertyChanged;
         this.Save = new MangaSaveCommand(this);
       }
     }

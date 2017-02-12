@@ -1,8 +1,5 @@
 ﻿using FluentNHibernate.Mapping;
 using MangaReader.Core.Manga;
-using MangaReader.Core.Manga.Acomic;
-using MangaReader.Core.Manga.Grouple;
-using MangaReader.Core.Manga.Hentaichan;
 
 namespace MangaReader.Core.NHibernate
 {
@@ -25,44 +22,8 @@ namespace MangaReader.Core.NHibernate
       Map(x => x.Folder);
       Map(x => x.NeedCompress);
       Map(x => x.CompressionMode);
-      HasMany(x => x.Histories).AsBag().Cascade.AllDeleteOrphan();
+      HasMany(x => x.Histories).AsBag().Cascade.AllDeleteOrphan().Not.LazyLoad();
       DiscriminateSubClassesOnColumn("Type");
-    }
-  }
-
-  public class ReadmangaMap : SubclassMap<Readmanga>
-  {
-    public ReadmangaMap()
-    {
-      Not.LazyLoad();
-      DiscriminatorValue(Readmanga.Type.ToString());
-    }
-  }
-
-  public class MintmangaMap : SubclassMap<Mintmanga>
-  {
-    public MintmangaMap()
-    {
-      Not.LazyLoad();
-      DiscriminatorValue(Mintmanga.Type.ToString());
-    }
-  }
-
-  public class AcomicsMap : SubclassMap<Acomics>
-  {
-    public AcomicsMap()
-    {
-      Not.LazyLoad();
-      DiscriminatorValue(Acomics.Type.ToString());
-    }
-  }
-
-  public class HentaichanMap : SubclassMap<Hentaichan>
-  {
-    public HentaichanMap()
-    {
-      Not.LazyLoad();
-      DiscriminatorValue(Hentaichan.Type.ToString());
     }
   }
 }

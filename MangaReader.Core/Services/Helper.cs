@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services.Config;
 using NHibernate.Util;
@@ -9,18 +10,6 @@ namespace MangaReader.Core.Services
 {
   public static class Helper
   {
-    public static Guid TypeProperty(this Type type)
-    {
-      var find = type.GetProperty("Type").GetValue(null);
-      return find is Guid ? (Guid)find : Guid.Empty;
-    }
-
-    public static Guid[] MangaProperty(this Type type)
-    {
-      var find = type.GetProperty("Manga").GetValue(null);
-      return find is Guid[] ? (Guid[])find : new Guid[0];
-    }
-
     /// <summary>
     /// Перезагрузить коллекцию из базы.
     /// </summary>
@@ -39,6 +28,20 @@ namespace MangaReader.Core.Services
     {
       return (bytes / 1024d / 1024d).ToString("0.00");
     }
+
+    /// <summary>
+    /// Получить сборки, которые относятся к приложению.
+    /// </summary>
+    /// <returns>Сборки.</returns>
+    /// <remarks>В текущей реализации - по namespace.</remarks>
+    public static List<Assembly> AllowedAssemblies()
+    {
+      var byName = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith("MangaReader")).ToList();
+      byName.AddRange(ConfigStorage.Plugins.Select(p => p.Assembly));
+      byName = byName.Distinct().ToList();
+      return byName;
+    }
+
   }
 
   public static class Generic
@@ -58,7 +61,7 @@ namespace MangaReader.Core.Services
     public static List<Type> GetAllTypes<T>()
     {
       var types = new List<Type>();
-      foreach (var assembly in ResolveAssembly.AllowedAssemblies())
+      foreach (var assembly in Helper.AllowedAssemblies())
       {
         types.AddRange(assembly.GetTypes()
           .Where(t => !t.IsAbstract && t.IsClass && typeof(T).IsAssignableFrom(t)));
@@ -71,17 +74,20 @@ namespace MangaReader.Core.Services
       return new List<T>(Enum.GetValues(typeof(T)).OfType<T>());
     }
 
-    public static Uri GetMangaMainUri<T>() where T : Mangas
+    public static Uri GetLoginMainUri<T>() where T : IManga
     {
       if (NHibernate.Mapping.Initialized)
       {
-        var setting = ConfigStorage.Instance.DatabaseConfig.MangaSettings.SingleOrDefault(s => s.Manga == typeof (T).TypeProperty());
-        return setting.Login.MainUri;
+        var plugin = ConfigStorage.GetPlugin<T>();
+        if (plugin != null)
+        {
+          var login = plugin.GetSettings();
+          if (login != null)
+            return login.Login.MainUri;
+        }
       }
-      else
-      {
-        return null;
-      }
+
+      return null;
     }
   }
 }

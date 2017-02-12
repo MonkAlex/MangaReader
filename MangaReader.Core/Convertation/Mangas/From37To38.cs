@@ -27,7 +27,7 @@ namespace MangaReader.Core.Convertation.Mangas
       Mapping.Session.Clear();
 
       var mainHosts = ConfigStorage.Instance.DatabaseConfig.MangaSettings.Select(s => s.MainUri.Host).Distinct().ToList();
-      foreach (var manga in Repository.Get<Manga.Mangas>())
+      foreach (var manga in Repository.Get<Manga.IManga>())
       {
         if (mainHosts.Contains(manga.Uri.Host))
           continue;

@@ -40,7 +40,7 @@ namespace MangaReader.Core.Manga
 
     #region DownloadProgressChanged
 
-    event EventHandler<Mangas> DownloadProgressChanged;
+    event EventHandler<IManga> DownloadProgressChanged;
 
     #endregion
 

@@ -2,80 +2,113 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:primitive="clr-namespace:MangaReader.ViewModel.Primitive"
+             xmlns:viewModel="clr-namespace:MangaReader.ViewModel"
+             xmlns:addManga="clr-namespace:MangaReader.ViewModel.Commands.AddManga"
+             xmlns:addNewManga="clr-namespace:MangaReader.UI.AddNewManga"
              Startup="App_OnStartup"
              ShutdownMode="OnExplicitShutdown"
              Exit="App_OnExit">
-    <Application.Resources>
-        <DataTemplate DataType="{x:Type primitive:ImageSourceVM}">
-            <Image Source="{Binding Source}" Width="24" Height="24"/>
-        </DataTemplate>
-        <Style TargetType="Button" x:Key="BaseButton">
-            <Setter Property="Content" Value="{Binding Command.Name, RelativeSource={RelativeSource Self}}"/>
-            <Setter Property="ToolTip" Value="{Binding Command.Name, RelativeSource={RelativeSource Self}}"/>
-            <Setter Property="MinHeight" Value="24"/>
-            <Setter Property="MaxHeight" Value="24"/>
-            <Setter Property="Width" Value="72"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="4"/>
-        </Style>
-        <Style TargetType="Button" x:Key="BigButton" BasedOn="{StaticResource BaseButton}">
-            <Setter Property="MaxHeight" Value="96"/>
-        </Style>
-        <Style TargetType="Button" x:Key="IconButton" BasedOn="{StaticResource BaseButton}">
-            <Setter Property="Width" Value="28"/>
-            <Setter Property="MinHeight" Value="28"/>
-            <Setter Property="MaxHeight" Value="28"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Content" Value="{Binding Icon}"/>
-        </Style>
-        <Style TargetType="Button" BasedOn="{StaticResource BaseButton}"/>
+  <Application.Resources>
+    <DataTemplate DataType="{x:Type primitive:ImageSourceVM}">
+      <Image Source="{Binding Source}" Width="24" Height="24"/>
+    </DataTemplate>
+    <Style TargetType="Button" x:Key="BaseButton">
+      <Setter Property="Content" Value="{Binding Command.Name, RelativeSource={RelativeSource Self}}"/>
+      <Setter Property="ToolTip" Value="{Binding Command.Name, RelativeSource={RelativeSource Self}}"/>
+      <Setter Property="MinHeight" Value="24"/>
+      <Setter Property="MaxHeight" Value="24"/>
+      <Setter Property="Width" Value="72"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+      <Setter Property="HorizontalContentAlignment" Value="Center"/>
+      <Setter Property="Margin" Value="4"/>
+    </Style>
+    <Style TargetType="Button" x:Key="BigButton" BasedOn="{StaticResource BaseButton}">
+      <Setter Property="MaxHeight" Value="96"/>
+    </Style>
+    <Style TargetType="Button" x:Key="IconButton" BasedOn="{StaticResource BaseButton}">
+      <Setter Property="Width" Value="28"/>
+      <Setter Property="MinHeight" Value="28"/>
+      <Setter Property="MaxHeight" Value="28"/>
+      <Setter Property="Padding" Value="0"/>
+      <Setter Property="Content" Value="{Binding Icon}"/>
+    </Style>
+    <Style TargetType="Button" BasedOn="{StaticResource BaseButton}"/>
 
-        <Style TargetType="ComboBox">
-            <Setter Property="MinHeight" Value="24"/>
-            <Setter Property="MaxHeight" Value="24"/>
-            <Setter Property="Margin" Value="4"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-        </Style>
-        <Style TargetType="CheckBox">
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="4"/>
-        </Style>
-        <Style TargetType="Label">
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="4"/>
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="4"/>
-        </Style>
-        <Style TargetType="PasswordBox">
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="4"/>
-        </Style>
+    <Style TargetType="ComboBox">
+      <Setter Property="MinHeight" Value="24"/>
+      <Setter Property="MaxHeight" Value="24"/>
+      <Setter Property="Margin" Value="4"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style TargetType="CheckBox">
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="Margin" Value="4"/>
+    </Style>
+    <Style TargetType="Label">
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+      <Setter Property="Margin" Value="4"/>
+    </Style>
+    <Style TargetType="TextBox">
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+      <Setter Property="Margin" Value="4"/>
+    </Style>
+    <Style TargetType="PasswordBox">
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+      <Setter Property="Margin" Value="4"/>
+    </Style>
 
-        <Style x:Key="ListViewItemButton" TargetType="ListViewItem">
-            <Setter Property="Focusable" Value="False"/>
-            <Setter Property="ContentTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <Button Command="{Binding Command}"
+    <Style x:Key="ListViewItemButton" TargetType="ListViewItem">
+      <Setter Property="Focusable" Value="False"/>
+      <Setter Property="ContentTemplate">
+        <Setter.Value>
+          <DataTemplate>
+            <Button Command="{Binding Command}"
                                 Style="{StaticResource IconButton}"
                                 CommandParameter="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}}"/>
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+          </DataTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
 
-        <Style x:Key="ContentMenuItem" TargetType="MenuItem">
-            <Setter Property="Header" Value="{Binding Name}"/>
-            <Setter Property="Icon" Value="{Binding Icon}"/>
-            <Setter Property="Command" Value="{Binding Command}"/>
-            <Setter Property="ItemsSource" Value="{Binding SubItems}"/>
-            <Setter Property="FontWeight" Value="{Binding FontWeight}"/>
-            <Setter Property="CommandParameter" Value="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
-        </Style>
-    </Application.Resources>
+    <Style x:Key="ContentMenuItem" TargetType="MenuItem">
+      <Setter Property="Header" Value="{Binding Name}"/>
+      <Setter Property="Icon" Value="{Binding Icon}"/>
+      <Setter Property="Command" Value="{Binding Command}"/>
+      <Setter Property="ItemsSource" Value="{Binding SubItems}"/>
+      <Setter Property="FontWeight" Value="{Binding FontWeight}"/>
+      <Setter Property="CommandParameter" Value="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+    </Style>
+
+    <DataTemplate DataType="{x:Type viewModel:AddBookmarksModel}">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <addNewManga:Login Grid.Row="0" DataContext="{Binding Login}"/>
+        <ListBox Grid.Row="1" ItemsSource="{Binding Bookmarks}"
+                 SelectionMode="Multiple">
+          <ListBox.ItemContainerStyle>
+            <Style TargetType="{x:Type ListBoxItem}">
+              <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+              <Setter Property="ContentTemplate">
+                <Setter.Value>
+                  <DataTemplate>
+                    <TextBlock Text="{Binding Value.Name}"/>
+                  </DataTemplate>
+                </Setter.Value>
+              </Setter>
+              <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="LightSlateGray"/>
+              </Style.Resources>
+            </Style>
+          </ListBox.ItemContainerStyle>
+        </ListBox>
+      </Grid>
+    </DataTemplate>
+
+  </Application.Resources>
 </Application>

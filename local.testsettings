@@ -2,7 +2,10 @@
 <TestSettings name="local" id="42a30dd2-00f2-4f44-9d49-8b70e4f5fbfc" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
   <Description>These are default test settings for a local test run.</Description>
   <Deployment>
+    <DeploymentItem filename="Sites\Bin\Publish\" />
+    <DeploymentItem filename="Sites\Bin\Release\" />
     <DeploymentItem filename="MangaReader.Core\Library\" />
+    <DeploymentItem filename="Sites\Bin\Debug\" />
   </Deployment>
   <NamingScheme baseName="Deploy" useDefault="false" />
   <Execution>

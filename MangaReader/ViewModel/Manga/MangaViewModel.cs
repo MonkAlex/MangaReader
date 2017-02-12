@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services.Config;
 
 namespace MangaReader.ViewModel.Manga
 {
-  public class MangaViewModel : MangaBaseModel, IComparer<Mangas>, IComparer
+  public class MangaViewModel : MangaBaseModel, IComparer<IManga>, IComparer
   {
     private string name;
     private string type;
@@ -109,17 +110,12 @@ namespace MangaReader.ViewModel.Manga
       this.CompletedIcon = result;
     }
 
-    private void SetType(Mangas manga)
+    private void SetType(IManga manga)
     {
       var result = "NA";
-      if (manga is Core.Manga.Grouple.Readmanga)
-        result = "RM";
-      if (manga is Core.Manga.Acomic.Acomics)
-        result = "AC";
-      if (manga is Core.Manga.Hentaichan.Hentaichan)
-        result = "HC";
-      if (manga is Core.Manga.Grouple.Mintmanga)
-        result = "MM";
+      var plugin = ConfigStorage.Plugins.SingleOrDefault(p => p.MangaType == manga.GetType());
+      if (plugin != null)
+        result = plugin.ShortName;
       this.Type = result;
     }
 
@@ -145,15 +141,15 @@ namespace MangaReader.ViewModel.Manga
       var yM = y as MangaViewModel;
       if (xM != null && yM != null)
         return Compare(xM.Manga, yM.Manga);
-      throw new Exception("Can compare only Mangas.");
+      throw new MangaReaderException("Can compare only Mangas.");
     }
 
-    public int Compare(Mangas x, Mangas y)
+    public int Compare(IManga x, IManga y)
     {
       return string.Compare(x.Name, y.Name, StringComparison.Ordinal);
     }
 
-    public MangaViewModel(Mangas manga) : base(manga)
+    public MangaViewModel(IManga manga) : base(manga)
     {
       if (Manga != null)
       {
@@ -163,7 +159,8 @@ namespace MangaReader.ViewModel.Manga
         SetType(Manga);
         SetNeedUpdate(Manga.NeedUpdate);
         this.Status = Manga.Status;
-        Manga.PropertyChanged += MangaOnPropertyChanged;
+        if (Manga is INotifyPropertyChanged)
+          ((INotifyPropertyChanged)Manga).PropertyChanged += MangaOnPropertyChanged;
       }
     }
   }

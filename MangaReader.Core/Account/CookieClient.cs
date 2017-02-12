@@ -4,11 +4,19 @@ using System.Text;
 
 namespace MangaReader.Core.Account
 {
+  [System.ComponentModel.DesignerCategory("Code")]
   public class CookieClient : WebClient
   {
-    internal CookieContainer Cookie { get; set; }
+    public CookieContainer Cookie { get; set; }
 
-    internal Uri ResponseUri;
+    public Uri ResponseUri;
+
+    private static readonly Lazy<IWebProxy> SystemProxy = new Lazy<IWebProxy>(() =>
+    {
+      var proxy = WebRequest.GetSystemWebProxy();
+      proxy.Credentials = CredentialCache.DefaultCredentials;
+      return proxy;
+    });
 
     protected override WebRequest GetWebRequest(Uri address)
     {
@@ -32,10 +40,16 @@ namespace MangaReader.Core.Account
       return baseResponce;
     }
 
-    public CookieClient()
+    public CookieClient() : this(new CookieContainer())
     {
-      this.Cookie = new CookieContainer();
+
+    }
+
+    public CookieClient(CookieContainer cookie)
+    {
       this.Encoding = Encoding.UTF8;
+      this.Proxy = SystemProxy.Value;
+      this.Cookie = cookie;
     }
   }
 }

@@ -2,7 +2,7 @@
 {
   public class SaveValidationException : EntityException
   {
-    public SaveValidationException(string message, Entity.Entity entity) : base(message, entity)
+    public SaveValidationException(string message, Entity.IEntity entity) : base(message, entity)
     {
     }
   }

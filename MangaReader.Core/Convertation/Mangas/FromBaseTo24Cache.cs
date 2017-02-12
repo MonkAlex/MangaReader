@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using MangaReader.Core.Convertation.Primitives;
+using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
@@ -26,7 +27,7 @@ namespace MangaReader.Core.Convertation.Mangas
     {
       base.ProtectedConvert(process);
 
-      var globalCollection = new List<Manga.Mangas>();
+      var globalCollection = new List<Manga.IManga>();
 
 #pragma warning disable CS0612 // Obsolete методы используются для конвертации
       var obsoleteManga = Serializer<ObservableCollection<Manga.Manga>>.Load(CacheFile);
@@ -48,7 +49,7 @@ namespace MangaReader.Core.Convertation.Mangas
         globalCollection.AddRange(cache.Where(gm => !globalCollection.Exists(m => m.Uri == gm.Uri)));
 
       var fileUrls = globalCollection.Select(m => m.Uri).ToList();
-      var dbMangas = Repository.Get<Manga.Mangas>().ToList();
+      var dbMangas = Repository.Get<IManga>().ToList();
       var fromFileInDb = dbMangas.Where(m => fileUrls.Contains(m.Uri)).ToList();
       if (fromFileInDb.Count == 0)
         fromFileInDb = globalCollection.ToList();

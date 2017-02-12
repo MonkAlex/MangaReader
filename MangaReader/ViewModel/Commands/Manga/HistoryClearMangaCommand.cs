@@ -7,7 +7,7 @@ namespace MangaReader.ViewModel.Commands.Manga
 {
   public class HistoryClearMangaCommand : MangaBaseCommand
   {
-    public override void Execute(Mangas manga)
+    public override void Execute(IManga manga)
     {
       base.Execute(manga);
 

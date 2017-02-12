@@ -8,9 +8,6 @@
 *.DotSettings
 packages.config
 
-# Single-exe build specification
-MangaReader.Core.dll
-
 # Wiki
 Wiki/
 

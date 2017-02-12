@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Acomics;
 using MangaReader.Core.Manga;
-using MangaReader.Core.Manga.Acomic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Entities.Manga
@@ -9,6 +9,8 @@ namespace Tests.Entities.Manga
   [TestClass]
   public class AcomicsStructure
   {
+    Parser parser = new Parser();
+
     [TestMethod]
     public void AddAcomicsOnlyPages()
     {
@@ -57,10 +59,10 @@ namespace Tests.Entities.Manga
       Assert.IsTrue(manga.HasVolumes);
     }
 
-    private Acomics GetManga(string uri)
+    private Acomics.Acomics GetManga(string uri)
     {
-      var manga = Mangas.CreateFromWeb(new Uri(uri)) as Acomics;
-      Getter.UpdateContent(manga);
+      var manga = Mangas.CreateFromWeb(new Uri(uri)) as Acomics.Acomics;
+      parser.UpdateContent(manga);
       return manga;
     }
   }

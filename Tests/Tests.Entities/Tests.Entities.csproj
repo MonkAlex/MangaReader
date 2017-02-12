@@ -36,15 +36,6 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Publish|AnyCPU'">
-    <OutputPath>bin\Publish\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="FluentNHibernate">
       <HintPath>..\..\MangaReader.Core\Library\FluentNHibernate.dll</HintPath>
@@ -104,6 +95,18 @@
     <ProjectReference Include="..\..\MangaReader.Core\MangaReader.Core.csproj">
       <Project>{744f331a-938a-475a-840a-7fac985ebe61}</Project>
       <Name>MangaReader.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Sites\Acomics.ru\Acomics.ru.csproj">
+      <Project>{3aabf85f-414f-4429-a1ab-812213771755}</Project>
+      <Name>Acomics.ru</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Sites\Hentaichan.me\Hentaichan.me.csproj">
+      <Project>{8bd693ba-7f23-4d27-9e16-84c1a154bd03}</Project>
+      <Name>Hentaichan.me</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Sites\Grouple.ru\Grouple.ru.csproj">
+      <Project>{d4bd1a69-ebdb-451e-b0fc-4e79644232b8}</Project>
+      <Name>Grouple.ru</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

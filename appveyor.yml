@@ -1,0 +1,9 @@
+os: Visual Studio 2015
+platform:
+- Any CPU
+configuration:
+- Release
+after_build:
+- "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
+- pip install codecov
+- codecov -f "./artifacts/coverage.xml"

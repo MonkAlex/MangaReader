@@ -3,6 +3,9 @@ before_build:
   - nuget restore
 platform:
 - Any CPU
+build:
+  project: MangaReader.sln 
+  verbosity: normal
 configuration:
 - Release
 after_build:

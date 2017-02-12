@@ -15,7 +15,7 @@ namespace Tests.Entities.Manga
     [TestMethod]
     public void AddHentaichanMultiPages()
     {
-      var manga = GetManga("http://hentaichan.me/related/14212-love-and-devil-glava-25.html");
+      var manga = GetManga("http://henchan.me/related/14212-love-and-devil-glava-25.html");
       Assert.AreEqual(25, manga.Chapters.Count);
       Assert.IsTrue(manga.HasChapters);
     }

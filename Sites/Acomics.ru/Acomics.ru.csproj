@@ -61,7 +61,9 @@
     <Compile Include="NHibernate\AcomicsMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MangaReader.Core\MangaReader.Core.csproj">
       <Project>{744f331a-938a-475a-840a-7fac985ebe61}</Project>

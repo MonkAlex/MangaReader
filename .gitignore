@@ -6,7 +6,6 @@
 *.user
 *.sln.docstates
 *.DotSettings
-packages.config
 
 # Wiki
 Wiki/

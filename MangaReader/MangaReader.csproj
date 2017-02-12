@@ -357,6 +357,9 @@
     <Resource Include="Icons\Navigation\previous.png" />
     <Resource Include="Icons\Navigation\skip_to_start.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

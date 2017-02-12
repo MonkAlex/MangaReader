@@ -74,7 +74,9 @@
       <Name>MangaReader.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /r /e "$(TargetPath)" "$(ProjectDir)\..\Bin\$(ConfigurationName)\"</PostBuildEvent>

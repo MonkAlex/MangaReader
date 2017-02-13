@@ -152,18 +152,14 @@ namespace Acomics
         for (var i = 0; i < count; i = i + 5)
         {
           document.LoadHtml(Page.GetPage(new Uri(list + "?skip=" + i), adultClient).Content);
-          links.AddRange(document.DocumentNode
-              .SelectNodes("//div[@class=\"issue\"]//a")
-              .Select(r => new Uri(r.Attributes[0].Value))
-              .ToList());
-          description.AddRange(document.DocumentNode
-              .SelectNodes("//div[@class=\"issue\"]//img")
-              .Select(r => r.Attributes[1].Value)
-              .ToList());
-          images.AddRange(document.DocumentNode
-              .SelectNodes("//div[@class=\"issue\"]//img")
-              .Select(r => new Uri(@"http://" + uri.Host + r.Attributes[0].Value))
-              .ToList());
+          foreach (var node in document.DocumentNode.SelectNodes("//div[@class=\"issue\"]//a"))
+          {
+            links.Add(new Uri(node.Attributes[0].Value));
+            var imgNode = node.ChildNodes
+              .Single(n => n.Name == "img" && !n.Attributes.Any(a => a.Name == "class" && a.Value == "blank-img"));
+            description.Add(imgNode.Attributes.Where(a => a.Name == "alt").Select(a => a.Value).FirstOrDefault());
+            images.Add(imgNode.Attributes.Where(a => a.Name == "src").Select(a => new Uri(@"http://" + uri.Host + a.Value)).Single());
+          }
         }
       }
       catch (NullReferenceException ex) { Log.Exception(ex, "Ошибка получения списка глав.", uri.ToString()); }

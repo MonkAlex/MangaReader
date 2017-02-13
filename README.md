@@ -10,8 +10,8 @@
 На текущий момент поддерживаются:
  1. [ReadManga](http://readmanga.me)
  2. [MintManga](http://mintmanga.com) (бывший adultmanga.ru)
- 3. [Hentaichan](http://hentaichan.me)
- 4. [Acomics](http://acomics.ru)
+ 3. [Hentaichan](http://henchan.me)
+ 4. [Acomics](https://acomics.ru)
 
 Больше информации по поддержке сайтов - в [справке][Wiki].
 

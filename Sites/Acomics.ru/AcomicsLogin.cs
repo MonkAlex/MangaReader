@@ -85,7 +85,7 @@ namespace Acomics
     public AcomicsLogin()
     {
       // Адрес может быть переопределен в базе. Это только дефолтное значение.
-      this.MainUri = new Uri("http://acomics.ru/");
+      this.MainUri = new Uri("https://acomics.ru/");
     }
   }
 }

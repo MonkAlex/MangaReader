@@ -54,6 +54,7 @@
     <Compile Include="AcomicsLogin.cs" />
     <Compile Include="AcomicsPlugin.cs" />
     <Compile Include="Chapter.cs" />
+    <Compile Include="Convertation\AcomicsFrom38To39.cs" />
     <Compile Include="Convertation\AcomicsFrom37To38.cs" />
     <Compile Include="Convertation\From24To27.cs" />
     <Compile Include="Parser.cs" />

@@ -9,18 +9,7 @@ namespace MangaReader.ViewModel.Commands
   {
     public override void Execute(object parameter)
     {
-      var title = "Обновление";
-
-      if (Updater.CheckUpdate())
-      {
-        var note = string.Format("Доступно обновление с версии {0} на {1}", Updater.ClientVersion, Updater.ServerVersion);
-        if (Dialogs.ShowYesNoDialog(title, "Запустить процесс обновления?", note))
-          new DownloadUpdate().Show();
-      }
-      else
-      {
-        Dialogs.ShowInfo(title, "Обновлений не найдено.");
-      }
+      Updater.StartUpdate();
     }
 
     public AppUpdateCommand()

@@ -196,7 +196,6 @@
     <Compile Include="ViewModel\Commands\ShowSettingCommand.cs" />
     <Compile Include="ViewModel\Commands\UpdateAllCommand.cs" />
     <Compile Include="ViewModel\Commands\Manga\UpdateMangaCommand.cs" />
-    <Compile Include="ViewModel\DownloadUpdate.cs" />
     <Compile Include="ViewModel\Initialize.cs" />
     <Compile Include="ViewModel\Primitive\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModel\Primitive\ProcessModel.cs" />
@@ -359,6 +358,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Update\MangaReader.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

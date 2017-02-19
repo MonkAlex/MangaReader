@@ -34,10 +34,14 @@ namespace MangaReader.Core.Update
     /// </summary>
     public static void StartUpdate()
     {
-      var args = string.Join(" ", 
-        "--fromFile", UpdateConfig, 
-        "--version", ClientVersion, 
-        "--outputFolder", ConfigStorage.WorkFolder);
+      if (!File.Exists(UpdateFilename))
+      {
+        Log.AddFormat("Updater not found.");
+        return;
+      }
+
+      var args = string.Format("--fromFile \"{0}\" --version \"{1}\" --outputFolder \"{2}\"", 
+        UpdateConfig, ClientVersion, ConfigStorage.WorkFolder);
       Log.AddFormat("Update process started: File '{0}', Args '{1}', Folder '{2}'", 
         UpdateFilename, args, ConfigStorage.WorkFolder);
 

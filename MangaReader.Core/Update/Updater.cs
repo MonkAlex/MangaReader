@@ -61,6 +61,8 @@ namespace MangaReader.Core.Update
           File.Delete(Path.Combine(ConfigStorage.WorkFolder, "System.Data.SQLite.dll"));
           File.Delete(Path.Combine(ConfigStorage.WorkFolder, "x86", "sqlite3.dll"));
           File.Delete(Path.Combine(x64folder, "sqlite3.dll"));
+          File.Delete(Path.Combine(ConfigStorage.WorkFolder, "update.exe"));
+          File.Delete(Path.Combine(ConfigStorage.WorkFolder, "update.it"));
           Directory.Delete(Path.Combine(ConfigStorage.WorkFolder, "x86"));
           Directory.Delete(x64folder);
         }

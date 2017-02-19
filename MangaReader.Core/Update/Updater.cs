@@ -21,10 +21,9 @@ namespace MangaReader.Core.Update
     /// <remarks>Завершает обновление и удаляет временные файлы.</remarks>
     public static void Initialize()
     {
+      Clean();
       if (ConfigStorage.Instance.AppConfig.UpdateReader)
-      {
         StartUpdate();
-      }
       else
         Log.AddFormat("Current version - {0}.", ClientVersion);
     }
@@ -40,12 +39,33 @@ namespace MangaReader.Core.Update
         return;
       }
 
-      var args = string.Format("--fromFile \"{0}\" --version \"{1}\" --outputFolder \"{2}\"", 
+      var args = string.Format("--fromFile \"{0}\" --version \"{1}\" --outputFolder \"{2}\"",
         UpdateConfig, ClientVersion, ConfigStorage.WorkFolder.TrimEnd('\\'));
-      Log.AddFormat("Update process started: File '{0}', Args '{1}', Folder '{2}'", 
+      Log.AddFormat("Update process started: File '{0}', Args '{1}', Folder '{2}'",
         UpdateFilename, args, ConfigStorage.WorkFolder);
 
-      Process.Start(new ProcessStartInfo { FileName = UpdateFilename, Arguments = args });
+      Process.Start(new ProcessStartInfo {FileName = UpdateFilename, Arguments = args});
+    }
+
+    /// <summary>
+    /// Чистка файлов, используемых версией 1.38 и ниже.
+    /// </summary>
+    private static void Clean()
+    {
+      try
+      {
+        var x64folder = Path.Combine(ConfigStorage.WorkFolder, "x64");
+        if (Directory.Exists(x64folder))
+        {
+          File.Delete(Path.Combine(ConfigStorage.WorkFolder, "sqlite3"));
+          File.Delete(Path.Combine(ConfigStorage.WorkFolder, "System.Data.SQLite.dll"));
+          File.Delete(Path.Combine(ConfigStorage.WorkFolder, "x86", "sqlite3.dll"));
+          File.Delete(Path.Combine(x64folder, "sqlite3.dll"));
+          Directory.Delete(Path.Combine(ConfigStorage.WorkFolder, "x86"));
+          Directory.Delete(x64folder);
+        }
+      }
+      catch { }
     }
   }
 }

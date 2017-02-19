@@ -506,7 +506,7 @@ namespace MangaReader.Core.Manga
       {
         foreach (var history in this.Histories)
         {
-          var historyUri = new UriBuilder(history.Uri) { Host = value.Host, Port = -1 };
+          var historyUri = new UriBuilder(history.Uri) { Scheme = value.Scheme, Host = value.Host, Port = -1 };
           historyUri.Path = historyUri.Path.Replace(this.uri.AbsolutePath, value.AbsolutePath);
           history.Uri = historyUri.Uri;
         }

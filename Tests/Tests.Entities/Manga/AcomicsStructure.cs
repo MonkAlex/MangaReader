@@ -31,7 +31,7 @@ namespace Tests.Entities.Manga
       Assert.AreEqual(3, manga.Chapters.Count);
 
       // Страниц в главах.
-      Assert.AreEqual(267, manga.Chapters.Select(c => c.Pages.Count).Sum());
+      Assert.AreEqual(268, manga.Chapters.Select(c => c.Pages.Count).Sum());
 
       Assert.IsTrue(manga.HasChapters);
       Assert.IsFalse(manga.HasVolumes);

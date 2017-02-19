@@ -41,7 +41,7 @@ namespace MangaReader.Core.Update
       }
 
       var args = string.Format("--fromFile \"{0}\" --version \"{1}\" --outputFolder \"{2}\"", 
-        UpdateConfig, ClientVersion, ConfigStorage.WorkFolder);
+        UpdateConfig, ClientVersion, ConfigStorage.WorkFolder.TrimEnd('\\'));
       Log.AddFormat("Update process started: File '{0}', Args '{1}', Folder '{2}'", 
         UpdateFilename, args, ConfigStorage.WorkFolder);
 

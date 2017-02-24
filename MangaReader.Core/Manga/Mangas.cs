@@ -533,7 +533,10 @@ namespace MangaReader.Core.Manga
       }
 
       if (manga != null)
-        manga.Uri = uri;
+      {
+        var parseResult = manga.Parser.ParseUri(uri);
+        manga.Uri = parseResult.CanBeParsed ? parseResult.MangaUri : uri;
+      }
 
       return manga;
     }
@@ -563,8 +566,12 @@ namespace MangaReader.Core.Manga
 
     protected virtual void Created(Uri url)
     {
-      this.Uri = url;
       this.Refresh();
+    }
+
+    protected void AddHistoryReadedUris<T>(T source, Uri url) where T : IEnumerable<IDownloadable>
+    {
+      this.AddHistory(source.TakeWhile(c => c.Uri.AbsolutePath != url.AbsolutePath).Select(ch => ch.Uri));
     }
 
     protected Mangas()

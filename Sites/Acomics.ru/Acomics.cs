@@ -24,6 +24,22 @@ namespace Acomics
       }
     }
 
+    protected override void Created(Uri url)
+    {
+      if (this.Uri != url)
+      {
+        this.UpdateContent();
+
+        var pages = this.Volumes.SelectMany(v => v.Chapters).SelectMany(c => c.Pages)
+          .Union(this.Chapters.SelectMany(c => c.Pages))
+          .Union(this.Pages)
+          .OrderBy(p => p.Number);
+        AddHistoryReadedUris(pages, url);
+      }
+
+      base.Created(url);
+    }
+
     #endregion
 
   }

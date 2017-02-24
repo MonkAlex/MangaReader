@@ -19,6 +19,8 @@ namespace MangaReader.Core.Manga
 
     MangaSetting Setting { get; }
 
+    ISiteParser Parser { get; }
+
     #region Content
 
     bool HasChapters { get; set; }

@@ -80,6 +80,19 @@ namespace Grouple
       base.Refresh();
     }
 
+    protected override void Created(Uri url)
+    {
+      if (this.Uri != url)
+      {
+        this.UpdateContent();
+
+        var chapters = this.Volumes.SelectMany(v => v.Chapters);
+        AddHistoryReadedUris(chapters, url);
+      }
+
+      base.Created(url);
+    }
+
     #endregion
   }
 }

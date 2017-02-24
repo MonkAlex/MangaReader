@@ -1,4 +1,5 @@
-﻿using MangaReader.Core.Manga;
+﻿using System;
+using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 
 namespace MangaReader.Core
@@ -13,6 +14,8 @@ namespace MangaReader.Core
     }
 
     public abstract void UpdateContent(IManga manga);
+
+    public abstract UriParseResult ParseUri(Uri uri);
 
     protected void UpdateName(IManga manga, string newName)
     {

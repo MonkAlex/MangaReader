@@ -28,6 +28,13 @@ namespace Hentaichan
 
       return !doubles;
     }
-    
+
+    protected override void Created(Uri url)
+    {
+      this.UpdateContent();
+      AddHistoryReadedUris(this.Chapters, new Uri(url.OriginalString.Replace("/related/", "/manga/")));
+
+      base.Created(url);
+    }
   }
 }

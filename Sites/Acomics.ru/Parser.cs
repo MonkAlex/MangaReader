@@ -8,6 +8,7 @@ using MangaReader.Core;
 using MangaReader.Core.Account;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 
 namespace Acomics
 {
@@ -129,6 +130,38 @@ namespace Acomics
       manga.Volumes.AddRange(volumes);
       manga.Chapters.AddRange(chapters);
       manga.Pages.AddRange(pages);
+    }
+
+    public override UriParseResult ParseUri(Uri uri)
+    {
+      // Manga : https://acomics.ru/~hotblood
+      // Volume : -
+      // Chapter : -
+      // Page : https://acomics.ru/~hotblood/60
+
+      var hosts = ConfigStorage.Plugins
+        .Where(p => p.GetParser().GetType() == typeof(Parser))
+        .SelectMany(p => p.GetSettings().MangaSettingUris);
+
+      foreach (var host in hosts)
+      {
+        var trimmedHost = host.OriginalString.TrimEnd('/');
+        if (!uri.OriginalString.StartsWith(trimmedHost))
+          continue;
+
+        var relativeUri = uri.OriginalString.Remove(0, trimmedHost.Length);
+        var manga = Regex.Match(relativeUri, @"\/(~\w+)(\/\d+)*", RegexOptions.IgnoreCase);
+        if (manga.Success && manga.Groups.Count > 1)
+        {
+          var mangaUri = new Uri(host, manga.Groups[1].Value);
+          if (manga.Groups[2].Success)
+            return new UriParseResult(true, UriParseKind.Page, mangaUri);
+          if (manga.Groups[1].Success)
+            return new UriParseResult(true, UriParseKind.Manga, mangaUri);
+        }
+      }
+
+      return new UriParseResult(false, UriParseKind.Manga, null);
     }
 
     /// <summary>

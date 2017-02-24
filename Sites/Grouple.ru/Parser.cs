@@ -9,6 +9,7 @@ using MangaReader.Core;
 using MangaReader.Core.Account;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 using Newtonsoft.Json.Linq;
 
 namespace Grouple
@@ -162,6 +163,40 @@ namespace Grouple
         });
 
       manga.Volumes.AddRange(rmVolumes);
+    }
+
+    public override UriParseResult ParseUri(Uri uri)
+    {
+      // Manga : http://readmanga.me/heroes_of_the_western_world__emerald_
+      // Volume : -
+      // Chapter : http://readmanga.me/heroes_of_the_western_world__emerald_/vol0/0
+      // Page : http://readmanga.me/heroes_of_the_western_world__emerald_/vol0/0#page=2
+
+      var hosts = ConfigStorage.Plugins
+        .Where(p => p.GetParser().GetType() == typeof(Parser))
+        .SelectMany(p => p.GetSettings().MangaSettingUris);
+
+      foreach (var host in hosts)
+      {
+        var trimmedHost = host.OriginalString.TrimEnd('/');
+        if (!uri.OriginalString.StartsWith(trimmedHost))
+          continue;
+
+        var relativeUri = uri.OriginalString.Remove(0, trimmedHost.Length);
+        var manga = Regex.Match(relativeUri, @"\/(\w+)(\/\w+\d+)*(\/\d+)*(#\w+=\d+)*", RegexOptions.IgnoreCase);
+        if (manga.Success && manga.Groups.Count > 1)
+        {
+          var mangaUri = new Uri(host, manga.Groups[1].Value);
+          if (manga.Groups[4].Success)
+            return new UriParseResult(true, UriParseKind.Page, mangaUri);
+          if (manga.Groups[3].Success)
+            return new UriParseResult(true, UriParseKind.Chapter, mangaUri);
+          if (manga.Groups[1].Success)
+            return new UriParseResult(true, UriParseKind.Manga, mangaUri);
+        }
+      }
+
+      return new UriParseResult(false, UriParseKind.Manga, null);
     }
   }
 }

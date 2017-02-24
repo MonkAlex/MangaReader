@@ -90,7 +90,7 @@ namespace Hentaichan
             {
               foreach (var node in pageNodes)
               {
-                pages.Add(new Uri(manga.Uri + node.Attributes[0].Value));
+                pages.Add(new Uri(manga.Uri, manga.Uri.AbsolutePath + node.Attributes[0].Value));
               }
               pages = pages.Distinct().ToList();
             }
@@ -121,6 +121,35 @@ namespace Hentaichan
       }
 
       manga.Chapters.AddRange(chapters);
+    }
+
+    public override UriParseResult ParseUri(Uri uri)
+    {
+      // Manga : http://henchan.me/related/14212-love-and-devil-glava-25.html
+      // Volume : -
+      // Chapter : -
+      // Page : http://henchan.me/online/14212-love-and-devil-glava-25.html#page=14
+
+      var hosts = ConfigStorage.Plugins
+        .Where(p => p.GetParser().GetType() == typeof(Parser))
+        .SelectMany(p => p.GetSettings().MangaSettingUris);
+
+      foreach (var host in hosts)
+      {
+        var trimmedHost = host.OriginalString.TrimEnd('/');
+        if (!uri.OriginalString.StartsWith(trimmedHost))
+          continue;
+
+        var relativeUri = uri.OriginalString.Remove(0, trimmedHost.Length);
+        var related = "/related/";
+        if (relativeUri.Contains(related))
+          return new UriParseResult(true, UriParseKind.Manga, uri);
+        var online = "/online/";
+        if (relativeUri.Contains(online))
+          return new UriParseResult(true, UriParseKind.Page, new Uri(uri, relativeUri.Replace(online, related)));
+      }
+
+      return new UriParseResult(false, UriParseKind.Manga, null);
     }
 
     public static void UpdatePages(MangaReader.Core.Manga.Chapter chapter)

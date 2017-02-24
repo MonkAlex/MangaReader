@@ -29,7 +29,7 @@ namespace Tests.Entities.Library
     {
       var error = false;
       var result = false;
-      var uri = new Uri(@"http://readmanga.me/berserk/");
+      var uri = new Uri(@"http://readmanga.me/berserk");
 
       var mangas = MangaReader.Core.NHibernate.Repository.Get<Grouple.Readmanga>()
         .ToList()

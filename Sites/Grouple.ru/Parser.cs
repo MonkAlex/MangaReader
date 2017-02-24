@@ -182,16 +182,12 @@ namespace Grouple
         if (!uri.OriginalString.StartsWith(trimmedHost))
           continue;
 
-        var relativeUri = uri.OriginalString.Remove(0, trimmedHost.Length);
-        var manga = Regex.Match(relativeUri, @"\/(\w+)(\/\w+\d+)*(\/\d+)*(#\w+=\d+)*", RegexOptions.IgnoreCase);
-        if (manga.Success && manga.Groups.Count > 1)
+        if (uri.Segments.Length > 1)
         {
-          var mangaUri = new Uri(host, manga.Groups[1].Value);
-          if (manga.Groups[4].Success)
-            return new UriParseResult(true, UriParseKind.Page, mangaUri);
-          if (manga.Groups[3].Success)
+          var mangaUri = new Uri(host, uri.Segments[1].TrimEnd('/'));
+          if (uri.Segments.Length == 4)
             return new UriParseResult(true, UriParseKind.Chapter, mangaUri);
-          if (manga.Groups[1].Success)
+          if (uri.Segments.Length == 2)
             return new UriParseResult(true, UriParseKind.Manga, mangaUri);
         }
       }

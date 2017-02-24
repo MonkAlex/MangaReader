@@ -145,18 +145,16 @@ namespace Acomics
 
       foreach (var host in hosts)
       {
-        var trimmedHost = host.OriginalString.TrimEnd('/');
+        var trimmedHost = host.OriginalString;
         if (!uri.OriginalString.StartsWith(trimmedHost))
           continue;
 
-        var relativeUri = uri.OriginalString.Remove(0, trimmedHost.Length);
-        var manga = Regex.Match(relativeUri, @"\/(~\w+)(\/\d+)*", RegexOptions.IgnoreCase);
-        if (manga.Success && manga.Groups.Count > 1)
+        if (uri.Segments.Length > 1)
         {
-          var mangaUri = new Uri(host, manga.Groups[1].Value);
-          if (manga.Groups[2].Success)
+          var mangaUri = new Uri(host, uri.Segments[1].TrimEnd('/'));
+          if (uri.Segments.Length == 3)
             return new UriParseResult(true, UriParseKind.Page, mangaUri);
-          if (manga.Groups[1].Success)
+          if (uri.Segments.Length == 2)
             return new UriParseResult(true, UriParseKind.Manga, mangaUri);
         }
       }

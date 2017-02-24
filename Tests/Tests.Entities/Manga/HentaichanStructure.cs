@@ -10,8 +10,6 @@ namespace Tests.Entities.Manga
   [TestClass]
   public class HentaichanStructure
   {
-    Parser parser = new Parser();
-
     [TestMethod]
     public void AddHentaichanMultiPages()
     {
@@ -24,7 +22,6 @@ namespace Tests.Entities.Manga
     {
       CreateLogin();
       var manga = Mangas.CreateFromWeb(new Uri(url)) as Hentaichan.Hentaichan;
-      parser.UpdateContent(manga);
       return manga;
     }
 

@@ -2,14 +2,16 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using MangaReader.Core.Account;
 using MangaReader.Core.Manga;
 using MangaReader.ViewModel.Commands.AddManga;
 using MangaReader.ViewModel.Primitive;
+using MangaReader.ViewModel.Setting;
 
 namespace MangaReader.ViewModel
 {
-  public class AddBookmarksModel : BaseViewModel
+  public class AddBookmarksModel : SettingViewModel
   {
     private readonly ObservableCollection<SelectedItem<IManga>> bookmarks;
 
@@ -23,7 +25,7 @@ namespace MangaReader.ViewModel
       }
     }
 
-    public string Header { get; set; }
+    public ICommand Add { get; }
 
     public LoginModel Login { get; }
     
@@ -38,10 +40,11 @@ namespace MangaReader.ViewModel
       Login.IsEnabled = Login.HasLogin;
     }
 
-    public AddBookmarksModel(ILogin login, string name)
+    public AddBookmarksModel(ILogin login, string name, AddFromUri addFromUriModel, AddNewModel mainModel)
     {
       this.bookmarks = new ObservableCollection<SelectedItem<IManga>>();
       this.Header = name;
+      this.Add = new AddSelected(addFromUriModel, mainModel);
       this.Login = new LoginModel(login);
       if (login != null)
         login.LoginStateChanged += LoginOnLoginStateChanged;

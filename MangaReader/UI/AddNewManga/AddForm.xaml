@@ -1,0 +1,24 @@
+﻿<Window x:Class="MangaReader.UI.AddNewManga.AddForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MangaReader.UI.AddNewManga"
+        xmlns:properties="clr-namespace:MangaReader.Properties"
+        mc:Ignorable="d"
+        Title="{x:Static properties:Strings.Input_Title}" 
+        Height="400" Width="400"
+        MinHeight="173" MinWidth="400"
+        WindowStartupLocation="CenterOwner">
+  <Grid>
+    <TabControl BorderBrush="Transparent"
+                SelectedIndex="0"
+                ItemsSource="{Binding BookmarksModels}">
+      <TabControl.ItemTemplate>
+        <DataTemplate>
+          <TextBlock Text="{Binding Header}"/>
+        </DataTemplate>
+      </TabControl.ItemTemplate>
+    </TabControl>
+  </Grid>
+</Window>

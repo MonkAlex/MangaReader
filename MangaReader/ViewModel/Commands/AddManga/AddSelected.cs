@@ -4,12 +4,15 @@ using MangaReader.Core.Services;
 using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.ViewModel.Commands.Primitives;
+using MangaReader.ViewModel.Setting;
 
 namespace MangaReader.ViewModel.Commands.AddManga
 {
   public class AddSelected : BaseCommand
   {
-    private AddNewModel model;
+    private AddNewModel mainModel;
+
+    private AddFromUri model;
 
     public override void Execute(object parameter)
     {
@@ -19,17 +22,19 @@ namespace MangaReader.ViewModel.Commands.AddManga
       if (Uri.TryCreate(model.InputText, UriKind.Absolute, out uri))
         Library.Add(uri);
 
-      var selectedItems = model.BookmarksModels.SelectMany(l => l.Bookmarks.Where(b => b.IsSelected));
+      var selectedItems = mainModel.BookmarksModels.OfType<AddBookmarksModel>()
+        .SelectMany(m => m.Bookmarks.Where(b => b.IsSelected));
       foreach (var manga in selectedItems)
       {
         Library.Add(manga.Value.Uri);
       }
-      model.Close();
+      mainModel.Close();
     }
 
-    public AddSelected(AddNewModel model)
+    public AddSelected(AddFromUri model, AddNewModel mainModel)
     {
       this.model = model;
+      this.mainModel = mainModel;
       this.Name = Strings.Library_Action_Add;
     }
   }

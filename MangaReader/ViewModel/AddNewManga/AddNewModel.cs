@@ -5,36 +5,25 @@ using MangaReader.Core.Services.Config;
 using MangaReader.UI.Services;
 using MangaReader.ViewModel.Commands.AddManga;
 using MangaReader.ViewModel.Primitive;
+using MangaReader.ViewModel.Setting;
 
 namespace MangaReader.ViewModel
 {
   public class AddNewModel : BaseViewModel
   {
-    private string inputText;
-
-    public ObservableCollection<AddBookmarksModel> BookmarksModels { get; set; }
-
-    public ICommand Add { get; set; }
-
-    public string InputText
-    {
-      get { return inputText; }
-      set
-      {
-        inputText = value;
-        OnPropertyChanged();
-      }
-    }
+    public ObservableCollection<SettingViewModel> BookmarksModels { get; set; }
 
     public override void Load()
     {
       base.Load();
 
+      var addFromUri = new AddFromUri(this);
+      this.BookmarksModels.Add(addFromUri);
       foreach (var settings in ConfigStorage.Instance.DatabaseConfig.MangaSettings
                                  .GroupBy(s => s.Login).Where(s => s.Key != null))
       {
         var name = string.Join(" \\ ", settings.Select(s => s.MangaName));
-        this.BookmarksModels.Add(new AddBookmarksModel(settings.Key, name));
+        this.BookmarksModels.Add(new AddBookmarksModel(settings.Key, name, addFromUri, this));
       }
     }
 
@@ -60,8 +49,7 @@ namespace MangaReader.ViewModel
 
     public AddNewModel()
     {
-      this.Add = new AddSelected(this);
-      this.BookmarksModels = new ObservableCollection<AddBookmarksModel>();
+      this.BookmarksModels = new ObservableCollection<SettingViewModel>();
     }
   }
 }

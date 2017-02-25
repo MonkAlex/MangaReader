@@ -89,6 +89,9 @@
     <Compile Include="Client.cs" />
     <Compile Include="Services\Dialogs.cs" />
     <Compile Include="Services\Markdown.cs" />
+    <Compile Include="UI\AddNewManga\AddForm.xaml.cs">
+      <DependentUpon>AddForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\MainForm\Filter.xaml.cs">
       <DependentUpon>Filter.xaml</DependentUpon>
     </Compile>
@@ -148,8 +151,9 @@
       <DependentUpon>VersionHistoryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Services\ViewService.cs" />
-    <Compile Include="ViewModel\AddBookmarksModel.cs" />
-    <Compile Include="ViewModel\AddNewModel.cs" />
+    <Compile Include="ViewModel\AddNewManga\AddBookmarksModel.cs" />
+    <Compile Include="ViewModel\AddNewManga\AddFromUri.cs" />
+    <Compile Include="ViewModel\AddNewManga\AddNewModel.cs" />
     <Compile Include="ViewModel\Commands\Manga\MangaSaveCommand.cs" />
     <Compile Include="ViewModel\Commands\Navigation\FirstMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\Navigation\LastMangaCommand.cs" />
@@ -204,6 +208,10 @@
     <Compile Include="ViewModel\TaskbarIconModel.cs" />
     <Compile Include="ViewModel\VersionHistoryModel.cs" />
     <Compile Include="ViewModel\WindowModel.cs" />
+    <Page Include="UI\AddNewManga\AddForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\MainForm\Filter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

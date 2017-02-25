@@ -12,7 +12,7 @@ namespace MangaReader.UI.Services
     {
       AddOrReplace(typeof(ViewModel.Initialize), typeof(MangaReader.UI.Converting));
       AddOrReplace(typeof(ViewModel.LoginModel), typeof(MangaReader.UI.AddNewManga.Login));
-      AddOrReplace(typeof(ViewModel.AddNewModel), typeof(MangaReader.UI.AddNewManga.AddNew));
+      AddOrReplace(typeof(ViewModel.AddNewModel), typeof(MangaReader.UI.AddNewManga.AddForm));
       AddOrReplace(typeof(ViewModel.WindowModel), typeof(MangaReader.UI.MainWindow));
       AddOrReplace(typeof(ViewModel.VersionHistoryModel), typeof(MangaReader.UI.VersionHistoryView));
       AddOrReplace(typeof(ViewModel.Setting.SettingModel), typeof(MangaReader.UI.Setting.SettingsForm));

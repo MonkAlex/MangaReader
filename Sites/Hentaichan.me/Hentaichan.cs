@@ -32,7 +32,9 @@ namespace Hentaichan
     protected override void Created(Uri url)
     {
       this.UpdateContent();
-      AddHistoryReadedUris(this.Chapters, new Uri(url.OriginalString.Replace("/related/", "/manga/")));
+      AddHistoryReadedUris(this.Chapters, new Uri(url.OriginalString
+        .Replace("/related/", "/manga/")
+        .Replace("/online/", "/manga/")));
 
       base.Created(url);
     }

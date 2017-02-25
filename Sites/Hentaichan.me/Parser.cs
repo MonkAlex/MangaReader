@@ -127,8 +127,8 @@ namespace Hentaichan
     {
       // Manga : http://henchan.me/related/14212-love-and-devil-glava-25.html
       // Volume : -
-      // Chapter : -
-      // Page : http://henchan.me/online/14212-love-and-devil-glava-25.html#page=14
+      // Chapter : http://henchan.me/online/14212-love-and-devil-glava-25.html
+      // Page : -
 
       var hosts = ConfigStorage.Plugins
         .Where(p => p.GetParser().GetType() == typeof(Parser))
@@ -143,10 +143,10 @@ namespace Hentaichan
         var relativeUri = uri.OriginalString.Remove(0, trimmedHost.Length);
         var related = "/related/";
         if (relativeUri.Contains(related))
-          return new UriParseResult(true, UriParseKind.Manga, uri);
+          return new UriParseResult(true, UriParseKind.Chapter, uri);
         var online = "/online/";
         if (relativeUri.Contains(online))
-          return new UriParseResult(true, UriParseKind.Page, new Uri(uri, relativeUri.Replace(online, related)));
+          return new UriParseResult(true, UriParseKind.Chapter, new Uri(uri, relativeUri.Replace(online, related)));
       }
 
       return new UriParseResult(false, UriParseKind.Manga, null);

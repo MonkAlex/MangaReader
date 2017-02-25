@@ -170,7 +170,7 @@ namespace Grouple
       // Manga : http://readmanga.me/heroes_of_the_western_world__emerald_
       // Volume : -
       // Chapter : http://readmanga.me/heroes_of_the_western_world__emerald_/vol0/0
-      // Page : http://readmanga.me/heroes_of_the_western_world__emerald_/vol0/0#page=2
+      // Page : -
 
       var hosts = ConfigStorage.Plugins
         .Where(p => p.GetParser().GetType() == typeof(Parser))

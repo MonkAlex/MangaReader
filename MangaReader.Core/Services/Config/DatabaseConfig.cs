@@ -14,6 +14,24 @@ namespace MangaReader.Core.Services.Config
     public Version Version { get; set; }
 
     /// <summary>
+    /// Уникальный идентификатор базы данных.
+    /// </summary>
+    public Guid UniqueId
+    {
+      get
+      {
+        if (uniqueId == Guid.Empty)
+          uniqueId = Guid.NewGuid();
+        return uniqueId;
+      }
+      set
+      {
+        if (uniqueId == Guid.Empty)
+          uniqueId = value;
+      }
+    }
+
+    /// <summary>
     /// Настройки разных типов манги.
     /// </summary>
     public List<MangaSetting> MangaSettings
@@ -39,6 +57,7 @@ namespace MangaReader.Core.Services.Config
     }
 
     private List<MangaSetting> mangaSettings;
+    private Guid uniqueId;
 
     /// <summary>
     /// Создать дефолтные настройки для новых типов.

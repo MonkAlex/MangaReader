@@ -80,6 +80,9 @@
     <Compile Include="Account\CookieClient.cs" />
     <Compile Include="Account\ILogin.cs" />
     <Compile Include="Account\Login.cs" />
+    <Compile Include="ApplicationControl\Client.cs" />
+    <Compile Include="ApplicationControl\Messages.cs" />
+    <Compile Include="ApplicationControl\Server.cs" />
     <Compile Include="BasePlugin.cs" />
     <Compile Include="BaseSiteParser.cs" />
     <Compile Include="Client.cs" />

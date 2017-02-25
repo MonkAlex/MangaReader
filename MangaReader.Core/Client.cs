@@ -1,6 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.IO.Pipes;
+using System.Linq;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
+using MangaReader.Core.ApplicationControl;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Exception;
 using MangaReader.Core.Services;
@@ -12,6 +18,8 @@ namespace MangaReader.Core
   public static class Client
   {
     private static Mutex mutex;
+
+    public static event EventHandler<string> OtherAppRunning;
 
     public static void Init()
     {
@@ -26,13 +34,21 @@ namespace MangaReader.Core
     {
       Updater.Initialize();
 
+      ConfigStorage.RefreshPlugins();
+      NHibernate.Mapping.Initialize(process);
+
       var isSingle = false;
-      mutex = new Mutex(false, "5197317b-a6f6-4a6c-a336-6fbf8642b7bc", out isSingle);
+      var name = ConfigStorage.Instance.DatabaseConfig.UniqueId.ToString("D");
+      mutex = new Mutex(false, name, out isSingle);
       if (!isSingle)
       {
         try
         {
+          process.ProgressState = ProgressState.Error;
+          process.Status = "Программа уже запущена.";
           Log.Exception(new MangaReaderException("Программа уже запущена."));
+
+          ApplicationControl.Client.Run(name, Messages.Activate);
         }
         finally
         {
@@ -40,20 +56,27 @@ namespace MangaReader.Core
         }
       }
 
-      ConfigStorage.RefreshPlugins();
-      NHibernate.Mapping.Initialize(process);
+      Task.Run(() =>
+      {
+        ApplicationControl.Server.Run(name);
+      });
+
       Converter.Convert(process);
     }
 
     public static void Close()
     {
-//      Library.ThreadAbort();
       ConfigStorage.Instance.Save();
       ConfigStorage.Close();
       NHibernate.Mapping.Close();
 
       if (mutex != null && !mutex.SafeWaitHandle.IsClosed)
         mutex.Close();
+    }
+
+    internal static void OnOtherAppRunning(string e)
+    {
+      OtherAppRunning?.Invoke(null, e);
     }
   }
 }

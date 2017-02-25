@@ -53,6 +53,8 @@ namespace MangaReader.ViewModel
       }
       model = new MainPageModel();
       model.Show();
+
+      Client.ClientOnClientBeenClosed(this, EventArgs.Empty);
     }
 
     public void SaveWindowState()

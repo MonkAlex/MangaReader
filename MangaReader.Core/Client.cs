@@ -21,6 +21,8 @@ namespace MangaReader.Core
 
     public static event EventHandler<string> OtherAppRunning;
 
+    public static event EventHandler ClientBeenClosed;
+
     public static void Init()
     {
       // Все необработанные - логгируем.
@@ -44,6 +46,7 @@ namespace MangaReader.Core
       {
         try
         {
+          OnClientBeenClosed();
           process.ProgressState = ProgressState.Error;
           process.Status = "Программа уже запущена.";
           Log.Exception(new MangaReaderException("Программа уже запущена."));
@@ -77,6 +80,11 @@ namespace MangaReader.Core
     internal static void OnOtherAppRunning(string e)
     {
       OtherAppRunning?.Invoke(null, e);
+    }
+
+    internal static void OnClientBeenClosed()
+    {
+      ClientBeenClosed?.Invoke(null, EventArgs.Empty);
     }
   }
 }

@@ -1,23 +1,58 @@
 ﻿using System;
-using System.Windows;
+using System.IO;
+using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Shell;
 using MangaReader.Core.ApplicationControl;
+using MangaReader.Core.Services.Config;
+using MangaReader.Services;
 using MangaReader.UI.Services;
 using MangaReader.ViewModel;
+using MangaReader.ViewModel.Commands;
+using WindowState = System.Windows.WindowState;
 
 namespace MangaReader
 {
   public static class Client
   {
+    const string AddManga = nameof(MangaReader.Core.ApplicationControl.Messages.AddManga);
+
     public static void Run()
     {
       ViewResolver.Instance.ViewInit();
       MangaReader.Core.Client.OtherAppRunning += ClientOnOtherAppRunning;
+      MangaReader.Core.Client.ClientBeenClosed += ClientOnClientBeenClosed;
 
+      // Извлечение текущего списка часто используемых элементов
+      var jumpList = new JumpList();
+      JumpList.SetJumpList(App.Current, jumpList);
+
+      // Добавление нового объекта JumpPath для файла в папке приложения
+      var path = System.Reflection.Assembly.GetExecutingAssembly().Location;
+      if (File.Exists(path))
+      {
+        JumpTask jumpTask = new JumpTask();
+        jumpTask.CustomCategory = "Манга";
+        jumpTask.Title = "Добавить мангу";
+        jumpTask.ApplicationPath = path;
+        jumpTask.IconResourcePath = path;
+        jumpTask.Arguments = AddManga;
+        jumpList.JumpItems.Add(jumpTask);
+      }
+
+      // Обновление списка часто используемых элементов
+      jumpList.Apply();
+      
       var model = new Initialize();
       model.Show();
 
       WindowModel.Instance.Show();
+    }
+
+    internal static void ClientOnClientBeenClosed(object sender, EventArgs eventArgs)
+    {
+      if (Environment.GetCommandLineArgs().Any(a => a == AddManga))
+        Core.ApplicationControl.Client.Run(ConfigStorage.Instance.DatabaseConfig.UniqueId.ToString("D"), Messages.AddManga);
     }
 
     private static void ClientOnOtherAppRunning(object sender, string s)
@@ -31,7 +66,7 @@ namespace MangaReader
         case Messages.Activate:
           App.Current.Dispatcher.Invoke(() =>
           {
-            var window = App.Current.MainWindow;
+            var window = WindowHelper.Owner;
 
             var state = WindowState.Normal;
             if (window.WindowState != WindowState.Minimized)
@@ -42,11 +77,24 @@ namespace MangaReader
 
             if (window.WindowState == WindowState.Minimized)
               window.WindowState = state;
+
+            if (window.Owner != null)
+              window.Owner.Activate();
+
+            window.Activate();
           });
           break;
         case Messages.AddManga:
+          App.Current.Dispatcher.Invoke(() =>
+          {
+            new AddNewMangaCommand().Execute(null);
+          });
           break;
         case Messages.Close:
+          App.Current.Dispatcher.Invoke(() =>
+          {
+            new ExitCommand().Execute(null);
+          });
           break;
         default:
           throw new ArgumentOutOfRangeException();
@@ -56,6 +104,7 @@ namespace MangaReader
     public static void Close()
     {
       MangaReader.Core.Client.OtherAppRunning -= ClientOnOtherAppRunning;
+      MangaReader.Core.Client.ClientBeenClosed -= ClientOnClientBeenClosed;
       WindowModel.Instance.Dispose();
       Core.Client.Close();
     }

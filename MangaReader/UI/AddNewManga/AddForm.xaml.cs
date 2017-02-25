@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MangaReader.Services;
 
 namespace MangaReader.UI.AddNewManga
 {
@@ -22,6 +23,7 @@ namespace MangaReader.UI.AddNewManga
     public AddForm()
     {
       InitializeComponent();
+      Owner = WindowHelper.Owner;
       ViewModel.Primitive.BaseViewModel.SubToViewModel(this);
     }
   }

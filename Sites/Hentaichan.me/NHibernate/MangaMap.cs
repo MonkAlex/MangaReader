@@ -10,4 +10,13 @@ namespace Hentaichan.NHibernate
       DiscriminatorValue(HentaichanPlugin.Manga.ToString());
     }
   }
+
+  public class MangachanMap : SubclassMap<Mangachan.Mangachan>
+  {
+    public MangachanMap()
+    {
+      Not.LazyLoad();
+      DiscriminatorValue(Mangachan.MangachanPlugin.Manga.ToString());
+    }
+  }
 }

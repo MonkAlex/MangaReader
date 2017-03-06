@@ -50,14 +50,20 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="BaseLogin.cs" />
     <Compile Include="Chapter.cs" />
     <Compile Include="Convertation\HentaichanFrom38To39.cs" />
     <Compile Include="Convertation\HentaichanFrom37To38.cs" />
+    <Compile Include="Convertation\HentaichanFrom39To40.cs" />
+    <Compile Include="Mangachan\Mangachan.cs" />
+    <Compile Include="Mangachan\MangachanLogin.cs" />
+    <Compile Include="Mangachan\MangachanPlugin.cs" />
+    <Compile Include="Mangachan\Parser.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Hentaichan.cs" />
     <Compile Include="HentaichanLogin.cs" />
-    <Compile Include="NHibernate\HentaichanLoginMap.cs" />
-    <Compile Include="NHibernate\HentaichanMap.cs" />
+    <Compile Include="NHibernate\BaseLoginMap.cs" />
+    <Compile Include="NHibernate\MangaMap.cs" />
     <Compile Include="HentaichanPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -48,12 +48,14 @@ namespace Hentaichan.Mangachan
     {
       base.Created(url);
 
-      this.UpdateContent();
+      if (this.Uri != url)
+      {
+        this.UpdateContent();
+        
+        var chapters = this.Volumes.SelectMany(v => v.Chapters);
+        AddHistoryReadedUris(chapters, url);
+      }
 
-#warning Загрузка с нужной главы
-      AddHistoryReadedUris(this.Chapters, new Uri(url.OriginalString
-        .Replace("/related/", "/manga/")
-        .Replace("/online/", "/manga/")));
     }
   }
 }

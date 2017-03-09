@@ -8,7 +8,7 @@ namespace Tests.Convertation._1._12
   [TestClass]
   public class Convert
   {
-    [TestMethod, Ignore]
+    [TestMethod]
     public void Convert_1_12_to_main()
     {
       Environment.Deploy(@"Tests.Convertation\1.12");

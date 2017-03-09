@@ -29,21 +29,6 @@ namespace MangaReader.Core.Convertation.Mangas
 
       var globalCollection = new List<Manga.IManga>();
 
-#pragma warning disable CS0612 // Obsolete методы используются для конвертации
-      var obsoleteManga = Serializer<ObservableCollection<Manga.Manga>>.Load(CacheFile);
-#pragma warning restore CS0612
-      if (obsoleteManga != null)
-      {
-        globalCollection.AddRange(obsoleteManga.Select(manga =>
-        {
-          var mangas = Manga.Mangas.Create(new Uri(manga.Url));
-          mangas.Name = manga.Name;
-          mangas.Status = manga.Status;
-          mangas.NeedUpdate = manga.NeedUpdate;
-          return mangas;
-        }));
-      }
-
       var cache = Serializer<ObservableCollection<Manga.Mangas>>.Load(CacheFile);
       if (cache != null)
         globalCollection.AddRange(cache.Where(gm => !globalCollection.Exists(m => m.Uri == gm.Uri)));

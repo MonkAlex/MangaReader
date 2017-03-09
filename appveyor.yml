@@ -8,7 +8,7 @@ build:
   verbosity: normal
 configuration:
 - Release
-after_build:
+after_test:
 - packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -mergeoutput -register:user -output:.\coverage.xml -target:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"  -targetargs:"/logger:Appveyor \"C:\projects\mangareader\Tests\Tests.API\bin\Release\Tests.API.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All
 - packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -mergeoutput -register:user -output:.\coverage.xml -target:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"  -targetargs:"/logger:Appveyor \"C:\projects\mangareader\Tests\Tests.Entities\bin\Release\Tests.Entities.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All
 - packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -mergeoutput -register:user -output:.\coverage.xml -target:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"  -targetargs:"/logger:Appveyor \"C:\projects\mangareader\Tests\Tests.Convertation\bin\Release\Tests.Convertation.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All

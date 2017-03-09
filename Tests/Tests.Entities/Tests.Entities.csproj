@@ -87,6 +87,7 @@
     <Compile Include="Manga\MangachanStructure.cs" />
     <Compile Include="Manga\MangaHistoryMultithread.cs" />
     <Compile Include="Manga\MintmangaStructure.cs" />
+    <Compile Include="Manga\ReadmangaCensored.cs" />
     <Compile Include="Manga\ReadmangaStructure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Manga\ReadmangaMoved.cs" />

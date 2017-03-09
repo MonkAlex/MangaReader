@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using HtmlAgilityPack;
 using MangaReader.Core;
 using MangaReader.Core.Account;
@@ -30,28 +31,41 @@ namespace Grouple
     {
       var fullUri = page.ResponseUri.OriginalString;
 
-      var client = new CookieClient();
-      var cookie = new Cookie
+      CookieClient client = null;
+      try
       {
-        Name = CookieKey,
-        Value = "true",
-        Expires = DateTime.Today.AddYears(1),
-        Domain = "." + page.ResponseUri.Host
-      };
-      client.Cookie.Add(cookie);
+        client = new CookieClient();
+        var cookie = new Cookie
+        {
+          Name = CookieKey,
+          Value = "true",
+          Expires = DateTime.Today.AddYears(1),
+          Domain = "." + page.ResponseUri.Host
+        };
+        client.Cookie.Add(cookie);
 
-      // Пытаемся найти переход с обычной манги на взрослую. Или хоть какой то переход.
-      var document = new HtmlDocument();
-      document.LoadHtml(page.Content);
-      var node = document.DocumentNode.SelectSingleNode("//form[@id='red-form']");
-      if (node != null)
-      {
-        var actionUri = node.Attributes.FirstOrDefault(a => a.Name == "action").Value;
-        fullUri = page.ResponseUri.GetLeftPart(UriPartial.Authority) + actionUri;
+        // Пытаемся найти переход с обычной манги на взрослую. Или хоть какой то переход.
+        var document = new HtmlDocument();
+        document.LoadHtml(page.Content);
+        var node = document.DocumentNode.SelectSingleNode("//form[@id='red-form']");
+        if (node != null)
+        {
+          var actionUri = node.Attributes.FirstOrDefault(a => a.Name == "action").Value;
+          fullUri = page.ResponseUri.GetLeftPart(UriPartial.Authority) + actionUri;
+        }
+        client.UploadValues(fullUri, "POST", new NameValueCollection { { "_agree", "on" }, { "agree", "on" } });
       }
-      client.UploadValues(fullUri, "POST", new NameValueCollection { { "_agree", "on" }, { "agree", "on" } });
+      catch (WebException ex)
+      {
+        Log.Exception(ex, "Upload failed, if 417 -- retry.");
+        if (((HttpWebResponse)ex.Response).StatusCode != HttpStatusCode.ExpectationFailed)
+          throw;
 
-      return client.ResponseUri;
+        Task.Delay(new TimeSpan(0, 11, 0)).Wait();
+        return GetRedirectUri(page);
+      }
+
+      return client?.ResponseUri;
     }
 
     /// <summary>
@@ -59,7 +73,7 @@ namespace Grouple
     /// </summary>
     /// <param name="chapter">Глава.</param>
     /// <returns>Список ссылок на изображения главы.</returns>
-    internal static void UpdatePages(Chapter chapter)
+    public static void UpdatePages(Chapter chapter)
     {
       chapter.Pages.Clear();
       var document = new HtmlDocument();
@@ -76,10 +90,11 @@ namespace Grouple
         var uriString = child[1].ToString() + child[0] + child[2];
 
         // Фикс страницы с цензурой.
-        if (!Uri.IsWellFormedUriString(uriString, UriKind.Absolute))
-          uriString = (@"http://" + chapter.Uri.Host + uriString);
+        Uri imageLink;
+        if (!Uri.TryCreate(uriString, UriKind.Absolute, out imageLink))
+          imageLink = new Uri(@"http://" + chapter.Uri.Host + uriString);
 
-        chapter.Pages.Add(new MangaPage(chapter.Uri, new Uri(uriString), i));
+        chapter.Pages.Add(new MangaPage(chapter.Uri, imageLink, i));
       }
     }
 

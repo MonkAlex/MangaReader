@@ -41,7 +41,14 @@ namespace MangaReader.Core.Services
       catch (WebException ex)
       {
         Library.Status = Strings.Page_GetPage_InternetOff;
-        Log.Exception(ex, Strings.Page_GetPage_InternetOff, ", ссылка:", url.ToString());
+        Log.Exception(ex, Strings.Page_GetPage_InternetOff + ", ссылка:" + url);
+
+        if (((HttpWebResponse) ex.Response).StatusCode == HttpStatusCode.ExpectationFailed)
+        {
+          Log.Exception(ex, "Upload failed, 417 -- retry after 5 second.");
+          Task.Delay(new TimeSpan(0, 11, 0)).Wait();
+        }
+
         if (ex.Status != WebExceptionStatus.Timeout)
           return new Page();
         ++restartCounter;

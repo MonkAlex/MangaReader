@@ -57,11 +57,9 @@ namespace Grouple
       }
       catch (WebException ex)
       {
-        Log.Exception(ex, "Upload failed, if 417 -- retry.");
-        if (((HttpWebResponse)ex.Response).StatusCode != HttpStatusCode.ExpectationFailed)
+        if (!Page.DelayOnException(ex))
           throw;
 
-        Task.Delay(new TimeSpan(0, 11, 0)).Wait();
         return GetRedirectUri(page);
       }
 

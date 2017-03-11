@@ -43,11 +43,7 @@ namespace MangaReader.Core.Services
         Library.Status = Strings.Page_GetPage_InternetOff;
         Log.Exception(ex, Strings.Page_GetPage_InternetOff + ", ссылка:" + url);
 
-        if (((HttpWebResponse) ex.Response).StatusCode == HttpStatusCode.ExpectationFailed)
-        {
-          Log.Exception(ex, "Upload failed, 417 -- retry after 5 second.");
-          Task.Delay(new TimeSpan(0, 11, 0)).Wait();
-        }
+        DelayOnException(ex);
 
         if (ex.Status != WebExceptionStatus.Timeout)
           return new Page();
@@ -59,6 +55,19 @@ namespace MangaReader.Core.Services
         Log.Exception(ex, ", ссылка:", url.ToString());
         return new Page();
       }
+    }
+
+    public static bool DelayOnException(WebException ex)
+    {
+      var response = ex.Response as HttpWebResponse;
+      if (response != null && response.StatusCode == HttpStatusCode.ExpectationFailed)
+      {
+        Log.Exception(ex, $"Failed, 417. {response.ResponseUri}");
+        var delay = new TimeSpan(0, 4, 0);
+        Task.Delay(delay).Wait();
+        return true;
+      }
+      return false;
     }
 
     /// <summary>

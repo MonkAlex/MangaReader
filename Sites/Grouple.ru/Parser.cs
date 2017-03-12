@@ -20,7 +20,7 @@ namespace Grouple
     /// <summary>
     /// Ключ с куками для редиректа.
     /// </summary>
-    internal static string CookieKey = "red-form";
+    internal const string CookieKey = "red-form";
 
     /// <summary>
     /// Получить ссылку с редиректа.
@@ -28,6 +28,11 @@ namespace Grouple
     /// <param name="page">Содержимое страницы по ссылке.</param>
     /// <returns>Новая ссылка.</returns>
     public static Uri GetRedirectUri(Page page)
+    {
+      return GetRedirectUriInternal(page, 0);
+    }
+
+    private static Uri GetRedirectUriInternal(Page page, int restartCount)
     {
       var fullUri = page.ResponseUri.OriginalString;
 
@@ -53,14 +58,18 @@ namespace Grouple
           var actionUri = node.Attributes.FirstOrDefault(a => a.Name == "action").Value;
           fullUri = page.ResponseUri.GetLeftPart(UriPartial.Authority) + actionUri;
         }
-        client.UploadValues(fullUri, "POST", new NameValueCollection { { "_agree", "on" }, { "agree", "on" } });
+        client.UploadValues(fullUri, "POST", new NameValueCollection {{"_agree", "on"}, {"agree", "on"}});
       }
       catch (WebException ex)
       {
+        restartCount++;
+        if (restartCount > 3)
+          return null;
+
         if (!Page.DelayOnExpectationFailed(ex))
           throw;
 
-        return GetRedirectUri(page);
+        return GetRedirectUriInternal(page, restartCount);
       }
 
       return client?.ResponseUri;

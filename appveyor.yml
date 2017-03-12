@@ -14,7 +14,7 @@ artifacts:
     name: test logs
     type: zip
 
-  - path: 'C:\projects\mangareader\Tests\Tests.Convertation\bin\Release\*.log'
+  - path: 'C:\projects\mangareader\Tests\Tests.Convertation\bin\Release\error.log'
     name: convertation logs
     type: zip
 after_build:

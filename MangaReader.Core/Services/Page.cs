@@ -41,9 +41,9 @@ namespace MangaReader.Core.Services
       catch (WebException ex)
       {
         Library.Status = Strings.Page_GetPage_InternetOff;
-        Log.Exception(ex, Strings.Page_GetPage_InternetOff + ", ссылка:" + url);
+        Log.Exception(ex, Strings.Page_GetPage_InternetOff + ", ссылка:" + url + $"restart count - {restartCounter}");
 
-        DelayOnException(ex);
+        DelayOnExpectationFailed(ex);
 
         if (ex.Status != WebExceptionStatus.Timeout)
           return new Page();
@@ -57,7 +57,7 @@ namespace MangaReader.Core.Services
       }
     }
 
-    public static bool DelayOnException(WebException ex)
+    public static bool DelayOnExpectationFailed(WebException ex)
     {
       var response = ex.Response as HttpWebResponse;
       if (response != null && response.StatusCode == HttpStatusCode.ExpectationFailed)

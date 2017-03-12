@@ -57,7 +57,7 @@ namespace Grouple
       }
       catch (WebException ex)
       {
-        if (!Page.DelayOnException(ex))
+        if (!Page.DelayOnExpectationFailed(ex))
           throw;
 
         return GetRedirectUri(page);

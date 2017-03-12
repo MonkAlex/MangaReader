@@ -43,9 +43,7 @@ namespace MangaReader.Core.Services
         Library.Status = Strings.Page_GetPage_InternetOff;
         Log.Exception(ex, Strings.Page_GetPage_InternetOff + ", ссылка:" + url + $"restart count - {restartCounter}");
 
-        DelayOnExpectationFailed(ex);
-
-        if (ex.Status != WebExceptionStatus.Timeout)
+        if (ex.Status != WebExceptionStatus.Timeout && !DelayOnExpectationFailed(ex))
           return new Page();
         ++restartCounter;
         return GetPage(url, client, restartCounter);

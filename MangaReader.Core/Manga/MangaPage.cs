@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using MangaReader.Core.Exception;
 using MangaReader.Core.Services;
 
@@ -8,6 +13,7 @@ namespace MangaReader.Core.Manga
 {
   public class MangaPage : IDownloadable
   {
+    protected static SemaphoreSlim Throttler = new SemaphoreSlim(200);
 
     #region Свойства
 
@@ -63,7 +69,7 @@ namespace MangaReader.Core.Manga
     /// Скачать страницу.
     /// </summary>
     /// <param name="chapterFolder">Папка для файлов.</param>
-    public void Download(string chapterFolder)
+    public async Task Download(string chapterFolder)
     {
       this.IsDownloaded = false;
 
@@ -73,15 +79,16 @@ namespace MangaReader.Core.Manga
       Library.CheckPause();
       try
       {
+        await Throttler.WaitAsync();
         chapterFolder = DirectoryHelpers.MakeValidPath(chapterFolder);
         if (!Directory.Exists(chapterFolder))
           Directory.CreateDirectory(chapterFolder);
 
-        var file = ImageFile.DownloadFile(this.ImageLink);
+        var file = await ImageFile.DownloadFile(this.ImageLink);
         if (!file.Exist)
           throw new System.Exception("Restart download, downloaded file is corrupted, link = " + this.ImageLink);
         var fileName = this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + file.Extension;
-        file.Save(Path.Combine(chapterFolder, fileName));
+        await file.Save(Path.Combine(chapterFolder, fileName));
         this.IsDownloaded = true;
         this.OnDownloadProgressChanged(null);
       }
@@ -89,7 +96,11 @@ namespace MangaReader.Core.Manga
       {
         Log.Exception(ex, this.Uri.OriginalString);
         ++restartCounter;
-        Download(chapterFolder);
+        await Download(chapterFolder);
+      }
+      finally
+      {
+        Throttler.Release();
       }
     }
 

@@ -93,7 +93,7 @@ namespace MangaReader.Core.Manga
     /// Скачать главу.
     /// </summary>
     /// <param name="downloadFolder">Папка для файлов.</param>
-    public virtual void Download(string downloadFolder)
+    public virtual Task Download(string downloadFolder)
     {
       if (restartCounter > 3)
         throw new DownloadAttemptFailed(restartCounter, this);
@@ -115,25 +115,25 @@ namespace MangaReader.Core.Manga
         if (!Directory.Exists(chapterFolder))
           Directory.CreateDirectory(chapterFolder);
 
-        Parallel.ForEach(this.ActivePages, page =>
+        var pTasks = this.ActivePages.Select(page =>
         {
-          page.Download(chapterFolder);
-          this.OnDownloadProgressChanged(null);
+          return page.Download(chapterFolder)
+          .ContinueWith(t => this.OnDownloadProgressChanged(null));
         });
-
+        return Task.WhenAll(pTasks.ToArray());
       }
       catch (AggregateException ae)
       {
         foreach (var ex in ae.InnerExceptions)
           Log.Exception(ex, this.Uri.ToString(), this.Name);
         ++restartCounter;
-        Download(downloadFolder);
+        return Download(downloadFolder);
       }
       catch (System.Exception ex)
       {
         Log.Exception(ex, this.Uri.ToString(), this.Name);
         ++restartCounter;
-        Download(downloadFolder);
+        return Download(downloadFolder);
       }
     }
 

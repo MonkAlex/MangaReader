@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
@@ -58,7 +59,7 @@ namespace MangaReader.Core.Manga
         handler(this, e);
     }
 
-    public void Download(string mangaFolder)
+    public Task Download(string mangaFolder)
     {
       var volumeFolder = Path.Combine(mangaFolder, this.Folder);
 
@@ -68,12 +69,13 @@ namespace MangaReader.Core.Manga
         this.ActiveChapters = History.GetItemsWithoutHistory(this);
       }
 
-      this.ActiveChapters.ForEach(c =>
+      var tasks = this.ActiveChapters.Select(c =>
       {
         c.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(args);
         c.OnlyUpdate = this.OnlyUpdate;
-        c.Download(volumeFolder);
+        return c.Download(volumeFolder);
       });
+      return Task.WhenAll(tasks);
     }
 
     public Volume(string name, int number)

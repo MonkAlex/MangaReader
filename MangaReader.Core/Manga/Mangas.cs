@@ -338,7 +338,7 @@ namespace MangaReader.Core.Manga
       this.Volumes.ForEach(v => v.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this));
     }
 
-    public void Download(string mangaFolder = null)
+    public async Task Download(string mangaFolder = null)
     {
       if (!this.NeedUpdate)
         return;
@@ -376,31 +376,35 @@ namespace MangaReader.Core.Manga
       // Формируем путь к главе вида Папка_манги\Том_001\Глава_0001
       try
       {
-        Parallel.ForEach(this.ActiveVolumes,
+        var tasks = this.ActiveVolumes.Select(
             v =>
             {
               v.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged(nameof(Downloaded));
               v.OnlyUpdate = this.Setting.OnlyUpdate;
-              v.Download(mangaFolder);
-              this.AddHistory(v.ActiveChapters.Where(c => c.IsDownloaded).Select(ch => ch.Uri));
-              this.AddHistory(v.ActiveChapters.SelectMany(ch => ch.ActivePages).Where(p => p.IsDownloaded).Select(p => p.Uri));
+              return v.Download(mangaFolder).ContinueWith(t =>
+              {
+                this.AddHistory(v.ActiveChapters.Where(c => c.IsDownloaded).Select(ch => ch.Uri));
+                this.AddHistory(v.ActiveChapters.SelectMany(ch => ch.ActivePages).Where(p => p.IsDownloaded).Select(p => p.Uri));
+              });
             });
-        Parallel.ForEach(this.ActiveChapters,
+        var chTasks = this.ActiveChapters.Select(
           ch =>
           {
             ch.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged(nameof(Downloaded));
             ch.OnlyUpdate = this.Setting.OnlyUpdate;
-            ch.Download(mangaFolder);
-            this.AddHistory(ch.Uri);
-            this.AddHistory(ch.ActivePages.Where(c => c.IsDownloaded).Select(p => p.Uri));
+            return ch.Download(mangaFolder).ContinueWith(t =>
+            {
+              this.AddHistory(ch.Uri);
+              this.AddHistory(ch.ActivePages.Where(c => c.IsDownloaded).Select(p => p.Uri));
+            });
           });
-        Parallel.ForEach(this.ActivePages,
+        var pTasks = this.ActivePages.Select(
           p =>
           {
             p.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged(nameof(Downloaded));
-            p.Download(mangaFolder);
-            this.AddHistory(p.Uri);
+            return p.Download(mangaFolder).ContinueWith(t => this.AddHistory(p.Uri));
           });
+        await Task.WhenAll(tasks.Concat(chTasks).Concat(pTasks).ToArray());
         this.Save();
         Log.AddFormat("Download end '{0}'.", this.Name);
       }

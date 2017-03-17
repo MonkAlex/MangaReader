@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 
 namespace MangaReader.Core.Services
 {
@@ -55,9 +56,14 @@ namespace MangaReader.Core.Services
     /// Сохранить файл на диск.
     /// </summary>
     /// <param name="path">Путь к файлу.</param>
-    public virtual void Save(string path)
+    public virtual async Task Save(string path)
     {
-      File.WriteAllBytes(path, this.Body);
+      using (FileStream sourceStream = new FileStream(path,
+          FileMode.Create, FileAccess.Write, FileShare.None,
+          bufferSize: 4096, useAsync: true))
+      {
+        await sourceStream.WriteAsync(this.Body, 0, this.Body.Length);
+      };
       this.Path = path;
     }
 
@@ -80,7 +86,7 @@ namespace MangaReader.Core.Services
     /// </summary>
     /// <param name="uri">Ссылка на файл.</param>
     /// <returns>Содержимое файла.</returns>
-    internal static ImageFile DownloadFile(Uri uri)
+    internal static async Task<ImageFile> DownloadFile(Uri uri)
     {
       byte[] result;
       WebResponse response;
@@ -89,7 +95,7 @@ namespace MangaReader.Core.Services
 
       try
       {
-        response = request.GetResponse();
+        response = await request.GetResponseAsync();
         using (var ms = new MemoryStream())
         {
           response.GetResponseStream().CopyTo(ms);

@@ -13,7 +13,7 @@ namespace MangaReader.Core.Manga
 {
   public class MangaPage : IDownloadable
   {
-    protected static SemaphoreSlim Throttler = new SemaphoreSlim(200);
+    protected static SemaphoreSlim Throttler = new SemaphoreSlim(25);
 
     #region Свойства
 
@@ -76,10 +76,10 @@ namespace MangaReader.Core.Manga
       if (restartCounter > 3)
         throw new DownloadAttemptFailed(restartCounter, this);
 
-      Library.CheckPause();
       try
       {
         await Throttler.WaitAsync();
+        Library.CheckPause();
         chapterFolder = DirectoryHelpers.MakeValidPath(chapterFolder);
         if (!Directory.Exists(chapterFolder))
           Directory.CreateDirectory(chapterFolder);

@@ -190,7 +190,7 @@ namespace MangaReader.Core.Services
           Status = Strings.Library_Status_MangaUpdate + current.Name;
           OnUpdateMangaStarted(current);
           current.DownloadProgressChanged += CurrentOnDownloadProgressChanged;
-          current.Download();
+          current.Download().Wait();
           current.DownloadProgressChanged -= CurrentOnDownloadProgressChanged;
           if (current.NeedCompress ?? current.Setting.CompressManga)
             current.Compress();

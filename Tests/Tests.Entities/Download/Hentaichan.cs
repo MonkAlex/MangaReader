@@ -19,7 +19,7 @@ namespace Tests.Entities.Download
     public async Task DownloadHentaichan()
     {
       CreateLogin();
-      var rm = Mangas.Create(new Uri(@"http://henchan.me/related/8824-o-ore-no-imouto-gaa-glava-3.5.html"));
+      var rm = Mangas.Create(new Uri(@"http://henchan.me/related/12850-twisted-intent-chast-1.html"));
       var sw = new Stopwatch();
       sw.Start();
       await rm.Download();
@@ -27,10 +27,10 @@ namespace Tests.Entities.Download
       Log.Add($"manga loaded {sw.Elapsed.TotalSeconds}");
       Assert.IsTrue(Directory.Exists(rm.Folder));
       var files = Directory.GetFiles(rm.Folder, "*", SearchOption.AllDirectories);
-      Assert.AreEqual(139, files.Length);
+      Assert.AreEqual(32, files.Length);
       var fileInfos = files.Select(f => new FileInfo(f)).ToList();
-      Assert.AreEqual(93596158, fileInfos.Sum(f => f.Length));
-      Assert.AreEqual(rm.Chapters.Count, fileInfos.GroupBy(f => f.Length).Max(g => g.Count()));
+      Assert.AreEqual(9733375, fileInfos.Sum(f => f.Length));
+      Assert.AreEqual(1, fileInfos.GroupBy(f => f.Length).Max(g => g.Count()));
       Assert.IsTrue(rm.IsDownloaded);
     }
 

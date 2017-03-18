@@ -14,6 +14,8 @@ namespace Tests.Entities.Download
   [TestClass]
   public class ReadmangaDL
   {
+    private int lastPercent = 0;
+
     [TestMethod]
     public async Task DownloadReadmanga()
     {
@@ -21,14 +23,24 @@ namespace Tests.Entities.Download
       var rm = Mangas.Create(new Uri(@"http://readmanga.me/hack__xxxx"));
       var sw = new Stopwatch();
       sw.Start();
+      rm.DownloadProgressChanged += RmOnDownloadProgressChanged;
       await rm.Download();
       sw.Stop();
-      Log.Add($"manga loaded {sw.Elapsed.TotalSeconds}");
+      Log.Add($"manga loaded {sw.Elapsed.TotalSeconds}, iscompleted = {rm.IsDownloaded}, lastpercent = {lastPercent}");
       Assert.IsTrue(Directory.Exists(rm.Folder));
       var files = Directory.GetFiles(rm.Folder, "*", SearchOption.AllDirectories);
       Assert.AreEqual(249, files.Length);
       var size = files.Sum(f => new FileInfo(f).Length);
       Assert.AreEqual(64025297, size);
+      Assert.IsTrue(rm.IsDownloaded);
+      Assert.AreEqual(100, lastPercent);
+    }
+
+    private void RmOnDownloadProgressChanged(object sender, IManga manga)
+    {
+      var dl = (int) manga.Downloaded;
+      if (dl > lastPercent)
+        lastPercent = dl;
     }
   }
 }

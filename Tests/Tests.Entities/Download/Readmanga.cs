@@ -30,8 +30,9 @@ namespace Tests.Entities.Download
       Assert.IsTrue(Directory.Exists(rm.Folder));
       var files = Directory.GetFiles(rm.Folder, "*", SearchOption.AllDirectories);
       Assert.AreEqual(249, files.Length);
-      var size = files.Sum(f => new FileInfo(f).Length);
-      Assert.AreEqual(64025297, size);
+      var fileInfos = files.Select(f => new FileInfo(f)).ToList();
+      Assert.AreEqual(64025297, fileInfos.Sum(f => f.Length));
+      Assert.IsTrue(rm.Volumes.Sum(v => v.Chapters.Count) > fileInfos.GroupBy(f => f.Length).Max(g => g.Count()));
       Assert.IsTrue(rm.IsDownloaded);
       Assert.AreEqual(100, lastPercent);
     }

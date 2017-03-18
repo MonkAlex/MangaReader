@@ -79,6 +79,9 @@
     <Compile Include="Compression\CRUD.cs" />
     <Compile Include="CRUD\MangaHistory.cs" />
     <Compile Include="CRUD\Manga.cs" />
+    <Compile Include="Download\Acomics.cs" />
+    <Compile Include="Download\Hentaichan.cs" />
+    <Compile Include="Download\Mangachan.cs" />
     <Compile Include="Download\Readmanga.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="Library\Add.cs" />

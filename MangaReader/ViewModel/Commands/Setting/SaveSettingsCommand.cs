@@ -1,5 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Reflection;
 using System.Windows;
+using MangaReader.Core.Exception;
+using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using MangaReader.Services;
 using MangaReader.UI.Services;
@@ -21,7 +25,17 @@ namespace MangaReader.ViewModel.Commands.Setting
       foreach (var mangaSetting in settingModel.Views)
         mangaSetting.Save();
 
-      ConfigStorage.Instance.Save();
+      try
+      {
+        ConfigStorage.Instance.Save();
+      }
+      catch (Exception e)
+      {
+        Log.Exception(e);
+        ConfigStorage.Instance.DatabaseConfig.Update();
+        var message = e.InnerException?.Message ?? e.Message;
+        Dialogs.ShowInfo("Не удалось сохранить настройки", message);
+      }
 
       if (skinGuid != ConfigStorage.Instance.ViewConfig.SkinGuid)
       {

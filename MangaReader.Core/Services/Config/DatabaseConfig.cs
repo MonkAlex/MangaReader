@@ -88,6 +88,13 @@ namespace MangaReader.Core.Services.Config
       return settings;
     }
 
+    public override void Update()
+    {
+      base.Update();
+
+      this.MangaSettings.ForEach(s => s.Update());
+    }
+
     public DatabaseConfig()
     {
       this.Version = new Version(1, 0, 0);

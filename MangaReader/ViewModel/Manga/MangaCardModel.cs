@@ -87,8 +87,8 @@ namespace MangaReader.ViewModel.Manga
 
     private void UpdateFolder()
     {
-      this.Folder = DirectoryHelpers.MakeValidPath(Path.Combine(Manga.Setting.Folder,
-          DirectoryHelpers.MakeValidPath(this.Name.Replace(Path.DirectorySeparatorChar, '.'))));
+      var mangaFolder = DirectoryHelpers.MakeValidPath(this.Name.Replace(Path.DirectorySeparatorChar, '.'));
+      this.Folder = DirectoryHelpers.MakeValidPath(Path.Combine(Manga.Setting.Folder, mangaFolder));
     }
 
     public ICommand Save { get; private set; }

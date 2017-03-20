@@ -27,8 +27,8 @@ namespace Tests.Entities.Download
       await rm.Download();
       sw.Stop();
       Log.Add($"manga loaded {sw.Elapsed.TotalSeconds}, iscompleted = {rm.IsDownloaded}, lastpercent = {lastPercent}");
-      Assert.IsTrue(Directory.Exists(rm.Folder));
-      var files = Directory.GetFiles(rm.Folder, "*", SearchOption.AllDirectories);
+      Assert.IsTrue(Directory.Exists(rm.GetAbsoulteFolderPath()));
+      var files = Directory.GetFiles(rm.GetAbsoulteFolderPath(), "*", SearchOption.AllDirectories);
       Assert.AreEqual(249, files.Length);
       var fileInfos = files.Select(f => new FileInfo(f)).ToList();
       Assert.AreEqual(64025297, fileInfos.Sum(f => f.Length));

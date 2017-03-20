@@ -23,8 +23,8 @@ namespace Tests.Entities.Download
       await rm.Download();
       sw.Stop();
       Log.Add($"manga loaded {sw.Elapsed.TotalSeconds}");
-      Assert.IsTrue(Directory.Exists(rm.Folder));
-      var files = Directory.GetFiles(rm.Folder, "*", SearchOption.AllDirectories);
+      Assert.IsTrue(Directory.Exists(rm.GetAbsoulteFolderPath()));
+      var files = Directory.GetFiles(rm.GetAbsoulteFolderPath(), "*", SearchOption.AllDirectories);
       Assert.AreEqual(6, files.Length);
       var fileInfos = files.Select(f => new FileInfo(f)).ToList();
       Assert.AreEqual(8301123, fileInfos.Sum(f => f.Length));

@@ -299,7 +299,11 @@ namespace MangaReader.Core.Manga
 
     public string Folder
     {
-      get { return DirectoryHelpers.MakeValidPath(Path.Combine(this.Setting.Folder, DirectoryHelpers.MakeValidPath(this.Name.Replace(Path.DirectorySeparatorChar, '.')))); }
+      get
+      {
+        var mangaFolder = DirectoryHelpers.MakeValidPath(this.Name.Replace(Path.DirectorySeparatorChar, '.'));
+        return DirectoryHelpers.MakeValidPath(Path.Combine(this.Setting.Folder, mangaFolder));
+      }
       set { }
     }
 
@@ -346,7 +350,7 @@ namespace MangaReader.Core.Manga
       this.Refresh();
 
       if (mangaFolder == null)
-        mangaFolder = this.Folder;
+        mangaFolder = this.GetAbsoulteFolderPath();
 
       this.UpdateContent();
 
@@ -451,16 +455,17 @@ namespace MangaReader.Core.Manga
     public void Compress()
     {
       Library.Status = Strings.Mangas_Compress_Started + this.Name;
+      var folder = this.GetAbsoulteFolderPath();
       switch (this.CompressionMode)
       {
         case Compression.CompressionMode.Manga:
-          Compression.CompressManga(this.Folder);
+          Compression.CompressManga(folder);
           break;
         case Compression.CompressionMode.Volume:
-          Compression.CompressVolumes(this.Folder);
+          Compression.CompressVolumes(folder);
           break;
         case Compression.CompressionMode.Chapter:
-          Compression.CompressChapters(this.Folder);
+          Compression.CompressChapters(folder);
           break;
         case null:
           throw new InvalidEnumArgumentException("CompressionMode is null", -1, typeof(Compression.CompressionMode));
@@ -475,13 +480,15 @@ namespace MangaReader.Core.Manga
       if (previousState != null)
       {
         var dirName = previousState[propertyNames.ToList().IndexOf(nameof(Folder))] as string;
-        if (dirName != null && !DirectoryHelpers.Equals(this.Folder, dirName) && Directory.Exists(dirName))
+        var newValue = this.GetAbsoulteFolderPath();
+        var oldValue = DirectoryHelpers.GetAbsoulteFolderPath(dirName);
+        if (oldValue != null && !DirectoryHelpers.Equals(newValue, oldValue) && Directory.Exists(oldValue))
         {
-          if (Directory.Exists(this.Folder))
-            throw new MangaDirectoryExists("Папка уже существует.", this.Folder, this);
+          if (Directory.Exists(newValue))
+            throw new MangaDirectoryExists("Папка уже существует.", newValue, this);
 
           // Копируем папку на новый адрес при изменении имени.
-          DirectoryHelpers.MoveDirectory(dirName, this.Folder);
+          DirectoryHelpers.MoveDirectory(oldValue, newValue);
         }
       }
 

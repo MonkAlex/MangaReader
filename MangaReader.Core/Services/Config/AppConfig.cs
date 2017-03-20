@@ -38,7 +38,12 @@ namespace MangaReader.Core.Services.Config
     /// <summary>
     /// Папка загрузки.
     /// </summary>
-    public static string DownloadFolder { get { return Path.Combine(ConfigStorage.WorkFolder, "Download"); } }
+    public static string DownloadFolder { get { return Path.Combine(ConfigStorage.WorkFolder, DownloadFolderName); } }
+
+    /// <summary>
+    /// Название папки загрузки.
+    /// </summary>
+    public const string DownloadFolderName = "Download";
 
     /// <summary>
     /// Префикс папки томов.

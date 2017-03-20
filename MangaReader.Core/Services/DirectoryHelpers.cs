@@ -2,6 +2,8 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using MangaReader.Core.Exception;
+using MangaReader.Core.Manga;
+using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Services
 {
@@ -76,6 +78,29 @@ namespace MangaReader.Core.Services
       var invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
 
       return Regex.Replace(correctName, invalidRegStr, replacement);
+    }
+
+
+    public static string GetAbsoulteFolderPath(this IDownloadable downloadable)
+    {
+      return GetAbsoulteFolderPath(downloadable.Folder);
+    }
+
+    public static string GetAbsoulteFolderPath(string folder)
+    {
+      Uri folderUri;
+      if (!Uri.TryCreate(folder, UriKind.RelativeOrAbsolute, out folderUri))
+      {
+        return folder;
+      }
+      else if (!folderUri.IsAbsoluteUri)
+      {
+        return Path.Combine(ConfigStorage.WorkFolder, folder);
+      }
+      else
+      {
+        return folder;
+      }
     }
   }
 }

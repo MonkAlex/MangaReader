@@ -75,7 +75,7 @@ namespace MangaReader.Core.Services.Config
 
         var setting = new MangaSetting
         {
-          Folder = AppConfig.DownloadFolder,
+          Folder = AppConfig.DownloadFolderName,
           Manga = plugin.MangaGuid,
           MangaName = plugin.Name,
           DefaultCompression = Compression.CompressionMode.Manga,

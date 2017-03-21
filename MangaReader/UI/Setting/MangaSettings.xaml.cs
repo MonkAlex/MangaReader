@@ -1,5 +1,8 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
+using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 using MangaReader.Services;
 
 namespace MangaReader.UI.Setting
@@ -17,7 +20,10 @@ namespace MangaReader.UI.Setting
 
     private void ChangeFolder_OnClick(object sender, RoutedEventArgs e)
     {
-      this.FolderPath.Text = Dialogs.SelectFolder(this.FolderPath.Text);
+      var absolutePath = DirectoryHelpers.GetAbsoulteFolderPath(this.FolderPath.Text);
+      var selectedPath = Dialogs.SelectFolder(absolutePath);
+      var relativePath = DirectoryHelpers.GetRelativePath(ConfigStorage.WorkFolder, selectedPath);
+      this.FolderPath.Text = relativePath.StartsWith(@"..\..\") ? selectedPath : relativePath;
     }
   }
 }

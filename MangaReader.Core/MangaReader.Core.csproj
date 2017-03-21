@@ -91,6 +91,7 @@
     <Compile Include="Convertation\Database\From24To27.cs" />
     <Compile Include="Convertation\Config\From27To28.cs" />
     <Compile Include="Convertation\Config\From29To30.cs" />
+    <Compile Include="Convertation\Database\From40To41.cs" />
     <Compile Include="Convertation\Database\FromBaseTo24.cs" />
     <Compile Include="Convertation\History\From32To33.cs" />
     <Compile Include="Convertation\History\FromBaseTo32.cs" />

@@ -57,7 +57,7 @@ namespace MangaReader.Services
     public static string SelectFolder(string oldPath)
     {
       var dialog = new VistaFolderBrowserDialog();
-      dialog.SelectedPath = System.IO.Path.GetDirectoryName(oldPath);
+      dialog.SelectedPath = System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(oldPath));
       if (dialog.ShowDialog() == true)
       {
         return dialog.SelectedPath + System.IO.Path.DirectorySeparatorChar;

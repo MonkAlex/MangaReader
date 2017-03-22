@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using MangaReader.Core.Exception;
@@ -48,9 +50,24 @@ namespace MangaReader.ViewModel.Commands.Setting
         }
       }
 
-      var window = ViewService.Instance.TryGet<System.Windows.Window>(settingModel);
+      var window = ViewService.Instance.TryGet<Window>(settingModel);
       if (window != null)
         window.Close();
+
+      ValidateMangaPaths();
+    }
+
+    public static void ValidateMangaPaths()
+    {
+      var paths = ConfigStorage.Instance.DatabaseConfig.MangaSettings
+        .Where(p =>
+        {
+          var absolute = DirectoryHelpers.GetAbsoulteFolderPath(p.Folder);
+          return !DirectoryHelpers.Equals(AppConfig.DownloadFolder, absolute) && !Directory.Exists(absolute);
+        })
+        .ToList();
+      if (paths.Any())
+        Dialogs.OpenSettingsOnPathNotExists(paths);
     }
 
     public SaveSettingsCommand(SettingModel model)

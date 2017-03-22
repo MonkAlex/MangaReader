@@ -1,4 +1,11 @@
-﻿using Ookii.Dialogs.Wpf;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using MangaReader.Core.Services;
+using MangaReader.Properties;
+using MangaReader.ViewModel.Commands;
+using Ookii.Dialogs.Wpf;
 
 namespace MangaReader.Services
 {
@@ -47,6 +54,29 @@ namespace MangaReader.Services
           result = true;
       }
       return result;
+    }
+
+    public static void OpenSettingsOnPathNotExists(IEnumerable<MangaSetting> mangaSettings)
+    {
+      var owner = WindowHelper.Owner;
+      using (var dialog = new TaskDialog())
+      {
+        dialog.CenterParent = true;
+        dialog.WindowTitle = "Папки загрузки недоступны";
+        dialog.MainInstruction = "Папки загрузки недоступны, рекомендуется исправить их в настройках.";
+        dialog.Content = "Недоступны папки:\r\n" + string.Join(Environment.NewLine, mangaSettings.Select(m => $"{m.MangaName}: {DirectoryHelpers.GetAbsoulteFolderPath(m.Folder)}"));
+        dialog.MainIcon = TaskDialogIcon.Error;
+        var settings = new TaskDialogButton(Strings.Library_Action_Settings);
+        dialog.Buttons.Add(settings);
+        dialog.Buttons.Add(new TaskDialogButton(ButtonType.Cancel));
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+          if (dialog.ShowDialog(owner) == settings)
+          {
+            new ShowSettingCommand().Execute(null);
+          }
+        });
+      }
     }
 
     /// <summary>

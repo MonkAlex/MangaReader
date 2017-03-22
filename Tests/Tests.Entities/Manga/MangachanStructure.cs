@@ -29,7 +29,6 @@ namespace Tests.Entities.Manga
     private Hentaichan.Mangachan.Mangachan GetManga(string url)
     {
       var manga = Mangas.CreateFromWeb(new Uri(url)) as Hentaichan.Mangachan.Mangachan;
-      parser.UpdateContent(manga);
       return manga;
     }
   }

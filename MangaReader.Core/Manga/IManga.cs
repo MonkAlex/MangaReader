@@ -56,5 +56,7 @@ namespace MangaReader.Core.Manga
     bool IsCompleted { get; set; }
 
     void Refresh();
+
+    void UpdateContent();
   }
 }

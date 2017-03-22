@@ -320,7 +320,7 @@ namespace MangaReader.Core.Manga
     /// Обновить содержимое манги.
     /// </summary>
     /// <remarks>Каждая конкретная манга сама забьет коллекцию Volumes\Chapters\Pages.</remarks>
-    protected virtual void UpdateContent()
+    public virtual void UpdateContent()
     {
       if (this.Pages == null)
         throw new ArgumentNullException("Pages");

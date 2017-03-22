@@ -40,20 +40,25 @@ namespace Hentaichan.Mangachan
 
     public override void UpdateNameAndStatus(IManga manga)
     {
-      var name = string.Empty;
+      var localizedName = new MangaName();
       try
       {
+        if (!manga.Volumes.Any() && !manga.Chapters.Any())
+          manga.UpdateContent();
+        var chapter = manga.Volumes.SelectMany(v => v.Chapters).FirstOrDefault();
+
         var document = new HtmlDocument();
-        var page = Page.GetPage(manga.Uri);
-        document.LoadHtml(page.Content);
-        var nameNode = document.DocumentNode.SelectSingleNode("//head/title");
-        name = nameNode.InnerText.Split(new[] { "&raquo;" }, StringSplitOptions.RemoveEmptyEntries)[0];
-        name = name.Trim();
+        document.LoadHtml(Page.GetPage(chapter.Uri).Content);
+        var enName = Regex.Match(document.DocumentNode.InnerHtml, @"\""name\"":\""(.*?)\""", RegexOptions.IgnoreCase);
+        if (enName.Success)
+          localizedName.English = WebUtility.HtmlDecode(enName.Groups[1].Value);
+        var ruName = Regex.Match(document.DocumentNode.InnerHtml, @"\""rus_name\"":\""\((.*?)\)\""", RegexOptions.IgnoreCase);
+        if (ruName.Success)
+          localizedName.Russian = WebUtility.HtmlDecode(ruName.Groups[1].Value);
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
-      name = WebUtility.HtmlDecode(name);
 
-      this.UpdateName(manga, name);
+      this.UpdateName(manga, localizedName.ToString());
     }
 
     public override void UpdateContent(IManga manga)

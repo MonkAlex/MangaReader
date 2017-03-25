@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -9,7 +10,7 @@ namespace MangaReader.Core.Services
 {
   public class ImageFile
   {
-    protected internal virtual byte[] Body { get; set; }
+    public virtual byte[] Body { get; set; }
 
     public virtual string Hash
     {
@@ -24,7 +25,10 @@ namespace MangaReader.Core.Services
 
     private string hash = string.Empty;
 
-    protected internal virtual bool Exist { get { return this.Body != null; } }
+    protected internal virtual bool Exist
+    {
+      get { return this.Body != null; }
+    }
 
     protected internal virtual string Extension
     {
@@ -40,6 +44,7 @@ namespace MangaReader.Core.Services
       }
       set { this.extension = value; }
     }
+
     private string extension = string.Empty;
 
     public virtual string Path { get; set; }
@@ -59,11 +64,11 @@ namespace MangaReader.Core.Services
     public virtual async Task Save(string path)
     {
       using (FileStream sourceStream = new FileStream(path,
-          FileMode.Create, FileAccess.Write, FileShare.None,
-          bufferSize: 4096, useAsync: true))
+        FileMode.Create, FileAccess.Write, FileShare.None,
+        bufferSize: 4096, useAsync: true))
       {
         await sourceStream.WriteAsync(this.Body, 0, this.Body.Length);
-      };
+      }
       this.Path = path;
     }
 
@@ -85,8 +90,9 @@ namespace MangaReader.Core.Services
     /// Скачать файл.
     /// </summary>
     /// <param name="uri">Ссылка на файл.</param>
+    /// <param name="progressChanged">Событие в ходе скачивания.</param>
     /// <returns>Содержимое файла.</returns>
-    internal static async Task<ImageFile> DownloadFile(Uri uri)
+    public static async Task<ImageFile> DownloadFile(Uri uri, Action<DownloadProgress> progressChanged)
     {
       byte[] result;
       WebResponse response;
@@ -96,11 +102,7 @@ namespace MangaReader.Core.Services
       try
       {
         response = await request.GetResponseAsync();
-        using (var ms = new MemoryStream())
-        {
-          response.GetResponseStream().CopyTo(ms);
-          result = ms.ToArray();
-        }
+        result = await CopyTo(response.GetResponseStream(), response.ContentLength, progressChanged);
       }
       catch (System.Exception ex)
       {
@@ -110,6 +112,55 @@ namespace MangaReader.Core.Services
       if (response.ContentLength == result.LongLength)
         file.Body = result;
       return file;
+    }
+
+    private static async Task<byte[]> CopyTo(Stream from, long totalBytes, Action<DownloadProgress> loadedEvent)
+    {
+      var sw = new Stopwatch();
+      sw.Start();
+      var data = new byte[totalBytes];
+      byte[] buffer = new byte[81920];
+      int currentIndex = 0;
+      while (true)
+      {
+        int num = await from.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
+        if (num != 0)
+        {
+          Array.Copy(buffer, 0, data, currentIndex, num);
+          currentIndex += num;
+          loadedEvent?.Invoke(new DownloadProgress(currentIndex, totalBytes, sw.ElapsedMilliseconds));
+        }
+        else
+          break;
+      }
+      sw.Stop();
+      return data;
+    }
+
+    public struct DownloadProgress
+    {
+      public readonly long BytesReceived;
+
+      public readonly long TotalBytesToReceive;
+
+      public readonly long TimeMs;
+
+      public double GetSpeed()
+      {
+        var seconds = TimeMs / 1000.0;
+        if (seconds > 0)
+          return BytesReceived / seconds;
+        return 0;
+      }
+
+      public DownloadProgress(long received, long total, long time)
+      {
+        this.BytesReceived = received;
+        this.TotalBytesToReceive = total;
+        this.TimeMs = time;
+      }
+
+      // public int ProgressPercentage { get; set; }
     }
   }
 }

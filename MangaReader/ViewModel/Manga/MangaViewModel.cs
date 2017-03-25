@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
+using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
 namespace MangaReader.ViewModel.Manga
@@ -16,6 +17,7 @@ namespace MangaReader.ViewModel.Manga
     private string completedIcon;
     private string needUpdateIcon;
     private double downloaded;
+    private string speed;
     private string status;
 
     public string Type
@@ -68,6 +70,16 @@ namespace MangaReader.ViewModel.Manga
       }
     }
 
+    public string Speed
+    {
+      get { return speed; }
+      set
+      {
+        speed = value;
+        OnPropertyChanged();
+      }
+    }
+
     public string Status
     {
       get { return status; }
@@ -92,6 +104,8 @@ namespace MangaReader.ViewModel.Manga
         SetNeedUpdate(Manga.NeedUpdate);
       if (args.PropertyName == nameof(Manga.Status))
         this.Status = Manga.Status;
+      if (args.PropertyName == nameof(Speed))
+        this.Speed = Manga.Speed.HumanizeByteSize();
     }
 
     private void SetCompletedIcon(bool isCompleted)

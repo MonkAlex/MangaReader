@@ -296,6 +296,20 @@ namespace MangaReader.Core.Manga
       set { }
     }
 
+    /// <summary>
+    /// Скорость загрузки манги.
+    /// </summary>
+    public double Speed
+    {
+      get
+      {
+        var volumes = (this.ActiveVolumes != null && this.ActiveVolumes.Any()) ? this.ActiveVolumes.Sum(v => v.Speed) : 0;
+        var chapters = (this.ActiveChapters != null && this.ActiveChapters.Any()) ? this.ActiveChapters.Sum(ch => ch.Speed) : 0;
+        var pages = (this.ActivePages != null && this.ActivePages.Any()) ? this.ActivePages.Sum(ch => ch.Speed) : 0;
+        return volumes + chapters + pages;
+      }
+    }
+
 
     public string Folder
     {
@@ -433,6 +447,8 @@ namespace MangaReader.Core.Manga
     protected void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
     {
       PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+      if (propertyName == nameof(Downloaded))
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Speed)));
     }
 
     #endregion

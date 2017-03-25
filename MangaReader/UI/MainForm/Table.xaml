@@ -116,7 +116,8 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid>
-                                        <ProgressBar Maximum="100" Value="{Binding Downloaded}"/>
+                                        <ProgressBar Minimum="0" Maximum="100" Value="{Binding Downloaded}"/>
+                                        <TextBlock Text="{Binding Speed}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                     </Grid>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>

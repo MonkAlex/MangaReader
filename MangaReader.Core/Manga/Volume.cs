@@ -38,6 +38,14 @@ namespace MangaReader.Core.Manga
       set { }
     }
 
+    /// <summary>
+    /// Скорость загрузки тома.
+    /// </summary>
+    public double Speed
+    {
+      get { return (this.ActiveChapters != null && this.ActiveChapters.Any()) ? this.ActiveChapters.Sum(ch => ch.Speed) : 0; }
+    }
+
     public Uri Uri { get; set; }
     
     public string Folder

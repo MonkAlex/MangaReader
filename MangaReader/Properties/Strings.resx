@@ -220,7 +220,7 @@
     <value>Перевод: (.*)</value>
   </data>
   <data name="Manga_Downloaded" xml:space="preserve">
-    <value>Загружено</value>
+    <value>Загрузка</value>
   </data>
   <data name="Settings_MinimizeToTray" xml:space="preserve">
     <value>Сворачивать в трей</value>

@@ -154,6 +154,7 @@
     <Compile Include="Services\Library.cs" />
     <Compile Include="Services\Log.cs" />
     <Compile Include="Services\MangaSetting.cs" />
+    <Compile Include="Services\NetworkSpeed.cs" />
     <Compile Include="Services\Page.cs" />
     <Compile Include="Services\Serializer.cs" />
     <Compile Include="Services\TimedLock.cs" />

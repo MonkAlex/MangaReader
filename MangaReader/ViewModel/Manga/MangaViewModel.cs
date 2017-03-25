@@ -95,7 +95,10 @@ namespace MangaReader.ViewModel.Manga
       if (args.PropertyName == nameof(Manga.Name))
         this.Name = Manga.Name;
       if (args.PropertyName == nameof(Manga.Downloaded))
+      {
         this.Downloaded = Manga.Downloaded;
+        this.Speed = !Manga.IsDownloaded ? (NetworkSpeed.TotalSpeed.HumanizeByteSize() + "ps") : string.Empty;
+      }
       if (args.PropertyName == nameof(Manga.IsCompleted))
         SetCompletedIcon(Manga.IsCompleted);
       if (args.PropertyName == nameof(Manga.Uri))
@@ -104,8 +107,6 @@ namespace MangaReader.ViewModel.Manga
         SetNeedUpdate(Manga.NeedUpdate);
       if (args.PropertyName == nameof(Manga.Status))
         this.Status = Manga.Status;
-      if (args.PropertyName == nameof(Speed))
-        this.Speed = Manga.Speed.HumanizeByteSize();
     }
 
     private void SetCompletedIcon(bool isCompleted)

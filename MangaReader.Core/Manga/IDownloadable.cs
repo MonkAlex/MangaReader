@@ -37,11 +37,6 @@ namespace MangaReader.Core.Manga
     /// </summary>
     string Folder { get; }
 
-    /// <summary>
-    /// Скорость скачивания.
-    /// </summary>
-    double Speed { get; }
-
     #endregion
 
     #region DownloadProgressChanged

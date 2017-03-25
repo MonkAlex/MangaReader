@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Xml.Serialization;
 
 namespace MangaReader.Core.Manga
 {
   // История манги.
+  [DebuggerDisplay("Id = {Id}, Uri = {Uri}, Date = {Date}")]
   public class MangaHistory : Entity.Entity
   {
 

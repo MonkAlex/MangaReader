@@ -61,7 +61,7 @@ namespace MangaReader.Core
       }
       catch (System.Exception ex)
       {
-        EventLog.WriteEntry(nameof(MangaReader), ex.ToString(), EventLogEntryType.Error);
+        EventLog.WriteEntry(nameof(MangaReader), $"{args.Name} \r\n {ex}", EventLogEntryType.Error);
       }
       return null;
     }

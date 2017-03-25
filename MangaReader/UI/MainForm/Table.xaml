@@ -112,6 +112,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn Header="{x:Static resx:Strings.Manga_Downloaded}"
+                                        Width="100"
                             ui:GridSort.PropertyName="Downloaded">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>

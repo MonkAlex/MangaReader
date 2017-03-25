@@ -1,16 +1,19 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MangaReader.Core.Services
 {
   public class ImageFile
   {
-    public virtual byte[] Body { get; set; }
+    protected virtual byte[] Body { get; set; }
 
     public virtual string Hash
     {
@@ -90,9 +93,8 @@ namespace MangaReader.Core.Services
     /// Скачать файл.
     /// </summary>
     /// <param name="uri">Ссылка на файл.</param>
-    /// <param name="progressChanged">Событие в ходе скачивания.</param>
     /// <returns>Содержимое файла.</returns>
-    public static async Task<ImageFile> DownloadFile(Uri uri, Action<DownloadProgress> progressChanged)
+    public static async Task<ImageFile> DownloadFile(Uri uri)
     {
       byte[] result;
       WebResponse response;
@@ -102,11 +104,12 @@ namespace MangaReader.Core.Services
       try
       {
         response = await request.GetResponseAsync();
-        result = await CopyTo(response.GetResponseStream(), response.ContentLength, progressChanged);
+        result = await CopyTo(response.GetResponseStream(), response.ContentLength, uri);
       }
       catch (System.Exception ex)
       {
         Log.Exception(ex, string.Format("Загрузка {0} не завершена.", uri));
+        NetworkSpeed.RemoveInfo(uri);
         return file;
       }
       if (response.ContentLength == result.LongLength)
@@ -114,7 +117,7 @@ namespace MangaReader.Core.Services
       return file;
     }
 
-    private static async Task<byte[]> CopyTo(Stream from, long totalBytes, Action<DownloadProgress> loadedEvent)
+    private static async Task<byte[]> CopyTo(Stream from, long totalBytes, Uri uri)
     {
       var sw = new Stopwatch();
       sw.Start();
@@ -128,39 +131,16 @@ namespace MangaReader.Core.Services
         {
           Array.Copy(buffer, 0, data, currentIndex, num);
           currentIndex += num;
-          loadedEvent?.Invoke(new DownloadProgress(currentIndex, totalBytes, sw.ElapsedMilliseconds));
+          NetworkSpeed.AddInfo(uri, currentIndex, sw.ElapsedMilliseconds);
         }
         else
+        {
+          NetworkSpeed.RemoveInfo(uri);
           break;
+        }
       }
       sw.Stop();
       return data;
-    }
-
-    public struct DownloadProgress
-    {
-      public readonly long BytesReceived;
-
-      public readonly long TotalBytesToReceive;
-
-      public readonly long TimeMs;
-
-      public double GetSpeed()
-      {
-        var seconds = TimeMs / 1000.0;
-        if (seconds > 0)
-          return BytesReceived / seconds;
-        return 0;
-      }
-
-      public DownloadProgress(long received, long total, long time)
-      {
-        this.BytesReceived = received;
-        this.TotalBytesToReceive = total;
-        this.TimeMs = time;
-      }
-
-      // public int ProgressPercentage { get; set; }
     }
   }
 }

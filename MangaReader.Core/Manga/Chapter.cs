@@ -66,14 +66,6 @@ namespace MangaReader.Core.Manga
       set { }
     }
 
-    /// <summary>
-    /// Скорость загрузки главы.
-    /// </summary>
-    public double Speed
-    {
-      get { return this.ActivePages != null && this.ActivePages.Any() ? this.ActivePages.Sum(p => p.Speed) : 0; }
-    }
-
     #endregion
 
     public string Folder

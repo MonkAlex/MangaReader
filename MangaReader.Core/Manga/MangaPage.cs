@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MangaReader.Core.Exception;
@@ -50,8 +47,6 @@ namespace MangaReader.Core.Manga
       set { }
     }
 
-    public double Speed { get; private set; }
-
     public string Folder { get; private set; }
 
     public event EventHandler<IManga> DownloadProgressChanged;
@@ -86,9 +81,7 @@ namespace MangaReader.Core.Manga
         if (!Directory.Exists(chapterFolder))
           Directory.CreateDirectory(chapterFolder);
 
-        this.Speed = 0;
-        var file = await ImageFile.DownloadFile(this.ImageLink, dp => this.Speed = dp.GetSpeed());
-        this.Speed = 0;
+        var file = await ImageFile.DownloadFile(this.ImageLink);
         if (!file.Exist)
           throw new System.Exception("Restart download, downloaded file is corrupted, link = " + this.ImageLink);
         var fileName = this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + file.Extension;

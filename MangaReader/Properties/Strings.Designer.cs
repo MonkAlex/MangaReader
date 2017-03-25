@@ -286,7 +286,7 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Загружено.
+        ///   Looks up a localized string similar to Загрузка.
         /// </summary>
         public static string Manga_Downloaded {
             get {

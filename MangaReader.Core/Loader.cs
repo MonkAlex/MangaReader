@@ -59,11 +59,31 @@ namespace MangaReader.Core
         }
         return Assembly.LoadFile(file.FullName);
       }
+      catch (FileLoadException fle)
+      {
+        ProcessInternetZoneOnFiles(fle, args.Name);
+      }
+      catch (NotSupportedException nse)
+      {
+        ProcessInternetZoneOnFiles(nse, args.Name);
+      }
       catch (System.Exception ex)
       {
         EventLog.WriteEntry(nameof(MangaReader), $"{args.Name} \r\n {ex}", EventLogEntryType.Error);
       }
       return null;
+    }
+
+    private static void ProcessInternetZoneOnFiles(System.Exception ex, string libraryName)
+    {
+      EventLog.WriteEntry(nameof(MangaReader), $"Just restart app \r\n {libraryName} \r\n {ex}", EventLogEntryType.Warning);
+      foreach (var s in new[] { LibPath, PluginPath })
+        foreach (var fileInfo in new DirectoryInfo(s).GetFiles())
+        {
+          var body = File.ReadAllBytes(fileInfo.FullName);
+          File.WriteAllBytes(fileInfo.FullName, body);
+        }
+      Environment.Exit(ex.HResult);
     }
   }
 }

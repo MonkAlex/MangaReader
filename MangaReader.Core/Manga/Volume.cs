@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,7 @@ using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Manga
 {
+  [DebuggerDisplay("{Number} {Name}")]
   public class Volume : IDownloadableContainer<Chapter>
   {
     public string Name { get; set; }

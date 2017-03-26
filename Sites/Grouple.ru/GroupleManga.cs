@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using MangaReader.Core;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Properties;
 using MangaReader.Core.Services;
@@ -82,7 +83,7 @@ namespace Grouple
 
     protected override void Created(Uri url)
     {
-      if (this.Uri != url)
+      if (this.Uri != url && Parser.ParseUri(url).Kind != UriParseKind.Manga)
       {
         this.UpdateContent();
 

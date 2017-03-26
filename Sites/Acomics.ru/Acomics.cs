@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MangaReader.Core;
 using MangaReader.Core.Services;
 
 namespace Acomics
@@ -26,7 +27,7 @@ namespace Acomics
 
     protected override void Created(Uri url)
     {
-      if (this.Uri != url)
+      if (this.Uri != url && Parser.ParseUri(url).Kind != UriParseKind.Manga)
       {
         this.UpdateContent();
 

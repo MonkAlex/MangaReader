@@ -11,17 +11,7 @@ namespace MangaReader.Core.Services
 {
   public class NetworkSpeed
   {
-    public static double TotalSpeed
-    {
-      get
-      {
-        if (totalSpeed > 0.1)
-          AvgSpeedStorage.Value.Add(totalSpeed);
-        return totalSpeed;
-      }
-    }
-
-    private static Lazy<ConcurrentBag<double>> AvgSpeedStorage = new Lazy<ConcurrentBag<double>>();
+    public static double TotalSpeed { get { return totalSpeed; } }
 
     private static double totalSpeed = 0;
 
@@ -50,9 +40,6 @@ namespace MangaReader.Core.Services
 
     public static void Clear()
     {
-      if (AvgSpeedStorage.Value.Any())
-        Log.Add($"Avg speed = {AvgSpeedStorage.Value.Average()}");
-      AvgSpeedStorage = new Lazy<ConcurrentBag<double>>();
       while (receivedStorage.Value.Count > 0)
       {
         long dd;

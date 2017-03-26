@@ -48,7 +48,7 @@ namespace Hentaichan.Mangachan
     {
       base.Created(url);
 
-      if (this.Uri != url)
+      if (this.Uri != url && Parser.ParseUri(url).Kind != UriParseKind.Manga)
       {
         this.UpdateContent();
         

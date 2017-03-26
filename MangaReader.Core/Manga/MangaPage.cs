@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Threading;
@@ -8,6 +9,7 @@ using MangaReader.Core.Services;
 
 namespace MangaReader.Core.Manga
 {
+  [DebuggerDisplay("{Number} {Name}")]
   public class MangaPage : IDownloadable
   {
     protected static SemaphoreSlim Throttler = new SemaphoreSlim(25);

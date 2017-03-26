@@ -97,7 +97,8 @@ namespace MangaReader.ViewModel.Manga
       if (args.PropertyName == nameof(Manga.Downloaded))
       {
         this.Downloaded = Manga.Downloaded;
-        this.Speed = !Manga.IsDownloaded ? (NetworkSpeed.TotalSpeed.HumanizeByteSize() + "ps") : string.Empty;
+        var speed = NetworkSpeed.TotalSpeed;
+        this.Speed = (!Manga.IsDownloaded && speed != 0) ? (speed.HumanizeByteSize() + "ps") : string.Empty;
       }
       if (args.PropertyName == nameof(Manga.IsCompleted))
         SetCompletedIcon(Manga.IsCompleted);

@@ -381,6 +381,7 @@ namespace MangaReader.Core.Manga
       // Формируем путь к главе вида Папка_манги\Том_001\Глава_0001
       try
       {
+        NetworkSpeed.Clear();
         var tasks = this.ActiveVolumes.Select(
             v =>
             {
@@ -411,6 +412,7 @@ namespace MangaReader.Core.Manga
           });
         await Task.WhenAll(tasks.Concat(chTasks).Concat(pTasks).ToArray());
         this.Save();
+        NetworkSpeed.Clear();
         Log.AddFormat("Download end '{0}'.", this.Name);
       }
 

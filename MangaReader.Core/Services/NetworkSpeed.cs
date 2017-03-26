@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -10,57 +11,63 @@ namespace MangaReader.Core.Services
 {
   public class NetworkSpeed
   {
-    public static double TotalSpeed { get { return totalSpeed; } }
+    public static double TotalSpeed
+    {
+      get
+      {
+        if (totalSpeed > 0.1)
+          AvgSpeedStorage.Value.Add(totalSpeed);
+        return totalSpeed;
+      }
+    }
+
+    private static Lazy<ConcurrentBag<double>> AvgSpeedStorage = new Lazy<ConcurrentBag<double>>();
 
     private static double totalSpeed = 0;
 
+    private const uint Seconds = 3;
+
+    private const uint TimerInterval = 1000;
+
     private static Timer speedTimer = new Timer(state =>
     {
-      var now = dpLazy.Value.Sum(v => v.Value.GetSpeed());
-      qLazy.Value.Enqueue(now);
-      totalSpeed = qLazy.Value.Average() * 1.1;
-    }, null, 0, 1000);
+      var now = 0L;
+      while (receivedStorage.Value.Any())
+      {
+        long added;
+        if (receivedStorage.Value.TryDequeue(out added))
+        {
+          now += added;
+        }
+      }
+      lastSpeeds.Value.Enqueue(now);
+      totalSpeed = lastSpeeds.Value.Average();
+    }, null, 0, TimerInterval);
 
-    private static Lazy<LimitedConcurrentQueue<double>> qLazy = new Lazy<LimitedConcurrentQueue<double>>(() => new LimitedConcurrentQueue<double>(20));
+    private static Lazy<LimitedConcurrentQueue<double>> lastSpeeds = new Lazy<LimitedConcurrentQueue<double>>(() => new LimitedConcurrentQueue<double>(Seconds));
 
-    private static Lazy<ConcurrentDictionary<Uri, DownloadProgress>> dpLazy = new Lazy<ConcurrentDictionary<Uri, DownloadProgress>>();
+    private static Lazy<ConcurrentQueue<long>> receivedStorage = new Lazy<ConcurrentQueue<long>>();
 
-    public static void AddInfo(Uri uri, long received, long time)
+    public static void Clear()
     {
-      var dp = new DownloadProgress(received, time);
-      dpLazy.Value.AddOrUpdate(uri, dp, (uri1, progress) => progress = dp);
+      if (AvgSpeedStorage.Value.Any())
+        Log.Add($"Avg speed = {AvgSpeedStorage.Value.Average()}");
+      AvgSpeedStorage = new Lazy<ConcurrentBag<double>>();
+      while (receivedStorage.Value.Count > 0)
+      {
+        long dd;
+        receivedStorage.Value.TryDequeue(out dd);
+      }
+      while (lastSpeeds.Value.Count > 0)
+      {
+        double dd;
+        lastSpeeds.Value.TryDequeue(out dd);
+      }
     }
 
-    public static void RemoveInfo(Uri uri)
+    public static void AddInfo(long received)
     {
-      DownloadProgress dp;
-      dpLazy.Value.TryRemove(uri, out dp);
-    }
-
-    private struct DownloadProgress
-    {
-      public readonly long BytesReceived;
-
-      // public readonly long TotalBytesToReceive;
-
-      public readonly long TimeMs;
-
-      public double GetSpeed()
-      {
-        var seconds = TimeMs / 1000.0;
-        if (seconds > 0.1)
-          return BytesReceived / seconds;
-        return 0;
-      }
-
-      public DownloadProgress(long received, long time)
-      {
-        this.BytesReceived = received;
-        // this.TotalBytesToReceive = total;
-        this.TimeMs = time;
-      }
-
-      // public int ProgressPercentage { get; set; }
+      receivedStorage.Value.Enqueue(received);
     }
 
     private class LimitedConcurrentQueue<T> : ConcurrentQueue<T>

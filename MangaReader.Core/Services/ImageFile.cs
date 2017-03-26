@@ -109,7 +109,6 @@ namespace MangaReader.Core.Services
       catch (System.Exception ex)
       {
         Log.Exception(ex, string.Format("Загрузка {0} не завершена.", uri));
-        NetworkSpeed.RemoveInfo(uri);
         return file;
       }
       if (response.ContentLength == result.LongLength)
@@ -119,8 +118,6 @@ namespace MangaReader.Core.Services
 
     private static async Task<byte[]> CopyTo(Stream from, long totalBytes, Uri uri)
     {
-      var sw = new Stopwatch();
-      sw.Start();
       var data = new byte[totalBytes];
       byte[] buffer = new byte[81920];
       int currentIndex = 0;
@@ -131,15 +128,13 @@ namespace MangaReader.Core.Services
         {
           Array.Copy(buffer, 0, data, currentIndex, num);
           currentIndex += num;
-          NetworkSpeed.AddInfo(uri, currentIndex, sw.ElapsedMilliseconds);
+          NetworkSpeed.AddInfo(num);
         }
         else
         {
-          NetworkSpeed.RemoveInfo(uri);
           break;
         }
       }
-      sw.Stop();
       return data;
     }
   }

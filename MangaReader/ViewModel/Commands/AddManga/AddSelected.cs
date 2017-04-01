@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using MangaReader.Core.Exception;
 using MangaReader.Core.Services;
 using MangaReader.Properties;
 using MangaReader.Services;
@@ -18,15 +19,23 @@ namespace MangaReader.ViewModel.Commands.AddManga
     {
       base.Execute(parameter);
 
-      Uri uri;
-      if (Uri.TryCreate(model.InputText, UriKind.Absolute, out uri))
-        Library.Add(uri);
-
-      var selectedItems = mainModel.BookmarksModels.OfType<AddBookmarksModel>()
-        .SelectMany(m => m.Bookmarks.Where(b => b.IsSelected));
-      foreach (var manga in selectedItems)
+      try
       {
-        Library.Add(manga.Value.Uri);
+        Uri uri;
+        if (Uri.TryCreate(model.InputText, UriKind.Absolute, out uri))
+          Library.Add(uri);
+
+        var selectedItems = mainModel.BookmarksModels.OfType<AddBookmarksModel>()
+          .SelectMany(m => m.Bookmarks.Where(b => b.IsSelected));
+        foreach (var manga in selectedItems)
+        {
+          Library.Add(manga.Value.Uri);
+        }
+      }
+      catch (MangaReaderException e)
+      {
+        Log.Exception(e);
+        Dialogs.ShowInfo("Не удалось добавить выбранную мангу", e.Message);
       }
       mainModel.Close();
     }

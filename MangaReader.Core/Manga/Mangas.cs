@@ -503,8 +503,8 @@ namespace MangaReader.Core.Manga
       if (!this.IsValid())
         throw new SaveValidationException("Нельзя сохранять невалидную сущность", this);
 
-      if (Repository.Get<IManga>().Any(m => m.Id != this.Id && (m.IsNameChanged ? m.LocalName : m.ServerName) == this.Name))
-        throw new SaveValidationException("Манга с таким именем уже существует", this);
+      if (Repository.Get<IManga>().Any(m => m.Id != this.Id && m.Folder == this.Folder))
+        throw new SaveValidationException($"Другая манга уже использует папку {this.Folder}.", this);
 
       base.Save();
     }

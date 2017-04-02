@@ -10,5 +10,14 @@
     System.Type LoginType { get; }
     Services.MangaSetting GetSettings();
     ISiteParser GetParser();
+    HistoryType HistoryType { get; }
+  }
+
+  [System.Flags]
+  public enum HistoryType
+  {
+    Page,
+    Chapter,
+    Volume    
   }
 }

@@ -25,5 +25,6 @@ namespace MangaReader.Core
     }
 
     public abstract ISiteParser GetParser();
+    public abstract HistoryType HistoryType { get; }
   }
 }

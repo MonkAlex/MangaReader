@@ -30,7 +30,7 @@ namespace MangaReader.Core.Services
 
     protected internal virtual bool Exist
     {
-      get { return this.Body != null; }
+      get { return this.Body != null && this.Body.LongLength > 0; }
     }
 
     protected internal virtual string Extension

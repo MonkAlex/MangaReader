@@ -107,17 +107,23 @@ namespace MangaReader.Core.Manga
 
     private bool? needCompress = null;
 
+    protected virtual IPlugin Plugin
+    {
+      get
+      {
+        var plugin = ConfigStorage.Plugins.SingleOrDefault(p => p.MangaType == this.GetType());
+        if (plugin == null)
+          throw new MangaReaderException(string.Format("Plugin for {0} manga type not found.", this.GetType()));
+        return plugin;
+      }
+    }
+
     public virtual ISiteParser Parser
     {
       get
       {
         if (Mapping.Initialized)
-        {
-          var plugin = ConfigStorage.Plugins.SingleOrDefault(p => p.MangaType == this.GetType());
-          if (plugin == null)
-            throw new MangaReaderException(string.Format("Plugin for {0} manga type not found.", this.GetType()));
-          return plugin.GetParser();
-        }
+          return Plugin.GetParser();
         throw new MangaReaderException("Mappings not initialized.");
       }
     }
@@ -130,12 +136,7 @@ namespace MangaReader.Core.Manga
       get
       {
         if (Mapping.Initialized)
-        {
-          var plugin = ConfigStorage.Plugins.SingleOrDefault(p => p.MangaType == this.GetType());
-          if (plugin == null)
-            throw new MangaReaderException(string.Format("Plugin for {0} manga type not found.", this.GetType()));
-          return plugin.GetSettings();
-        }
+          return Plugin.GetSettings();
         throw new MangaReaderException("Mappings not initialized.");
       }
     }
@@ -382,6 +383,7 @@ namespace MangaReader.Core.Manga
       try
       {
         NetworkSpeed.Clear();
+        var plugin = Plugin;
         var tasks = this.ActiveVolumes.Select(
             v =>
             {
@@ -389,8 +391,11 @@ namespace MangaReader.Core.Manga
               v.OnlyUpdate = this.Setting.OnlyUpdate;
               return v.Download(mangaFolder).ContinueWith(t =>
               {
-                this.AddHistory(v.ActiveChapters.Where(c => c.IsDownloaded).Select(ch => ch.Uri));
-                this.AddHistory(v.ActiveChapters.SelectMany(ch => ch.ActivePages).Where(p => p.IsDownloaded).Select(p => p.Uri));
+                if (plugin.HistoryType == HistoryType.Chapter)
+                  this.AddHistory(v.ActiveChapters.Where(c => c.IsDownloaded).Select(ch => ch.Uri));
+
+                if (plugin.HistoryType == HistoryType.Page)
+                  this.AddHistory(v.ActiveChapters.SelectMany(ch => ch.ActivePages).Where(p => p.IsDownloaded).Select(p => p.Uri));
               });
             });
         var chTasks = this.ActiveChapters.Select(
@@ -400,15 +405,22 @@ namespace MangaReader.Core.Manga
             ch.OnlyUpdate = this.Setting.OnlyUpdate;
             return ch.Download(mangaFolder).ContinueWith(t =>
             {
-              this.AddHistory(ch.Uri);
-              this.AddHistory(ch.ActivePages.Where(c => c.IsDownloaded).Select(p => p.Uri));
+              if (ch.IsDownloaded && plugin.HistoryType == HistoryType.Chapter)
+                this.AddHistory(ch.Uri);
+
+              if (plugin.HistoryType == HistoryType.Page)
+                this.AddHistory(ch.ActivePages.Where(c => c.IsDownloaded).Select(p => p.Uri));
             });
           });
         var pTasks = this.ActivePages.Select(
           p =>
           {
             p.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged(nameof(Downloaded));
-            return p.Download(mangaFolder).ContinueWith(t => this.AddHistory(p.Uri));
+            return p.Download(mangaFolder).ContinueWith(t =>
+            {
+              if (p.IsDownloaded && plugin.HistoryType == HistoryType.Page)
+                this.AddHistory(p.Uri);
+            });
           });
         await Task.WhenAll(tasks.Concat(chTasks).Concat(pTasks).ToArray());
         this.Save();

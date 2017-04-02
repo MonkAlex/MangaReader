@@ -20,11 +20,6 @@ namespace MangaReader.Core.Manga
     #region Свойства
 
     /// <summary>
-    /// Количество перезапусков загрузки.
-    /// </summary>
-    private int restartCounter;
-
-    /// <summary>
     /// Хранилище ссылок на изображения.
     /// </summary>
     public List<MangaPage> Pages { get; set; }
@@ -97,9 +92,6 @@ namespace MangaReader.Core.Manga
     /// <param name="downloadFolder">Папка для файлов.</param>
     public virtual Task Download(string downloadFolder)
     {
-      if (restartCounter > 3)
-        throw new DownloadAttemptFailed(restartCounter, this);
-
       var chapterFolder = Path.Combine(downloadFolder, this.Folder);
 
       if (this.Pages == null || !this.Pages.Any())
@@ -120,7 +112,13 @@ namespace MangaReader.Core.Manga
         var pTasks = this.ActivePages.Select(page =>
         {
           return page.Download(chapterFolder)
-          .ContinueWith(t => this.OnDownloadProgressChanged(null));
+          .ContinueWith(t =>
+            {
+              if (t.Exception != null)
+                Log.Exception(t.Exception, page.Uri.ToString(), page.ImageLink.ToString());
+
+              this.OnDownloadProgressChanged(null);
+            });
         });
         return Task.WhenAll(pTasks.ToArray());
       }
@@ -128,15 +126,12 @@ namespace MangaReader.Core.Manga
       {
         foreach (var ex in ae.InnerExceptions)
           Log.Exception(ex, this.Uri.ToString(), this.Name);
-        ++restartCounter;
-        return Download(downloadFolder);
       }
       catch (System.Exception ex)
       {
         Log.Exception(ex, this.Uri.ToString(), this.Name);
-        ++restartCounter;
-        return Download(downloadFolder);
       }
+      return Task.FromResult(false);
     }
 
     /// <summary>
@@ -164,7 +159,6 @@ namespace MangaReader.Core.Manga
       this.Uri = uri;
       this.Pages = new List<MangaPage>();
       this.ActivePages = new List<MangaPage>();
-      this.restartCounter = 0;
     }
 
     #endregion

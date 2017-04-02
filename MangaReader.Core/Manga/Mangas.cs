@@ -391,6 +391,9 @@ namespace MangaReader.Core.Manga
               v.OnlyUpdate = this.Setting.OnlyUpdate;
               return v.Download(mangaFolder).ContinueWith(t =>
               {
+                if (t.Exception != null)
+                  Log.Exception(t.Exception, v.Uri.ToString());
+
                 if (plugin.HistoryType == HistoryType.Chapter)
                   this.AddHistory(v.ActiveChapters.Where(c => c.IsDownloaded).Select(ch => ch.Uri));
 
@@ -405,6 +408,9 @@ namespace MangaReader.Core.Manga
             ch.OnlyUpdate = this.Setting.OnlyUpdate;
             return ch.Download(mangaFolder).ContinueWith(t =>
             {
+              if (t.Exception != null)
+                Log.Exception(t.Exception, ch.Uri.ToString());
+
               if (ch.IsDownloaded && plugin.HistoryType == HistoryType.Chapter)
                 this.AddHistory(ch.Uri);
 
@@ -418,6 +424,8 @@ namespace MangaReader.Core.Manga
             p.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged(nameof(Downloaded));
             return p.Download(mangaFolder).ContinueWith(t =>
             {
+              if (t.Exception != null)
+                Log.Exception(t.Exception, p.Uri.ToString(), p.ImageLink.ToString());
               if (p.IsDownloaded && plugin.HistoryType == HistoryType.Page)
                 this.AddHistory(p.Uri);
             });

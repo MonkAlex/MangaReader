@@ -15,7 +15,7 @@ namespace MangaReader.ViewModel.Commands.Manga
       var text = string.Format("Удалить мангу {0}?", parameter.Name);
       var remove = Dialogs.ShowYesNoDialog("Удаление манги", text, "Манга и история её обновлений будет удалена.");
       if (remove)
-        Library.Remove(parameter);
+        Library.ThreadAction(() => Library.Remove(parameter));
     }
 
     public DeleteMangaCommand()

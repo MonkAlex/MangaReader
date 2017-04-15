@@ -69,7 +69,7 @@ namespace MangaReader.Services
         var settings = new TaskDialogButton(Strings.Library_Action_Settings);
         dialog.Buttons.Add(settings);
         dialog.Buttons.Add(new TaskDialogButton(ButtonType.Cancel));
-        Application.Current.Dispatcher.Invoke(() =>
+        Client.Dispatcher.Invoke(() =>
         {
           if (dialog.ShowDialog(owner) == settings)
           {

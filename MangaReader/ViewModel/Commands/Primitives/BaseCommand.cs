@@ -45,10 +45,10 @@ namespace MangaReader.ViewModel.Commands.Primitives
 
     protected virtual void OnCanExecuteChanged()
     {
-      if (Application.Current.Dispatcher.CheckAccess())
+      if (Client.Dispatcher.CheckAccess())
         CanExecuteChanged?.Invoke(this, EventArgs.Empty);
       else
-        Application.Current.Dispatcher.InvokeAsync(() => CanExecuteChanged?.Invoke(this, EventArgs.Empty));
+        Client.Dispatcher.InvokeAsync(() => CanExecuteChanged?.Invoke(this, EventArgs.Empty));
     }
     
     public event PropertyChangedEventHandler PropertyChanged;

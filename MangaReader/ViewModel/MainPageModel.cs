@@ -119,14 +119,14 @@ namespace MangaReader.ViewModel
     {
       var model = this.MangaViewModels.SingleOrDefault(m => Equals(m.Manga, mangas));
       if (model != null)
-        this.MangaViewModels.Remove(model);
+        Client.Dispatcher.Invoke(() => this.MangaViewModels.Remove(model));
     }
 
     private void LibraryOnMangaAdded(object sender, IManga mangas)
     {
       var model = this.MangaViewModels.SingleOrDefault(m => Equals(m.Manga, mangas));
       if (model == null)
-        this.MangaViewModels.Add(new MangaViewModel(mangas));
+        Client.Dispatcher.Invoke(() => this.MangaViewModels.Add(new MangaViewModel(mangas)));
     }
     
     private void LibraryOnUpdateMangaStarted(object sender, IDownloadable mangas)

@@ -22,12 +22,12 @@ namespace MangaReader.ViewModel.Primitive
 
     private void ViewOnUnloaded(object sender, RoutedEventArgs routedEventArgs)
     {
-      Application.Current.Dispatcher.InvokeAsync(this.Unload);
+      Client.Dispatcher.InvokeAsync(this.Unload);
     }
 
     private void ViewOnLoaded(object sender, RoutedEventArgs routedEventArgs)
     {
-      Application.Current.Dispatcher.InvokeAsync(this.Load);
+      Client.Dispatcher.InvokeAsync(this.Load);
     }
 
     public static void SubToViewModel(FrameworkElement view)

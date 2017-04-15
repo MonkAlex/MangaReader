@@ -16,7 +16,7 @@ namespace MangaReader.Services
         if (Application.Current.CheckAccess())
           return action();
         else
-          return Application.Current.Dispatcher.Invoke(action);
+          return Client.Dispatcher.Invoke(action);
       }
     }
   }

@@ -80,10 +80,10 @@ namespace MangaReader.ViewModel.Primitive
 
     protected virtual void OnStateChanged(ConvertState newState)
     {
-      if (Application.Current.Dispatcher.CheckAccess())
+      if (Client.Dispatcher.CheckAccess())
         StateChanged?.Invoke(this, newState);
       else
-        Application.Current.Dispatcher.InvokeAsync(() => StateChanged?.Invoke(this, newState));
+        Client.Dispatcher.InvokeAsync(() => StateChanged?.Invoke(this, newState));
     }
 
   }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shell;
+using System.Windows.Threading;
 using MangaReader.Core.ApplicationControl;
 using MangaReader.Core.Services.Config;
 using MangaReader.Services;
@@ -16,6 +18,8 @@ namespace MangaReader
   public static class Client
   {
     const string AddManga = nameof(MangaReader.Core.ApplicationControl.Messages.AddManga);
+
+    public static Dispatcher Dispatcher { get { return Application.Current.Dispatcher; } }
 
     public static void Run()
     {
@@ -64,7 +68,7 @@ namespace MangaReader
       switch (message)
       {
         case Messages.Activate:
-          App.Current.Dispatcher.Invoke(() =>
+          Dispatcher.Invoke(() =>
           {
             var window = WindowHelper.Owner;
 
@@ -85,13 +89,13 @@ namespace MangaReader
           });
           break;
         case Messages.AddManga:
-          App.Current.Dispatcher.Invoke(() =>
+          Dispatcher.Invoke(() =>
           {
             new AddNewMangaCommand().Execute(null);
           });
           break;
         case Messages.Close:
-          App.Current.Dispatcher.Invoke(() =>
+          Dispatcher.Invoke(() =>
           {
             new ExitCommand().Execute(null);
           });

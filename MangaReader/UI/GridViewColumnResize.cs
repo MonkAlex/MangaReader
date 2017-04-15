@@ -213,7 +213,7 @@ namespace MangaReader.UI
           Resize();
           _element.SizeChanged += OnSizeChanged;
         };
-        _timer = new Timer(x => Application.Current.Dispatcher.BeginInvoke(resizeAndEnableSize), null, Delay,
+        _timer = new Timer(x => Client.Dispatcher.BeginInvoke(resizeAndEnableSize), null, Delay,
                            RefreshTime);
       }
 

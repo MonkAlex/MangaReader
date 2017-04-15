@@ -39,8 +39,23 @@ namespace MangaReader.Services
     /// <returns>True, если выбрано Да.</returns>
     public static bool ShowYesNoDialog(string title, string text, string note)
     {
+      return ShowYesNoDialog(title, text, note, string.Empty).Item1;
+    }
+
+
+    /// <summary>
+    /// Задать вопрос пользователю, варианты "Да\Нет".
+    /// </summary>
+    /// <param name="title">Заголовок окна.</param>
+    /// <param name="text">Текст.</param>
+    /// <param name="note">Примечание к тексту.</param>
+    /// <param name="checkbox">Текст для галочки.</param>
+    /// <returns>True, если выбрано Да.</returns>
+    public static Tuple<bool, bool> ShowYesNoDialog(string title, string text, string note, string checkbox)
+    {
       var owner = WindowHelper.Owner;
       var result = false;
+      var checkboxValue = false;
       using (var dialog = new TaskDialog())
       {
         dialog.CenterParent = true;
@@ -48,12 +63,17 @@ namespace MangaReader.Services
         dialog.MainInstruction = text;
         dialog.Content = note;
         dialog.MainIcon = TaskDialogIcon.Information;
+        if (!string.IsNullOrWhiteSpace(checkbox))
+          dialog.VerificationText = checkbox;
         dialog.Buttons.Add(new TaskDialogButton(ButtonType.Yes));
         dialog.Buttons.Add(new TaskDialogButton(ButtonType.No));
         if (dialog.ShowDialog(owner).ButtonType == ButtonType.Yes)
+        {
           result = true;
+          checkboxValue = dialog.IsVerificationChecked;
+        }
       }
-      return result;
+      return new Tuple<bool, bool>(result, checkboxValue);
     }
 
     public static void OpenSettingsOnPathNotExists(IEnumerable<MangaSetting> mangaSettings)

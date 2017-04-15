@@ -56,6 +56,18 @@ namespace MangaReader.Core.Services
       }
     }
 
+    public static void DeleteDirectory(string folder)
+    {
+      try
+      {
+        Directory.Delete(folder, true);
+      }
+      catch (System.Exception ex)
+      {
+        Log.Exception(ex, $"Не удалось удалить папку {folder}");
+      }
+    }
+
     /// <summary>
     /// Очистка пути от недопустимых символов.
     /// </summary>

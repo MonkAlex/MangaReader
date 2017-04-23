@@ -148,6 +148,7 @@
     <Compile Include="Services\Config\ViewConfig.cs" />
     <Compile Include="Convertation\Convert.cs" />
     <Compile Include="Services\DirectoryHelpers.cs" />
+    <Compile Include="Services\DownloadManager.cs" />
     <Compile Include="Services\Helper.cs" />
     <Compile Include="Services\History.cs" />
     <Compile Include="Services\ImageFile.cs" />

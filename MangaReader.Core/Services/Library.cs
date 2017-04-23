@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using MangaReader.Core.Exception;
@@ -12,56 +13,54 @@ using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Services
 {
-  public static class Library
+  public class LibraryViewModel : INotifyPropertyChanged
   {
     /// <summary>
     /// Таймер для автообновления манги.
     /// </summary>
-    private static readonly Timer Timer = new Timer(TimerTick, null, new TimeSpan(0, 1, 0), new TimeSpan(0, 1, 0));
+    private readonly Timer Timer = null;
+
+    private int mangaIndex;
+    private int mangasCount;
+    private string status;
+    private bool isAvaible = true;
 
     /// <summary>
     /// Статус библиотеки.
     /// </summary>
-    public static string Status
+    public string Status
     {
       get { return status; }
       set
       {
         status = value;
-        OnStatusChanged(value);
+        OnPropertyChanged();
       }
     }
 
     /// <summary>
     /// Признак паузы.
     /// </summary>
-    public static bool IsPaused
+    public bool IsPaused
     {
-      get { return isPaused; }
+      get { return DownloadManager.IsPaused; }
       set
       {
-        isPaused = value;
-        OnPauseChanged(value);
+        DownloadManager.IsPaused = value;
+        OnPropertyChanged();
       }
     }
-
-    private static int mangaIndex;
-
-    private static int mangasCount;
-    private static bool isAvaible = true;
-    private static bool isPaused;
-    private static string status;
 
     /// <summary>
     /// Библиотека доступна, т.е. не в процессе обновления.
     /// </summary>
-    public static bool IsAvaible
+    public bool IsAvaible
     {
       get { return isAvaible; }
       private set
       {
         isAvaible = value;
-        OnAvaibleChanged(value);
+        OnPropertyChanged();
       }
     }
 
@@ -70,7 +69,7 @@ namespace MangaReader.Core.Services
     /// </summary>
     /// <param name="action">Выполняемое действие.</param>
     /// <remarks>Только одно действие за раз. Доступность выполнения можно проверить в IsAvaible.</remarks>
-    public async static void ThreadAction(Action action)
+    public async Task ThreadAction(Action action)
     {
       if (!IsAvaible)
         throw new MangaReaderException("Library not avaible.");
@@ -86,13 +85,13 @@ namespace MangaReader.Core.Services
     /// Добавить мангу.
     /// </summary>
     /// <param name="url"></param>
-    public static bool Add(string url)
+    public bool Add(string url)
     {
       Uri uri;
       if (Uri.TryCreate(url, UriKind.Absolute, out uri) && Add(uri))
         return true;
 
-      Library.Status = "Некорректная ссылка.";
+      Status = "Некорректная ссылка.";
       return false;
     }
 
@@ -100,7 +99,7 @@ namespace MangaReader.Core.Services
     /// Добавить мангу.
     /// </summary>
     /// <param name="uri"></param>
-    public static bool Add(Uri uri)
+    public bool Add(Uri uri)
     {
       if (Repository.Get<IManga>().Any(m => m.Uri == uri))
         return false;
@@ -109,7 +108,7 @@ namespace MangaReader.Core.Services
       if (newManga == null || !newManga.IsValid())
         return false;
 
-      OnMangaAdded(newManga);
+      OnLibraryChanged(new LibraryViewModelArgs(null, newManga, MangaOperation.Added, LibraryOperation.UpdateMangaChanged));
       Status = Strings.Library_Status_MangaAdded + newManga.Name;
       return true;
     }
@@ -118,23 +117,23 @@ namespace MangaReader.Core.Services
     /// Удалить мангу.
     /// </summary>
     /// <param name="manga"></param>
-    public static void Remove(IManga manga)
+    public void Remove(IManga manga)
     {
       if (manga == null)
         return;
 
       manga.Delete();
-      OnMangaDeleted(manga);
+      OnLibraryChanged(new LibraryViewModelArgs(null, manga, MangaOperation.Deleted, LibraryOperation.UpdateMangaChanged));
 
       var removed = Strings.Library_Status_MangaRemoved + manga.Name;
       Status = removed;
       Log.Add(removed);
     }
 
-    private static void TimerTick(object sender)
+    private void TimerTick(object sender)
     {
       if (IsAvaible && ConfigStorage.Instance.AppConfig.AutoUpdateInHours > 0 &&
-        DateTime.Now > ConfigStorage.Instance.AppConfig.LastUpdate.AddHours(ConfigStorage.Instance.AppConfig.AutoUpdateInHours))
+          DateTime.Now > ConfigStorage.Instance.AppConfig.LastUpdate.AddHours(ConfigStorage.Instance.AppConfig.AutoUpdateInHours))
       {
         Log.AddFormat("{0} Время последнего обновления - {1}, частота обновления - каждые {2} часов.",
           Strings.AutoUpdate, ConfigStorage.Instance.AppConfig.LastUpdate, ConfigStorage.Instance.AppConfig.AutoUpdateInHours);
@@ -150,30 +149,19 @@ namespace MangaReader.Core.Services
     /// Обновить мангу.
     /// </summary>
     /// <param name="manga">Обновляемая манга.</param>
-    public static void Update(IManga manga)
+    public void Update(IManga manga)
     {
       Update(Enumerable.Repeat(manga, 1), new SortDescription());
     }
-
-    /// <summary>
-    /// Реакция на паузу.
-    /// </summary>
-    public static void CheckPause()
-    {
-      while (IsPaused)
-      {
-        Thread.Sleep(1000);
-      }
-    }
-
+    
     /// <summary>
     /// Обновить мангу.
     /// </summary>
     /// <param name="mangas">Обновляемая манга.</param>
     /// <param name="sort">Сортировка.</param>
-    public static void Update(IEnumerable<IManga> mangas, SortDescription sort)
+    public void Update(IEnumerable<IManga> mangas, SortDescription sort)
     {
-      OnUpdateStarted();
+      OnLibraryChanged(new LibraryViewModelArgs(null, null, MangaOperation.None, LibraryOperation.UpdateStarted));
       Status = Strings.Library_Status_Update;
       try
       {
@@ -185,10 +173,10 @@ namespace MangaReader.Core.Services
         mangasCount = listMangas.Count;
         foreach (var current in listMangas)
         {
-          CheckPause();
+          DownloadManager.CheckPause().Wait();
 
           Status = Strings.Library_Status_MangaUpdate + current.Name;
-          OnUpdateMangaStarted(current);
+          OnLibraryChanged(new LibraryViewModelArgs(null, current, MangaOperation.UpdateStarted, LibraryOperation.UpdateMangaChanged));
           current.DownloadProgressChanged += CurrentOnDownloadProgressChanged;
           current.Download().Wait();
           current.DownloadProgressChanged -= CurrentOnDownloadProgressChanged;
@@ -196,7 +184,7 @@ namespace MangaReader.Core.Services
             current.Compress();
           mangaIndex++;
           if (current.IsDownloaded)
-            OnUpdateMangaCompleted(current);
+            OnLibraryChanged(new LibraryViewModelArgs(null, current, MangaOperation.UpdateCompleted, LibraryOperation.UpdateMangaChanged));
         }
       }
       catch (AggregateException ae)
@@ -210,92 +198,71 @@ namespace MangaReader.Core.Services
       }
       finally
       {
-        OnUpdateCompleted();
+        OnLibraryChanged(new LibraryViewModelArgs(null, null, MangaOperation.None, LibraryOperation.UpdateCompleted));
         Status = Strings.Library_Status_UpdateComplete;
         ConfigStorage.Instance.AppConfig.LastUpdate = DateTime.Now;
       }
     }
 
-    private static void CurrentOnDownloadProgressChanged(object sender, IManga mangas)
+    private void CurrentOnDownloadProgressChanged(object sender, IManga mangas)
     {
-      var percent = (double) (100*mangaIndex + mangas.Downloaded)/(mangasCount*100);
-      OnUpdatePercentChanged(percent);
+      var percent = (double)(100 * mangaIndex + mangas.Downloaded) / (mangasCount * 100);
+      OnLibraryChanged(new LibraryViewModelArgs(percent, mangas, MangaOperation.None, LibraryOperation.UpdatePercentChanged));
     }
 
     #endregion
 
-    #region Events
+    public event EventHandler<LibraryViewModelArgs> LibraryChanged; 
 
-    public static event EventHandler UpdateStarted;
+    public event PropertyChangedEventHandler PropertyChanged;
 
-    public static event EventHandler UpdateCompleted;
-
-    public static event EventHandler<double> UpdatePercentChanged;
-
-    public static event EventHandler<IManga> UpdateMangaStarted;
-
-    public static event EventHandler<IManga> UpdateMangaCompleted;
-
-    public static event EventHandler<bool> AvaibleChanged;
-
-    public static event EventHandler<bool> PauseChanged;
-
-    public static event EventHandler<string> StatusChanged;
-
-    public static event EventHandler<IManga> MangaAdded;
-
-    public static event EventHandler<IManga> MangaDeleted;
-
-    private static void OnUpdateStarted()
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
-      UpdateStarted?.Invoke(null, EventArgs.Empty);
+      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    private static void OnUpdateCompleted()
+    public LibraryViewModel()
     {
-      UpdateCompleted?.Invoke(null, EventArgs.Empty);
+      Timer = new Timer(TimerTick, null, new TimeSpan(0, 1, 0), new TimeSpan(0, 1, 0));
     }
 
-    private static void OnUpdatePercentChanged(double e)
+    protected virtual void OnLibraryChanged(LibraryViewModelArgs e)
     {
-      UpdatePercentChanged?.Invoke(null, e);
+      LibraryChanged?.Invoke(this, e);
     }
+  }
 
-    private static void OnUpdateMangaCompleted(IManga e)
+  public struct LibraryViewModelArgs
+  {
+    public double? Percent { get; }
+    public IManga Manga { get; }
+    public MangaOperation MangaOperation { get; }
+    public LibraryOperation LibraryOperation { get; }
+
+    public LibraryViewModelArgs(double? percent, IManga manga, 
+      MangaOperation mangaOperation, LibraryOperation libraryOperation)
     {
-      UpdateMangaCompleted?.Invoke(null, e);
+      this.Percent = percent;
+      this.Manga = manga;
+      this.MangaOperation = mangaOperation;
+      this.LibraryOperation = libraryOperation;
     }
+  }
 
-    private static void OnAvaibleChanged(bool e)
-    {
-      AvaibleChanged?.Invoke(null, e);
-    }
+  public enum MangaOperation
+  {
+    Added,
+    Deleted,
+    UpdateStarted,
+    UpdateCompleted,
+    None
+  }
 
-    private static void OnPauseChanged(bool e)
-    {
-      PauseChanged?.Invoke(null, e);
-    }
-
-    private static void OnStatusChanged(string e)
-    {
-      StatusChanged?.Invoke(null, e);
-    }
-
-    private static void OnMangaAdded(IManga e)
-    {
-      MangaAdded?.Invoke(null, e);
-    }
-
-    private static void OnMangaDeleted(IManga e)
-    {
-      MangaDeleted?.Invoke(null, e);
-    }
-
-    private static void OnUpdateMangaStarted(IManga e)
-    {
-      UpdateMangaStarted?.Invoke(null, e);
-    }
-
-    #endregion
+  public enum LibraryOperation
+  {
+    UpdateStarted,
+    UpdatePercentChanged,
+    UpdateMangaChanged,
+    UpdateCompleted,
   }
 }

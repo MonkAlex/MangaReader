@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Shell;
 using System.Windows.Threading;
 using MangaReader.Core.ApplicationControl;
+using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using MangaReader.Services;
 using MangaReader.UI.Services;
@@ -91,7 +92,9 @@ namespace MangaReader
         case Messages.AddManga:
           Dispatcher.Invoke(() =>
           {
-            new AddNewMangaCommand().Execute(null);
+            var library = WindowHelper.Library;
+            if (library != null)
+              new AddNewMangaCommand(library).Execute(null);
           });
           break;
         case Messages.Close:

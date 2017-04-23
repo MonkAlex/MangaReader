@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using MangaReader.Core.Manga;
+using MangaReader.Core.Services;
 using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
 
@@ -18,7 +19,7 @@ namespace MangaReader.ViewModel.Commands.Manga
       return true;
     }
 
-    public OpenUrlMangaCommand()
+    public OpenUrlMangaCommand(LibraryViewModel model) : base(model)
     {
       this.Name = Strings.Manga_Action_View;
       this.Icon = "pack://application:,,,/Icons/Manga/www.png";

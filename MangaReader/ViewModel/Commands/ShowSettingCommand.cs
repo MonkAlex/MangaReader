@@ -1,4 +1,5 @@
-﻿using MangaReader.Properties;
+﻿using MangaReader.Core.Services;
+using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
 using MangaReader.ViewModel.Setting;
 
@@ -11,7 +12,7 @@ namespace MangaReader.ViewModel.Commands
       new SettingModel().Show();
     }
 
-    public ShowSettingCommand()
+    public ShowSettingCommand(LibraryViewModel model) : base(model)
     {
       this.Name = Strings.Library_Action_Settings;
       this.Icon = "pack://application:,,,/Icons/Main/settings.png";

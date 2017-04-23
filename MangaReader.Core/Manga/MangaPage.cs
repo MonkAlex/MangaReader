@@ -77,13 +77,13 @@ namespace MangaReader.Core.Manga
 
       try
       {
+        await DownloadManager.CheckPause();
         await Throttler.WaitAsync();
-        Library.CheckPause();
         chapterFolder = DirectoryHelpers.MakeValidPath(chapterFolder);
         if (!Directory.Exists(chapterFolder))
           Directory.CreateDirectory(chapterFolder);
 
-        var file = await ImageFile.DownloadFile(this.ImageLink);
+        var file = await DownloadManager.DownloadImage(this.ImageLink);
         if (!file.Exist)
           throw new System.Exception("Restart download, downloaded file is corrupted, link = " + this.ImageLink);
         var fileName = this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + file.Extension;

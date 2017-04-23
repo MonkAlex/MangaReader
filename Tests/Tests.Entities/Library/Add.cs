@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using MangaReader.Core.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Entities.Library
@@ -7,6 +8,8 @@ namespace Tests.Entities.Library
   [TestClass]
   public class Add
   {
+    protected LibraryViewModel model = new MangaReader.Core.Services.LibraryViewModel();
+
     [TestMethod]
     public void AddInvalidUrl()
     {
@@ -14,7 +17,7 @@ namespace Tests.Entities.Library
       var result = false;
       try
       {
-        result = MangaReader.Core.Services.Library.Add(@"http://example.com/");
+        result = model.Add(@"http://example.com/");
       }
       catch (Exception)
       {
@@ -36,11 +39,11 @@ namespace Tests.Entities.Library
         .Where(m => m.Uri.AbsoluteUri.Contains("berserk"))
         .ToList();
       foreach (var manga in mangas)
-        MangaReader.Core.Services.Library.Remove(manga);
+        model.Remove(manga);
 
       try
       {
-        result = MangaReader.Core.Services.Library.Add(uri);
+        result = model.Add(uri);
       }
       catch (Exception)
       {
@@ -50,7 +53,7 @@ namespace Tests.Entities.Library
       Assert.IsTrue(result);
 
       // Проверка повторного добавления.
-      result = MangaReader.Core.Services.Library.Add(uri);
+      result = model.Add(uri);
       Assert.IsFalse(result);
     }
   }

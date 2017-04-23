@@ -1,4 +1,5 @@
-﻿using MangaReader.Properties;
+﻿using MangaReader.Core.Services;
+using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands
@@ -11,7 +12,7 @@ namespace MangaReader.ViewModel.Commands
       vm.Show();
     }
 
-    public AddNewMangaCommand()
+    public AddNewMangaCommand(LibraryViewModel model) : base(model)
     {
       this.Name = Strings.Library_Action_Add;
       this.Icon = "pack://application:,,,/Icons/Main/add_manga.png";

@@ -21,7 +21,7 @@ namespace MangaReader.ViewModel.Commands
       }
     }
 
-    public UpdateVisibleMangaCommand(ListCollectionView view)
+    public UpdateVisibleMangaCommand(ListCollectionView view, LibraryViewModel model) : base(model)
     {
       this.view = view;
       this.Name = "Обновить";

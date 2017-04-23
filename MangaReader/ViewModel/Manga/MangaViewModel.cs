@@ -165,7 +165,7 @@ namespace MangaReader.ViewModel.Manga
       return string.Compare(x.Name, y.Name, StringComparison.Ordinal);
     }
 
-    public MangaViewModel(IManga manga) : base(manga)
+    public MangaViewModel(IManga manga, LibraryViewModel model) : base(manga, model)
     {
       if (Manga != null)
       {

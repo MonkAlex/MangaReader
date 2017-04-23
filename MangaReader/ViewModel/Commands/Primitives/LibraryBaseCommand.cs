@@ -1,22 +1,29 @@
-﻿using MangaReader.Core.Services;
+﻿using System;
+using System.ComponentModel;
+using MangaReader.Core.Services;
 
 namespace MangaReader.ViewModel.Commands.Primitives
 {
   public class LibraryBaseCommand : BaseCommand
   {
+    protected LibraryViewModel Library { get; }
+
     public override bool CanExecute(object parameter)
     {
       return base.CanExecute(parameter) && Library.IsAvaible;
     }
 
-    public LibraryBaseCommand()
+    public LibraryBaseCommand(LibraryViewModel model)
     {
-      Library.AvaibleChanged += LibraryChanged;
+      Library = model;
+      Library.PropertyChanged += LibraryOnPropertyChanged;
     }
 
-    private void LibraryChanged(object sender, bool eventArgs)
+    private void LibraryOnPropertyChanged(object sender, PropertyChangedEventArgs args)
     {
-      OnCanExecuteChanged();
+      if (args.PropertyName == nameof(Library.IsAvaible) ||
+        args.PropertyName == nameof(Library.IsPaused))
+        OnCanExecuteChanged();
     }
   }
 }

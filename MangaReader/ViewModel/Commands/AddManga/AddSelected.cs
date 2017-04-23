@@ -23,13 +23,13 @@ namespace MangaReader.ViewModel.Commands.AddManga
       {
         Uri uri;
         if (Uri.TryCreate(model.InputText, UriKind.Absolute, out uri))
-          Library.Add(uri);
+          WindowHelper.Library.Add(uri);
 
         var selectedItems = mainModel.BookmarksModels.OfType<AddBookmarksModel>()
           .SelectMany(m => m.Bookmarks.Where(b => b.IsSelected));
         foreach (var manga in selectedItems)
         {
-          Library.Add(manga.Value.Uri);
+          WindowHelper.Library.Add(manga.Value.Uri);
         }
       }
       catch (MangaReaderException e)

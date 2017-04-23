@@ -93,7 +93,7 @@ namespace MangaReader.Services
         {
           if (dialog.ShowDialog(owner) == settings)
           {
-            new ShowSettingCommand().Execute(null);
+            new ShowSettingCommand(WindowHelper.Library).Execute(null);
           }
         });
       }

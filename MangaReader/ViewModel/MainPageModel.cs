@@ -28,6 +28,9 @@ namespace MangaReader.ViewModel
     private ICommand updateWithPause;
     private string libraryStatus;
     private IDownloadable lastDownload;
+    private bool shutdownPc;
+
+    public LibraryViewModel Library { get; set; }
 
     public string LibraryStatus
     {
@@ -41,7 +44,7 @@ namespace MangaReader.ViewModel
 
     public ListCollectionView View { get; set; }
 
-    public ObservableCollection<MangaViewModel> MangaViewModels { get; private set; } 
+    public ObservableCollection<MangaViewModel> MangaViewModels { get; private set; }
 
     public LibraryFilter LibraryFilter { get; set; }
 
@@ -95,7 +98,17 @@ namespace MangaReader.ViewModel
       }
     }
 
-    public ObservableCollection<ContentMenuItem> NavigationMenu { get; set; } 
+    public ObservableCollection<ContentMenuItem> NavigationMenu { get; set; }
+
+    public bool ShutdownPC
+    {
+      get { return shutdownPc; }
+      set
+      {
+        shutdownPc = value;
+        OnPropertyChanged();
+      }
+    }
 
     internal virtual bool Filter(object o)
     {
@@ -113,30 +126,6 @@ namespace MangaReader.ViewModel
 
       return LibraryFilter.AllowedTypes.Any(t => Equals(t.Value as MangaSetting, manga.Setting)) &&
         manga.Name.ToLowerInvariant().Contains(LibraryFilter.Name.ToLowerInvariant());
-    }
-
-    private void LibraryOnMangaDeleted(object sender, IManga mangas)
-    {
-      var model = this.MangaViewModels.SingleOrDefault(m => Equals(m.Manga, mangas));
-      if (model != null)
-        Client.Dispatcher.Invoke(() => this.MangaViewModels.Remove(model));
-    }
-
-    private void LibraryOnMangaAdded(object sender, IManga mangas)
-    {
-      var model = this.MangaViewModels.SingleOrDefault(m => Equals(m.Manga, mangas));
-      if (model == null)
-        Client.Dispatcher.Invoke(() => this.MangaViewModels.Add(new MangaViewModel(mangas)));
-    }
-    
-    private void LibraryOnUpdateMangaStarted(object sender, IDownloadable mangas)
-    {
-      this.LastDownload = mangas;
-    }
-
-    private void LibraryOnUpdateMangaCompleted(object sender, IDownloadable mangas)
-    {
-      this.LastDownload = null;
     }
 
     public override void Show()
@@ -174,23 +163,25 @@ namespace MangaReader.ViewModel
     public MainPageModel()
     {
       LibraryFilter = ConfigStorage.Instance.ViewConfig.LibraryFilter;
-      this.MangaViewModels = new ObservableCollection<MangaViewModel>(Repository.Get<IManga>().Select(m => new MangaViewModel(m)));
-      Library.MangaAdded += LibraryOnMangaAdded;
-      Library.MangaDeleted += LibraryOnMangaDeleted;
-      Library.StatusChanged += (sender, s) => LibraryStatus = s;
-      Library.UpdateMangaStarted += LibraryOnUpdateMangaStarted;
-      Library.UpdateMangaCompleted += LibraryOnUpdateMangaCompleted;
+      this.Library = new LibraryViewModel();
+      this.MangaViewModels = new ObservableCollection<MangaViewModel>(Repository.Get<IManga>().Select(m => new MangaViewModel(m, Library)));
+      Library.LibraryChanged += LibraryOnLibraryChanged;
+      Library.PropertyChanged += (sender, s) =>
+      {
+        if (s.PropertyName == nameof(Library.Status))
+          LibraryStatus = Library.Status;
+      };
 
       View = new ListCollectionView(MangaViewModels)
       {
         Filter = Filter,
-        CustomSort = new MangaViewModel(null)
+        CustomSort = new MangaViewModel(null, Library)
       };
       View.MoveCurrentToFirst();
 
-      this.AddNewManga = new AddNewMangaCommand();
-      this.ShowSettings = new ShowSettingCommand();
-      this.UpdateWithPause = new UpdateWithPauseCommand(View);
+      this.AddNewManga = new AddNewMangaCommand(Library);
+      this.ShowSettings = new ShowSettingCommand(Library);
+      this.UpdateWithPause = new UpdateWithPauseCommand(View, Library);
 
       #region Менюшка
 
@@ -199,14 +190,14 @@ namespace MangaReader.ViewModel
       var file = new ContentMenuItem("Файл");
       file.SubItems.Add((BaseCommand)this.AddNewManga);
       file.SubItems.Add((BaseCommand)this.UpdateWithPause);
-      file.SubItems.Add(new UpdateAllCommand { Name = "Обновить всё" });
+      file.SubItems.Add(new UpdateAllCommand(Library) { Name = "Обновить всё" });
       file.SubItems.Add(new ExitCommand());
 
       var setting = new ContentMenuItem(Strings.Library_Action_Settings);
       setting.SubItems.Add((BaseCommand)ShowSettings);
 
       var about = new ContentMenuItem("О программе");
-      about.SubItems.Add(new AppUpdateCommand());
+      about.SubItems.Add(new AppUpdateCommand(Library));
       about.SubItems.Add(new ShowUpdateHistoryCommand());
       about.SubItems.Add(new OpenWikiCommand());
 
@@ -221,6 +212,35 @@ namespace MangaReader.ViewModel
       this.NavigationMenu.Add(new PreviousMangaCommand(View));
       this.NavigationMenu.Add(new NextMangaCommand(View));
       this.NavigationMenu.Add(new LastMangaCommand(View));
+    }
+
+    private void LibraryOnLibraryChanged(object o, LibraryViewModelArgs args)
+    {
+      if (args.LibraryOperation == LibraryOperation.UpdateMangaChanged)
+      {
+        var model = this.MangaViewModels.SingleOrDefault(m => Equals(m.Manga, args.Manga));
+        switch (args.MangaOperation)
+        {
+          case MangaOperation.Added:
+            if (model == null)
+              Client.Dispatcher.Invoke(() => this.MangaViewModels.Add(new MangaViewModel(args.Manga, Library)));
+            break;
+          case MangaOperation.Deleted:
+            if (model != null)
+              Client.Dispatcher.Invoke(() => this.MangaViewModels.Remove(model));
+            break;
+          case MangaOperation.UpdateStarted:
+            this.LastDownload = args.Manga;
+            break;
+          case MangaOperation.UpdateCompleted:
+            this.LastDownload = null;
+            break;
+          case MangaOperation.None:
+            break;
+          default:
+            throw new ArgumentOutOfRangeException();
+        }
+      }
     }
   }
 }

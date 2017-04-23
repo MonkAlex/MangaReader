@@ -4,12 +4,12 @@ using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands
 {
-  public class PauseCommand : BaseCommand
+  public class PauseCommand : LibraryBaseCommand
   {
 
     public override bool CanExecute(object parameter)
     {
-      return base.CanExecute(parameter) && !Library.IsPaused && !Library.IsAvaible;
+      return !Library.IsPaused && !Library.IsAvaible;
     }
 
     public override void Execute(object parameter)
@@ -19,12 +19,10 @@ namespace MangaReader.ViewModel.Commands
       Library.IsPaused = true;
     }
 
-    public PauseCommand()
+    public PauseCommand(LibraryViewModel model) : base(model)
     {
       this.Name = Strings.Manga_Action_Pause;
       this.Icon = "pack://application:,,,/Icons/Main/pause.png";
-      Library.PauseChanged += (o, a) => this.OnCanExecuteChanged();
-      Library.AvaibleChanged += (o, a) => this.OnCanExecuteChanged();
     }
   }
 }

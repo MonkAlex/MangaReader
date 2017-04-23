@@ -33,7 +33,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
       
     }
 
-    public MangaBaseCommand()
+    public MangaBaseCommand(LibraryViewModel model) : base(model)
     {
       this.NeedRefresh = true;
     }

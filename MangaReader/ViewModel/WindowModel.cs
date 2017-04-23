@@ -46,15 +46,73 @@ namespace MangaReader.ViewModel
         window.StateChanged += (o, a) => WindowOnStateChanged(window, a);
         window.Closing += (o, a) => WindowOnClosing(window, a);
 
-        TaskbarIcon = new TaskbarIconModel(window.FindName("TaskbarIcon"));
-
         ConfigStorage.Instance.ViewConfig.UpdateWindowState(window);
         window.Show();
       }
       model = new MainPageModel();
+      UpdateAll = new UpdateAllCommand(model.Library);
+
+      model.Library.LibraryChanged += LibraryOnLibraryChanged;
+      model.Library.PropertyChanged += LibraryOnPropertyChanged;
+
+      if (window != null)
+        TaskbarIcon = new TaskbarIconModel(window.FindName("TaskbarIcon"), model.Library);
+
       model.Show();
 
       Client.ClientOnClientBeenClosed(this, EventArgs.Empty);
+    }
+
+    private void LibraryOnPropertyChanged(object sender, PropertyChangedEventArgs args)
+    {
+      if (args.PropertyName == nameof(model.Library.IsPaused))
+      {
+        if (model.Library.IsPaused)
+        {
+          beforePause = ProgressState;
+          ProgressState = ProgressState.Paused;
+        }
+        else
+          ProgressState = beforePause;
+      }
+    }
+
+    private void LibraryOnLibraryChanged(object sender, LibraryViewModelArgs args)
+    {
+      switch (args.LibraryOperation)
+      {
+        case LibraryOperation.UpdateStarted:
+          Percent = 0;
+          ProgressState = ProgressState.Normal;
+          break;
+        case LibraryOperation.UpdatePercentChanged:
+          Percent = args.Percent ?? 0;
+          break;
+        case LibraryOperation.UpdateMangaChanged:
+          switch (args.MangaOperation)
+          {
+            case MangaOperation.Added:
+              break;
+            case MangaOperation.Deleted:
+              break;
+            case MangaOperation.UpdateStarted:
+              break;
+            case MangaOperation.UpdateCompleted:
+              TaskbarIcon.ShowInTray(Strings.Library_Status_MangaUpdate + args.Manga.Name + " завершено.", args.Manga);
+              break;
+            case MangaOperation.None:
+              break;
+            default:
+              throw new ArgumentOutOfRangeException();
+          }
+          break;
+        case LibraryOperation.UpdateCompleted:
+          Percent = 0;
+          ProgressState = ProgressState.None;
+          break;
+        default:
+          throw new ArgumentOutOfRangeException();
+      }
     }
 
     public void SaveWindowState()
@@ -68,51 +126,12 @@ namespace MangaReader.ViewModel
 
     private WindowModel()
     {
-      UpdateAll = new UpdateAllCommand();
       Close = new ExitCommand();
       
       ProgressState = ProgressState.None;
-      Library.UpdateStarted += LibraryOnUpdateStarted;
-      Library.UpdateCompleted += LibraryOnUpdateCompleted;
-      Library.UpdateMangaCompleted += LibraryOnUpdateMangaCompleted;
-      Library.UpdatePercentChanged += LibraryOnUpdatePercentChanged;
-      Library.PauseChanged += LibraryOnPauseChanged;
     }
 
     private ProgressState beforePause = ProgressState.None;
-
-    private void LibraryOnPauseChanged(object sender, bool e)
-    {
-      if (e)
-      {
-        beforePause = ProgressState;
-        ProgressState = ProgressState.Paused;
-      }
-      else
-        ProgressState = beforePause;
-    }
-
-    private void LibraryOnUpdatePercentChanged(object sender, double i)
-    {
-      Percent = i;
-    }
-
-    private void LibraryOnUpdateMangaCompleted(object sender, IManga mangas)
-    {
-      TaskbarIcon.ShowInTray(Strings.Library_Status_MangaUpdate + mangas.Name + " завершено.", mangas);
-    }
-
-    private void LibraryOnUpdateCompleted(object sender, EventArgs eventArgs)
-    {
-      Percent = 0;
-      ProgressState = ProgressState.None;
-    }
-
-    private void LibraryOnUpdateStarted(object sender, EventArgs eventArgs)
-    {
-      Percent = 0;
-      ProgressState = ProgressState.Normal;
-    }
 
     private void WindowOnClosing(Window sender, CancelEventArgs cancelEventArgs)
     {
@@ -135,11 +154,8 @@ namespace MangaReader.ViewModel
     {
       if (TaskbarIcon != null)
         TaskbarIcon.Dispose();
-      Library.UpdateStarted -= LibraryOnUpdateStarted;
-      Library.UpdateCompleted -= LibraryOnUpdateCompleted;
-      Library.UpdateMangaCompleted -= LibraryOnUpdateMangaCompleted;
-      Library.UpdatePercentChanged -= LibraryOnUpdatePercentChanged;
-      Library.PauseChanged -= LibraryOnPauseChanged;
+      model.Library.LibraryChanged -= LibraryOnLibraryChanged;
+      model.Library.PropertyChanged -= LibraryOnPropertyChanged;
       //      if (lazyModel.IsValueCreated)
       //        lazyModel = new Lazy<WindowModel>(() => new WindowModel(new MainWindow()));
     }

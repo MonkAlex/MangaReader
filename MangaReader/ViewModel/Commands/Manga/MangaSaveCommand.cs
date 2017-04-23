@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using MangaReader.Core.Exception;
+using MangaReader.Core.Services;
 using MangaReader.ViewModel.Commands.Primitives;
 using MangaReader.ViewModel.Manga;
 
@@ -41,7 +42,7 @@ namespace MangaReader.ViewModel.Commands.Manga
       }
     }
 
-    public MangaSaveCommand(MangaCardModel model)
+    public MangaSaveCommand(MangaCardModel model, LibraryViewModel library) : base(library)
     {
       this.model = model;
       this.Name = "Принять";

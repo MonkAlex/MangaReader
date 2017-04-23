@@ -11,6 +11,7 @@ namespace MangaReader.ViewModel.Commands
     private BaseCommand Pause;
     private BaseCommand Continue;
     private BaseCommand activeCommand;
+    private LibraryViewModel library;
 
     private BaseCommand ActiveCommand
     {
@@ -57,11 +58,12 @@ namespace MangaReader.ViewModel.Commands
       }
     }
 
-    public UpdateWithPauseCommand(ListCollectionView view)
+    public UpdateWithPauseCommand(ListCollectionView view, LibraryViewModel library)
     {
-      this.Update = new UpdateVisibleMangaCommand(view);
-      this.Pause = new PauseCommand();
-      this.Continue = new ContinueCommand();
+      this.library = library;
+      this.Update = new UpdateVisibleMangaCommand(view, library);
+      this.Pause = new PauseCommand(library);
+      this.Continue = new ContinueCommand(library);
       this.ActiveCommand = this.Update;
       this.Update.CanExecuteChanged += UpdateOnCanExecuteChanged;
     }
@@ -75,7 +77,7 @@ namespace MangaReader.ViewModel.Commands
       }
       else if (this.ActiveCommand == this.Update)
       {
-        this.ActiveCommand = Library.IsPaused ? this.Continue : this.Pause;
+        this.ActiveCommand = library.IsPaused ? this.Continue : this.Pause;
       }
     }
   }

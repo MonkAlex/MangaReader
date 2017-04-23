@@ -12,7 +12,7 @@ namespace MangaReader.ViewModel.Commands.Manga
       Library.ThreadAction(() => Library.Update(parameter));
     }
 
-    public UpdateMangaCommand()
+    public UpdateMangaCommand(LibraryViewModel model) : base(model)
     {
       this.Name = Strings.Manga_Action_Update;
       this.Icon = "pack://application:,,,/Icons/Manga/start_update.png";

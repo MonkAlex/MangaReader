@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows.Input;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
+using MangaReader.Services;
 using MangaReader.UI.Services;
 using MangaReader.ViewModel.Commands.Manga;
 
@@ -113,7 +114,7 @@ namespace MangaReader.ViewModel.Manga
       }
     }
 
-    public MangaCardModel(IManga manga) : base(manga)
+    public MangaCardModel(IManga manga, LibraryViewModel model) : base(manga, model)
     {
       if (Manga != null)
       {
@@ -125,7 +126,7 @@ namespace MangaReader.ViewModel.Manga
         this.CompressionMode = Manga.CompressionMode;
         if (Manga is INotifyPropertyChanged)
           ((INotifyPropertyChanged)Manga).PropertyChanged += MangaOnPropertyChanged;
-        this.Save = new MangaSaveCommand(this);
+        this.Save = new MangaSaveCommand(this, WindowHelper.Library);
       }
     }
 

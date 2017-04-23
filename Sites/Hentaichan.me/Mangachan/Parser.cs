@@ -84,7 +84,8 @@ namespace Hentaichan.Mangachan
       catch (NullReferenceException ex)
       {
         var status = "Возможно требуется регистрация";
-        Library.Status = status;
+#warning Статусы надо бы переделать на лог поди
+        // Library.Status = status;
         Log.Exception(ex, status, manga.Uri.OriginalString);
       }
 

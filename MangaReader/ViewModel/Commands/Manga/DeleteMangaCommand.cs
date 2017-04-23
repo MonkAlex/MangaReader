@@ -30,7 +30,7 @@ namespace MangaReader.ViewModel.Commands.Manga
       }
     }
 
-    public DeleteMangaCommand()
+    public DeleteMangaCommand(LibraryViewModel model) : base(model)
     {
       this.Name = Strings.Manga_Action_Remove;
       this.Icon = "pack://application:,,,/Icons/Manga/delete.png";

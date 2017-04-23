@@ -1,4 +1,5 @@
-﻿using MangaReader.Core.Update;
+﻿using MangaReader.Core.Services;
+using MangaReader.Core.Update;
 using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.ViewModel.Commands.Primitives;
@@ -12,7 +13,7 @@ namespace MangaReader.ViewModel.Commands
       Updater.StartUpdate();
     }
 
-    public AppUpdateCommand()
+    public AppUpdateCommand(LibraryViewModel model) : base(model)
     {
       this.Name = Strings.Library_CheckUpdate;
       this.Icon = "pack://application:,,,/Icons/Main/update_app.png";

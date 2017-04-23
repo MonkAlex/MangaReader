@@ -14,8 +14,9 @@ namespace Tests.Entities.Manga
     [TestMethod]
     public void CreateWithHistoryAndMove()
     {
+      var model = new MangaReader.Core.Services.LibraryViewModel();
       foreach (var remove in Environment.Session.Query<IManga>().Where(m => m.ServerName.Contains("btooom")).ToList())
-        MangaReader.Core.Services.Library.Remove(remove);
+        model.Remove(remove);
 
       var manga = Builder.CreateReadmanga();
       manga.Uri = new Uri("http://readmanga.me/btoom");

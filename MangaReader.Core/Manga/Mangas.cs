@@ -477,7 +477,8 @@ namespace MangaReader.Core.Manga
     /// </summary>
     public void Compress()
     {
-      Library.Status = Strings.Mangas_Compress_Started + this.Name;
+#warning Статусы надо бы переделать на лог поди
+      // Library.Status = Strings.Mangas_Compress_Started + this.Name;
       var folder = this.GetAbsoulteFolderPath();
       switch (this.CompressionMode)
       {
@@ -495,7 +496,8 @@ namespace MangaReader.Core.Manga
         default:
           throw new InvalidEnumArgumentException(nameof(CompressionMode), (int)this.CompressionMode, typeof(Compression.CompressionMode));
       }
-      Library.Status = Strings.Mangas_Compress_Completed;
+#warning Статусы надо бы переделать на лог поди
+      // Library.Status = Strings.Mangas_Compress_Completed;
     }
 
     protected override void BeforeSave(object[] currentState, object[] previousState, string[] propertyNames)

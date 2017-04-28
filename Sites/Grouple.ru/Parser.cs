@@ -166,8 +166,8 @@ namespace Grouple
             .ConvertAll(r => r.InnerText.Replace("\r\n", string.Empty).Trim())
             .ToList();
       }
-      catch (NullReferenceException ex) { Log.Exception(ex, "Ошибка получения списка глав.", page.ResponseUri.ToString()); }
-      catch (ArgumentNullException ex) { Log.Exception(ex, "Главы не найдены.", page.ResponseUri.ToString()); }
+      catch (NullReferenceException ex) { Log.Exception(ex, $"Ошибка получения списка глав с адреса {page.ResponseUri}"); }
+      catch (ArgumentNullException ex) { Log.Exception(ex, $"Главы не найдены по адресу {page.ResponseUri}"); }
 
       for (var i = 0; i < links.Count; i++)
       {

@@ -22,10 +22,9 @@ namespace MangaReader.Core.Update
     public static void Initialize()
     {
       Clean();
+      Log.AddFormat("Current version - {0}.", ClientVersion);
       if (ConfigStorage.Instance.AppConfig.UpdateReader)
         StartUpdate();
-      else
-        Log.AddFormat("Current version - {0}.", ClientVersion);
     }
 
     /// <summary>

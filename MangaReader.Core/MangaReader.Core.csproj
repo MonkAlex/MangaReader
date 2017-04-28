@@ -55,6 +55,10 @@
       <HintPath>Library\NHibernate.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.4.7\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -158,7 +162,6 @@
     <Compile Include="Services\NetworkSpeed.cs" />
     <Compile Include="Services\Page.cs" />
     <Compile Include="Services\Serializer.cs" />
-    <Compile Include="Services\TimedLock.cs" />
     <Compile Include="Update\Updater.cs" />
     <Compile Include="Update\VersionHistory.cs" />
   </ItemGroup>

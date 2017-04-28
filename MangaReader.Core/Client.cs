@@ -75,6 +75,8 @@ namespace MangaReader.Core
 
       if (mutex != null && !mutex.SafeWaitHandle.IsClosed)
         mutex.Close();
+
+      Log.Separator("Closed");
     }
 
     internal static void OnOtherAppRunning(string e)

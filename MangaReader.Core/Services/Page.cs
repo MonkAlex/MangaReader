@@ -35,14 +35,14 @@ namespace MangaReader.Core.Services
       }
       catch (UriFormatException ex)
       {
-        Log.Exception(ex, "Некорректная ссылка:", url.ToString());
+        Log.Exception(ex, $"Некорректная ссылка: {url}");
         return new Page();
       }
       catch (WebException ex)
       {
 #warning Статусы надо бы переделать на лог поди
         // Library.Status = Strings.Page_GetPage_InternetOff;
-        Log.Exception(ex, Strings.Page_GetPage_InternetOff + ", ссылка:" + url + $" restart count - {restartCounter}");
+        Log.Exception(ex, $"{Strings.Page_GetPage_InternetOff}, ссылка: {url}, restart count - {restartCounter}");
 
         if (ex.Status != WebExceptionStatus.Timeout && !DelayOnExpectationFailed(ex))
           return new Page();
@@ -51,7 +51,7 @@ namespace MangaReader.Core.Services
       }
       catch (System.Exception ex)
       {
-        Log.Exception(ex, ", ссылка:", url.ToString());
+        Log.Exception(ex, $"Не удалось получить страницу: {url}");
         return new Page();
       }
     }
@@ -89,14 +89,14 @@ namespace MangaReader.Core.Services
       }
       catch (UriFormatException ex)
       {
-        Log.Exception(ex, "Некорректная ссылка:", url.ToString());
+        Log.Exception(ex, $"Некорректная ссылка: {url}");
         return new Page();
       }
       catch (WebException ex)
       {
 #warning Статусы надо бы переделать на лог поди
         // Library.Status = Strings.Page_GetPage_InternetOff;
-        Log.Exception(ex, Strings.Page_GetPage_InternetOff, ", ссылка:", url.ToString());
+        Log.Exception(ex, $"{Strings.Page_GetPage_InternetOff}, ссылка: {url}, restart count - {restartCounter}");
         if (ex.Status != WebExceptionStatus.Timeout)
           return new Page();
         ++restartCounter;
@@ -104,7 +104,7 @@ namespace MangaReader.Core.Services
       }
       catch (System.Exception ex)
       {
-        Log.Exception(ex, ", ссылка:", url.ToString());
+        Log.Exception(ex, $"Не удалось получить страницу: {url}");
         return new Page();
       }
     }

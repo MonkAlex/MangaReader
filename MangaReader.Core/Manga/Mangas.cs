@@ -425,7 +425,7 @@ namespace MangaReader.Core.Manga
             return p.Download(mangaFolder).ContinueWith(t =>
             {
               if (t.Exception != null)
-                Log.Exception(t.Exception, p.Uri.ToString(), p.ImageLink.ToString());
+                Log.Exception(t.Exception, $"Не удалось скачать изображение {p.ImageLink} со страницы {p.Uri}");
               if (p.IsDownloaded && plugin.HistoryType == HistoryType.Page)
                 this.AddHistory(p.Uri);
             });

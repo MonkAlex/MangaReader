@@ -1,26 +1,19 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using MangaReader.Core.Services.Config;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
 
 namespace MangaReader.Core.Services
 {
-  public static class Log
+  public class Log
   {
-    /// <summary>
-    /// Указатель блокировки.
-    /// </summary>
-    private static readonly object LogLock;
+    private static Lazy<Log> instance = new Lazy<Log>(() => new Log());
 
-    /// <summary>
-    /// Ссылка на файл лога.
-    /// </summary>
-    private static readonly string LogPath = Path.Combine(ConfigStorage.WorkFolder, "manga.log");
-
-    /// <summary>
-    /// Ссылка на файл лога исключений.
-    /// </summary>
-    private static readonly string ExceptionPath = Path.Combine(ConfigStorage.WorkFolder, "error.log");
+    internal ILogger Logger;
 
     /// <summary>
     /// Добавление записи в лог.
@@ -28,63 +21,122 @@ namespace MangaReader.Core.Services
     /// <param name="message">Сообщение.</param>
     public static void Add(string message)
     {
-      var contents = string.Concat(DateTime.Now.ToString("O"), "   ", message, Environment.NewLine);
-      Write(contents, LogPath);
+      WriteExceptionToEventSource(() =>
+      {
+        instance.Value.Logger.Debug(message);
+      });
     }
 
     /// <summary>
     /// Добавление записи в лог.
     /// </summary>
-    /// <param name="format">Строка с форматированием.</param>
+    /// <param name="message">Строка с форматированием.</param>
     /// <param name="args">Параметры форматирования.</param>
-    public static void AddFormat(string format, params object[] args)
+    public static void AddFormat(string message, params object[] args)
     {
-      var contents = string.Concat(DateTime.Now.ToString("O"), "   ", string.Format(format, args), Environment.NewLine);
-      Write(contents, LogPath);
+      WriteExceptionToEventSource(() =>
+      {
+        instance.Value.Logger.Debug(message, args);
+      });
     }
 
     /// <summary>
     /// Добавление записи в лог.
     /// </summary>
     /// <param name="ex">Исключение.</param>
-    /// <param name="messages">Сообщение.</param>
-    public static void Exception(System.Exception ex, params string[] messages)
+    public static void Exception(System.Exception ex)
     {
-      var contents = string.Concat(DateTime.Now.ToString("O"), "   ", string.Join(Environment.NewLine, messages),
-        Environment.NewLine, ex, Environment.NewLine, Environment.NewLine);
-      Write(contents, ExceptionPath);
+      WriteExceptionToEventSource(() =>
+      {
+        instance.Value.Logger.Error(ex);
+      });
     }
 
     /// <summary>
     /// Добавление записи в лог.
     /// </summary>
-    /// <param name="messages">Сообщение.</param>
-    public static void Exception(params string[] messages)
+    /// <param name="ex">Исключение.</param>
+    /// <param name="message">Сообщение.</param>
+    public static void Exception(System.Exception ex, string message)
     {
-      var stack = new StackTrace(1);
-      var contents = string.Concat(DateTime.Now.ToString("O"), "   ", string.Join(Environment.NewLine, messages),
-        Environment.NewLine, stack.ToString(), Environment.NewLine, Environment.NewLine);
-      Write(contents, ExceptionPath);
+      WriteExceptionToEventSource(() =>
+      {
+        instance.Value.Logger.Error(ex, message);
+      });
     }
 
     /// <summary>
-    /// Записать в историю.
+    /// Добавление записи в лог.
     /// </summary>
-    /// <param name="contents">Сообщение.</param>
-    /// <param name="path">Файл.</param>
-    private static void Write(string contents, string path)
+    /// <param name="message">Сообщение.</param>
+    public static void Exception(string message)
     {
-      Console.WriteLine(contents);
-      using (TimedLock.Lock(LogLock))
+      WriteExceptionToEventSource(() =>
       {
-        File.AppendAllText(path, contents, System.Text.Encoding.UTF8);
+        var stack = new StackTrace(1);
+        var content = string.Concat(message, Environment.NewLine, stack.ToString());
+        instance.Value.Logger.Error(content);
+      });
+    }
+
+    public static void Separator(string message)
+    {
+      WriteExceptionToEventSource(() =>
+      {
+        instance.Value.SeparatorImpl(message);
+      });
+    }
+
+    private void SeparatorImpl(string message)
+    {
+      WriteExceptionToEventSource(() =>
+      {
+        Logger.Debug(string.Empty);
+        Logger.Debug($"            *** {message} ***           ");
+        Logger.Debug(string.Empty);
+      });
+    }
+
+    private static void WriteExceptionToEventSource(Action action)
+    {
+      try
+      {
+        action();
+      }
+      catch (System.Exception e)
+      {
+        EventLog.WriteEntry(nameof(MangaReader), e.ToString(), EventLogEntryType.Error);
       }
     }
 
-    static Log()
+    private Log()
     {
-      // Mono fix
-      LogLock = "lc?";
+      var config = new LoggingConfiguration();
+      var layout = @"${longdate} ${processid} ${threadid} ${assembly-version} ${level} ${message}";
+
+      var fileTarget = new FileTarget();
+      config.AddTarget("file", fileTarget);
+      fileTarget.FileName = @"${basedir}/${processname}.log";
+      fileTarget.ArchiveFileName = "${basedir}/logs/${processname}.{#}.log";
+      fileTarget.ArchiveNumbering = ArchiveNumberingMode.Date;
+      fileTarget.ArchiveEvery = FileArchivePeriod.Day;
+      fileTarget.ArchiveOldFileOnStartup = true;
+      fileTarget.CreateDirs = true;
+      fileTarget.Layout = layout;
+      fileTarget.Encoding = Encoding.UTF8;
+      var rule = new LoggingRule("*", LogLevel.Debug, fileTarget);
+      config.LoggingRules.Add(rule);
+
+      var consoleTarget = new ColoredConsoleTarget();
+      config.AddTarget("console", consoleTarget);
+      consoleTarget.Layout = layout;
+      var rule2 = new LoggingRule("*", LogLevel.Debug, consoleTarget);
+      config.LoggingRules.Add(rule2);
+
+      LogManager.Configuration = config;
+      LogManager.ThrowExceptions = true;
+      Logger = LogManager.GetLogger("default");
+      SeparatorImpl("Initialized");
     }
   }
 }

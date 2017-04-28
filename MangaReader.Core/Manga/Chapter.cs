@@ -115,7 +115,7 @@ namespace MangaReader.Core.Manga
           .ContinueWith(t =>
             {
               if (t.Exception != null)
-                Log.Exception(t.Exception, page.Uri.ToString(), page.ImageLink.ToString());
+                Log.Exception(t.Exception, $"Не удалось скачать изображение {page.ImageLink} со страницы {page.Uri}");
 
               this.OnDownloadProgressChanged(null);
             });
@@ -125,11 +125,11 @@ namespace MangaReader.Core.Manga
       catch (AggregateException ae)
       {
         foreach (var ex in ae.InnerExceptions)
-          Log.Exception(ex, this.Uri.ToString(), this.Name);
+          Log.Exception(ex, $"Не удалось скачать главу {Name} по ссылке {Uri}");
       }
       catch (System.Exception ex)
       {
-        Log.Exception(ex, this.Uri.ToString(), this.Name);
+        Log.Exception(ex, $"Не удалось скачать главу {Name} по ссылке {Uri}");
       }
       return Task.FromResult(false);
     }

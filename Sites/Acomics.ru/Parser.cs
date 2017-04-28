@@ -193,8 +193,8 @@ namespace Acomics
           }
         }
       }
-      catch (NullReferenceException ex) { Log.Exception(ex, "Ошибка получения списка глав.", uri.ToString()); }
-      catch (ArgumentNullException ex) { Log.Exception(ex, "Главы не найдены.", uri.ToString()); }
+      catch (NullReferenceException ex) { Log.Exception(ex, $"Ошибка получения списка глав с адреса {uri}"); }
+      catch (ArgumentNullException ex) { Log.Exception(ex, $"Главы не найдены по адресу {uri}"); }
 
       var pages = new List<MangaPage>();
       for (var i = 0; i < links.Count; i++)

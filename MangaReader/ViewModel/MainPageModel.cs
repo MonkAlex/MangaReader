@@ -32,16 +32,6 @@ namespace MangaReader.ViewModel
 
     public LibraryViewModel Library { get; set; }
 
-    public string LibraryStatus
-    {
-      get { return libraryStatus; }
-      set
-      {
-        libraryStatus = value;
-        OnPropertyChanged();
-      }
-    }
-
     public ListCollectionView View { get; set; }
 
     public ObservableCollection<MangaViewModel> MangaViewModels { get; private set; }
@@ -166,12 +156,6 @@ namespace MangaReader.ViewModel
       this.Library = new LibraryViewModel();
       this.MangaViewModels = new ObservableCollection<MangaViewModel>(Repository.Get<IManga>().Select(m => new MangaViewModel(m, Library)));
       Library.LibraryChanged += LibraryOnLibraryChanged;
-      Library.PropertyChanged += (sender, s) =>
-      {
-        if (s.PropertyName == nameof(Library.Status))
-          LibraryStatus = Library.Status;
-      };
-
       View = new ListCollectionView(MangaViewModels)
       {
         Filter = Filter,

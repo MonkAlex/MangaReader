@@ -158,6 +158,7 @@
     <Compile Include="Services\ImageFile.cs" />
     <Compile Include="Services\Library.cs" />
     <Compile Include="Services\Log.cs" />
+    <Compile Include="Services\LogEventViewModel.cs" />
     <Compile Include="Services\MangaSetting.cs" />
     <Compile Include="Services\NetworkSpeed.cs" />
     <Compile Include="Services\Page.cs" />

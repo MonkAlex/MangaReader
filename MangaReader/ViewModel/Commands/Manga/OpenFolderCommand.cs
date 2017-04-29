@@ -19,7 +19,7 @@ namespace MangaReader.ViewModel.Commands.Manga
       if (parameter != null && Directory.Exists(parameter.GetAbsoulteFolderPath()))
         Process.Start(parameter.GetAbsoulteFolderPath());
       else
-        Library.Status = Strings.Library_Status_FolderNotFound;
+        Log.Info(Strings.Library_Status_FolderNotFound);
     }
 
     public override bool CanExecute(object parameter)

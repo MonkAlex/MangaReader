@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="MangaReader.UI.LogViewer.LogViewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MangaReader.UI.LogViewer"
+             mc:Ignorable="d" 
+             MinWidth="50"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             d:DesignHeight="100" d:DesignWidth="350">
+  <Grid SizeChanged="ParentGrid_OnSizeChanged">
+    <ListView ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:LogViewer}}, Path=LogEntries}" 
+            x:Name="LogView">
+      <ListView.ItemContainerStyle>
+        <Style TargetType="{x:Type ListViewItem}">
+          <Setter Property="ToolTip" Value="{Binding ToolTip}" />
+          <Setter Property="Background" Value="{Binding Background}" />
+          <Setter Property="Foreground" Value="{Binding Foreground}" />
+          <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+              <Setter Property="Background" Value="DarkOrange"/>
+              <Setter Property="Foreground" Value="black"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter Property="Background" Value="{Binding BackgroundMouseOver}"/>
+              <Setter Property="Foreground" Value="{Binding ForegroundMouseOver}"/>
+            </Trigger>
+          </Style.Triggers>
+        </Style>
+      </ListView.ItemContainerStyle>
+      <ListView.Resources>
+        <Style TargetType="GridViewColumnHeader">
+          <Setter Property="Visibility" Value="Collapsed" />
+        </Style>
+      </ListView.Resources>
+      <ListView.View>
+        <GridView x:Name="GridView">
+          <GridView.Columns>
+            <GridViewColumn DisplayMemberBinding="{Binding Time}" Header="Время"/>
+            <GridViewColumn DisplayMemberBinding="{Binding Level}" Header="Событие"/>
+            <GridViewColumn DisplayMemberBinding="{Binding FormattedMessage}" Header="Текст" />
+          </GridView.Columns>
+        </GridView>
+      </ListView.View>
+    </ListView>
+  </Grid>
+</UserControl>

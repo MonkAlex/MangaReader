@@ -4,6 +4,7 @@
         xmlns:ui="clr-namespace:MangaReader.UI"
         xmlns:base="clr-namespace:MangaReader.UI.MainForm"
         xmlns:resx="clr-namespace:MangaReader.Properties"
+        xmlns:logViewer="clr-namespace:MangaReader.UI.LogViewer"
         Title="{x:Static resx:Strings.Title}"  MinHeight="350" MinWidth="525">
   <base:BaseForm.Resources>
     <BooleanToVisibilityConverter x:Key="B2V"/>
@@ -12,7 +13,7 @@
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
-      <RowDefinition Height="Auto"/>
+      <RowDefinition MaxHeight="100"/>
     </Grid.RowDefinitions>
     <base:Filter Grid.Row="0" DataContext="{Binding LibraryFilter}"/>
     <ListView x:Name="FormLibrary" 
@@ -137,13 +138,11 @@
         <ColumnDefinition Width="Auto"/>
       </Grid.ColumnDefinitions>
       <Grid.RowDefinitions>
-        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
         <RowDefinition Height="Auto"/>
       </Grid.RowDefinitions>
-      <StatusBar x:Name="StatusBar" Grid.Column="0" Grid.Row="0">
-        <StatusBarItem HorizontalContentAlignment="Stretch">
-          <TextBlock x:Name="TextBlock" TextAlignment="Center" Text="{Binding LibraryStatus}"/>
-        </StatusBarItem>
+      <logViewer:LogViewer Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4"/>
+      <StatusBar x:Name="StatusBar" Grid.Column="0" Grid.Row="1">
         <StatusBarItem HorizontalContentAlignment="Right">
           <CheckBox IsChecked="{Binding ShutdownPC}"
                     Visibility="{Binding Library.IsAvaible, Converter={StaticResource B2V}}"
@@ -151,12 +150,12 @@
         </StatusBarItem>
       </StatusBar>
 
-      <Button Grid.Column="1" Grid.Row="0"
-                    Command="{Binding UpdateWithPause}"/>
-      <Button Grid.Column="2" Grid.Row="0"
-                    Command="{Binding AddNewManga}"/>
-      <Button Grid.Column="3" Grid.Row="0"
-                    Command="{Binding ShowSettings}"/>
+      <Button Grid.Column="1" Grid.Row="1"
+              Command="{Binding UpdateWithPause}"/>
+      <Button Grid.Column="2" Grid.Row="1"
+              Command="{Binding AddNewManga}"/>
+      <Button Grid.Column="3" Grid.Row="1"
+              Command="{Binding ShowSettings}"/>
     </Grid>
   </Grid>
 </base:BaseForm>

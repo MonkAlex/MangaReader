@@ -22,21 +22,7 @@ namespace MangaReader.Core.Services
 
     private int mangaIndex;
     private int mangasCount;
-    private string status;
     private bool isAvaible = true;
-
-    /// <summary>
-    /// Статус библиотеки.
-    /// </summary>
-    public string Status
-    {
-      get { return status; }
-      set
-      {
-        status = value;
-        OnPropertyChanged();
-      }
-    }
 
     /// <summary>
     /// Признак паузы.
@@ -91,7 +77,7 @@ namespace MangaReader.Core.Services
       if (Uri.TryCreate(url, UriKind.Absolute, out uri) && Add(uri))
         return true;
 
-      Status = "Некорректная ссылка.";
+      Log.Info("Некорректная ссылка.");
       return false;
     }
 
@@ -109,7 +95,7 @@ namespace MangaReader.Core.Services
         return false;
 
       OnLibraryChanged(new LibraryViewModelArgs(null, newManga, MangaOperation.Added, LibraryOperation.UpdateMangaChanged));
-      Status = Strings.Library_Status_MangaAdded + newManga.Name;
+      Log.Info(Strings.Library_Status_MangaAdded + newManga.Name);
       return true;
     }
 
@@ -125,9 +111,7 @@ namespace MangaReader.Core.Services
       manga.Delete();
       OnLibraryChanged(new LibraryViewModelArgs(null, manga, MangaOperation.Deleted, LibraryOperation.UpdateMangaChanged));
 
-      var removed = Strings.Library_Status_MangaRemoved + manga.Name;
-      Status = removed;
-      Log.Add(removed);
+      Log.Info(Strings.Library_Status_MangaRemoved + manga.Name);
     }
 
     private void TimerTick(object sender)
@@ -162,7 +146,7 @@ namespace MangaReader.Core.Services
     public void Update(IEnumerable<IManga> mangas, SortDescription sort)
     {
       OnLibraryChanged(new LibraryViewModelArgs(null, null, MangaOperation.None, LibraryOperation.UpdateStarted));
-      Status = Strings.Library_Status_Update;
+      Log.Info(Strings.Library_Status_Update);
       try
       {
         mangaIndex = 0;
@@ -175,7 +159,7 @@ namespace MangaReader.Core.Services
         {
           DownloadManager.CheckPause().Wait();
 
-          Status = Strings.Library_Status_MangaUpdate + current.Name;
+          Log.Info(Strings.Library_Status_MangaUpdate + current.Name);
           OnLibraryChanged(new LibraryViewModelArgs(null, current, MangaOperation.UpdateStarted, LibraryOperation.UpdateMangaChanged));
           current.DownloadProgressChanged += CurrentOnDownloadProgressChanged;
           current.Download().Wait();
@@ -199,7 +183,7 @@ namespace MangaReader.Core.Services
       finally
       {
         OnLibraryChanged(new LibraryViewModelArgs(null, null, MangaOperation.None, LibraryOperation.UpdateCompleted));
-        Status = Strings.Library_Status_UpdateComplete;
+        Log.Info(Strings.Library_Status_UpdateComplete);
         ConfigStorage.Instance.AppConfig.LastUpdate = DateTime.Now;
       }
     }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using MangaReader.Core.Services.Config;
 using NLog;
+using NLog.Common;
 using NLog.Config;
 using NLog.Targets;
 
@@ -14,6 +15,8 @@ namespace MangaReader.Core.Services
     private static Lazy<Log> instance = new Lazy<Log>(() => new Log());
 
     internal ILogger Logger;
+
+    public static event Action<LogEventStruct> LogReceived;
 
     /// <summary>
     /// Добавление записи в лог.
@@ -37,6 +40,31 @@ namespace MangaReader.Core.Services
       WriteExceptionToEventSource(() =>
       {
         instance.Value.Logger.Debug(message, args);
+      });
+    }
+
+    /// <summary>
+    /// Добавление записи в лог.
+    /// </summary>
+    /// <param name="message">Сообщение.</param>
+    public static void Info(string message)
+    {
+      WriteExceptionToEventSource(() =>
+      {
+        instance.Value.Logger.Info(message);
+      });
+    }
+
+    /// <summary>
+    /// Добавление записи в лог.
+    /// </summary>
+    /// <param name="message">Строка с форматированием.</param>
+    /// <param name="args">Параметры форматирования.</param>
+    public static void InfoFormat(string message, params object[] args)
+    {
+      WriteExceptionToEventSource(() =>
+      {
+        instance.Value.Logger.Info(message, args);
       });
     }
 
@@ -133,10 +161,25 @@ namespace MangaReader.Core.Services
       var rule2 = new LoggingRule("*", LogLevel.Debug, consoleTarget);
       config.LoggingRules.Add(rule2);
 
+      var viewerTarget = new InfoTarget();
+      config.AddTarget("viewer", viewerTarget);
+      var rule3 = new LoggingRule("*", LogLevel.Info, viewerTarget);
+      config.LoggingRules.Add(rule3);
+
       LogManager.Configuration = config;
       LogManager.ThrowExceptions = true;
       Logger = LogManager.GetLogger("default");
       SeparatorImpl("Initialized");
+    }
+
+    private class InfoTarget : Target
+    {
+      protected override void Write(NLog.Common.AsyncLogEventInfo logEvent)
+      {
+        base.Write(logEvent);
+
+        LogReceived?.Invoke(new LogEventStruct(logEvent.LogEvent));
+      }
     }
   }
 }

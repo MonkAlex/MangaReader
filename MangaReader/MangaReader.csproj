@@ -92,6 +92,9 @@
     <Compile Include="UI\AddNewManga\AddForm.xaml.cs">
       <DependentUpon>AddForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\LogViewer\LogViewer.xaml.cs">
+      <DependentUpon>LogViewer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\MainForm\Filter.xaml.cs">
       <DependentUpon>Filter.xaml</DependentUpon>
     </Compile>
@@ -209,6 +212,10 @@
     <Compile Include="ViewModel\VersionHistoryModel.cs" />
     <Compile Include="ViewModel\WindowModel.cs" />
     <Page Include="UI\AddNewManga\AddForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\LogViewer\LogViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

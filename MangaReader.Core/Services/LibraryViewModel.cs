@@ -119,7 +119,7 @@ namespace MangaReader.Core.Services
       if (IsAvaible && ConfigStorage.Instance.AppConfig.AutoUpdateInHours > 0 &&
           DateTime.Now > ConfigStorage.Instance.AppConfig.LastUpdate.AddHours(ConfigStorage.Instance.AppConfig.AutoUpdateInHours))
       {
-        Log.AddFormat("{0} Время последнего обновления - {1}, частота обновления - каждые {2} часов.",
+        Log.InfoFormat("{0} Время последнего обновления - {1}, частота обновления - каждые {2} часов.",
           Strings.AutoUpdate, ConfigStorage.Instance.AppConfig.LastUpdate, ConfigStorage.Instance.AppConfig.AutoUpdateInHours);
 
         if (IsAvaible)

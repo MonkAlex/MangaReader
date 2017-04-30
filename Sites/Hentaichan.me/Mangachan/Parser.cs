@@ -83,10 +83,7 @@ namespace Hentaichan.Mangachan
       }
       catch (NullReferenceException ex)
       {
-        var status = "Возможно требуется регистрация";
-#warning Статусы надо бы переделать на лог поди
-        // Library.Status = status;
-        Log.Exception(ex, $"{status} для доступа к {manga.Uri}");
+        Log.Exception(ex, $"Возможно, требуется регистрация для доступа к {manga.Uri}");
       }
 
       foreach (var volume in chapters.GroupBy(c => c.Volume).ToList())

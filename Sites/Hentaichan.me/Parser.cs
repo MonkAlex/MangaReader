@@ -110,16 +110,11 @@ namespace Hentaichan
       }
       catch (NullReferenceException ex)
       {
-        var status = "Возможно требуется регистрация";
-#warning Статусы надо бы переделать на лог поди
-        // Library.Status = status;
-        Log.Exception(ex, $"{status} для доступа к {manga.Uri}");
+        Log.Exception(ex, $"Возможно, требуется регистрация для доступа к {manga.Uri}");
       }
       catch (GetSiteInfoException ex)
       {
-#warning Статусы надо бы переделать на лог поди
-        // Library.Status = string.Format("{0}. {1}", manga.Name, AdultOnly);
-        Log.Exception(ex);
+        Log.Exception(ex, string.Format("{0}. {1}", manga.Name, AdultOnly));
       }
 
       manga.Chapters.AddRange(chapters);

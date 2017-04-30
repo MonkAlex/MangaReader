@@ -26,7 +26,6 @@ namespace MangaReader.ViewModel
     private ICommand addNewManga;
     private ObservableCollection<ContentMenuItem> menu;
     private ICommand updateWithPause;
-    private string libraryStatus;
     private IDownloadable lastDownload;
     private bool shutdownPc;
 

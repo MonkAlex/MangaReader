@@ -22,7 +22,7 @@ namespace MangaReader.Core.Update
     public static void Initialize()
     {
       Clean();
-      Log.AddFormat("Current version - {0}.", ClientVersion);
+      Log.InfoFormat("Версия приложения - {0}.", ClientVersion);
       if (ConfigStorage.Instance.AppConfig.UpdateReader)
         StartUpdate();
     }
@@ -34,13 +34,13 @@ namespace MangaReader.Core.Update
     {
       if (!File.Exists(UpdateFilename))
       {
-        Log.AddFormat("Updater not found.");
+        Log.InfoFormat("Апдейтер не найден.");
         return;
       }
 
       var args = string.Format("--fromFile \"{0}\" --version \"{1}\" --outputFolder \"{2}\"",
         UpdateConfig, ClientVersion, ConfigStorage.WorkFolder.TrimEnd('\\'));
-      Log.AddFormat("Update process started: File '{0}', Args '{1}', Folder '{2}'",
+      Log.InfoFormat("Запущен процесс обновления: Файл '{0}', с аргументами '{1}', в папке '{2}'",
         UpdateFilename, args, ConfigStorage.WorkFolder);
 
       Process.Start(new ProcessStartInfo {FileName = UpdateFilename, Arguments = args});

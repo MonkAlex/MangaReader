@@ -32,13 +32,32 @@
         <Style TargetType="GridViewColumnHeader">
           <Setter Property="Visibility" Value="Collapsed" />
         </Style>
+        <Style x:Key="HyperlinkStyle" TargetType="{x:Type Run}" >
+          <Style.Setters>
+            <Setter Property="Foreground" Value="Blue"/>
+          </Style.Setters>
+          <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter Property="TextDecorations" Value="Underline"/>
+              <Setter Property="Cursor" Value="Hand"/>
+            </Trigger>
+          </Style.Triggers>
+        </Style>
       </ListView.Resources>
       <ListView.View>
         <GridView x:Name="GridView">
           <GridView.Columns>
             <GridViewColumn DisplayMemberBinding="{Binding Time}" Header="Время"/>
             <GridViewColumn DisplayMemberBinding="{Binding Level}" Header="Событие"/>
-            <GridViewColumn DisplayMemberBinding="{Binding FormattedMessage}" Header="Текст" />
+            <GridViewColumn Header="Текст">
+              <GridViewColumn.CellTemplate>
+                <DataTemplate>
+                  <local:TextBlockWithHyperlinks HyperlinkPressed="TextBlockWithLinks_OnHyperlinkPressed" 
+                                            HyperlinkStyle="{StaticResource HyperlinkStyle}"
+                                            Text="{Binding FormattedMessage, NotifyOnTargetUpdated=True}"/>
+                </DataTemplate>
+              </GridViewColumn.CellTemplate>
+            </GridViewColumn>
           </GridView.Columns>
         </GridView>
       </ListView.View>

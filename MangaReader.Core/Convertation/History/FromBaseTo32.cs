@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
-using NHibernate.Linq;
 
 namespace MangaReader.Core.Convertation.History
 {
@@ -82,38 +80,36 @@ namespace MangaReader.Core.Convertation.History
         {
           process.Percent += 100.0 / mangas.Count;
           var mangaHistory = histories.Where(h => h.MangaUrl == manga.Uri.OriginalString ||
-            h.Uri.OriginalString.Contains(manga.Uri.OriginalString + "/")).ToList();
+                                                  h.Uri.OriginalString.Contains(manga.Uri.OriginalString + "/")).ToList();
           manga.AddHistory(mangaHistory);
           histories.RemoveAll(h => mangaHistory.Contains(h));
         }
         tranc.Commit();
       }
 
-      var tasks = histories.GroupBy(h => new Uri(h.Uri, "..")).Select(history =>
+      using (var tranc = Mapping.Session.BeginTransaction())
       {
-        return Task.Run(() =>
+        foreach (var history in histories.GroupBy(h => new Uri(h.Uri, "..")))
         {
           var manga = Manga.Mangas.Create(history.Key);
           if (manga == null)
-            return;
+            continue;
 
           manga.Refresh();
           if (manga.Uri == history.Key)
-            return;
+            continue;
 
-          var uri = manga.Uri;
-          manga = Repository.Get<IManga>().FirstOrDefault(m => m.Uri == uri);
+          manga = Repository.Get<IManga>().FirstOrDefault(m => m.Uri == manga.Uri);
           if (manga == null)
-            return;
+            continue;
 
           foreach (var record in history)
             record.Uri = new Uri(record.Uri.OriginalString
               .Replace(history.Key.OriginalString.TrimEnd('/'), manga.Uri.OriginalString.TrimEnd('/')));
           manga.AddHistory(history);
-          manga.Save();
-        });
-      });
-      Task.WaitAll(tasks.ToArray());
+        }
+        tranc.Commit();
+      }
 
       Backup.MoveToBackup(HistoryFile);
     }

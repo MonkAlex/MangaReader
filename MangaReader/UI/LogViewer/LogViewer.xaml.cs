@@ -67,5 +67,10 @@ namespace MangaReader.UI.LogViewer
     {
       ResizeColumns();
     }
+
+    private void TextBlockWithLinks_OnHyperlinkPressed(object sender, HyperlinkPressedEventArgs args)
+    {
+      System.Diagnostics.Process.Start(args.Hyperlink.OriginalString);
+    }
   }
 }

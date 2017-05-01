@@ -36,21 +36,21 @@ namespace MangaReader.Core.Services
       catch (UriFormatException ex)
       {
         Log.Exception(ex, $"Некорректная ссылка: {url}");
-        return new Page();
+        return new Page(url);
       }
       catch (WebException ex)
       {
         Log.Exception(ex, $"{Strings.Page_GetPage_InternetOff}, ссылка: {url}, попытка номер - {restartCounter}");
 
         if (ex.Status != WebExceptionStatus.Timeout && !DelayOnExpectationFailed(ex))
-          return new Page();
+          return new Page(url);
         ++restartCounter;
         return GetPage(url, client, restartCounter);
       }
       catch (System.Exception ex)
       {
         Log.Exception(ex, $"Не удалось получить страницу: {url}");
-        return new Page();
+        return new Page(url);
       }
     }
 
@@ -88,20 +88,20 @@ namespace MangaReader.Core.Services
       catch (UriFormatException ex)
       {
         Log.Exception(ex, $"Некорректная ссылка: {url}");
-        return new Page();
+        return new Page(url);
       }
       catch (WebException ex)
       {
         Log.Exception(ex, $"{Strings.Page_GetPage_InternetOff}, ссылка: {url}, попытка номер - {restartCounter}");
         if (ex.Status != WebExceptionStatus.Timeout)
-          return new Page();
+          return new Page(url);
         ++restartCounter;
         return await GetPageAsync(url, client, restartCounter).ConfigureAwait(false);
       }
       catch (System.Exception ex)
       {
         Log.Exception(ex, $"Не удалось получить страницу: {url}");
-        return new Page();
+        return new Page(url);
       }
     }
 

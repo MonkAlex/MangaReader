@@ -95,6 +95,7 @@
     <Compile Include="UI\LogViewer\LogViewer.xaml.cs">
       <DependentUpon>LogViewer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\LogViewer\TextBlockWithHyperlinks.cs" />
     <Compile Include="UI\MainForm\Filter.xaml.cs">
       <DependentUpon>Filter.xaml</DependentUpon>
     </Compile>

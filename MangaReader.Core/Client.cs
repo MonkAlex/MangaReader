@@ -34,37 +34,44 @@ namespace MangaReader.Core
 
     public static void Start(IProcess process)
     {
-      Updater.Initialize();
-
-      ConfigStorage.RefreshPlugins();
-      NHibernate.Mapping.Initialize(process);
-
-      var isSingle = false;
-      var name = ConfigStorage.Instance.DatabaseConfig.UniqueId.ToString("D");
-      mutex = new Mutex(false, name, out isSingle);
-      if (!isSingle)
+      try
       {
-        try
-        {
-          OnClientBeenClosed();
-          process.ProgressState = ProgressState.Error;
-          process.Status = "Программа уже запущена.";
-          Log.Exception(new MangaReaderException("Программа уже запущена."));
+        Updater.Initialize();
 
-          ApplicationControl.Client.Run(name, Messages.Activate);
-        }
-        finally
+        ConfigStorage.RefreshPlugins();
+        NHibernate.Mapping.Initialize(process);
+
+        var isSingle = false;
+        var name = ConfigStorage.Instance.DatabaseConfig.UniqueId.ToString("D");
+        mutex = new Mutex(false, name, out isSingle);
+        if (!isSingle)
         {
-          Environment.Exit(1);
+          try
+          {
+            OnClientBeenClosed();
+            process.ProgressState = ProgressState.Error;
+            process.Status = "Программа уже запущена.";
+            Log.Exception(new MangaReaderException("Программа уже запущена."));
+
+            ApplicationControl.Client.Run(name, Messages.Activate);
+          }
+          finally
+          {
+            Environment.Exit(1);
+          }
         }
+
+        Task.Run(() =>
+        {
+          ApplicationControl.Server.Run(name);
+        });
+
+        Converter.Convert(process);
       }
-
-      Task.Run(() =>
+      finally
       {
-        ApplicationControl.Server.Run(name);
-      });
-
-      Converter.Convert(process);
+        process.State = ConvertState.Completed;
+      }
     }
 
     public static void Close()

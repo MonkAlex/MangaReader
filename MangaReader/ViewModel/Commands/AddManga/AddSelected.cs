@@ -26,6 +26,7 @@ namespace MangaReader.ViewModel.Commands.AddManga
           WindowHelper.Library.Add(uri);
 
         var selectedItems = mainModel.BookmarksModels.OfType<AddBookmarksModel>()
+          .Where(m => m.IsBookmarksLoaded)
           .SelectMany(m => m.Bookmarks.Where(b => b.IsSelected));
         foreach (var manga in selectedItems)
         {

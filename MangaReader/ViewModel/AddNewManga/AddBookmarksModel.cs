@@ -25,6 +25,8 @@ namespace MangaReader.ViewModel
       }
     }
 
+    public bool IsBookmarksLoaded { get { return bookmarks.Any(); } }
+
     public ICommand Add { get; }
 
     public LoginModel Login { get; }

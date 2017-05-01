@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
+using NHibernate.Linq;
 
 namespace MangaReader.Core.Convertation.History
 {
@@ -87,29 +89,31 @@ namespace MangaReader.Core.Convertation.History
         tranc.Commit();
       }
 
-      using (var tranc = Mapping.Session.BeginTransaction())
+      var tasks = histories.GroupBy(h => new Uri(h.Uri, "..")).Select(history =>
       {
-        foreach (var history in histories.GroupBy(h => new Uri(h.Uri, "..")))
+        return Task.Run(() =>
         {
           var manga = Manga.Mangas.Create(history.Key);
           if (manga == null)
-            continue;
+            return;
 
           manga.Refresh();
           if (manga.Uri == history.Key)
-            continue;
+            return;
 
-          manga = Repository.Get<IManga>().FirstOrDefault(m => m.Uri == manga.Uri);
+          var uri = manga.Uri;
+          manga = Repository.Get<IManga>().FirstOrDefault(m => m.Uri == uri);
           if (manga == null)
-            continue;
+            return;
 
           foreach (var record in history)
             record.Uri = new Uri(record.Uri.OriginalString
               .Replace(history.Key.OriginalString.TrimEnd('/'), manga.Uri.OriginalString.TrimEnd('/')));
           manga.AddHistory(history);
-        }
-        tranc.Commit();
-      }
+          manga.Save();
+        });
+      });
+      Task.WaitAll(tasks.ToArray());
 
       Backup.MoveToBackup(HistoryFile);
     }

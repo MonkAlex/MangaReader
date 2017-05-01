@@ -140,7 +140,7 @@ namespace MangaReader.Core.Services
     private Log()
     {
       var config = new LoggingConfiguration();
-      var layout = @"${longdate} ${processid} ${threadid} ${assembly-version} ${level} ${message}";
+      var layout = @"${longdate} ${processid} ${threadid} ${assembly-version} ${level} ${message}${onexception:${newline}${exception:format=tostring}}";
 
       var fileTarget = new FileTarget();
       config.AddTarget("file", fileTarget);

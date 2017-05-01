@@ -35,7 +35,7 @@ namespace Grouple.Convertation
         setting.MainUri = new Uri("http://readmanga.me/");
         setting.MangaSettingUris.Add(setting.MainUri);
         setting.MangaSettingUris.Add(new Uri("http://readmanga.ru/"));
-        setting.Login.MainUri = new Uri(@"http://grouple.ru/");
+        setting.Login.MainUri = new Uri(@"https://grouple.ru/");
         setting.Save();
       }
 
@@ -45,7 +45,7 @@ namespace Grouple.Convertation
         setting.MainUri = new Uri("http://mintmanga.com/");
         setting.MangaSettingUris.Add(setting.MainUri);
         setting.MangaSettingUris.Add(new Uri("http://adultmanga.ru/"));
-        setting.Login.MainUri = new Uri(@"http://grouple.ru/");
+        setting.Login.MainUri = new Uri(@"https://grouple.ru/");
         setting.Save();
       }
     }

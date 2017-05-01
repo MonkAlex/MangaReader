@@ -55,6 +55,7 @@
     </Compile>
     <Compile Include="Chapter.cs" />
     <Compile Include="Convertation\From37To38.cs" />
+    <Compile Include="Convertation\From41To42.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="GroupleLogin.cs" />
     <Compile Include="GroupleManga.cs" />

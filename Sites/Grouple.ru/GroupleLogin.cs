@@ -24,11 +24,11 @@ namespace Grouple
         return IsLogined;
 
       var loginData = new NameValueCollection
-            {
-                {"j_username", this.Name},
-                {"j_password", this.Password},
-                {"remember_me", "checked"}
-            };
+      {
+        {"j_username", this.Name},
+        {"j_password", this.Password},
+        {"remember_me", "checked"}
+      };
       try
       {
         var result = await GetClient().UploadValuesTaskAsync("internal/auth/j_spring_security_check", "POST", loginData);
@@ -57,7 +57,8 @@ namespace Grouple
       var firstOrDefault = document.DocumentNode
           .SelectNodes("//div[@class=\"bookmarks-lists\"]");
 
-      if (firstOrDefault == null || firstOrDefault.FirstOrDefault() == null)
+      var bookMarksNode = firstOrDefault?.FirstOrDefault();
+      if (bookMarksNode == null)
       {
         Log.AddFormat("Bookmarks from '{0}' not found.", this.MainUri);
         return bookmarks;
@@ -65,7 +66,7 @@ namespace Grouple
 
       var parser = new Parser();
       var loadedBookmarks = Regex
-          .Matches(firstOrDefault.FirstOrDefault().OuterHtml, @"href='(.*?)'", RegexOptions.IgnoreCase)
+          .Matches(bookMarksNode.OuterHtml, @"href='(.*?)'", RegexOptions.IgnoreCase)
           .OfType<Group>()
           .Select(g => g.Captures[0])
           .OfType<Match>()
@@ -84,7 +85,7 @@ namespace Grouple
     public GroupleLogin()
     {
       // Адрес может быть переопределен в базе. Это только дефолтное значение.
-      this.MainUri = new Uri(@"http://grouple.ru/");
+      this.MainUri = new Uri(@"https://grouple.ru/");
     }
   }
 }

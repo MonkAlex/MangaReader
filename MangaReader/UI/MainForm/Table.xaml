@@ -144,8 +144,8 @@
       <logViewer:LogViewer Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4"/>
       <StatusBar x:Name="StatusBar" Grid.Column="0" Grid.Row="1">
         <StatusBarItem HorizontalContentAlignment="Right">
-          <CheckBox IsChecked="{Binding ShutdownPC}"
-                    Visibility="{Binding Library.IsAvaible, Converter={StaticResource B2V}}"
+          <CheckBox IsChecked="{Binding Library.ShutdownPC}"
+                    Visibility="{Binding Library.InProcess, Converter={StaticResource B2V}}"
                     Content="Выключить ПК"/>
         </StatusBarItem>
       </StatusBar>

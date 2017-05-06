@@ -11,13 +11,16 @@ namespace MangaReader.ViewModel.Commands
   {
     private readonly ListCollectionView view;
 
-    public override void Execute(object parameter)
+    public override async void Execute(object parameter)
     {
       base.Execute(parameter);
 
       if (Library.IsAvaible)
       {
-        Library.ThreadAction(() => Library.Update(view.OfType<MangaBaseModel>().Select(m => m.Manga), ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
+        await Library.ThreadAction(() => Library.Update(view.OfType<MangaBaseModel>().Select(m => m.Manga), ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
+        if (Library.ShutdownPC)
+          new ShutdownViewModel().Show();
+        Library.ShutdownPC = false;
       }
     }
 

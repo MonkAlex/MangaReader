@@ -19,6 +19,7 @@ namespace MangaReader.UI.Services
       AddOrReplace(typeof(ViewModel.Setting.AppSettingModel), typeof(MangaReader.UI.Setting.AppSettingView));
       AddOrReplace(typeof(ViewModel.Setting.MangaSettingModel), typeof(MangaReader.UI.Setting.MangaSettings));
       AddOrReplace(typeof(ViewModel.Manga.MangaCardModel), typeof(MangaReader.UI.Manga.MangaForm));
+      AddOrReplace(typeof(ViewModel.ShutdownViewModel), typeof(MangaReader.UI.ShutdownWindow));
     }
   }
 }

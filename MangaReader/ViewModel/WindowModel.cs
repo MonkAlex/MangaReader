@@ -25,7 +25,15 @@ namespace MangaReader.ViewModel
 
     public ICommand Close { get; set; }
 
-    public TaskbarIconModel TaskbarIcon { get; set; }
+    public TaskbarIconModel TaskbarIcon
+    {
+      get { return taskbarIcon; }
+      set
+      {
+        taskbarIcon = value;
+        OnPropertyChanged();
+      }
+    }
 
     public object Content
     {
@@ -132,6 +140,7 @@ namespace MangaReader.ViewModel
     }
 
     private ProgressState beforePause = ProgressState.None;
+    private TaskbarIconModel taskbarIcon;
 
     private void WindowOnClosing(Window sender, CancelEventArgs cancelEventArgs)
     {

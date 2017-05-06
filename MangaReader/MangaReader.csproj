@@ -155,6 +155,9 @@
       <DependentUpon>VersionHistoryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Services\ViewService.cs" />
+    <Compile Include="UI\ShutdownWindow.xaml.cs">
+      <DependentUpon>ShutdownWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\AddNewManga\AddBookmarksModel.cs" />
     <Compile Include="ViewModel\AddNewManga\AddFromUri.cs" />
     <Compile Include="ViewModel\AddNewManga\AddNewModel.cs" />
@@ -209,6 +212,7 @@
     <Compile Include="ViewModel\Primitive\ProcessModel.cs" />
     <Compile Include="ViewModel\Setting\SettingModel.cs" />
     <Compile Include="ViewModel\Setting\SettingViewModel.cs" />
+    <Compile Include="ViewModel\ShutdownViewModel.cs" />
     <Compile Include="ViewModel\TaskbarIconModel.cs" />
     <Compile Include="ViewModel\VersionHistoryModel.cs" />
     <Compile Include="ViewModel\WindowModel.cs" />
@@ -281,6 +285,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\VersionHistoryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ShutdownWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

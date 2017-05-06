@@ -23,6 +23,7 @@ namespace MangaReader.Core.Services
     private int mangaIndex;
     private int mangasCount;
     private bool isAvaible = true;
+    private bool shutdownPc;
 
     /// <summary>
     /// Признак паузы.
@@ -46,6 +47,22 @@ namespace MangaReader.Core.Services
       private set
       {
         isAvaible = value;
+        OnPropertyChanged();
+        OnPropertyChanged(nameof(InProcess));
+      }
+    }
+
+    public bool InProcess
+    {
+      get { return !IsAvaible; }
+    }
+
+    public bool ShutdownPC
+    {
+      get { return shutdownPc; }
+      set
+      {
+        shutdownPc = value;
         OnPropertyChanged();
       }
     }

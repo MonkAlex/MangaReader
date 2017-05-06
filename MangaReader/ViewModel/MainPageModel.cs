@@ -27,7 +27,6 @@ namespace MangaReader.ViewModel
     private ObservableCollection<ContentMenuItem> menu;
     private ICommand updateWithPause;
     private IDownloadable lastDownload;
-    private bool shutdownPc;
 
     public LibraryViewModel Library { get; set; }
 
@@ -88,16 +87,6 @@ namespace MangaReader.ViewModel
     }
 
     public ObservableCollection<ContentMenuItem> NavigationMenu { get; set; }
-
-    public bool ShutdownPC
-    {
-      get { return shutdownPc; }
-      set
-      {
-        shutdownPc = value;
-        OnPropertyChanged();
-      }
-    }
 
     internal virtual bool Filter(object o)
     {

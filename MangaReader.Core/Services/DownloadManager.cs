@@ -38,38 +38,38 @@ namespace MangaReader.Core.Services
       try
       {
         response = await request.GetResponseAsync();
-        result = await CopyTo(response.GetResponseStream(), response.ContentLength, uri);
+        result = await CopyTo(response.GetResponseStream());
       }
       catch (System.Exception ex)
       {
         Log.Exception(ex, string.Format("Загрузка {0} не завершена.", uri));
         return file;
       }
-      if (response.ContentLength == result.LongLength)
+      if (response.ContentLength <= result.LongLength)
         file.Body = result;
       return file;
     }
 
-    private static async Task<byte[]> CopyTo(Stream from, long totalBytes, Uri uri)
+    private static async Task<byte[]> CopyTo(Stream from)
     {
-      var data = new byte[totalBytes];
-      byte[] buffer = new byte[81920];
-      int currentIndex = 0;
-      while (true)
+      using (var memory = new MemoryStream())
       {
-        int num = await from.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
-        if (num != 0)
+        byte[] buffer = new byte[81920];
+        while (true)
         {
-          Array.Copy(buffer, 0, data, currentIndex, num);
-          currentIndex += num;
-          NetworkSpeed.AddInfo(num);
+          int num = await from.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
+          if (num != 0)
+          {
+            memory.Write(buffer, 0, num);
+            NetworkSpeed.AddInfo(num);
+          }
+          else
+          {
+            break;
+          }
         }
-        else
-        {
-          break;
-        }
+        return memory.ToArray();
       }
-      return data;
     }
   }
 }

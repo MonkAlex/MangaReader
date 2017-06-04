@@ -51,10 +51,10 @@ namespace Hentaichan.Mangachan
         document.LoadHtml(Page.GetPage(chapter.Uri).Content);
         var enName = Regex.Match(document.DocumentNode.InnerHtml, @"\""name\"":\""(.*?)\""", RegexOptions.IgnoreCase);
         if (enName.Success)
-          localizedName.English = WebUtility.HtmlDecode(enName.Groups[1].Value);
+          localizedName.English = WebUtility.HtmlDecode(enName.Groups[1].Value.Replace("\\'", "'"));
         var ruName = Regex.Match(document.DocumentNode.InnerHtml, @"\""rus_name\"":\""\((.*?)\)\""", RegexOptions.IgnoreCase);
         if (ruName.Success)
-          localizedName.Russian = WebUtility.HtmlDecode(ruName.Groups[1].Value);
+          localizedName.Russian = WebUtility.HtmlDecode(ruName.Groups[1].Value.Replace("\\'", "'"));
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
 

@@ -34,91 +34,91 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Avalonia.Animation, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.0.5.1-build3247-alpha\lib\net45\Avalonia.Animation.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.1\lib\net45\Avalonia.Animation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.Base, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.0.5.1-build3247-alpha\lib\net45\Avalonia.Base.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.1\lib\net45\Avalonia.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.Cairo, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.Cairo.0.5.1-build3247-alpha\lib\net45\Avalonia.Cairo.dll</HintPath>
+      <HintPath>..\packages\Avalonia.Cairo.0.5.1\lib\net45\Avalonia.Cairo.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.Controls, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.0.5.1-build3247-alpha\lib\net45\Avalonia.Controls.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.1\lib\net45\Avalonia.Controls.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.DesignerSupport, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.0.5.1-build3247-alpha\lib\net45\Avalonia.DesignerSupport.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.1\lib\net45\Avalonia.DesignerSupport.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.Diagnostics, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.0.5.1-build3247-alpha\lib\net45\Avalonia.Diagnostics.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.1\lib\net45\Avalonia.Diagnostics.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.Direct2D1, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.Direct2D1.0.5.1-build3247-alpha\lib\net45\Avalonia.Direct2D1.dll</HintPath>
+      <HintPath>..\packages\Avalonia.Direct2D1.0.5.1\lib\net45\Avalonia.Direct2D1.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.DotNetFrameworkRuntime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.0.5.1-build3247-alpha\lib\net45\Avalonia.DotNetFrameworkRuntime.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.1\lib\net45\Avalonia.DotNetFrameworkRuntime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Avalonia.Gtk, Version=1.0.6368.13826, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.Gtk.0.5.1-build3247-alpha\lib\net45\Avalonia.Gtk.dll</HintPath>
+    <Reference Include="Avalonia.Gtk, Version=1.0.6360.17202, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Avalonia.Gtk.0.5.1\lib\net45\Avalonia.Gtk.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.Gtk3, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.Gtk3.0.5.1-build3247-alpha\lib\netstandard1.1\Avalonia.Gtk3.dll</HintPath>
+      <HintPath>..\packages\Avalonia.Gtk3.0.5.1\lib\netstandard1.1\Avalonia.Gtk3.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.Input, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.0.5.1-build3247-alpha\lib\net45\Avalonia.Input.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.1\lib\net45\Avalonia.Input.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.Interactivity, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.0.5.1-build3247-alpha\lib\net45\Avalonia.Interactivity.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.1\lib\net45\Avalonia.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.Layout, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.0.5.1-build3247-alpha\lib\net45\Avalonia.Layout.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.1\lib\net45\Avalonia.Layout.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.Logging.Serilog, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.0.5.1-build3247-alpha\lib\net45\Avalonia.Logging.Serilog.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.1\lib\net45\Avalonia.Logging.Serilog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.Markup, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.0.5.1-build3247-alpha\lib\net45\Avalonia.Markup.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.1\lib\net45\Avalonia.Markup.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.Markup.Xaml, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.0.5.1-build3247-alpha\lib\net45\Avalonia.Markup.Xaml.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.1\lib\net45\Avalonia.Markup.Xaml.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.ReactiveUI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.0.5.1-build3247-alpha\lib\net45\Avalonia.ReactiveUI.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.1\lib\net45\Avalonia.ReactiveUI.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.Skia.Desktop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.Skia.Desktop.0.5.1-build3247-alpha\lib\net45\Avalonia.Skia.Desktop.dll</HintPath>
+      <HintPath>..\packages\Avalonia.Skia.Desktop.0.5.1\lib\net45\Avalonia.Skia.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.Styling, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.0.5.1-build3247-alpha\lib\net45\Avalonia.Styling.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.1\lib\net45\Avalonia.Styling.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.Themes.Default, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.0.5.1-build3247-alpha\lib\net45\Avalonia.Themes.Default.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.1\lib\net45\Avalonia.Themes.Default.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.Visuals, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.0.5.1-build3247-alpha\lib\net45\Avalonia.Visuals.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.1\lib\net45\Avalonia.Visuals.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Avalonia.Win32, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Avalonia.Win32.0.5.1-build3247-alpha\lib\net45\Avalonia.Win32.dll</HintPath>
+      <HintPath>..\packages\Avalonia.Win32.0.5.1\lib\net45\Avalonia.Win32.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
@@ -197,7 +197,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MangaReader.Core\MangaReader.Core.csproj">
@@ -212,9 +214,8 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\SkiaSharp.1.57.1\build\net45\SkiaSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SkiaSharp.1.57.1\build\net45\SkiaSharp.targets'))" />
-    <Error Condition="!Exists('..\packages\Avalonia.Skia.Linux.Natives.1.57.1.3\build\net45\Avalonia.Skia.Linux.Natives.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Avalonia.Skia.Linux.Natives.1.57.1.3\build\net45\Avalonia.Skia.Linux.Natives.targets'))" />
+    <Error Condition="!Exists('..\packages\Avalonia.Skia.Linux.Natives.1.57.1.4\build\net45\Avalonia.Skia.Linux.Natives.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Avalonia.Skia.Linux.Natives.1.57.1.4\build\net45\Avalonia.Skia.Linux.Natives.targets'))" />
   </Target>
-  <Import Project="..\packages\Avalonia.Skia.Linux.Natives.1.57.1.3\build\net45\Avalonia.Skia.Linux.Natives.targets" Condition="Exists('..\packages\Avalonia.Skia.Linux.Natives.1.57.1.3\build\net45\Avalonia.Skia.Linux.Natives.targets')" />
   <PropertyGroup>
     <PostBuildEvent>
       xcopy /y /r /e "$(ProjectDir)\..\MangaReader.Core\bin\$(ConfigurationName)" "$(TargetDir)"
@@ -227,4 +228,5 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
+  <Import Project="..\packages\Avalonia.Skia.Linux.Natives.1.57.1.4\build\net45\Avalonia.Skia.Linux.Natives.targets" Condition="Exists('..\packages\Avalonia.Skia.Linux.Natives.1.57.1.4\build\net45\Avalonia.Skia.Linux.Natives.targets')" />
 </Project>

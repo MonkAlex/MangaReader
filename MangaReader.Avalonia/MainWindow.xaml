@@ -1,3 +1,17 @@
 ﻿<Window xmlns="https://github.com/avaloniaui" MinWidth="500" MinHeight="300">
-  <ItemsControl Items="{Binding}"/>
+  <ItemsControl Items="{Binding}">
+    <ItemsControl.ItemTemplate>
+      <DataTemplate>
+        <Grid ColumnDefinitions="*,*">
+          <TextBlock Grid.Column="0" Text="{Binding Name}"/>
+          <TextBlock Grid.Column="1" Text="{Binding Folder}"/>
+        </Grid>
+      </DataTemplate>
+    </ItemsControl.ItemTemplate>
+    <ItemsControl.ItemsPanel>
+      <ItemsPanelTemplate>
+        <StackPanel Orientation="Horizontal"></StackPanel>
+      </ItemsPanelTemplate>
+    </ItemsControl.ItemsPanel>
+  </ItemsControl>
 </Window>

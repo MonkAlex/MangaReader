@@ -236,6 +236,7 @@ namespace MangaReader.Core.Manga
     private Compression.CompressionMode? compressionMode;
     private string status;
     private ICollection<MangaHistory> histories;
+    private byte[] cover;
 
     /// <summary>
     /// Статус корректности манги.
@@ -309,6 +310,16 @@ namespace MangaReader.Core.Manga
       set { }
     }
 
+    public byte[] Cover
+    {
+      get { return cover; }
+      set
+      {
+        cover = value;
+        OnPropertyChanged();
+      }
+    }
+
     public event EventHandler<IManga> DownloadProgressChanged;
 
     protected void OnDownloadProgressChanged(IManga manga)
@@ -350,6 +361,8 @@ namespace MangaReader.Core.Manga
         return;
 
       this.Refresh();
+      if (Cover == null)
+        Cover = Parser.GetPreviews(this).FirstOrDefault();
 
       if (mangaFolder == null)
         mangaFolder = this.GetAbsoulteFolderPath();

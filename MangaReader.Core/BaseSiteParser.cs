@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 
@@ -24,5 +26,7 @@ namespace MangaReader.Core
       else if (newName != manga.ServerName)
         manga.ServerName = newName;
     }
+
+    public abstract IEnumerable<byte[]> GetPreviews(IManga manga);
   }
 }

@@ -149,6 +149,12 @@ namespace Hentaichan
       return new UriParseResult(false, UriParseKind.Manga, null);
     }
 
+    public override IEnumerable<byte[]> GetPreviews(IManga manga)
+    {
+      foreach (var bytes in Mangachan.Parser.GetPreviewsImpl(manga))
+        yield return bytes;
+    }
+
     public static void UpdatePages(MangaReader.Core.Manga.Chapter chapter)
     {
       chapter.Pages.Clear();

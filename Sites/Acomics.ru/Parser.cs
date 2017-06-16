@@ -162,6 +162,11 @@ namespace Acomics
       return new UriParseResult(false, UriParseKind.Manga, null);
     }
 
+    public override IEnumerable<byte[]> GetPreviews(IManga manga)
+    {
+      throw new NotImplementedException();
+    }
+
     /// <summary>
     /// Получить страницы манги.
     /// </summary>

@@ -21,6 +21,8 @@ namespace MangaReader.Core.Manga
 
     ISiteParser Parser { get; }
 
+    byte[] Cover { get; set; }
+
     #region Content
 
     bool HasChapters { get; set; }

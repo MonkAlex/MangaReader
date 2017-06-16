@@ -1,4 +1,5 @@
-﻿using MangaReader.Core.Manga;
+﻿using System.Collections.Generic;
+using MangaReader.Core.Manga;
 
 namespace MangaReader.Core
 {
@@ -8,6 +9,7 @@ namespace MangaReader.Core
     void UpdateContentType(IManga manga);
     void UpdateContent(IManga manga);
     UriParseResult ParseUri(System.Uri uri);
+    IEnumerable<byte[]> GetPreviews(IManga manga);
   }
 
   public class UriParseResult

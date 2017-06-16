@@ -126,6 +126,41 @@ namespace Hentaichan.Mangachan
       return new UriParseResult(false, UriParseKind.Manga, null);
     }
 
+    public override IEnumerable<byte[]> GetPreviews(IManga manga)
+    {
+      foreach (var bytes in GetPreviewsImpl(manga))
+        yield return bytes;
+    }
+
+    internal static IEnumerable<byte[]> GetPreviewsImpl(IManga manga)
+    {
+      byte[] result = null;
+      try
+      {
+        var document = new HtmlDocument();
+        var client = GetClient();
+        var content = Page.GetPage(manga.Uri, client).Content;
+        document.LoadHtml(content);
+
+        var chapterNodes = document.GetElementbyId("cover");
+        if (chapterNodes != null)
+        {
+          var src = chapterNodes.Attributes.Single(a => a.Name == "src").Value;
+          Uri link;
+          if (Uri.IsWellFormedUriString(src, UriKind.Relative))
+            link = new Uri(manga.Setting.MainUri, src);
+          else
+            link = new Uri(src);
+          result = client.DownloadData(link);
+        }
+      }
+      catch (NullReferenceException ex)
+      {
+        Log.Exception(ex, $"Возможно, требуется регистрация для доступа к {manga.Uri}");
+      }
+      yield return result;
+    }
+
     public static void UpdatePages(MangaReader.Core.Manga.Chapter chapter)
     {
       chapter.Pages.Clear();

@@ -1,10 +1,12 @@
-﻿<Window xmlns="https://github.com/avaloniaui" MinWidth="500" MinHeight="300">
+﻿<Window xmlns="https://github.com/avaloniaui" 
+        xmlns:av="clr-namespace:MangaReader.Avalonia;assembly=MangaReader.Avalonia"
+        MinWidth="500" MinHeight="300">
   <ItemsControl Items="{Binding}">
     <ItemsControl.ItemTemplate>
       <DataTemplate>
-        <Grid ColumnDefinitions="*,*">
-          <TextBlock Grid.Column="0" Text="{Binding Name}"/>
-          <TextBlock Grid.Column="1" Text="{Binding Folder}"/>
+        <Grid RowDefinitions="*,*">
+          <Image Grid.Row="0" Source="{Binding Cover, Converter={Static av:BitmapTypeConverter.Instance}}"/>
+          <TextBlock Grid.Row="1" Text="{Binding Name}"/>
         </Grid>
       </DataTemplate>
     </ItemsControl.ItemTemplate>

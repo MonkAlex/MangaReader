@@ -219,7 +219,37 @@ namespace Grouple
 
     public override IEnumerable<byte[]> GetPreviews(IManga manga)
     {
-      throw new NotImplementedException();
+      return GetPreviewsImpl(manga);
     }
+
+    private IEnumerable<byte[]> GetPreviewsImpl(IManga manga)
+    {
+      var document = new HtmlDocument();
+      var client = new CookieClient();
+      document.LoadHtml(Page.GetPage(manga.Uri, client).Content);
+      var banners = document.DocumentNode.SelectSingleNode("//div[@class='picture-fotorama']");
+      foreach (var node in banners.ChildNodes)
+      {
+        Uri link = null;
+        try
+        {
+          var attributes = node.Attributes.Where(a => a.Name == "src" || a.Name == "href").ToList();
+          if (!attributes.Any())
+            continue;
+
+          var src = attributes.Single().Value;
+          if (Uri.IsWellFormedUriString(src, UriKind.Relative))
+            link = new Uri(manga.Setting.MainUri, src);
+          else
+            link = new Uri(src);
+        }
+        catch (NullReferenceException ex) { Log.Exception(ex); }
+        if (link == null)
+          continue;
+
+        yield return client.DownloadData(link);
+      }
+    }
+
   }
 }

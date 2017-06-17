@@ -361,8 +361,7 @@ namespace MangaReader.Core.Manga
         return;
 
       this.Refresh();
-      if (Cover == null)
-        Cover = Parser.GetPreviews(this).FirstOrDefault();
+      Cover = Parser.GetPreviews(this).FirstOrDefault();
 
       if (mangaFolder == null)
         mangaFolder = this.GetAbsoulteFolderPath();

@@ -164,7 +164,24 @@ namespace Acomics
 
     public override IEnumerable<byte[]> GetPreviews(IManga manga)
     {
-      throw new NotImplementedException();
+      byte[] result = null;
+      try
+      {
+        var document = new HtmlDocument();
+        var client = this.GetAdultClient();
+        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/banner"), client).Content);
+        var banners = document.DocumentNode.SelectSingleNode("//div[@class='serial-content']");
+        var image = banners.ChildNodes.SkipWhile(n => n.InnerText != "160x90").Skip(1).FirstOrDefault();
+        var src = image.ChildNodes[0].Attributes.Single(a => a.Name == "src").Value;
+        Uri link;
+        if (Uri.IsWellFormedUriString(src, UriKind.Relative))
+          link = new Uri(manga.Setting.MainUri, src);
+        else
+          link = new Uri(src);
+        result = client.DownloadData(link);
+      }
+      catch (NullReferenceException ex) { Log.Exception(ex); }
+      yield return result;
     }
 
     /// <summary>

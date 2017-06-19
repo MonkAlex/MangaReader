@@ -29,10 +29,12 @@ namespace MangaReader.Core.Services
         if (restartCounter > 3)
           throw new DownloadAttemptFailed(restartCounter, url);
 
-        Manga.MangaPage.Throttler.Wait();
-        var webClient = client ?? new CookieClient();
-        var content = webClient.DownloadString(url);
-        return new Page(content, webClient.ResponseUri);
+        using (ThrottleService.Wait())
+        {
+          var webClient = client ?? new CookieClient();
+          var content = webClient.DownloadString(url);
+          return new Page(content, webClient.ResponseUri);
+        }
       }
       catch (UriFormatException ex)
       {
@@ -53,11 +55,6 @@ namespace MangaReader.Core.Services
         Log.Exception(ex, $"Не удалось получить страницу: {url}");
         return new Page(url);
       }
-      finally
-      {
-        if (restartCounter <= 3)
-          Manga.MangaPage.Throttler.Release();
-      }
     }
 
     public static bool DelayOnExpectationFailed(WebException ex)
@@ -65,7 +62,7 @@ namespace MangaReader.Core.Services
       var response = ex.Response as HttpWebResponse;
       if (response != null && response.StatusCode == HttpStatusCode.ExpectationFailed)
       {
-        Log.Exception(ex, $"Failed, 417. {response.ResponseUri}");
+        Log.Exception(ex, $"Доступ к {response.ResponseUri} будет повторно проверен через 4 минуты.");
         var delay = new TimeSpan(0, 4, 0);
         Task.Delay(delay).Wait();
         return true;
@@ -87,10 +84,12 @@ namespace MangaReader.Core.Services
         if (restartCounter > 3)
           throw new DownloadAttemptFailed(restartCounter, url);
 
-        await Manga.MangaPage.Throttler.WaitAsync();
-        var webClient = client ?? new CookieClient();
-        var task = webClient.DownloadStringTaskAsync(url).ConfigureAwait(false);
-        return new Page(await task, webClient.ResponseUri);
+        using (await ThrottleService.WaitAsync())
+        {
+          var webClient = client ?? new CookieClient();
+          var task = webClient.DownloadStringTaskAsync(url).ConfigureAwait(false);
+          return new Page(await task, webClient.ResponseUri);
+        }
       }
       catch (UriFormatException ex)
       {
@@ -109,11 +108,6 @@ namespace MangaReader.Core.Services
       {
         Log.Exception(ex, $"Не удалось получить страницу: {url}");
         return new Page(url);
-      }
-      finally
-      {
-        if (restartCounter <= 3)
-          Manga.MangaPage.Throttler.Release();
       }
     }
 

@@ -29,6 +29,7 @@ namespace MangaReader.Core.Services
         if (restartCounter > 3)
           throw new DownloadAttemptFailed(restartCounter, url);
 
+        Manga.MangaPage.Throttler.Wait();
         var webClient = client ?? new CookieClient();
         var content = webClient.DownloadString(url);
         return new Page(content, webClient.ResponseUri);
@@ -40,7 +41,7 @@ namespace MangaReader.Core.Services
       }
       catch (WebException ex)
       {
-        Log.Exception(ex, $"{Strings.Page_GetPage_InternetOff}, ссылка: {url}, попытка номер - {restartCounter}");
+        Log.Exception(ex, $"{Strings.Page_GetPage_SiteOff}, ссылка: {url}, попытка номер - {restartCounter}");
 
         if (ex.Status != WebExceptionStatus.Timeout && !DelayOnExpectationFailed(ex))
           return new Page(url);
@@ -51,6 +52,11 @@ namespace MangaReader.Core.Services
       {
         Log.Exception(ex, $"Не удалось получить страницу: {url}");
         return new Page(url);
+      }
+      finally
+      {
+        if (restartCounter <= 3)
+          Manga.MangaPage.Throttler.Release();
       }
     }
 
@@ -81,6 +87,7 @@ namespace MangaReader.Core.Services
         if (restartCounter > 3)
           throw new DownloadAttemptFailed(restartCounter, url);
 
+        await Manga.MangaPage.Throttler.WaitAsync();
         var webClient = client ?? new CookieClient();
         var task = webClient.DownloadStringTaskAsync(url).ConfigureAwait(false);
         return new Page(await task, webClient.ResponseUri);
@@ -92,7 +99,7 @@ namespace MangaReader.Core.Services
       }
       catch (WebException ex)
       {
-        Log.Exception(ex, $"{Strings.Page_GetPage_InternetOff}, ссылка: {url}, попытка номер - {restartCounter}");
+        Log.Exception(ex, $"{Strings.Page_GetPage_SiteOff}, ссылка: {url}, попытка номер - {restartCounter}");
         if (ex.Status != WebExceptionStatus.Timeout)
           return new Page(url);
         ++restartCounter;
@@ -102,6 +109,11 @@ namespace MangaReader.Core.Services
       {
         Log.Exception(ex, $"Не удалось получить страницу: {url}");
         return new Page(url);
+      }
+      finally
+      {
+        if (restartCounter <= 3)
+          Manga.MangaPage.Throttler.Release();
       }
     }
 

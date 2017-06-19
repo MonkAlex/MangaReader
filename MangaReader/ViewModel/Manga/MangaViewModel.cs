@@ -19,6 +19,7 @@ namespace MangaReader.ViewModel.Manga
     private double downloaded;
     private string speed;
     private string status;
+    private bool speedTracked = false;
 
     public string Type
     {
@@ -96,9 +97,12 @@ namespace MangaReader.ViewModel.Manga
         this.Name = Manga.Name;
       if (args.PropertyName == nameof(Manga.Downloaded))
       {
+        if (!speedTracked && !Manga.IsDownloaded)
+        {
+          NetworkSpeed.Updated += NetworkSpeedOnUpdated;
+          speedTracked = true;
+        }
         this.Downloaded = Manga.Downloaded;
-        var speed = NetworkSpeed.TotalSpeed;
-        this.Speed = (!Manga.IsDownloaded && speed != 0) ? (speed.HumanizeByteSize() + "ps") : string.Empty;
       }
       if (args.PropertyName == nameof(Manga.IsCompleted))
         SetCompletedIcon(Manga.IsCompleted);
@@ -108,6 +112,14 @@ namespace MangaReader.ViewModel.Manga
         SetNeedUpdate(Manga.NeedUpdate);
       if (args.PropertyName == nameof(Manga.Status))
         this.Status = Manga.Status;
+      if (args.PropertyName == nameof(Manga.IsDownloaded))
+      {
+        if (Manga.IsDownloaded && speedTracked)
+        {
+          NetworkSpeed.Updated -= NetworkSpeedOnUpdated;
+          speedTracked = false;
+        }
+      }
     }
 
     private void SetCompletedIcon(bool isCompleted)
@@ -178,6 +190,12 @@ namespace MangaReader.ViewModel.Manga
         if (Manga is INotifyPropertyChanged)
           ((INotifyPropertyChanged)Manga).PropertyChanged += MangaOnPropertyChanged;
       }
+    }
+
+    private void NetworkSpeedOnUpdated(double d)
+    {
+      var outSpeed = NetworkSpeed.TotalSpeed;
+      this.Speed = (!Manga.IsDownloaded && outSpeed != 0) ? (outSpeed.HumanizeByteSize() + "ps") : string.Empty;
     }
   }
 }

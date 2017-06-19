@@ -85,7 +85,7 @@ namespace Grouple
     public GroupleLogin()
     {
       // Адрес может быть переопределен в базе. Это только дефолтное значение.
-      this.MainUri = new Uri(@"https://grouple.ru/");
+      this.MainUri = new Uri(@"https://grouple.co/");
     }
   }
 }

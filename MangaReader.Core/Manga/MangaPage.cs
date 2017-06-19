@@ -12,7 +12,7 @@ namespace MangaReader.Core.Manga
   [DebuggerDisplay("{Number} {Name}")]
   public class MangaPage : IDownloadable
   {
-    protected static SemaphoreSlim Throttler = new SemaphoreSlim(25);
+    internal static SemaphoreSlim Throttler = new SemaphoreSlim(15);
 
     #region Свойства
 

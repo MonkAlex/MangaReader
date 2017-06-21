@@ -1,19 +1,25 @@
-﻿<Window xmlns="https://github.com/avaloniaui" 
+﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:av="clr-namespace:MangaReader.Avalonia;assembly=MangaReader.Avalonia"
         MinWidth="500" MinHeight="300">
-  <ItemsControl Items="{Binding}">
-    <ItemsControl.ItemTemplate>
-      <DataTemplate>
-        <Grid RowDefinitions="*,*">
-          <Image Grid.Row="0" Source="{Binding Cover, Converter={Static av:BitmapTypeConverter.Instance}}"/>
-          <TextBlock Grid.Row="1" Text="{Binding Name}"/>
-        </Grid>
-      </DataTemplate>
-    </ItemsControl.ItemTemplate>
-    <ItemsControl.ItemsPanel>
-      <ItemsPanelTemplate>
-        <StackPanel Orientation="Horizontal"></StackPanel>
-      </ItemsPanelTemplate>
-    </ItemsControl.ItemsPanel>
-  </ItemsControl>
+  <Grid RowDefinitions="Auto,*">
+    <TextBox Grid.Row="0"/>
+    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" CanScrollHorizontally="False">
+      <ItemsControl Items="{Binding}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Grid RowDefinitions="*,Auto" Margin="10"
+                  Width="150" Height="300">
+              <Image Grid.Row="0" Source="{Binding Cover, Converter={Static av:BitmapTypeConverter.Instance}}"/>
+              <TextBlock Grid.Row="1" Text="{Binding Name}" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center"/>
+            </Grid>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel/>
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+      </ItemsControl>
+    </ScrollViewer>
+  </Grid>
 </Window>

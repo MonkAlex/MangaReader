@@ -163,6 +163,7 @@
     <Compile Include="Services\NetworkSpeed.cs" />
     <Compile Include="Services\Page.cs" />
     <Compile Include="Services\Serializer.cs" />
+    <Compile Include="Services\ThrottleService.cs" />
     <Compile Include="Update\Updater.cs" />
     <Compile Include="Update\VersionHistory.cs" />
   </ItemGroup>

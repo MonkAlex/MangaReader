@@ -32,6 +32,7 @@ namespace MangaReader.Core.Services
       }
       lastSpeeds.Value.Enqueue(now);
       totalSpeed = lastSpeeds.Value.Average();
+      OnUpdated(totalSpeed);
     }, null, 0, TimerInterval);
 
     private static Lazy<LimitedConcurrentQueue<double>> lastSpeeds = new Lazy<LimitedConcurrentQueue<double>>(() => new LimitedConcurrentQueue<double>(Seconds));
@@ -57,6 +58,8 @@ namespace MangaReader.Core.Services
       receivedStorage.Value.Enqueue(received);
     }
 
+    public static event Action<double> Updated; 
+
     private class LimitedConcurrentQueue<T> : ConcurrentQueue<T>
     {
       public uint Limit { get; }
@@ -75,6 +78,11 @@ namespace MangaReader.Core.Services
       {
         Limit = limit;
       }
+    }
+
+    private static void OnUpdated(double obj)
+    {
+      Updated?.Invoke(obj);
     }
   }
 }

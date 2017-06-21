@@ -213,6 +213,12 @@ namespace MangaReader.ViewModel
             throw new ArgumentOutOfRangeException();
         }
       }
+      if (args.LibraryOperation == LibraryOperation.UpdateCompleted)
+      {
+        if (Library.ShutdownPC)
+          Client.Dispatcher.Invoke(() => new ShutdownViewModel().Show());
+        Library.ShutdownPC = false;
+      }
     }
   }
 }

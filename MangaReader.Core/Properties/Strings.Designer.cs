@@ -367,11 +367,11 @@ namespace MangaReader.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Интернет недоступен.
+        ///   Looks up a localized string similar to Сайт недоступен.
         /// </summary>
-        public static string Page_GetPage_InternetOff {
+        public static string Page_GetPage_SiteOff {
             get {
-                return ResourceManager.GetString("Page_GetPage_InternetOff", resourceCulture);
+                return ResourceManager.GetString("Page_GetPage_SiteOff", resourceCulture);
             }
         }
         

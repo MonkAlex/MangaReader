@@ -13,7 +13,7 @@ namespace Tests.Entities.Compression
     [Test]
     public void ArchiveCreateUpdate()
     {
-      var downloadFolder = Path.Combine(Directory.GetCurrentDirectory(), "Compress");
+      var downloadFolder = Path.Combine(TestContext.CurrentContext.TestDirectory, "Compress");
       if (Directory.Exists(downloadFolder))
         Directory.Delete(downloadFolder, true);
       Directory.CreateDirectory(downloadFolder);

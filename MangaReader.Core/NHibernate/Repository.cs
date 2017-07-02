@@ -9,12 +9,12 @@ namespace MangaReader.Core.NHibernate
   {
     public static IQueryable<T> Get<T>() where T : Entity.IEntity
     {
-      return Mapping.Session.Query<T>();
+      return Mapping.GetSession().Query<T>();
     }
 
     public static T Get<T>(int id) where T : Entity.IEntity
     {
-      return Mapping.Session.Get<T>(id);
+      return Mapping.GetSession().Get<T>(id);
     }
 
     public static void Save<T>(T obj) where T : Entity.IEntity
@@ -28,7 +28,7 @@ namespace MangaReader.Core.NHibernate
       if (!list.Any())
         return;
 
-      var session = Mapping.Session;
+      var session = Mapping.GetSession();
       using (var tranc = session.BeginTransaction())
       {
         try

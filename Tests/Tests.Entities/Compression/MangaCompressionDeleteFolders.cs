@@ -13,7 +13,7 @@ namespace Tests.Entities.Compression
     [Test]
     public void MangaFolderIsEmptyAfterCompression()
     {
-      var downloadFolder = Path.Combine(Directory.GetCurrentDirectory(), "MangaCompressionDeleteFolders");
+      var downloadFolder = Path.Combine(TestContext.CurrentContext.TestDirectory, "MangaCompressionDeleteFolders");
       if (Directory.Exists(downloadFolder))
         Directory.Delete(downloadFolder, true);
       Directory.CreateDirectory(downloadFolder);

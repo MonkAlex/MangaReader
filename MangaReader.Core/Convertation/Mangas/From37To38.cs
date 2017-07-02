@@ -24,7 +24,7 @@ namespace MangaReader.Core.Convertation.Mangas
                where Uri like '%mintmanga.com%' or Uri like '%adultmanga.ru%'");
 
       // Чистим кеш, чтобы не вытащить мангу старого типа.
-      Mapping.Session.Clear();
+      Mapping.GetSession().Clear();
 
       var mainHosts = ConfigStorage.Instance.DatabaseConfig.MangaSettings.Select(s => s.MainUri.Host).Distinct().ToList();
       foreach (var manga in Repository.Get<Manga.IManga>())

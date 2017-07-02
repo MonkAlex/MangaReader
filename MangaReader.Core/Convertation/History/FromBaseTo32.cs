@@ -74,7 +74,7 @@ namespace MangaReader.Core.Convertation.History
         }
       }
 
-      using (var tranc = Mapping.Session.BeginTransaction())
+      using (var tranc = Mapping.GetSession().BeginTransaction())
       {
         foreach (var manga in mangas)
         {
@@ -87,7 +87,7 @@ namespace MangaReader.Core.Convertation.History
         tranc.Commit();
       }
 
-      using (var tranc = Mapping.Session.BeginTransaction())
+      using (var tranc = Mapping.GetSession().BeginTransaction())
       {
         foreach (var history in histories.GroupBy(h => new Uri(h.Uri, "..")))
         {

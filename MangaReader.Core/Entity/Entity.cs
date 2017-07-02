@@ -45,7 +45,7 @@ namespace MangaReader.Core.Entity
         return;
       }
 
-      Mapping.Session.Refresh(this);
+      Mapping.GetSession().Refresh(this);
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ namespace MangaReader.Core.Entity
       if (this.Id == 0)
         return false;
 
-      var session = Mapping.Session;
+      var session = Mapping.GetSession();
       using (var tranc = session.BeginTransaction())
       {
         var entity = session.Load(this.GetType(), this.Id);

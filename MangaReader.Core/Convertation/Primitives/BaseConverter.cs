@@ -39,7 +39,7 @@ namespace MangaReader.Core.Convertation.Primitives
 
     protected object RunSql(string command)
     {
-      var query = Mapping.Session.CreateSQLQuery(command);
+      var query = Mapping.GetSession().CreateSQLQuery(command);
       return query.UniqueResult();
     }
   }

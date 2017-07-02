@@ -13,7 +13,7 @@ namespace Tests.Entities.Compression
     [Test]
     public void ChapterArchiveNotIncludeInVolumeArchive()
     {
-      var downloadFolder = Path.Combine(Directory.GetCurrentDirectory(), "ArchiveNotInclude");
+      var downloadFolder = Path.Combine(TestContext.CurrentContext.TestDirectory, "ArchiveNotInclude");
       if (Directory.Exists(downloadFolder))
         Directory.Delete(downloadFolder, true);
       Directory.CreateDirectory(downloadFolder);

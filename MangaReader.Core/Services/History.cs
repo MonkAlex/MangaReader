@@ -21,12 +21,9 @@ namespace MangaReader.Core.Services
         return internalContainer;
 
       var uris = internalContainer.Select(c => c.Uri).ToList();
-      List<Uri> exists;
-      using (var session = Mapping.OpenSession())
-      {
-        // В многопоточном коде нельзя обращаться к одной сессии.
-        exists = session.Query<MangaHistory>().Where(h => uris.Contains(h.Uri)).Select(h => h.Uri).ToList();
-      }
+      
+      // В многопоточном коде нельзя обращаться к одной сессии.
+      var exists = Mapping.GetSession().Query<MangaHistory>().Where(h => uris.Contains(h.Uri)).Select(h => h.Uri).ToList();
 
       foreach (var item in internalContainer.OfType<IDownloadableContainer<IDownloadable>>())
       {

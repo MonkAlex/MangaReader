@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using MangaReader.Core.Convertation;
@@ -7,6 +9,7 @@ using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using NHibernate;
 using NHibernate.Cfg;
+using NHibernate.Context;
 using NHibernate.Mapping;
 using NHibernate.Tool.hbm2ddl;
 
@@ -17,14 +20,10 @@ namespace MangaReader.Core.NHibernate
     private const string DbFile = "storage.db";
 
     private static ISessionFactory sessionFactory;
-
-    public static ISession Session;
-
-    public static ISession OpenSession()
+    
+    public static ISession GetSession()
     {
-      var session = sessionFactory.OpenSession();
-      session.FlushMode = FlushMode.Commit;
-      return session;
+      return sessionFactory.GetCurrentSession();
     }
 
     public static bool Initialized { get; set; }
@@ -35,7 +34,6 @@ namespace MangaReader.Core.NHibernate
       Log.Add("Connect to database...");
       process.Status = "Подключение к базе данных...";
       sessionFactory = CreateSessionFactory();
-      Session = OpenSession();
       Log.Add("Connect to database completed.");
 
       Initialized = true;
@@ -49,7 +47,6 @@ namespace MangaReader.Core.NHibernate
       Log.Add("Closing database connect.");
 
       Initialized = false;
-      Session.Close();
       sessionFactory.Close();
     }
 
@@ -59,6 +56,7 @@ namespace MangaReader.Core.NHibernate
         .Configure()
         .Database(SQLiteConfiguration.Standard.UsingFile(Path.Combine(ConfigStorage.WorkFolder, DbFile)))
         .Mappings(LoadPlugins)
+        .CurrentSessionContext<ThreadLocalSessionContext>()
         .ExposeConfiguration(BuildSchema)
         .BuildSessionFactory();
     }

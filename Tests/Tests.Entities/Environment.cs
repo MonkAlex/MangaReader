@@ -10,7 +10,24 @@ namespace Tests
 {
   public class Environment
   {
+    public static Lazy<bool> SetUpLazy = new Lazy<bool>(() =>
+    {
+      SetUpInternal(InitClient);
+      return true;
+    });
+
+    public static bool InitClient = false;
+    
     public static void SetUp(bool initSession)
+    {
+      InitClient = initSession;
+      if (SetUpLazy.Value)
+      {
+        TestContext.Progress.Write("Already Set Up.");
+      }
+    }
+
+    private static void SetUpInternal(bool initSession)
     {
       BeforeTestClean();
       DeployToLib(@".\..\MangaReader.Core\Library\");
@@ -18,12 +35,12 @@ namespace Tests
       DeployToLib(@".\..\Sites\Bin\Release\");
       DeployToLib(@".\..\Sites\Bin\Debug\");
 
-      var process = new ReportProcess();
       MangaReader.Core.Loader.Init();
       MangaReader.Core.Services.Config.ConfigStorage.Instance.AppConfig.UpdateReader = false;
 
-      if (initSession)
+      if (initSession && !Mapping.Initialized)
       {
+        var process = new ReportProcess();
         MangaReader.Core.Client.Init();
         MangaReader.Core.Client.Start(process);
       }
@@ -128,22 +145,18 @@ namespace Tests
     }
   }
 
+  [Parallelizable(ParallelScope.All)]
   public class TestClass
   {
-    private static ManualResetEvent fixtureHandle = new ManualResetEvent(true);
-
     [SetUp]
     protected void SetUp()
     {
-      //fixtureHandle.WaitOne();
       Environment.SetUp(true);
     }
 
     [TearDown]
     protected void Clean()
     {
-      Environment.TestCleanup();
-      //fixtureHandle.Set();
     }
   }
 }

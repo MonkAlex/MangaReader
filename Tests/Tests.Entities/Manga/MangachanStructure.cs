@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
 using MangaReader.Core.Manga;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Tests.Entities.Manga
 {
-  [TestClass]
-  public class MangachanStructure
+  [TestFixture]
+  public class MangachanStructure : TestClass
   {
     private MangaReader.Core.ISiteParser parser = new Hentaichan.Mangachan.Parser();
 
-    [TestMethod]
+    [Test]
     public void AddMangachanMultiPages()
     {
       var manga = GetManga("http://mangachan.me/manga/3828-12-prince.html");
@@ -18,7 +18,7 @@ namespace Tests.Entities.Manga
       Assert.AreEqual(78, manga.Volumes.Sum(v => v.Chapters.Count));
     }
 
-    [TestMethod]
+    [Test]
     public void AddMangachanSingleChapter()
     {
       var manga = GetManga("http://mangachan.me/manga/20138-16000-honesty.html");

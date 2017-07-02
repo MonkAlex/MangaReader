@@ -1,14 +1,14 @@
 ﻿using System;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Tests.Entities.MangaHistory
 {
-  [TestClass]
-  public class AcomicsChapters
+  [TestFixture]
+  public class AcomicsChapters : TestClass
   {
-    [TestMethod]
+    [Test]
     public void CreateWithHistoryAndGetLastVolume()
     {
       var manga = Builder.CreateAcomics();
@@ -30,7 +30,7 @@ namespace Tests.Entities.MangaHistory
       Assert.AreEqual(1, newChapters.Count);
     }
 
-    [TestMethod]
+    [Test]
     public void CreateWithHistoryAndGetNotLastVolume()
     {
       var manga = Builder.CreateAcomics();

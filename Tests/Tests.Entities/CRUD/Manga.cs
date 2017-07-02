@@ -1,30 +1,32 @@
 ﻿using System;
+using System.Linq;
 using MangaReader.Core.Manga;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MangaReader.Core.NHibernate;
+using NUnit.Framework;
 
 namespace Tests.Entities.CRUD
 {
-  [TestClass]
-  public class Manga
+  [TestFixture]
+  public class Manga : TestClass
   {
-    [TestMethod]
+    [Test]
     public void MangaCreateDelete()
     {
       var newManga = Builder.CreateReadmanga();
       var mangaId = newManga.Id;
       Assert.AreNotEqual(0, newManga.Id);
 
-      var fromDb = Environment.Session.Get<IManga>(mangaId);
+      var fromDb = Repository.Get<IManga>(mangaId);
       Assert.AreNotEqual(null, fromDb);
 
       Builder.DeleteReadmanga(newManga);
       Assert.AreEqual(0, newManga.Id);
 
-      fromDb = Environment.Session.Get<IManga>(mangaId);
+      fromDb = Repository.Get<IManga>(mangaId);
       Assert.AreEqual(null, fromDb);
     }
 
-    [TestMethod]
+    [Test]
     public void MangaReadUpdate()
     {
       var url = new Uri("http://rutracker.org/forum/viewforum.php?f=52");
@@ -38,14 +40,14 @@ namespace Tests.Entities.CRUD
       newManga.Update();
       Assert.AreEqual(oldUrl, newManga.Uri);
 
-      var fromDb = Environment.Session.Get<IManga>(mangaId);
+      var fromDb = Repository.Get<IManga>(mangaId);
       Assert.AreEqual(oldUrl, fromDb.Uri);
 
       newManga.Uri = url;
       newManga.Save();
       Assert.AreEqual(url, newManga.Uri);
 
-      fromDb = Environment.Session.Get<IManga>(mangaId);
+      fromDb = Repository.Get<IManga>(mangaId);
       Assert.AreEqual(url, fromDb.Uri);
 
       Builder.DeleteAcomics(newManga);

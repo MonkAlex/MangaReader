@@ -7,14 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Tests.Entities.Download
 {
-  [TestClass]
-  public class Mangachan
+  [TestFixture]
+  public class Mangachan : TestClass
   {
-    [TestMethod]
+    [Test]
     public async Task DownloadMangachan()
     {
       var rm = Mangas.Create(new Uri(@"http://mangachan.me/manga/35617--rain-.html"));

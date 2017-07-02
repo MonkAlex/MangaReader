@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Tests.Entities.Download
 {
-  [TestClass]
-  public class HentaichanDL
+  [TestFixture]
+  public class HentaichanDL : TestClass
   {
-    [TestMethod]
+    [Test]
     public async Task DownloadHentaichan()
     {
       CreateLogin();

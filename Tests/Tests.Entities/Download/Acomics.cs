@@ -7,14 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Tests.Entities.Download
 {
-  [TestClass]
-  public class AcomicsDL
+  [TestFixture]
+  public class AcomicsDL : TestClass
   {
-    [TestMethod]
+    [Test]
     public async Task DownloadAcomics()
     {
       var rm = Mangas.Create(new Uri(@"https://acomics.ru/~MGS-LDIOH"));

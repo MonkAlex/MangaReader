@@ -2,16 +2,16 @@
 using System.Linq;
 using Grouple;
 using MangaReader.Core.Manga;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Tests.Entities.Manga
 {
-  [TestClass]
-  public class MintmangaStructure
+  [TestFixture]
+  public class MintmangaStructure : TestClass
   {
     private Parser parser = new Parser();
 
-    [TestMethod]
+    [Test]
     public void AddMintmangaWithExtra()
     {
       var chapters = GetCountOfChapters("http://mintmanga.com/love_mate");

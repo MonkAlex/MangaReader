@@ -3,14 +3,14 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Tests.Entities.Compression
 {
-  [TestClass]
+  [TestFixture]
   public class CRUD
   {
-    [TestMethod]
+    [Test]
     public void ArchiveCreateUpdate()
     {
       var downloadFolder = Path.Combine(Directory.GetCurrentDirectory(), "Compress");

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Tests.Entities.Manga
 {
-  [TestClass]
-  public class MangaHistoryMultithread
+  [TestFixture]
+  public class MangaHistoryMultithread : TestClass
   {
-    [TestMethod]
+    [Test]
     public void AddHistoryMultithread()
     {
       var manga = Builder.CreateReadmanga();

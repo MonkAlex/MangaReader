@@ -2,16 +2,16 @@
 using System.Linq;
 using Acomics;
 using MangaReader.Core.Manga;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Tests.Entities.Manga
 {
-  [TestClass]
-  public class AcomicsStructure
+  [TestFixture]
+  public class AcomicsStructure : TestClass
   {
     Parser parser = new Parser();
 
-    [TestMethod]
+    [Test]
     public void AddAcomicsOnlyPages()
     {
       var manga = GetManga("http://acomics.ru/~supersciencefriends");
@@ -19,7 +19,7 @@ namespace Tests.Entities.Manga
       Assert.IsTrue(manga.OnlyPages);
     }
 
-    [TestMethod]
+    [Test]
     public void AddAcomicsChapters()
     {
       var manga = GetManga("http://acomics.ru/~hotblood");
@@ -40,7 +40,7 @@ namespace Tests.Entities.Manga
       Assert.AreEqual(4, manga.Chapters.Count);
     }
 
-    [TestMethod]
+    [Test]
     public void AddAcomicsVolume()
     {
       var manga = GetManga("http://acomics.ru/~strays");

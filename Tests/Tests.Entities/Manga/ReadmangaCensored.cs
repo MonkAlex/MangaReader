@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using MangaReader.Core;
 using MangaReader.Core.Manga;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Tests.Entities.Manga
 {
-  [TestClass]
-  public class ReadmangaCensored
+  [TestFixture]
+  public class ReadmangaCensored : TestClass
   {
     private Grouple.Parser parser = new Grouple.Parser();
 
@@ -19,7 +19,7 @@ namespace Tests.Entities.Manga
     // Censored
     // http://readmanga.me/school_teacher/vol2/10?mature=1
 
-    [TestMethod]
+    [Test]
     public void NotCensoredReadmanga()
     {
       var manga = Get(@"http://readmanga.me/black_butler/vol3/10?mature=1");
@@ -28,7 +28,7 @@ namespace Tests.Entities.Manga
       Assert.IsTrue(chapter.Pages[0].ImageLink.IsAbsoluteUri);
     }
 
-    [TestMethod]
+    [Test]
     public void CensoredReadmanga()
     {
       var manga = Get(@"http://readmanga.me/school_teacher/vol2/10?mature=1");

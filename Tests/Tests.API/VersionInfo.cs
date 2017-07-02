@@ -1,19 +1,19 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Tests.API
 {
-  [TestClass]
+  [TestFixture]
   public class VersionInfo
   {
-    [TestMethod]
+    [Test]
     public void VersionHistoryIsExists()
     {
       var text = MangaReader.Core.Update.VersionHistory.GetHistory();
       Assert.IsTrue(!string.IsNullOrWhiteSpace(text));
     }
 
-    [TestMethod]
+    [Test]
     public void VersionHistoryCorrect()
     {
       var version = MangaReader.Core.Update.VersionHistory.GetVersion();

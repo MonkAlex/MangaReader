@@ -1,17 +1,17 @@
 ﻿using System.Linq;
 using MangaReader.Core.Manga;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHibernate.Linq;
+using NUnit.Framework;
 
 namespace Tests.Convertation._1._20
 {
-  [TestClass]
+  [TestFixture]
   public class Convert
   {
-    [TestMethod]
+    [Test]
     public void Convert_1_20_to_main()
     {
-      Environment.Deploy(@"Tests.Convertation\1.20");
+      Environment.DeployToRoot(@"Tests.Convertation\1.20");
 
       MangaReader.Core.Client.Init();
       MangaReader.Core.Client.Start(new ReportProcess());
@@ -191,13 +191,14 @@ namespace Tests.Convertation._1._20
       Assert.AreEqual(17839, loadedHistoryRecord.Count);
     }
 
-    [TestInitialize]
+    [SetUp]
     public void Clean()
     {
+      Environment.SetUp(false);
       Environment.BeforeTestClean();
     }
 
-    [TestCleanup]
+    [TearDown]
     public void Close()
     {
       Environment.TestCleanup();

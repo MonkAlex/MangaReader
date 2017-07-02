@@ -2,37 +2,37 @@
 using System.Linq;
 using Grouple;
 using MangaReader.Core.Manga;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Tests.Entities.Manga
 {
-  [TestClass]
-  public class ReadmangaStructure
+  [TestFixture]
+  public class ReadmangaStructure : TestClass
   {
     private Parser parser = new Parser();
 
-    [TestMethod]
+    [Test]
     public void AddEmptyReadmanga()
     {
       var chapters = GetCountOfChapters("http://readmanga.me/_my_name_");
       Assert.AreEqual(0, chapters);
     }
 
-    [TestMethod]
+    [Test]
     public void AddSingleReadmanga()
     {
       var chapters = GetCountOfChapters("http://readmanga.me/traeh");
       Assert.AreEqual(1, chapters);
     }
 
-    [TestMethod]
+    [Test]
     public void AddReadmangaWithoutExtra()
     {
       var chapters = GetCountOfChapters("http://readmanga.me/hack__xxxx");
       Assert.AreEqual(10, chapters);
     }
 
-    [TestMethod]
+    [Test]
     public void AddReadmangaWithExtra()
     {
       var chapters = GetCountOfChapters("http://readmanga.me/anima");

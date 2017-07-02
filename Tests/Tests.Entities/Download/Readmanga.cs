@@ -7,16 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Tests.Entities.Download
 {
-  [TestClass]
-  public class ReadmangaDL
+  [TestFixture]
+  public class ReadmangaDL : TestClass
   {
     private int lastPercent = 0;
 
-    [TestMethod]
+    [Test]
     public async Task DownloadReadmanga()
     {
       // var rm = Mangas.Create(new Uri(@"http://henchan.me/related/15692-sweet-guy-glava-0-prolog.html"));

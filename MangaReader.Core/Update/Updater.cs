@@ -54,7 +54,7 @@ namespace MangaReader.Core.Update
       try
       {
         var x64folder = Path.Combine(ConfigStorage.WorkFolder, "x64");
-        if (Directory.Exists(x64folder) && System.Environment.GetCommandLineArgs().All(a => !a.Contains("vstest")))
+        if (Directory.Exists(x64folder))
         {
           File.Delete(Path.Combine(ConfigStorage.WorkFolder, "sqlite3"));
           File.Delete(Path.Combine(ConfigStorage.WorkFolder, "System.Data.SQLite.dll"));

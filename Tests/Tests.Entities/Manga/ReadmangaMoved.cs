@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using MangaReader.Core.Manga;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHibernate.Linq;
+using NUnit.Framework;
 
 namespace Tests.Entities.Manga
 {
-  [TestClass]
-  public class ReadmangaMoved
+  [TestFixture]
+  public class ReadmangaMoved : TestClass
   {
-    [TestMethod]
+    [Test]
     public void CreateWithHistoryAndMove()
     {
       var model = new MangaReader.Core.Services.LibraryViewModel();
-      foreach (var remove in Environment.Session.Query<IManga>().Where(m => m.ServerName.Contains("btooom")).ToList())
+      foreach (var remove in Repository.Get<IManga>().Where(m => m.ServerName.Contains("btooom")).ToList())
         model.Remove(remove);
 
       var manga = Builder.CreateReadmanga();
@@ -23,7 +24,7 @@ namespace Tests.Entities.Manga
       manga.AddHistory(new Uri("http://readmanga.me/btoom/vol1/1?mature=1"));
       manga.Save();
 
-      manga = Environment.Session.Get<Grouple.Readmanga>(manga.Id);
+      manga = Repository.Get<Grouple.Readmanga>(manga.Id);
       manga.Refresh();
       manga.Save();
       var chapters = new Volume() { Chapters = new List<MangaReader.Core.Manga.Chapter>

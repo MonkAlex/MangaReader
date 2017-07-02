@@ -3,14 +3,14 @@ using System.Linq;
 using Hentaichan;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services.Config;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Tests.Entities.Manga
 {
-  [TestClass]
-  public class HentaichanStructure
+  [TestFixture]
+  public class HentaichanStructure : TestClass
   {
-    [TestMethod]
+    [Test]
     public void AddHentaichanMultiPages()
     {
       var manga = GetManga("http://henchan.me/related/14212-love-and-devil-glava-25.html");

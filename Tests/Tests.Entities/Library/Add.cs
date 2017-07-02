@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
 using MangaReader.Core.Services;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Tests.Entities.Library
 {
-  [TestClass]
-  public class Add
+  [TestFixture]
+  public class Add : TestClass
   {
     protected LibraryViewModel model = new MangaReader.Core.Services.LibraryViewModel();
 
-    [TestMethod]
+    [Test]
     public void AddInvalidUrl()
     {
       var error = false;
@@ -27,7 +27,7 @@ namespace Tests.Entities.Library
       Assert.IsFalse(result);
     }
 
-    [TestMethod]
+    [Test]
     public void AddValidUrl()
     {
       var error = false;

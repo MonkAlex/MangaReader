@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
+using MangaReader.Avalonia.ViewModel;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services.Config;
@@ -15,6 +16,8 @@ namespace MangaReader.Avalonia
 {
   public class MainWindow : Window
   {
+    private ExplorerViewModel explorer;
+
     public MainWindow()
     {
       this.InitializeComponent();
@@ -23,16 +26,15 @@ namespace MangaReader.Avalonia
       var processTest = new ProcessTest();
       processTest.StateChanged += ProcessTestOnStateChanged;
       Task.Run(() => MangaReader.Core.Client.Start(processTest));
+      explorer = new ExplorerViewModel();
+      this.DataContext = explorer;
     }
 
     private void ProcessTestOnStateChanged(object sender, ConvertState convertState)
     {
       if (convertState == ConvertState.Completed)
       {
-          Dispatcher.UIThread.InvokeAsync(() =>
-          {
-            this.DataContext = MangaReader.Core.NHibernate.Repository.Get<IManga>().ToList();
-          }, DispatcherPriority.ApplicationIdle);
+        explorer.SelectDefaultTab();
       }
     }
 

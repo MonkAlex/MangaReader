@@ -1,10 +1,12 @@
-﻿namespace MangaReader.Avalonia.ViewModel.Explorer
+﻿using System.ComponentModel;
+
+namespace MangaReader.Avalonia.ViewModel.Explorer.Tabs
 {
-  public class ExplorerTabViewModel<T> : ViewModelBase where T : ViewModelBase
+  public class ExplorerTabViewModel : ViewModelBase
   {
     private string name;
     private int priority;
-    private T content;
+    private INotifyPropertyChanged content;
 
     public string Name
     {
@@ -18,7 +20,7 @@
       set { RaiseAndSetIfChanged(ref priority, value); }
     }
 
-    public T Content
+    public INotifyPropertyChanged Content
     {
       get { return content; }
       set { RaiseAndSetIfChanged(ref content, value); }

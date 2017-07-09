@@ -1,10 +1,11 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:av="clr-namespace:MangaReader.Avalonia;assembly=MangaReader.Avalonia"
-        MinWidth="500" MinHeight="300">
-  <Grid RowDefinitions="Auto,*">
+        MinWidth="500" MinHeight="300"
+        Title="{Binding SelectedTab.Content.Name}">
+  <Grid RowDefinitions="Auto,*" DataContext="{Binding SelectedTab.Content}">
     <TextBox Grid.Row="0"/>
     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" CanScrollHorizontally="False">
-      <ItemsControl Items="{Binding}">
+      <ItemsControl Items="{Binding Items}">
         <ItemsControl.ItemTemplate>
           <DataTemplate>
             <Grid RowDefinitions="*,Auto" Margin="10"

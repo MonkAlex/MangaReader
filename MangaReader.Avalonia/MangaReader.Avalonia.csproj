@@ -184,7 +184,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ViewModel\ExplorerViewModel.cs" />
-    <Compile Include="ViewModel\Explorer\ExplorerTabViewModel.cs" />
+    <Compile Include="ViewModel\Explorer\LibraryContentViewModel.cs" />
+    <Compile Include="ViewModel\Explorer\Tabs\ExplorerTabViewModel.cs" />
+    <Compile Include="ViewModel\Explorer\Tabs\LibraryTabViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <EmbeddedResource Include="App.xaml" />
     <Compile Include="..\VersionInfo.cs">

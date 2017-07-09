@@ -24,6 +24,7 @@ namespace MangaReader.Avalonia.ViewModel
     {
       this.Tabs = new ObservableCollection<ExplorerTabViewModel>();
       this.Tabs.Add(new LibraryTabViewModel());
+      this.Tabs.Add(new SearchTabViewModel());
     }
   }
 }

@@ -1,26 +1,70 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:av="clr-namespace:MangaReader.Avalonia;assembly=MangaReader.Avalonia"
+        xmlns:c="clr-namespace:MangaReader.Avalonia.ViewModel.Explorer;assembly=MangaReader.Avalonia"
         MinWidth="500" MinHeight="300"
         Title="{Binding SelectedTab.Name}">
-  <Grid RowDefinitions="Auto,*" DataContext="{Binding SelectedTab.Content}">
-    <TextBox Grid.Row="0"/>
-    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" CanScrollHorizontally="False">
-      <ItemsControl Items="{Binding Items}">
-        <ItemsControl.ItemTemplate>
-          <DataTemplate>
-            <Grid RowDefinitions="*,Auto" Margin="10"
-                  Width="150" Height="300">
-              <Image Grid.Row="0" Source="{Binding Cover, Converter={Static av:BitmapTypeConverter.Instance}}"/>
-              <TextBlock Grid.Row="1" Text="{Binding Name}" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center"/>
-            </Grid>
-          </DataTemplate>
-        </ItemsControl.ItemTemplate>
-        <ItemsControl.ItemsPanel>
-          <ItemsPanelTemplate>
-            <WrapPanel/>
-          </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-      </ItemsControl>
-    </ScrollViewer>
+  <Window.DataTemplates>
+    <DataTemplate DataType="c:LibraryContentViewModel">
+      <Grid RowDefinitions="Auto,*" DataContext="{Binding}">
+        <TextBox Grid.Row="0"/>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" CanScrollHorizontally="False">
+          <ItemsControl Items="{Binding Items}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Grid RowDefinitions="*,Auto" Margin="10"
+                    Width="150" Height="300">
+                  <Image Grid.Row="0" Source="{Binding Cover, Converter={Static av:BitmapTypeConverter.Instance}}"/>
+                  <TextBlock Grid.Row="1" Text="{Binding Name}" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center"/>
+                </Grid>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <WrapPanel/>
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+          </ItemsControl>
+        </ScrollViewer>
+      </Grid>
+    </DataTemplate>
+    <DataTemplate DataType="c:SearchContentViewModel">
+      <Grid RowDefinitions="Auto,*" DataContext="{Binding}">
+        <TextBox Grid.Row="0" Text="{Binding Search, Mode=TwoWay}"/>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" CanScrollHorizontally="False">
+          <ItemsControl Items="{Binding Items}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Grid RowDefinitions="*,Auto" Margin="10"
+                    Width="150" Height="300">
+                  <Image Grid.Row="0" Source="{Binding Cover, Converter={Static av:BitmapTypeConverter.Instance}}"/>
+                  <TextBlock Grid.Row="1" Text="{Binding Name}" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center"/>
+                </Grid>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <WrapPanel/>
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+          </ItemsControl>
+        </ScrollViewer>
+      </Grid>
+    </DataTemplate>
+  </Window.DataTemplates>
+  <Grid ColumnDefinitions="Auto,*" DataContext="{Binding}">
+    <ListBox Grid.Column="0" 
+             Items="{Binding Tabs}" 
+             SelectedItem="{Binding SelectedTab}"
+             BorderThickness="0">
+      <ListBox.ItemTemplate>
+        <DataTemplate>
+          <TextBlock Margin="10"
+                     Text="{Binding Name}"
+                     ToolTip.Tip="{Binding Name}"
+                     HorizontalAlignment="Center"/>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+    <ContentPresenter Grid.Column="1" DataContext="{Binding SelectedTab}" Content="{Binding Content}"/>
   </Grid>
 </Window>

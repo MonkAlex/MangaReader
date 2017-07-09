@@ -1,7 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Threading;
 using MangaReader.Core.Manga;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
 {
@@ -20,8 +22,13 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       set { RaiseAndSetIfChanged(ref items, value); }
     }
 
-    public void RefreshItems()
+    public async Task RefreshItems()
     {
+      while (!Core.NHibernate.Mapping.Initialized)
+      {
+        Log.Add("Wait nhibernate initialization...");
+        await Task.Delay(500);
+      }
       Dispatcher.UIThread.InvokeAsync(() =>
       {
         Items = new ObservableCollection<IManga>(Core.NHibernate.Repository.Get<IManga>().ToList());

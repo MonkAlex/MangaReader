@@ -53,17 +53,11 @@ namespace MangaReader.Core.Update
     {
       try
       {
-        var x64folder = Path.Combine(ConfigStorage.WorkFolder, "x64");
-        if (Directory.Exists(x64folder))
+        var updateExe = Path.Combine(ConfigStorage.WorkFolder, "update.exe");
+        if (File.Exists(updateExe))
         {
-          File.Delete(Path.Combine(ConfigStorage.WorkFolder, "sqlite3"));
-          File.Delete(Path.Combine(ConfigStorage.WorkFolder, "System.Data.SQLite.dll"));
-          File.Delete(Path.Combine(ConfigStorage.WorkFolder, "x86", "sqlite3.dll"));
-          File.Delete(Path.Combine(x64folder, "sqlite3.dll"));
-          File.Delete(Path.Combine(ConfigStorage.WorkFolder, "update.exe"));
+          File.Delete(updateExe);
           File.Delete(Path.Combine(ConfigStorage.WorkFolder, "update.it"));
-          Directory.Delete(Path.Combine(ConfigStorage.WorkFolder, "x86"));
-          Directory.Delete(x64folder);
         }
       }
       catch { }

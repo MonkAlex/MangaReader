@@ -37,6 +37,7 @@ namespace MangaReader.Core
 
     internal static void Init()
     {
+      AppDomain.CurrentDomain.AssemblyResolve -= LibraryResolve;
       AppDomain.CurrentDomain.AssemblyResolve += LibraryResolve;
     }
 

@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -213,6 +214,7 @@
     <ProjectReference Include="..\MangaReader.Core\MangaReader.Core.csproj">
       <Project>{744f331a-938a-475a-840a-7fac985ebe61}</Project>
       <Name>MangaReader.Core</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -227,14 +229,14 @@
   <PropertyGroup>
     <PostBuildEvent>
       xcopy /y /r /e "$(ProjectDir)\..\MangaReader.Core\bin\$(ConfigurationName)" "$(TargetDir)"
-      xcopy /y /r /e "$(ProjectDir)\..\Sites\Bin\$(ConfigurationName)" "$(TargetDir)"
+      xcopy /y /r /e "$(ProjectDir)\..\Sites\Bin\$(ConfigurationName)" "$(TargetDir)\Plugins"
 </PostBuildEvent>
   </PropertyGroup>
   <Target Name="BeforeBuild">
-    <MakeDir Directories="$(TargetDir)\lib" />
     <MakeDir Directories="$(TargetDir)\Plugins" />
   </Target>
   <Target Name="AfterBuild">
+    <Move SourceFiles="$(TargetDir)\libSkiaSharp.dylib.so" DestinationFiles="$(TargetDir)\libSkiaSharp.so"/>
   </Target>
   <Import Project="..\packages\Avalonia.Skia.Linux.Natives.1.57.1.4\build\net45\Avalonia.Skia.Linux.Natives.targets" Condition="Exists('..\packages\Avalonia.Skia.Linux.Natives.1.57.1.4\build\net45\Avalonia.Skia.Linux.Natives.targets')" />
 </Project>

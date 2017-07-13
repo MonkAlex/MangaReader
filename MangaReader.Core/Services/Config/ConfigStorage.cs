@@ -130,10 +130,13 @@ namespace MangaReader.Core.Services.Config
 
     public static void RefreshPlugins()
     {
+      Loader.Init();
       var result = new List<IPlugin>();
 
+      Log.Add("Search plugins...");
       result.AddRange(GetPluginsFrom(ConfigStorage.WorkFolder));
       result.AddRange(GetPluginsFrom(ConfigStorage.PluginPath));
+      Log.Add("Search plugins completed.");
 
       plugins = result;
     }
@@ -159,6 +162,8 @@ namespace MangaReader.Core.Services.Config
               if (!ilogin.IsAssignableFrom(plugin.LoginType))
                 throw new MangaReaderException($"Type in property {nameof(plugin.LoginType)} of " +
                                                $"type {plugin.GetType()} must be implement {ilogin} interface.");
+
+              Log.Add($"Plugin {plugin.Name} loaded.");
               result.Add(plugin);
             }
             catch (MangaReaderException mre)

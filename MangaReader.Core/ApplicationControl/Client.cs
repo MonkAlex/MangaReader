@@ -7,6 +7,8 @@ namespace MangaReader.Core.ApplicationControl
   {
     public static void Run(string uniqueId, Messages message)
     {
+#warning Пайпы не хотят работать под моно, пока отключаем.
+      /*
       using (var client = new NamedPipeClientStream(uniqueId))
       {
         client.Connect(5000);
@@ -16,6 +18,7 @@ namespace MangaReader.Core.ApplicationControl
           writer.Flush();
         }
       }
+      */
     }
   }
 }

@@ -10,11 +10,16 @@ namespace Tests
 {
   public class Environment
   {
-    public static Lazy<bool> SetUpLazy = new Lazy<bool>(() =>
+    public static Lazy<bool> SetUpLazy = ValueFactory();
+
+    private static Lazy<bool> ValueFactory()
     {
-      SetUpInternal(InitClient);
-      return true;
-    });
+      return new Lazy<bool>(() =>
+      {
+        SetUpInternal(InitClient);
+        return true;
+      });
+    }
 
     public static bool InitClient = false;
     
@@ -142,6 +147,7 @@ namespace Tests
     public static void TestCleanup()
     {
       MangaReader.Core.Client.Close();
+      SetUpLazy = ValueFactory();
     }
   }
 

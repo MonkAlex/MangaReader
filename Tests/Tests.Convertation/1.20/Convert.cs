@@ -17,7 +17,7 @@ namespace Tests.Convertation._1._20
       MangaReader.Core.Client.Start(new ReportProcess());
 
       var loadedMangas = MangaReader.Core.NHibernate.Mapping.GetSession().Query<IManga>().ToList();
-      Assert.AreEqual(159, loadedMangas.Count);
+      Assert.AreEqual(153, loadedMangas.Count);
 
       var loadedHistoryRecord = MangaReader.Core.NHibernate.Mapping.GetSession().Query<MangaHistory>().ToList();
 
@@ -31,7 +31,6 @@ namespace Tests.Convertation._1._20
       Assert.AreEqual(177, loadedHistoryRecord.Count(h => h.Url.Contains("oh_my_goddess")));
       Assert.AreEqual(41, loadedHistoryRecord.Count(h => h.Url.Contains("anagle_mole")));
       Assert.AreEqual(151, loadedHistoryRecord.Count(h => h.Url.Contains("area_d")));
-      Assert.AreEqual(24, loadedHistoryRecord.Count(h => h.Url.Contains("asa_made_jugyou_chu")));
       Assert.AreEqual(7, loadedHistoryRecord.Count(h => h.Url.Contains("baka_and_boing")));
       Assert.AreEqual(26, loadedHistoryRecord.Count(h => h.Url.Contains("the_idiot__the_test__and_summoned_creatures")));
       Assert.AreEqual(41, loadedHistoryRecord.Count(h => h.Url.Contains("berserk")));
@@ -59,7 +58,6 @@ namespace Tests.Convertation._1._20
       Assert.AreEqual(128, loadedHistoryRecord.Count(h => h.Url.Contains("black_god")));
       Assert.AreEqual(10, loadedHistoryRecord.Count(h => h.Url.Contains("the_comic_artist_and_his_assistants_2")));
       Assert.AreEqual(243, loadedHistoryRecord.Count(h => h.Url.Contains("minamoto_kun_s_story")));
-      Assert.AreEqual(40, loadedHistoryRecord.Count(h => h.Url.Contains("daily_life_with_a_monster_girl")));
       Assert.AreEqual(174, loadedHistoryRecord.Count(h => h.Url.Contains("nagasarete_airantou")));
       Assert.AreEqual(119, loadedHistoryRecord.Count(h => h.Url.Contains("nana_and_kaoru")));
       Assert.AreEqual(83, loadedHistoryRecord.Count(h => h.Url.Contains("my_mysterious_girlfriend_x")));
@@ -68,21 +66,17 @@ namespace Tests.Convertation._1._20
       Assert.AreEqual(855, loadedHistoryRecord.Count(h => h.Url.Contains("one__piece")));
       Assert.AreEqual(13, loadedHistoryRecord.Count(h => h.Url.Contains("listen_to_what_papa_says")));
       Assert.AreEqual(69, loadedHistoryRecord.Count(h => h.Url.Contains("pastel")));
-      Assert.AreEqual(16, loadedHistoryRecord.Count(h => h.Url.Contains("rika")));
       Assert.AreEqual(75, loadedHistoryRecord.Count(h => h.Url.Contains("rosario_to_vampire_ii")));
       Assert.AreEqual(84, loadedHistoryRecord.Count(h => h.Url.Contains("sakuranbo_syndrome")));
       Assert.AreEqual(76, loadedHistoryRecord.Count(h => h.Url.Contains("sankarea")));
       Assert.AreEqual(95, loadedHistoryRecord.Count(h => h.Url.Contains("lost_property_of_the_sky")));
-      Assert.AreEqual(47, loadedHistoryRecord.Count(h => h.Url.Contains("say__i_love_you")));
       Assert.AreEqual(69, loadedHistoryRecord.Count(h => h.Url.Contains("dusk_maiden_of_amnesia")));
       Assert.AreEqual(103, loadedHistoryRecord.Count(h => h.Url.Contains("birdy_the_mighty_2")));
       Assert.AreEqual(190, loadedHistoryRecord.Count(h => h.Url.Contains("the_breaker__new_waves")));
       Assert.AreEqual(79, loadedHistoryRecord.Count(h => h.Url.Contains("to_love_ru_darkness")));
       Assert.AreEqual(50, loadedHistoryRecord.Count(h => h.Url.Contains("the_monster_next_to_me")));
-      Assert.AreEqual(33, loadedHistoryRecord.Count(h => h.Url.Contains("yomeiro_choice")));
       Assert.AreEqual(73, loadedHistoryRecord.Count(h => h.Url.Contains("dream_eater_merry")));
       Assert.AreEqual(27, loadedHistoryRecord.Count(h => h.Url.Contains("yuria_type_100")));
-      Assert.AreEqual(68, loadedHistoryRecord.Count(h => h.Url.Contains("btoom")));
       Assert.AreEqual(46, loadedHistoryRecord.Count(h => h.Url.Contains("blood_lad")));
       Assert.AreEqual(122, loadedHistoryRecord.Count(h => h.Url.Contains("ocean_s_cape")));
       Assert.AreEqual(13, loadedHistoryRecord.Count(h => h.Url.Contains("fisheye_placebo")));
@@ -188,7 +182,7 @@ namespace Tests.Convertation._1._20
       Assert.AreEqual(68, loadedHistoryRecord.Count(h => h.Url.Contains("the_knight_of_cydonia")));
 
       Assert.AreEqual(loadedMangas.Sum(m => m.Histories.Count()), loadedHistoryRecord.Count());
-      Assert.AreEqual(17839, loadedHistoryRecord.Count);
+      Assert.AreEqual(17611, loadedHistoryRecord.Count);
     }
 
     [SetUp]

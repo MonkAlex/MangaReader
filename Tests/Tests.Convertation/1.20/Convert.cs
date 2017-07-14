@@ -29,7 +29,7 @@ namespace Tests.Convertation._1._20
 
       Assert.AreEqual(188, loadedHistoryRecord.Count(h => h.Url.Contains("3x3_eyes")));
       Assert.AreEqual(177, loadedHistoryRecord.Count(h => h.Url.Contains("oh_my_goddess")));
-      Assert.AreEqual(41, loadedHistoryRecord.Count(h => h.Url.Contains("anagle_mole")));
+      Assert.AreEqual(33, loadedHistoryRecord.Count(h => h.Url.Contains("anagle_mole")));
       Assert.AreEqual(151, loadedHistoryRecord.Count(h => h.Url.Contains("area_d")));
       Assert.AreEqual(7, loadedHistoryRecord.Count(h => h.Url.Contains("baka_and_boing")));
       Assert.AreEqual(26, loadedHistoryRecord.Count(h => h.Url.Contains("the_idiot__the_test__and_summoned_creatures")));
@@ -182,7 +182,7 @@ namespace Tests.Convertation._1._20
       Assert.AreEqual(68, loadedHistoryRecord.Count(h => h.Url.Contains("the_knight_of_cydonia")));
 
       Assert.AreEqual(loadedMangas.Sum(m => m.Histories.Count()), loadedHistoryRecord.Count());
-      Assert.AreEqual(17611, loadedHistoryRecord.Count);
+      Assert.AreEqual(17603, loadedHistoryRecord.Count);
     }
 
     [SetUp]

@@ -34,6 +34,11 @@ namespace MangaReader.Core
       get { return Path.Combine(WorkFolder, "Plugins"); }
     }
 
+    internal static string[] AssemblyFolders
+    {
+      get { return new string[] {LibPath, PluginPath}; }
+    }
+
 
     internal static void Init()
     {
@@ -49,16 +54,16 @@ namespace MangaReader.Core
         if (libName.Contains(','))
           libName = libName.Substring(0, libName.IndexOf(','));
         libName = libName + ".dll";
-        var path = LibPath;
-        var file = new DirectoryInfo(path).GetFiles().SingleOrDefault(f => f.Name == libName);
-        if (file == null)
+
+        foreach (var folder in AssemblyFolders)
         {
-          path = PluginPath;
-          file = new DirectoryInfo(path).GetFiles().SingleOrDefault(f => f.Name == libName);
+          var directory = new DirectoryInfo(folder);
+          var file = directory.Exists ? directory.GetFiles().SingleOrDefault(f => f.Name == libName) : null;
           if (file == null)
-            return null;
+            continue;
+          
+          return Assembly.LoadFile(file.FullName);
         }
-        return Assembly.LoadFile(file.FullName);
       }
       catch (FileLoadException fle)
       {
@@ -77,13 +82,14 @@ namespace MangaReader.Core
 
     private static void ProcessInternetZoneOnFiles(System.Exception ex, string libraryName)
     {
-      EventLog.WriteEntry(nameof(MangaReader), $"Just restart app \r\n {libraryName} \r\n {ex}", EventLogEntryType.Warning);
-      foreach (var s in new[] { LibPath, PluginPath })
-        foreach (var fileInfo in new DirectoryInfo(s).GetFiles())
-        {
-          var body = File.ReadAllBytes(fileInfo.FullName);
-          File.WriteAllBytes(fileInfo.FullName, body);
-        }
+      EventLog.WriteEntry(nameof(MangaReader), $"Just restart app \r\n {libraryName} \r\n {ex}",
+        EventLogEntryType.Warning);
+      foreach (var s in new[] {LibPath, PluginPath})
+      foreach (var fileInfo in new DirectoryInfo(s).GetFiles())
+      {
+        var body = File.ReadAllBytes(fileInfo.FullName);
+        File.WriteAllBytes(fileInfo.FullName, body);
+      }
       Environment.Exit(ex.HResult);
     }
   }

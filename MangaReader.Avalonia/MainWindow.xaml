@@ -7,32 +7,32 @@
     <DataTemplate DataType="c:LibraryContentViewModel">
       <Grid RowDefinitions="Auto,*" DataContext="{Binding}">
         <TextBox Grid.Row="0"/>
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" CanScrollHorizontally="False">
-          <ItemsControl Items="{Binding Items}">
-            <ItemsControl.ItemTemplate>
-              <DataTemplate>
-                <Grid RowDefinitions="*,Auto" Margin="10"
-                    Width="150" Height="300">
-                  <Image Grid.Row="0" Source="{Binding Cover, Converter={Static av:BitmapTypeConverter.Instance}}"/>
-                  <TextBlock Grid.Row="1" Text="{Binding Name}" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center"/>
-                </Grid>
-              </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemsPanel>
-              <ItemsPanelTemplate>
-                <WrapPanel/>
-              </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-          </ItemsControl>
-        </ScrollViewer>
+        <ListBox Grid.Row="1" Items="{Binding Items}" 
+                 BorderThickness="0"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <Grid RowDefinitions="*,Auto" Margin="10"
+                  Width="150" Height="300">
+                <Image Grid.Row="0" Source="{Binding Cover, Converter={Static av:BitmapTypeConverter.Instance}}"/>
+                <TextBlock Grid.Row="1" Text="{Binding Name}" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center"/>
+              </Grid>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+          <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel/>
+            </ItemsPanelTemplate>
+          </ListBox.ItemsPanel>
+        </ListBox>
       </Grid>
     </DataTemplate>
     <DataTemplate DataType="c:SearchContentViewModel">
       <Grid RowDefinitions="Auto,*" DataContext="{Binding}">
         <TextBox Grid.Row="0" Text="{Binding Search, Mode=TwoWay}"/>
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" CanScrollHorizontally="False">
-          <ItemsControl Items="{Binding Items}">
-            <ItemsControl.ItemTemplate>
+          <ListBox Items="{Binding Items}" BorderThickness="0">
+            <ListBox.ItemTemplate>
               <DataTemplate>
                 <Grid RowDefinitions="*,Auto" Margin="10"
                     Width="150" Height="300">
@@ -40,13 +40,8 @@
                   <TextBlock Grid.Row="1" Text="{Binding Name}" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center"/>
                 </Grid>
               </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemsPanel>
-              <ItemsPanelTemplate>
-                <WrapPanel/>
-              </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-          </ItemsControl>
+            </ListBox.ItemTemplate>
+          </ListBox>
         </ScrollViewer>
       </Grid>
     </DataTemplate>

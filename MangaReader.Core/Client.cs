@@ -68,6 +68,10 @@ namespace MangaReader.Core
 
         Converter.Convert(process);
       }
+      catch (System.Exception ex)
+      {
+        Log.Exception(ex);
+      }
       finally
       {
         process.State = ConvertState.Completed;

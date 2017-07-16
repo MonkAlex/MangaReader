@@ -6,8 +6,8 @@
   <Window.DataTemplates>
     <DataTemplate DataType="c:LibraryContentViewModel">
       <Grid RowDefinitions="Auto,*" DataContext="{Binding}">
-        <TextBox Grid.Row="0"/>
-        <ListBox Grid.Row="1" Items="{Binding Items}" 
+        <TextBox Grid.Row="0" Text="{Binding Search}"/>
+        <ListBox Grid.Row="1" Items="{Binding FilteredItems}" 
                  BorderThickness="0"
                  ScrollViewer.VerticalScrollBarVisibility="Auto">
           <ListBox.ItemTemplate>

@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Linq;
 using MangaReader.Core.Manga;
 using NUnit.Framework;
+using MangaReader.Core.Services.Config;
 
 namespace Tests.Entities.Manga
 {
@@ -30,6 +31,35 @@ namespace Tests.Entities.Manga
     {
       var manga = Mangas.CreateFromWeb(new Uri(url)) as Hentaichan.Mangachan.Mangachan;
       return manga;
+    }
+
+    [Test]
+    public void MangachanNameParsing()
+    {
+      // Спецсимвол "
+      TestNameParsing("http://mangachan.me/manga/48069-isekai-de-kuro-no-iyashi-te-tte-yobarete-imasu.html",
+        "Isekai de \"Kuro no Iyashi Te\" tte Yobarete Imasu",
+        "В другом мире моё имя - Чёрный целитель");
+
+      // Просто проверка.
+      TestNameParsing("http://mangachan.me/manga/46475-shin5-kekkonshite-mo-koishiteru.html",
+        "#shin5 - Kekkonshite mo Koishiteru",
+        "Любовь после свадьбы");
+
+      // Нет русского варианта.
+      TestNameParsing("http://mangachan.me/manga/17625--okazaki-mari.html",
+        "& (Okazaki Mari)",
+        "& (Okazaki Mari)");
+    }
+
+    private void TestNameParsing(string uri, string english, string russian)
+    {
+      ConfigStorage.Instance.AppConfig.Language = Languages.English;
+      var manga = GetManga(uri);
+      Assert.AreEqual(english, manga.Name);
+      ConfigStorage.Instance.AppConfig.Language = Languages.Russian;
+      parser.UpdateNameAndStatus(manga);
+      Assert.AreEqual(russian, manga.Name);
     }
   }
 }

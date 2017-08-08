@@ -43,18 +43,17 @@ namespace Hentaichan.Mangachan
       var localizedName = new MangaName();
       try
       {
-        if (!manga.Volumes.Any() && !manga.Chapters.Any())
-          manga.UpdateContent();
-        var chapter = manga.Volumes.SelectMany(v => v.Chapters).FirstOrDefault();
-
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(chapter.Uri).Content);
-        var enName = Regex.Match(document.DocumentNode.InnerHtml, @"\""name\"":\""(.*?)\""", RegexOptions.IgnoreCase);
+        document.LoadHtml(Page.GetPage(manga.Uri).Content);
+        var html = document.DocumentNode.InnerHtml;
+        var enName = Regex.Match(html, @"title>(.*?) &raquo", RegexOptions.IgnoreCase);
         if (enName.Success)
-          localizedName.English = WebUtility.HtmlDecode(enName.Groups[1].Value.Replace("\\'", "'"));
-        var ruName = Regex.Match(document.DocumentNode.InnerHtml, @"\""rus_name\"":\""\((.*?)\)\""", RegexOptions.IgnoreCase);
-        if (ruName.Success)
-          localizedName.Russian = WebUtility.HtmlDecode(ruName.Groups[1].Value.Replace("\\'", "'"));
+        {
+          localizedName.English = WebUtility.HtmlDecode(enName.Groups[1].Value);
+          var ruName = Regex.Match(html, $"{localizedName.English} \\((.*?)\\)", RegexOptions.IgnoreCase);
+          if (ruName.Success)
+            localizedName.Russian = WebUtility.HtmlDecode(ruName.Groups[1].Value);
+        }
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
 

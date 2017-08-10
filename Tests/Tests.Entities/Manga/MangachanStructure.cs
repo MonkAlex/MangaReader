@@ -52,6 +52,11 @@ namespace Tests.Entities.Manga
       TestNameParsing("http://mangachan.me/manga/17625--okazaki-mari.html",
         "& (Okazaki Mari)",
         "& (Okazaki Mari)");
+      
+      // Символ звездочки *
+      TestNameParsing("http://mangachan.me/manga/23099--asterisk.html",
+        "* - Asterisk",
+        "Звездочка");
     }
 
     private void TestNameParsing(string uri, string english, string russian)

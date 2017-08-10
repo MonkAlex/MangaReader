@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Avalonia.Threading;
+using MangaReader.Avalonia.ViewModel.Command.Library;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using ReactiveUI;
@@ -48,6 +50,10 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       }
     }
 
+    public ObservableCollection<ICommand> Commands { get; }
+    
+    public LibraryViewModel Library { get; }
+
     public async Task RefreshItems()
     {
       while (!Core.NHibernate.Mapping.Initialized)
@@ -74,6 +80,13 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         return true;
       
       return manga.Name.IndexOf(Search, StringComparison.InvariantCultureIgnoreCase) >= 0;
+    }
+
+    public LibraryContentViewModel()
+    {
+      this.Commands = new ObservableCollection<ICommand>();
+      this.Library = new LibraryViewModel();
+      this.Commands.Add(new UpdateWithPauseCommand(this, Library));
     }
   }
 }

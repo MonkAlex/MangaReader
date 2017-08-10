@@ -184,6 +184,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ViewModel\Command\BaseCommand.cs" />
+    <Compile Include="ViewModel\Command\Library\ContinueCommand.cs" />
+    <Compile Include="ViewModel\Command\Library\LibraryBaseCommand.cs" />
+    <Compile Include="ViewModel\Command\Library\PauseCommand.cs" />
+    <Compile Include="ViewModel\Command\Library\UpdateVisibleMangaCommand.cs" />
+    <Compile Include="ViewModel\Command\Library\UpdateWithPauseCommand.cs" />
     <Compile Include="ViewModel\ExplorerViewModel.cs" />
     <Compile Include="ViewModel\Explorer\LibraryContentViewModel.cs" />
     <Compile Include="ViewModel\Explorer\SearchContentViewModel.cs" />

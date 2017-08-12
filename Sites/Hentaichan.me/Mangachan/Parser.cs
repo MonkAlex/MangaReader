@@ -134,31 +134,37 @@ namespace Hentaichan.Mangachan
 
     internal static IEnumerable<byte[]> GetPreviewsImpl(IManga manga)
     {
-      byte[] result = null;
+      var links = new List<Uri>();
+      var client = GetClient();
       try
       {
         var document = new HtmlDocument();
-        var client = GetClient();
         var content = Page.GetPage(manga.Uri, client).Content;
         document.LoadHtml(content);
-
-        var chapterNodes = document.GetElementbyId("cover");
+        
+        var chapterNodes = document.DocumentNode.SelectNodes("//img[@id='cover']");
         if (chapterNodes != null)
         {
-          var src = chapterNodes.Attributes.Single(a => a.Name == "src").Value;
-          Uri link;
-          if (Uri.IsWellFormedUriString(src, UriKind.Relative))
-            link = new Uri(manga.Setting.MainUri, src);
-          else
-            link = new Uri(src);
-          result = client.DownloadData(link);
+          foreach (var node in chapterNodes.SelectMany(n => n.Attributes).Where(a => a.Name == "src" && !string.IsNullOrWhiteSpace(a.Value)))
+          {
+            var src = node.Value;
+            Uri link;
+            if (Uri.IsWellFormedUriString(src, UriKind.Relative))
+              link = new Uri(manga.Setting.MainUri, src);
+            else
+              link = new Uri(src);
+            links.Add(link);
+          }
         }
       }
       catch (NullReferenceException ex)
       {
         Log.Exception(ex, $"Возможно, требуется регистрация для доступа к {manga.Uri}");
       }
-      yield return result;
+      foreach (var link in links)
+      {
+        yield return client.DownloadData(link);
+      }
     }
 
     public static void UpdatePages(MangaReader.Core.Manga.Chapter chapter)

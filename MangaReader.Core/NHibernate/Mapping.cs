@@ -23,6 +23,9 @@ namespace MangaReader.Core.NHibernate
     
     public static ISession GetSession()
     {
+      if (!CurrentSessionContext.HasBind(sessionFactory))
+        CurrentSessionContext.Bind(sessionFactory.OpenSession());
+      
       return sessionFactory.GetCurrentSession();
     }
 
@@ -56,7 +59,7 @@ namespace MangaReader.Core.NHibernate
         .Configure()
         .Database(SQLiteConfiguration.Standard.UsingFile(Path.Combine(ConfigStorage.WorkFolder, DbFile)))
         .Mappings(LoadPlugins)
-        .CurrentSessionContext<ThreadLocalSessionContext>()
+        .CurrentSessionContext<AsyncLocalSessionContext>()
         .ExposeConfiguration(BuildSchema)
         .BuildSessionFactory();
     }

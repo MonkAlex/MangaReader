@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MangaReader.Core</RootNamespace>
     <AssemblyName>MangaReader.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -127,6 +127,7 @@
     <Compile Include="Manga\MangaPage.cs" />
     <Compile Include="Manga\Mangas.cs" />
     <Compile Include="Manga\Volume.cs" />
+    <Compile Include="NHibernate\AsyncContext.cs" />
     <Compile Include="NHibernate\DatabaseConfigMap.cs" />
     <Compile Include="NHibernate\Mapping.cs" />
     <Compile Include="NHibernate\HistoryMap.cs" />

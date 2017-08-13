@@ -36,6 +36,13 @@ namespace MangaReader.Core
     /// <param name="manga">Манга.</param>
     /// <returns>Превью для манги. Может быть пустым или содержать несколько вариантов превью.</returns>
     IEnumerable<byte[]> GetPreviews(IManga manga);
+
+    /// <summary>
+    /// Искать мангу на сайте.
+    /// </summary>
+    /// <param name="name">Название манги.</param>
+    /// <returns>Найденная манга.</returns>
+    IEnumerable<IManga> Search(string name);
   }
 
   public class UriParseResult

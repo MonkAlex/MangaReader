@@ -132,6 +132,11 @@ namespace Hentaichan.Mangachan
         yield return bytes;
     }
 
+    public override IEnumerable<IManga> Search(string name)
+    {
+      return Enumerable.Empty<IManga>();
+    }
+
     internal static IEnumerable<byte[]> GetPreviewsImpl(IManga manga)
     {
       var links = new List<Uri>();

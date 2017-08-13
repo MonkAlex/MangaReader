@@ -222,6 +222,49 @@ namespace Grouple
       return GetPreviewsImpl(manga);
     }
 
+    public override IEnumerable<IManga> Search(string name)
+    {
+      var hosts = ConfigStorage.Plugins
+        .Where(p => p.GetParser().GetType() == typeof(Parser))
+        .Select(p => p.GetSettings().MainUri);
+
+      var client = new CookieClient();
+      foreach (var host in hosts)
+      {
+        var searchHost = new Uri(host, "search?q=" + WebUtility.UrlEncode(name));
+        var page = Page.GetPage(searchHost, client);
+        if (!page.HasContent)
+          continue;
+        
+        var document = new HtmlDocument();
+        document.LoadHtml(page.Content);
+        var mangas = document.DocumentNode.SelectNodes("//div[@class='tile col-sm-6']");
+        if (mangas == null)
+          continue;
+        
+        foreach (var manga in mangas)
+        {
+          #warning Иногда вместо манги оказываются "персоны", пока непонятно как фильтровать.
+          var image = manga.SelectSingleNode(".//div[@class='img']//a//img");
+          var imageUri = image != null ? image.Attributes.Single(a => a.Name == "data-original").Value : null;
+          
+          var mangaNode = manga.SelectSingleNode(".//h3//a");
+          var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
+          var mangaName = mangaNode.Attributes.Single(a => a.Name == "title").Value;
+
+          Uri test;
+          if (!Uri.TryCreate(mangaUri, UriKind.Relative, out test))
+            continue;
+
+          var result = Mangas.Create(new Uri(host, mangaUri));
+          result.Name = mangaName;
+          if (imageUri != null)
+            result.Cover = client.DownloadData(imageUri);
+          yield return result;
+        }
+      }
+    }
+
     private IEnumerable<byte[]> GetPreviewsImpl(IManga manga)
     {
       var document = new HtmlDocument();

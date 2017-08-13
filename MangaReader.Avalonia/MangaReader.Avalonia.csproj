@@ -185,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ViewModel\Command\BaseCommand.cs" />
+    <Compile Include="ViewModel\Command\DelegateCommand.cs" />
     <Compile Include="ViewModel\Command\Library\ContinueCommand.cs" />
     <Compile Include="ViewModel\Command\Library\LibraryBaseCommand.cs" />
     <Compile Include="ViewModel\Command\Library\PauseCommand.cs" />
@@ -237,15 +238,21 @@
   </Target>
   <PropertyGroup>
     <PostBuildEvent>
-      xcopy /y /r /e "$(ProjectDir)\..\MangaReader.Core\bin\$(ConfigurationName)" "$(TargetDir)"
-      xcopy /y /r /e "$(ProjectDir)\..\Sites\Bin\$(ConfigurationName)" "$(TargetDir)\Plugins"
-</PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <Target Name="BeforeBuild">
     <MakeDir Directories="$(TargetDir)\Plugins" />
   </Target>
   <Target Name="AfterBuild">
-    <Move SourceFiles="$(TargetDir)\libSkiaSharp.dylib.so" DestinationFiles="$(TargetDir)\libSkiaSharp.so" />
+    <Copy SourceFiles="$(TargetDir)\libSkiaSharp.dylib.so" DestinationFolder="$(TargetDir)\libSkiaSharp.so" />
+    <ItemGroup>
+      <SourceFiles Include="$(ProjectDir)\..\MangaReader.Core\bin\$(ConfigurationName)\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(SourceFiles)" DestinationFolder="$(TargetDir)" />
+    <ItemGroup>
+      <SourceFiles Include="$(ProjectDir)\..\Sites\Bin\$(ConfigurationName)\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(SourceFiles)" DestinationFolder="$(TargetDir)\Plugins" />
   </Target>
   <Import Project="..\packages\Avalonia.Skia.Linux.Natives.1.57.1.4\build\net45\Avalonia.Skia.Linux.Natives.targets" Condition="Exists('..\packages\Avalonia.Skia.Linux.Natives.1.57.1.4\build\net45\Avalonia.Skia.Linux.Natives.targets')" />
 </Project>

@@ -155,6 +155,11 @@ namespace Hentaichan
         yield return bytes;
     }
 
+    public override IEnumerable<IManga> Search(string name)
+    {
+      return Enumerable.Empty<IManga>();
+    }
+
     public static void UpdatePages(MangaReader.Core.Manga.Chapter chapter)
     {
       chapter.Pages.Clear();

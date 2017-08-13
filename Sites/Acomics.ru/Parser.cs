@@ -184,6 +184,11 @@ namespace Acomics
       yield return result;
     }
 
+    public override IEnumerable<IManga> Search(string name)
+    {
+      return Enumerable.Empty<IManga>();
+    }
+
     /// <summary>
     /// Получить страницы манги.
     /// </summary>

@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 using NUnit.Framework;
 
 namespace Tests
@@ -35,10 +36,10 @@ namespace Tests
     private static void SetUpInternal(bool initSession)
     {
       BeforeTestClean();
-      DeployToLib(@".\..\MangaReader.Core\Library\");
-      DeployToLib(@".\..\Sites\Bin\Publish\");
-      DeployToLib(@".\..\Sites\Bin\Release\");
-      DeployToLib(@".\..\Sites\Bin\Debug\");
+      DeployToLib(Path.Combine(".", "..", "MangaReader.Core", "Library"));
+      DeployToLib(Path.Combine(".", "..", "Sites", "Bin", "Publish"));
+      DeployToLib(Path.Combine(".", "..", "Sites", "Bin", "Release"));
+      DeployToLib(Path.Combine(".", "..", "Sites", "Bin", "Debug"));
 
       MangaReader.Core.Loader.Init();
       MangaReader.Core.Services.Config.ConfigStorage.Instance.AppConfig.UpdateReader = false;
@@ -55,7 +56,7 @@ namespace Tests
 
     public static void DeployToLib(string from)
     {
-      DeployTo(from, "Lib");
+      DeployTo(from, ConfigStorage.LibPath);
     }
 
     public static void DeployToRoot(string from)
@@ -134,7 +135,7 @@ namespace Tests
     {
       var dd = AppDomain.CurrentDomain.BaseDirectory;
       File.Delete(Path.Combine(dd, "storage.db"));
-      var masks = new[] {"System.Data.SQLite*", "*hibernate*", "*.dbak"};
+      var masks = new[] {"System.Data.SQLite*", "*Hibernate*", "*.dbak"};
       foreach (var mask in masks)
       {
         foreach (var file in Directory.GetFiles(dd, mask, SearchOption.TopDirectoryOnly))

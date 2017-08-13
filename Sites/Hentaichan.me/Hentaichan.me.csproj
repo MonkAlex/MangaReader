@@ -83,7 +83,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y /r /e "$(TargetPath)" "$(ProjectDir)\..\Bin\$(ConfigurationName)\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. -->
@@ -91,5 +90,9 @@
     <MakeDir Directories="$(ProjectDir)\..\Bin" />
   </Target>
   <Target Name="AfterBuild">
+    <ItemGroup>
+      <SourceFiles Include="$(TargetPath)" />
+    </ItemGroup>
+    <Copy SourceFiles="@(SourceFiles)" DestinationFolder="$(ProjectDir)\..\Bin\$(ConfigurationName)\" />
   </Target>
 </Project>

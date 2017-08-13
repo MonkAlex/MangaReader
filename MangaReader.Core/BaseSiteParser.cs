@@ -28,5 +28,7 @@ namespace MangaReader.Core
     }
 
     public abstract IEnumerable<byte[]> GetPreviews(IManga manga);
+
+    public abstract IEnumerable<IManga> Search(string name);
   }
 }

@@ -186,7 +186,40 @@ namespace Acomics
 
     public override IEnumerable<IManga> Search(string name)
     {
-      return Enumerable.Empty<IManga>();
+      var hosts = ConfigStorage.Plugins
+        .Where(p => p.GetParser().GetType() == typeof(Parser))
+        .Select(p => p.GetSettings().MainUri);
+
+      var client = new CookieClient();
+      foreach (var host in hosts)
+      {
+        var searchHost = new Uri(host, "search?keyword=" + WebUtility.UrlEncode(name));
+        var page = Page.GetPage(searchHost, client);
+        if (!page.HasContent)
+          continue;
+        
+        var document = new HtmlDocument();
+        document.LoadHtml(page.Content);
+        var mangas = document.DocumentNode.SelectNodes("//table[@class='catalog-elem list-loadable']");
+        if (mangas == null)
+          continue;
+        
+        foreach (var manga in mangas)
+        {
+          var image = manga.SelectSingleNode(".//td[@class='catdata1']//a//img");
+          var imageUri = image != null ? image.Attributes.Single(a => a.Name == "src").Value : null;
+          
+          var mangaNode = manga.SelectSingleNode(".//div[@class='title']//a");
+          var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
+          var mangaName = mangaNode.InnerText;
+
+          var result = Mangas.Create(new Uri(host, mangaUri));
+          result.Name = WebUtility.HtmlDecode(mangaName);
+          if (imageUri != null)
+            result.Cover = client.DownloadData(new Uri(host, imageUri));
+          yield return result;
+        }
+      }
     }
 
     /// <summary>

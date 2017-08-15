@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Grouple;
+using Acomics;
 using MangaReader.Core.Manga;
 using NUnit.Framework;
 
 namespace Tests.Entities.Search
 {
   [TestFixture]
-  public class Grouple : TestClass
+  public class Acomics : TestClass
   {
     private Parser parser = new Parser();
     
     [Test]
-    public void SearchOnGrouple()
+    public void SearchOnAcomics()
     {
-      var manga = Search("Дурень и Сиськи").FirstOrDefault();
-      Assert.AreEqual("Baka And Boing", manga.Name);
+      var mangas = Search("mass effect");
+      Assert.IsTrue(mangas.Any(m => m.Uri.OriginalString == "https://acomics.ru/~mess-perfect-3"));
     }
 
     private IEnumerable<IManga> Search(string name)

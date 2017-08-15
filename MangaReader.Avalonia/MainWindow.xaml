@@ -38,7 +38,7 @@
       <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*, Auto" DataContext="{Binding}">
         <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding Search}"/>
         <Button Grid.Row="0" Grid.Column="1" DataContext="{Binding StartSearch}" Command="{Binding}" Content="{Binding Name}"/>
-        <ListBox Grid.Row="1" Items="{Binding FilteredItems}" 
+        <ListBox Grid.Row="1" Grid.ColumnSpan="2" Items="{Binding Items}" 
                  BorderThickness="0"
                  ScrollViewer.VerticalScrollBarVisibility="Auto">
           <ListBox.ItemTemplate>

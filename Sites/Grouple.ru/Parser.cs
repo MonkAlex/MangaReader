@@ -244,7 +244,10 @@ namespace Grouple
         
         foreach (var manga in mangas)
         {
-          #warning Иногда вместо манги оказываются "персоны", пока непонятно как фильтровать.
+          // Это переводчик, идем дальше.
+          if (manga.SelectSingleNode(".//i[@class='fa fa-user text-info']") != null)
+            continue;
+          
           var image = manga.SelectSingleNode(".//div[@class='img']//a//img");
           var imageUri = image != null ? image.Attributes.Single(a => a.Name == "data-original").Value : null;
           
@@ -257,7 +260,7 @@ namespace Grouple
             continue;
 
           var result = Mangas.Create(new Uri(host, mangaUri));
-          result.Name = mangaName;
+          result.Name = WebUtility.HtmlDecode(mangaName);
           if (imageUri != null)
             result.Cover = client.DownloadData(imageUri);
           yield return result;

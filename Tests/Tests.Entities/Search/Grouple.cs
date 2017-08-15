@@ -15,8 +15,8 @@ namespace Tests.Entities.Search
     [Test]
     public void Search()
     {
-      var chapters = Search("my name");
-      Assert.AreEqual(0, chapters);
+      var manga = Search("Дурень и Сиськи").FirstOrDefault();
+      Assert.AreEqual("Baka And Boing", manga.Name);
     }
 
     private IEnumerable<IManga> Search(string name)

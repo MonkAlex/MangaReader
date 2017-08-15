@@ -100,6 +100,8 @@
     <Compile Include="ReportProcess.cs" />
     <Compile Include="Search\Acomics.cs" />
     <Compile Include="Search\Grouple.cs" />
+    <Compile Include="Search\Henchan.cs" />
+    <Compile Include="Search\Mangachan.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MangaReader.Core\MangaReader.Core.csproj">

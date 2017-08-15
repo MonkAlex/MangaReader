@@ -128,13 +128,45 @@ namespace Hentaichan.Mangachan
 
     public override IEnumerable<byte[]> GetPreviews(IManga manga)
     {
-      foreach (var bytes in GetPreviewsImpl(manga))
-        yield return bytes;
+      return GetPreviewsImpl(manga);
     }
 
     public override IEnumerable<IManga> Search(string name)
     {
-      return Enumerable.Empty<IManga>();
+      var hosts = ConfigStorage.Plugins
+        .Where(p => p.GetParser().GetType() == typeof(Parser))
+        .Select(p => p.GetSettings().MainUri);
+
+      var client = new CookieClient();
+      foreach (var host in hosts)
+      {
+        var searchHost = new Uri(host, "?do=search&subaction=search&story=" + WebUtility.UrlEncode(name));
+        var page = Page.GetPage(searchHost, client);
+        if (!page.HasContent)
+          continue;
+        
+        var document = new HtmlDocument();
+        document.LoadHtml(page.Content);
+        var mangas = document.DocumentNode.SelectNodes("//div[@class='content_row']");
+        if (mangas == null)
+          continue;
+        
+        foreach (var manga in mangas)
+        {
+          var image = manga.SelectSingleNode(".//div[@class='manga_images']//img");
+          var imageUri = image != null ? image.Attributes.Single(a => a.Name == "src").Value : null;
+          
+          var mangaNode = manga.SelectSingleNode(".//h2//a");
+          var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
+          var mangaName = mangaNode.InnerText;
+
+          var result = Mangas.Create(new Uri(mangaUri));
+          result.Name = WebUtility.HtmlDecode(mangaName);
+          if (imageUri != null)
+            result.Cover = client.DownloadData(new Uri(host, imageUri));
+          yield return result;
+        }
+      }
     }
 
     internal static IEnumerable<byte[]> GetPreviewsImpl(IManga manga)

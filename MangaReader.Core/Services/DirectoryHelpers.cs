@@ -75,6 +75,10 @@ namespace MangaReader.Core.Services
     /// <returns>Исправленный путь.</returns>
     public static string MakeValidPath(string name)
     {
+      if (Environment.OSVersion.Platform == PlatformID.Unix ||
+          Environment.OSVersion.Platform == PlatformID.MacOSX)
+        return name;
+      
       const string replacement = ".";
       var matchesCount = Regex.Matches(name, @":\\").Count;
       string correctName;

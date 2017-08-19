@@ -19,11 +19,6 @@ namespace MangaReader.Avalonia.ViewModel.Command
       execute.Invoke();
     }
 
-    public void CanExecuteChanged()
-    {
-      this.OnCanExecuteChanged();
-    }
-
     public DelegateCommand(Action execute) : this(execute, () => true)
     {
       

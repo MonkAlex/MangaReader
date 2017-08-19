@@ -70,9 +70,9 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       this.PropertyChanged += (sender, args) =>
       {
         if (args.PropertyName == nameof(Search))
-          this.StartSearch.CanExecuteChanged();
+          this.StartSearch.OnCanExecuteChanged();
         if (args.PropertyName == nameof(ManualUri))
-          this.AddManual.CanExecuteChanged();
+          this.AddManual.OnCanExecuteChanged();
       };
     }
   }

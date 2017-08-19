@@ -43,7 +43,7 @@ namespace MangaReader.Avalonia.ViewModel.Command
 
     public event EventHandler CanExecuteChanged;
 
-    protected virtual void OnCanExecuteChanged()
+    public virtual void OnCanExecuteChanged()
     {
       // if (Dispatcher.UIThread.CheckAccess())
         CanExecuteChanged?.Invoke(this, EventArgs.Empty);

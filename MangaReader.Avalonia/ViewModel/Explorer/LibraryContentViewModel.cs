@@ -5,7 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Threading;
+using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Avalonia.ViewModel.Command.Library;
+using MangaReader.Avalonia.ViewModel.Command.Manga;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using ReactiveUI;
@@ -17,6 +19,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     private ObservableCollection<IManga> items;
     private string search;
     private IReactiveDerivedList<IManga> filteredItems;
+    private IManga selectedManga;
 
     public ObservableCollection<IManga> Items
     {
@@ -40,6 +43,19 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       private set { RaiseAndSetIfChanged(ref filteredItems, value); }
     }
 
+    public IManga SelectedManga
+    {
+      get { return selectedManga; }
+      set
+      {
+        RaiseAndSetIfChanged(ref selectedManga, value);
+        foreach (var command in Commands)
+        {
+          command.OnCanExecuteChanged();
+        }
+      }
+    }
+
     public string Search
     {
       get { return search; }
@@ -50,7 +66,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       }
     }
 
-    public ObservableCollection<ICommand> Commands { get; }
+    public ObservableCollection<BaseCommand> Commands { get; }
     
     public LibraryViewModel Library { get; }
 
@@ -84,9 +100,10 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public LibraryContentViewModel()
     {
-      this.Commands = new ObservableCollection<ICommand>();
+      this.Commands = new ObservableCollection<BaseCommand>();
       this.Library = new LibraryViewModel();
       this.Commands.Add(new UpdateWithPauseCommand(this, Library));
+      this.Commands.Add(new OpenFolderCommand());
     }
   }
 }

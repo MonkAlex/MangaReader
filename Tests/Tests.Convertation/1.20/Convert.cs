@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using MangaReader.Core.Manga;
 using NHibernate.Linq;
 using NUnit.Framework;
@@ -11,7 +12,7 @@ namespace Tests.Convertation._1._20
     [Test]
     public void Convert_1_20_to_main()
     {
-      Environment.DeployToRoot(@"Tests.Convertation\1.20");
+      Environment.DeployToRoot(Path.Combine("Tests.Convertation", "1.20"));
 
       MangaReader.Core.Client.Init();
       MangaReader.Core.Client.Start(new ReportProcess());

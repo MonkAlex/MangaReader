@@ -49,7 +49,7 @@ namespace Tests.Entities.Manga
       Assert.AreEqual(0, manga.Chapters.Count);
       Assert.AreEqual(3, manga.Volumes.Count);
       Assert.AreEqual(15, manga.Volumes.Select(c => c.Chapters.Count).Sum());
-      Assert.AreEqual(389, manga.Volumes.SelectMany(c => c.Chapters).Select(c => c.Pages.Count).Sum());
+      Assert.AreEqual(399, manga.Volumes.SelectMany(c => c.Chapters).Select(c => c.Pages.Count).Sum());
 
       Assert.IsTrue(manga.HasChapters);
       Assert.IsTrue(manga.HasVolumes);

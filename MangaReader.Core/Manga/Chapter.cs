@@ -44,7 +44,7 @@ namespace MangaReader.Core.Manga
     /// <summary>
     /// Номер главы.
     /// </summary>
-    public int Number { get; set; }
+    public double Number { get; set; }
 
     /// <summary>
     /// Статус загрузки.

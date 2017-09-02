@@ -21,8 +21,8 @@ namespace Hentaichan
       : base(uri)
     {
       var fromUri = Regex.Match(uri.OriginalString, @"/*(\d+\.\d+|\d+)", RegexOptions.RightToLeft)
-        .Groups[1].Value.Replace(".", string.Empty);
-      this.Number = Convert.ToInt32(fromUri);
+        .Groups[1].Value;
+      this.Number = double.Parse(fromUri);
     }
   }
 }

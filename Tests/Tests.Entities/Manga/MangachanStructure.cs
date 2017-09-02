@@ -29,10 +29,9 @@ namespace Tests.Entities.Manga
       Assert.AreEqual(1, manga.Volumes.Sum(v => v.Chapters.Count));
     }
 
-    private Hentaichan.Mangachan.Mangachan GetManga(string url)
+    private static IManga GetManga(string url)
     {
-      var manga = Mangas.CreateFromWeb(new Uri(url)) as Hentaichan.Mangachan.Mangachan;
-      return manga;
+      return Mangas.CreateFromWeb(new Uri(url));
     }
 
     [Test]

@@ -90,8 +90,9 @@ namespace MangaReader.Core.Manga
     /// Скачать главу.
     /// </summary>
     /// <param name="downloadFolder">Папка для файлов.</param>
-    public virtual Task Download(string downloadFolder)
+    public virtual async Task Download(string downloadFolder)
     {
+      await DownloadManager.CheckPause();
       var chapterFolder = Path.Combine(downloadFolder, this.Folder);
 
       if (this.Pages == null || !this.Pages.Any())
@@ -100,11 +101,13 @@ namespace MangaReader.Core.Manga
       this.ActivePages = this.Pages;
       if (this.OnlyUpdate)
       {
+        await DownloadManager.CheckPause();
         this.ActivePages = History.GetItemsWithoutHistory(this);
       }
 
       try
       {
+        await DownloadManager.CheckPause();
         chapterFolder = DirectoryHelpers.MakeValidPath(chapterFolder);
         if (!Directory.Exists(chapterFolder))
           Directory.CreateDirectory(chapterFolder);
@@ -120,7 +123,7 @@ namespace MangaReader.Core.Manga
               this.OnDownloadProgressChanged(null);
             });
         });
-        return Task.WhenAll(pTasks.ToArray());
+        await Task.WhenAll(pTasks.ToArray());
       }
       catch (AggregateException ae)
       {
@@ -131,7 +134,6 @@ namespace MangaReader.Core.Manga
       {
         Log.Exception(ex, $"Не удалось скачать главу {Name} по ссылке {Uri}");
       }
-      return Task.FromResult(false);
     }
 
     /// <summary>

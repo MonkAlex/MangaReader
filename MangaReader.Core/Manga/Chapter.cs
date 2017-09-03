@@ -67,7 +67,7 @@ namespace MangaReader.Core.Manga
 
     public string Folder
     {
-      get { return this.folderPrefix + this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0'); }
+      get { return this.folderPrefix + this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(Number % 1 == 0 ? 4 : 6, '0'); }
       private set { this.folderPrefix = value; }
     }
 

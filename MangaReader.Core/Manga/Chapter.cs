@@ -15,7 +15,7 @@ namespace MangaReader.Core.Manga
   /// Глава.
   /// </summary>
   [DebuggerDisplay("{Number} {Name}")]
-  public class Chapter : IDownloadableContainer<MangaPage>
+  public class Chapter : Entity.Entity, IDownloadableContainer<MangaPage>
   {
     #region Свойства
 
@@ -29,7 +29,11 @@ namespace MangaReader.Core.Manga
     /// </summary>
     public List<MangaPage> ActivePages { get; set; }
 
-    public IEnumerable<MangaPage> Container { get { return this.Pages; } }
+    public IEnumerable<MangaPage> Container
+    {
+      get { return this.Pages; }
+      protected set { RefreshPagesList(value); }
+    }
 
     /// <summary>
     /// Название главы.
@@ -53,13 +57,16 @@ namespace MangaReader.Core.Manga
     {
       get { return this.ActivePages != null && this.ActivePages.Any() && this.ActivePages.All(v => v.IsDownloaded); }
     }
-    
+
     /// <summary>
     /// Процент загрузки главы.
     /// </summary>
     public double Downloaded
     {
-      get { return (this.ActivePages != null && this.ActivePages.Any()) ? this.ActivePages.Average(ch => ch.Downloaded) : 0; }
+      get
+      {
+        return (this.ActivePages != null && this.ActivePages.Any()) ? this.ActivePages.Average(ch => ch.Downloaded) : 0;
+      }
       set { }
     }
 
@@ -67,7 +74,11 @@ namespace MangaReader.Core.Manga
 
     public string Folder
     {
-      get { return this.folderPrefix + this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(Number % 1 == 0 ? 4 : 6, '0'); }
+      get
+      {
+        return this.folderPrefix +
+               this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(Number % 1 == 0 ? 4 : 6, '0');
+      }
       private set { this.folderPrefix = value; }
     }
 
@@ -115,7 +126,7 @@ namespace MangaReader.Core.Manga
         var pTasks = this.ActivePages.Select(page =>
         {
           return page.Download(chapterFolder)
-          .ContinueWith(t =>
+            .ContinueWith(t =>
             {
               if (t.Exception != null)
                 Log.Exception(t.Exception, $"Не удалось скачать изображение {page.ImageLink} со страницы {page.Uri}");
@@ -145,7 +156,22 @@ namespace MangaReader.Core.Manga
       if (this.Pages == null)
         throw new ArgumentNullException("Pages");
 
-      this.Pages.ForEach(p => p.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(null));
+      RefreshPagesList(this.Pages);
+    }
+
+    protected virtual void RefreshPagesList(IEnumerable<MangaPage> pages)
+    {
+      if (pages != this.Pages)
+      {
+        this.Pages.ForEach(p => p.DownloadProgressChanged -= OnDownloadProgressChanged);
+        this.Pages = pages.ToList();
+      }
+      this.Pages.ForEach(p => p.DownloadProgressChanged += OnDownloadProgressChanged);
+    }
+
+    private void OnDownloadProgressChanged(object sender, IManga manga)
+    {
+      this.OnDownloadProgressChanged(null);
     }
 
     #endregion
@@ -161,6 +187,11 @@ namespace MangaReader.Core.Manga
       this.Uri = uri;
       this.Pages = new List<MangaPage>();
       this.ActivePages = new List<MangaPage>();
+    }
+
+    protected Chapter()
+    {
+      
     }
 
     #endregion

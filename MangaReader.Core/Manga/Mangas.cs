@@ -182,22 +182,22 @@ namespace MangaReader.Core.Manga
 
 
     [XmlIgnore]
-    public virtual List<Volume> Volumes { get; set; }
+    public virtual ICollection<Volume> Volumes { get; set; }
 
     [XmlIgnore]
-    public virtual List<Volume> ActiveVolumes { get; set; }
+    public virtual ICollection<Volume> ActiveVolumes { get; set; }
 
     [XmlIgnore]
-    public virtual List<Chapter> Chapters { get; set; }
+    public virtual ICollection<Chapter> Chapters { get; set; }
 
     [XmlIgnore]
-    public virtual List<Chapter> ActiveChapters { get; set; }
+    public virtual ICollection<Chapter> ActiveChapters { get; set; }
 
     [XmlIgnore]
-    public virtual List<MangaPage> Pages { get; set; }
+    public virtual ICollection<MangaPage> Pages { get; set; }
 
     [XmlIgnore]
-    public virtual List<MangaPage> ActivePages { get; set; }
+    public virtual ICollection<MangaPage> ActivePages { get; set; }
 
     /// <summary>
     /// Нужно ли обновлять мангу.
@@ -350,9 +350,12 @@ namespace MangaReader.Core.Manga
 
       Parser.UpdateContent(this);
 
-      this.Pages.ForEach(p => p.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this));
-      this.Chapters.ForEach(ch => ch.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this));
-      this.Volumes.ForEach(v => v.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this));
+      foreach (var page in Pages)
+        page.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this);
+      foreach (var chapter in Chapters)
+        chapter.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this);
+      foreach (var volume in Volumes)
+        volume.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this);
     }
 
     public async Task Download(string mangaFolder = null)

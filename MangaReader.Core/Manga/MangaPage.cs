@@ -9,7 +9,7 @@ using MangaReader.Core.Services;
 namespace MangaReader.Core.Manga
 {
   [DebuggerDisplay("{Number} {Name}")]
-  public class MangaPage : IDownloadable
+  public class MangaPage : Entity.Entity, IDownloadable
   {
     #region Свойства
 
@@ -115,6 +115,11 @@ namespace MangaReader.Core.Manga
       this.ImageLink = imageLink;
       this.Number = number;
       this.restartCounter = 0;
+    }
+
+    protected MangaPage()
+    {
+      
     }
 
     #endregion

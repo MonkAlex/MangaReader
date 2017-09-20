@@ -128,7 +128,9 @@
     <Compile Include="Manga\Mangas.cs" />
     <Compile Include="Manga\Volume.cs" />
     <Compile Include="NHibernate\AsyncContext.cs" />
+    <Compile Include="NHibernate\ChapterMap.cs" />
     <Compile Include="NHibernate\DatabaseConfigMap.cs" />
+    <Compile Include="NHibernate\MangaPageMap.cs" />
     <Compile Include="NHibernate\Mapping.cs" />
     <Compile Include="NHibernate\HistoryMap.cs" />
     <Compile Include="NHibernate\Interceptors.cs" />
@@ -136,6 +138,7 @@
     <Compile Include="NHibernate\MangaMap.cs" />
     <Compile Include="NHibernate\MangaSettingMap.cs" />
     <Compile Include="NHibernate\Repository.cs" />
+    <Compile Include="NHibernate\VolumeMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Strings.Designer.cs">
       <DependentUpon>Strings.resx</DependentUpon>

@@ -83,6 +83,15 @@ namespace MangaReader.Core.Services
       return new List<T>(Enum.GetValues(typeof(T)).OfType<T>());
     }
 
+    public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> items)
+    {
+      if (collection == null || collection.IsReadOnly || items == null)
+        return;
+      
+      foreach (var item in items)
+        collection.Add(item);
+    }
+
     public static Uri GetLoginMainUri<T>() where T : IManga
     {
       if (NHibernate.Mapping.Initialized)

@@ -11,7 +11,7 @@ using MangaReader.Core.Services.Config;
 namespace MangaReader.Core.Manga
 {
   [DebuggerDisplay("{Number} {Name}")]
-  public class Volume : IDownloadableContainer<Chapter>
+  public class Volume : Entity.Entity, IDownloadableContainer<Chapter>
   {
     public string Name { get; set; }
 
@@ -21,7 +21,11 @@ namespace MangaReader.Core.Manga
 
     public List<Chapter> ActiveChapters { get; set; }
 
-    public IEnumerable<Chapter> Container { get { return this.Chapters; } }
+    public IEnumerable<Chapter> Container
+    {
+      get { return this.Chapters; }
+      protected set { RefreshPagesList(value); }
+    }
 
     /// <summary>
     /// Статус загрузки.
@@ -65,7 +69,7 @@ namespace MangaReader.Core.Manga
     {
       var volumeFolder = Path.Combine(mangaFolder, this.Folder);
 
-      this.ActiveChapters = this.Chapters;
+      this.ActiveChapters = this.Chapters.ToList();
       if (this.OnlyUpdate)
       {
         this.ActiveChapters = History.GetItemsWithoutHistory(this);
@@ -73,11 +77,25 @@ namespace MangaReader.Core.Manga
 
       var tasks = this.ActiveChapters.Select(c =>
       {
-        c.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(args);
         c.OnlyUpdate = this.OnlyUpdate;
         return c.Download(volumeFolder);
       });
       return Task.WhenAll(tasks);
+    }
+    
+    protected virtual void RefreshPagesList(IEnumerable<Chapter> chapters)
+    {
+      if (chapters != this.Chapters)
+      {
+        this.Chapters.ForEach(p => p.DownloadProgressChanged -= OnDownloadProgressChanged);
+        this.Chapters = chapters.ToList();
+      }
+      this.Chapters.ForEach(p => p.DownloadProgressChanged += OnDownloadProgressChanged);
+    }
+    
+    private void OnDownloadProgressChanged(object sender, IManga manga)
+    {
+      this.OnDownloadProgressChanged(manga);
     }
 
     public Volume(string name, int number)

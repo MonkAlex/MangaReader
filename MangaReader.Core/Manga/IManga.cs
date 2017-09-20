@@ -29,11 +29,11 @@ namespace MangaReader.Core.Manga
 
     bool HasVolumes { get; set; }
 
-    List<Volume> Volumes { get; set; }
+    ICollection<Volume> Volumes { get; set; }
 
-    List<Chapter> Chapters { get; set; }
+    ICollection<Chapter> Chapters { get; set; }
 
-    List<MangaPage> Pages { get; set; }
+    ICollection<MangaPage> Pages { get; set; }
 
     #endregion
 

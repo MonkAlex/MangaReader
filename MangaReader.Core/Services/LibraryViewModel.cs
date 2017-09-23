@@ -90,8 +90,7 @@ namespace MangaReader.Core.Services
     /// <param name="url"></param>
     public bool Add(string url)
     {
-      Uri uri;
-      if (Uri.TryCreate(url, UriKind.Absolute, out uri) && Add(uri))
+      if (Uri.TryCreate(url, UriKind.Absolute, out Uri uri) && Add(uri))
         return true;
 
       Log.Info("Некорректная ссылка.");
@@ -141,7 +140,8 @@ namespace MangaReader.Core.Services
 
         if (IsAvaible)
         {
-          ThreadAction(() => Update(Repository.Get<IManga>(), ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
+          ThreadAction(() => Update(Repository.Get<IManga>(), ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription))
+            .LogException("Автоматическое обновление успешно завершено", "Автоматическое обновление завершено с ошибкой");
         }
       }
     }

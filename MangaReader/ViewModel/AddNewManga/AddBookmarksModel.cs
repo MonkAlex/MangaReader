@@ -8,6 +8,7 @@ using MangaReader.Core.Manga;
 using MangaReader.ViewModel.Commands.AddManga;
 using MangaReader.ViewModel.Primitive;
 using MangaReader.ViewModel.Setting;
+using MangaReader.Core.Services;
 
 namespace MangaReader.ViewModel
 {
@@ -20,7 +21,7 @@ namespace MangaReader.ViewModel
       get
       {
         if (!bookmarks.Any())
-          LoadBookmarks();
+          LoadBookmarks().LogException();
         return bookmarks;
       }
     }

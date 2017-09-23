@@ -5,6 +5,7 @@ using System.Reflection;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services.Config;
 using NHibernate.Util;
+using System.Threading.Tasks;
 
 namespace MangaReader.Core.Services
 {
@@ -106,6 +107,22 @@ namespace MangaReader.Core.Services
       }
 
       return null;
+    }
+
+    public static Task LogException(this Task task)
+    {
+      return LogException(task, string.Empty, string.Empty);
+    }
+
+    public static Task LogException(this Task task, string onsuccess, string onfail)
+    {
+      return task.ContinueWith(t =>
+      {
+        if (t.Exception != null)
+          Log.Exception(t.Exception, onfail);
+        else if (!string.IsNullOrWhiteSpace(onsuccess))
+          Log.Info(onsuccess);
+      });
     }
   }
 }

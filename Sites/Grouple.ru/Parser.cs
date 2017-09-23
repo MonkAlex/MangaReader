@@ -97,8 +97,7 @@ namespace Grouple
         var uriString = child[1].ToString() + child[0] + child[2];
 
         // Фикс страницы с цензурой.
-        Uri imageLink;
-        if (!Uri.TryCreate(uriString, UriKind.Absolute, out imageLink))
+        if (!Uri.TryCreate(uriString, UriKind.Absolute, out Uri imageLink))
           imageLink = new Uri(@"http://" + chapter.Uri.Host + uriString);
 
         chapter.Pages.Add(new MangaPage(chapter.Uri, imageLink, i));
@@ -249,14 +248,13 @@ namespace Grouple
             continue;
           
           var image = manga.SelectSingleNode(".//div[@class='img']//a//img");
-          var imageUri = image != null ? image.Attributes.Single(a => a.Name == "data-original").Value : null;
+          var imageUri = image?.Attributes.Single(a => a.Name == "data-original").Value;
           
           var mangaNode = manga.SelectSingleNode(".//h3//a");
           var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
           var mangaName = mangaNode.Attributes.Single(a => a.Name == "title").Value;
 
-          Uri test;
-          if (!Uri.TryCreate(mangaUri, UriKind.Relative, out test))
+          if (!Uri.TryCreate(mangaUri, UriKind.Relative, out Uri test))
             continue;
 
           var result = Mangas.Create(new Uri(host, mangaUri));

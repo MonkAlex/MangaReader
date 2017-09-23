@@ -177,7 +177,7 @@ namespace Hentaichan
         foreach (var manga in mangas)
         {
           var image = manga.SelectSingleNode(".//div[@class='manga_images']//img");
-          var imageUri = image != null ? image.Attributes.Single(a => a.Name == "src").Value : null;
+          var imageUri = image?.Attributes.Single(a => a.Name == "src").Value;
           
           var mangaNode = manga.SelectSingleNode(".//h2//a");
           var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;

@@ -26,7 +26,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       get
       {
         if (items == null)
-          RefreshItems();
+          RefreshItems().LogException();
         return items;
       }
       set { RaiseAndSetIfChanged(ref items, value); }
@@ -37,7 +37,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       get
       {
         if (filteredItems == null)
-          RefreshItems();
+          RefreshItems().LogException();
         return filteredItems;
       }
       private set { RaiseAndSetIfChanged(ref filteredItems, value); }

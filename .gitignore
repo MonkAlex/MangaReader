@@ -6,6 +6,7 @@
 *.user
 *.sln.docstates
 *.DotSettings
+/.vs
 
 # Wiki
 Wiki/

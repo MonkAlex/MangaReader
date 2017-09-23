@@ -35,73 +35,76 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Avalonia.Animation, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.0.5.2-build3652-alpha\lib\net45\Avalonia.Animation.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.2-build3873-alpha\lib\net45\Avalonia.Animation.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Base, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.0.5.2-build3652-alpha\lib\net45\Avalonia.Base.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.2-build3873-alpha\lib\net45\Avalonia.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Avalonia.Cairo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.Cairo.0.5.2-build3652-alpha\lib\net45\Avalonia.Cairo.dll</HintPath>
+    <Reference Include="Avalonia.Cairo, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Avalonia.Cairo.0.5.2-build3873-alpha\lib\net45\Avalonia.Cairo.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Controls, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.0.5.2-build3652-alpha\lib\net45\Avalonia.Controls.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.2-build3873-alpha\lib\net45\Avalonia.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.DesignerSupport, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.0.5.2-build3652-alpha\lib\net45\Avalonia.DesignerSupport.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.2-build3873-alpha\lib\net45\Avalonia.DesignerSupport.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Diagnostics, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.0.5.2-build3652-alpha\lib\net45\Avalonia.Diagnostics.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.2-build3873-alpha\lib\net45\Avalonia.Diagnostics.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Direct2D1, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.Direct2D1.0.5.2-build3652-alpha\lib\netstandard1.3\Avalonia.Direct2D1.dll</HintPath>
+      <HintPath>..\packages\Avalonia.Direct2D1.0.5.2-build3873-alpha\lib\netstandard2.0\Avalonia.Direct2D1.dll</HintPath>
     </Reference>
-    <Reference Include="Avalonia.DotNetFrameworkRuntime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.0.5.2-build3652-alpha\lib\net45\Avalonia.DotNetFrameworkRuntime.dll</HintPath>
+    <Reference Include="Avalonia.DotNetFrameworkRuntime, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Avalonia.0.5.2-build3873-alpha\lib\net45\Avalonia.DotNetFrameworkRuntime.dll</HintPath>
     </Reference>
-    <Reference Include="Avalonia.Gtk, Version=1.0.6439.28230, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.Gtk.0.5.2-build3652-alpha\lib\net45\Avalonia.Gtk.dll</HintPath>
+    <Reference Include="Avalonia.Gtk, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Avalonia.Gtk.0.5.2-build3873-alpha\lib\net45\Avalonia.Gtk.dll</HintPath>
     </Reference>
-    <Reference Include="Avalonia.Gtk3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.Gtk3.0.5.2-build3652-alpha\lib\netstandard1.3\Avalonia.Gtk3.dll</HintPath>
+    <Reference Include="Avalonia.Gtk3, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Avalonia.Gtk3.0.5.2-build3873-alpha\lib\netstandard2.0\Avalonia.Gtk3.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Input, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.0.5.2-build3652-alpha\lib\net45\Avalonia.Input.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.2-build3873-alpha\lib\net45\Avalonia.Input.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Interactivity, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.0.5.2-build3652-alpha\lib\net45\Avalonia.Interactivity.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.2-build3873-alpha\lib\net45\Avalonia.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Layout, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.0.5.2-build3652-alpha\lib\net45\Avalonia.Layout.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.2-build3873-alpha\lib\net45\Avalonia.Layout.dll</HintPath>
     </Reference>
-    <Reference Include="Avalonia.Logging.Serilog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.0.5.2-build3652-alpha\lib\net45\Avalonia.Logging.Serilog.dll</HintPath>
+    <Reference Include="Avalonia.Logging.Serilog, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Avalonia.0.5.2-build3873-alpha\lib\net45\Avalonia.Logging.Serilog.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Markup, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.0.5.2-build3652-alpha\lib\net45\Avalonia.Markup.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.2-build3873-alpha\lib\net45\Avalonia.Markup.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Markup.Xaml, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.0.5.2-build3652-alpha\lib\net45\Avalonia.Markup.Xaml.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.2-build3873-alpha\lib\net45\Avalonia.Markup.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="Avalonia.ReactiveUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.0.5.2-build3652-alpha\lib\net45\Avalonia.ReactiveUI.dll</HintPath>
+    <Reference Include="Avalonia.MonoMac, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Avalonia.MonoMac.0.5.2-build3873-alpha\lib\netstandard2.0\Avalonia.MonoMac.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Skia, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.Skia.0.5.2-build3652-alpha\lib\netstandard1.3\Avalonia.Skia.dll</HintPath>
+      <HintPath>..\packages\Avalonia.Skia.0.5.2-build3873-alpha\lib\netstandard2.0\Avalonia.Skia.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Skia.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Avalonia.Skia.Desktop.0.5.2-build3633-alpha\lib\net45\Avalonia.Skia.Desktop.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Styling, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.0.5.2-build3652-alpha\lib\net45\Avalonia.Styling.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.2-build3873-alpha\lib\net45\Avalonia.Styling.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Themes.Default, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.0.5.2-build3652-alpha\lib\net45\Avalonia.Themes.Default.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.2-build3873-alpha\lib\net45\Avalonia.Themes.Default.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Visuals, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.0.5.2-build3652-alpha\lib\net45\Avalonia.Visuals.dll</HintPath>
+      <HintPath>..\packages\Avalonia.0.5.2-build3873-alpha\lib\net45\Avalonia.Visuals.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Win32, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Avalonia.Win32.0.5.2-build3652-alpha\lib\net45\Avalonia.Win32.dll</HintPath>
+      <HintPath>..\packages\Avalonia.Win32.0.5.2-build3873-alpha\lib\net45\Avalonia.Win32.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoMac, Version=0.0.3.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\MonoMac.NetStandard.0.0.3\lib\net461\MonoMac.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.4.0\lib\net45\Serilog.dll</HintPath>
@@ -136,6 +139,15 @@
       <HintPath>..\packages\System.ComponentModel.TypeConverter.4.3.0\lib\net45\System.ComponentModel.TypeConverter.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.UnmanagedMemoryStream, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.IO.UnmanagedMemoryStream.4.3.0\lib\net46\System.IO.UnmanagedMemoryStream.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive, Version=4.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263">
+      <HintPath>..\packages\System.Reactive.4.0.0-preview00001\lib\net46\System.Reactive.dll</HintPath>
+    </Reference>
     <Reference Include="System.Reactive.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Reactive.Core.3.0.0\lib\net45\System.Reactive.Core.dll</HintPath>
       <Private>True</Private>
@@ -235,7 +247,7 @@
     <MakeDir Directories="$(TargetDir)\Plugins" />
   </Target>
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)\libSkiaSharp.dylib.so" DestinationFolder="$(TargetDir)\libSkiaSharp.so" />
+    <Copy SourceFiles="$(TargetDir)\libSkiaSharp.dylib.so" DestinationFiles="$(TargetDir)\libSkiaSharp.so" />
     <ItemGroup>
       <SourceFiles Include="$(ProjectDir)\..\MangaReader.Core\bin\$(ConfigurationName)\*" />
     </ItemGroup>

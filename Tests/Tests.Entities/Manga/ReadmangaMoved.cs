@@ -27,7 +27,7 @@ namespace Tests.Entities.Manga
       manga = Repository.Get<Grouple.Readmanga>(manga.Id);
       manga.Refresh();
       manga.Save();
-      var chapters = new Volume() { Chapters = new List<MangaReader.Core.Manga.Chapter>
+      var chapters = new Volume() { Container = new List<MangaReader.Core.Manga.Chapter>
         { new Chapter(new Uri("http://mintmanga.com/btooom_/vol1/1?mature=1"))}};
       var chartersNotInHistory = History.GetItemsWithoutHistory(chapters);
       Assert.AreEqual(0, chartersNotInHistory.Count);

@@ -12,7 +12,7 @@ namespace Acomics.Convertation
     protected override bool ProtectedCanConvert(IProcess process)
     {
       return base.ProtectedCanConvert(process) && 
-        Version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 && 
+        Version.CompareTo(MangaReader.Core.NHibernate.Repository.Get<DatabaseConfig>().Single().Version) > 0 && 
         process.Version.CompareTo(Version) >= 0;
     }
 

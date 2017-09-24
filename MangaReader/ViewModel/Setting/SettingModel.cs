@@ -35,15 +35,14 @@ namespace MangaReader.ViewModel.Setting
       this.Save = new SaveSettingsCommand(this);
 
       this.Views.Add(this.AppSetting);
-      foreach (var setting in ConfigStorage.Instance.DatabaseConfig.MangaSettings)
+      foreach (var setting in Core.NHibernate.Repository.Get<Core.Services.MangaSetting>())
         this.Views.Add(new MangaSettingModel(setting));
       this.SelectedModel = this.AppSetting;
     }
 
     private void SyncLoginOnModelChange(SettingViewModel model)
     {
-      var mangaSettings = model as MangaSettingModel;
-      if (mangaSettings != null)
+      if (model is MangaSettingModel mangaSettings)
       {
         var someLoginView = this.Views
           .OfType<MangaSettingModel>()

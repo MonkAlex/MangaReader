@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MangaReader.Core.Account;
 using MangaReader.Core.Manga;
+using MangaReader.Core.Properties;
 using MangaReader.Core.Services;
 
 namespace Hentaichan
@@ -96,7 +97,7 @@ namespace Hentaichan
       }
       catch (System.Exception ex)
       {
-        Log.Exception(ex);
+        Log.Exception(ex, Strings.Login_Failed);
         this.IsLogined = false;
       }
       return IsLogined;

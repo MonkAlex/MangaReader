@@ -40,10 +40,10 @@ namespace MangaReader.Core
 
         ConfigStorage.RefreshPlugins();
         NHibernate.Mapping.Initialize(process);
+        DatabaseConfig.Initialize();
 
-        var isSingle = false;
-        var name = ConfigStorage.Instance.DatabaseConfig.UniqueId.ToString("D");
-        mutex = new Mutex(false, name, out isSingle);
+        var name = NHibernate.Repository.Get<DatabaseConfig>().Single().UniqueId.ToString("D");
+        mutex = new Mutex(false, name, out bool isSingle);
         if (!isSingle)
         {
           try

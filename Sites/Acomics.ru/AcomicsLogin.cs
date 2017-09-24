@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using MangaReader.Core.Account;
 using MangaReader.Core.Manga;
+using MangaReader.Core.Properties;
 using MangaReader.Core.Services;
 
 namespace Acomics
@@ -43,7 +44,7 @@ namespace Acomics
       }
       catch (System.Exception ex)
       {
-        Log.Exception(ex);
+        Log.Exception(ex, Strings.Login_Failed);
         this.IsLogined = false;
       }
       return IsLogined;

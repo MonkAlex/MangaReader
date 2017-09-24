@@ -88,8 +88,7 @@ namespace Hentaichan.Mangachan
 
       foreach (var volume in chapters.GroupBy(c => c.Volume).ToList())
       {
-        var vol = new Volume(volume.Key);
-        vol.Chapters.AddRange(volume);
+        var vol = new Volume(volume.Key) { Container = volume};
         chapters.RemoveAll(c => volume.Contains(c));
         manga.Volumes.Add(vol);
       }
@@ -154,7 +153,7 @@ namespace Hentaichan.Mangachan
         foreach (var manga in mangas)
         {
           var image = manga.SelectSingleNode(".//div[@class='manga_images']//img");
-          var imageUri = image != null ? image.Attributes.Single(a => a.Name == "src").Value : null;
+          var imageUri = image?.Attributes.Single(a => a.Name == "src").Value;
           
           var mangaNode = manga.SelectSingleNode(".//h2//a");
           var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;

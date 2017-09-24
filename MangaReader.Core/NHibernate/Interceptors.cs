@@ -33,5 +33,11 @@ namespace MangaReader.Core.NHibernate
       }
       return base.OnFlushDirty(entity, id, currentState, previousState, propertyNames, types);
     }
+
+    public override bool OnSave(object entity, object id, object[] state, string[] propertyNames, IType[] types)
+    {
+      this.OnFlushDirty(entity, id, state, null, propertyNames, types);
+      return base.OnSave(entity, id, state, propertyNames, types);
+    }
   }
 }

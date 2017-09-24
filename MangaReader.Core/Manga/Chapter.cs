@@ -163,7 +163,7 @@ namespace MangaReader.Core.Manga
     {
       if (pages != this.Pages)
       {
-        this.Pages.ForEach(p => p.DownloadProgressChanged -= OnDownloadProgressChanged);
+        this.Pages?.ForEach(p => p.DownloadProgressChanged -= OnDownloadProgressChanged);
         this.Pages = pages.ToList();
       }
       this.Pages.ForEach(p => p.DownloadProgressChanged += OnDownloadProgressChanged);

@@ -179,7 +179,7 @@ namespace Grouple
         .Select(g =>
         {
           var v = new Volume(g.Key);
-          v.Chapters.AddRange(g);
+          v.Container = g;
           return v;
         });
 

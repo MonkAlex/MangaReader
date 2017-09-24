@@ -17,7 +17,7 @@ namespace Tests.Entities.Manga
       var manga = GetManga("http://mangachan.me/manga/3828-12-prince.html");
       parser.UpdateContent(manga);
       Assert.AreEqual(16, manga.Volumes.Count);
-      Assert.AreEqual(78, manga.Volumes.Sum(v => v.Chapters.Count));
+      Assert.AreEqual(78, manga.Volumes.Sum(v => v.Container.Count()));
     }
 
     [Test]
@@ -26,7 +26,7 @@ namespace Tests.Entities.Manga
       var manga = GetManga("http://mangachan.me/manga/20138-16000-honesty.html");
       parser.UpdateContent(manga);
       Assert.AreEqual(1, manga.Volumes.Count);
-      Assert.AreEqual(1, manga.Volumes.Sum(v => v.Chapters.Count));
+      Assert.AreEqual(1, manga.Volumes.Sum(v => v.Container.Count()));
     }
 
     private static IManga GetManga(string url)

@@ -87,7 +87,7 @@ namespace Grouple
       {
         this.UpdateContent();
 
-        var chapters = this.Volumes.SelectMany(v => v.Chapters);
+        var chapters = this.Volumes.SelectMany(v => v.Container);
         AddHistoryReadedUris(chapters, url);
       }
 

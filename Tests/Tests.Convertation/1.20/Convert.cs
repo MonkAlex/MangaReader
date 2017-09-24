@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using MangaReader.Core.Manga;
 using NHibernate.Linq;
@@ -17,10 +18,15 @@ namespace Tests.Convertation._1._20
       MangaReader.Core.Client.Init();
       MangaReader.Core.Client.Start(new ReportProcess());
 
-      var loadedMangas = MangaReader.Core.NHibernate.Mapping.GetSession().Query<IManga>().ToList();
-      Assert.AreEqual(153, loadedMangas.Count);
+      List<IManga> loadedMangas;
+      List<MangaHistory> loadedHistoryRecord;
+      using (var session = MangaReader.Core.NHibernate.Mapping.GetSession())
+      {
+        loadedMangas = session.Query<IManga>().ToList();
+        Assert.AreEqual(153, loadedMangas.Count);
 
-      var loadedHistoryRecord = MangaReader.Core.NHibernate.Mapping.GetSession().Query<MangaHistory>().ToList();
+        loadedHistoryRecord = session.Query<MangaHistory>().ToList();
+      }
 
       /*
       var s = loadedMangas.Select(m => $"Assert.AreEqual({m.Histories.Count()}, loadedHistoryRecord.Count(h => h.Url.Contains(\"{m.Uri.OriginalString.Split('/').Last()}\")));").ToList();

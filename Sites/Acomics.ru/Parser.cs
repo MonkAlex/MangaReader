@@ -101,7 +101,7 @@ namespace Acomics
               .Where(cn => cn != null)
               .SelectMany(cn => cn)
               .Select(cn => new Chapter(new Uri(cn.Attributes[0].Value), (cn.Attributes.Count > 1 ? cn.Attributes[1].Value : cn.InnerText)));
-            newVolume.Chapters.AddRange(volumeChapters);
+            newVolume.Container = volumeChapters;
             volumes.Add(newVolume);
           }
 
@@ -113,7 +113,7 @@ namespace Acomics
         }
 
         var allPages = GetMangaPages(manga.Uri);
-        var innerChapters = chapters.Count == 0 ? volumes.SelectMany(v => v.Chapters).ToList() : chapters;
+        var innerChapters = chapters.Count == 0 ? volumes.SelectMany(v => v.Container).ToList() : chapters;
         for (int i = 0; i < innerChapters.Count; i++)
         {
           var current = innerChapters[i].Number;
@@ -121,7 +121,7 @@ namespace Acomics
           innerChapters[i].Pages.AddRange(allPages.Where(p => current <= p.Number && p.Number < next));
           innerChapters[i].Number = i + 1;
         }
-        pages.AddRange(allPages.Except(innerChapters.SelectMany(c => c.Pages)));
+        pages = allPages.Except(innerChapters.SelectMany(c => c.Pages)).ToList();
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
 

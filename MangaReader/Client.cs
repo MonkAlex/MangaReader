@@ -36,12 +36,14 @@ namespace MangaReader
       var path = System.Reflection.Assembly.GetExecutingAssembly().Location;
       if (File.Exists(path))
       {
-        JumpTask jumpTask = new JumpTask();
-        jumpTask.CustomCategory = "Манга";
-        jumpTask.Title = "Добавить мангу";
-        jumpTask.ApplicationPath = path;
-        jumpTask.IconResourcePath = path;
-        jumpTask.Arguments = AddManga;
+        JumpTask jumpTask = new JumpTask
+        {
+          CustomCategory = "Манга",
+          Title = "Добавить мангу",
+          ApplicationPath = path,
+          IconResourcePath = path,
+          Arguments = AddManga
+        };
         jumpList.JumpItems.Add(jumpTask);
       }
 
@@ -57,13 +59,12 @@ namespace MangaReader
     internal static void ClientOnClientBeenClosed(object sender, EventArgs eventArgs)
     {
       if (Environment.GetCommandLineArgs().Any(a => a == AddManga))
-        Core.ApplicationControl.Client.Run(ConfigStorage.Instance.DatabaseConfig.UniqueId.ToString("D"), Messages.AddManga);
+        Core.ApplicationControl.Client.Run(Core.NHibernate.Repository.Get<DatabaseConfig>().Single().UniqueId.ToString("D"), Messages.AddManga);
     }
 
     private static void ClientOnOtherAppRunning(object sender, string s)
     {
-      Messages message;
-      if (!Messages.TryParse(s, true, out message))
+      if (!Messages.TryParse(s, true, out Messages message))
         return;
 
       switch (message)

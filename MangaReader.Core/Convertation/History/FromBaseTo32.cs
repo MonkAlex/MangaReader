@@ -56,7 +56,7 @@ namespace MangaReader.Core.Convertation.History
       // Актуализируем старые ссылки, с учетом переездов сайтов.
       foreach (var history in histories)
       {
-        var settings = ConfigStorage.Instance.DatabaseConfig.MangaSettings
+        var settings = Repository.Get<MangaSetting>()
           .Where(s => s.MangaSettingUris.Select(u => u.Host).Contains(history.Uri.Host));
         foreach (var setting in settings)
         {
@@ -74,41 +74,47 @@ namespace MangaReader.Core.Convertation.History
         }
       }
 
-      using (var tranc = Mapping.GetSession().BeginTransaction())
+      using (var session = Mapping.GetSession())
       {
-        foreach (var manga in mangas)
+        using (var tranc = session.BeginTransaction())
         {
-          process.Percent += 100.0 / mangas.Count;
-          var mangaHistory = histories.Where(h => h.MangaUrl == manga.Uri.OriginalString ||
-                                                  h.Uri.OriginalString.Contains(manga.Uri.OriginalString + "/")).ToList();
-          manga.AddHistory(mangaHistory);
-          histories.RemoveAll(h => mangaHistory.Contains(h));
+          foreach (var manga in mangas)
+          {
+            process.Percent += 100.0 / mangas.Count;
+            var mangaHistory = histories.Where(h => h.MangaUrl == manga.Uri.OriginalString ||
+                                                    h.Uri.OriginalString.Contains(manga.Uri.OriginalString + "/")).ToList();
+            manga.AddHistory(mangaHistory);
+            histories.RemoveAll(h => mangaHistory.Contains(h));
+          }
+          tranc.Commit();
         }
-        tranc.Commit();
       }
 
-      using (var tranc = Mapping.GetSession().BeginTransaction())
+      using (var session = Mapping.GetSession())
       {
-        foreach (var history in histories.GroupBy(h => new Uri(h.Uri, "..")))
+        using (var tranc = session.BeginTransaction())
         {
-          var manga = Manga.Mangas.Create(history.Key);
-          if (manga == null)
-            continue;
+          foreach (var history in histories.GroupBy(h => new Uri(h.Uri, "..")))
+          {
+            var manga = Manga.Mangas.Create(history.Key);
+            if (manga == null)
+              continue;
 
-          manga.Refresh();
-          if (manga.Uri == history.Key)
-            continue;
+            manga.Refresh();
+            if (manga.Uri == history.Key)
+              continue;
 
-          manga = Repository.Get<IManga>().FirstOrDefault(m => m.Uri == manga.Uri);
-          if (manga == null)
-            continue;
+            manga = Repository.Get<IManga>().FirstOrDefault(m => m.Uri == manga.Uri);
+            if (manga == null)
+              continue;
 
-          foreach (var record in history)
-            record.Uri = new Uri(record.Uri.OriginalString
-              .Replace(history.Key.OriginalString.TrimEnd('/'), manga.Uri.OriginalString.TrimEnd('/')));
-          manga.AddHistory(history);
+            foreach (var record in history)
+              record.Uri = new Uri(record.Uri.OriginalString
+                .Replace(history.Key.OriginalString.TrimEnd('/'), manga.Uri.OriginalString.TrimEnd('/')));
+            manga.AddHistory(history);
+          }
+          tranc.Commit();
         }
-        tranc.Commit();
       }
 
       Backup.MoveToBackup(HistoryFile);

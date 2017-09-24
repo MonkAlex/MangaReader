@@ -3,6 +3,7 @@ using System.IO;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
+using System.Linq;
 
 namespace MangaReader.Core.Convertation.Config
 {
@@ -34,7 +35,9 @@ namespace MangaReader.Core.Convertation.Config
         ConfigStorage.Instance.ViewConfig.WindowStates.Height = (double)((object[])settings[5])[3];
         ConfigStorage.Instance.ViewConfig.WindowStates.WindowState = (WindowState)((object[])settings[5])[4];
 
-        ConfigStorage.Instance.DatabaseConfig.Version = new Version((string)settings[9]);
+        var databaseConfig = NHibernate.Repository.Get<DatabaseConfig>().Single();
+        databaseConfig.Version = new Version((string)settings[9]);
+        databaseConfig.Save();
 
         Backup.MoveToBackup(SettingsOldPath);
       }

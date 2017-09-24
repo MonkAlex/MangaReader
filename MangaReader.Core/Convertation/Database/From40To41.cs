@@ -1,8 +1,8 @@
 ﻿using System;
-using System.IO;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
+using System.Linq;
 
 namespace MangaReader.Core.Convertation.Database
 {
@@ -12,10 +12,9 @@ namespace MangaReader.Core.Convertation.Database
     {
       base.ProtectedConvert(process);
 
-      foreach (var setting in ConfigStorage.Instance.DatabaseConfig.MangaSettings)
+      foreach (var setting in NHibernate.Repository.Get<MangaSetting>().ToList())
       {
-        Uri folderUri;
-        if (!Uri.TryCreate(setting.Folder, UriKind.RelativeOrAbsolute, out folderUri))
+        if (!Uri.TryCreate(setting.Folder, UriKind.RelativeOrAbsolute, out Uri folderUri))
           continue;
 
         if (folderUri.IsAbsoluteUri)
@@ -23,7 +22,7 @@ namespace MangaReader.Core.Convertation.Database
           var relativePath = DirectoryHelpers.GetRelativePath(ConfigStorage.WorkFolder, setting.Folder);
           setting.Folder = relativePath.StartsWith(@"..\..\") ? setting.Folder : relativePath;
         }
-        
+        setting.Save();
       }
       
     }

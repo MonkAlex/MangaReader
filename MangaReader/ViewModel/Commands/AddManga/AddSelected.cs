@@ -21,8 +21,7 @@ namespace MangaReader.ViewModel.Commands.AddManga
 
       try
       {
-        Uri uri;
-        if (Uri.TryCreate(model.InputText, UriKind.Absolute, out uri))
+        if (Uri.TryCreate(model.InputText, UriKind.Absolute, out Uri uri))
           WindowHelper.Library.Add(uri);
 
         var selectedItems = mainModel.BookmarksModels.OfType<AddBookmarksModel>()

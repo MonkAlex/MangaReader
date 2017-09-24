@@ -14,12 +14,15 @@ namespace Tests.Entities.Download
   [TestFixture]
   public class AcomicsDL : TestClass
   {
+    private int lastPercent = 0;
+
     [Test]
     public async Task DownloadAcomics()
     {
       var rm = Mangas.Create(new Uri(@"https://acomics.ru/~MGS-LDIOH"));
       var sw = new Stopwatch();
       sw.Start();
+      rm.DownloadProgressChanged += RmOnDownloadProgressChanged;
       await rm.Download();
       sw.Stop();
       Log.Add($"manga loaded {sw.Elapsed.TotalSeconds}");
@@ -30,6 +33,14 @@ namespace Tests.Entities.Download
       Assert.AreEqual(8301123, fileInfos.Sum(f => f.Length));
       Assert.AreEqual(1, fileInfos.GroupBy(f => f.Length).Max(g => g.Count()));
       Assert.IsTrue(rm.IsDownloaded);
+      Assert.AreEqual(100, lastPercent);
+    }
+
+    private void RmOnDownloadProgressChanged(object sender, IManga manga)
+    {
+      var dl = (int)manga.Downloaded;
+      if (dl > lastPercent)
+        lastPercent = dl;
     }
   }
 }

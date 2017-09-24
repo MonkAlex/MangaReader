@@ -9,12 +9,15 @@ namespace MangaReader.Core.NHibernate
   {
     public static IQueryable<T> Get<T>() where T : Entity.IEntity
     {
-      return Mapping.GetSession().Query<T>();
+      return Mapping.GetStatelessSession().Query<T>();
     }
 
     public static T Get<T>(int id) where T : Entity.IEntity
     {
-      return Mapping.GetSession().Get<T>(id);
+      using (var session = Mapping.GetSession())
+      {
+        return session.Get<T>(id);
+      }
     }
 
     public static void Save<T>(T obj) where T : Entity.IEntity
@@ -28,25 +31,27 @@ namespace MangaReader.Core.NHibernate
       if (!list.Any())
         return;
 
-      var session = Mapping.GetSession();
-      using (var tranc = session.BeginTransaction())
+      using (var session = Mapping.GetSession())
       {
-        try
+        using (var tranc = session.BeginTransaction())
         {
-          foreach (var o in list)
+          try
           {
-            Log.AddFormat("Save {0} with id {1}.", o.GetType().Name, o.Id);
-            if (o.Id == 0)
-              session.Save(o);
-            else
-              session.Update(o);
+            foreach (var o in list)
+            {
+              Log.AddFormat("Save {0} with id {1}.", o.GetType().Name, o.Id);
+              if (o.Id == 0)
+                session.Save(o);
+              else
+                session.Update(o);
+            }
+            tranc.Commit();
           }
-          tranc.Commit();
-        }
-        catch (System.Exception)
-        {
-          tranc.Rollback();
-          throw;
+          catch (System.Exception)
+          {
+            tranc.Rollback();
+            throw;
+          }
         }
       }
     }

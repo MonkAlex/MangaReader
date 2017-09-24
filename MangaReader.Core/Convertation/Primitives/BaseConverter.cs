@@ -1,6 +1,7 @@
 ﻿using System;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
+using NHibernate;
 
 namespace MangaReader.Core.Convertation.Primitives
 {
@@ -34,13 +35,16 @@ namespace MangaReader.Core.Convertation.Primitives
 
     protected virtual void ProtectedConvert(IProcess process)
     {
-      
+
     }
 
     protected object RunSql(string command)
     {
-      var query = Mapping.GetSession().CreateSQLQuery(command);
-      return query.UniqueResult();
+      using (var session = Mapping.GetSession())
+      {
+        var query = session.CreateSQLQuery(command);
+        return query.UniqueResult();
+      }
     }
   }
 }

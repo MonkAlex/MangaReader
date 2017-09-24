@@ -45,7 +45,8 @@ namespace MangaReader.Core.Entity
         return;
       }
 
-      Mapping.GetSession().Refresh(this);
+      using (var session = Mapping.GetSession())
+        session.Refresh(this);
     }
 
     /// <summary>
@@ -57,13 +58,15 @@ namespace MangaReader.Core.Entity
       if (this.Id == 0)
         return false;
 
-      var session = Mapping.GetSession();
-      using (var tranc = session.BeginTransaction())
+      using (var session = Mapping.GetSession())
       {
-        var entity = session.Load(this.GetType(), this.Id);
-        session.Delete(entity);
-        tranc.Commit();
-        this.Id = 0;
+        using (var tranc = session.BeginTransaction())
+        {
+          var entity = session.Load(this.GetType(), this.Id);
+          session.Delete(entity);
+          tranc.Commit();
+          this.Id = 0;
+        }
       }
       return true;
     }
@@ -73,8 +76,7 @@ namespace MangaReader.Core.Entity
       if (obj == null)
         return false;
 
-      var entity = obj as Entity;
-      if (entity == null)
+      if (!(obj is Entity entity))
         return false;
 
       return Equals(this.Id, entity.Id) && this.GetType() == entity.GetType();
@@ -82,6 +84,8 @@ namespace MangaReader.Core.Entity
 
     public override int GetHashCode()
     {
+      if (this.Id == 0)
+        return base.GetHashCode()^this.GetType().GetHashCode();
       return this.Id.GetHashCode()^this.GetType().GetHashCode();
     }
   }

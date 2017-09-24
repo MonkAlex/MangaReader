@@ -11,7 +11,7 @@ namespace MangaReader.Core.Convertation.Mangas
     protected override bool ProtectedCanConvert(IProcess process)
     {
       return base.ProtectedCanConvert(process) &&
-        this.Version.CompareTo(ConfigStorage.Instance.DatabaseConfig.Version) > 0 &&
+        this.Version.CompareTo(NHibernate.Repository.Get<DatabaseConfig>().Single().Version) > 0 &&
         process.Version.CompareTo(this.Version) >= 0;
     }
 
@@ -23,10 +23,7 @@ namespace MangaReader.Core.Convertation.Mangas
                set Type = '64ac91ef-bdb3-4086-be17-bb1dbe7a7656'
                where Uri like '%mintmanga.com%' or Uri like '%adultmanga.ru%'");
 
-      // Чистим кеш, чтобы не вытащить мангу старого типа.
-      Mapping.GetSession().Clear();
-
-      var mainHosts = ConfigStorage.Instance.DatabaseConfig.MangaSettings.Select(s => s.MainUri.Host).Distinct().ToList();
+      var mainHosts = Repository.Get<Services.MangaSetting>().Select(s => s.MainUri).ToList().Select(u => u.Host).Distinct().ToList();
       foreach (var manga in Repository.Get<Manga.IManga>())
       {
         if (mainHosts.Contains(manga.Uri.Host))

@@ -17,14 +17,14 @@ namespace MangaReader.Core.Manga
 
     public int Number { get; set; }
 
-    public List<Chapter> Chapters { get; set; }
+    private IEnumerable<Chapter> Chapters { get; set; }
 
-    public List<Chapter> ActiveChapters { get; set; }
+    public IEnumerable<Chapter> ActiveChapters { get; set; }
 
     public IEnumerable<Chapter> Container
     {
       get { return this.Chapters; }
-      protected set { RefreshPagesList(value); }
+      set { RefreshChaptersList(value); }
     }
 
     /// <summary>
@@ -60,9 +60,7 @@ namespace MangaReader.Core.Manga
 
     protected void OnDownloadProgressChanged(IManga e)
     {
-      var handler = DownloadProgressChanged;
-      if (handler != null)
-        handler(this, e);
+      DownloadProgressChanged?.Invoke(this, e);
     }
 
     public Task Download(string mangaFolder)
@@ -83,14 +81,16 @@ namespace MangaReader.Core.Manga
       return Task.WhenAll(tasks);
     }
     
-    protected virtual void RefreshPagesList(IEnumerable<Chapter> chapters)
+    protected virtual void RefreshChaptersList(IEnumerable<Chapter> chapters)
     {
       if (chapters != this.Chapters)
       {
-        this.Chapters.ForEach(p => p.DownloadProgressChanged -= OnDownloadProgressChanged);
+        foreach (var chapter in Chapters)
+          chapter.DownloadProgressChanged -= OnDownloadProgressChanged;
         this.Chapters = chapters.ToList();
       }
-      this.Chapters.ForEach(p => p.DownloadProgressChanged += OnDownloadProgressChanged);
+      foreach (var chapter in Chapters)
+        chapter.DownloadProgressChanged += OnDownloadProgressChanged;
     }
     
     private void OnDownloadProgressChanged(object sender, IManga manga)

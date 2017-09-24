@@ -24,7 +24,7 @@ namespace Tests.Entities.MangaHistory
       manga.Save();
 
       var chapter = new Chapter(chapterUri) { Pages = { new MangaPage(new Uri("http://acomics.ru/~ma3/1130"), null, 1) } };
-      var volume = new Volume() { Uri = volumeUri, Chapters = { chapter } };
+      var volume = new Volume() { Uri = volumeUri, Container = new [] {chapter} };
 
       var newChapters = History.GetItemsWithoutHistory(volume);
       Assert.AreEqual(1, newChapters.Count);
@@ -46,7 +46,7 @@ namespace Tests.Entities.MangaHistory
       manga.Save();
 
       var chapter = new Chapter(chapterUri) { Pages = { new MangaPage(new Uri("http://acomics.ru/~ma3/794"), null, 1) } };
-      var volume = new Volume() { Uri = volumeUri, Chapters = { chapter } };
+      var volume = new Volume() { Uri = volumeUri, Container = new[] { chapter } };
 
       var newChapters = History.GetItemsWithoutHistory(volume);
       Assert.AreEqual(1, newChapters.Count);

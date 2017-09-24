@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using MangaReader.Core.Account;
 using MangaReader.Core.Manga;
+using MangaReader.Core.Properties;
 using MangaReader.Core.Services;
 
 namespace Grouple
@@ -15,7 +16,7 @@ namespace Grouple
   public class GroupleLogin : Login
   {
     public override Uri MainUri { get; set; }
-    public override Uri LogoutUri { get { return new Uri(this.MainUri, "internal/auth/logout"); } }
+    public override Uri LogoutUri { get { return new Uri(this.MainUri, "login/logout"); } }
     public override Uri BookmarksUri { get { return new Uri(this.MainUri, "private/bookmarks"); } }
 
     public override async Task<bool> DoLogin()
@@ -25,18 +26,18 @@ namespace Grouple
 
       var loginData = new NameValueCollection
       {
-        {"j_username", this.Name},
-        {"j_password", this.Password},
+        {"username", this.Name},
+        {"password", this.Password},
         {"remember_me", "checked"}
       };
       try
       {
-        var result = await GetClient().UploadValuesTaskAsync("internal/auth/j_spring_security_check", "POST", loginData);
-        IsLogined = Encoding.UTF8.GetString(result).Contains("internal/auth/logout");
+        var result = await GetClient().UploadValuesTaskAsync("login/authenticate", "POST", loginData);
+        IsLogined = Encoding.UTF8.GetString(result).Contains("login/logout");
       }
       catch (System.Exception ex)
       {
-        Log.Exception(ex);
+        Log.Exception(ex, Strings.Login_Failed);
       }
       return IsLogined;
     }

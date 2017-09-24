@@ -104,8 +104,7 @@ namespace MangaReader.Core.Services
 
     public static string GetAbsoulteFolderPath(string folder)
     {
-      Uri folderUri;
-      if (!Uri.TryCreate(folder, UriKind.RelativeOrAbsolute, out folderUri))
+      if (!Uri.TryCreate(folder, UriKind.RelativeOrAbsolute, out Uri folderUri))
       {
         return folder;
       }

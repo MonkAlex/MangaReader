@@ -179,11 +179,13 @@ namespace MangaReader.ViewModel
 
       #endregion
 
-      this.NavigationMenu = new ObservableCollection<ContentMenuItem>();
-      this.NavigationMenu.Add(new FirstMangaCommand(View));
-      this.NavigationMenu.Add(new PreviousMangaCommand(View));
-      this.NavigationMenu.Add(new NextMangaCommand(View));
-      this.NavigationMenu.Add(new LastMangaCommand(View));
+      this.NavigationMenu = new ObservableCollection<ContentMenuItem>
+      {
+        new FirstMangaCommand(View),
+        new PreviousMangaCommand(View),
+        new NextMangaCommand(View),
+        new LastMangaCommand(View)
+      };
     }
 
     private void LibraryOnLibraryChanged(object o, LibraryViewModelArgs args)

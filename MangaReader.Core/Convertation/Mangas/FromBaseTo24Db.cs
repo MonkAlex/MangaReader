@@ -27,7 +27,11 @@ namespace MangaReader.Core.Convertation.Mangas
       base.ProtectedConvert(process);
 
       var database = Serializer<List<string>>.Load(DatabaseFile) ?? new List<string>(File.ReadAllLines(DatabaseFile));
-      var mangaUrls = Mapping.GetSession().Query<Manga.IManga>().Select(m => m.Uri.ToString()).ToList();
+      List<string> mangaUrls;
+      using (var session = Mapping.GetSession())
+      {
+        mangaUrls = session.Query<Manga.IManga>().Select(m => m.Uri.ToString()).ToList();
+      }
       database = database.Where(s => !mangaUrls.Contains(s)).ToList();
 
       if (database.Any())

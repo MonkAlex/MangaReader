@@ -23,7 +23,7 @@ namespace Tests.Entities.Manga
     public void NotCensoredReadmanga()
     {
       var manga = Get(@"http://readmanga.me/black_butler/vol3/10?mature=1");
-      var chapter = manga.Volumes.Single(v => v.Number == 3).Chapters[0];
+      var chapter = manga.Volumes.Single(v => v.Number == 3).Container.ToList()[0];
       Grouple.Parser.UpdatePages(chapter as Grouple.Chapter);
       Assert.IsTrue(chapter.Pages[0].ImageLink.IsAbsoluteUri);
     }
@@ -32,7 +32,7 @@ namespace Tests.Entities.Manga
     public void CensoredReadmanga()
     {
       var manga = Get(@"http://readmanga.me/school_teacher/vol2/10?mature=1");
-      var chapter = manga.Volumes.Single(v => v.Number == 2).Chapters[5];
+      var chapter = manga.Volumes.Single(v => v.Number == 2).Container.ToList()[5];
       Grouple.Parser.UpdatePages(chapter as Grouple.Chapter);
       Assert.IsTrue(chapter.Pages[0].ImageLink.IsAbsoluteUri);
     }

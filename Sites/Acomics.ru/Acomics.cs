@@ -31,7 +31,7 @@ namespace Acomics
       {
         this.UpdateContent();
 
-        var pages = this.Volumes.SelectMany(v => v.Chapters).SelectMany(c => c.Pages)
+        var pages = this.Volumes.SelectMany(v => v.Container).SelectMany(c => c.Pages)
           .Union(this.Chapters.SelectMany(c => c.Pages))
           .Union(this.Pages)
           .OrderBy(p => p.Number);

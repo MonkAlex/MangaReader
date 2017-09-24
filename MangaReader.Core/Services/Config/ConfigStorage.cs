@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using MangaReader.Core.Exception;
-using MangaReader.Core.NHibernate;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -35,6 +34,7 @@ namespace MangaReader.Core.Services.Config
     /// </summary>
     public ViewConfig ViewConfig { get; set; }
 
+    /*
     /// <summary>
     /// Настройки, зависящие от базы данных.
     /// </summary>
@@ -56,7 +56,7 @@ namespace MangaReader.Core.Services.Config
     }
 
     private DatabaseConfig databaseConfig;
-
+    */
     /// <summary>
     /// Папка программы.
     /// </summary>
@@ -183,12 +183,6 @@ namespace MangaReader.Core.Services.Config
 
     public void Save()
     {
-      if (Mapping.Initialized)
-      {
-        this.DatabaseConfig.Save();
-        this.DatabaseConfig.MangaSettings.SaveAll();
-      }
-
       var str = JsonConvert.SerializeObject(this);
       File.WriteAllText(SettingsPath, str, Encoding.UTF8);
       Log.Add("Settings saved.");
@@ -196,7 +190,6 @@ namespace MangaReader.Core.Services.Config
 
     public static void Close()
     {
-      Instance.databaseConfig = null;
       _instance = null;
     }
 

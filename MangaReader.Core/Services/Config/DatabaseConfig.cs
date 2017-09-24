@@ -31,32 +31,6 @@ namespace MangaReader.Core.Services.Config
       }
     }
 
-    /// <summary>
-    /// Настройки разных типов манги.
-    /// </summary>
-    public List<MangaSetting> MangaSettings
-    {
-      get
-      {
-        if (mangaSettings == null)
-        {
-          if (Mapping.Initialized)
-          {
-            var query = Repository.Get<MangaSetting>().ToList();
-            mangaSettings = CreateDefaultMangaSettings(query);
-          }
-          else
-          {
-            Log.Exception("Запрос MangaSettings до инициализации соединения с базой.");
-            return new List<MangaSetting>();
-          }
-        }
-        return mangaSettings;
-      }
-      set { }
-    }
-
-    private List<MangaSetting> mangaSettings;
     private Guid uniqueId;
 
     /// <summary>
@@ -64,7 +38,7 @@ namespace MangaReader.Core.Services.Config
     /// </summary>
     /// <param name="query">Коллекция уже имеющихся настроек.</param>
     /// <returns>Коллекция всех настроек.</returns>
-    private static List<MangaSetting> CreateDefaultMangaSettings(List<MangaSetting> query)
+    private static void CreateDefaultMangaSettings(List<MangaSetting> query)
     {
       var settings = new List<MangaSetting>(query);
       var plugins = ConfigStorage.Plugins;
@@ -85,19 +59,18 @@ namespace MangaReader.Core.Services.Config
         setting.Save();
         settings.Add(setting);
       }
-      return settings;
-    }
-
-    public override void Update()
-    {
-      base.Update();
-
-      this.MangaSettings.ForEach(s => s.Update());
     }
 
     public DatabaseConfig()
     {
       this.Version = new Version(1, 0, 0);
+    }
+
+    public static void Initialize()
+    {
+      Repository.Get<DatabaseConfig>().SingleOrCreate();
+      var query = Repository.Get<MangaSetting>().ToList();
+      CreateDefaultMangaSettings(query);
     }
   }
 }

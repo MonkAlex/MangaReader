@@ -62,7 +62,7 @@ namespace MangaReader.Core.Manga
 
     public virtual string Url
     {
-      get { return Uri == null ? null : Uri.ToString(); }
+      get { return Uri?.ToString(); }
       set { Uri = value == null ? null : new Uri(value); }
     }
 
@@ -219,21 +219,8 @@ namespace MangaReader.Core.Manga
     private static List<Compression.CompressionMode> allowedCompressionModes =
       new List<Compression.CompressionMode>(Enum.GetValues(typeof(Compression.CompressionMode)).Cast<Compression.CompressionMode>());
 
-    public virtual Compression.CompressionMode? CompressionMode
-    {
-      get
-      {
-        if (this.compressionMode == null)
-          this.compressionMode = this.GetDefaultCompression();
-        return this.compressionMode;
-      }
-      set
-      {
-        this.compressionMode = value;
-      }
-    }
+    public virtual Compression.CompressionMode? CompressionMode { get; set; }
 
-    private Compression.CompressionMode? compressionMode;
     private string status;
     private ICollection<MangaHistory> histories;
     private byte[] cover;
@@ -300,15 +287,7 @@ namespace MangaReader.Core.Manga
       set { }
     }
 
-    public string Folder
-    {
-      get
-      {
-        var mangaFolder = DirectoryHelpers.MakeValidPath(this.Name.Replace(Path.DirectorySeparatorChar, '.'));
-        return DirectoryHelpers.MakeValidPath(Path.Combine(this.Setting.Folder, mangaFolder));
-      }
-      set { }
-    }
+    public string Folder { get; set; }
 
     public byte[] Cover
     {
@@ -324,9 +303,7 @@ namespace MangaReader.Core.Manga
 
     protected void OnDownloadProgressChanged(IManga manga)
     {
-      var handler = DownloadProgressChanged;
-      if (handler != null)
-        handler(this, manga);
+      DownloadProgressChanged?.Invoke(this, manga);
     }
 
     /// <summary>
@@ -381,7 +358,7 @@ namespace MangaReader.Core.Manga
 
         Func<MangaPage, bool> pagesFilter = p => histories.All(m => m.Uri != p.Uri);
         Func<Chapter, bool> chaptersFilter = ch => histories.All(m => m.Uri != ch.Uri) || ch.Pages.Any(pagesFilter);
-        Func<Volume, bool> volumesFilter = v => v.Chapters.Any(chaptersFilter);
+        Func<Volume, bool> volumesFilter = v => v.Container.Any(chaptersFilter);
 
         this.ActivePages = this.ActivePages.Where(pagesFilter).ToList();
         this.ActiveChapters = this.ActiveChapters.Where(chaptersFilter).ToList();
@@ -516,6 +493,19 @@ namespace MangaReader.Core.Manga
 
     protected override void BeforeSave(object[] currentState, object[] previousState, string[] propertyNames)
     {
+      var mangaFolder = DirectoryHelpers.MakeValidPath(this.Name.Replace(Path.DirectorySeparatorChar, '.'));
+      Folder = DirectoryHelpers.MakeValidPath(Path.Combine(this.Setting.Folder, mangaFolder));
+      currentState[propertyNames.ToList().IndexOf(nameof(Folder))] = Folder;
+
+      if (CompressionMode == null)
+      {
+        CompressionMode = this.GetDefaultCompression();
+        currentState[propertyNames.ToList().IndexOf(nameof(CompressionMode))] = CompressionMode;
+      }
+
+      if (Repository.Get<IManga>().Any(m => m.Id != this.Id && m.Folder == this.Folder))
+        throw new SaveValidationException($"Другая манга уже использует папку {this.Folder}.", this);
+
       if (previousState != null)
       {
         var dirName = previousState[propertyNames.ToList().IndexOf(nameof(Folder))] as string;
@@ -538,9 +528,6 @@ namespace MangaReader.Core.Manga
     {
       if (!this.IsValid())
         throw new SaveValidationException("Нельзя сохранять невалидную сущность", this);
-
-      if (Repository.Get<IManga>().Any(m => m.Id != this.Id && m.Folder == this.Folder))
-        throw new SaveValidationException($"Другая манга уже использует папку {this.Folder}.", this);
 
       base.Save();
     }
@@ -573,8 +560,9 @@ namespace MangaReader.Core.Manga
     {
       IManga manga = null;
 
-      var setting = ConfigStorage.Instance.DatabaseConfig.MangaSettings
-        .SingleOrDefault(s => s.MangaSettingUris.Any(u => Equals(u.Host, uri.Host)));
+      var setting = Repository.Get<MangaSetting>()
+        .ToList()
+        .SingleOrDefault(s => s.MangaSettingUris.Any(u => u.Host == uri.Host));
       if (setting != null)
       {
         var plugin = ConfigStorage.Plugins.SingleOrDefault(p => Equals(p.GetSettings(), setting));
@@ -603,8 +591,7 @@ namespace MangaReader.Core.Manga
       if (manga != null)
       {
         // Только для местной реализации - вызвать Created\Refresh.
-        var mangas = manga as Mangas;
-        if (mangas != null)
+        if (manga is Mangas mangas)
           mangas.Created(uri);
 
         if (manga.IsValid())

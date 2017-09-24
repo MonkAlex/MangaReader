@@ -43,7 +43,7 @@ namespace Tests.Entities.Manga
     {
       var manga = Mangas.Create(new Uri(url));
       parser.UpdateContent(manga);
-      return manga.Volumes.Sum(v => v.Chapters.Count);
+      return manga.Volumes.Sum(v => v.Container.Count());
     }
   }
 }

@@ -10,6 +10,7 @@ using MangaReader.Core.Services.Config;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Context;
+using NHibernate.Event;
 using NHibernate.Mapping;
 using NHibernate.Tool.hbm2ddl;
 
@@ -20,13 +21,28 @@ namespace MangaReader.Core.NHibernate
     private const string DbFile = "storage.db";
 
     private static ISessionFactory sessionFactory;
-    
+
     public static ISession GetSession()
     {
       if (!CurrentSessionContext.HasBind(sessionFactory))
         CurrentSessionContext.Bind(sessionFactory.OpenSession());
-      
-      return sessionFactory.GetCurrentSession();
+
+      var session = sessionFactory.GetCurrentSession();
+      var impl = session.GetSessionImplementation();
+      if (impl.IsClosed)
+      {
+        session = sessionFactory.OpenSession();
+        impl = session.GetSessionImplementation();
+      }
+      session.FlushMode = FlushMode.Commit;
+      Log.AddFormat("Session {0} ts {1} was returned from factory.", impl.SessionId, impl.Timestamp);
+      return session;
+    }
+
+    public static IStatelessSession GetStatelessSession()
+    {
+      var session = sessionFactory.OpenStatelessSession();
+      return session;
     }
 
     public static bool Initialized { get; set; }

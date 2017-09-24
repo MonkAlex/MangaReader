@@ -2,7 +2,8 @@
 using System.IO;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Services;
-using MangaReader.Core.Services.Config;
+using System.Linq;
+using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Core.Convertation.Config
 {
@@ -23,10 +24,12 @@ namespace MangaReader.Core.Convertation.Config
 
       try
       {
+        var mangaSettings = Repository.Get<MangaSetting>().ToList();
         if (settings[1] is bool)
-          ConfigStorage.Instance.DatabaseConfig.MangaSettings.ForEach(ms => ms.OnlyUpdate = (bool)settings[1]);
+          mangaSettings.ForEach(ms => ms.OnlyUpdate = (bool)settings[1]);
         if (settings[4] is bool)
-          ConfigStorage.Instance.DatabaseConfig.MangaSettings.ForEach(ms => ms.CompressManga = (bool)settings[4]);
+          mangaSettings.ForEach(ms => ms.CompressManga = (bool)settings[4]);
+        mangaSettings.SaveAll();
       }
       catch (System.Exception ex)
       {

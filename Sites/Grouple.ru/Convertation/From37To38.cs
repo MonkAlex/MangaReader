@@ -12,7 +12,7 @@ namespace Grouple.Convertation
     {
       base.ProtectedConvert(process);
 
-      var settings = ConfigStorage.Instance.DatabaseConfig.MangaSettings;
+      var settings = MangaReader.Core.NHibernate.Repository.Get<MangaReader.Core.Services.MangaSetting>().ToList();
       var readmanga = settings.SingleOrDefault(s => ReadmangaPlugin.Manga == s.Manga);
       var mintmanga = settings.SingleOrDefault(s => MintmangaPlugin.Manga == s.Manga);
       if (readmanga != null)

@@ -34,7 +34,6 @@ namespace MangaReader.ViewModel.Commands.Setting
       catch (Exception e)
       {
         Log.Exception(e);
-        ConfigStorage.Instance.DatabaseConfig.Update();
         var message = e.InnerException?.Message ?? e.Message;
         Dialogs.ShowInfo("Не удалось сохранить настройки", message);
       }
@@ -59,7 +58,7 @@ namespace MangaReader.ViewModel.Commands.Setting
 
     public static void ValidateMangaPaths()
     {
-      var paths = ConfigStorage.Instance.DatabaseConfig.MangaSettings
+      var paths = Core.NHibernate.Repository.Get<MangaSetting>().ToList()
         .Where(p =>
         {
           var absolute = DirectoryHelpers.GetAbsoulteFolderPath(p.Folder);

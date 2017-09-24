@@ -18,8 +18,9 @@ namespace MangaReader.Core.Convertation
 
       Convert<ConfigConverter>(process);
 
-      Log.AddFormat("Found {0} manga type settings:", ConfigStorage.Instance.DatabaseConfig.MangaSettings.Count);
-      ConfigStorage.Instance.DatabaseConfig.MangaSettings.ForEach(s => Log.AddFormat("Load settings for {0}, guid {1}.", s.MangaName, s.Manga));
+      var mangaSettings = NHibernate.Repository.Get<MangaSetting>().ToList();
+      Log.AddFormat("Found {0} manga type settings:", mangaSettings.Count);
+      mangaSettings.ForEach(s => Log.AddFormat("Load settings for {0}, guid {1}.", s.MangaName, s.Manga));
 
       Convert<MangasConverter>(process);
       Convert<DatabaseConverter>(process);
@@ -27,7 +28,9 @@ namespace MangaReader.Core.Convertation
 
       Log.Add("Convert completed.");
 
-      ConfigStorage.Instance.DatabaseConfig.Version = process.Version;
+      var databaseConfig = NHibernate.Repository.Get<DatabaseConfig>().Single();
+      databaseConfig.Version = process.Version;
+      databaseConfig.Save();
       process.State = ConvertState.Completed;
     }
 

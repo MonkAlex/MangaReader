@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Reflection;
 using MangaReader.Core.Services;
-using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core
 {
@@ -21,7 +20,7 @@ namespace MangaReader.Core
 
     public virtual MangaSetting GetSettings()
     {
-      return ConfigStorage.Instance.DatabaseConfig.MangaSettings.Single(m => Equals(m.Manga, this.MangaGuid));
+      return NHibernate.Repository.Get<MangaSetting>().Single(m => m.Manga == this.MangaGuid);
     }
 
     public abstract ISiteParser GetParser();

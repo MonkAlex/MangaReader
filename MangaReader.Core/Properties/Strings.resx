@@ -261,4 +261,7 @@
   <data name="Manga_Action_Restore" xml:space="preserve">
     <value>Продолжить</value>
   </data>
+  <data name="Login_Failed" xml:space="preserve">
+    <value>Авторизация не была пройдена. Неверный логин или пароль?</value>
+  </data>
 </root>

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaReader", "MangaReader\MangaReader.csproj", "{49B3CB76-DC2D-4707-96CA-3D0DDCCD006B}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -42,7 +42,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grouple.ru", "Sites\Grouple
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acomics.ru", "Sites\Acomics.ru\Acomics.ru.csproj", "{3AABF85F-414F-4429-A1AB-812213771755}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaReader.Avalonia", "MangaReader.Avalonia\MangaReader.Avalonia.csproj", "{565BBAE6-4DD6-4505-A73F-5D15CA2F2CA9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaReader.Avalonia", "MangaReader.Avalonia\MangaReader.Avalonia.csproj", "{CB38A54B-C280-4C63-90FC-1EA6BC017BA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -150,18 +150,18 @@ Global
 		{3AABF85F-414F-4429-A1AB-812213771755}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3AABF85F-414F-4429-A1AB-812213771755}.Release|x86.ActiveCfg = Release|Any CPU
 		{3AABF85F-414F-4429-A1AB-812213771755}.Release|x86.Build.0 = Release|Any CPU
-		{565BBAE6-4DD6-4505-A73F-5D15CA2F2CA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{565BBAE6-4DD6-4505-A73F-5D15CA2F2CA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{565BBAE6-4DD6-4505-A73F-5D15CA2F2CA9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{565BBAE6-4DD6-4505-A73F-5D15CA2F2CA9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{565BBAE6-4DD6-4505-A73F-5D15CA2F2CA9}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{565BBAE6-4DD6-4505-A73F-5D15CA2F2CA9}.Debug|x86.Build.0 = Debug|Any CPU
-		{565BBAE6-4DD6-4505-A73F-5D15CA2F2CA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{565BBAE6-4DD6-4505-A73F-5D15CA2F2CA9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{565BBAE6-4DD6-4505-A73F-5D15CA2F2CA9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{565BBAE6-4DD6-4505-A73F-5D15CA2F2CA9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{565BBAE6-4DD6-4505-A73F-5D15CA2F2CA9}.Release|x86.ActiveCfg = Release|Any CPU
-		{565BBAE6-4DD6-4505-A73F-5D15CA2F2CA9}.Release|x86.Build.0 = Release|Any CPU
+		{CB38A54B-C280-4C63-90FC-1EA6BC017BA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB38A54B-C280-4C63-90FC-1EA6BC017BA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB38A54B-C280-4C63-90FC-1EA6BC017BA9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{CB38A54B-C280-4C63-90FC-1EA6BC017BA9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CB38A54B-C280-4C63-90FC-1EA6BC017BA9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CB38A54B-C280-4C63-90FC-1EA6BC017BA9}.Debug|x86.Build.0 = Debug|Any CPU
+		{CB38A54B-C280-4C63-90FC-1EA6BC017BA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB38A54B-C280-4C63-90FC-1EA6BC017BA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB38A54B-C280-4C63-90FC-1EA6BC017BA9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{CB38A54B-C280-4C63-90FC-1EA6BC017BA9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{CB38A54B-C280-4C63-90FC-1EA6BC017BA9}.Release|x86.ActiveCfg = Release|Any CPU
+		{CB38A54B-C280-4C63-90FC-1EA6BC017BA9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -173,5 +173,8 @@ Global
 		{8BD693BA-7F23-4D27-9E16-84C1A154BD03} = {E12FEFB3-A8AD-45A1-B82D-3078D2CE9979}
 		{D4BD1A69-EBDB-451E-B0FC-4E79644232B8} = {E12FEFB3-A8AD-45A1-B82D-3078D2CE9979}
 		{3AABF85F-414F-4429-A1AB-812213771755} = {E12FEFB3-A8AD-45A1-B82D-3078D2CE9979}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {81DD1551-E13F-4E21-9374-331C4C77871B}
 	EndGlobalSection
 EndGlobal

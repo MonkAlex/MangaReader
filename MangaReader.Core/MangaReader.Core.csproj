@@ -195,8 +195,8 @@
   </Target>
   <Target Name="AfterBuild">
     <ItemGroup>
-      <SourceFiles Include="$(ProjectDir)\Library\*" />
+      <SourceFiles Include="$(ProjectDir)\Library\**\*" />
     </ItemGroup>
-    <Copy SourceFiles="@(SourceFiles)" DestinationFolder="$(TargetDir)" />
+    <Copy SourceFiles="@(SourceFiles)" DestinationFolder="$(TargetDir)\%(RecursiveDir)" />
   </Target>
 </Project>

@@ -22,8 +22,9 @@ namespace MangaReader.Avalonia
     {
       InitializeLogging();
       AppBuilder.Configure<App>()
-          .UsePlatformDetect()
-          .Start<MainWindow>();
+        .UsePlatformDetect()
+        .UseReactiveUI()
+        .Start<MainWindow>();
     }
 
     public static void AttachDevTools(Window window)

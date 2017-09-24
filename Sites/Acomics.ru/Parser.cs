@@ -207,7 +207,7 @@ namespace Acomics
         foreach (var manga in mangas)
         {
           var image = manga.SelectSingleNode(".//td[@class='catdata1']//a//img");
-          var imageUri = image != null ? image.Attributes.Single(a => a.Name == "src").Value : null;
+          var imageUri = image?.Attributes.Single(a => a.Name == "src").Value;
           
           var mangaNode = manga.SelectSingleNode(".//div[@class='title']//a");
           var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;

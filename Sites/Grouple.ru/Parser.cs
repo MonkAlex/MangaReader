@@ -176,12 +176,7 @@ namespace Grouple
       var rmVolumes = dic
         .Select(cs => new Chapter(cs.Key, cs.Value))
         .GroupBy(c => c.Volume)
-        .Select(g =>
-        {
-          var v = new Volume(g.Key);
-          v.Container = g;
-          return v;
-        });
+        .Select(g => new Volume(g.Key) {Container = g});
 
       manga.Volumes.AddRange(rmVolumes);
     }

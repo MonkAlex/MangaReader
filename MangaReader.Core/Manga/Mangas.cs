@@ -357,7 +357,7 @@ namespace MangaReader.Core.Manga
         var histories = this.Histories.ToList();
 
         Func<MangaPage, bool> pagesFilter = p => histories.All(m => m.Uri != p.Uri);
-        Func<Chapter, bool> chaptersFilter = ch => histories.All(m => m.Uri != ch.Uri) || ch.Pages.Any(pagesFilter);
+        Func<Chapter, bool> chaptersFilter = ch => histories.All(m => m.Uri != ch.Uri) || ch.Container.Any(pagesFilter);
         Func<Volume, bool> volumesFilter = v => v.Container.Any(chaptersFilter);
 
         this.ActivePages = this.ActivePages.Where(pagesFilter).ToList();
@@ -388,10 +388,10 @@ namespace MangaReader.Core.Manga
                   Log.Exception(t.Exception, v.Uri.ToString());
 
                 if (plugin.HistoryType == HistoryType.Chapter)
-                  this.AddHistory(v.ActiveChapters.Where(c => c.IsDownloaded).Select(ch => ch.Uri));
+                  this.AddHistory(v.InDownloading.Where(c => c.IsDownloaded).Select(ch => ch.Uri));
 
                 if (plugin.HistoryType == HistoryType.Page)
-                  this.AddHistory(v.ActiveChapters.SelectMany(ch => ch.ActivePages).Where(p => p.IsDownloaded).Select(p => p.Uri));
+                  this.AddHistory(v.InDownloading.SelectMany(ch => ch.InDownloading).Where(p => p.IsDownloaded).Select(p => p.Uri));
               });
             });
         var chTasks = this.ActiveChapters.Select(
@@ -408,7 +408,7 @@ namespace MangaReader.Core.Manga
                 this.AddHistory(ch.Uri);
 
               if (plugin.HistoryType == HistoryType.Page)
-                this.AddHistory(ch.ActivePages.Where(c => c.IsDownloaded).Select(p => p.Uri));
+                this.AddHistory(ch.InDownloading.Where(c => c.IsDownloaded).Select(p => p.Uri));
             });
           });
         var pTasks = this.ActivePages.Select(
@@ -506,6 +506,7 @@ namespace MangaReader.Core.Manga
       if (Repository.Get<IManga>().Any(m => m.Id != this.Id && m.Folder == this.Folder))
         throw new SaveValidationException($"Другая манга уже использует папку {this.Folder}.", this);
 
+#warning Никогда не выполняется при стейтлесс сессии, т.е. точно не выполняется для списков.
       if (previousState != null)
       {
         var dirName = previousState[propertyNames.ToList().IndexOf(nameof(Folder))] as string;

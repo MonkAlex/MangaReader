@@ -65,6 +65,7 @@ namespace MangaReader.ViewModel.Setting
       this.mangaSetting.Folder = this.Folder;
       this.mangaSetting.OnlyUpdate = this.OnlyUpdate;
       this.Login.Save();
+      this.mangaSetting.Save();
     }
 
     public MangaSettingModel(MangaSetting setting)

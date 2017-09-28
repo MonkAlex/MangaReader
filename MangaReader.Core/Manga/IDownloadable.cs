@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace MangaReader.Core.Manga
 {
-  public interface IDownloadableContainer<out T> : IDownloadable where T : IDownloadable
+  public interface IDownloadableContainer<T> : IDownloadable where T : IDownloadable
   {
     /// <summary>
     /// Загружаемое содержимое.
     /// </summary>
-    IEnumerable<T> Container { get; }
+    ICollection<T> Container { get; }
+
+    /// <summary>
+    /// Содержимое после фильтрации (по истории).
+    /// </summary>
+    IEnumerable<T> InDownloading { get; }
   }
 
   public interface IDownloadable

@@ -52,9 +52,7 @@ namespace MangaReader.Core.Manga
 
     protected void OnDownloadProgressChanged(IManga e)
     {
-      var handler = DownloadProgressChanged;
-      if (handler != null)
-        handler(this, e);
+      DownloadProgressChanged?.Invoke(this, e);
     }
 
     #endregion

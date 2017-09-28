@@ -82,7 +82,7 @@ namespace Grouple
     /// <returns>Список ссылок на изображения главы.</returns>
     public static void UpdatePages(Chapter chapter)
     {
-      chapter.Pages.Clear();
+      chapter.Container.Clear();
       var document = new HtmlDocument();
       document.LoadHtml(Page.GetPage(chapter.Uri).Content);
       var node = document.DocumentNode.SelectNodes("//div[@class=\"pageBlock container reader-bottom\"]").FirstOrDefault();
@@ -100,7 +100,7 @@ namespace Grouple
         if (!Uri.TryCreate(uriString, UriKind.Absolute, out Uri imageLink))
           imageLink = new Uri(@"http://" + chapter.Uri.Host + uriString);
 
-        chapter.Pages.Add(new MangaPage(chapter.Uri, imageLink, i));
+        chapter.Container.Add(new MangaPage(chapter.Uri, imageLink, i));
       }
     }
 
@@ -176,7 +176,12 @@ namespace Grouple
       var rmVolumes = dic
         .Select(cs => new Chapter(cs.Key, cs.Value))
         .GroupBy(c => c.Volume)
-        .Select(g => new Volume(g.Key) {Container = g});
+        .Select(g =>
+        {
+          var v = new Volume(g.Key);
+          v.Container.AddRange(g);
+          return v;
+        });
 
       manga.Volumes.AddRange(rmVolumes);
     }

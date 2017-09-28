@@ -75,6 +75,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="uNhAddIns.WPF">
+      <HintPath>Library\uNhAddIns.WPF.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +121,7 @@
     <Compile Include="Exception\SaveValidationException.cs" />
     <Compile Include="ISiteParser.cs" />
     <Compile Include="Loader.cs" />
+    <Compile Include="Manga\DownloadableContainerImpl.cs" />
     <Compile Include="Manga\MangaName.cs" />
     <Compile Include="Manga\Chapter.cs" />
     <Compile Include="Manga\ICompressible.cs" />

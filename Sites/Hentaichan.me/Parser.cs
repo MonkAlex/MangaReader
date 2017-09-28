@@ -198,7 +198,7 @@ namespace Hentaichan
     
     public static void UpdatePages(MangaReader.Core.Manga.Chapter chapter)
     {
-      chapter.Pages.Clear();
+      chapter.Container.Clear();
       var pages = new List<MangaPage>();
       try
       {
@@ -214,7 +214,7 @@ namespace Hentaichan
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
 
-      chapter.Pages.AddRange(pages);
+      chapter.Container.AddRange(pages);
     }
   }
 }

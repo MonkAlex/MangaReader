@@ -88,7 +88,8 @@ namespace Hentaichan.Mangachan
 
       foreach (var volume in chapters.GroupBy(c => c.Volume).ToList())
       {
-        var vol = new Volume(volume.Key) { Container = volume};
+        var vol = new Volume(volume.Key);
+        vol.Container.AddRange(volume);
         chapters.RemoveAll(c => volume.Contains(c));
         manga.Volumes.Add(vol);
       }
@@ -205,7 +206,7 @@ namespace Hentaichan.Mangachan
 
     public static void UpdatePages(MangaReader.Core.Manga.Chapter chapter)
     {
-      chapter.Pages.Clear();
+      chapter.Container.Clear();
       var pages = new List<MangaPage>();
       try
       {
@@ -221,7 +222,7 @@ namespace Hentaichan.Mangachan
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
 
-      chapter.Pages.AddRange(pages);
+      chapter.Container.AddRange(pages);
     }
   }
 }

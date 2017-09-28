@@ -28,14 +28,9 @@ namespace MangaReader.Core.NHibernate
         CurrentSessionContext.Bind(sessionFactory.OpenSession());
 
       var session = sessionFactory.GetCurrentSession();
-      var impl = session.GetSessionImplementation();
-      if (impl.IsClosed)
-      {
+      if (!session.IsOpen || !session.IsConnected)
         session = sessionFactory.OpenSession();
-        impl = session.GetSessionImplementation();
-      }
       session.FlushMode = FlushMode.Commit;
-      Log.AddFormat("Session {0} ts {1} was returned from factory.", impl.SessionId, impl.Timestamp);
       return session;
     }
 
@@ -94,7 +89,7 @@ namespace MangaReader.Core.NHibernate
       {
         source.Where = string.Format("{0} in ('{1}')", 
           source.Discriminator.ColumnIterator.Single().Text,
-          string.Join("', '", source.SubclassIterator.Select(i => i.DiscriminatorValue)));
+          string.Join("', '", source.SubclassIterator.Select(i => i.DiscriminatorValue).Concat(new []{ source.DiscriminatorValue })));
       }
 
       config.SetInterceptor(new BaseInterceptor());

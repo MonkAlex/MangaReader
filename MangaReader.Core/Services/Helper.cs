@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using MangaReader.Core.Manga;
@@ -88,7 +89,7 @@ namespace MangaReader.Core.Services
     {
       if (collection == null || collection.IsReadOnly || items == null)
         return;
-      
+
       foreach (var item in items)
         collection.Add(item);
     }

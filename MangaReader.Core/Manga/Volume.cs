@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -11,41 +10,14 @@ using MangaReader.Core.Services.Config;
 namespace MangaReader.Core.Manga
 {
   [DebuggerDisplay("{Number} {Name}")]
-  public class Volume : Entity.Entity, IDownloadableContainer<Chapter>
+  public class Volume : DownloadableContainerImpl<Chapter>
   {
     public string Name { get; set; }
 
     public int Number { get; set; }
 
-    private IEnumerable<Chapter> Chapters { get; set; }
+    public override IEnumerable<Chapter> InDownloading { get; protected set; }
 
-    public IEnumerable<Chapter> ActiveChapters { get; set; }
-
-    public IEnumerable<Chapter> Container
-    {
-      get { return this.Chapters; }
-      set { RefreshChaptersList(value); }
-    }
-
-    /// <summary>
-    /// Статус загрузки.
-    /// </summary>
-    public virtual bool IsDownloaded
-    {
-      get { return this.ActiveChapters != null && this.ActiveChapters.Any() && this.ActiveChapters.All(v => v.IsDownloaded); }
-    }
-
-    /// <summary>
-    /// Процент загрузки манги.
-    /// </summary>
-    public virtual double Downloaded
-    {
-      get { return (this.ActiveChapters != null && this.ActiveChapters.Any()) ? this.ActiveChapters.Average(ch => ch.Downloaded) : 0; }
-      set { }
-    }
-
-    public Uri Uri { get; set; }
-    
     public string Folder
     {
       get { return this.folderPrefix + this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0'); }
@@ -56,47 +28,24 @@ namespace MangaReader.Core.Manga
 
     private string folderPrefix = AppConfig.VolumePrefix;
 
-    public event EventHandler<IManga> DownloadProgressChanged;
-
-    protected void OnDownloadProgressChanged(IManga e)
-    {
-      DownloadProgressChanged?.Invoke(this, e);
-    }
-
-    public Task Download(string mangaFolder)
+    public override Task Download(string mangaFolder = null)
     {
       var volumeFolder = Path.Combine(mangaFolder, this.Folder);
 
-      this.ActiveChapters = this.Chapters.ToList();
+      this.InDownloading = this.Container.ToList();
       if (this.OnlyUpdate)
       {
-        this.ActiveChapters = History.GetItemsWithoutHistory(this);
+        this.InDownloading = History.GetItemsWithoutHistory(this);
       }
 
-      var tasks = this.ActiveChapters.Select(c =>
+      var tasks = this.InDownloading.Select(c =>
       {
         c.OnlyUpdate = this.OnlyUpdate;
         return c.Download(volumeFolder);
       });
       return Task.WhenAll(tasks);
     }
-    
-    protected virtual void RefreshChaptersList(IEnumerable<Chapter> chapters)
-    {
-      if (chapters != this.Chapters)
-      {
-        foreach (var chapter in Chapters)
-          chapter.DownloadProgressChanged -= OnDownloadProgressChanged;
-        this.Chapters = chapters.ToList();
-      }
-      foreach (var chapter in Chapters)
-        chapter.DownloadProgressChanged += OnDownloadProgressChanged;
-    }
-    
-    private void OnDownloadProgressChanged(object sender, IManga manga)
-    {
-      this.OnDownloadProgressChanged(manga);
-    }
+
 
     public Volume(string name, int number)
       : this(number)
@@ -112,7 +61,7 @@ namespace MangaReader.Core.Manga
 
     public Volume()
     {
-      this.Chapters = new List<Chapter>();
+
     }
   }
 }

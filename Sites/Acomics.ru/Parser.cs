@@ -101,7 +101,7 @@ namespace Acomics
               .Where(cn => cn != null)
               .SelectMany(cn => cn)
               .Select(cn => new Chapter(new Uri(cn.Attributes[0].Value), (cn.Attributes.Count > 1 ? cn.Attributes[1].Value : cn.InnerText)));
-            newVolume.Container = volumeChapters;
+            newVolume.Container.AddRange(volumeChapters);
             volumes.Add(newVolume);
           }
 
@@ -118,10 +118,10 @@ namespace Acomics
         {
           var current = innerChapters[i].Number;
           var next = i + 1 != innerChapters.Count ? innerChapters[i + 1].Number : int.MaxValue;
-          innerChapters[i].Pages.AddRange(allPages.Where(p => current <= p.Number && p.Number < next));
+          innerChapters[i].Container.AddRange(allPages.Where(p => current <= p.Number && p.Number < next));
           innerChapters[i].Number = i + 1;
         }
-        pages = allPages.Except(innerChapters.SelectMany(c => c.Pages)).ToList();
+        pages = allPages.Except(innerChapters.SelectMany(c => c.Container)).ToList();
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
 

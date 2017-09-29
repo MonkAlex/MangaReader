@@ -56,6 +56,7 @@
     </Compile>
     <Compile Include="BaseLogin.cs" />
     <Compile Include="Chapter.cs" />
+    <Compile Include="Convertation\HenchanFrom43To44.cs" />
     <Compile Include="Convertation\HentaichanFrom38To39.cs" />
     <Compile Include="Convertation\HentaichanFrom37To38.cs" />
     <Compile Include="Convertation\HentaichanFrom39To40.cs" />

@@ -19,7 +19,6 @@ namespace Tests.Entities.Download
     [Test]
     public async Task DownloadReadmanga()
     {
-      // var rm = Mangas.Create(new Uri(@"http://henchan.me/related/15692-sweet-guy-glava-0-prolog.html"));
       var rm = Mangas.Create(new Uri(@"http://readmanga.me/hack__xxxx"));
       var sw = new Stopwatch();
       sw.Start();

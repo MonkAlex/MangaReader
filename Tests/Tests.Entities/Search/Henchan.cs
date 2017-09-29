@@ -16,7 +16,7 @@ namespace Tests.Entities.Search
     public void SearchOnHenchan()
     {
       var mangas = Search("play");
-      Assert.IsTrue(mangas.Any(m => m.Uri.OriginalString == "http://henchan.me/manga/22839-shalosti-v-basseyne.html"));
+      Assert.IsTrue(mangas.Any(m => m.Uri.OriginalString == "http://hentai-chan.me/manga/22839-shalosti-v-basseyne.html"));
 
       var game = Search("A Tale of Two Swords ");
       Assert.IsEmpty(game);

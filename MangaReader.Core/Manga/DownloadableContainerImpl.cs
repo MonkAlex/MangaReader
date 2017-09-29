@@ -36,6 +36,8 @@ namespace MangaReader.Core.Manga
 
     public ICollection<T> Container { get; }
 
+    IEnumerable<T> IDownloadableContainer<T>.Container { get { return Container; } }
+
     public abstract IEnumerable<T> InDownloading { get; protected set; }
 
     private void ContainerOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)

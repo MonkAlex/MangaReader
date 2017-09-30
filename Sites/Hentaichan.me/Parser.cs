@@ -10,6 +10,7 @@ using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
+using Newtonsoft.Json.Linq;
 
 namespace Hentaichan
 {
@@ -206,11 +207,12 @@ namespace Hentaichan
         var page = Page.GetPage(new Uri(chapter.Uri.OriginalString.Replace("/manga/", "/online/")), GetClient());
         document.LoadHtml(page.Content);
 
-        var i = 0;
         var imgs = Regex.Match(document.DocumentNode.OuterHtml, @"""(fullimg.*)", RegexOptions.IgnoreCase).Groups[1].Value.Remove(0, 9);
-        foreach (Match match in Regex.Matches(imgs, @"""(.*?)"","))
+        var jsonParsed = JToken.Parse(imgs).Children().ToList();
+        for (var i = 0; i < jsonParsed.Count; i++)
         {
-          pages.Add(new MangaPage(chapter.Uri, new Uri(match.Groups[1].Value), i++));
+          var uriString = jsonParsed[i].ToString();
+          pages.Add(new MangaPage(chapter.Uri, new Uri(uriString), i + 1));
         }
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }

@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
+using MangaReader.Core.Manga;
+using MangaReader.Core.Services;
 using NHibernate;
 using NHibernate.Type;
 
@@ -11,6 +13,11 @@ namespace MangaReader.Core.NHibernate
     public override bool OnFlushDirty(object entity, object id, object[] currentState, object[] previousState, string[] propertyNames,
       IType[] types)
     {
+      var nameIndex = propertyNames.ToList().IndexOf(nameof(Mangas.ServerName));
+      var name = nameIndex > 0 ? $" ({currentState[nameIndex]})" : null;
+      Log.Add(id != null
+        ? $"Save {entity.GetType().Name} with id {id}{name}."
+        : $"New {entity.GetType().Name}{name}.");
       var method = entity.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance).SingleOrDefault(m => m.Name == "BeforeSave");
       if (method != null)
       {

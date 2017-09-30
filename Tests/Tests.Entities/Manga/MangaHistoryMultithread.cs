@@ -49,7 +49,6 @@ namespace Tests.Entities.Manga
       AddRandomHistory(manga2);
       manga2.Save();
       Assert.AreEqual(y, manga2.Histories.Count());
-      Assert.AreEqual(y, Repository.Get<MangaReader.Core.Manga.MangaHistory>().Count());
     }
 
     private static void AddRandomHistory(Readmanga manga)

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
@@ -15,16 +13,20 @@ namespace Tests.Entities.Download
   [TestFixture]
   public class HentaichanDL : TestClass
   {
+    private int lastPercent = 0;
+
     [Test]
     public async Task DownloadHentaichan()
     {
       CreateLogin();
-      var rm = Mangas.Create(new Uri(@"http://hentai-chan.me/related/12850-twisted-intent-chast-1.html"));
+      var rm = Mangas.CreateFromWeb(new Uri(@"http://hentai-chan.me/related/12850-twisted-intent-chast-1.html"));
       var sw = new Stopwatch();
       sw.Start();
+      rm.DownloadProgressChanged += RmOnDownloadProgressChanged;
+      DirectoryHelpers.DeleteDirectory(rm.GetAbsoulteFolderPath());
       await rm.Download();
       sw.Stop();
-      Log.Add($"manga loaded {sw.Elapsed.TotalSeconds}");
+      Log.Add($"manga loaded {sw.Elapsed.TotalSeconds}, iscompleted = {rm.IsDownloaded}, lastpercent = {lastPercent}");
       Assert.IsTrue(Directory.Exists(rm.GetAbsoulteFolderPath()));
       var files = Directory.GetFiles(rm.GetAbsoulteFolderPath(), "*", SearchOption.AllDirectories);
       Assert.AreEqual(32, files.Length);
@@ -32,6 +34,7 @@ namespace Tests.Entities.Download
       Assert.AreEqual(9733375, fileInfos.Sum(f => f.Length));
       Assert.AreEqual(1, fileInfos.GroupBy(f => f.Length).Max(g => g.Count()));
       Assert.IsTrue(rm.IsDownloaded);
+      Assert.AreEqual(100, lastPercent);
     }
 
     private void CreateLogin()
@@ -44,5 +47,11 @@ namespace Tests.Entities.Download
       setting.Save();
     }
 
+    private void RmOnDownloadProgressChanged(object sender, IManga manga)
+    {
+      var dl = (int)manga.Downloaded;
+      if (dl > lastPercent)
+        lastPercent = dl;
+    }
   }
 }

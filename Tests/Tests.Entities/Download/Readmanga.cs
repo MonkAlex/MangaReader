@@ -19,10 +19,11 @@ namespace Tests.Entities.Download
     [Test]
     public async Task DownloadReadmanga()
     {
-      var rm = Mangas.Create(new Uri(@"http://readmanga.me/hack__xxxx"));
+      var rm = Mangas.CreateFromWeb(new Uri(@"http://readmanga.me/hack__xxxx"));
       var sw = new Stopwatch();
       sw.Start();
       rm.DownloadProgressChanged += RmOnDownloadProgressChanged;
+      DirectoryHelpers.DeleteDirectory(rm.GetAbsoulteFolderPath());
       await rm.Download();
       sw.Stop();
       Log.Add($"manga loaded {sw.Elapsed.TotalSeconds}, iscompleted = {rm.IsDownloaded}, lastpercent = {lastPercent}");

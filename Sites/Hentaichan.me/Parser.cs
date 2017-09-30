@@ -203,7 +203,8 @@ namespace Hentaichan
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(new Uri(chapter.Uri.OriginalString.Replace("/manga/", "/online/")), GetClient()).Content);
+        var page = Page.GetPage(new Uri(chapter.Uri.OriginalString.Replace("/manga/", "/online/")), GetClient());
+        document.LoadHtml(page.Content);
 
         var i = 0;
         var imgs = Regex.Match(document.DocumentNode.OuterHtml, @"""(fullimg.*)", RegexOptions.IgnoreCase).Groups[1].Value.Remove(0, 9);

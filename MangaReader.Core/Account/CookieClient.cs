@@ -50,6 +50,7 @@ namespace MangaReader.Core.Account
       this.Encoding = Encoding.UTF8;
       this.Proxy = SystemProxy.Value;
       this.Cookie = cookie;
+      Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (compatible; MangaReader/1.0)";
     }
   }
 }

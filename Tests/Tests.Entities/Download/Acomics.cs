@@ -19,13 +19,14 @@ namespace Tests.Entities.Download
     [Test]
     public async Task DownloadAcomics()
     {
-      var rm = Mangas.Create(new Uri(@"https://acomics.ru/~MGS-LDIOH"));
+      var rm = Mangas.CreateFromWeb(new Uri(@"https://acomics.ru/~MGS-LDIOH"));
       var sw = new Stopwatch();
       sw.Start();
       rm.DownloadProgressChanged += RmOnDownloadProgressChanged;
+      DirectoryHelpers.DeleteDirectory(rm.GetAbsoulteFolderPath());
       await rm.Download();
       sw.Stop();
-      Log.Add($"manga loaded {sw.Elapsed.TotalSeconds}");
+      Log.Add($"manga loaded {sw.Elapsed.TotalSeconds}, iscompleted = {rm.IsDownloaded}, lastpercent = {lastPercent}");
       Assert.IsTrue(Directory.Exists(rm.GetAbsoulteFolderPath()));
       var files = Directory.GetFiles(rm.GetAbsoulteFolderPath(), "*", SearchOption.AllDirectories);
       Assert.AreEqual(6, files.Length);

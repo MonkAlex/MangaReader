@@ -131,15 +131,7 @@ namespace MangaReader.Core.Manga
     /// <summary>
     /// Настройки манги.
     /// </summary>
-    public virtual MangaSetting Setting
-    {
-      get
-      {
-        if (Mapping.Initialized)
-          return Plugin.GetSettings();
-        throw new MangaReaderException("Mappings not initialized.");
-      }
-    }
+    public virtual MangaSetting Setting { get; protected set; }
 
     /// <summary>
     /// История манги.
@@ -341,8 +333,9 @@ namespace MangaReader.Core.Manga
         return;
 
       this.Refresh();
-      Cover = Parser.GetPreviews(this).FirstOrDefault();
-      this.Save();
+
+      if (Cover == null)
+        Cover = Parser.GetPreviews(this).FirstOrDefault();
 
       if (mangaFolder == null)
         mangaFolder = this.GetAbsoulteFolderPath();
@@ -568,7 +561,11 @@ namespace MangaReader.Core.Manga
       {
         var plugin = ConfigStorage.Plugins.SingleOrDefault(p => Equals(p.GetSettings(), setting));
         if (plugin != null)
+        {
           manga = Activator.CreateInstance(plugin.MangaType) as IManga;
+          if (manga is Mangas mangas)
+            mangas.Setting = setting;
+        }
       }
 
       if (manga != null)

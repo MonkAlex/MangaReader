@@ -23,6 +23,7 @@ namespace MangaReader.Core.NHibernate
       Map(x => x.NeedCompress);
       Map(x => x.CompressionMode);
       Map(x => x.Cover);
+      References(x => x.Setting).Cascade.All().Column(nameof(Mangas.Setting));
       HasMany(x => x.Histories).AsBag().Cascade.AllDeleteOrphan().Not.LazyLoad();
       HasMany(x => x.Volumes).AsBag().Cascade.AllDeleteOrphan().Not.LazyLoad();
       HasMany(x => x.Chapters).AsBag().Cascade.AllDeleteOrphan().Not.LazyLoad();

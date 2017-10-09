@@ -120,7 +120,12 @@ namespace MangaReader.Core.Services.Config
 
     public static IPlugin GetPlugin<T>() where T : Core.Manga.IManga
     {
-      return Plugins.SingleOrDefault(p => p.MangaType == typeof (T));
+      return Plugins.SingleOrDefault(p => p.MangaType == typeof(T));
+    }
+
+    public static IPlugin GetPlugin(Type mangaType)
+    {
+      return Plugins.SingleOrDefault(p => p.MangaType == mangaType);
     }
 
     public static IPlugin GetPlugin(Guid mangaGuid)

@@ -131,7 +131,8 @@ namespace MangaReader.Core.Manga
     /// <summary>
     /// Настройки манги.
     /// </summary>
-    public virtual MangaSetting Setting { get; protected set; }
+    [XmlIgnore]
+    public virtual MangaSetting Setting { get; internal set; }
 
     /// <summary>
     /// История манги.

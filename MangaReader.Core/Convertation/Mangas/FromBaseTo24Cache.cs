@@ -35,11 +35,14 @@ namespace MangaReader.Core.Convertation.Mangas
 
       var fileUrls = globalCollection.Select(m => m.Uri).ToList();
       var dbMangas = Repository.Get<IManga>().ToList();
+      var settings = Repository.Get<MangaSetting>().ToList();
       var fromFileInDb = dbMangas.Where(m => fileUrls.Contains(m.Uri)).ToList();
       if (fromFileInDb.Count == 0)
         fromFileInDb = globalCollection.ToList();
       var onlyInDb = dbMangas.Where(m => !fileUrls.Contains(m.Uri)).ToList();
       globalCollection = fromFileInDb.Concat(onlyInDb).ToList();
+      foreach (var manga in globalCollection.Where(m => m.Setting == null).OfType<Manga.Mangas>())
+        manga.Setting = settings.Single(s => s.Manga == ConfigStorage.GetPlugin(manga.GetType()).MangaGuid);
       globalCollection.SaveAll();
 
       Backup.MoveToBackup(CacheFile);

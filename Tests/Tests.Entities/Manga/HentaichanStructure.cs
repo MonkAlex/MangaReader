@@ -10,7 +10,7 @@ namespace Tests.Entities.Manga
   [TestFixture]
   public class HentaichanStructure : TestClass
   {
-    [Test]
+    [Test, Ignore("Changes on site, in process")]
     public void AddHentaichanMultiPages()
     {
       var manga = GetManga("http://hentai-chan.me/related/14212-love-and-devil-glava-25.html");

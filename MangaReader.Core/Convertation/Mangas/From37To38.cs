@@ -23,6 +23,10 @@ namespace MangaReader.Core.Convertation.Mangas
                set Type = '64ac91ef-bdb3-4086-be17-bb1dbe7a7656'
                where Uri like '%mintmanga.com%' or Uri like '%adultmanga.ru%'");
 
+      RunSql(@"update Mangas
+               set Setting = (select Id from MangaSetting where MangaName = 'Mintmanga')
+               where Type = '64ac91ef-bdb3-4086-be17-bb1dbe7a7656'");
+
       var mainHosts = Repository.Get<Services.MangaSetting>().Select(s => s.MainUri).ToList().Select(u => u.Host).Distinct().ToList();
       foreach (var manga in Repository.Get<Manga.IManga>())
       {

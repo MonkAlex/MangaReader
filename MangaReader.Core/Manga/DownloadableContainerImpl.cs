@@ -9,6 +9,8 @@ namespace MangaReader.Core.Manga
 {
   public abstract class DownloadableContainerImpl<T> : Entity.Entity, IDownloadableContainer<T> where T : IDownloadable
   {
+    private ICollection<T> container;
+
     /// <summary>
     /// Статус загрузки.
     /// </summary>
@@ -34,7 +36,11 @@ namespace MangaReader.Core.Manga
 
     public abstract Task Download(string folder = null);
 
-    public ICollection<T> Container { get; }
+    public ICollection<T> Container
+    {
+      get { return container; }
+      set { Init(value); }
+    }
 
     IEnumerable<T> IDownloadableContainer<T>.Container { get { return Container; } }
 
@@ -71,11 +77,30 @@ namespace MangaReader.Core.Manga
       DownloadProgressChanged?.Invoke(this, manga);
     }
 
+    protected virtual void Init(ICollection<T> baseItems)
+    {
+      if (baseItems is INotifyCollectionChanged collectionChanged)
+      {
+        (container as INotifyCollectionChanged).CollectionChanged -= ContainerOnCollectionChanged;
+        collectionChanged.CollectionChanged += ContainerOnCollectionChanged;
+        container = (ICollection<T>)collectionChanged;
+        return;
+      }
+
+      if (container != null)
+      {
+        container.Clear();
+        (container as INotifyCollectionChanged).CollectionChanged -= ContainerOnCollectionChanged;
+      }
+
+      var observableCollection = baseItems != null ? new ObservableCollection<T>(baseItems) : new ObservableCollection<T>();
+      observableCollection.CollectionChanged += ContainerOnCollectionChanged;
+      container = observableCollection;
+    }
+
     protected DownloadableContainerImpl()
     {
-      var containter = new ObservableCollection<T>();
-      this.Container = containter;
-      containter.CollectionChanged += ContainerOnCollectionChanged;
+      this.Init(null);
     }
   }
 }

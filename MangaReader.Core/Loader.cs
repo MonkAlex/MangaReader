@@ -44,6 +44,8 @@ namespace MangaReader.Core
     {
       AppDomain.CurrentDomain.AssemblyResolve -= LibraryResolve;
       AppDomain.CurrentDomain.AssemblyResolve += LibraryResolve;
+      AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= LibraryResolve;
+      AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += LibraryResolve;
     }
 
     private static Assembly LibraryResolve(object sender, ResolveEventArgs args)
@@ -61,8 +63,9 @@ namespace MangaReader.Core
           var file = directory.Exists ? directory.GetFiles().SingleOrDefault(f => f.Name == libName) : null;
           if (file == null)
             continue;
-          
-          return Assembly.LoadFile(file.FullName);
+
+          // LoadFile failed with empty mapping in test and can MissingMethodException when assembly load twice.
+          return Assembly.LoadFrom(file.FullName);
         }
       }
       catch (FileLoadException fle)

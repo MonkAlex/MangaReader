@@ -39,18 +39,23 @@
   <ItemGroup>
     <Reference Include="FluentNHibernate">
       <HintPath>..\..\MangaReader.Core\Library\FluentNHibernate.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\..\MangaReader.Core\Library\HtmlAgilityPack.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\..\MangaReader.Core\Library\Iesi.Collections.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\MangaReader.Core\Library\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\..\MangaReader.Core\Library\NHibernate.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="nunit.framework, Version=3.7.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
       <HintPath>..\..\packages\NUnit.3.7.1\lib\net45\nunit.framework.dll</HintPath>
@@ -59,6 +64,7 @@
     <Reference Include="System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\MangaReader.Core\Library\System.Data.SQLite.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
@@ -96,6 +102,7 @@
     <Compile Include="Manga\MintmangaStructure.cs" />
     <Compile Include="Manga\ReadmangaCensored.cs" />
     <Compile Include="Manga\ReadmangaStructure.cs" />
+    <Compile Include="Mapping\Simple.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Manga\ReadmangaMoved.cs" />
     <Compile Include="ReportProcess.cs" />
@@ -103,6 +110,7 @@
     <Compile Include="Search\Grouple.cs" />
     <Compile Include="Search\Henchan.cs" />
     <Compile Include="Search\Mangachan.cs" />
+    <Compile Include="TestClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MangaReader.Core\MangaReader.Core.csproj">
@@ -112,14 +120,17 @@
     <ProjectReference Include="..\..\Sites\Acomics.ru\Acomics.ru.csproj">
       <Project>{3aabf85f-414f-4429-a1ab-812213771755}</Project>
       <Name>Acomics.ru</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Sites\Hentaichan.me\Hentaichan.me.csproj">
       <Project>{8bd693ba-7f23-4d27-9e16-84c1a154bd03}</Project>
       <Name>Hentaichan.me</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Sites\Grouple.ru\Grouple.ru.csproj">
       <Project>{d4bd1a69-ebdb-451e-b0fc-4e79644232b8}</Project>
       <Name>Grouple.ru</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -145,11 +156,8 @@
   </Choose>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  -->
 </Project>

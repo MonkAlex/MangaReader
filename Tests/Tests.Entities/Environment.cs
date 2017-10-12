@@ -36,12 +36,14 @@ namespace Tests
     private static void SetUpInternal(bool initSession)
     {
       BeforeTestClean();
-      DeployToLib(Path.Combine(".", "..", "MangaReader.Core", "Library"));
-      DeployToLib(Path.Combine(".", "..", "Sites", "Bin", "Publish"));
-      DeployToLib(Path.Combine(".", "..", "Sites", "Bin", "Release"));
-      DeployToLib(Path.Combine(".", "..", "Sites", "Bin", "Debug"));
-
       MangaReader.Core.Loader.Init();
+
+      DeployToPlugins(Path.Combine(".", "..", "Sites", "Bin", "Debug"));
+      DeployToPlugins(Path.Combine(".", "..", "Sites", "Bin", "Release"));
+      DeployToPlugins(Path.Combine(".", "..", "Sites", "Bin", "Publish"));
+      DeployToLib(Path.Combine(".", "..", "MangaReader.Core", "bin", "Debug"));
+      DeployToLib(Path.Combine(".", "..", "MangaReader.Core", "bin", "Release"));
+      DeployToLib(Path.Combine(".", "..", "MangaReader.Core", "bin", "Publish"));
       MangaReader.Core.Services.Config.ConfigStorage.Instance.AppConfig.UpdateReader = false;
 
       if (initSession && !Mapping.Initialized)
@@ -59,6 +61,11 @@ namespace Tests
       DeployTo(from, ConfigStorage.LibPath);
     }
 
+    public static void DeployToPlugins(string from)
+    {
+      DeployTo(from, ConfigStorage.PluginPath);
+    }
+
     public static void DeployToRoot(string from)
     {
       DeployTo(from, string.Empty);
@@ -69,6 +76,8 @@ namespace Tests
       var dd = Path.Combine(TestContext.CurrentContext.TestDirectory, to);
       var directory = new DirectoryInfo(Path.GetFullPath(Path.Combine(TestsDirectory, from)));
       Log.AddFormat("Copy from {0} to {1}", directory, dd);
+      if (!Directory.Exists(dd))
+        Directory.CreateDirectory(dd);
       if (directory.Exists)
       {
         InternalDeploy(directory, dd);
@@ -149,21 +158,6 @@ namespace Tests
     {
       MangaReader.Core.Client.Close();
       SetUpLazy = ValueFactory();
-    }
-  }
-
-  [Parallelizable(ParallelScope.All)]
-  public class TestClass
-  {
-    [SetUp]
-    protected void SetUp()
-    {
-      Environment.SetUp(true);
-    }
-
-    [TearDown]
-    protected void Clean()
-    {
     }
   }
 }

@@ -58,7 +58,7 @@ namespace Hentaichan.Mangachan
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
 
-      this.UpdateName(manga, localizedName.ToString());
+      UpdateName(manga, localizedName.ToString());
     }
 
     public override void UpdateContent(IManga manga)
@@ -86,15 +86,17 @@ namespace Hentaichan.Mangachan
         Log.Exception(ex, $"Возможно, требуется регистрация для доступа к {manga.Uri}");
       }
 
+      var volumes = new List<Volume>();
       foreach (var volume in chapters.GroupBy(c => c.Volume).ToList())
       {
         var vol = new Volume(volume.Key);
         vol.Container.AddRange(volume);
         chapters.RemoveAll(c => volume.Contains(c));
-        manga.Volumes.Add(vol);
+        volumes.Add(vol);
       }
 
-      manga.Chapters.AddRange(chapters);
+      //FillMangaVolumes(manga, volumes);
+      //FillMangaChapters(manga, chapters);
     }
 
     public override UriParseResult ParseUri(Uri uri)
@@ -144,18 +146,18 @@ namespace Hentaichan.Mangachan
         var page = Page.GetPage(searchHost, client);
         if (!page.HasContent)
           continue;
-        
+
         var document = new HtmlDocument();
         document.LoadHtml(page.Content);
         var mangas = document.DocumentNode.SelectNodes("//div[@class='content_row']");
         if (mangas == null)
           continue;
-        
+
         foreach (var manga in mangas)
         {
           var image = manga.SelectSingleNode(".//div[@class='manga_images']//img");
           var imageUri = image?.Attributes.Single(a => a.Name == "src").Value;
-          
+
           var mangaNode = manga.SelectSingleNode(".//h2//a");
           var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
           var mangaName = mangaNode.InnerText;
@@ -178,7 +180,7 @@ namespace Hentaichan.Mangachan
         var document = new HtmlDocument();
         var content = Page.GetPage(manga.Uri, client).Content;
         document.LoadHtml(content);
-        
+
         var chapterNodes = document.DocumentNode.SelectNodes("//img[@id='cover']");
         if (chapterNodes != null)
         {

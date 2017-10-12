@@ -39,6 +39,7 @@ namespace MangaReader.Core
         Updater.Initialize();
 
         ConfigStorage.RefreshPlugins();
+        BaseSiteParser.InitMapper();
         NHibernate.Mapping.Initialize(process);
         DatabaseConfig.Initialize();
 

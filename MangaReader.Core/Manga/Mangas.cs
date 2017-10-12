@@ -314,10 +314,6 @@ namespace MangaReader.Core.Manga
       if (this.Volumes == null)
         throw new ArgumentNullException("Volumes");
 
-      this.Volumes.Clear();
-      this.Chapters.Clear();
-      this.Pages.Clear();
-
       Parser.UpdateContent(this);
 
       foreach (var page in Pages)

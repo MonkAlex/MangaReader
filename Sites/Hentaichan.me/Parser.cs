@@ -66,7 +66,7 @@ namespace Hentaichan
       catch (NullReferenceException ex) { Log.Exception(ex); }
       name = WebUtility.HtmlDecode(name);
 
-      this.UpdateName(manga, name);
+      UpdateName(manga, name);
     }
 
     public override void UpdateContent(IManga manga)
@@ -118,7 +118,7 @@ namespace Hentaichan
         Log.Exception(ex, string.Format("{0}. {1}", manga.Name, AdultOnly));
       }
 
-      manga.Chapters.AddRange(chapters);
+      //FillMangaChapters(manga, chapters);
     }
 
     public override UriParseResult ParseUri(Uri uri)

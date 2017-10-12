@@ -35,6 +35,14 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>Library\AutoMapper.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="AutoMapper.Collection">
+      <HintPath>Library\AutoMapper.Collection.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="FluentNHibernate">
       <HintPath>Library\FluentNHibernate.dll</HintPath>
       <Private>False</Private>
@@ -77,6 +85,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="uNhAddIns.WPF">
       <HintPath>Library\uNhAddIns.WPF.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -111,6 +120,7 @@
     <Compile Include="Convertation\Primitives\DatabaseConverter.cs" />
     <Compile Include="Convertation\Primitives\HistoryConverter.cs" />
     <Compile Include="Convertation\Primitives\MangasConverter.cs" />
+    <Compile Include="DataTrasferObject\VolumeDto.cs" />
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Entity\IEntity.cs" />
     <Compile Include="Exception\DownloadAttemptFailed.cs" />

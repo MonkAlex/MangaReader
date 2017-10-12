@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using MangaReader.Core;
 using MangaReader.Core.Account;
+using MangaReader.Core.DataTrasferObject;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
@@ -40,7 +41,7 @@ namespace Acomics
         if (nameNode != null && nameNode.Attributes.Any(a => Equals(a.Name, "content")))
         {
           var name = WebUtility.HtmlDecode(nameNode.Attributes.Single(a => Equals(a.Name, "content")).Value);
-          this.UpdateName(manga, name);
+          UpdateName(manga, name);
         }
 
         var content = document.GetElementbyId("contentMargin");
@@ -77,9 +78,9 @@ namespace Acomics
     /// <param name="manga">Манга.</param>
     public override void UpdateContent(IManga manga)
     {
-      var volumes = new List<Volume>();
-      var chapters = new List<MangaReader.Core.Manga.Chapter>();
-      var pages = new List<MangaPage>();
+      var volumes = new List<VolumeDto>();
+      var chapters = new List<ChapterDto>();
+      var pages = new List<MangaPageDto>();
       try
       {
         var document = new HtmlDocument();
@@ -91,7 +92,7 @@ namespace Acomics
           {
             var volume = volumeNodes[i];
             var desc = volume.InnerText;
-            var newVolume = new Volume(desc, volumes.Count + 1);
+            var newVolume = new VolumeDto(){Name = desc, Number = volumes.Count + 1};
             var skipped = volume.ParentNode.ChildNodes
               .SkipWhile(cn => cn.PreviousSibling != volume);
             var volumeChapterNodes = skipped
@@ -100,7 +101,7 @@ namespace Acomics
               .Select(cn => cn.SelectNodes(".//a"))
               .Where(cn => cn != null)
               .SelectMany(cn => cn)
-              .Select(cn => new Chapter(new Uri(cn.Attributes[0].Value), (cn.Attributes.Count > 1 ? cn.Attributes[1].Value : cn.InnerText)));
+              .Select(cn => new ChapterDto(cn.Attributes[0].Value, (cn.Attributes.Count > 1 ? cn.Attributes[1].Value : cn.InnerText), ChapterNumberFromUri));
             newVolume.Container.AddRange(volumeChapters);
             volumes.Add(newVolume);
           }
@@ -109,7 +110,7 @@ namespace Acomics
         {
           var nodes = document.DocumentNode.SelectNodes(ChapterXPath);
           if (nodes != null)
-            chapters.AddRange(nodes.Select(cn => new Chapter(new Uri(cn.Attributes[0].Value), (cn.Attributes.Count > 1 ? cn.Attributes[1].Value : cn.InnerText))));
+            chapters.AddRange(nodes.Select(cn => new ChapterDto(cn.Attributes[0].Value, (cn.Attributes.Count > 1 ? cn.Attributes[1].Value : cn.InnerText), ChapterNumberFromUri)));
         }
 
         var allPages = GetMangaPages(manga.Uri);
@@ -127,9 +128,14 @@ namespace Acomics
 
       manga.HasVolumes = volumes.Any();
       manga.HasChapters = volumes.Any() || chapters.Any();
-      manga.Volumes.AddRange(volumes);
-      manga.Chapters.AddRange(chapters);
-      manga.Pages.AddRange(pages);
+      FillMangaVolumes(manga, volumes);
+      FillMangaChapters(manga, chapters);
+      FillMangaPages(manga, pages);
+    }
+
+    private static double ChapterNumberFromUri(Uri uri)
+    {
+      return Convert.ToInt32(Regex.Match(uri.OriginalString, @"/[-]?[0-9]+", RegexOptions.RightToLeft).Value.Remove(0, 1));
     }
 
     public override UriParseResult ParseUri(Uri uri)
@@ -227,7 +233,7 @@ namespace Acomics
     /// </summary>
     /// <param name="uri">Ссылка на мангу.</param>
     /// <returns>Словарь (ссылка, описание).</returns>
-    private List<MangaPage> GetMangaPages(Uri uri)
+    private List<MangaPageDto> GetMangaPages(Uri uri)
     {
       var links = new List<Uri>();
       var description = new List<string>();
@@ -256,12 +262,12 @@ namespace Acomics
       catch (NullReferenceException ex) { Log.Exception(ex, $"Ошибка получения списка глав с адреса {uri}"); }
       catch (ArgumentNullException ex) { Log.Exception(ex, $"Главы не найдены по адресу {uri}"); }
 
-      var pages = new List<MangaPage>();
+      var pages = new List<MangaPageDto>();
       for (var i = 0; i < links.Count; i++)
       {
         var page = links[i];
         var number = Convert.ToInt32(Regex.Match(page.OriginalString, @"/[-]?[0-9]+", RegexOptions.RightToLeft).Value.Remove(0, 1));
-        pages.Add(new MangaPage(page, images[i], number) {Name = description[i]});
+        pages.Add(new MangaPageDto(page, images[i], number, description[i]));
       }
       return pages;
     }

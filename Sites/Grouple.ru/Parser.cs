@@ -58,7 +58,7 @@ namespace Grouple
           var actionUri = node.Attributes.FirstOrDefault(a => a.Name == "action").Value;
           fullUri = page.ResponseUri.GetLeftPart(UriPartial.Authority) + actionUri;
         }
-        client.UploadValues(fullUri, "POST", new NameValueCollection {{"_agree", "on"}, {"agree", "on"}});
+        client.UploadValues(fullUri, "POST", new NameValueCollection { { "_agree", "on" }, { "agree", "on" } });
       }
       catch (WebException ex)
       {
@@ -124,7 +124,7 @@ namespace Grouple
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
 
-      this.UpdateName(manga, localizedName.ToString());
+      UpdateName(manga, localizedName.ToString());
 
       var status = string.Empty;
       try
@@ -183,7 +183,7 @@ namespace Grouple
           return v;
         });
 
-      manga.Volumes.AddRange(rmVolumes);
+      //FillMangaVolumes(manga, rmVolumes);
     }
 
     public override UriParseResult ParseUri(Uri uri)
@@ -234,22 +234,22 @@ namespace Grouple
         var page = Page.GetPage(searchHost, client);
         if (!page.HasContent)
           continue;
-        
+
         var document = new HtmlDocument();
         document.LoadHtml(page.Content);
         var mangas = document.DocumentNode.SelectNodes("//div[@class='tile col-sm-6']");
         if (mangas == null)
           continue;
-        
+
         foreach (var manga in mangas)
         {
           // Это переводчик, идем дальше.
           if (manga.SelectSingleNode(".//i[@class='fa fa-user text-info']") != null)
             continue;
-          
+
           var image = manga.SelectSingleNode(".//div[@class='img']//a//img");
           var imageUri = image?.Attributes.Single(a => a.Name == "data-original").Value;
-          
+
           var mangaNode = manga.SelectSingleNode(".//h3//a");
           var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
           var mangaName = mangaNode.Attributes.Single(a => a.Name == "title").Value;

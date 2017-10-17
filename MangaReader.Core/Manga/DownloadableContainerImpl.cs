@@ -79,10 +79,13 @@ namespace MangaReader.Core.Manga
 
     protected virtual void Init(ICollection<T> baseItems)
     {
+      var nccea = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, 
+        (baseItems ?? Enumerable.Empty<T>()).ToList(), (container ?? Enumerable.Empty<T>()).ToList());
       if (baseItems is INotifyCollectionChanged collectionChanged)
       {
         (container as INotifyCollectionChanged).CollectionChanged -= ContainerOnCollectionChanged;
         collectionChanged.CollectionChanged += ContainerOnCollectionChanged;
+        ContainerOnCollectionChanged(this, nccea);
         container = (ICollection<T>)collectionChanged;
         return;
       }
@@ -95,6 +98,7 @@ namespace MangaReader.Core.Manga
 
       var observableCollection = baseItems != null ? new ObservableCollection<T>(baseItems) : new ObservableCollection<T>();
       observableCollection.CollectionChanged += ContainerOnCollectionChanged;
+      ContainerOnCollectionChanged(this, nccea);
       container = observableCollection;
     }
 

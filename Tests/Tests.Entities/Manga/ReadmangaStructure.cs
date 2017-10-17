@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Grouple;
 using MangaReader.Core.Manga;
 using NUnit.Framework;
 
@@ -9,8 +8,6 @@ namespace Tests.Entities.Manga
   [TestFixture]
   public class ReadmangaStructure : TestClass
   {
-    private Parser parser = new Parser();
-
     [Test]
     public void AddEmptyReadmanga()
     {
@@ -28,8 +25,8 @@ namespace Tests.Entities.Manga
     [Test]
     public void AddReadmangaWithoutExtra()
     {
-      var chapters = GetCountOfChapters("http://readmanga.me/hack__xxxx");
-      Assert.AreEqual(10, chapters);
+      var chapters = GetCountOfChapters("http://readmanga.me/_hack__alcor");
+      Assert.AreEqual(3, chapters);
     }
 
     [Test]
@@ -42,7 +39,7 @@ namespace Tests.Entities.Manga
     private int GetCountOfChapters(string url)
     {
       var manga = Mangas.Create(new Uri(url));
-      parser.UpdateContent(manga);
+      new Grouple.Parser().UpdateContent(manga);
       return manga.Volumes.Sum(v => v.Container.Count());
     }
   }

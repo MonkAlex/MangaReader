@@ -13,7 +13,7 @@ namespace Tests.Entities.Manga
     {
       var manga = Mangas.CreateFromWeb(new Uri("http://mangachan.me/manga/5335-the-breaker-new-waves.html"));
       manga.Parser.UpdateContent(manga);
-      var chapters = manga.Volumes.SelectMany(v => v.Container);
+      var chapters = manga.Volumes.SelectMany(v => v.Container).ToList();
       Assert.AreEqual(1, chapters.Count(c => c.Number == 170));
       Assert.AreEqual(1, chapters.Count(c => c.Number == 170.1));
     }

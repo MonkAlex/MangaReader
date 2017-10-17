@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using AutoMapper;
+using AutoMapper.EquivalencyExpression;
 using HtmlAgilityPack;
 using MangaReader.Core;
 using MangaReader.Core.Account;
@@ -69,7 +71,7 @@ namespace Acomics
         manga.HasVolumes = document.DocumentNode.SelectNodes(VolumeXPath) != null;
         manga.HasChapters = document.DocumentNode.SelectNodes(ChapterXPath) != null;
       }
-      catch (System.Exception){}
+      catch (System.Exception) { }
     }
 
     /// <summary>
@@ -92,7 +94,7 @@ namespace Acomics
           {
             var volume = volumeNodes[i];
             var desc = volume.InnerText;
-            var newVolume = new VolumeDto(){Name = desc, Number = volumes.Count + 1};
+            var newVolume = new VolumeDto() { Name = desc, Number = volumes.Count + 1 };
             var skipped = volume.ParentNode.ChildNodes
               .SkipWhile(cn => cn.PreviousSibling != volume);
             var volumeChapterNodes = skipped
@@ -101,7 +103,7 @@ namespace Acomics
               .Select(cn => cn.SelectNodes(".//a"))
               .Where(cn => cn != null)
               .SelectMany(cn => cn)
-              .Select(cn => new ChapterDto(cn.Attributes[0].Value, (cn.Attributes.Count > 1 ? cn.Attributes[1].Value : cn.InnerText), ChapterNumberFromUri));
+              .Select(CreateChapterDto);
             newVolume.Container.AddRange(volumeChapters);
             volumes.Add(newVolume);
           }
@@ -110,7 +112,7 @@ namespace Acomics
         {
           var nodes = document.DocumentNode.SelectNodes(ChapterXPath);
           if (nodes != null)
-            chapters.AddRange(nodes.Select(cn => new ChapterDto(cn.Attributes[0].Value, (cn.Attributes.Count > 1 ? cn.Attributes[1].Value : cn.InnerText), ChapterNumberFromUri)));
+            chapters.AddRange(nodes.Select(CreateChapterDto));
         }
 
         var allPages = GetMangaPages(manga.Uri);
@@ -133,9 +135,13 @@ namespace Acomics
       FillMangaPages(manga, pages);
     }
 
-    private static double ChapterNumberFromUri(Uri uri)
+    private static ChapterDto CreateChapterDto(HtmlNode cn)
     {
-      return Convert.ToInt32(Regex.Match(uri.OriginalString, @"/[-]?[0-9]+", RegexOptions.RightToLeft).Value.Remove(0, 1));
+      var uri = cn.Attributes[0].Value;
+      return new ChapterDto(uri, (cn.Attributes.Count > 1 ? cn.Attributes[1].Value : cn.InnerText))
+      {
+        Number = Chapter.GetChapterNumber(uri)
+      };
     }
 
     public override UriParseResult ParseUri(Uri uri)
@@ -203,18 +209,18 @@ namespace Acomics
         var page = Page.GetPage(searchHost, client);
         if (!page.HasContent)
           continue;
-        
+
         var document = new HtmlDocument();
         document.LoadHtml(page.Content);
         var mangas = document.DocumentNode.SelectNodes("//table[@class='catalog-elem list-loadable']");
         if (mangas == null)
           continue;
-        
+
         foreach (var manga in mangas)
         {
           var image = manga.SelectSingleNode(".//td[@class='catdata1']//a//img");
           var imageUri = image?.Attributes.Single(a => a.Name == "src").Value;
-          
+
           var mangaNode = manga.SelectSingleNode(".//div[@class='title']//a");
           var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
           var mangaName = mangaNode.InnerText;
@@ -270,6 +276,29 @@ namespace Acomics
         pages.Add(new MangaPageDto(page, images[i], number, description[i]));
       }
       return pages;
+    }
+
+    public override IMapper GetMapper()
+    {
+      return Mappers.GetOrAdd(typeof(Parser), type =>
+      {
+        var config = new MapperConfiguration(cfg =>
+        {
+          cfg.AddCollectionMappers();
+          cfg.CreateMap<VolumeDto, Volume>()
+            .EqualityComparison((src, dest) => src.Number == dest.Number);
+          cfg.CreateMap<ChapterDto, MangaReader.Core.Manga.Chapter>()
+            .ConstructUsing(dto => new Chapter(dto.Uri, dto.Name))
+            .EqualityComparison((src, dest) => src.Number == dest.Number);
+          cfg.CreateMap<ChapterDto, Chapter>()
+            .IncludeBase<ChapterDto, MangaReader.Core.Manga.Chapter>()
+            .ConstructUsing(dto => new Chapter(dto.Uri, dto.Name))
+            .EqualityComparison((src, dest) => src.Number == dest.Number);
+          cfg.CreateMap<MangaPageDto, MangaPage>()
+            .EqualityComparison((src, dest) => src.ImageLink == dest.ImageLink);
+        });
+        return config.CreateMapper();
+      });
     }
   }
 }

@@ -5,9 +5,12 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.EquivalencyExpression;
 using HtmlAgilityPack;
 using MangaReader.Core;
 using MangaReader.Core.Account;
+using MangaReader.Core.DataTrasferObject;
 using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
@@ -86,17 +89,18 @@ namespace Hentaichan.Mangachan
         Log.Exception(ex, $"Возможно, требуется регистрация для доступа к {manga.Uri}");
       }
 
-      var volumes = new List<Volume>();
+      var volumes = new List<VolumeDto>();
       foreach (var volume in chapters.GroupBy(c => c.Volume).ToList())
       {
-        var vol = new Volume(volume.Key);
-        vol.Container.AddRange(volume);
+        var vol = new VolumeDto(volume.Key);
+        vol.Container.AddRange(volume.Select(c => new ChapterDto(c.Uri, c.Name) { Number = c.Number }));
         chapters.RemoveAll(c => volume.Contains(c));
         volumes.Add(vol);
       }
 
-      //FillMangaVolumes(manga, volumes);
-      //FillMangaChapters(manga, chapters);
+      var chaptersDto = chapters.Select(c => new ChapterDto(c.Uri, c.Name) { Number = c.Number }).ToList();
+      FillMangaVolumes(manga, volumes);
+      FillMangaChapters(manga, chaptersDto);
     }
 
     public override UriParseResult ParseUri(Uri uri)
@@ -225,6 +229,29 @@ namespace Hentaichan.Mangachan
       catch (NullReferenceException ex) { Log.Exception(ex); }
 
       chapter.Container.AddRange(pages);
+    }
+
+    public override IMapper GetMapper()
+    {
+      return Mappers.GetOrAdd(typeof(Parser), type =>
+      {
+        var config = new MapperConfiguration(cfg =>
+        {
+          cfg.AddCollectionMappers();
+          cfg.CreateMap<VolumeDto, Volume>()
+            .EqualityComparison((src, dest) => src.Number == dest.Number);
+          cfg.CreateMap<ChapterDto, MangaReader.Core.Manga.Chapter>()
+            .ConstructUsing(dto => new Chapter(dto.Uri, dto.Name))
+            .EqualityComparison((src, dest) => src.Number == dest.Number);
+          cfg.CreateMap<ChapterDto, Chapter>()
+            .IncludeBase<ChapterDto, MangaReader.Core.Manga.Chapter>()
+            .ConstructUsing(dto => new Chapter(dto.Uri, dto.Name))
+            .EqualityComparison((src, dest) => src.Number == dest.Number);
+          cfg.CreateMap<MangaPageDto, MangaPage>()
+            .EqualityComparison((src, dest) => src.ImageLink == dest.ImageLink);
+        });
+        return config.CreateMapper();
+      });
     }
   }
 }

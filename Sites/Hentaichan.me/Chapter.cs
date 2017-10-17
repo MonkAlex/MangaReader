@@ -11,6 +11,11 @@ namespace Hentaichan
       base.UpdatePages();
     }
 
+    internal static double GetChapterNumber(Uri uri)
+    {
+      return double.Parse(Regex.Match(uri.OriginalString, @"/*(\d+\.\d+|\d+)", RegexOptions.RightToLeft).Groups[1].Value);
+    }
+
     public Chapter(Uri uri, string desc) 
       : this(uri)
     {
@@ -20,9 +25,7 @@ namespace Hentaichan
     public Chapter(Uri uri) 
       : base(uri)
     {
-      var fromUri = Regex.Match(uri.OriginalString, @"/*(\d+\.\d+|\d+)", RegexOptions.RightToLeft)
-        .Groups[1].Value;
-      this.Number = double.Parse(fromUri);
+      this.Number = GetChapterNumber(uri);
     }
   }
 }

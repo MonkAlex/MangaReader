@@ -120,6 +120,8 @@
     <Compile Include="Convertation\Primitives\DatabaseConverter.cs" />
     <Compile Include="Convertation\Primitives\HistoryConverter.cs" />
     <Compile Include="Convertation\Primitives\MangasConverter.cs" />
+    <Compile Include="DataTrasferObject\ChapterDto.cs" />
+    <Compile Include="DataTrasferObject\MangaPageDto.cs" />
     <Compile Include="DataTrasferObject\VolumeDto.cs" />
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Entity\IEntity.cs" />

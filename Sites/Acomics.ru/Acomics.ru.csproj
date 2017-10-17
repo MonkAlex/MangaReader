@@ -30,6 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=6.0.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\MangaReader.Core\Library\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Collection, Version=3.1.2.0, Culture=neutral, PublicKeyToken=e57c3f0a3d6646db, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\MangaReader.Core\Library\AutoMapper.Collection.dll</HintPath>
+    </Reference>
     <Reference Include="FluentNHibernate">
       <HintPath>..\..\MangaReader.Core\Library\FluentNHibernate.dll</HintPath>
     </Reference>
@@ -53,6 +61,7 @@
     <Compile Include="Acomics.cs" />
     <Compile Include="AcomicsLogin.cs" />
     <Compile Include="AcomicsPlugin.cs" />
+    <Compile Include="Chapter.cs" />
     <Compile Include="Convertation\AcomicsFrom38To39.cs" />
     <Compile Include="Convertation\AcomicsFrom37To38.cs" />
     <Compile Include="Convertation\From24To27.cs" />

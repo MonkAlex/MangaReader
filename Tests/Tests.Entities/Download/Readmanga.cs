@@ -19,7 +19,7 @@ namespace Tests.Entities.Download
     [Test]
     public async Task DownloadReadmanga()
     {
-      var rm = Mangas.CreateFromWeb(new Uri(@"http://readmanga.me/hack__xxxx"));
+      var rm = Mangas.CreateFromWeb(new Uri(@"http://readmanga.me/_hack__alcor"));
       var sw = new Stopwatch();
       sw.Start();
       rm.DownloadProgressChanged += RmOnDownloadProgressChanged;
@@ -29,10 +29,10 @@ namespace Tests.Entities.Download
       Log.Add($"manga loaded {sw.Elapsed.TotalSeconds}, iscompleted = {rm.IsDownloaded}, lastpercent = {lastPercent}");
       Assert.IsTrue(Directory.Exists(rm.GetAbsoulteFolderPath()));
       var files = Directory.GetFiles(rm.GetAbsoulteFolderPath(), "*", SearchOption.AllDirectories);
-      Assert.AreEqual(249, files.Length);
+      Assert.AreEqual(75, files.Length);
       var fileInfos = files.Select(f => new FileInfo(f)).ToList();
-      Assert.AreEqual(64025297, fileInfos.Sum(f => f.Length));
-      Assert.IsTrue(rm.Volumes.Sum(v => v.Container.Count()) > fileInfos.GroupBy(f => f.Length).Max(g => g.Count()));
+      Assert.AreEqual(19661531, fileInfos.Sum(f => f.Length));
+      Assert.AreEqual(rm.Volumes.Sum(v => v.Container.Count()), fileInfos.GroupBy(f => f.Length).Max(g => g.Count()));
       Assert.IsTrue(rm.IsDownloaded);
       Assert.AreEqual(100, lastPercent);
     }

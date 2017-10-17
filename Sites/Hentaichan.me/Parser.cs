@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using AutoMapper;
+using AutoMapper.EquivalencyExpression;
 using HtmlAgilityPack;
 using MangaReader.Core;
 using MangaReader.Core.Account;
+using MangaReader.Core.DataTrasferObject;
 using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
@@ -29,7 +32,7 @@ namespace Hentaichan
         {
           if (login == null)
           {
-            login = new HentaichanLogin() {Name = setting.Login.Name, Password = setting.Login.Password};
+            login = new HentaichanLogin() { Name = setting.Login.Name, Password = setting.Login.Password };
             setting.Login = login;
           }
 
@@ -71,11 +74,11 @@ namespace Hentaichan
 
     public override void UpdateContent(IManga manga)
     {
-      var chapters = new List<Chapter>();
+      var chapters = new List<ChapterDto>();
       try
       {
         var document = new HtmlDocument();
-        var pages = new List<Uri>() {manga.Uri};
+        var pages = new List<Uri>() { manga.Uri };
         for (int i = 0; i < pages.Count; i++)
         {
           var content = Page.GetPage(pages[i], GetClient()).Content;
@@ -104,7 +107,8 @@ namespace Hentaichan
             {
               var link = node.SelectSingleNode(".//h2//a");
               var desc = node.SelectSingleNode(".//div[@class=\"related_tag_list\"]");
-              chapters.Add(new Chapter(new Uri(manga.Uri, link.Attributes[0].Value), desc.InnerText));
+              var uri = new Uri(manga.Uri, link.Attributes[0].Value);
+              chapters.Add(new ChapterDto(uri, desc.InnerText) { Number = Chapter.GetChapterNumber(uri) });
             }
           }
         }
@@ -118,7 +122,7 @@ namespace Hentaichan
         Log.Exception(ex, string.Format("{0}. {1}", manga.Name, AdultOnly));
       }
 
-      //FillMangaChapters(manga, chapters);
+      FillMangaChapters(manga, chapters);
     }
 
     public override UriParseResult ParseUri(Uri uri)
@@ -168,18 +172,18 @@ namespace Hentaichan
         var page = Page.GetPage(searchHost, client);
         if (!page.HasContent)
           continue;
-        
+
         var document = new HtmlDocument();
         document.LoadHtml(page.Content);
         var mangas = document.DocumentNode.SelectNodes("//div[@class='content_row']");
         if (mangas == null)
           continue;
-        
+
         foreach (var manga in mangas)
         {
           var image = manga.SelectSingleNode(".//div[@class='manga_images']//img");
           var imageUri = image?.Attributes.Single(a => a.Name == "src").Value;
-          
+
           var mangaNode = manga.SelectSingleNode(".//h2//a");
           var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
           var mangaName = mangaNode.InnerText;
@@ -196,7 +200,7 @@ namespace Hentaichan
         }
       }
     }
-    
+
     public static void UpdatePages(MangaReader.Core.Manga.Chapter chapter)
     {
       chapter.Container.Clear();
@@ -218,6 +222,29 @@ namespace Hentaichan
       catch (NullReferenceException ex) { Log.Exception(ex); }
 
       chapter.Container.AddRange(pages);
+    }
+
+    public override IMapper GetMapper()
+    {
+      return Mappers.GetOrAdd(typeof(Parser), type =>
+      {
+        var config = new MapperConfiguration(cfg =>
+        {
+          cfg.AddCollectionMappers();
+          cfg.CreateMap<VolumeDto, Volume>()
+            .EqualityComparison((src, dest) => src.Number == dest.Number);
+          cfg.CreateMap<ChapterDto, MangaReader.Core.Manga.Chapter>()
+            .ConstructUsing(dto => new Chapter(dto.Uri, dto.Name))
+            .EqualityComparison((src, dest) => src.Number == dest.Number);
+          cfg.CreateMap<ChapterDto, Chapter>()
+            .IncludeBase<ChapterDto, MangaReader.Core.Manga.Chapter>()
+            .ConstructUsing(dto => new Chapter(dto.Uri, dto.Name))
+            .EqualityComparison((src, dest) => src.Number == dest.Number);
+          cfg.CreateMap<MangaPageDto, MangaPage>()
+            .EqualityComparison((src, dest) => src.ImageLink == dest.ImageLink);
+        });
+        return config.CreateMapper();
+      });
     }
   }
 }

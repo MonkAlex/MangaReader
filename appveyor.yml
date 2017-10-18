@@ -1,6 +1,7 @@
 image: Visual Studio 2017
 before_build:
-  - nuget restore
+- nuget update -self
+- nuget restore
 platform:
 - Any CPU
 build:

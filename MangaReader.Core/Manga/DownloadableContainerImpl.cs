@@ -38,6 +38,13 @@ namespace MangaReader.Core.Manga
 
     public abstract Task Download(string folder = null);
 
+    public virtual void ClearHistory()
+    {
+      foreach (var element in this.Container)
+        element.ClearHistory();
+      this.DownloadedAt = null;
+    }
+
     public ICollection<T> Container
     {
       get { return container; }

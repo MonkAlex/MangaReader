@@ -13,6 +13,7 @@ namespace MangaReader.Core.NHibernate
       Map(x => x.Name);
       Map(x => x.Uri);
       Map(x => x.Folder);
+      Map(x => x.DownloadedAt);
       HasMany(x => x.Container).CollectionType<uNhAddIns.WPF.Collections.Types.ObservableBagType<MangaPage>>().Cascade.AllDeleteOrphan().Not.LazyLoad();
       DiscriminateSubClassesOnColumn("Type", "1c63706d-a375-4154-ad17-e55be1eed4fe");
     }

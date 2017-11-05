@@ -107,7 +107,7 @@ namespace MangaReader.Core.Manga
 
     private bool? needCompress = null;
 
-    protected virtual IPlugin Plugin
+    internal virtual IPlugin Plugin
     {
       get
       {
@@ -319,6 +319,7 @@ namespace MangaReader.Core.Manga
       this.ActiveVolumes = this.Volumes;
       this.ActiveChapters = this.Chapters;
       this.ActivePages = this.Pages;
+
       if (this.Setting.OnlyUpdate)
       {
         var histories = this.Histories.ToList();
@@ -391,6 +392,7 @@ namespace MangaReader.Core.Manga
             });
           });
         await Task.WhenAll(tasks.Concat(chTasks).Concat(pTasks).ToArray());
+        this.DownloadedAt = DateTime.Now;
         this.Save();
         NetworkSpeed.Clear();
         Log.AddFormat("Download end '{0}'.", this.Name);
@@ -405,6 +407,19 @@ namespace MangaReader.Core.Manga
       {
         Log.Exception(ex);
       }
+    }
+
+    public void ClearHistory()
+    {
+      Histories.Clear();
+
+      foreach (var volume in Volumes)
+        volume.ClearHistory();
+      foreach (var chapter in Chapters)
+        chapter.ClearHistory();
+      foreach (var page in Pages)
+        page.ClearHistory();
+      this.DownloadedAt = null;
     }
 
     #endregion

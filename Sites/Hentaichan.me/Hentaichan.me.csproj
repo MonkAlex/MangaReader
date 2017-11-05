@@ -63,16 +63,18 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="BaseLogin.cs" />
-    <Compile Include="Chapter.cs" />
+    <Compile Include="HentaichanChapter.cs" />
     <Compile Include="Convertation\HenchanFrom43To44.cs" />
     <Compile Include="Convertation\HentaichanFrom38To39.cs" />
     <Compile Include="Convertation\HentaichanFrom37To38.cs" />
     <Compile Include="Convertation\HentaichanFrom39To40.cs" />
-    <Compile Include="Mangachan\Chapter.cs" />
+    <Compile Include="Mangachan\MangachanChapter.cs" />
     <Compile Include="Mangachan\Mangachan.cs" />
     <Compile Include="Mangachan\MangachanLogin.cs" />
     <Compile Include="Mangachan\MangachanPlugin.cs" />
     <Compile Include="Mangachan\Parser.cs" />
+    <Compile Include="NHibernate\HentaichanChapterMap.cs" />
+    <Compile Include="NHibernate\MangachanChapterMap.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Hentaichan.cs" />
     <Compile Include="HentaichanLogin.cs" />

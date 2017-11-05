@@ -61,10 +61,11 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Chapter.cs" />
+    <Compile Include="GroupleChapter.cs" />
     <Compile Include="Convertation\From37To38.cs" />
     <Compile Include="Convertation\From41To42.cs" />
     <Compile Include="Convertation\From42To43.cs" />
+    <Compile Include="NHibernate\GroupleChapterMap.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="GroupleLogin.cs" />
     <Compile Include="GroupleManga.cs" />

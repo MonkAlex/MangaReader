@@ -99,6 +99,11 @@ namespace MangaReader.Core.Manga
       }
     }
 
+    public void ClearHistory()
+    {
+      this.DownloadedAt = null;
+    }
+
     #endregion
 
     #region Конструктор

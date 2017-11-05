@@ -36,7 +36,8 @@ namespace MangaReader.Core.Services
           exists.Remove(item.Uri);
       }
       
-      return internalContainer.Where(c => uris.Except(exists).Contains(c.Uri)).ToList();
+      var historyNotFound = internalContainer.Where(c => uris.Except(exists).Contains(c.Uri)).ToList();
+      return historyNotFound.Where(c => c.DownloadedAt == null).ToList();
     }
   }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Hentaichan.Mangachan
 {
-  public class Chapter : MangaReader.Core.Manga.Chapter
+  public class MangachanChapter : MangaReader.Core.Manga.Chapter
   {
     public int Volume { get; }
 
@@ -18,7 +18,7 @@ namespace Hentaichan.Mangachan
       base.UpdatePages();
     }
 
-    public Chapter(Uri uri, string desc)
+    public MangachanChapter(Uri uri, string desc)
       : base(uri)
     {
       this.Name = desc;
@@ -28,6 +28,11 @@ namespace Hentaichan.Mangachan
         Volume = int.Parse(match.Groups[1].Value);
         Number = double.Parse(match.Groups[2].Value, NumberStyles.Float, CultureInfo.InvariantCulture);
       }
+    }
+
+    protected MangachanChapter()
+    {
+      
     }
   }
 }

@@ -23,7 +23,7 @@ namespace Tests.Entities.Manga
     {
       var manga = Get(@"http://readmanga.me/black_butler_anthology_comic_dj____rainbow_butler/vol1/6");
       var chapter = manga.Volumes.Single(v => v.Number == 1).Container.ToList()[0];
-      Grouple.Parser.UpdatePages(chapter as Grouple.Chapter);
+      Grouple.Parser.UpdatePages(chapter as Grouple.GroupleChapter);
       Assert.IsTrue(chapter.Container.First().ImageLink.IsAbsoluteUri);
     }
 
@@ -32,7 +32,7 @@ namespace Tests.Entities.Manga
     {
       var manga = Get(@"http://readmanga.me/school_teacher/vol2/10?mature=1");
       var chapter = manga.Volumes.Single(v => v.Number == 2).Container.ToList()[5];
-      Grouple.Parser.UpdatePages(chapter as Grouple.Chapter);
+      Grouple.Parser.UpdatePages(chapter as Grouple.GroupleChapter);
       Assert.IsTrue(chapter.Container.First().ImageLink.IsAbsoluteUri);
     }
 

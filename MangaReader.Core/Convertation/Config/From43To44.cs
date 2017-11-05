@@ -3,9 +3,9 @@ using System.Linq;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Services;
 
-namespace MangaReader.Core.Convertation.Database
+namespace MangaReader.Core.Convertation.Config
 {
-  public class From43To44 : DatabaseConverter
+  public class From43To44 : ConfigConverter
   {
     protected override void ProtectedConvert(IProcess process)
     {
@@ -20,7 +20,7 @@ namespace MangaReader.Core.Convertation.Database
 
     public From43To44()
     {
-      this.Version = new Version(1, 44, 1);
+      this.Version = new Version(1, 43, 4);
     }
   }
 }

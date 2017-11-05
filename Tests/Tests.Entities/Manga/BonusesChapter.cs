@@ -23,7 +23,7 @@ namespace Tests.Entities.Manga
     {
       var manga = Mangas.CreateFromWeb(new Uri("http://readmanga.me/animal_country"));
       manga.Parser.UpdateContent(manga);
-      var chapters = manga.Volumes.SelectMany(v => v.Container).OfType<Grouple.Chapter>();
+      var chapters = manga.Volumes.SelectMany(v => v.Container).OfType<Grouple.GroupleChapter>();
       Assert.AreEqual(1, chapters.Count(c => c.Volume == 14 && c.Number == 54));
       Assert.AreEqual(1, chapters.Count(c => c.Volume == 6 && c.Number == 22));
     }
@@ -33,7 +33,7 @@ namespace Tests.Entities.Manga
     {
       var manga = Mangas.CreateFromWeb(new Uri("http://mintmanga.com/haruka_na_receive"));
       manga.Parser.UpdateContent(manga);
-      var chapters = manga.Volumes.SelectMany(v => v.Container).OfType<Grouple.Chapter>();
+      var chapters = manga.Volumes.SelectMany(v => v.Container).OfType<Grouple.GroupleChapter>();
       Assert.AreEqual(1, chapters.Count(c => c.Volume == 1 && c.Number == 0));
     }
   }

@@ -34,7 +34,7 @@ namespace Hentaichan.Convertation
     public HenchanFrom43To44()
     {
       this.Name = "henchan.me переехал на hentai-chan.me...";
-      this.Version = new Version(1, 44, 0);
+      this.Version = new Version(1, 43, 5);
       this.CanReportProcess = true;
     }
   }

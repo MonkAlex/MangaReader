@@ -87,13 +87,13 @@ namespace Grouple
     /// <summary>
     /// Получить ссылки на все изображения в главе.
     /// </summary>
-    /// <param name="chapter">Глава.</param>
+    /// <param name="groupleChapter">Глава.</param>
     /// <returns>Список ссылок на изображения главы.</returns>
-    public static void UpdatePages(Chapter chapter)
+    public static void UpdatePages(GroupleChapter groupleChapter)
     {
-      chapter.Container.Clear();
+      groupleChapter.Container.Clear();
       var document = new HtmlDocument();
-      document.LoadHtml(Page.GetPage(chapter.Uri).Content);
+      document.LoadHtml(Page.GetPage(groupleChapter.Uri).Content);
       var node = document.DocumentNode.SelectNodes("//div[@class=\"pageBlock container reader-bottom\"]").FirstOrDefault();
       if (node == null)
         return;
@@ -107,9 +107,9 @@ namespace Grouple
 
         // Фикс страницы с цензурой.
         if (!Uri.TryCreate(uriString, UriKind.Absolute, out Uri imageLink))
-          imageLink = new Uri(@"http://" + chapter.Uri.Host + uriString);
+          imageLink = new Uri(@"http://" + groupleChapter.Uri.Host + uriString);
 
-        chapter.Container.Add(new MangaPage(chapter.Uri, imageLink, i));
+        groupleChapter.Container.Add(new MangaPage(groupleChapter.Uri, imageLink, i));
       }
     }
 
@@ -193,7 +193,7 @@ namespace Grouple
       }
 
       var rmVolumes = dic
-        .Select(cs => new Chapter(cs.Key, cs.Value))
+        .Select(cs => new GroupleChapter(cs.Key, cs.Value))
         .GroupBy(c => c.Volume)
         .Select(g =>
         {
@@ -325,11 +325,11 @@ namespace Grouple
           cfg.CreateMap<VolumeDto, Volume>()
             .EqualityComparison((src, dest) => src.Number == dest.Number);
           cfg.CreateMap<ChapterDto, MangaReader.Core.Manga.Chapter>()
-            .ConstructUsing(dto => new Chapter(dto.Uri, dto.Name))
+            .ConstructUsing(dto => new GroupleChapter(dto.Uri, dto.Name))
             .EqualityComparison((src, dest) => src.Number == dest.Number);
-          cfg.CreateMap<ChapterDto, Chapter>()
+          cfg.CreateMap<ChapterDto, GroupleChapter>()
             .IncludeBase<ChapterDto, MangaReader.Core.Manga.Chapter>()
-            .ConstructUsing(dto => new Chapter(dto.Uri, dto.Name))
+            .ConstructUsing(dto => new GroupleChapter(dto.Uri, dto.Name))
             .EqualityComparison((src, dest) => src.Number == dest.Number);
           cfg.CreateMap<MangaPageDto, MangaPage>()
             .EqualityComparison((src, dest) => src.ImageLink == dest.ImageLink);

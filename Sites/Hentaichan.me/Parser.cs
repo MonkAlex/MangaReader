@@ -108,7 +108,7 @@ namespace Hentaichan
               var link = node.SelectSingleNode(".//h2//a");
               var desc = node.SelectSingleNode(".//div[@class=\"related_tag_list\"]");
               var uri = new Uri(manga.Uri, link.Attributes[0].Value);
-              chapters.Add(new ChapterDto(uri, desc.InnerText) { Number = Chapter.GetChapterNumber(uri) });
+              chapters.Add(new ChapterDto(uri, desc.InnerText) { Number = HentaichanChapter.GetChapterNumber(uri) });
             }
           }
         }
@@ -234,11 +234,11 @@ namespace Hentaichan
           cfg.CreateMap<VolumeDto, Volume>()
             .EqualityComparison((src, dest) => src.Number == dest.Number);
           cfg.CreateMap<ChapterDto, MangaReader.Core.Manga.Chapter>()
-            .ConstructUsing(dto => new Chapter(dto.Uri, dto.Name))
+            .ConstructUsing(dto => new HentaichanChapter(dto.Uri, dto.Name))
             .EqualityComparison((src, dest) => src.Number == dest.Number);
-          cfg.CreateMap<ChapterDto, Chapter>()
+          cfg.CreateMap<ChapterDto, HentaichanChapter>()
             .IncludeBase<ChapterDto, MangaReader.Core.Manga.Chapter>()
-            .ConstructUsing(dto => new Chapter(dto.Uri, dto.Name))
+            .ConstructUsing(dto => new HentaichanChapter(dto.Uri, dto.Name))
             .EqualityComparison((src, dest) => src.Number == dest.Number);
           cfg.CreateMap<MangaPageDto, MangaPage>()
             .EqualityComparison((src, dest) => src.ImageLink == dest.ImageLink);

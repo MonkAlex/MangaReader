@@ -66,7 +66,7 @@ namespace Hentaichan.Mangachan
 
     public override void UpdateContent(IManga manga)
     {
-      var chapters = new List<Chapter>();
+      var chapters = new List<MangachanChapter>();
       try
       {
         var document = new HtmlDocument();
@@ -79,7 +79,7 @@ namespace Hentaichan.Mangachan
           foreach (var node in chapterNodes)
           {
             var link = node.Attributes.Single(a => a.Name == "href").Value;
-            chapters.Add(new Chapter(new Uri(manga.Uri, link), WebUtility.HtmlDecode(node.InnerText)));
+            chapters.Add(new MangachanChapter(new Uri(manga.Uri, link), WebUtility.HtmlDecode(node.InnerText)));
           }
           chapters.Reverse();
         }
@@ -241,11 +241,11 @@ namespace Hentaichan.Mangachan
           cfg.CreateMap<VolumeDto, Volume>()
             .EqualityComparison((src, dest) => src.Number == dest.Number);
           cfg.CreateMap<ChapterDto, MangaReader.Core.Manga.Chapter>()
-            .ConstructUsing(dto => new Chapter(dto.Uri, dto.Name))
+            .ConstructUsing(dto => new MangachanChapter(dto.Uri, dto.Name))
             .EqualityComparison((src, dest) => src.Number == dest.Number);
-          cfg.CreateMap<ChapterDto, Chapter>()
+          cfg.CreateMap<ChapterDto, MangachanChapter>()
             .IncludeBase<ChapterDto, MangaReader.Core.Manga.Chapter>()
-            .ConstructUsing(dto => new Chapter(dto.Uri, dto.Name))
+            .ConstructUsing(dto => new MangachanChapter(dto.Uri, dto.Name))
             .EqualityComparison((src, dest) => src.Number == dest.Number);
           cfg.CreateMap<MangaPageDto, MangaPage>()
             .EqualityComparison((src, dest) => src.ImageLink == dest.ImageLink);

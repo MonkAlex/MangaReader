@@ -6,7 +6,7 @@ namespace Acomics
   /// <summary>
   /// Глава.
   /// </summary>
-  public class Chapter : MangaReader.Core.Manga.Chapter
+  public class AcomicsChapter : MangaReader.Core.Manga.Chapter
   {
     internal static int GetChapterNumber(string uri)
     {
@@ -20,7 +20,7 @@ namespace Acomics
     /// </summary>
     /// <param name="uri">Ссылка на главу.</param>
     /// <param name="desc">Описание главы.</param>
-    public Chapter(Uri uri, string desc)
+    public AcomicsChapter(Uri uri, string desc)
       : this(uri)
     {
       this.Name = desc;
@@ -30,11 +30,16 @@ namespace Acomics
     /// Глава манги.
     /// </summary>
     /// <param name="uri">Ссылка на главу.</param>
-    public Chapter(Uri uri)
+    public AcomicsChapter(Uri uri)
       : base(uri)
     {
       this.Uri = uri;
       this.Number = GetChapterNumber(uri.OriginalString);
+    }
+
+    protected AcomicsChapter()
+    {
+      
     }
 
     #endregion

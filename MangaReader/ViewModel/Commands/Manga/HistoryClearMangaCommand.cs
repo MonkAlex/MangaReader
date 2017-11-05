@@ -16,7 +16,7 @@ namespace MangaReader.ViewModel.Commands.Manga
       var clear = Dialogs.ShowYesNoDialog("Удаление истории", text, "После удаления истории манга будет скачиваться целиком.");
       if (clear)
       {
-        manga.Histories.Clear();
+        manga.ClearHistory();
         manga.Save();
       }
     }

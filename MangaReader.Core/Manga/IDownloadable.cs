@@ -63,6 +63,11 @@ namespace MangaReader.Core.Manga
     /// </summary>
     Task Download(string folder = null);
 
+    /// <summary>
+    /// Clear history.
+    /// </summary>
+    void ClearHistory();
+
     #endregion
 
   }

@@ -63,7 +63,7 @@ namespace Tests.Entities
 
     public static void DeleteMangaHistory(IManga manga)
     {
-      manga.Histories.Clear();
+      manga.ClearHistory();
       manga.Save();
     }
   }

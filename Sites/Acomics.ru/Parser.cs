@@ -140,7 +140,7 @@ namespace Acomics
       var uri = cn.Attributes[0].Value;
       return new ChapterDto(uri, (cn.Attributes.Count > 1 ? cn.Attributes[1].Value : cn.InnerText))
       {
-        Number = Chapter.GetChapterNumber(uri)
+        Number = AcomicsChapter.GetChapterNumber(uri)
       };
     }
 
@@ -288,11 +288,11 @@ namespace Acomics
           cfg.CreateMap<VolumeDto, Volume>()
             .EqualityComparison((src, dest) => src.Number == dest.Number);
           cfg.CreateMap<ChapterDto, MangaReader.Core.Manga.Chapter>()
-            .ConstructUsing(dto => new Chapter(dto.Uri, dto.Name))
+            .ConstructUsing(dto => new AcomicsChapter(dto.Uri, dto.Name))
             .EqualityComparison((src, dest) => src.Number == dest.Number);
-          cfg.CreateMap<ChapterDto, Chapter>()
+          cfg.CreateMap<ChapterDto, AcomicsChapter>()
             .IncludeBase<ChapterDto, MangaReader.Core.Manga.Chapter>()
-            .ConstructUsing(dto => new Chapter(dto.Uri, dto.Name))
+            .ConstructUsing(dto => new AcomicsChapter(dto.Uri, dto.Name))
             .EqualityComparison((src, dest) => src.Number == dest.Number);
           cfg.CreateMap<MangaPageDto, MangaPage>()
             .EqualityComparison((src, dest) => src.ImageLink == dest.ImageLink);

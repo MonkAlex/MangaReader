@@ -21,16 +21,9 @@ namespace MangaReader.Core.Manga
     #region Свойства
 
     /// <summary>
-    /// Название главы.
-    /// </summary>
-    public string Name { get; set; }
-
-    /// <summary>
     /// Номер главы.
     /// </summary>
     public double Number { get; set; }
-
-    public override IEnumerable<MangaPage> InDownloading { get; protected set; }
 
     #endregion
 

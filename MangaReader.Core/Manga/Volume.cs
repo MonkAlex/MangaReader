@@ -12,11 +12,7 @@ namespace MangaReader.Core.Manga
   [DebuggerDisplay("{Number} {Name}")]
   public class Volume : DownloadableContainerImpl<Chapter>
   {
-    public string Name { get; set; }
-
     public int Number { get; set; }
-
-    public override IEnumerable<Chapter> InDownloading { get; protected set; }
 
     public string Folder
     {

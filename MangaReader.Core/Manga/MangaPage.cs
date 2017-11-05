@@ -50,13 +50,6 @@ namespace MangaReader.Core.Manga
 
     public DateTime? DownloadedAt { get; set; }
 
-    public event EventHandler<IManga> DownloadProgressChanged;
-
-    protected void OnDownloadProgressChanged(IManga e)
-    {
-      DownloadProgressChanged?.Invoke(this, e);
-    }
-
     #endregion
 
     #region Методы
@@ -88,7 +81,6 @@ namespace MangaReader.Core.Manga
           var fileName = this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + file.Extension;
           await file.Save(Path.Combine(chapterFolder, fileName));
           this.IsDownloaded = true;
-          this.OnDownloadProgressChanged(null);
         }
       }
       catch (System.Exception ex)

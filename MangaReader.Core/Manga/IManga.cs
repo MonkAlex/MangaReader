@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using MangaReader.Core.Entity;
 using MangaReader.Core.Services;
 
 namespace MangaReader.Core.Manga
 {
-  public interface IManga : IDownloadable, ICompressible, IEntity
+  public interface IManga : IDownloadable, ICompressible, IEntity, INotifyPropertyChanged
   {
     string Name { get; set; }
 

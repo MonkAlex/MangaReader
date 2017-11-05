@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace MangaReader.Core.Manga
@@ -47,12 +46,6 @@ namespace MangaReader.Core.Manga
     /// Загружено.
     /// </summary>
     DateTime? DownloadedAt { get; set; }
-
-    #endregion
-
-    #region DownloadProgressChanged
-
-    event EventHandler<IManga> DownloadProgressChanged;
 
     #endregion
 

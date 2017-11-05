@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using MangaReader.Core.Exception;
@@ -15,7 +16,7 @@ using MangaReader.Core.Services.Config;
 namespace MangaReader.Core.Manga
 {
   [DebuggerDisplay("{Name}, Id = {Id}, Uri = {Uri}")]
-  public abstract class Mangas : Entity.Entity, INotifyPropertyChanged, IManga
+  public abstract class Mangas : Entity.Entity, IManga
   {
     #region Свойства
 
@@ -213,7 +214,7 @@ namespace MangaReader.Core.Manga
 
     #endregion
 
-    #region DownloadProgressChanged
+    #region Download
 
     /// <summary>
     /// Статус загрузки.
@@ -259,13 +260,6 @@ namespace MangaReader.Core.Manga
       }
     }
 
-    public event EventHandler<IManga> DownloadProgressChanged;
-
-    protected void OnDownloadProgressChanged(IManga manga)
-    {
-      DownloadProgressChanged?.Invoke(this, manga);
-    }
-
     /// <summary>
     /// Обновить содержимое манги.
     /// </summary>
@@ -282,13 +276,6 @@ namespace MangaReader.Core.Manga
         throw new ArgumentNullException("Volumes");
 
       Parser.UpdateContent(this);
-
-      foreach (var page in Pages)
-        page.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this);
-      foreach (var chapter in Chapters)
-        chapter.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this);
-      foreach (var volume in Volumes)
-        volume.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this);
     }
 
     protected void AddToHistory(params IDownloadable[] downloadables)
@@ -343,12 +330,12 @@ namespace MangaReader.Core.Manga
       // Формируем путь к главе вида Папка_манги\Том_001\Глава_0001
       try
       {
+        var timer = new Timer(state => OnPropertyChanged(nameof(Downloaded)), null, 750, 750);
         NetworkSpeed.Clear();
         var plugin = Plugin;
         var tasks = this.ActiveVolumes.Select(
             v =>
             {
-              v.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged(nameof(Downloaded));
               v.OnlyUpdate = this.Setting.OnlyUpdate;
               return v.Download(mangaFolder).ContinueWith(t =>
               {
@@ -365,7 +352,6 @@ namespace MangaReader.Core.Manga
         var chTasks = this.ActiveChapters.Select(
           ch =>
           {
-            ch.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged(nameof(Downloaded));
             ch.OnlyUpdate = this.Setting.OnlyUpdate;
             return ch.Download(mangaFolder).ContinueWith(t =>
             {
@@ -382,7 +368,6 @@ namespace MangaReader.Core.Manga
         var pTasks = this.ActivePages.Select(
           p =>
           {
-            p.DownloadProgressChanged += (sender, args) => this.OnPropertyChanged(nameof(Downloaded));
             return p.Download(mangaFolder).ContinueWith(t =>
             {
               if (t.Exception != null)
@@ -393,6 +378,8 @@ namespace MangaReader.Core.Manga
           });
         await Task.WhenAll(tasks.Concat(chTasks).Concat(pTasks).ToArray());
         this.DownloadedAt = DateTime.Now;
+        timer.Dispose();
+        OnPropertyChanged(nameof(Downloaded));
         this.Save();
         NetworkSpeed.Clear();
         Log.AddFormat("Download end '{0}'.", this.Name);

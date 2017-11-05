@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace Tests.Entities.Download
       var rm = Mangas.CreateFromWeb(new Uri(@"http://readmanga.me/black_butler_anthology_comic_dj____rainbow_butler"));
       var sw = new Stopwatch();
       sw.Start();
-      rm.DownloadProgressChanged += RmOnDownloadProgressChanged;
+      rm.PropertyChanged += RmOnDownloadChanged;
       DirectoryHelpers.DeleteDirectory(rm.GetAbsoulteFolderPath());
       await rm.Download();
       sw.Stop();
@@ -39,11 +40,14 @@ namespace Tests.Entities.Download
       Assert.AreEqual(100, lastPercent);
     }
 
-    private void RmOnDownloadProgressChanged(object sender, IManga manga)
+    private void RmOnDownloadChanged(object sender, PropertyChangedEventArgs args)
     {
-      var dl = (int) manga.Downloaded;
-      if (dl > lastPercent)
-        lastPercent = dl;
+      if (args.PropertyName == nameof(IManga.Downloaded))
+      {
+        var dl = (int)((IManga)sender).Downloaded;
+        if (dl > lastPercent)
+          lastPercent = dl;
+      }
     }
   }
 }

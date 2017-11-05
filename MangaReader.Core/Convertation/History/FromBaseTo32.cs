@@ -83,7 +83,7 @@ namespace MangaReader.Core.Convertation.History
             process.Percent += 100.0 / mangas.Count;
             var mangaHistory = histories.Where(h => h.MangaUrl == manga.Uri.OriginalString ||
                                                     h.Uri.OriginalString.Contains(manga.Uri.OriginalString + "/")).ToList();
-            manga.AddHistory(mangaHistory);
+            manga.Histories.AddRange(mangaHistory);
             histories.RemoveAll(h => mangaHistory.Contains(h));
             session.SaveOrUpdate(manga);
           }
@@ -111,7 +111,7 @@ namespace MangaReader.Core.Convertation.History
 
             foreach (var record in history)
               record.Uri = new Uri(record.Uri.OriginalString.Replace(history.Key.OriginalString.TrimEnd('/'), manga.Uri.OriginalString.TrimEnd('/')));
-            manga.AddHistory(history);
+            manga.Histories.AddRange(history);
             session.SaveOrUpdate(manga);
           }
           tranc.Commit();

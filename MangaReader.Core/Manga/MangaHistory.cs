@@ -38,7 +38,7 @@ namespace MangaReader.Core.Manga
 
     public override bool Equals(object obj)
     {
-      if (obj == null)
+      if (obj == null || this.Uri == null)
         return false;
 
       var mangaHistory = obj as MangaHistory;

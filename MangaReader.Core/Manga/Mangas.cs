@@ -138,41 +138,7 @@ namespace MangaReader.Core.Manga
     /// История манги.
     /// </summary>
     [XmlIgnore]
-    public virtual IEnumerable<MangaHistory> Histories
-    {
-      get { return histories; }
-    }
-
-    public void AddHistory(Uri message)
-    {
-      AddHistory(new[] { new MangaHistory(message) });
-    }
-
-    public void AddHistory(IEnumerable<Uri> messages)
-    {
-      AddHistory(messages.Select(m => new MangaHistory(m)));
-    }
-
-    public void AddHistory(IEnumerable<MangaHistory> history)
-    {
-      lock (histories)
-      {
-        var list = history.Where(message => histories.All(h => h.Uri != message.Uri)).ToList();
-        foreach (var mangaHistory in list)
-        {
-          histories.Add(mangaHistory);
-        }
-      }
-    }
-
-    public void ClearHistory()
-    {
-      lock (histories)
-      {
-        histories.Clear();
-      }
-    }
-
+    public virtual ICollection<MangaHistory> Histories { get; protected set; }
 
     [XmlIgnore]
     public virtual ICollection<Volume> Volumes { get; set; }
@@ -215,7 +181,6 @@ namespace MangaReader.Core.Manga
     public virtual Compression.CompressionMode? CompressionMode { get; set; }
 
     private string status;
-    private ICollection<MangaHistory> histories;
     private byte[] cover;
 
     /// <summary>
@@ -282,6 +247,8 @@ namespace MangaReader.Core.Manga
 
     public string Folder { get; set; }
 
+    public DateTime? DownloadedAt { get; set; }
+
     public byte[] Cover
     {
       get { return cover; }
@@ -322,6 +289,16 @@ namespace MangaReader.Core.Manga
         chapter.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this);
       foreach (var volume in Volumes)
         volume.DownloadProgressChanged += (sender, args) => this.OnDownloadProgressChanged(this);
+    }
+
+    protected void AddToHistory(params IDownloadable[] downloadables)
+    {
+      foreach (var downloadable in downloadables)
+      {
+        Histories.Add(new MangaHistory(downloadable.Uri));
+        if (downloadable.DownloadedAt == null)
+          downloadable.DownloadedAt = DateTime.Now;
+      }
     }
 
     public async Task Download(string mangaFolder = null)
@@ -378,10 +355,10 @@ namespace MangaReader.Core.Manga
                   Log.Exception(t.Exception, v.Uri.ToString());
 
                 if (plugin.HistoryType == HistoryType.Chapter)
-                  this.AddHistory(v.InDownloading.Where(c => c.IsDownloaded).Select(ch => ch.Uri));
+                  AddToHistory(v.InDownloading.Where(c => c.IsDownloaded).ToArray());
 
                 if (plugin.HistoryType == HistoryType.Page)
-                  this.AddHistory(v.InDownloading.SelectMany(ch => ch.InDownloading).Where(p => p.IsDownloaded).Select(p => p.Uri));
+                  AddToHistory(v.InDownloading.SelectMany(ch => ch.InDownloading).Where(p => p.IsDownloaded).ToArray());
               });
             });
         var chTasks = this.ActiveChapters.Select(
@@ -395,10 +372,10 @@ namespace MangaReader.Core.Manga
                 Log.Exception(t.Exception, ch.Uri.ToString());
 
               if (ch.IsDownloaded && plugin.HistoryType == HistoryType.Chapter)
-                this.AddHistory(ch.Uri);
+                AddToHistory(ch);
 
               if (plugin.HistoryType == HistoryType.Page)
-                this.AddHistory(ch.InDownloading.Where(c => c.IsDownloaded).Select(p => p.Uri));
+                AddToHistory(ch.InDownloading.Where(c => c.IsDownloaded).ToArray());
             });
           });
         var pTasks = this.ActivePages.Select(
@@ -410,7 +387,7 @@ namespace MangaReader.Core.Manga
               if (t.Exception != null)
                 Log.Exception(t.Exception, $"Не удалось скачать изображение {p.ImageLink} со страницы {p.Uri}");
               if (p.IsDownloaded && plugin.HistoryType == HistoryType.Page)
-                this.AddHistory(p.Uri);
+                AddToHistory(p);
             });
           });
         await Task.WhenAll(tasks.Concat(chTasks).Concat(pTasks).ToArray());
@@ -603,12 +580,13 @@ namespace MangaReader.Core.Manga
 
     protected void AddHistoryReadedUris<T>(T source, Uri url) where T : IEnumerable<IDownloadable>
     {
-      this.AddHistory(source.TakeWhile(c => c.Uri.AbsolutePath != url.AbsolutePath).Select(ch => ch.Uri));
+      var readed = source.TakeWhile(c => c.Uri.AbsolutePath != url.AbsolutePath).ToArray();
+      AddToHistory(readed);
     }
 
     protected Mangas()
     {
-      this.histories = new List<MangaHistory>();
+      this.Histories = new HistoryCollection();
       this.Chapters = new List<Chapter>();
       this.Volumes = new List<Volume>();
       this.Pages = new List<MangaPage>();

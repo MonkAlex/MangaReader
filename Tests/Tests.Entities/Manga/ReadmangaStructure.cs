@@ -25,8 +25,8 @@ namespace Tests.Entities.Manga
     [Test]
     public void AddReadmangaWithoutExtra()
     {
-      var chapters = GetCountOfChapters("http://readmanga.me/_hack__alcor");
-      Assert.AreEqual(3, chapters);
+      var chapters = GetCountOfChapters("http://readmanga.me/black_butler_anthology_comic_dj____rainbow_butler");
+      Assert.AreEqual(13, chapters);
     }
 
     [Test]

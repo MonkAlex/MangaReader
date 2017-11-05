@@ -54,7 +54,10 @@ namespace Tests.Entities.Manga
     private static void AddRandomHistory(Readmanga manga)
     {
       var x = 100000;
-      Parallel.For(0, x, i => { manga.AddHistory(new Uri(string.Format("http://readmanga.me/btoom/vol1/{0}?mature=1", i % y))); });
+      Parallel.For(0, x, i =>
+      {
+        manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(new Uri(string.Format("http://readmanga.me/btoom/vol1/{0}?mature=1", i % y))));
+      });
     }
   }
 }

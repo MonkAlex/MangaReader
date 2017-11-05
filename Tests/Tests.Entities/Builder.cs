@@ -57,13 +57,13 @@ namespace Tests.Entities
     public static void CreateMangaHistory(IManga manga)
     {
       var history = new MangaReader.Core.Manga.MangaHistory(Url);
-      manga.AddHistory(history.Uri);
+      manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(history.Uri));
       manga.Save();
     }
 
     public static void DeleteMangaHistory(IManga manga)
     {
-      manga.ClearHistory();
+      manga.Histories.Clear();
       manga.Save();
     }
   }

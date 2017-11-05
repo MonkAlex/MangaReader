@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using MangaReader.Core.Entity;
 using MangaReader.Core.Services;
@@ -37,20 +38,8 @@ namespace MangaReader.Core.Manga
 
     #endregion
 
-    #region History
+    ICollection<MangaHistory> Histories { get; }
 
-    IEnumerable<MangaHistory> Histories { get; }
-
-    void AddHistory(Uri message);
-
-    void AddHistory(IEnumerable<Uri> messages);
-
-    void AddHistory(IEnumerable<MangaHistory> history);
-
-    void ClearHistory();
-
-    #endregion
-    
     bool NeedUpdate { get; set; }
 
     bool IsValid();

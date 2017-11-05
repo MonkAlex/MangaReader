@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MangaReader.Core;
 using MangaReader.Core.Manga;
+using MangaReader.Core.Services;
 using NUnit.Framework;
 
 namespace Tests.Entities.Manga
@@ -12,18 +13,16 @@ namespace Tests.Entities.Manga
   [TestFixture]
   public class ReadmangaCensored : TestClass
   {
-    private Grouple.Parser parser = new Grouple.Parser();
-
     // Not censored
-    // http://readmanga.me/black_butler/vol3/10?mature=1
+    // http://readmanga.me/black_butler_anthology_comic_dj____rainbow_butler/vol1/6
     // Censored
     // http://readmanga.me/school_teacher/vol2/10?mature=1
 
     [Test]
     public void NotCensoredReadmanga()
     {
-      var manga = Get(@"http://readmanga.me/black_butler/vol3/10?mature=1");
-      var chapter = manga.Volumes.Single(v => v.Number == 3).Container.ToList()[0];
+      var manga = Get(@"http://readmanga.me/black_butler_anthology_comic_dj____rainbow_butler/vol1/6");
+      var chapter = manga.Volumes.Single(v => v.Number == 1).Container.ToList()[0];
       Grouple.Parser.UpdatePages(chapter as Grouple.Chapter);
       Assert.IsTrue(chapter.Container.First().ImageLink.IsAbsoluteUri);
     }
@@ -37,10 +36,29 @@ namespace Tests.Entities.Manga
       Assert.IsTrue(chapter.Container.First().ImageLink.IsAbsoluteUri);
     }
 
+    [Test]
+    public void MangaRemovedCopyright()
+    {
+      var error = string.Empty;
+
+      void OnLogOnLogReceived(LogEventStruct les)
+      {
+        if (les.Level == "Error")
+          error = les.FormattedMessage;
+      }
+
+      Log.LogReceived += OnLogOnLogReceived;
+      var manga = Get(@"http://readmanga.me/_hack__alcor");
+      Log.LogReceived -= OnLogOnLogReceived;
+      var chapters = manga.Volumes.SelectMany(v => v.Container).ToList();
+      Assert.IsTrue(!chapters.Any());
+      Assert.AreEqual("Запрещена публикация произведения по копирайту, адрес манги http://readmanga.me/_hack__alcor", error);
+    }
+
     private IManga Get(string url)
     {
       var manga = Mangas.Create(new Uri(url));
-      parser.UpdateContent(manga);
+      new Grouple.Parser().UpdateContent(manga);
       return manga;
     }
   }

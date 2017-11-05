@@ -16,7 +16,7 @@ namespace Tests.Entities.MangaHistory
 
       var volumeUri = new Uri("http://acomics.ru/~ma3/935");
       var chapterUri = new Uri("http://acomics.ru/~ma3/1129");
-      manga.AddHistory(chapterUri);
+      manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(chapterUri));
       manga.Save();
 
       manga.Refresh();
@@ -40,7 +40,7 @@ namespace Tests.Entities.MangaHistory
 
       var volumeUri = new Uri("http://acomics.ru/~ma3/777");
       var chapterUri = new Uri("http://acomics.ru/~ma3/793");
-      manga.AddHistory(chapterUri);
+      manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(chapterUri));
       manga.Save();
 
       manga.Refresh();

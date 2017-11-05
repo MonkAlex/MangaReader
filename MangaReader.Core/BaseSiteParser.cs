@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +40,9 @@ namespace MangaReader.Core
     /// <param name="chapters">Главы.</param>
     protected void FillMangaChapters(IManga manga, ICollection<ChapterDto> chapters)
     {
+      if (!chapters.Any())
+        return;
+
       GetMapper().Map(chapters, manga.Chapters);
     }
 
@@ -52,6 +54,9 @@ namespace MangaReader.Core
     /// <remarks>Перенос главы из тома в том видимо не ловим.</remarks>
     protected void FillMangaVolumes(IManga manga, ICollection<VolumeDto> volumes)
     {
+      if (!volumes.Any())
+        return;
+
       GetMapper().Map(volumes, manga.Volumes);
     }
 
@@ -62,6 +67,9 @@ namespace MangaReader.Core
     /// <param name="pages">Страницы.</param>
     protected void FillMangaPages(IManga manga, ICollection<MangaPageDto> pages)
     {
+      if (!pages.Any())
+        return;
+
       GetMapper().Map(pages, manga.Pages);
     }
 

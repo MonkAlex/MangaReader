@@ -11,6 +11,7 @@ using HtmlAgilityPack;
 using MangaReader.Core;
 using MangaReader.Core.Account;
 using MangaReader.Core.DataTrasferObject;
+using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
@@ -24,6 +25,11 @@ namespace Grouple
     /// Ключ с куками для редиректа.
     /// </summary>
     internal const string CookieKey = "red-form";
+
+    /// <summary>
+    /// Манга удалена.
+    /// </summary>
+    internal const string Copyright = "Запрещена публикация произведения по копирайту";
 
     /// <summary>
     /// Получить ссылку с редиректа.
@@ -149,27 +155,37 @@ namespace Grouple
       var links = new List<Uri> { };
       var description = new List<string> { };
       var page = Page.GetPage(manga.Uri);
+      var hasCopyrightNotice = false;
       try
       {
         var document = new HtmlDocument();
         document.LoadHtml(page.Content);
+        hasCopyrightNotice = document.DocumentNode.InnerText.Contains(Copyright);
         var linkNodes = document.DocumentNode
           .SelectNodes("//div[@class=\"expandable chapters-link\"]//a[@href]")
           .Reverse()
           .ToList();
         links = linkNodes
-            .ConvertAll(r => r.Attributes.ToList().ConvertAll(i => i.Value))
-            .SelectMany(j => j)
-            .Where(k => k != string.Empty)
-            .Select(s => @"http://" + page.ResponseUri.Host + s + "?mature=1")
-            .Select(s => new Uri(s))
-            .ToList();
+          .ConvertAll(r => r.Attributes.ToList().ConvertAll(i => i.Value))
+          .SelectMany(j => j)
+          .Where(k => k != string.Empty)
+          .Select(s => @"http://" + page.ResponseUri.Host + s + "?mature=1")
+          .Select(s => new Uri(s))
+          .ToList();
         description = linkNodes
-            .ConvertAll(r => r.InnerText.Replace("\r\n", string.Empty).Trim())
-            .ToList();
+          .ConvertAll(r => r.InnerText.Replace("\r\n", string.Empty).Trim())
+          .ToList();
       }
-      catch (NullReferenceException ex) { Log.Exception(ex, $"Ошибка получения списка глав с адреса {page.ResponseUri}"); }
-      catch (ArgumentNullException ex) { Log.Exception(ex, $"Главы не найдены по адресу {page.ResponseUri}"); }
+      catch (NullReferenceException ex)
+      {
+        Log.Exception(ex, $"Ошибка получения списка глав с адреса {page.ResponseUri}");
+      }
+      catch (ArgumentNullException ex)
+      {
+        Log.Exception(ex, hasCopyrightNotice
+            ? $"{Copyright}, адрес манги {page.ResponseUri}"
+            : $"Главы не найдены по адресу {page.ResponseUri}");
+      }
 
       for (var i = 0; i < links.Count; i++)
       {

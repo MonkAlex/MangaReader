@@ -48,6 +48,8 @@ namespace MangaReader.Core.Manga
 
     public string Folder { get; private set; }
 
+    public DateTime? DownloadedAt { get; set; }
+
     public event EventHandler<IManga> DownloadProgressChanged;
 
     protected void OnDownloadProgressChanged(IManga e)

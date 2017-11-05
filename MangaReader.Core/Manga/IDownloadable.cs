@@ -43,6 +43,11 @@ namespace MangaReader.Core.Manga
     /// </summary>
     string Folder { get; }
 
+    /// <summary>
+    /// Загружено.
+    /// </summary>
+    DateTime? DownloadedAt { get; set; }
+
     #endregion
 
     #region DownloadProgressChanged

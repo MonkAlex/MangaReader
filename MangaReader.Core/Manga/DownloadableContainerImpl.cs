@@ -32,6 +32,8 @@ namespace MangaReader.Core.Manga
 
     public virtual string Folder { get; protected set; }
 
+    public DateTime? DownloadedAt { get; set; }
+
     public event EventHandler<IManga> DownloadProgressChanged;
 
     public abstract Task Download(string folder = null);

@@ -21,7 +21,7 @@ namespace Tests.Entities.Manga
 
       var manga = Builder.CreateReadmanga();
       manga.Uri = new Uri("http://readmanga.me/btoom");
-      manga.AddHistory(new Uri("http://readmanga.me/btoom/vol1/1?mature=1"));
+      manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(new Uri("http://readmanga.me/btoom/vol1/1?mature=1")));
       manga.Save();
 
       manga = Repository.Get<Grouple.Readmanga>(manga.Id);

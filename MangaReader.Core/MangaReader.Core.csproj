@@ -135,6 +135,7 @@
     <Compile Include="ISiteParser.cs" />
     <Compile Include="Loader.cs" />
     <Compile Include="Manga\DownloadableContainerImpl.cs" />
+    <Compile Include="Manga\HistoryCollection.cs" />
     <Compile Include="Manga\MangaName.cs" />
     <Compile Include="Manga\Chapter.cs" />
     <Compile Include="Manga\ICompressible.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="NHibernate\AsyncContext.cs" />
     <Compile Include="NHibernate\ChapterMap.cs" />
     <Compile Include="NHibernate\DatabaseConfigMap.cs" />
+    <Compile Include="NHibernate\HistoryBugType.cs" />
     <Compile Include="NHibernate\MangaPageMap.cs" />
     <Compile Include="NHibernate\Mapping.cs" />
     <Compile Include="NHibernate\HistoryMap.cs" />

@@ -16,7 +16,7 @@ namespace MangaReader.ViewModel.Commands
       base.Execute(parameter);
 
       if (Library.IsAvaible)
-        await Library.ThreadAction(() => Library.Update(view.OfType<MangaBaseModel>().Select(m => m.Manga), ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
+        await Library.ThreadAction(() => Library.Update(view.OfType<MangaModel>().Select(m => m.Id), ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
     }
 
     public UpdateVisibleMangaCommand(ListCollectionView view, LibraryViewModel model) : base(model)

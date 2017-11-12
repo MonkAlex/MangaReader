@@ -33,10 +33,10 @@ namespace MangaReader.Core.Services.Config
       {
         if (allTypes == null)
         {
-          allTypes = NHibernate.Repository.Get<MangaSetting>()
+          allTypes = NHibernate.Repository.GetStateless<MangaSetting>()
             .Select(s => new { s.MangaName, s })
             .OrderBy(a => a.MangaName)
-            .ToDictionary(a => a.MangaName, a => a.s as object);
+            .ToDictionary(a => a.MangaName, a => a.s.Id as object);
         }
         return allTypes;
       }

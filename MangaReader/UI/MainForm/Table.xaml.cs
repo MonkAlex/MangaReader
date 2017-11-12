@@ -25,12 +25,10 @@ namespace MangaReader.UI.MainForm
       if (e.ClickCount < 2)
         return;
 
-      var item = sender as ListViewItem;
-      if (item == null)
+      if (!(sender is ListViewItem item))
         return;
 
-      var downloadable = item.DataContext as MangaViewModel;
-      if (downloadable == null)
+      if (!(item.DataContext is MangaModel downloadable))
         return;
 
       var defaultCommand = downloadable.MangaMenu.FirstOrDefault(m => m.IsDefault);
@@ -40,8 +38,7 @@ namespace MangaReader.UI.MainForm
 
     private void ListView_MouseDown(object sender, MouseButtonEventArgs e)
     {
-      var listView = sender as ListView;
-      if (listView != null)
+      if (sender is ListView listView)
       {
         listView.SelectedIndex = -1;
       }

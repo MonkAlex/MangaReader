@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
+using NHibernate.Linq;
 
 namespace MangaReader.Core.Account
 {
@@ -71,10 +72,10 @@ namespace MangaReader.Core.Account
     
     public static ILogin Get(Type type)
     {
-      var fromdb = NHibernate.Repository.Get<ILogin>().ToList().SingleOrDefault(l => l.GetType() == type);
-      if (fromdb == null)
-        fromdb = (ILogin)Activator.CreateInstance(type);
-      return fromdb;
+      using (var context = NHibernate.Repository.GetEntityContext())
+      {
+        return context.Get<ILogin>().ToList().SingleOrDefault(l => l.GetType() == type) ?? (ILogin)Activator.CreateInstance(type);
+      }
     }
 
     protected Login()

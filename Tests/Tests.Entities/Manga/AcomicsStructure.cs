@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Acomics;
 using MangaReader.Core.Manga;
 using NUnit.Framework;
 
@@ -9,8 +8,6 @@ namespace Tests.Entities.Manga
   [TestFixture]
   public class AcomicsStructure : TestClass
   {
-    Parser parser = new Parser();
-
     [Test]
     public void AddAcomicsOnlyPages()
     {
@@ -62,7 +59,7 @@ namespace Tests.Entities.Manga
     private Acomics.Acomics GetManga(string uri)
     {
       var manga = Mangas.CreateFromWeb(new Uri(uri)) as Acomics.Acomics;
-      parser.UpdateContent(manga);
+      new Acomics.Parser().UpdateContent(manga);
       return manga;
     }
   }

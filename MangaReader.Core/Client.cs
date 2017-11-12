@@ -42,7 +42,7 @@ namespace MangaReader.Core
         NHibernate.Mapping.Initialize(process);
         DatabaseConfig.Initialize();
 
-        var name = NHibernate.Repository.Get<DatabaseConfig>().Single().UniqueId.ToString("D");
+        var name = NHibernate.Repository.GetDatabaseUniqueId().ToString("D");
         mutex = new Mutex(false, name, out bool isSingle);
         if (!isSingle)
         {

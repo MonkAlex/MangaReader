@@ -77,9 +77,15 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         Log.Add("Wait nhibernate initialization...");
         await Task.Delay(500);
       }
+#warning Тут по идее тоже DTO нужны.
+      List<IManga> mangas;
+      using (var context = Core.NHibernate.Repository.GetEntityContext())
+      {
+        mangas = context.Get<IManga>().ToList();
+      }
       Dispatcher.UIThread.InvokeAsync(() =>
       {
-        Items = new ObservableCollection<IManga>(Core.NHibernate.Repository.Get<IManga>().ToList());
+        Items = new ObservableCollection<IManga>(mangas);
         FilteredItems = Items.CreateDerivedCollection(
           x => x,
           Filter,

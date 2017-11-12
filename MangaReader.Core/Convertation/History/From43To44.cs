@@ -13,35 +13,38 @@ namespace MangaReader.Core.Convertation.History
     protected override bool ProtectedCanConvert(IProcess process)
     {
       return base.ProtectedCanConvert(process) &&
-             Version.CompareTo(NHibernate.Repository.Get<DatabaseConfig>().Single().Version) > 0 &&
+             Version.CompareTo(Repository.GetStateless<DatabaseConfig>().Single().Version) > 0 &&
              process.Version.CompareTo(Version) >= 0;
     }
 
     protected override void ProtectedConvert(IProcess process)
     {
       base.ProtectedConvert(process);
-      var mangas = Repository.Get<Manga.Mangas>().ToList();
-      if (mangas.Any())
-        process.ProgressState = ProgressState.Normal;
-
-      foreach (var manga in mangas.Where(m => !m.Volumes.Any() && !m.Chapters.Any() && !m.Pages.Any()))
+      using (var context = Repository.GetEntityContext())
       {
-        process.Percent += 100.0 / mangas.Count;
+        var mangas = context.Get<Manga.Mangas>().Where(m => !m.Volumes.Any() && !m.Chapters.Any() && !m.Pages.Any()).ToList();
+        if (mangas.Any())
+          process.ProgressState = ProgressState.Normal;
 
-        manga.UpdateContent();
-        var history = manga.Histories.ToList();
-        if (manga.Plugin.HistoryType != HistoryType.Page)
+        foreach (var manga in mangas)
         {
-          var volumeChapters = manga.Volumes.SelectMany(v => v.Container);
-          SetDownloadableDate(history, volumeChapters.Concat(manga.Chapters));
+          process.Percent += 100.0 / mangas.Count;
+
+          manga.UpdateContent();
+          var history = manga.Histories.ToList();
+          if (manga.Plugin.HistoryType != HistoryType.Page)
+          {
+            var volumeChapters = manga.Volumes.SelectMany(v => v.Container);
+            SetDownloadableDate(history, volumeChapters.Concat(manga.Chapters));
+          }
+          else
+          {
+            var volumePages = manga.Volumes.SelectMany(v => v.Container).SelectMany(c => c.Container);
+            var chapterPages = manga.Chapters.SelectMany(c => c.Container);
+            SetDownloadableDate(history, volumePages.Concat(chapterPages).Concat(manga.Pages));
+          }
+          manga.Save();
         }
-        else
-        {
-          var volumePages = manga.Volumes.SelectMany(v => v.Container).SelectMany(c => c.Container);
-          var chapterPages = manga.Chapters.SelectMany(c => c.Container);
-          SetDownloadableDate(history, volumePages.Concat(chapterPages).Concat(manga.Pages));
-        }
-        manga.Save();
       }
     }
 

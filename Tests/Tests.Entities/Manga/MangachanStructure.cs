@@ -9,13 +9,11 @@ namespace Tests.Entities.Manga
   [TestFixture]
   public class MangachanStructure : TestClass
   {
-    private MangaReader.Core.ISiteParser parser = new Hentaichan.Mangachan.Parser();
-
     [Test]
     public void AddMangachanMultiPages()
     {
       var manga = GetManga("http://mangachan.me/manga/3828-12-prince.html");
-      parser.UpdateContent(manga);
+      new Hentaichan.Mangachan.Parser().UpdateContent(manga);
       Assert.AreEqual(16, manga.Volumes.Count);
       Assert.AreEqual(78, manga.Volumes.Sum(v => v.Container.Count()));
     }
@@ -24,7 +22,7 @@ namespace Tests.Entities.Manga
     public void AddMangachanSingleChapter()
     {
       var manga = GetManga("http://mangachan.me/manga/20138-16000-honesty.html");
-      parser.UpdateContent(manga);
+      new Hentaichan.Mangachan.Parser().UpdateContent(manga);
       Assert.AreEqual(1, manga.Volumes.Count);
       Assert.AreEqual(1, manga.Volumes.Sum(v => v.Container.Count()));
     }
@@ -64,7 +62,7 @@ namespace Tests.Entities.Manga
       var manga = GetManga(uri);
       Assert.AreEqual(english, manga.Name);
       ConfigStorage.Instance.AppConfig.Language = Languages.Russian;
-      parser.UpdateNameAndStatus(manga);
+      new Hentaichan.Mangachan.Parser().UpdateNameAndStatus(manga);
       Assert.AreEqual(russian, manga.Name);
     }
   }

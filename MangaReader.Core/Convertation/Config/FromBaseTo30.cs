@@ -24,7 +24,7 @@ namespace MangaReader.Core.Convertation.Config
 
       try
       {
-        var mangaSettings = Repository.Get<MangaSetting>().ToList();
+        var mangaSettings = Repository.GetStateless<MangaSetting>().ToList();
         if (settings[1] is bool)
           mangaSettings.ForEach(ms => ms.OnlyUpdate = (bool)settings[1]);
         if (settings[4] is bool)

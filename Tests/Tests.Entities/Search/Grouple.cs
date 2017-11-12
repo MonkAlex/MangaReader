@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Grouple;
 using MangaReader.Core.Manga;
 using NUnit.Framework;
 
@@ -10,8 +9,6 @@ namespace Tests.Entities.Search
   [TestFixture]
   public class Grouple : TestClass
   {
-    private Parser parser = new Parser();
-    
     [Test]
     public void SearchOnGrouple()
     {
@@ -21,7 +18,7 @@ namespace Tests.Entities.Search
 
     private IEnumerable<IManga> Search(string name)
     {
-      return parser.Search(name);
+      return new global::Grouple.Parser().Search(name);
     }
 
   }

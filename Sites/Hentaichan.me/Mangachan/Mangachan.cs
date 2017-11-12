@@ -21,9 +21,10 @@ namespace Hentaichan.Mangachan
       if (!baseValidation)
         return false;
 
-      var doubles = Repository.Get<Mangachan>().Any(m => m.Id != this.Id && m.ServerName == this.ServerName);
-
-      return !doubles;
+      using (var context = Repository.GetEntityContext())
+      {
+        return !context.Get<Mangachan>().Any(m => m.Id != Id && m.ServerName == ServerName);
+      }
     }
 
     public override void Refresh()

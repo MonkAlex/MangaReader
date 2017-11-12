@@ -68,8 +68,8 @@ namespace MangaReader.Core.Services.Config
 
     public static void Initialize()
     {
-      Repository.Get<DatabaseConfig>().SingleOrCreate();
-      var query = Repository.Get<MangaSetting>().ToList();
+      Repository.GetStateless<DatabaseConfig>().SingleOrCreate();
+      var query = Repository.GetStateless<MangaSetting>().ToList();
       CreateDefaultMangaSettings(query);
     }
   }

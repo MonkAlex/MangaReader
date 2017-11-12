@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hentaichan.Mangachan;
 using MangaReader.Core.Manga;
 using NUnit.Framework;
 
@@ -10,8 +9,6 @@ namespace Tests.Entities.Search
   [TestFixture]
   public class Mangachan : TestClass
   {
-    private Parser parser = new Parser();
-    
     [Test]
     public void SearchOnMangachan()
     {
@@ -21,7 +18,7 @@ namespace Tests.Entities.Search
 
     private IEnumerable<IManga> Search(string name)
     {
-      return parser.Search(name);
+      return new global::Hentaichan.Mangachan.Parser().Search(name);
     }
 
   }

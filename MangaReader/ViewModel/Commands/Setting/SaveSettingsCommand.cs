@@ -58,7 +58,7 @@ namespace MangaReader.ViewModel.Commands.Setting
 
     public static void ValidateMangaPaths()
     {
-      var paths = Core.NHibernate.Repository.Get<MangaSetting>().ToList()
+      var paths = Core.NHibernate.Repository.GetStateless<MangaSetting>().ToList()
         .Where(p =>
         {
           var absolute = DirectoryHelpers.GetAbsoulteFolderPath(p.Folder);

@@ -11,7 +11,7 @@ namespace MangaReader.Core.Convertation.Config
     {
       base.ProtectedConvert(process);
 
-      var settings = NHibernate.Repository.Get<MangaSetting>().ToList();
+      var settings = NHibernate.Repository.GetStateless<MangaSetting>();
       foreach (var setting in settings)
       {
         this.RunSql($"update Mangas set Setting = {setting.Id} where Setting is null and Type = \"{setting.Manga}\"");

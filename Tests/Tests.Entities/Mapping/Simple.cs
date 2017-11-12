@@ -12,9 +12,12 @@ namespace Tests.Entities.Mapping
     [Test, Order(2)]
     public void AcomicsVolumesChaptersAndPages()
     {
-      var mangas = Repository.Get<IManga>().Where(m => m.ServerName == "Strays").ToList();
-      foreach (var deleting in mangas)
-        deleting.Delete();
+      using (var context = Repository.GetEntityContext())
+      {
+        var mangas = context.Get<IManga>().Where(m => m.ServerName == "Strays");
+        foreach (var deleting in mangas)
+          deleting.Delete();
+      }
 
       var firstChapterName = "Глава 1. Беспризорница";
       var chapterRenamed = "Test";

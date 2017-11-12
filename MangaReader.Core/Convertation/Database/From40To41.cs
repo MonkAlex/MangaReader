@@ -12,7 +12,7 @@ namespace MangaReader.Core.Convertation.Database
     {
       base.ProtectedConvert(process);
 
-      foreach (var setting in NHibernate.Repository.Get<MangaSetting>().ToList())
+      foreach (var setting in NHibernate.Repository.GetStateless<MangaSetting>())
       {
         if (!Uri.TryCreate(setting.Folder, UriKind.RelativeOrAbsolute, out Uri folderUri))
           continue;

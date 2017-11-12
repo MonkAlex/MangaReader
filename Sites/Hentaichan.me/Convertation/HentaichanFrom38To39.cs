@@ -22,13 +22,16 @@ namespace Hentaichan.Convertation
         setting.Save();
       }
 
-      var mangas = Repository.Get<Hentaichan>().ToList();
-      foreach (var manga in mangas)
+      using (var context = Repository.GetEntityContext())
       {
-        manga.Uri = new Uri(manga.Uri.OriginalString.Replace("hentaichan.me", "henchan.me"));
-        process.Percent += 100.0 / mangas.Count;
+        var mangas = context.Get<Hentaichan>().ToList();
+        foreach (var manga in mangas)
+        {
+          manga.Uri = new Uri(manga.Uri.OriginalString.Replace("hentaichan.me", "henchan.me"));
+          process.Percent += 100.0 / mangas.Count;
+        }
+        mangas.SaveAll();
       }
-      mangas.SaveAll();
     }
 
     public HentaichanFrom38To39()

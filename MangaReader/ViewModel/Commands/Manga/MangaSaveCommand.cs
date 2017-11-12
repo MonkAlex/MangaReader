@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using MangaReader.Core.Exception;
 using MangaReader.Core.Services;
 using MangaReader.ViewModel.Commands.Primitives;
@@ -9,7 +8,7 @@ namespace MangaReader.ViewModel.Commands.Manga
 {
   public class MangaSaveCommand : LibraryBaseCommand
   {
-    private readonly MangaCardModel model;
+    private readonly MangaModel model;
 
     public override void Execute(object parameter)
     {
@@ -17,7 +16,7 @@ namespace MangaReader.ViewModel.Commands.Manga
 
       try
       {
-        var manga = model.Manga;
+        var manga = model.ContextManga;
         if (model.CanChangeName)
         {
           var name = model.Name;
@@ -33,16 +32,18 @@ namespace MangaReader.ViewModel.Commands.Manga
         manga.NeedCompress = model.NeedCompress;
 
         manga.Save();
+        model.UpdateProperties(manga);
         model.Close();
       }
       catch (MangaReaderException ex)
       {
         MessageBox.Show(ex.Message);
-        model.Manga.Update();
+        model.ContextManga.Update();
+        model.UpdateProperties(model.ContextManga);
       }
     }
 
-    public MangaSaveCommand(MangaCardModel model, LibraryViewModel library) : base(library)
+    public MangaSaveCommand(MangaModel model, LibraryViewModel library) : base(library)
     {
       this.model = model;
       this.Name = "Принять";

@@ -40,10 +40,9 @@ namespace MangaReader.Core.Convertation.Primitives
 
     protected object RunSql(string command)
     {
-      using (var session = Mapping.GetSession())
+      using (var session = Repository.GetEntityContext())
       {
-        var query = session.CreateSQLQuery(command);
-        return query.UniqueResult();
+        return session.CreateSqlQuery(command);
       }
     }
   }

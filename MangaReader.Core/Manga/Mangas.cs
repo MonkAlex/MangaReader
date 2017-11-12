@@ -23,7 +23,7 @@ namespace MangaReader.Core.Manga
     /// <summary>
     /// Название манги.
     /// </summary>
-    public string Name
+    public virtual string Name
     {
       get { return this.IsNameChanged ? this.LocalName : this.ServerName; }
       set
@@ -37,7 +37,7 @@ namespace MangaReader.Core.Manga
       }
     }
 
-    public string LocalName
+    public virtual string LocalName
     {
       get { return localName ?? ServerName; }
       set { localName = value; }
@@ -45,9 +45,9 @@ namespace MangaReader.Core.Manga
 
     private string localName;
 
-    public string ServerName { get; set; }
+    public virtual string ServerName { get; set; }
 
-    public bool IsNameChanged
+    public virtual bool IsNameChanged
     {
       get { return isNameChanged; }
       set
@@ -96,7 +96,7 @@ namespace MangaReader.Core.Manga
       }
     }
 
-    public bool? NeedCompress
+    public virtual bool? NeedCompress
     {
       get { return needCompress; }
       set
@@ -108,7 +108,7 @@ namespace MangaReader.Core.Manga
 
     private bool? needCompress = null;
 
-    internal virtual IPlugin Plugin
+    protected internal virtual IPlugin Plugin
     {
       get
       {
@@ -133,7 +133,7 @@ namespace MangaReader.Core.Manga
     /// Настройки манги.
     /// </summary>
     [XmlIgnore]
-    public virtual MangaSetting Setting { get; internal set; }
+    public virtual MangaSetting Setting { get; protected internal set; }
 
     /// <summary>
     /// История манги.
@@ -200,7 +200,7 @@ namespace MangaReader.Core.Manga
     /// <summary>
     /// Признак только страниц, даже без глав.
     /// </summary>
-    public bool OnlyPages { get { return !this.HasVolumes && !this.HasChapters; } }
+    public virtual bool OnlyPages { get { return !this.HasVolumes && !this.HasChapters; } }
 
     /// <summary>
     /// Признак наличия глав.
@@ -219,7 +219,7 @@ namespace MangaReader.Core.Manga
     /// <summary>
     /// Статус загрузки.
     /// </summary>
-    public bool IsDownloaded
+    public virtual bool IsDownloaded
     {
       get
       {
@@ -234,7 +234,7 @@ namespace MangaReader.Core.Manga
     /// <summary>
     /// Процент загрузки манги.
     /// </summary>
-    public double Downloaded
+    public virtual double Downloaded
     {
       get
       {
@@ -246,11 +246,11 @@ namespace MangaReader.Core.Manga
       set { }
     }
 
-    public string Folder { get; set; }
+    public virtual string Folder { get; set; }
 
-    public DateTime? DownloadedAt { get; set; }
+    public virtual DateTime? DownloadedAt { get; set; }
 
-    public byte[] Cover
+    public virtual byte[] Cover
     {
       get { return cover; }
       set
@@ -288,7 +288,7 @@ namespace MangaReader.Core.Manga
       }
     }
 
-    public async Task Download(string mangaFolder = null)
+    public virtual async Task Download(string mangaFolder = null)
     {
       if (!this.NeedUpdate)
         return;
@@ -396,7 +396,7 @@ namespace MangaReader.Core.Manga
       }
     }
 
-    public void ClearHistory()
+    public virtual void ClearHistory()
     {
       Histories.Clear();
 
@@ -413,7 +413,7 @@ namespace MangaReader.Core.Manga
 
     #region INotifyPropertyChanged
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public virtual event PropertyChangedEventHandler PropertyChanged;
 
     protected void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
     {
@@ -437,7 +437,7 @@ namespace MangaReader.Core.Manga
     /// <summary>
     /// Упаковка манги.
     /// </summary>
-    public void Compress()
+    public virtual void Compress()
     {
       Log.Info(Strings.Mangas_Compress_Started + this.Name);
       var folder = this.GetAbsoulteFolderPath();
@@ -472,10 +472,12 @@ namespace MangaReader.Core.Manga
         currentState[propertyNames.ToList().IndexOf(nameof(CompressionMode))] = CompressionMode;
       }
 
-      if (Repository.Get<IManga>().Any(m => m.Id != this.Id && m.Folder == this.Folder))
-        throw new SaveValidationException($"Другая манга уже использует папку {this.Folder}.", this);
+      using (var context = Repository.GetEntityContext())
+      {
+        if (context.Get<IManga>().Any(m => m.Id != this.Id && m.Folder == this.Folder))
+          throw new SaveValidationException($"Другая манга уже использует папку {this.Folder}.", this);
+      }
 
-#warning Никогда не выполняется при стейтлесс сессии, т.е. точно не выполняется для списков.
       if (previousState != null)
       {
         var dirName = previousState[propertyNames.ToList().IndexOf(nameof(Folder))] as string;
@@ -529,18 +531,20 @@ namespace MangaReader.Core.Manga
     public static IManga Create(Uri uri)
     {
       IManga manga = null;
+      MangaSetting setting;
 
-      var setting = Repository.Get<MangaSetting>()
-        .ToList()
-        .SingleOrDefault(s => s.MangaSettingUris.Any(u => u.Host == uri.Host));
-      if (setting != null)
+      using (var context = Repository.GetEntityContext())
       {
-        var plugin = ConfigStorage.Plugins.SingleOrDefault(p => Equals(p.GetSettings(), setting));
-        if (plugin != null)
+        setting = context.Get<MangaSetting>().ToList().SingleOrDefault(s => s.MangaSettingUris.Any(u => u.Host == uri.Host));
+        if (setting != null)
         {
-          manga = Activator.CreateInstance(plugin.MangaType) as IManga;
-          if (manga is Mangas mangas)
-            mangas.Setting = setting;
+          var plugin = ConfigStorage.Plugins.SingleOrDefault(p => Equals(p.GetSettings(), setting));
+          if (plugin != null)
+          {
+            manga = Activator.CreateInstance(plugin.MangaType) as IManga;
+            if (manga is Mangas mangas)
+              mangas.Setting = setting;
+          }
         }
       }
 

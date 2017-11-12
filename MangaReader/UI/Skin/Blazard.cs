@@ -5,7 +5,7 @@
     public override void Init()
     {
       RegisterModelAndView<ViewModel.MainPageModel, MainForm.Blazard>();
-      RegisterModelAndView<ViewModel.Manga.MangaViewModel, Manga.BlazardManga>();
+      RegisterModelAndView<ViewModel.Manga.MangaModel, Manga.BlazardManga>();
     }
 
     public Blazard()

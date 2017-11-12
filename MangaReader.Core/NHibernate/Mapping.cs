@@ -29,8 +29,13 @@ namespace MangaReader.Core.NHibernate
 
       var session = sessionFactory.GetCurrentSession();
       if (!session.IsOpen || !session.IsConnected)
+      {
+        CurrentSessionContext.Unbind(sessionFactory);
         session = sessionFactory.OpenSession();
+        CurrentSessionContext.Bind(session);
+      }
       session.FlushMode = FlushMode.Commit;
+      Log.Trace($"Get session with id = {session.GetSessionImplementation().SessionId}");
       return session;
     }
 

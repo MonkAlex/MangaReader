@@ -35,7 +35,7 @@ namespace MangaReader.ViewModel.Setting
       this.Save = new SaveSettingsCommand(this);
 
       this.Views.Add(this.AppSetting);
-      foreach (var setting in Core.NHibernate.Repository.Get<Core.Services.MangaSetting>())
+      foreach (var setting in Core.NHibernate.Repository.GetStateless<Core.Services.MangaSetting>())
         this.Views.Add(new MangaSettingModel(setting));
       this.SelectedModel = this.AppSetting;
     }

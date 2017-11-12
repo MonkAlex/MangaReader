@@ -103,8 +103,11 @@ namespace MangaReader.Core.Services
     /// <param name="uri"></param>
     public bool Add(Uri uri)
     {
-      if (Repository.Get<IManga>().Any(m => m.Uri == uri))
-        return false;
+      using (var context = Repository.GetEntityContext())
+      {
+        if (context.Get<IManga>().Any(m => m.Uri == uri))
+          return false;
+      }
 
       var newManga = Mangas.CreateFromWeb(uri);
       if (newManga == null || !newManga.IsValid())
@@ -140,7 +143,7 @@ namespace MangaReader.Core.Services
 
         if (IsAvaible)
         {
-          ThreadAction(() => Update(Repository.Get<IManga>(), ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription))
+          ThreadAction(() => Update(null, ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription))
             .LogException("Автоматическое обновление успешно завершено", "Автоматическое обновление завершено с ошибкой");
         }
       }
@@ -150,42 +153,45 @@ namespace MangaReader.Core.Services
     /// Обновить мангу.
     /// </summary>
     /// <param name="manga">Обновляемая манга.</param>
-    public void Update(IManga manga)
+    public void Update(int manga)
     {
-      Update(Enumerable.Repeat(manga, 1), new SortDescription());
+      Update(new[] { manga }, new SortDescription());
     }
-    
+
     /// <summary>
     /// Обновить мангу.
     /// </summary>
     /// <param name="mangas">Обновляемая манга.</param>
     /// <param name="sort">Сортировка.</param>
-    public void Update(IEnumerable<IManga> mangas, SortDescription sort)
+    public void Update(IEnumerable<int> mangas, SortDescription sort)
     {
       OnLibraryChanged(new LibraryViewModelArgs(null, null, MangaOperation.None, LibraryOperation.UpdateStarted));
       Log.Info(Strings.Library_Status_Update);
       try
       {
         mangaIndex = 0;
-        mangas = sort.Direction == ListSortDirection.Ascending ?
-          mangas.OrderBy(m => m.Name) :
-          mangas.OrderByDescending(m => m.Name);
-        var listMangas = mangas.Where(m => m.NeedUpdate).ToList();
-        mangasCount = listMangas.Count;
-        foreach (var current in listMangas)
+        using (var context = Repository.GetEntityContext())
         {
-          DownloadManager.CheckPause().Wait();
+          var entities = context.Get<IManga>().Where(m => m.NeedUpdate && (mangas == null || mangas.Contains(m.Id))).ToList();
+          entities = sort.Direction == ListSortDirection.Ascending ?
+            entities.OrderBy(m => m.Name).ToList() :
+            entities.OrderByDescending(m => m.Name).ToList();
+          mangasCount = entities.Count;
+          foreach (var current in entities)
+          {
+            DownloadManager.CheckPause().Wait();
 
-          Log.Info(Strings.Library_Status_MangaUpdate + current.Name);
-          OnLibraryChanged(new LibraryViewModelArgs(null, current, MangaOperation.UpdateStarted, LibraryOperation.UpdateMangaChanged));
-          current.PropertyChanged += CurrentOnDownloadChanged;
-          current.Download().Wait();
-          current.PropertyChanged -= CurrentOnDownloadChanged;
-          if (current.NeedCompress ?? current.Setting.CompressManga)
-            current.Compress();
-          mangaIndex++;
-          if (current.IsDownloaded)
-            OnLibraryChanged(new LibraryViewModelArgs(null, current, MangaOperation.UpdateCompleted, LibraryOperation.UpdateMangaChanged));
+            Log.Info(Strings.Library_Status_MangaUpdate + current.Name);
+            OnLibraryChanged(new LibraryViewModelArgs(null, current, MangaOperation.UpdateStarted, LibraryOperation.UpdateMangaChanged));
+            current.PropertyChanged += CurrentOnDownloadChanged;
+            current.Download().Wait();
+            current.PropertyChanged -= CurrentOnDownloadChanged;
+            if (current.NeedCompress ?? current.Setting.CompressManga)
+              current.Compress();
+            mangaIndex++;
+            if (current.IsDownloaded)
+              OnLibraryChanged(new LibraryViewModelArgs(null, current, MangaOperation.UpdateCompleted, LibraryOperation.UpdateMangaChanged));
+          }
         }
       }
       catch (AggregateException ae)
@@ -217,7 +223,7 @@ namespace MangaReader.Core.Services
 
     #endregion
 
-    public event EventHandler<LibraryViewModelArgs> LibraryChanged; 
+    public event EventHandler<LibraryViewModelArgs> LibraryChanged;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -244,7 +250,7 @@ namespace MangaReader.Core.Services
     public MangaOperation MangaOperation { get; }
     public LibraryOperation LibraryOperation { get; }
 
-    public LibraryViewModelArgs(double? percent, IManga manga, 
+    public LibraryViewModelArgs(double? percent, IManga manga,
       MangaOperation mangaOperation, LibraryOperation libraryOperation)
     {
       this.Percent = percent;

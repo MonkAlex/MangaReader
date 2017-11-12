@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Grouple;
 using MangaReader.Core.Manga;
 using NUnit.Framework;
 
@@ -9,8 +8,6 @@ namespace Tests.Entities.Manga
   [TestFixture]
   public class MintmangaStructure : TestClass
   {
-    private Parser parser = new Parser();
-
     [Test]
     public void AddMintmangaWithExtra()
     {
@@ -21,7 +18,7 @@ namespace Tests.Entities.Manga
     private int GetCountOfChapters(string url)
     {
       var manga = Mangas.Create(new Uri(url));
-      parser.UpdateContent(manga);
+      new Grouple.Parser().UpdateContent(manga);
       return manga.Volumes.Sum(v => v.Container.Count());
     }
   }

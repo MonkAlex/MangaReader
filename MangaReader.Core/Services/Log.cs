@@ -22,6 +22,18 @@ namespace MangaReader.Core.Services
     /// Добавление записи в лог.
     /// </summary>
     /// <param name="message">Сообщение.</param>
+    public static void Trace(string message)
+    {
+      WriteExceptionToEventSource(() =>
+      {
+        instance.Value.Logger.Trace(message);
+      });
+    }
+
+    /// <summary>
+    /// Добавление записи в лог.
+    /// </summary>
+    /// <param name="message">Сообщение.</param>
     public static void Add(string message)
     {
       WriteExceptionToEventSource(() =>

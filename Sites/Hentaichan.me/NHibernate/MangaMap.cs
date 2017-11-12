@@ -6,7 +6,6 @@ namespace Hentaichan.NHibernate
   {
     public HentaichanMap()
     {
-      Not.LazyLoad();
       DiscriminatorValue(HentaichanPlugin.Manga.ToString());
     }
   }
@@ -15,7 +14,6 @@ namespace Hentaichan.NHibernate
   {
     public MangachanMap()
     {
-      Not.LazyLoad();
       DiscriminatorValue(Mangachan.MangachanPlugin.Manga.ToString());
     }
   }

@@ -7,7 +7,7 @@ namespace MangaReader.Core.Entity
   public class Entity : IEntity
   {
     [XmlIgnore]
-    public int Id
+    public virtual int Id
     {
       set
       {
@@ -45,8 +45,8 @@ namespace MangaReader.Core.Entity
         return;
       }
 
-      using (var session = Mapping.GetSession())
-        session.Refresh(this);
+      using (var context = Repository.GetEntityContext())
+        context.Refresh(this);
     }
 
     /// <summary>
@@ -58,12 +58,11 @@ namespace MangaReader.Core.Entity
       if (this.Id == 0)
         return false;
 
-      using (var session = Mapping.GetSession())
+      using (var context = Repository.GetEntityContext())
       {
-        using (var tranc = session.BeginTransaction())
+        using (var tranc = context.OpenTransaction())
         {
-          var entity = session.Load(this.GetType(), this.Id);
-          session.Delete(entity);
+          context.Delete(this);
           tranc.Commit();
           this.Id = 0;
         }

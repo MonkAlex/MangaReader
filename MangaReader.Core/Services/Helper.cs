@@ -57,7 +57,7 @@ namespace MangaReader.Core.Services
 
   public static class Generic
   {
-    public static T SingleOrCreate<T>(this IQueryable<T> query) where T : Entity.Entity, new()
+    public static T SingleOrCreate<T>(this IEnumerable<T> query) where T : Entity.Entity, new()
     {
       var single = query.SingleOrDefault();
       if (Equals(single, default(T)))

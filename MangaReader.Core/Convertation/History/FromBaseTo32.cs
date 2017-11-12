@@ -47,36 +47,36 @@ namespace MangaReader.Core.Convertation.History
 #pragma warning restore CS0612
       // ReSharper restore CSharpWarnings::CS0612
 
-      var mangas = Repository.Get<Manga.IManga>().ToList();
-      var historyInDb = Repository.Get<MangaHistory>().Select(h => h.Uri).ToList();
-      histories = histories.Where(h => !historyInDb.Contains(h.Uri)).Distinct().ToList();
-      if (histories.Any())
-        process.ProgressState = ProgressState.Normal;
-
-      // Актуализируем старые ссылки, с учетом переездов сайтов.
-      var mangaSettings = Repository.Get<MangaSetting>().ToList();
-      foreach (var history in histories)
+      using (var context = Repository.GetEntityContext())
       {
-        var settings = mangaSettings.Where(s => s.MangaSettingUris.Select(u => u.Host).Contains(history.Uri.Host));
-        foreach (var setting in settings)
+        var mangas = context.Get<IManga>().ToList();
+        var historyInDb = Repository.GetStateless<MangaHistory>().Select(h => h.Uri).ToList();
+        histories = histories.Where(h => !historyInDb.Contains(h.Uri)).Distinct().ToList();
+        if (histories.Any())
+          process.ProgressState = ProgressState.Normal;
+
+        // Актуализируем старые ссылки, с учетом переездов сайтов.
+        var mangaSettings = Repository.GetStateless<MangaSetting>();
+        foreach (var history in histories)
         {
-          var hosts = setting.MangaSettingUris.Where(s => !Equals(s, setting.MainUri)).Select(s => s.Host).ToList();
-          foreach (var host in hosts)
+          var settings = mangaSettings.Where(s => s.MangaSettingUris.Select(u => u.Host).Contains(history.Uri.Host));
+          foreach (var setting in settings)
           {
-            if (history.MangaUrl != null && history.MangaUrl.Contains(host))
-              history.MangaUrl = history.MangaUrl.Replace(host, setting.MainUri.Host);
-            if (history.Uri.Host == host)
+            var hosts = setting.MangaSettingUris.Where(s => !Equals(s, setting.MainUri)).Select(s => s.Host).ToList();
+            foreach (var host in hosts)
             {
-              var builder = new UriBuilder(history.Uri) { Host = setting.MainUri.Host, Port = -1 };
-              history.Uri = builder.Uri;
+              if (history.MangaUrl != null && history.MangaUrl.Contains(host))
+                history.MangaUrl = history.MangaUrl.Replace(host, setting.MainUri.Host);
+              if (history.Uri.Host == host)
+              {
+                var builder = new UriBuilder(history.Uri) { Host = setting.MainUri.Host, Port = -1 };
+                history.Uri = builder.Uri;
+              }
             }
           }
         }
-      }
 
-      using (var session = Mapping.GetSession())
-      {
-        using (var tranc = session.BeginTransaction())
+        using (var tranc = context.OpenTransaction())
         {
           foreach (var manga in mangas)
           {
@@ -85,15 +85,12 @@ namespace MangaReader.Core.Convertation.History
                                                     h.Uri.OriginalString.Contains(manga.Uri.OriginalString + "/")).ToList();
             manga.Histories.AddRange(mangaHistory);
             histories.RemoveAll(h => mangaHistory.Contains(h));
-            session.SaveOrUpdate(manga);
+            context.SaveOrUpdate(manga);
           }
           tranc.Commit();
         }
-      }
 
-      using (var session = Mapping.GetSession())
-      {
-        using (var tranc = session.BeginTransaction())
+        using (var tranc = context.OpenTransaction())
         {
           foreach (var history in histories.GroupBy(h => new Uri(h.Uri, "..")))
           {
@@ -105,19 +102,20 @@ namespace MangaReader.Core.Convertation.History
             if (manga.Uri == history.Key)
               continue;
 
-            manga = Repository.Get<IManga>().FirstOrDefault(m => m.Uri == manga.Uri);
+            var uri = manga.Uri;
+            manga = mangas.FirstOrDefault(m => m.Uri == uri);
             if (manga == null)
               continue;
 
             foreach (var record in history)
               record.Uri = new Uri(record.Uri.OriginalString.Replace(history.Key.OriginalString.TrimEnd('/'), manga.Uri.OriginalString.TrimEnd('/')));
             manga.Histories.AddRange(history);
-            session.SaveOrUpdate(manga);
+            context.SaveOrUpdate(manga);
           }
           tranc.Commit();
         }
       }
-      
+
       Backup.MoveToBackup(HistoryFile);
     }
 

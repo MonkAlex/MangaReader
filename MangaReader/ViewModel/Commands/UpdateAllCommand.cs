@@ -16,7 +16,7 @@ namespace MangaReader.ViewModel.Commands
 
       if (Library.IsAvaible)
       {
-        Library.ThreadAction(() => Library.Update(Repository.Get<IManga>(), ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
+        Library.ThreadAction(() => Library.Update(null, ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
       }
     }
 

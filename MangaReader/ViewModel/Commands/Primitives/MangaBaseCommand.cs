@@ -1,5 +1,9 @@
-﻿using MangaReader.Core.Manga;
+﻿using System;
+using System.Linq;
+using MangaReader.Core.Manga;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
+using MangaReader.ViewModel.Commands.Manga;
 using MangaReader.ViewModel.Manga;
 
 namespace MangaReader.ViewModel.Commands.Primitives
@@ -12,10 +16,27 @@ namespace MangaReader.ViewModel.Commands.Primitives
     {
       base.Execute(parameter);
 
-      var manga = parameter as MangaViewModel;
-      if (manga != null && manga.Manga != null)
+      if (parameter is MangaModel model)
       {
-        this.Execute(manga.Manga);
+        using (var context = Repository.GetEntityContext())
+        {
+          var manga = context.Get<IManga>().Single(m => m.Id == model.Id);
+          try
+          {
+            model.ContextManga = manga;
+            this.Execute(manga);
+
+          }
+          catch (Exception e)
+          {
+            Log.Exception(e);
+          }
+          finally
+          {
+            model.UpdateProperties(manga);
+            model.ContextManga = null;
+          }
+        }
 
         if (NeedRefresh)
           WindowModel.Instance.Refresh();
@@ -30,7 +51,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
 
     public virtual void Execute(IManga manga)
     {
-      
+
     }
 
     public MangaBaseCommand(LibraryViewModel model) : base(model)

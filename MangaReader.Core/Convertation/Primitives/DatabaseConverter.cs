@@ -8,7 +8,7 @@ namespace MangaReader.Core.Convertation.Primitives
     protected override bool ProtectedCanConvert(IProcess process)
     {
       return base.ProtectedCanConvert(process) &&
-        Version.CompareTo(NHibernate.Repository.Get<DatabaseConfig>().Single().Version) > 0 && 
+        Version.CompareTo(NHibernate.Repository.GetStateless<DatabaseConfig>().Single().Version) > 0 && 
         process.Version.CompareTo(Version) >= 0;
     }
 

@@ -22,13 +22,16 @@ namespace Acomics.Convertation
         setting.Save();
       }
 
-      var mangas = Repository.Get<Acomics>().ToList();
-      foreach (var manga in mangas)
+      using (var context = Repository.GetEntityContext())
       {
-        manga.Uri = new Uri(manga.Uri.OriginalString.Replace("http://acomics.ru", "https://acomics.ru"));
-        process.Percent += 100.0 / mangas.Count;
+        var mangas = context.Get<Acomics>().ToList();
+        foreach (var manga in mangas)
+        {
+          manga.Uri = new Uri(manga.Uri.OriginalString.Replace("http://acomics.ru", "https://acomics.ru"));
+          process.Percent += 100.0 / mangas.Count;
+        }
+        mangas.SaveAll();
       }
-      mangas.SaveAll();
     }
 
     public AcomicsFrom38To39()

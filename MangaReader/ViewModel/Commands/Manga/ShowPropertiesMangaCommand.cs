@@ -8,11 +8,18 @@ namespace MangaReader.ViewModel.Commands.Manga
 {
   public class ShowPropertiesMangaCommand : MangaBaseCommand
   {
+    private MangaModel model;
+
+    public override void Execute(object parameter)
+    {
+      model = (MangaModel)parameter;
+      base.Execute(parameter);
+    }
+
     public override void Execute(IManga manga)
     {
       base.Execute(manga);
-
-      new MangaCardModel(manga, Library).Show();
+      model.Show();
     }
 
     public ShowPropertiesMangaCommand(LibraryViewModel model) : base(model)

@@ -6,7 +6,6 @@ namespace Acomics.NHibernate
   {
     public AcomicsMap()
     {
-      Not.LazyLoad();
       DiscriminatorValue(AcomicsPlugin.Manga.ToString());
     }
   }

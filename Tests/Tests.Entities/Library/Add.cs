@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using NUnit.Framework;
 
@@ -34,12 +35,15 @@ namespace Tests.Entities.Library
       var result = false;
       var uri = new Uri(@"http://readmanga.me/berserk");
 
-      var mangas = MangaReader.Core.NHibernate.Repository.Get<Grouple.Readmanga>()
-        .ToList()
-        .Where(m => m.Uri.AbsoluteUri.Contains("berserk"))
-        .ToList();
-      foreach (var manga in mangas)
-        model.Remove(manga);
+      using (var context = Repository.GetEntityContext())
+      {
+        var mangas = context.Get<Grouple.Readmanga>()
+          .ToList()
+          .Where(m => m.Uri.AbsoluteUri.Contains("berserk"))
+          .ToList();
+        foreach (var manga in mangas)
+          model.Remove(manga);
+      }
 
       try
       {

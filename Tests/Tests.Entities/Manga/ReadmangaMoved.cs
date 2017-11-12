@@ -16,24 +16,27 @@ namespace Tests.Entities.Manga
     public void CreateWithHistoryAndMove()
     {
       var model = new MangaReader.Core.Services.LibraryViewModel();
-      foreach (var remove in Repository.Get<IManga>().Where(m => m.ServerName.Contains("btooom")).ToList())
-        model.Remove(remove);
+      using (var context = Repository.GetEntityContext())
+      {
+        foreach (var remove in context.Get<IManga>().ToList().Where(m => m.ServerName.Contains("btooom")))
+          model.Remove(remove);
 
-      var manga = Builder.CreateReadmanga();
-      manga.Uri = new Uri("http://readmanga.me/btoom");
-      manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(new Uri("http://readmanga.me/btoom/vol1/1?mature=1")));
-      manga.Save();
+        var manga = Builder.CreateReadmanga();
+        manga.Uri = new Uri("http://readmanga.me/btoom");
+        manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(new Uri("http://readmanga.me/btoom/vol1/1?mature=1")));
+        manga.Save();
 
-      manga = Repository.Get<Grouple.Readmanga>(manga.Id);
-      manga.Refresh();
-      manga.Save();
+        manga = context.Get<Grouple.Readmanga>().FirstOrDefault(m => m.Id == manga.Id);
+        manga.Refresh();
+        manga.Save();
 
 
-      var volume = new Volume();
-      volume.Container.Add(new Chapter(new Uri("http://mintmanga.com/btooom_/vol1/1?mature=1")));
+        var volume = new Volume();
+        volume.Container.Add(new Chapter(new Uri("http://mintmanga.com/btooom_/vol1/1?mature=1")));
 
-      var chartersNotInHistory = History.GetItemsWithoutHistory(volume);
-      Assert.AreEqual(0, chartersNotInHistory.Count);
+        var chartersNotInHistory = History.GetItemsWithoutHistory(volume);
+        Assert.AreEqual(0, chartersNotInHistory.Count);
+      }
     }
   }
 }

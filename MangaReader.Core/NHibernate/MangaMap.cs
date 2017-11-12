@@ -8,7 +8,6 @@ namespace MangaReader.Core.NHibernate
   {
     public MangaMap()
     {
-      Not.LazyLoad();
       Id(x => x.Id).GeneratedBy.Native();
       Map(x => x.LocalName);
       Map(x => x.ServerName);
@@ -25,10 +24,10 @@ namespace MangaReader.Core.NHibernate
       Map(x => x.Cover);
       Map(x => x.DownloadedAt);
       References(x => x.Setting).Column(nameof(Mangas.Setting));
-      HasMany(x => x.Histories).CollectionType<HistoryBugType>().Cascade.AllDeleteOrphan().Not.LazyLoad();
-      HasMany(x => x.Volumes).AsBag().Cascade.AllDeleteOrphan().Not.LazyLoad();
-      HasMany(x => x.Chapters).AsBag().Cascade.AllDeleteOrphan().Not.LazyLoad();
-      HasMany(x => x.Pages).AsBag().Cascade.AllDeleteOrphan().Not.LazyLoad();
+      HasMany(x => x.Histories).CollectionType<HistoryBugType>().Cascade.AllDeleteOrphan();
+      HasMany(x => x.Volumes).AsBag().Cascade.AllDeleteOrphan();
+      HasMany(x => x.Chapters).AsBag().Cascade.AllDeleteOrphan();
+      HasMany(x => x.Pages).AsBag().Cascade.AllDeleteOrphan();
       DiscriminateSubClassesOnColumn("Type");
     }
   }

@@ -59,7 +59,7 @@ namespace MangaReader
     internal static void ClientOnClientBeenClosed(object sender, EventArgs eventArgs)
     {
       if (Environment.GetCommandLineArgs().Any(a => a == AddManga))
-        Core.ApplicationControl.Client.Run(Core.NHibernate.Repository.Get<DatabaseConfig>().Single().UniqueId.ToString("D"), Messages.AddManga);
+        Core.ApplicationControl.Client.Run(Core.NHibernate.Repository.GetDatabaseUniqueId().ToString("D"), Messages.AddManga);
     }
 
     private static void ClientOnOtherAppRunning(object sender, string s)

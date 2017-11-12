@@ -12,7 +12,7 @@ namespace Acomics.Convertation
     protected override bool ProtectedCanConvert(IProcess process)
     {
       return base.ProtectedCanConvert(process) && 
-        Version.CompareTo(MangaReader.Core.NHibernate.Repository.Get<DatabaseConfig>().Single().Version) > 0 && 
+        Version.CompareTo(MangaReader.Core.NHibernate.Repository.GetStateless<DatabaseConfig>().Single().Version) > 0 && 
         process.Version.CompareTo(Version) >= 0;
     }
 
@@ -20,14 +20,17 @@ namespace Acomics.Convertation
     {
       base.ProtectedConvert(process);
 
-      var acomics = Repository.Get<Acomics>().ToList();
       var parser = new Parser();
-      foreach (var acomic in acomics)
+      using (var context = Repository.GetEntityContext())
       {
-        parser.UpdateContentType(acomic);
-        process.Percent += 100.0 / acomics.Count;
+        var acomics = context.Get<Acomics>().ToList();
+        foreach (var acomic in acomics)
+        {
+          parser.UpdateContentType(acomic);
+          process.Percent += 100.0 / acomics.Count;
+        }
+        acomics.SaveAll();
       }
-      acomics.SaveAll();
     }
 
     public From24To27()

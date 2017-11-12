@@ -6,7 +6,6 @@ namespace Grouple.NHibernate
   {
     public MintmangaMap()
     {
-      Not.LazyLoad();
       DiscriminatorValue(MintmangaPlugin.Manga.ToString());
     }
   }

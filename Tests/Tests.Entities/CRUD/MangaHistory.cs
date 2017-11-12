@@ -20,20 +20,26 @@ namespace Tests.Entities.CRUD
       Assert.AreNotEqual(0, history.Id);
       Assert.AreNotEqual(null, manga.Histories.FirstOrDefault());
 
-      var mangaHistory = Repository.Get<MangaReader.Core.Manga.MangaHistory>(historyId);
-      Assert.AreNotEqual(null, mangaHistory);
+      using (var context = Repository.GetEntityContext())
+      {
+        var mangaHistory = context.Get<MangaReader.Core.Manga.MangaHistory>().FirstOrDefault(h => h.Id == historyId);
+        Assert.AreNotEqual(null, mangaHistory);
 
-      var mangas = Repository.Get<IManga>(mangaId);
-      Assert.AreNotEqual(null, mangas);
+        var mangas = context.Get<IManga>().FirstOrDefault(m => m.Id == mangaId);
+        Assert.AreNotEqual(null, mangas);
+      }
 
       Builder.DeleteMangaHistory(manga);
       Builder.DeleteAcomics(manga);
 
-      mangaHistory = Repository.Get<MangaReader.Core.Manga.MangaHistory>(historyId);
-      Assert.AreEqual(null, mangaHistory);
+      using (var context = Repository.GetEntityContext())
+      {
+        var mangaHistory = context.Get<MangaReader.Core.Manga.MangaHistory>().FirstOrDefault(h => h.Id == historyId);
+        Assert.AreEqual(null, mangaHistory);
 
-      mangas = Repository.Get<IManga>(mangaId);
-      Assert.AreEqual(null, mangas);
+        var mangas = context.Get<IManga>().FirstOrDefault(m => m.Id == mangaId);
+        Assert.AreEqual(null, mangas);
+      }
     }
 
     [Test]
@@ -52,14 +58,14 @@ namespace Tests.Entities.CRUD
       history.Update();
       Assert.AreEqual(oldUrl, history.Uri);
 
-      var mangaHistory = Repository.Get<MangaReader.Core.Manga.MangaHistory>(historyId);
+      var mangaHistory = Repository.GetStateless<MangaReader.Core.Manga.MangaHistory>(historyId);
       Assert.AreEqual(oldUrl, mangaHistory.Uri);
 
       history.Uri = url;
       history.Save();
       Assert.AreEqual(url, history.Uri);
 
-      mangaHistory = Repository.Get<MangaReader.Core.Manga.MangaHistory>(historyId);
+      mangaHistory = Repository.GetStateless<MangaReader.Core.Manga.MangaHistory>(historyId);
       Assert.AreEqual(url, mangaHistory.Uri);
 
       Builder.DeleteMangaHistory(manga);

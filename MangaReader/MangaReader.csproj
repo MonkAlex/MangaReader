@@ -168,9 +168,7 @@
     <Compile Include="ViewModel\Commands\Navigation\PreviousMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\OpenWikiCommand.cs" />
     <Compile Include="ViewModel\Commands\Primitives\NavigationCommand.cs" />
-    <Compile Include="ViewModel\Manga\MangaBaseModel.cs" />
-    <Compile Include="ViewModel\Manga\MangaCardModel.cs" />
-    <Compile Include="ViewModel\Manga\MangaViewModel.cs" />
+    <Compile Include="ViewModel\Manga\MangaModel.cs" />
     <Compile Include="ViewModel\Primitive\ImageSourceVM.cs" />
     <Compile Include="ViewModel\Setting\AppSettingModel.cs" />
     <Compile Include="ViewModel\Commands\AddManga\AddSelected.cs" />

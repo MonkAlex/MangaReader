@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
+using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
@@ -32,7 +34,7 @@ namespace MangaReader.ViewModel
 
     public ListCollectionView View { get; set; }
 
-    public ObservableCollection<MangaViewModel> MangaViewModels { get; private set; }
+    public ObservableCollection<MangaModel> MangaViewModels { get; private set; }
 
     public LibraryFilter LibraryFilter { get; set; }
 
@@ -90,11 +92,11 @@ namespace MangaReader.ViewModel
 
     internal virtual bool Filter(object o)
     {
-      var mangaModel = o as MangaBaseModel;
+      var mangaModel = o as MangaModel;
       if (mangaModel == null)
         return false;
 
-      var manga = mangaModel.Manga;
+      var manga = mangaModel;
 
       if (LibraryFilter.Uncompleted && manga.IsCompleted)
         return false;
@@ -102,7 +104,7 @@ namespace MangaReader.ViewModel
       if (LibraryFilter.OnlyUpdate && !manga.NeedUpdate)
         return false;
 
-      return LibraryFilter.AllowedTypes.Any(t => Equals(t.Value as MangaSetting, manga.Setting)) &&
+      return LibraryFilter.AllowedTypes.Any(t => Equals(t.Value, manga.SettingsId)) &&
         manga.Name.ToLowerInvariant().Contains(LibraryFilter.Name.ToLowerInvariant());
     }
 
@@ -142,12 +144,13 @@ namespace MangaReader.ViewModel
     {
       LibraryFilter = ConfigStorage.Instance.ViewConfig.LibraryFilter;
       this.Library = new LibraryViewModel();
-      this.MangaViewModels = new ObservableCollection<MangaViewModel>(Repository.Get<IManga>().Select(m => new MangaViewModel(m, Library)));
+      using (var context = Repository.GetEntityContext())
+        this.MangaViewModels = new ObservableCollection<MangaModel>(context.Get<IManga>().Select(m => new MangaModel(m, Library)));
       Library.LibraryChanged += LibraryOnLibraryChanged;
       View = new ListCollectionView(MangaViewModels)
       {
         Filter = Filter,
-        CustomSort = new MangaViewModel(null, Library)
+        CustomSort = mangaComparer.Value
       };
       View.MoveCurrentToFirst();
 
@@ -188,16 +191,38 @@ namespace MangaReader.ViewModel
       };
     }
 
+    private Lazy<IComparer> mangaComparer = new Lazy<IComparer>(() => new MangaComparerImpl());
+
+    private class MangaComparerImpl : IComparer, IComparer<IManga>
+    {
+      public int Compare(object x, object y)
+      {
+        if (x is MangaModel xM && y is MangaModel yM)
+          return Compare(xM.Name, yM.Name);
+        throw new MangaReaderException("Can compare only Mangas.");
+      }
+
+      private static int Compare(string x, string y)
+      {
+        return string.Compare(x, y, StringComparison.Ordinal);
+      }
+
+      public int Compare(IManga x, IManga y)
+      {
+        return Compare(x.Name, y.Name);
+      }
+    }
+
     private void LibraryOnLibraryChanged(object o, LibraryViewModelArgs args)
     {
       if (args.LibraryOperation == LibraryOperation.UpdateMangaChanged)
       {
-        var model = this.MangaViewModels.SingleOrDefault(m => Equals(m.Manga, args.Manga));
+        var model = this.MangaViewModels.SingleOrDefault(m => Equals(m.Id, args.Manga?.Id));
         switch (args.MangaOperation)
         {
           case MangaOperation.Added:
             if (model == null)
-              Client.Dispatcher.Invoke(() => this.MangaViewModels.Add(new MangaViewModel(args.Manga, Library)));
+              Client.Dispatcher.Invoke(() => this.MangaViewModels.Add(new MangaModel(args.Manga, Library)));
             break;
           case MangaOperation.Deleted:
             if (model != null)

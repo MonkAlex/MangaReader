@@ -35,9 +35,12 @@ namespace MangaReader.Core.Convertation.Config
         ConfigStorage.Instance.ViewConfig.WindowStates.Height = (double)((object[])settings[5])[3];
         ConfigStorage.Instance.ViewConfig.WindowStates.WindowState = (WindowState)((object[])settings[5])[4];
 
-        var databaseConfig = NHibernate.Repository.Get<DatabaseConfig>().Single();
-        databaseConfig.Version = new Version((string)settings[9]);
-        databaseConfig.Save();
+        using (var context = NHibernate.Repository.GetEntityContext())
+        {
+          var databaseConfig = context.Get<DatabaseConfig>().Single();
+          databaseConfig.Version = new Version((string)settings[9]);
+          databaseConfig.Save();
+        }
 
         Backup.MoveToBackup(SettingsOldPath);
       }

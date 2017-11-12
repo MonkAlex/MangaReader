@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Text;
-using MangaReader.Core.Services.Config;
 using NLog;
-using NLog.Common;
 using NLog.Config;
 using NLog.Targets;
 
@@ -17,18 +14,6 @@ namespace MangaReader.Core.Services
     internal ILogger Logger;
 
     public static event Action<LogEventStruct> LogReceived;
-
-    /// <summary>
-    /// Добавление записи в лог.
-    /// </summary>
-    /// <param name="message">Сообщение.</param>
-    public static void Trace(string message)
-    {
-      WriteExceptionToEventSource(() =>
-      {
-        instance.Value.Logger.Trace(message);
-      });
-    }
 
     /// <summary>
     /// Добавление записи в лог.

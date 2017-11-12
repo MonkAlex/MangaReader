@@ -15,9 +15,12 @@ namespace MangaReader.Core.NHibernate
     {
       var nameIndex = propertyNames.ToList().IndexOf(nameof(Mangas.ServerName));
       var name = nameIndex > 0 ? $" ({currentState[nameIndex]})" : null;
-      Log.Add(id != null
-        ? $"Save {entity.GetType().Name} with id {id}{name}."
-        : $"New {entity.GetType().Name}{name}.");
+      if (name != null)
+      {
+        Log.Add(id != null
+          ? $"Save {entity.GetType().Name} with id {id}{name}."
+          : $"New {entity.GetType().Name}{name}.");
+      }
       var method = entity.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance).SingleOrDefault(m => m.Name == "BeforeSave");
       if (method != null)
       {

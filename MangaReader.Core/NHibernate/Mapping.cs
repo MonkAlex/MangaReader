@@ -35,7 +35,6 @@ namespace MangaReader.Core.NHibernate
         CurrentSessionContext.Bind(session);
       }
       session.FlushMode = FlushMode.Commit;
-      Log.Trace($"Get session with id = {session.GetSessionImplementation().SessionId}");
       return session;
     }
 

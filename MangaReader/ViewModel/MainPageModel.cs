@@ -229,9 +229,11 @@ namespace MangaReader.ViewModel
               Client.Dispatcher.Invoke(() => this.MangaViewModels.Remove(model));
             break;
           case MangaOperation.UpdateStarted:
+            ActualizeSpeedAndProcess(LastDownload as IManga);
             this.LastDownload = args.Manga;
             break;
           case MangaOperation.UpdateCompleted:
+            ActualizeSpeedAndProcess(args.Manga);
             this.LastDownload = null;
             break;
           case MangaOperation.None:
@@ -245,6 +247,23 @@ namespace MangaReader.ViewModel
         if (Library.ShutdownPC)
           Client.Dispatcher.Invoke(() => new ShutdownViewModel().Show());
         Library.ShutdownPC = false;
+      }
+      if (args.LibraryOperation == LibraryOperation.UpdatePercentChanged)
+      {
+        ActualizeSpeedAndProcess(args.Manga);
+      }
+    }
+
+    private void ActualizeSpeedAndProcess(IManga manga)
+    {
+      if (manga == null)
+        return;
+
+      var view = MangaViewModels.SingleOrDefault(m => m.Id == manga.Id);
+      if (view != null)
+      {
+        view.Downloaded = manga.Downloaded;
+        view.Speed = NetworkSpeed.TotalSpeed.HumanizeByteSize();
       }
     }
   }

@@ -27,13 +27,9 @@ namespace MangaReader.Core.Manga
 
     #endregion
 
-    public string Folder
+    public override string Folder
     {
-      get
-      {
-        return this.folderPrefix + this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(Number % 1 == 0 ? 4 : 6, '0');
-      }
-      private set { this.folderPrefix = value; }
+      get { return this.folderPrefix + this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(Number % 1 == 0 ? 4 : 6, '0'); }
     }
 
     public bool OnlyUpdate { get; set; }

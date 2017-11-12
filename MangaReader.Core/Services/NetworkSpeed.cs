@@ -42,15 +42,9 @@ namespace MangaReader.Core.Services
     public static void Clear()
     {
       while (receivedStorage.Value.Count > 0)
-      {
-        long dd;
-        receivedStorage.Value.TryDequeue(out dd);
-      }
+        receivedStorage.Value.TryDequeue(out _);
       while (lastSpeeds.Value.Count > 0)
-      {
-        double dd;
-        lastSpeeds.Value.TryDequeue(out dd);
-      }
+        lastSpeeds.Value.TryDequeue(out _);
       totalSpeed = 0;
     }
 
@@ -68,10 +62,7 @@ namespace MangaReader.Core.Services
       public new void Enqueue(T item)
       {
         while (Count >= Limit)
-        {
-          T deleted;
-          TryDequeue(out deleted);
-        }
+          TryDequeue(out _);
         base.Enqueue(item);
       }
 

@@ -14,10 +14,9 @@ namespace MangaReader.Core.Manga
   {
     public int Number { get; set; }
 
-    public string Folder
+    public override string Folder
     {
       get { return this.folderPrefix + this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0'); }
-      private set { this.folderPrefix = value; }
     }
 
     public virtual bool OnlyUpdate { get; set; }

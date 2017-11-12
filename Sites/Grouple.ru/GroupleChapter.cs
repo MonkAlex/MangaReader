@@ -16,8 +16,6 @@ namespace Grouple
     /// </summary>
     public int Volume;
 
-    public List<Uri> Servers { get; set; }
-
     #endregion
 
     #region Методы

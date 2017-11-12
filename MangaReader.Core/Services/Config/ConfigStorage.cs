@@ -34,29 +34,6 @@ namespace MangaReader.Core.Services.Config
     /// </summary>
     public ViewConfig ViewConfig { get; set; }
 
-    /*
-    /// <summary>
-    /// Настройки, зависящие от базы данных.
-    /// </summary>
-    [JsonIgnore]
-    public DatabaseConfig DatabaseConfig
-    {
-      get
-      {
-        if (databaseConfig == null)
-        {
-          if (Mapping.Initialized)
-            databaseConfig = Repository.Get<DatabaseConfig>().SingleOrCreate();
-          else
-            Log.Exception("Запрос DatabaseConfig до инициализации соединения с базой.");
-        }
-        return databaseConfig;
-      }
-      set { }
-    }
-
-    private DatabaseConfig databaseConfig;
-    */
     /// <summary>
     /// Папка программы.
     /// </summary>

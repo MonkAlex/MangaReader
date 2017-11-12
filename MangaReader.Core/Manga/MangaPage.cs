@@ -19,6 +19,11 @@ namespace MangaReader.Core.Manga
     private int restartCounter;
 
     /// <summary>
+    /// Максимальное количество попыток скачивания.
+    /// </summary>
+    protected int MaxAttempt { get; set; }
+
+    /// <summary>
     /// Название страницы.
     /// </summary>
     public string Name { get; set; }
@@ -62,7 +67,7 @@ namespace MangaReader.Core.Manga
     {
       this.IsDownloaded = false;
 
-      if (restartCounter > 3)
+      if (restartCounter > MaxAttempt)
         throw new DownloadAttemptFailed(restartCounter, this);
 
       try
@@ -77,7 +82,7 @@ namespace MangaReader.Core.Manga
 
           var file = await DownloadManager.DownloadImage(this.ImageLink);
           if (!file.Exist)
-            throw new System.Exception("Restart download, downloaded file is corrupted, link = " + this.ImageLink);
+            OnDownloadFailed();
           var fileName = this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + file.Extension;
           await file.Save(Path.Combine(chapterFolder, fileName));
           this.IsDownloaded = true;
@@ -89,6 +94,11 @@ namespace MangaReader.Core.Manga
         ++restartCounter;
         await Download(chapterFolder);
       }
+    }
+
+    protected virtual void OnDownloadFailed()
+    {
+      throw new System.Exception("Restart download, downloaded file is corrupted, link = " + this.ImageLink);
     }
 
     public void ClearHistory()
@@ -111,6 +121,7 @@ namespace MangaReader.Core.Manga
       this.Uri = uri;
       this.ImageLink = imageLink;
       this.Number = number;
+      this.MaxAttempt = 3;
       this.restartCounter = 0;
     }
 

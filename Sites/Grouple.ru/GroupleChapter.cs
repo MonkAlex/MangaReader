@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Grouple
@@ -14,6 +15,8 @@ namespace Grouple
     /// Номер тома.
     /// </summary>
     public int Volume;
+
+    public List<Uri> Servers { get; set; }
 
     #endregion
 

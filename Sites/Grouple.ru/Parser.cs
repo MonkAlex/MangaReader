@@ -4,14 +4,12 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.EquivalencyExpression;
 using HtmlAgilityPack;
 using MangaReader.Core;
 using MangaReader.Core.Account;
 using MangaReader.Core.DataTrasferObject;
-using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
@@ -98,6 +96,10 @@ namespace Grouple
       if (node == null)
         return;
 
+      var servers = Regex.Match(node.OuterHtml, @"var servers = (\[.*?\])", RegexOptions.IgnoreCase);
+      var jsonServers = JToken.Parse(servers.Groups[1].Value).Children().ToList();
+      var serversList = jsonServers.Select(server => new Uri(server.ToString())).ToList();
+
       var initBlock = Regex.Match(node.OuterHtml, @"rm_h\.init\([ ]*(\[\[.*?\]\])", RegexOptions.IgnoreCase);
       var jsonParsed = JToken.Parse(initBlock.Groups[1].Value).Children().ToList();
       for (var i = 0; i < jsonParsed.Count; i++)
@@ -109,7 +111,7 @@ namespace Grouple
         if (!Uri.TryCreate(uriString, UriKind.Absolute, out Uri imageLink))
           imageLink = new Uri(@"http://" + groupleChapter.Uri.Host + uriString);
 
-        groupleChapter.Container.Add(new MangaPage(groupleChapter.Uri, imageLink, i));
+        groupleChapter.Container.Add(new GroupleMangaPage(groupleChapter.Uri, imageLink, i, serversList));
       }
     }
 

@@ -65,7 +65,9 @@
     <Compile Include="Convertation\From37To38.cs" />
     <Compile Include="Convertation\From41To42.cs" />
     <Compile Include="Convertation\From42To43.cs" />
+    <Compile Include="GroupleMangaPage.cs" />
     <Compile Include="NHibernate\GroupleChapterMap.cs" />
+    <Compile Include="NHibernate\GroupleMangaPageMap.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="GroupleLogin.cs" />
     <Compile Include="GroupleManga.cs" />

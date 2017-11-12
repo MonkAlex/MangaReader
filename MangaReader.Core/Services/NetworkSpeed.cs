@@ -51,6 +51,7 @@ namespace MangaReader.Core.Services
         double dd;
         lastSpeeds.Value.TryDequeue(out dd);
       }
+      totalSpeed = 0;
     }
 
     public static void AddInfo(long received)

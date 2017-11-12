@@ -127,10 +127,17 @@ namespace MangaReader.Core.Services
       if (manga == null)
         return;
 
-      manga.Delete();
       OnLibraryChanged(new LibraryViewModelArgs(null, manga, MangaOperation.Deleted, LibraryOperation.UpdateMangaChanged));
-
-      Log.Info(Strings.Library_Status_MangaRemoved + manga.Name);
+      try
+      {
+        manga.Delete();
+        Log.Info(Strings.Library_Status_MangaRemoved + manga.Name);
+      }
+      catch (System.Exception e)
+      {
+        Log.Exception(e);
+        OnLibraryChanged(new LibraryViewModelArgs(null, manga, MangaOperation.Added, LibraryOperation.UpdateMangaChanged));
+      }
     }
 
     private void TimerTick(object sender)

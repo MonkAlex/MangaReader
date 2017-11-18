@@ -48,11 +48,11 @@ namespace Tests.Entities.Manga
       }
 
       Log.LogReceived += OnLogOnLogReceived;
-      var manga = Get(@"http://readmanga.me/_hack__alcor");
+      var manga = Get(@"http://readmanga.me/red_storm");
       Log.LogReceived -= OnLogOnLogReceived;
       var chapters = manga.Volumes.SelectMany(v => v.Container).ToList();
       Assert.IsTrue(!chapters.Any());
-      Assert.AreEqual("Запрещена публикация произведения по копирайту, адрес манги http://readmanga.me/_hack__alcor", error);
+      Assert.AreEqual("Запрещена публикация произведения по копирайту, адрес манги http://readmanga.me/red_storm", error);
     }
 
     private IManga Get(string url)

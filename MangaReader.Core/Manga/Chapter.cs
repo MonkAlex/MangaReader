@@ -19,7 +19,7 @@ namespace MangaReader.Core.Manga
     /// <summary>
     /// Том.
     /// </summary>
-    public Volume Volume { get; protected set; }
+    public Volume Volume { get; set; }
 
     /// <summary>
     /// Номер главы.

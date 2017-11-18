@@ -58,12 +58,12 @@ namespace MangaReader.Core.Manga
     /// <summary>
     /// Манга.
     /// </summary>
-    public IManga Manga { get; protected set; }
+    public IManga Manga { get; set; }
 
     /// <summary>
     /// Глава.
     /// </summary>
-    public Chapter Chapter { get; protected set; }
+    public Chapter Chapter { get; set; }
 
     #endregion
 

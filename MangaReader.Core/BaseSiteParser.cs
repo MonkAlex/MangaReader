@@ -44,6 +44,14 @@ namespace MangaReader.Core
         return;
 
       GetMapper().Map(chapters, manga.Chapters);
+      foreach (var chapter in manga.Chapters)
+      {
+        chapter.Manga = manga;
+        foreach (var page in chapter.Container)
+        {
+          page.Chapter = chapter;
+        }
+      }
     }
 
     /// <summary>
@@ -58,6 +66,18 @@ namespace MangaReader.Core
         return;
 
       GetMapper().Map(volumes, manga.Volumes);
+      foreach (var volume in manga.Volumes)
+      {
+        volume.Manga = manga;
+        foreach (var chapter in volume.Container)
+        {
+          chapter.Volume = volume;
+          foreach (var page in chapter.Container)
+          {
+            page.Chapter = chapter;
+          }
+        }
+      }
     }
 
     /// <summary>
@@ -71,6 +91,10 @@ namespace MangaReader.Core
         return;
 
       GetMapper().Map(pages, manga.Pages);
+      foreach (var page in manga.Pages)
+      {
+        page.Manga = manga;
+      }
     }
 
     public abstract IEnumerable<byte[]> GetPreviews(IManga manga);

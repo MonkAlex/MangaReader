@@ -55,6 +55,16 @@ namespace MangaReader.Core.Manga
 
     public DateTime? DownloadedAt { get; set; }
 
+    /// <summary>
+    /// Манга.
+    /// </summary>
+    public IManga Manga { get; protected set; }
+
+    /// <summary>
+    /// Глава.
+    /// </summary>
+    public Chapter Chapter { get; protected set; }
+
     #endregion
 
     #region Методы

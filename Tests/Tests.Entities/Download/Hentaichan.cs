@@ -32,7 +32,7 @@ namespace Tests.Entities.Download
       var files = Directory.GetFiles(rm.GetAbsoulteFolderPath(), "*", SearchOption.AllDirectories);
       Assert.AreEqual(32, files.Length);
       var fileInfos = files.Select(f => new FileInfo(f)).ToList();
-      Assert.AreEqual(9864970, fileInfos.Sum(f => f.Length));
+      Assert.AreEqual(9984593, fileInfos.Sum(f => f.Length));
       Assert.AreEqual(1, fileInfos.GroupBy(f => f.Length).Max(g => g.Count()));
       Assert.IsTrue(rm.IsDownloaded);
       Assert.AreEqual(100, lastPercent);

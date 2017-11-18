@@ -16,6 +16,7 @@ namespace MangaReader.Core.NHibernate
       Map(x => x.OnlyUpdate);
       Map(x => x.DefaultCompression);
       Map(x => x.MainUri);
+      Map(x => x.FolderNamingStrategy);
       HasMany(x => x.MangaSettingUris).Element("Uri").Not.LazyLoad();
       References(x => x.Login).Cascade.All().NotFound.Ignore();
     }

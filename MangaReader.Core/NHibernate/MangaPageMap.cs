@@ -15,6 +15,8 @@ namespace MangaReader.Core.NHibernate
       Map(x => x.Folder);
       Map(x => x.ImageLink);
       Map(x => x.DownloadedAt);
+      References(x => x.Manga).Class<Mangas>().Column($"{nameof(Mangas)}_id");
+      References(x => x.Chapter).Column($"{nameof(Chapter)}_id");
       DiscriminateSubClassesOnColumn("Type", "43dc8bf1-2756-48a7-a652-f0ee2d2f6192");
     }
   }

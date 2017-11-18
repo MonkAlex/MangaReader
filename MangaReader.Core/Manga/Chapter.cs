@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,6 +17,11 @@ namespace MangaReader.Core.Manga
     #region Свойства
 
     /// <summary>
+    /// Том.
+    /// </summary>
+    public Volume Volume { get; protected set; }
+
+    /// <summary>
     /// Номер главы.
     /// </summary>
     public double Number { get; set; }
@@ -29,12 +30,10 @@ namespace MangaReader.Core.Manga
 
     public override string Folder
     {
-      get { return this.folderPrefix + this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(Number % 1 == 0 ? 4 : 6, '0'); }
+      get { return DatabaseConfig.GetNamingStrategy(Volume?.Manga ?? Manga).FormateChapterFolder(this); }
     }
 
     public bool OnlyUpdate { get; set; }
-
-    private string folderPrefix = AppConfig.ChapterPrefix;
 
     #region Методы
 

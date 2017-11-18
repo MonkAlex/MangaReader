@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,12 +14,10 @@ namespace MangaReader.Core.Manga
 
     public override string Folder
     {
-      get { return this.folderPrefix + this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0'); }
+      get { return DatabaseConfig.GetNamingStrategy(Manga).FormateVolumeFolder(this); }
     }
 
     public virtual bool OnlyUpdate { get; set; }
-
-    private string folderPrefix = AppConfig.VolumePrefix;
 
     public override Task Download(string mangaFolder = null)
     {

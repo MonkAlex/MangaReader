@@ -2,16 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using MangaReader.Core.Account;
+using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Core.Services.Config
 {
   public class DatabaseConfig : Entity.Entity
   {
+    private static readonly Lazy<List<IFolderNamingStrategy>> Strategies = new Lazy<List<IFolderNamingStrategy>>(() => 
+      new List<IFolderNamingStrategy>(Generic.GetAllTypes<IFolderNamingStrategy>().Select(Activator.CreateInstance).OfType<IFolderNamingStrategy>()));
+
     /// <summary>
     /// Версия базы данных.
     /// </summary>
     public Version Version { get; set; }
+
+    /// <summary>
+    /// Идентификатор выбранной стратегии именования папок.
+    /// </summary>
+    public Guid FolderNamingStrategy { get; set; }
 
     /// <summary>
     /// Уникальный идентификатор базы данных.
@@ -32,6 +41,30 @@ namespace MangaReader.Core.Services.Config
     }
 
     private Guid uniqueId;
+
+    public IFolderNamingStrategy GetNamingStrategy()
+    {
+      return GetNamingStrategy(FolderNamingStrategy);
+    }
+
+    public static IFolderNamingStrategy GetNamingStrategy(Guid id)
+    {
+      var selected = Strategies.Value.SingleOrDefault(s => s.Id == id);
+      return selected ?? new LegacyFolderNaming();
+    }
+
+    public static IFolderNamingStrategy GetNamingStrategy(IManga manga)
+    {
+      var settingId = manga.Setting.FolderNamingStrategy;
+      if (Guid.Empty != settingId)
+        return GetNamingStrategy(settingId);
+
+      using (var context = Repository.GetEntityContext())
+      {
+        var config = context.Get<DatabaseConfig>().Single();
+        return config.GetNamingStrategy();
+      }
+    }
 
     /// <summary>
     /// Создать дефолтные настройки для новых типов.

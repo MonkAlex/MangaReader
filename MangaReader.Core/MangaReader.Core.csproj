@@ -176,7 +176,9 @@
     <Compile Include="Services\DownloadManager.cs" />
     <Compile Include="Services\Helper.cs" />
     <Compile Include="Services\History.cs" />
+    <Compile Include="Services\IFolderNamingStrategy.cs" />
     <Compile Include="Services\ImageFile.cs" />
+    <Compile Include="Services\LegacyFolderNaming.cs" />
     <Compile Include="Services\LibraryViewModel.cs" />
     <Compile Include="Services\Log.cs" />
     <Compile Include="Services\LogEventStruct.cs" />

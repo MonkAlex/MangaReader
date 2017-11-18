@@ -28,7 +28,12 @@ namespace MangaReader.Core.Services
 
     public Uri MainUri { get; set; }
 
-    public IList<Uri> MangaSettingUris { get; set; } 
+    public IList<Uri> MangaSettingUris { get; set; }
+
+    /// <summary>
+    /// Идентификатор выбранной стратегии именования папок.
+    /// </summary>
+    public Guid FolderNamingStrategy { get; set; }
 
     public MangaSetting()
     {

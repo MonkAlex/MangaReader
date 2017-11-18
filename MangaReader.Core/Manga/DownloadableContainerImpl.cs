@@ -47,6 +47,8 @@ namespace MangaReader.Core.Manga
 
     public virtual IEnumerable<T> InDownloading { get; protected set; }
 
+    public IManga Manga { get; protected set; }
+
     protected DownloadableContainerImpl()
     {
       Container = new List<T>();

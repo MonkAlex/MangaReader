@@ -17,6 +17,7 @@
                 <RowDefinition Height="2*"></RowDefinition>
                 <RowDefinition Height="2*"></RowDefinition>
                 <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -49,10 +50,21 @@
               ItemsSource="{Binding CompressionModes}" 
               SelectedItem="{Binding DefaultCompression}"/>
 
-            <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"
+            <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" 
+                       TextTrimming="WordEllipsis" 
+                       Text="{x:Static resx:Strings.Settings_FolderNaming}"
+                       VerticalAlignment="Center"/>
+            <ComboBox Grid.Row="4" Grid.Column="2" 
+                      IsSynchronizedWithCurrentItem="True" 
+                      ItemsSource="{Binding FolderNamingStrategy.Strategies}" 
+                      SelectedItem="{Binding FolderNamingStrategy.Selected}"
+                      VerticalAlignment="Center" 
+                      HorizontalAlignment="Stretch"/>
+
+            <CheckBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3"
                       Content="{x:Static resx:Strings.Settings_Update}" 
                       IsChecked="{Binding OnlyUpdate}"/>
-            <CheckBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3"
+            <CheckBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3"
                       Content="{x:Static resx:Strings.Settings_Compress}"
                       IsChecked="{Binding CompressManga}"/>
         </Grid>

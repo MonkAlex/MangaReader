@@ -10,14 +10,16 @@ namespace MangaReader.Core.Services
 {
   public static class FolderNamingStrategies
   {
-    private static readonly Lazy<List<IFolderNamingStrategy>> Strategies = new Lazy<List<IFolderNamingStrategy>>(() =>
+    private static readonly Lazy<List<IFolderNamingStrategy>> StrategiesLazy = new Lazy<List<IFolderNamingStrategy>>(() =>
       new List<IFolderNamingStrategy>(Generic.GetAllTypes<IFolderNamingStrategy>().Select(Activator.CreateInstance).OfType<IFolderNamingStrategy>()));
 
     private static readonly ConcurrentDictionary<IManga, IFolderNamingStrategy> mangaCache = new ConcurrentDictionary<IManga, IFolderNamingStrategy>();
 
+    public static IReadOnlyCollection<IFolderNamingStrategy> Strategies { get { return StrategiesLazy.Value.AsReadOnly(); } }
+
     public static IFolderNamingStrategy GetNamingStrategy(Guid id)
     {
-      var selected = Strategies.Value.SingleOrDefault(s => s.Id == id);
+      var selected = StrategiesLazy.Value.SingleOrDefault(s => s.Id == id);
       return selected ?? new LegacyFolderNaming();
     }
 

@@ -264,4 +264,7 @@
   <data name="Settings_Skin" xml:space="preserve">
     <value>Скин (изменяется после перезапуска)</value>
   </data>
+  <data name="Settings_FolderNaming" xml:space="preserve">
+    <value>Способ именования папок</value>
+  </data>
 </root>

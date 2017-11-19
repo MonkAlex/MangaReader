@@ -18,7 +18,7 @@ namespace MangaReader.ViewModel.Setting
 
     public virtual void Save()
     {
-      
+
     }
   }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using MangaReader.Core.Services;
-using MangaReader.Services;
 
 namespace MangaReader.ViewModel.Setting
 {
@@ -56,6 +55,8 @@ namespace MangaReader.ViewModel.Setting
       }
     }
 
+    public FolderNamingModel FolderNamingStrategy { get; set; }
+
     public override void Save()
     {
       base.Save();
@@ -64,6 +65,7 @@ namespace MangaReader.ViewModel.Setting
       this.mangaSetting.DefaultCompression = this.DefaultCompression;
       this.mangaSetting.Folder = this.Folder;
       this.mangaSetting.OnlyUpdate = this.OnlyUpdate;
+      this.mangaSetting.FolderNamingStrategy = this.FolderNamingStrategy.Selected.Id;
       this.Login.Save();
       this.mangaSetting.Save();
     }
@@ -79,6 +81,10 @@ namespace MangaReader.ViewModel.Setting
       this.Folder = this.mangaSetting.Folder;
       this.OnlyUpdate = this.mangaSetting.OnlyUpdate;
       this.Login = new LoginModel(this.mangaSetting.Login) {IsEnabled = true};
+
+      this.FolderNamingStrategy = new FolderNamingModel();
+      this.FolderNamingStrategy.Strategies.Insert(0, new FolderNamingStrategyDto() {Name = "Использовать общие настройки"});
+      this.FolderNamingStrategy.SelectedGuid = mangaSetting.FolderNamingStrategy;
     }
   }
 }

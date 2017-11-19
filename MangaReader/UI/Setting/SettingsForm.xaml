@@ -6,7 +6,7 @@
         xmlns:ui="clr-namespace:MangaReader.UI.Setting"
         WindowStartupLocation="CenterOwner"
         Title="{x:Static resx:Strings.Library_Action_Settings}"
-        Height="300"
+        Height="320"
         Width="450">
     <Grid>
         <Grid.RowDefinitions>

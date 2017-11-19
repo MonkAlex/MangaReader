@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using MangaReader.UI.Skin;
@@ -66,7 +68,9 @@ namespace MangaReader.ViewModel.Setting
       }
     }
 
-    public IReadOnlyList<SkinSetting> SkinSettings { get; private set; } 
+    public IReadOnlyList<SkinSetting> SkinSettings { get; private set; }
+
+    public FolderNamingModel FolderNamingStrategy { get; set; }
 
     public override void Save()
     {
@@ -84,6 +88,13 @@ namespace MangaReader.ViewModel.Setting
       var viewConfig = ConfigStorage.Instance.ViewConfig;
       if (Skin.Guid != Default.DefaultGuid || viewConfig.SkinGuid != Guid.Empty)
         viewConfig.SkinGuid = Skin.Guid;
+
+      using (var context = Repository.GetEntityContext())
+      {
+        var config = context.Get<DatabaseConfig>().Single();
+        config.FolderNamingStrategy = FolderNamingStrategy.Selected.Id;
+        config.Save();
+      }
     }
 
     public AppSettingModel()
@@ -98,6 +109,13 @@ namespace MangaReader.ViewModel.Setting
       this.Language = appConfig.Language;
       this.AutoUpdateHours = appConfig.AutoUpdateInHours.ToString();
       this.Skin = Skins.GetSkinSetting(ConfigStorage.Instance.ViewConfig.SkinGuid);
+
+      this.FolderNamingStrategy = new FolderNamingModel();
+      using (var context = Repository.GetEntityContext())
+      {
+        var config = context.Get<DatabaseConfig>().Single();
+        this.FolderNamingStrategy.SelectedGuid = config.FolderNamingStrategy;
+      }
     }
   }
 }

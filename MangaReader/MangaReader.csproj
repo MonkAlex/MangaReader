@@ -193,6 +193,8 @@
     <Compile Include="ViewModel\Commands\UpdateWithPauseCommand.cs" />
     <Compile Include="ViewModel\LoginModel.cs" />
     <Compile Include="ViewModel\MainPageModel.cs" />
+    <Compile Include="ViewModel\Setting\FolderNamingModel.cs" />
+    <Compile Include="ViewModel\Setting\FolderNamingStrategyDto.cs" />
     <Compile Include="ViewModel\Setting\MangaSettingModel.cs" />
     <Compile Include="ViewModel\Primitive\BaseViewModel.cs" />
     <Compile Include="ViewModel\Commands\AddNewMangaCommand.cs" />

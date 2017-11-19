@@ -90,7 +90,7 @@ namespace Hentaichan.Mangachan
       }
 
       var volumes = new List<VolumeDto>();
-      foreach (var volume in chapters.GroupBy(c => c.Volume).ToList())
+      foreach (var volume in chapters.GroupBy(c => c.VolumeNumber).ToList())
       {
         var vol = new VolumeDto(volume.Key);
         vol.Container.AddRange(volume.Select(c => new ChapterDto(c.Uri, c.Name) { Number = c.Number }));

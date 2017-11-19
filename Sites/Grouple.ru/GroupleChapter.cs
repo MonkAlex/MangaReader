@@ -14,7 +14,7 @@ namespace Grouple
     /// <summary>
     /// Номер тома.
     /// </summary>
-    public int Volume;
+    public int VolumeNumber;
 
     #endregion
 
@@ -51,7 +51,7 @@ namespace Grouple
     public GroupleChapter(Uri uri)
       : base(uri)
     {
-      this.Volume = Convert.ToInt32(Regex.Match(uri.ToString(), @"vol[-]?[0-9]+").Value.Remove(0, 3));
+      this.VolumeNumber = Convert.ToInt32(Regex.Match(uri.ToString(), @"vol[-]?[0-9]+").Value.Remove(0, 3));
       this.Number = Convert.ToInt32(Regex.Match(uri.ToString(), @"/[-]?[0-9]+", RegexOptions.RightToLeft).Value.Remove(0, 1));
     }
 

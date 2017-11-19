@@ -10,7 +10,7 @@ namespace Hentaichan.Mangachan
 {
   public class MangachanChapter : MangaReader.Core.Manga.Chapter
   {
-    public int Volume { get; }
+    public int VolumeNumber { get; }
 
     protected override void UpdatePages()
     {
@@ -25,7 +25,7 @@ namespace Hentaichan.Mangachan
       var match = Regex.Match(Name, @"v(\d+) - (\d+\.\d+|\d+)", RegexOptions.RightToLeft);
       if (match.Groups.Count > 2)
       {
-        Volume = int.Parse(match.Groups[1].Value);
+        VolumeNumber = int.Parse(match.Groups[1].Value);
         Number = double.Parse(match.Groups[2].Value, NumberStyles.Float, CultureInfo.InvariantCulture);
       }
     }

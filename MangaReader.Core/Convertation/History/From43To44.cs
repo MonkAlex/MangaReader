@@ -30,6 +30,7 @@ namespace MangaReader.Core.Convertation.History
         {
           process.Percent += 100.0 / mangas.Count;
 
+          manga.Refresh();
           manga.UpdateContent();
           var history = manga.Histories.ToList();
           if (manga.Plugin.HistoryType != HistoryType.Page)

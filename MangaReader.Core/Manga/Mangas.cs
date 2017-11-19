@@ -484,6 +484,7 @@ namespace MangaReader.Core.Manga
       if (previousState != null)
       {
         var dirName = previousState[propertyNames.ToList().IndexOf(nameof(Folder))] as string;
+        dirName = DirectoryHelpers.MakeValidPath(dirName);
         var newValue = this.GetAbsoulteFolderPath();
         var oldValue = DirectoryHelpers.GetAbsoulteFolderPath(dirName);
         if (oldValue != null && !DirectoryHelpers.Equals(newValue, oldValue) && Directory.Exists(oldValue))

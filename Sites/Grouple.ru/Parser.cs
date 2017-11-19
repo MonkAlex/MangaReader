@@ -196,7 +196,7 @@ namespace Grouple
 
       var rmVolumes = dic
         .Select(cs => new GroupleChapter(cs.Key, cs.Value))
-        .GroupBy(c => c.Volume)
+        .GroupBy(c => c.VolumeNumber)
         .Select(g =>
         {
           var v = new VolumeDto(g.Key);

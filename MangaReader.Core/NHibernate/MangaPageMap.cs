@@ -12,7 +12,6 @@ namespace MangaReader.Core.NHibernate
       Map(x => x.Number);
       Map(x => x.Name);
       Map(x => x.Uri);
-      Map(x => x.Folder);
       Map(x => x.ImageLink);
       Map(x => x.DownloadedAt);
       References(x => x.Manga).Class<Mangas>().Column($"{nameof(Mangas)}_id");

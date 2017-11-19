@@ -174,11 +174,13 @@
     <Compile Include="Convertation\Convert.cs" />
     <Compile Include="Services\DirectoryHelpers.cs" />
     <Compile Include="Services\DownloadManager.cs" />
+    <Compile Include="Services\FolderNamingStrategy\FolderNamingStrategies.cs" />
+    <Compile Include="Services\FolderNamingStrategy\NameWithNumberPrefixFolderNaming.cs" />
     <Compile Include="Services\Helper.cs" />
     <Compile Include="Services\History.cs" />
-    <Compile Include="Services\IFolderNamingStrategy.cs" />
+    <Compile Include="Services\FolderNamingStrategy\IFolderNamingStrategy.cs" />
     <Compile Include="Services\ImageFile.cs" />
-    <Compile Include="Services\LegacyFolderNaming.cs" />
+    <Compile Include="Services\FolderNamingStrategy\LegacyFolderNaming.cs" />
     <Compile Include="Services\LibraryViewModel.cs" />
     <Compile Include="Services\Log.cs" />
     <Compile Include="Services\LogEventStruct.cs" />

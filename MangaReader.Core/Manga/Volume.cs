@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Core.Services;
-using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Manga
 {
@@ -14,7 +13,7 @@ namespace MangaReader.Core.Manga
 
     public override string Folder
     {
-      get { return DatabaseConfig.GetNamingStrategy(Manga).FormateVolumeFolder(this); }
+      get { return FolderNamingStrategies.GetNamingStrategy(Manga).FormateVolumeFolder(this); }
     }
 
     public virtual bool OnlyUpdate { get; set; }

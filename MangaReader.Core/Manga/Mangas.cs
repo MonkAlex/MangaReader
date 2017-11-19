@@ -330,56 +330,59 @@ namespace MangaReader.Core.Manga
       // Формируем путь к главе вида Папка_манги\Том_001\Глава_0001
       try
       {
-        var timer = new Timer(state => OnPropertyChanged(nameof(Downloaded)), null, 750, 750);
-        NetworkSpeed.Clear();
-        var plugin = Plugin;
-        var tasks = this.ActiveVolumes.Select(
-            v =>
+        using (FolderNamingStrategies.BlockStrategy(this))
+        {
+          var timer = new Timer(state => OnPropertyChanged(nameof(Downloaded)), null, 750, 750);
+          NetworkSpeed.Clear();
+          var plugin = Plugin;
+          var tasks = this.ActiveVolumes.Select(
+              v =>
+              {
+                v.OnlyUpdate = this.Setting.OnlyUpdate;
+                return v.Download(mangaFolder).ContinueWith(t =>
+                {
+                  if (t.Exception != null)
+                    Log.Exception(t.Exception, v.Uri.ToString());
+
+                  if (plugin.HistoryType == HistoryType.Chapter)
+                    AddToHistory(v.InDownloading.Where(c => c.IsDownloaded).ToArray());
+
+                  if (plugin.HistoryType == HistoryType.Page)
+                    AddToHistory(v.InDownloading.SelectMany(ch => ch.InDownloading).Where(p => p.IsDownloaded).ToArray());
+                });
+              });
+          var chTasks = this.ActiveChapters.Select(
+            ch =>
             {
-              v.OnlyUpdate = this.Setting.OnlyUpdate;
-              return v.Download(mangaFolder).ContinueWith(t =>
+              ch.OnlyUpdate = this.Setting.OnlyUpdate;
+              return ch.Download(mangaFolder).ContinueWith(t =>
               {
                 if (t.Exception != null)
-                  Log.Exception(t.Exception, v.Uri.ToString());
+                  Log.Exception(t.Exception, ch.Uri.ToString());
 
-                if (plugin.HistoryType == HistoryType.Chapter)
-                  AddToHistory(v.InDownloading.Where(c => c.IsDownloaded).ToArray());
+                if (ch.IsDownloaded && plugin.HistoryType == HistoryType.Chapter)
+                  AddToHistory(ch);
 
                 if (plugin.HistoryType == HistoryType.Page)
-                  AddToHistory(v.InDownloading.SelectMany(ch => ch.InDownloading).Where(p => p.IsDownloaded).ToArray());
+                  AddToHistory(ch.InDownloading.Where(c => c.IsDownloaded).ToArray());
               });
             });
-        var chTasks = this.ActiveChapters.Select(
-          ch =>
-          {
-            ch.OnlyUpdate = this.Setting.OnlyUpdate;
-            return ch.Download(mangaFolder).ContinueWith(t =>
+          var pTasks = this.ActivePages.Select(
+            p =>
             {
-              if (t.Exception != null)
-                Log.Exception(t.Exception, ch.Uri.ToString());
-
-              if (ch.IsDownloaded && plugin.HistoryType == HistoryType.Chapter)
-                AddToHistory(ch);
-
-              if (plugin.HistoryType == HistoryType.Page)
-                AddToHistory(ch.InDownloading.Where(c => c.IsDownloaded).ToArray());
+              return p.Download(mangaFolder).ContinueWith(t =>
+              {
+                if (t.Exception != null)
+                  Log.Exception(t.Exception, $"Не удалось скачать изображение {p.ImageLink} со страницы {p.Uri}");
+                if (p.IsDownloaded && plugin.HistoryType == HistoryType.Page)
+                  AddToHistory(p);
+              });
             });
-          });
-        var pTasks = this.ActivePages.Select(
-          p =>
-          {
-            return p.Download(mangaFolder).ContinueWith(t =>
-            {
-              if (t.Exception != null)
-                Log.Exception(t.Exception, $"Не удалось скачать изображение {p.ImageLink} со страницы {p.Uri}");
-              if (p.IsDownloaded && plugin.HistoryType == HistoryType.Page)
-                AddToHistory(p);
-            });
-          });
-        await Task.WhenAll(tasks.Concat(chTasks).Concat(pTasks).ToArray());
-        this.DownloadedAt = DateTime.Now;
-        timer.Dispose();
-        OnPropertyChanged(nameof(Downloaded));
+          await Task.WhenAll(tasks.Concat(chTasks).Concat(pTasks).ToArray());
+          this.DownloadedAt = DateTime.Now;
+          timer.Dispose();
+          OnPropertyChanged(nameof(Downloaded));
+        }
         this.Save();
         NetworkSpeed.Clear();
         Log.AddFormat("Download end '{0}'.", this.Name);

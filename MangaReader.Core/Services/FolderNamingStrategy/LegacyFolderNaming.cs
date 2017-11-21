@@ -13,12 +13,12 @@ namespace MangaReader.Core.Services
 
     public string FormateChapterFolder(Chapter chapter)
     {
-      return AppConfig.ChapterPrefix + chapter.Number.ToString(CultureInfo.InvariantCulture).PadLeft(chapter.Number % 1 == 0 ? 4 : 6, '0');
+      return AppConfig.ChapterPrefix + " " + chapter.Number.ToString(CultureInfo.InvariantCulture).PadLeft(chapter.Number % 1 == 0 ? 4 : 6, '0');
     }
 
     public string FormateVolumeFolder(Volume volume)
     {
-      return AppConfig.VolumePrefix + volume.Number.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0');
+      return AppConfig.VolumePrefix + " " + volume.Number.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0');
     }
   }
 }

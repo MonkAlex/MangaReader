@@ -48,12 +48,12 @@ namespace MangaReader.Core.Services.Config
     /// <summary>
     /// Префикс папки томов.
     /// </summary>
-    internal static string VolumePrefix = "Volume ";
+    public const string VolumePrefix = "Volume";
 
     /// <summary>
     /// Префикс папки глав.
     /// </summary>
-    internal static string ChapterPrefix = "Chapter ";
+    public const string ChapterPrefix = "Chapter";
 
     public AppConfig()
     {

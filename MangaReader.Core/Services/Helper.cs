@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services.Config;
 using NHibernate.Util;
@@ -12,6 +12,9 @@ namespace MangaReader.Core.Services
 {
   public static class Helper
   {
+
+    public static readonly Regex SpaceRegex = new Regex(@"\s{2,}", RegexOptions.Compiled);
+
     /// <summary>
     /// Перезагрузить коллекцию из базы.
     /// </summary>

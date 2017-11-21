@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Core.Manga
 {
   public abstract class DownloadableContainerImpl<T> : Entity.Entity, IDownloadableContainer<T> where T : IDownloadable
   {
+    private string name;
+
     /// <summary>
     /// Статус загрузки.
     /// </summary>
@@ -24,7 +27,21 @@ namespace MangaReader.Core.Manga
       set { }
     }
 
-    public string Name { get; set; }
+    public string Name
+    {
+      get => name;
+      set => name = GetNormalizedName(value);
+    }
+
+    protected virtual string GetNormalizedName(string newName)
+    {
+      if (newName == null)
+        return null;
+
+      newName = newName.Trim();
+      newName = Helper.SpaceRegex.Replace(newName, " ");
+      return newName;
+    }
 
     public Uri Uri { get; set; }
 

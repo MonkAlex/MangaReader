@@ -57,6 +57,12 @@ namespace MangaReader.Core.Services
 
   public static class Generic
   {
+    public static Guid GetNamingStrategyId<T>() where T : IFolderNamingStrategy
+    {
+      var obj = Activator.CreateInstance<T>();
+      return obj.Id;
+    }
+
     public static T SingleOrCreate<T>(this IEnumerable<T> query) where T : Entity.Entity, new()
     {
       var single = query.SingleOrDefault();

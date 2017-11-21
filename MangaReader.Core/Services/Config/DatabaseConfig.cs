@@ -69,6 +69,7 @@ namespace MangaReader.Core.Services.Config
     public DatabaseConfig()
     {
       this.Version = new Version(1, 0, 0);
+      this.FolderNamingStrategy = Generic.GetNamingStrategyId<NumberPrefixFolderNaming>();
     }
 
     public static void Initialize()

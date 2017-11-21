@@ -176,6 +176,7 @@
     <Compile Include="Services\DownloadManager.cs" />
     <Compile Include="Services\FolderNamingStrategy\FolderNamingStrategies.cs" />
     <Compile Include="Services\FolderNamingStrategy\NameWithNumberPrefixFolderNaming.cs" />
+    <Compile Include="Services\FolderNamingStrategy\NumberPrefixFolderNaming.cs" />
     <Compile Include="Services\Helper.cs" />
     <Compile Include="Services\History.cs" />
     <Compile Include="Services\FolderNamingStrategy\IFolderNamingStrategy.cs" />

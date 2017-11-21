@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MangaReader.Core.Convertation.Primitives;
+using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
@@ -10,7 +11,7 @@ namespace MangaReader.Core.Convertation
 
   public static class Converter
   {
-    static public void Convert(IProcess process)
+    public static void Convert(IProcess process)
     {
       process.State = ConvertState.Started;
 
@@ -28,10 +29,17 @@ namespace MangaReader.Core.Convertation
 
       Log.Add("Convert completed.");
 
-      var databaseConfig = NHibernate.Repository.GetStateless<DatabaseConfig>().Single();
-      databaseConfig.Version = process.Version;
-      databaseConfig.Save();
-      process.State = ConvertState.Completed;
+      using (var context = NHibernate.Repository.GetEntityContext())
+      {
+        var databaseConfig = context.Get<DatabaseConfig>().Single();
+        var oldVersion = databaseConfig.Version;
+        databaseConfig.Version = process.Version;
+        databaseConfig.Save();
+        process.State = ConvertState.Completed;
+
+        if (process.Version.CompareTo(oldVersion) > 0 && context.Get<IManga>().Any())
+          Client.OnClientUpdated(oldVersion);
+      }
     }
 
     private static void Convert<T>(IProcess process) where T : BaseConverter

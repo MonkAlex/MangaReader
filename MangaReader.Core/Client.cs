@@ -23,6 +23,8 @@ namespace MangaReader.Core
 
     public static event EventHandler ClientBeenClosed;
 
+    public static event EventHandler<Version> ClientUpdated; 
+
     public static void Init()
     {
       // Все необработанные - логгируем.
@@ -98,6 +100,11 @@ namespace MangaReader.Core
     internal static void OnClientBeenClosed()
     {
       ClientBeenClosed?.Invoke(null, EventArgs.Empty);
+    }
+
+    internal static void OnClientUpdated(Version e)
+    {
+      ClientUpdated?.Invoke(null, e);
     }
   }
 }

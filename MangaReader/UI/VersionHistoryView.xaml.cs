@@ -16,9 +16,9 @@ namespace MangaReader.UI
     /// </summary>
     public VersionHistoryView()
     {
-      InitializeComponent();
       ViewModel.Primitive.BaseViewModel.SubToViewModel(this);
       this.Owner = WindowHelper.Owner;
+      InitializeComponent();
       if (this.Owner != null)
         this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
     }

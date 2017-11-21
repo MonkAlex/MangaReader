@@ -4,7 +4,10 @@
         xmlns:properties="clr-namespace:MangaReader.Properties"
         xmlns:ui="clr-namespace:MangaReader.UI"
         xmlns:xaml="clr-namespace:Markdown.Xaml"
-        Title="{x:Static properties:Strings.Update_Title}" Height="400" Width="500"
+        Title="{x:Static properties:Strings.Update_Title}" 
+        Width="{Binding Path=Owner.Width, RelativeSource={RelativeSource Self}}" 
+        Height="{Binding Path=Owner.Height, RelativeSource={RelativeSource Self}}" 
+        MinWidth="500" MinHeight="400"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.Resources>

@@ -8,8 +8,7 @@ namespace MangaReader.Core.ApplicationControl
   {
     public static void Run(string uniqueId)
     {
-#warning Пайпы не хотят работать под моно, пока отключаем.
-      /*
+#warning Avalonia:Пайпы не хотят работать под моно.
       using (var server = new NamedPipeServerStream(uniqueId, PipeDirection.InOut,
         NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Message, PipeOptions.None))
       {
@@ -24,7 +23,6 @@ namespace MangaReader.Core.ApplicationControl
           }
         }
       }
-      */
     }
   }
 }

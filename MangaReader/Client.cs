@@ -2,12 +2,10 @@
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Shell;
 using System.Windows.Threading;
 using MangaReader.Core.ApplicationControl;
 using MangaReader.Core.Services;
-using MangaReader.Core.Services.Config;
 using MangaReader.Services;
 using MangaReader.UI.Services;
 using MangaReader.ViewModel;
@@ -27,6 +25,7 @@ namespace MangaReader
       ViewResolver.Instance.ViewInit();
       MangaReader.Core.Client.OtherAppRunning += ClientOnOtherAppRunning;
       MangaReader.Core.Client.ClientBeenClosed += ClientOnClientBeenClosed;
+      MangaReader.Core.Client.ClientUpdated += ClientOnClientUpdated;
 
       // Извлечение текущего списка часто используемых элементов
       var jumpList = new JumpList();
@@ -54,6 +53,18 @@ namespace MangaReader
       model.Show();
 
       WindowModel.Instance.Show();
+    }
+
+    private static async void ClientOnClientUpdated(object sender, Version version)
+    {
+      try
+      {
+        await Dispatcher.InvokeAsync(() => new ShowUpdateHistoryCommand().Execute(sender));
+      }
+      catch (Exception e)
+      {
+        Log.Exception(e);
+      }
     }
 
     internal static void ClientOnClientBeenClosed(object sender, EventArgs eventArgs)
@@ -113,6 +124,7 @@ namespace MangaReader
     {
       MangaReader.Core.Client.OtherAppRunning -= ClientOnOtherAppRunning;
       MangaReader.Core.Client.ClientBeenClosed -= ClientOnClientBeenClosed;
+      MangaReader.Core.Client.ClientUpdated -= ClientOnClientUpdated;
       WindowModel.Instance.Dispose();
       Core.Client.Close();
     }

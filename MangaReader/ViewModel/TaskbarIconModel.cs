@@ -56,6 +56,7 @@ namespace MangaReader.ViewModel
       ToolTipText = Strings.Title;
       ContextMenu.Add(new ContentMenuItem(new AddNewMangaCommand(library)));
       ContextMenu.Add(new ContentMenuItem(new ShowSettingCommand(library)));
+      ContextMenu.Add(new ContentMenuItem(new ShowUpdateHistoryCommand()));
       ContextMenu.Add(new ContentMenuItem(new AppUpdateCommand(library)));
       ContextMenu.Add(new ContentMenuItem(new ExitCommand()));
       this.icon.TrayBalloonTipClicked += (sender, args) =>

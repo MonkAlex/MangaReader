@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Hentaichan.Mangachan
 {
@@ -18,11 +14,10 @@ namespace Hentaichan.Mangachan
       base.UpdatePages();
     }
 
-    public MangachanChapter(Uri uri, string desc)
-      : base(uri)
+    public MangachanChapter(Uri uri, string name)
+      : base(uri, name)
     {
-      this.Name = desc;
-      var match = Regex.Match(Name, @"v(\d+) - (\d+\.\d+|\d+)", RegexOptions.RightToLeft);
+      var match = Regex.Match(name, @"v(\d+) - (\d+\.\d+|\d+)", RegexOptions.RightToLeft);
       if (match.Groups.Count > 2)
       {
         VolumeNumber = int.Parse(match.Groups[1].Value);

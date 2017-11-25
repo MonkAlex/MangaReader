@@ -94,9 +94,11 @@ namespace MangaReader.Core.Manga
     /// Глава манги.
     /// </summary>
     /// <param name="uri">Ссылка на главу.</param>
-    public Chapter(Uri uri)
+    /// <param name="name">Название главы.</param>
+    public Chapter(Uri uri, string name) : this()
     {
       this.Uri = uri;
+      this.Name = name;
     }
 
     protected Chapter()

@@ -61,11 +61,9 @@
     <Compile Include="Acomics.cs" />
     <Compile Include="AcomicsLogin.cs" />
     <Compile Include="AcomicsPlugin.cs" />
-    <Compile Include="AcomicsChapter.cs" />
     <Compile Include="Convertation\AcomicsFrom38To39.cs" />
     <Compile Include="Convertation\AcomicsFrom37To38.cs" />
     <Compile Include="Convertation\From24To27.cs" />
-    <Compile Include="NHibernate\AcomicsChapterMap.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="NHibernate\AcomicsLoginMap.cs" />
     <Compile Include="NHibernate\AcomicsMap.cs" />

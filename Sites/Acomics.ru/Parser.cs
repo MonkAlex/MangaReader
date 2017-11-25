@@ -140,8 +140,14 @@ namespace Acomics
       var uri = cn.Attributes[0].Value;
       return new ChapterDto(uri, (cn.Attributes.Count > 1 ? cn.Attributes[1].Value : cn.InnerText))
       {
-        Number = AcomicsChapter.GetChapterNumber(uri)
+        // Главе присваивается кривой номер, так и задумано, он будет перебит после заполнения страницами.
+        Number = GetChapterNumber(uri)
       };
+    }
+
+    internal static int GetChapterNumber(string uri)
+    {
+      return Convert.ToInt32(Regex.Match(uri, @"/[-]?[0-9]+", RegexOptions.RightToLeft).Value.Remove(0, 1));
     }
 
     public override UriParseResult ParseUri(Uri uri)
@@ -272,7 +278,7 @@ namespace Acomics
       for (var i = 0; i < links.Count; i++)
       {
         var page = links[i];
-        var number = Convert.ToInt32(Regex.Match(page.OriginalString, @"/[-]?[0-9]+", RegexOptions.RightToLeft).Value.Remove(0, 1));
+        var number = GetChapterNumber(page.OriginalString);
         pages.Add(new MangaPageDto(page, images[i], number, description[i]));
       }
       return pages;
@@ -287,12 +293,8 @@ namespace Acomics
           cfg.AddCollectionMappers();
           cfg.CreateMap<VolumeDto, Volume>()
             .EqualityComparison((src, dest) => src.Number == dest.Number);
-          cfg.CreateMap<ChapterDto, MangaReader.Core.Manga.Chapter>()
-            .ConstructUsing(dto => new AcomicsChapter(dto.Uri, dto.Name))
-            .EqualityComparison((src, dest) => src.Number == dest.Number);
-          cfg.CreateMap<ChapterDto, AcomicsChapter>()
-            .IncludeBase<ChapterDto, MangaReader.Core.Manga.Chapter>()
-            .ConstructUsing(dto => new AcomicsChapter(dto.Uri, dto.Name))
+          cfg.CreateMap<ChapterDto, Chapter>()
+            .ConstructUsing(dto => new Chapter(dto.Uri, dto.Name))
             .EqualityComparison((src, dest) => src.Number == dest.Number);
           cfg.CreateMap<MangaPageDto, MangaPage>()
             .EqualityComparison((src, dest) => src.ImageLink == dest.ImageLink);

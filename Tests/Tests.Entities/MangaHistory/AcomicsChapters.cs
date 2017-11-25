@@ -23,7 +23,7 @@ namespace Tests.Entities.MangaHistory
       manga.Name = Guid.NewGuid().ToString();
       manga.Save();
 
-      var chapter = new Chapter(chapterUri);
+      var chapter = new Chapter(chapterUri, string.Empty);
       chapter.Container.Add(new MangaPage(new Uri("http://acomics.ru/~ma3/1130"), null, 1));
       var volume = new Volume() { Uri = volumeUri };
       volume.Container.Add(chapter);
@@ -47,7 +47,7 @@ namespace Tests.Entities.MangaHistory
       manga.Name = Guid.NewGuid().ToString();
       manga.Save();
 
-      var chapter = new Chapter(chapterUri);
+      var chapter = new Chapter(chapterUri, string.Empty);
       chapter.Container.Add(new MangaPage(new Uri("http://acomics.ru/~ma3/794"), null, 1));
       var volume = new Volume() { Uri = volumeUri };
       volume.Container.Add(chapter);

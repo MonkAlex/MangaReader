@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Grouple
@@ -37,19 +36,9 @@ namespace Grouple
     /// Глава манги.
     /// </summary>
     /// <param name="uri">Ссылка на главу.</param>
-    /// <param name="desc">Описание главы.</param>
-    public GroupleChapter(Uri uri, string desc)
-      : this(uri)
-    {
-      this.Name = desc;
-    }
-
-    /// <summary>
-    /// Глава манги.
-    /// </summary>
-    /// <param name="uri">Ссылка на главу.</param>
-    public GroupleChapter(Uri uri)
-      : base(uri)
+    /// <param name="name">Описание главы.</param>
+    public GroupleChapter(Uri uri, string name)
+      : base(uri, name)
     {
       this.VolumeNumber = Convert.ToInt32(Regex.Match(uri.ToString(), @"vol[-]?[0-9]+").Value.Remove(0, 3));
       this.Number = Convert.ToInt32(Regex.Match(uri.ToString(), @"/[-]?[0-9]+", RegexOptions.RightToLeft).Value.Remove(0, 1));

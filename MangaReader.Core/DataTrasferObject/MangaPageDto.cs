@@ -9,9 +9,9 @@ namespace MangaReader.Core.DataTrasferObject
     public Uri Uri { get; set; }
     public Uri ImageLink { get; set; }
 
-    public MangaPageDto(Uri uri, Uri image, int number, string desc) : this(uri, image, number)
+    public MangaPageDto(Uri uri, Uri image, int number, string name) : this(uri, image, number)
     {
-      this.Name = desc;
+      this.Name = name;
     }
 
     public MangaPageDto(Uri uri, Uri image, int number)

@@ -32,7 +32,7 @@ namespace Tests.Entities.Manga
 
 
         var volume = new Volume();
-        volume.Container.Add(new Chapter(new Uri("http://mintmanga.com/btooom_/vol1/1?mature=1")));
+        volume.Container.Add(new Chapter(new Uri("http://mintmanga.com/btooom_/vol1/1?mature=1"), string.Empty));
 
         var chartersNotInHistory = History.GetItemsWithoutHistory(volume);
         Assert.AreEqual(0, chartersNotInHistory.Count);

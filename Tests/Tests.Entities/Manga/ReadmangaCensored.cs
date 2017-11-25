@@ -36,7 +36,7 @@ namespace Tests.Entities.Manga
       Assert.IsTrue(chapter.Container.First().ImageLink.IsAbsoluteUri);
     }
 
-    [Test]
+    [Test, Ignore("All restored.")]
     public void MangaRemovedCopyright()
     {
       var error = string.Empty;

@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Windows.Data;
 using MangaReader.Core.Services;
-using MangaReader.Core.Services.Config;
 using MangaReader.ViewModel.Commands.Primitives;
 using MangaReader.ViewModel.Manga;
 
@@ -16,7 +15,7 @@ namespace MangaReader.ViewModel.Commands
       base.Execute(parameter);
 
       if (Library.IsAvaible)
-        await Library.ThreadAction(() => Library.Update(view.OfType<MangaModel>().Select(m => m.Id), ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
+        await Library.ThreadAction(() => Library.Update(view.OfType<MangaModel>().Select(m => m.Id)));
     }
 
     public UpdateVisibleMangaCommand(ListCollectionView view, LibraryViewModel model) : base(model)

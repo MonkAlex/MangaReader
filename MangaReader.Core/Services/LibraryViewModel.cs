@@ -150,7 +150,7 @@ namespace MangaReader.Core.Services
 
         if (IsAvaible)
         {
-          ThreadAction(() => Update(null, ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription))
+          ThreadAction(() => Update())
             .LogException("Автоматическое обновление успешно завершено", "Автоматическое обновление завершено с ошибкой");
         }
       }
@@ -162,7 +162,33 @@ namespace MangaReader.Core.Services
     /// <param name="manga">Обновляемая манга.</param>
     public void Update(int manga)
     {
-      Update(new[] { manga }, new SortDescription());
+      Update(new[] { manga });
+    }
+
+    /// <summary>
+    /// Обновить мангу.
+    /// </summary>
+    public void Update()
+    {
+      Update(ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription);
+    }
+
+    /// <summary>
+    /// Обновить мангу.
+    /// </summary>
+    /// <param name="sort">Сортировка.</param>
+    public void Update(SortDescription sort)
+    {
+      Update(null, sort);
+    }
+
+    /// <summary>
+    /// Обновить мангу.
+    /// </summary>
+    /// <param name="mangas">Обновляемая манга.</param>
+    public void Update(IEnumerable<int> mangas)
+    {
+      Update(mangas, ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription);
     }
 
     /// <summary>

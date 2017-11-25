@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Services;
-using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Library
 {
@@ -14,7 +13,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Library
       base.Execute(parameter);
 
       if (Library.IsAvaible)
-        await Library.ThreadAction(() => Library.Update(viewModel.FilteredItems.Select(i => i.Id), ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription));
+        await Library.ThreadAction(() => Library.Update(viewModel.FilteredItems.Select(i => i.Id)));
     }
 
     public UpdateVisibleMangaCommand(LibraryContentViewModel viewModel, LibraryViewModel model) : base(model)

@@ -4,6 +4,7 @@ using System.Linq;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
+using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Convertation.History
@@ -30,21 +31,28 @@ namespace MangaReader.Core.Convertation.History
         {
           process.Percent += 100.0 / mangas.Count;
 
-          manga.Refresh();
-          manga.UpdateContent();
-          var history = manga.Histories.ToList();
-          if (manga.Plugin.HistoryType != HistoryType.Page)
+          try
           {
-            var volumeChapters = manga.Volumes.SelectMany(v => v.Container);
-            SetDownloadableDate(history, volumeChapters.Concat(manga.Chapters));
+            manga.Refresh();
+            manga.UpdateContent();
+            var history = manga.Histories.ToList();
+            if (manga.Plugin.HistoryType != HistoryType.Page)
+            {
+              var volumeChapters = manga.Volumes.SelectMany(v => v.Container);
+              SetDownloadableDate(history, volumeChapters.Concat(manga.Chapters));
+            }
+            else
+            {
+              var volumePages = manga.Volumes.SelectMany(v => v.Container).SelectMany(c => c.Container);
+              var chapterPages = manga.Chapters.SelectMany(c => c.Container);
+              SetDownloadableDate(history, volumePages.Concat(chapterPages).Concat(manga.Pages));
+            }
+            manga.Save();
           }
-          else
+          catch (System.Exception ex)
           {
-            var volumePages = manga.Volumes.SelectMany(v => v.Container).SelectMany(c => c.Container);
-            var chapterPages = manga.Chapters.SelectMany(c => c.Container);
-            SetDownloadableDate(history, volumePages.Concat(chapterPages).Concat(manga.Pages));
+            Log.Exception(ex, $"Не удалось корректно обновить историю '{manga.Name}'.");
           }
-          manga.Save();
         }
       }
     }

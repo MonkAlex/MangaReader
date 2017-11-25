@@ -36,7 +36,7 @@ namespace Tests.Entities.Manga
       Assert.IsTrue(chapter.Container.First().ImageLink.IsAbsoluteUri);
     }
 
-    [Test, Ignore("All restored.")]
+    [Test]
     public void MangaRemovedCopyright()
     {
       var error = string.Empty;
@@ -48,11 +48,11 @@ namespace Tests.Entities.Manga
       }
 
       Log.LogReceived += OnLogOnLogReceived;
-      var manga = Get(@"http://readmanga.me/red_storm");
+      var manga = Get(@"http://mintmanga.com/in_the_first_grade");
       Log.LogReceived -= OnLogOnLogReceived;
       var chapters = manga.Volumes.SelectMany(v => v.Container).ToList();
       Assert.IsTrue(!chapters.Any());
-      Assert.AreEqual("Запрещена публикация произведения по копирайту, адрес манги http://readmanga.me/red_storm", error);
+      Assert.AreEqual("Запрещена публикация произведения по копирайту, адрес манги http://mintmanga.com/in_the_first_grade", error);
     }
 
     private IManga Get(string url)

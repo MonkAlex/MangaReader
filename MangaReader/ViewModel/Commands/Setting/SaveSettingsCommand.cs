@@ -2,9 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows;
-using MangaReader.Core.Exception;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using MangaReader.Services;
@@ -24,11 +22,11 @@ namespace MangaReader.ViewModel.Commands.Setting
 
       var skinGuid = ConfigStorage.Instance.ViewConfig.SkinGuid;
 
-      foreach (var mangaSetting in settingModel.Views)
-        mangaSetting.Save();
-
       try
       {
+        foreach (var mangaSetting in settingModel.Views)
+          mangaSetting.Save();
+
         ConfigStorage.Instance.Save();
       }
       catch (Exception e)

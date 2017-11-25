@@ -219,7 +219,7 @@ namespace Hentaichan
           pages.Add(new MangaPage(chapter.Uri, new Uri(uriString), i + 1));
         }
       }
-      catch (NullReferenceException ex) { Log.Exception(ex); }
+      catch (Exception ex) { Log.Exception(ex); }
 
       chapter.Container.AddRange(pages);
     }

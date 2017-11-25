@@ -226,7 +226,7 @@ namespace Hentaichan.Mangachan
           pages.Add(new MangaPage(chapter.Uri, new Uri(match.Groups[1].Value), i++));
         }
       }
-      catch (NullReferenceException ex) { Log.Exception(ex); }
+      catch (Exception ex) { Log.Exception(ex); }
 
       chapter.Container.AddRange(pages);
     }

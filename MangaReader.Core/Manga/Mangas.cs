@@ -293,15 +293,22 @@ namespace MangaReader.Core.Manga
       if (!this.NeedUpdate)
         return;
 
-      this.Refresh();
+      try
+      {
+        this.Refresh();
 
-      if (Cover == null)
-        Cover = Parser.GetPreviews(this).FirstOrDefault();
+        if (Cover == null)
+          Cover = Parser.GetPreviews(this).FirstOrDefault();
 
-      if (mangaFolder == null)
-        mangaFolder = this.GetAbsoulteFolderPath();
+        if (mangaFolder == null)
+          mangaFolder = this.GetAbsoulteFolderPath();
 
-      this.UpdateContent();
+        this.UpdateContent();
+      }
+      catch (System.Exception ex)
+      {
+        Log.Exception(ex, $"Не удалось получить информацию о манге {Name} ({Uri})");
+      }
 
       this.ActiveVolumes = this.Volumes;
       this.ActiveChapters = this.Chapters;
@@ -342,7 +349,7 @@ namespace MangaReader.Core.Manga
                 return v.Download(mangaFolder).ContinueWith(t =>
                 {
                   if (t.Exception != null)
-                    Log.Exception(t.Exception, v.Uri.ToString());
+                    Log.Exception(t.Exception, v.Uri?.ToString());
 
                   if (plugin.HistoryType == HistoryType.Chapter)
                     AddToHistory(v.InDownloading.Where(c => c.IsDownloaded).ToArray());
@@ -358,7 +365,7 @@ namespace MangaReader.Core.Manga
               return ch.Download(mangaFolder).ContinueWith(t =>
               {
                 if (t.Exception != null)
-                  Log.Exception(t.Exception, ch.Uri.ToString());
+                  Log.Exception(t.Exception, ch.Uri?.ToString());
 
                 if (ch.IsDownloaded && plugin.HistoryType == HistoryType.Chapter)
                   AddToHistory(ch);

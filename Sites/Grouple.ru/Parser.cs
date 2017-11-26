@@ -175,7 +175,7 @@ namespace Grouple
           .Select(s => new Uri(s))
           .ToList();
         description = linkNodes
-          .ConvertAll(r => r.InnerText.Replace("\r\n", string.Empty).Trim())
+          .ConvertAll(r => WebUtility.HtmlDecode(r.InnerText.Replace("\r\n", string.Empty).Trim()))
           .ToList();
       }
       catch (NullReferenceException ex)

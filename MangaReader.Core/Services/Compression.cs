@@ -89,6 +89,7 @@ namespace MangaReader.Core.Services
       if (!Directory.Exists(message))
         return files;
 
+#warning Проверка не учитывает возможность переопределения папки в настройках типа манги.
       // Нельзя сжимать папку со всей мангой.
       if (message.Trim(Path.DirectorySeparatorChar) == AppConfig.DownloadFolder.Trim(Path.DirectorySeparatorChar))
         return files;

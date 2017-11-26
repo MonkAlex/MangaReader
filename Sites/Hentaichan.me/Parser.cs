@@ -108,7 +108,7 @@ namespace Hentaichan
               var link = node.SelectSingleNode(".//h2//a");
               var name = node.SelectSingleNode(".//div[@class=\"related_tag_list\"]");
               var uri = new Uri(manga.Uri, link.Attributes[0].Value);
-              chapters.Add(new ChapterDto(uri, name.InnerText) { Number = HentaichanChapter.GetChapterNumber(uri) });
+              chapters.Add(new ChapterDto(uri, WebUtility.HtmlDecode(name.InnerText)) { Number = HentaichanChapter.GetChapterNumber(uri) });
             }
           }
         }

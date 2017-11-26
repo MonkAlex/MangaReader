@@ -338,8 +338,8 @@ namespace MangaReader.Core.Manga
       try
       {
         using (FolderNamingStrategies.BlockStrategy(this))
+        using (new Timer(state => OnPropertyChanged(nameof(Downloaded)), null, 750, 750))
         {
-          var timer = new Timer(state => OnPropertyChanged(nameof(Downloaded)), null, 750, 750);
           NetworkSpeed.Clear();
           var plugin = Plugin;
           var tasks = this.ActiveVolumes.Select(
@@ -387,7 +387,6 @@ namespace MangaReader.Core.Manga
             });
           await Task.WhenAll(tasks.Concat(chTasks).Concat(pTasks).ToArray());
           this.DownloadedAt = DateTime.Now;
-          timer.Dispose();
           OnPropertyChanged(nameof(Downloaded));
         }
         this.Save();

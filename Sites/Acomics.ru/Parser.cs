@@ -93,7 +93,7 @@ namespace Acomics
           for (var i = 0; i < volumeNodes.Count; i++)
           {
             var volume = volumeNodes[i];
-            var desc = volume.InnerText;
+            var desc = WebUtility.HtmlDecode(volume.InnerText);
             var newVolume = new VolumeDto() { Name = desc, Number = volumes.Count + 1 };
             var skipped = volume.ParentNode.ChildNodes
               .SkipWhile(cn => cn.PreviousSibling != volume);
@@ -138,7 +138,7 @@ namespace Acomics
     private static ChapterDto CreateChapterDto(HtmlNode cn)
     {
       var uri = cn.Attributes[0].Value;
-      return new ChapterDto(uri, (cn.Attributes.Count > 1 ? cn.Attributes[1].Value : cn.InnerText))
+      return new ChapterDto(uri, WebUtility.HtmlDecode(cn.Attributes.Count > 1 ? cn.Attributes[1].Value : cn.InnerText))
       {
         // Главе присваивается кривой номер, так и задумано, он будет перебит после заполнения страницами.
         Number = GetChapterNumber(uri)

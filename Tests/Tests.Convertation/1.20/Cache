@@ -1,1601 +1,5 @@
 <?xml version="1.0"?>
 <ArrayOfMangas xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Mangas xsi:type="Readmanga">
-    <Name>3x3 Eyes</Name>
-    <Url>http://adultmanga.ru/3x3_eyes</Url>
-    <Status>Томов: 40
-Просмотров: 832122
-Перевод: продолжается
-Переводчики: Allmult, Mangarus, Ichiban Project, Rayn
-Жанры: романтика, приключения, комедия, сэйнэн, мистика, боевик, драма, эротика, фантастика &amp;hellip;
-Автор: Takada Yuuzou
-Категория: Не Яой
-Год выпуска: 1987
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Oh My Goddess!</Name>
-    <Url>http://readmanga.me/oh_my_goddess</Url>
-    <Status>Томов: 48
-Просмотров: 739691
-Перевод: продолжается
-Жанры: гарем, романтика, повседневность, сэйнэн, фэнтези, комедия
-Автор: Fujishima Kousuke
-Переводчики: Волшебный Источник, Jiyuu Manga, Grand Line Pirates, Viload, Манга - Русский проект, Cheeza, One-Piece.Ru
-Год выпуска: 1988
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Anagle Mole</Name>
-    <Url>http://readmanga.me/anagle_mole</Url>
-    <Status>Томов: 5
-Просмотров: 258091
-Перевод: продолжается
-Жанры: боевик, мистика, сёнэн, сверхъестественное, комедия
-Автор: Fukuchi Tsubasa
-Переводчик: Rikudou-Sennin Clan
-Год выпуска: 2011
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Area D</Name>
-    <Url>http://readmanga.me/area_d</Url>
-    <Status>Томов: 11 , выпуск продолжается
-Просмотров: 1402946
-Перевод: продолжается
-Авторы: Yang Kyung-Il, NANATSUKI Kyoichi
-Жанры: сверхъестественное, сёнэн, боевик
-Переводчик: Уроборос
-Год выпуска: 2012
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Baka And Boing</Name>
-    <Url>http://adultmanga.ru/baka_and_boing</Url>
-    <Status>Томов: 5
-Просмотров: 98366
-Перевод: продолжается
-Жанры: комедия, романтика, драма, этти, сэйнэн, сверхъестественное
-Переводчик: KuroMori Manga Team
-Автор: Kobayashi Hiyoko
-Год выпуска: 2008
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>The Idiot, the Test, and Summoned Creatures</Name>
-    <Url>http://readmanga.me/the_idiot__the_test__and_summoned_creatures</Url>
-    <Status>Томов: 12
-Просмотров: 186561
-Перевод: продолжается
-Авторы: Inoue Kenji, MATTAKU Moosuke
-Жанры: школа, романтика, боевик, сёнэн, комедия
-Переводчик: Shinra Tensei Manga Team
-Год выпуска: 2009
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Berserk</Name>
-    <Url>http://readmanga.me/berserk</Url>
-    <Status>Томов: 38 , выпуск продолжается
-Просмотров: 4372355
-Перевод: продолжается
-Автор: Miura Kentaro
-Жанры: боевик, трагедия, психология, фэнтези, сверхъестественное, ужасы, сэйнэн, приключения
-Переводчики: Living FLCL, Mangani Team, AniMedium, The Berserk World, MadDogs, Уроборос
-Года выпуска: 1998, 1987
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>The God of Poverty Is!</Name>
-    <Url>http://readmanga.me/the_god_of_poverty_is</Url>
-    <Status>Томов: 16
-Просмотров: 1084514
-Перевод: завершен
-Жанры: сёнэн, комедия, гарем, фэнтези, сверхъестественное, школа, этти, боевик
-Переводчики: Rikudou-Sennin Clan, Tamashii Clan
-Автор: Sukeno Yoshiaki
-Год выпуска: 2008
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Come Come Vanilla!</Name>
-    <Url>http://adultmanga.ru/come_come_vanilla</Url>
-    <Status>Томов: 3
-Просмотров: 216741
-Перевод: завершен
-Переводчик: Kukuruka team
-Авторы: Харуми Тихиро, Tazawa Daisuke
-Категория: Не Яой
-Жанры: гарем, сэйнэн, романтика, комедия, этти
-Год выпуска: 2010
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>He Is a Ultimate Teacher</Name>
-    <Url>http://adultmanga.ru/he_is_a_ultimate_teacher</Url>
-    <Status>Томов: 16 , выпуск продолжается
-Просмотров: 2206925
-Перевод: продолжается
-Жанры: школа, повседневность, комедия, сёнэн, романтика
-Категория: Не Яой
-Переводчик: Aizen522 (Eden404)
-Автор: Azuma Takeshi
-Год выпуска: 2011
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Cage of Eden</Name>
-    <Url>http://adultmanga.ru/cage_of_eden</Url>
-    <Status>Томов: 21
-Просмотров: 3143471
-Перевод: продолжается
-Жанры: фэнтези, психология, романтика, ужасы, приключения, сёнэн, драма, этти, детектив &amp;hellip;
-Переводчики: MirGroup, sansu, Daiyamondo Team, Flayma Team, Nightmare, Kuro no Oni Team, Lucky People Team, Rulate Project, Syndicate Manga Team, Wake up Team, Action Manga Team, Midnight Theater &amp;hellip;
-Автор: YAMADA Yoshinobu
-Категория: Не Яой
-Год выпуска: 2009
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Fairy Tail</Name>
-    <Url>http://readmanga.me/fairy_tail</Url>
-    <Status>Томов: 49 , выпуск продолжается
-Просмотров: 49231728
-Перевод: продолжается
-Переводчики: Rikudou-Sennin Clan, MTT-Manga Translation Team, Chidori.su, Naruto-Base.Ru, Vanime team, ftgroup, NBF-Team, Naruto-Grand.Ru, Zelmira Black Pearl &amp;hellip;
-Жанры: сверхъестественное, фэнтези, этти, романтика, боевик, комедия, приключения, драма, сёнэн &amp;hellip;
-Автор: Mashima Hiro
-Год выпуска: 2006
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Freezing</Name>
-    <Url>http://adultmanga.ru/freezing</Url>
-    <Status>Томов: 25 , выпуск продолжается
-Просмотров: 3134585
-Перевод: продолжается
-Переводчики: Aniside Team, AniDram.tv, &amp;quot;П&amp;quot;-феникс, Flayma Team, Anime Together, Anime Sweet Home, Fokkusu, LNS
-Жанры: романтика, эротика, драма, мистика, трагедия, боевик, школа, приключения, сэйнэн, научная фантастика &amp;hellip;
-Категория: Не Яой
-Авторы: Lim Dall Young, Kim Kwang Hyun, Im Dal Young
-Год выпуска: 2007
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Goudere Bishoujo Nagihara Sora</Name>
-    <Url>http://adultmanga.ru/goudere_bishoujo_nagihara_sora</Url>
-    <Status>Томов: 4
-Просмотров: 325918
-Перевод: продолжается
-Жанры: сэйнэн, комедия, сверхъестественное, гарем, романтика, этти
-Категория: Не Яой
-Автор: Minazuki Suu
-Переводчики: Project: F.A.T., Midori Ringo
-Год выпуска: 2008
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Happy Negative Marriage</Name>
-    <Url>http://adultmanga.ru/happy_negative_marriage</Url>
-    <Status>Томов: 5
-Просмотров: 423739
-Перевод: продолжается
-Жанры: эротика, повседневность, сэйнэн, комедия, романтика, драма
-Переводчики: Closed Door, mrBadGuy&amp;amp;EviLF, Уроборос
-Автор: Amazume Ryuta
-Категория: Не Яой
-Год выпуска: 2009
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Between Haru and Natsu, I Am...</Name>
-    <Url>http://adultmanga.ru/between_haru_and_natsu__i_am</Url>
-    <Status>Томов: 4 , выпуск продолжается
-Просмотров: 198795
-Перевод: продолжается
-Жанры: комедия, романтика, этти, сэйнэн, гарем
-Переводчики: Espada, Berry_Inc
-Автор: TAKEDA Sun
-Категория: Не Яой
-Год выпуска: 2008
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Hayate the Combat Butler</Name>
-    <Url>http://readmanga.me/hayate_the_combat_butler</Url>
-    <Status>Томов: 44 , выпуск продолжается
-Просмотров: 2568080
-Перевод: продолжается
-Автор: Hata Kenjirou
-Жанры: романтика, сёнэн, комедия, сверхъестественное, гарем, школа
-Переводчики: Gurren-Dan Gang, Rikudou-Sennin Clan, Okashii Obake Group
-Год выпуска: 2004
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>High School DxD</Name>
-    <Url>http://adultmanga.ru/high_school_dxd</Url>
-    <Status>Томов: 6 , выпуск продолжается
-Просмотров: 1145377
-Перевод: продолжается
-Переводчик: Shinra Tensei Manga Team
-Автор: ISHIBUMI Ichiei
-Жанры: гарем, романтика, сёнэн, боевик, школа, повседневность, сверхъестественное, комедия, этти &amp;hellip;
-Категория: Не Яой
-Год выпуска: 2011
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Lucifer and the Biscuit Hammer</Name>
-    <Url>http://readmanga.me/lucifer_and_the_biscuit_hammer</Url>
-    <Status>Томов: 10
-Просмотров: 358818
-Перевод: продолжается
-Жанры: фэнтези, сэйнэн, боевик, комедия, романтика, научная фантастика, драма, повседневность
-Автор: Mizukami Satoshi
-Переводчики: Animarium, Mangalis
-Год выпуска: 2005
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>I AM A HERO</Name>
-    <Url>http://adultmanga.ru/i_am_a_hero</Url>
-    <Status>Томов: 15 , выпуск продолжается
-Просмотров: 2244233
-Перевод: продолжается
-Категория: Не Яой
-Переводчики: JazzWay team, Espada
-Жанры: трагедия, драма, сэйнэн, психология, повседневность, ужасы, комедия
-Автор: Hanazawa Kengo
-Год выпуска: 2009
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Strawberry 100%</Name>
-    <Url>http://adultmanga.ru/strawberry_100</Url>
-    <Status>Томов: 19
-Просмотров: 1090024
-Перевод: завершен
-Автор: Kawashita Mizuki
-Жанры: сёнэн, комедия, повседневность, гарем, школа, эротика, романтика
-Переводчики: Уроборос, armlovers, Отаку Усолья
-Категория: Не Яой
-Год выпуска: 2002
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Amnesia Labyrinth</Name>
-    <Url>http://adultmanga.ru/amnesia_labyrinth</Url>
-    <Status>Томов: 2 , выпуск продолжается
-Просмотров: 81364
-Перевод: продолжается
-Жанры: эротика, драма, школа, романтика, психология, мистика, сёнэн
-Авторы: Natsumi Kohane, Tanigawa Nagaru
-Переводчик: Action Manga Team
-Категория: Не Яой
-Год выпуска: 2009
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>The World God only Knows</Name>
-    <Url>http://readmanga.me/the_world_god_only_knows</Url>
-    <Status>Томов: 26
-Просмотров: 6928371
-Перевод: завершен
-Жанры: комедия, гарем, сёнэн, школа, фантастика, романтика
-Переводчики: Маленькое сокровище, Rikudou-Sennin Clan
-Автор: Wakaki Tamiki
-Год выпуска: 2008
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Kiba no Tabishounin - The Arms Peddler</Name>
-    <Url>http://readmanga.me/kiba_no_tabishounin___the_arms_peddler</Url>
-    <Status>Томов: 7 , выпуск продолжается
-Просмотров: 1045740
-Перевод: продолжается
-Жанры: приключения, драма, сэйнэн, боевик, научная фантастика, ужасы, сверхъестественное
-Переводчики: [+3 INT], LNS, Pensieri
-Автор: NANATSUKI Kyoichi
-Год выпуска: 2010
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>KissxSis</Name>
-    <Url>http://adultmanga.ru/kissxsis</Url>
-    <Status>Томов: 13 , выпуск продолжается
-Просмотров: 1908400
-Перевод: продолжается
-Жанры: романтика, этти, школа, комедия, гарем, сэйнэн
-Переводчики: Rikudou-Sennin Clan, Corsaircheg, Deeps of Aniverse, Eragot
-Автор: Ditama Bow
-Категория: Не Яой
-Год выпуска: 2004
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>This Older Woman is a Fiction!?</Name>
-    <Url>http://adultmanga.ru/this_older_woman_is_a_fiction</Url>
-    <Status>Томов: 6 , выпуск продолжается
-Просмотров: 565981
-Перевод: продолжается
-Жанры: романтика, сэйнэн, повседневность, этти, комедия
-Переводчики: Living FLCL, Rea-l, Flayma Team
-Категория: Не Яой
-Автор: MUTSUKI Tsutomu
-Год выпуска: 2010
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Take a Look at This S!</Name>
-    <Url>http://adultmanga.ru/take_a_look_at_this_s</Url>
-    <Status>Томов: 15
-Просмотров: 3915187
-Перевод: завершен
-Жанры: сэйнэн, гарем, мистика, эротика, романтика, комедия, драма, этти
-Автор: Kitazaki Taku
-Категория: Не Яой
-Переводчик: Violent Manga Project
-Год выпуска: 2009
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Kurogane (KEZAWA Haruto)</Name>
-    <Url>http://readmanga.me/kurogane__kezawa_haruto</Url>
-    <Status>Томов: 8
-Просмотров: 1732172
-Перевод: завершен
-Жанры: сёнэн, комедия, спорт, сверхъестественное, приключения, школа
-Переводчики: KuroMori Manga Team, One-Piece.Ru, Ygen
-Автор: Ikezawa Haruto
-Год выпуска: 2011
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Black God</Name>
-    <Url>http://readmanga.me/black_god</Url>
-    <Status>Томов: 19
-Просмотров: 764467
-Перевод: продолжается
-Жанры: боевик, драма, романтика, сэйнэн, сверхъестественное
-Авторы: Park Sung Woo, LIM Dall-Young
-Переводчик: Rikudou-Sennin Clan
-Год выпуска: 2005
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>The Comic Artist and His Assistants 2</Name>
-    <Url>http://adultmanga.ru/the_comic_artist_and_his_assistants_2</Url>
-    <Status>Томов: 1
-Просмотров: 103813
-Перевод: завершен
-Переводчики: Anime-nya.ru, Rikudou-Sennin Clan
-Категория: Не Яой
-Жанры: романтика, сэйнэн, комедия, этти, повседневность, гарем
-Автор: Hiroyuki
-Год выпуска: 2013
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Minamoto-kun's story</Name>
-    <Url>http://adultmanga.ru/minamoto_kun_s_story</Url>
-    <Status>Томов: 7 , выпуск продолжается
-Просмотров: 7046760
-Перевод: продолжается
-Жанры: эротика, романтика, этти, сэйнэн, комедия, гарем
-Переводчики: Taiyoufuu, Skygrinder, Eragot
-Автор: INABA Minori
-Категория: Не Яой
-Год выпуска: 2011
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Nagasarete Airantou</Name>
-    <Url>http://readmanga.me/nagasarete_airantou</Url>
-    <Status>Томов: 24 , выпуск продолжается
-Просмотров: 670520
-Перевод: продолжается
-Жанры: комедия, романтика, сёнэн, приключения, гарем, этти
-Переводчики: FireLied, Rikudou-Sennin Clan
-Автор: Fujishiro Takeshi
-Год выпуска: 2003
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Nana and Kaoru</Name>
-    <Url>http://adultmanga.ru/nana_and_kaoru</Url>
-    <Status>Томов: 14 , выпуск продолжается
-Просмотров: 3490209
-Перевод: продолжается
-Категория: Не Яой
-Жанры: школа, романтика, комедия, сэйнэн, эротика
-Переводчик: OJS-team
-Автор: Amazume Ryuta
-Год выпуска: 2008
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>My Mysterious Girlfriend X</Name>
-    <Url>http://readmanga.me/my_mysterious_girlfriend_x</Url>
-    <Status>Томов: 12
-Просмотров: 786982
-Перевод: продолжается
-Жанры: комедия, школа, сэйнэн, романтика, сверхъестественное
-Переводчики: Mangaman, vovka69
-Автор: Ueshiba Riichi
-Год выпуска: 2006
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Nisekoi (Komi Naoshi)</Name>
-    <Url>http://readmanga.me/nisekoi__komi_naoshi</Url>
-    <Status>Томов: 17 , выпуск продолжается
-Просмотров: 5687064
-Перевод: продолжается
-Жанры: комедия, гарем, романтика, сёнэн, боевик, школа
-Переводчики: Saazzex, Grand Line Pirates, Deeps of Aniverse, R1PER.EP, dizirt, One-Piece.Ru, Thoumeaux, anidim, Rikudou-Sennin Clan, Nyama-sama &amp;hellip;
-Автор: Komi Naoshi
-Год выпуска: 2011
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>NYOTAI-KA</Name>
-    <Url>http://adultmanga.ru/nyotai_ka</Url>
-    <Status>Томов: 5
-Просмотров: 713363
-Перевод: продолжается
-Жанры: сэйнэн, эротика, романтика, этти, комедия, гендерная интрига
-Автор: RUEN Rouga
-Переводчик: Trap Manga
-Категория: Не Яой
-Год выпуска: 2009
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>One Piece</Name>
-    <Url>http://readmanga.me/one__piece</Url>
-    <Status>Томов: 78 , выпуск продолжается
-Просмотров: 39579842
-Перевод: продолжается
-Переводчики: Zelmira Black Pearl, Skull Manga, OnePiece.ru, One-Piece.Ru, GoingMerry, Atributz, 1/2 Grand Line Pirates, Romance Dawn Project, Diamond Style &amp;hellip;
-Жанры: комедия, драма, психология, фэнтези, боевые искусства, сверхъестественное, боевик, сёнэн, приключения &amp;hellip;
-Автор: Oda Eiichiro
-Год выпуска: 1997
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Listen to what Papa says!</Name>
-    <Url>http://adultmanga.ru/listen_to_what_papa_says</Url>
-    <Status>Томов: 2
-Просмотров: 157503
-Перевод: завершен
-Категория: Не Яой
-Переводчики: qeemiho, Rikudou-Sennin Clan
-Автор: Matsu Tomohiro
-Жанры: комедия, этти, романтика, сёнэн
-Год выпуска: 2011
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Pastel</Name>
-    <Url>http://adultmanga.ru/pastel</Url>
-    <Status>Томов: 37 , выпуск продолжается
-Просмотров: 719106
-Перевод: продолжается
-Категория: Не Яой
-Жанры: комедия, романтика, сёнэн, гарем, школа, повседневность, эротика
-Переводчики: Flayma Team, Amica-Manga
-Автор: Kobayashi Toshihiko
-Год выпуска: 2002
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Rosario to Vampire II</Name>
-    <Url>http://adultmanga.ru/rosario_to_vampire_ii</Url>
-    <Status>Томов: 14
-Просмотров: 3690883
-Перевод: завершен
-Категория: Не Яой
-Жанры: романтика, вампиры, мистика, школа, этти, гарем, драма, сёнэн
-Переводчики: Shikifujin, Shikei, Jiyuu Manga, Anime Together
-Автор: Ikeda Akihisa
-Год выпуска: 2007
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Sakuranbo Syndrome</Name>
-    <Url>http://adultmanga.ru/sakuranbo_syndrome</Url>
-    <Status>Томов: 11
-Просмотров: 1046095
-Перевод: продолжается
-Жанры: романтика, комедия, драма, сэйнэн
-Переводчик: Violent Manga Project
-Категория: Не Яой
-Автор: Kitazaki Taku
-Год выпуска: 2006
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Sankarea</Name>
-    <Url>http://adultmanga.ru/sankarea</Url>
-    <Status>Томов: 11
-Просмотров: 1698651
-Перевод: завершен
-Переводчики: AgamaSand Manga Team, Living FLCL, MD-Team, Eragot
-Категория: Не Яой
-Автор: Hattori Mitsuru
-Жанры: романтика, сёнэн, сверхъестественное, комедия, этти
-Год выпуска: 2009
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Lost Property of the Sky</Name>
-    <Url>http://adultmanga.ru/lost_property_of_the_sky</Url>
-    <Status>Томов: 20
-Просмотров: 1337505
-Перевод: завершен
-Жанры: научная фантастика, боевик, драма, сверхъестественное, мистика, комедия, школа, романтика, сёнэн, гарем, этти &amp;hellip;
-Категория: Не Яой
-Переводчики: RUS-MANGA, Anime Together, Mike Flaming, Angeloid Suu
-Автор: Minazuki Suu
-Год выпуска: 2007
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Dusk Maiden of Amnesia</Name>
-    <Url>http://readmanga.me/dusk_maiden_of_amnesia</Url>
-    <Status>Томов: 10
-Просмотров: 1135822
-Перевод: завершен
-Автор: Maybe
-Переводчики: Get Atom, Action Manga Team, Hanabi Manga Team, А.Н.А.М, Anime-nya.ru, Living FLCL, AgamaSand Manga Team, AniGroup
-Жанры: комедия, романтика, драма, сёнэн, психология, мистика, этти, школа, сверхъестественное &amp;hellip;
-Год выпуска: 2008
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>BIRDY THE MIGHTY 2</Name>
-    <Url>http://adultmanga.ru/birdy_the_mighty_2</Url>
-    <Status>Томов: 33
-Просмотров: 204429
-Перевод: продолжается
-Жанры: этти, приключения, фантастика, гендерная интрига, сёнэн, комедия
-Автор: YUUKI Masami
-Категория: Не Яой
-Переводчик: Rikudou-Sennin Clan
-Год выпуска: 2003
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>The Breaker: New waves</Name>
-    <Url>http://readmanga.me/the_breaker__new_waves</Url>
-    <Status>Томов: 20 , выпуск продолжается
-Просмотров: 26692035
-Перевод: продолжается
-Жанры: школа, сёнэн, комедия, сверхъестественное, гарем, боевик, приключения, боевые искусства, драма &amp;hellip;
-Переводчики: Narutoproject, Уроборос, Mangani Team
-Авторы: Park Jin-hwan, Jeon Geuk-jin
-Категория: Манхва
-Год выпуска: 2010
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>To Love-Ru Darkness</Name>
-    <Url>http://adultmanga.ru/to_love_ru_darkness</Url>
-    <Status>Томов: 12 , выпуск продолжается
-Просмотров: 2001586
-Перевод: продолжается
-Жанры: эротика, гарем, научная фантастика, сверхъестественное, сёнэн, комедия, школа, романтика, этти &amp;hellip;
-Категория: Не Яой
-Авторы: Yabuki Kentaro, Hasemi Saki
-Переводчики: Rikudou-Sennin Clan, Anime Together, Eragot
-Год выпуска: 2010
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>The Monster Next to Me</Name>
-    <Url>http://readmanga.me/the_monster_next_to_me</Url>
-    <Status>Томов: 13
-Просмотров: 3232599
-Перевод: продолжается
-Автор: Robico
-Переводчик: Maid Latte
-Жанры: школа, романтика, комедия, сёдзё
-Год выпуска: 2008
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Dream Eater Merry</Name>
-    <Url>http://adultmanga.ru/dream_eater_merry</Url>
-    <Status>Томов: 13 , выпуск продолжается
-Просмотров: 443942
-Перевод: продолжается
-Категория: Не Яой
-Жанры: фэнтези, боевик, сверхъестественное, комедия, этти, сэйнэн, романтика
-Автор: Ushiki Yoshitaka
-Переводчик: Rikudou-Sennin Clan
-Год выпуска: 2008
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Yuria Type 100</Name>
-    <Url>http://adultmanga.ru/yuria_type_100</Url>
-    <Status>Томов: 12
-Просмотров: 456743
-Перевод: продолжается
-Жанры: комедия, научная фантастика, эротика, романтика, сэйнэн
-Переводчики: Ran-team, Pururu, Ready Steady GO! (R.S.G.)
-Категория: Не Яой
-Авторы: Hagio Nobuto, Harada Shigemitsu
-Год выпуска: 2006
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Blood Lad</Name>
-    <Url>http://adultmanga.ru/blood_lad</Url>
-    <Status>Томов: 12 , выпуск продолжается
-Просмотров: 3363123
-Перевод: продолжается
-Жанры: боевик, романтика, фэнтези, сэйнэн, комедия, вампиры, сверхъестественное
-Переводчики: АниПанда, Translators, Rikudou-Sennin Clan, Saazzex
-Категория: Не Яой
-Автор: Kodama Yuuki
-Год выпуска: 2009
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Ocean's Cape</Name>
-    <Url>http://readmanga.me/ocean_s_cape</Url>
-    <Status>Томов: 15
-Просмотров: 1386275
-Перевод: продолжается
-Жанры: этти, романтика, комедия, гарем, сверхъестественное, повседневность, сэйнэн
-Переводчики: Manga Club, Shinra Tensei Manga Team
-Автор: Fumizuki Kou
-Год выпуска: 2007
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Fisheye Placebo</Name>
-    <Url>http://readmanga.me/fisheye_placebo</Url>
-    <Status>Томов: 2 , выпуск продолжается
-Просмотров: 1170532
-Перевод: продолжается
-Жанры: фантастика, научная фантастика, психология
-Категория: Веб
-Автор: Yan Wenqing
-Переводчик: Aizen522(Eden404)
-Год выпуска: 2013
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Hunter x Hunter</Name>
-    <Url>http://readmanga.me/hunter_x_hunter</Url>
-    <Status>Томов: 34 , выпуск продолжается
-Просмотров: 12733606
-Перевод: продолжается
-Жанры: фэнтези, комедия, боевые искусства, психология, приключения, боевик, драма, сёнэн
-Переводчики: Death Note - KIRA Revival Project, Takai group, One-Piece.Ru, Living FLCL
-Автор: Togashi Yoshihiro
-Год выпуска: 1998
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>D.Gray-Man</Name>
-    <Url>http://readmanga.me/d_gray_man</Url>
-    <Status>Томов: 24 , выпуск продолжается
-Просмотров: 13972605
-Перевод: продолжается
-Жанры: сверхъестественное, комедия, приключения, драма, боевик, история, сёнэн, фэнтези, ужасы, трагедия &amp;hellip;
-Автор: Hoshino Katsura
-Переводчики: Living FLCL, Welcome to Wonderland, Soby Team, Red Moon, FASTeam, Devils-scan, Bookman&amp;#39;s notes, Rikudou-Sennin Clan
-Год выпуска: 2004
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Toriko</Name>
-    <Url>http://readmanga.me/toriko</Url>
-    <Status>Томов: 34 , выпуск продолжается
-Просмотров: 10919423
-Перевод: продолжается
-Жанры: приключения, комедия, боевик, фэнтези, сёнэн
-Переводчики: Grand Line Pirates, One-Piece.Ru
-Автор: Shimabukuro Mitsutoshi
-Год выпуска: 2008
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Nice to Meet You, Kami-sama</Name>
-    <Url>http://readmanga.me/nice_to_meet_you__kami_sama</Url>
-    <Status>Томов: 21 , выпуск продолжается
-Просмотров: 17936558
-Перевод: продолжается
-Жанры: приключения, комедия, сёдзё, школа, драма, фэнтези, гарем, романтика, сверхъестественное &amp;hellip;
-Переводчики: Cookie Fly!, Мирриярри-Мя, Wizards of Words, Mangani Team, Golden Wind
-Автор: Suzuki Julietta
-Год выпуска: 2008
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Rave Master</Name>
-    <Url>http://readmanga.me/rave_master</Url>
-    <Status>Томов: 35
-Просмотров: 6082912
-Перевод: завершен
-Жанры: фэнтези, романтика, сверхъестественное, этти, боевик, сёнэн, драма, комедия, приключения &amp;hellip;
-Переводчики: Мир Рэйв, Ezergan Team, FreshManga!
-Автор: Mashima Hiro
-Год выпуска: 1999
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Until Death Do Us Part</Name>
-    <Url>http://readmanga.me/until_death_do_us_part</Url>
-    <Status>Томов: 30 , выпуск продолжается
-Просмотров: 4073667
-Перевод: продолжается
-Переводчики: Aragami FanSub Group, Rikudou-Sennin Clan
-Жанры: научная фантастика, драма, боевик, сверхъестественное, сэйнэн, романтика, приключения
-Авторы: Takashige Hiroshi, Ji-Hyoung Song
-Год выпуска: 2005
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>The Greatest Fusion Fantasy</Name>
-    <Url>http://readmanga.me/the_greatest_fusion_fantasy</Url>
-    <Status>Томов: 29
-Просмотров: 5676269
-Перевод: продолжается
-Жанры: фэнтези, комедия, романтика, боевик, сёнэн, приключения
-Категория: Манхва
-Переводчики: SUZURI Project, Valhalla Knights, Nirai
-Авторы: Kenny A.t., Kim Daewoo
-Год выпуска: 2002
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Liar Game</Name>
-    <Url>http://readmanga.me/liar_game</Url>
-    <Status>Томов: 17 , выпуск продолжается
-Просмотров: 2647559
-Перевод: продолжается
-Переводчики: Mangalis, Kitsune-dan
-Жанры: сэйнэн, драма, мистика, психология
-Автор: Kaitani Shinobu
-Год выпуска: 2005
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>L-DK</Name>
-    <Url>http://readmanga.me/l_dk</Url>
-    <Status>Томов: 16 , выпуск продолжается
-Просмотров: 8795939
-Перевод: продолжается
-Переводчики: JazzWay team, AniTube.su, Pink Tears, YesINastya, Remanga, Star Team, КоРиШи
-Жанры: школа, романтика, сёдзё, комедия, драма
-Автор: Watanabe Ayu
-Год выпуска: 2009
-Возрастная рекомендация: G
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Nana</Name>
-    <Url>http://readmanga.me/nana</Url>
-    <Status>Томов: 22
-Просмотров: 2772497
-Перевод: продолжается
-Жанры: дзёсэй, романтика, драма, повседневность, комедия, сёдзё, трагедия
-Переводчики: YumeDream, Story 707, Ageha, The Greeds, Ameuri
-Автор: Yazawa Ai
-Год выпуска: 2000
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Dorohedoro</Name>
-    <Url>http://readmanga.me/dorohedoro</Url>
-    <Status>Томов: 20 , выпуск продолжается
-Просмотров: 2939936
-Перевод: продолжается
-Переводчики: Какой-то чувак, nyana11, Ё man, wsj team, KusoSekai
-Жанры: ужасы, мистика, приключения, комедия, сверхъестественное, сэйнэн, психология, фэнтези
-Автор: Hayashida Q.
-Год выпуска: 2001
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Kimi ni Todoke</Name>
-    <Url>http://readmanga.me/kimi_ni_todoke</Url>
-    <Status>Томов: 22 , выпуск продолжается
-Просмотров: 3256837
-Перевод: продолжается
-Переводчики: Jiyuu Manga, sonya_bass, Zack182
-Автор: Shiina Karuho
-Жанры: школа, романтика, комедия, повседневность, драма, сёдзё
-Год выпуска: 2006
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Perfect Girl Evolution</Name>
-    <Url>http://readmanga.me/perfect_girl_evolution</Url>
-    <Status>Томов: 35 , выпуск продолжается
-Просмотров: 2649261
-Перевод: продолжается
-Жанры: комедия, сёдзё, повседневность, романтика, школа, мистика
-Переводчики: Square Circle Group, Shoujo Manga, Fear Dormitory, Call Of The Wind, Death Note - KIRA Revival Project
-Автор: Hayakawa Tomoko
-Год выпуска: 2000
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Break Blade</Name>
-    <Url>http://readmanga.me/break_blade</Url>
-    <Status>Томов: 13 , выпуск продолжается
-Просмотров: 1602757
-Перевод: продолжается
-Переводчики: Ellefiere, X-Empire, S.N.R.S.N., Action Manga Team
-Жанры: фэнтези, меха, приключения, сёнэн, драма
-Автор: Yunosuke Yoshinaga
-Год выпуска: 2007
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>The Devil and Her Love Song</Name>
-    <Url>http://readmanga.me/the_devil_and_her_love_song</Url>
-    <Status>Томов: 13
-Просмотров: 1804935
-Перевод: продолжается
-Переводчики: Bon_Bon Band, Live Manga, Enigma
-Автор: Tomori Miyoshi
-Жанры: романтика, сёдзё, школа, психология, драма
-Год выпуска: 2007
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Dreamin' Sun</Name>
-    <Url>http://readmanga.me/dreamin__sun</Url>
-    <Status>Томов: 10
-Просмотров: 1647997
-Перевод: продолжается
-Жанры: драма, комедия, сёдзё, романтика
-Переводчик: Maid Latte
-Автор: Takano Ichigo
-Год выпуска: 2008
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>You Are My Pet</Name>
-    <Url>http://readmanga.me/you_are_my_pet</Url>
-    <Status>Томов: 14
-Просмотров: 1299701
-Перевод: продолжается
-Жанры: повседневность, романтика, дзёсэй, драма, комедия
-Переводчик: Midori Ringo
-Автор: Ogawa Yayoi
-Год выпуска: 2000
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>A TACKLE ON MY LIFE</Name>
-    <Url>http://readmanga.me/a_tackle_on_my_life</Url>
-    <Status>Томов: 14
-Просмотров: 1189606
-Перевод: завершен
-Переводчики: Cherry Manga, Midnight Grove
-Жанры: сёдзё, боевик, комедия, романтика, школа
-Автор: Hwang Mi Ri
-Категория: Манхва
-Год выпуска: 2008
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Queen's Knight</Name>
-    <Url>http://readmanga.me/queen_s_knight</Url>
-    <Status>Томов: 17
-Просмотров: 1050517
-Перевод: завершен
-Переводчики: Ageha, KuroShiro = Black &amp;amp; White =, Shoujo Manga
-Жанры: сверхъестественное, боевик, история, сёдзё, приключения, драма, фэнтези, романтика, трагедия &amp;hellip;
-Категория: Манхва
-Автор: Kang Won Kim
-Год выпуска: 1997
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>+Anima</Name>
-    <Url>http://readmanga.me/anima</Url>
-    <Status>Томов: 10
-Просмотров: 879941
-Перевод: завершен
-Переводчики: Mangaman, Peremanga
-Жанры: фэнтези, сёнэн, приключения
-Автор: Mukai Natsumi
-Год выпуска: 2000
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>A Night of a Thousand Dreams</Name>
-    <Url>http://readmanga.me/a_night_of_a_thousand_dreams</Url>
-    <Status>Томов: 11
-Просмотров: 1390210
-Перевод: завершен
-Жанры: драма, сёнэн-ай, психология, романтика, сёдзё, трагедия, история
-Авторы: Han Seung Hee, Jun Jin Suk
-Категория: Манхва
-Переводчики: BL 4ever, Secret box, Airty, Allergic to Anxiety
-Год выпуска: 2004
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Gamble Fish</Name>
-    <Url>http://readmanga.me/gamble_fish</Url>
-    <Status>Томов: 19
-Просмотров: 1164439
-Перевод: продолжается
-Жанры: этти, сёнэн, психология, мистика, гарем, школа
-Переводчики: One-Piece.Ru, Алый рассвет, BlazingSouls Manga, Grimtaus
-Авторы: Yamane Kazutoshi, Aoyama Hiromi
-Год выпуска: 2007
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Monster</Name>
-    <Url>http://readmanga.me/monster</Url>
-    <Status>Томов: 18
-Просмотров: 632233
-Перевод: продолжается
-Переводчики: Caribou, Nekonomi, Манга - Русский проект, Speculum Mundi, Тинори
-Жанры: сэйнэн, драма, приключения, триллер, ужасы
-Автор: Urasawa Naoki
-Год выпуска: 1994
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>AKB49 - The Rules Against Love</Name>
-    <Url>http://readmanga.me/akb49___the_rules_against_love</Url>
-    <Status>Томов: 22 , выпуск продолжается
-Просмотров: 1320066
-Перевод: продолжается
-Жанры: гендерная интрига, драма, сёнэн, школа, романтика
-Авторы: Takahashi Hisashi, Motoazabu Factory, Miyajima Reiji
-Переводчики: Trap Manga, Kanablog, JazzWay team
-Год выпуска: 2010
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>ToraDora</Name>
-    <Url>http://readmanga.me/toradora</Url>
-    <Status>Томов: 10
-Просмотров: 857798
-Перевод: продолжается
-Переводчики: Baka-Tsuki Ru, Vesperum, FST, MoonLight-Panda
-Жанры: драма, повседневность, романтика, комедия
-Авторы: Takemiya Yuyuko, Zekkyo
-Год выпуска: 2007
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Saki</Name>
-    <Url>http://readmanga.me/saki</Url>
-    <Status>Томов: 13 , выпуск продолжается
-Просмотров: 554664
-Перевод: продолжается
-Жанры: драма, игра, школа, сёдзё-ай, этти, спорт
-Переводчик: Otaku Усолья
-Автор: KOBAYASHI Ritz
-Год выпуска: 2006
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Love Attack (SEINO Shizuru)</Name>
-    <Url>http://readmanga.me/love_attack__seino_shizuru</Url>
-    <Status>Томов: 13
-Просмотров: 1779503
-Перевод: продолжается
-Автор: Seino Shizuru
-Жанры: повседневность, сёдзё, школа, романтика, комедия
-Переводчики: Manga-Art, FlowersStorm
-Год выпуска: 2005
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>A Badboy Drinks Tea</Name>
-    <Url>http://readmanga.me/a_badboy_drinks_tea</Url>
-    <Status>Томов: 11
-Просмотров: 772268
-Перевод: продолжается
-Жанры: романтика, сёнэн, комедия, боевик, школа
-Автор: Nishimori Hiroyuki
-Переводчик: Pineapple team
-Год выпуска: 2007
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Enchained Spiritual Beast Ga-Rei</Name>
-    <Url>http://readmanga.me/enchained_spiritual_beast_ga_rei</Url>
-    <Status>Томов: 12
-Просмотров: 914786
-Перевод: завершен
-Автор: Segawa Hajime
-Жанры: комедия, боевые искусства, приключения, сёнэн, романтика, мистика, боевик
-Переводчики: Misty Dreams, Коло, Action Manga Team
-Год выпуска: 2005
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Chu Feng</Name>
-    <Url>http://readmanga.me/school_shock</Url>
-    <Status>Томов: 1 , выпуск продолжается
-Просмотров: 757809
-Перевод: продолжается
-Автор: WhiteCat (Bai Mao)
-Жанры: комедия, романтика, научная фантастика, школа, боевик, сёнэн, меха
-Переводчик: Rikudou-Sennin Clan
-Категория: Маньхуа
-Год выпуска: 2009
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Momoiro heaven</Name>
-    <Url>http://readmanga.me/momoiro_heaven</Url>
-    <Status>Томов: 13
-Просмотров: 2311735
-Перевод: продолжается
-Автор: Yoshino Mari
-Переводчики: Anastasil, MoonLight Team
-Жанры: драма, школа, романтика, дзёсэй, повседневность, комедия
-Год выпуска: 2007
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Homunculus</Name>
-    <Url>http://readmanga.me/homunculus</Url>
-    <Status>Томов: 15
-Просмотров: 843698
-Перевод: завершен
-Переводчики: Sad-Robot, Karnen, Aragami FanSub Group, ogremagizk, Night
-Жанры: повседневность, мистика, драма, психология, сэйнэн, ужасы
-Автор: Yamamoto Hideo
-Год выпуска: 2003
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>D.N.Angel</Name>
-    <Url>http://readmanga.me/d_n_angel</Url>
-    <Status>Томов: 16
-Просмотров: 468011
-Перевод: продолжается
-Жанры: комедия, сёдзё, драма, романтика, фэнтези
-Автор: Sugisaki Yukiru
-Переводчик: YumeDream
-Год выпуска: 1997
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Dragon Head</Name>
-    <Url>http://readmanga.me/dragon_head</Url>
-    <Status>Томов: 10
-Просмотров: 567533
-Перевод: завершен
-Жанры: приключения, драма, ужасы, сэйнэн
-Переводчик: Уроборос
-Автор: Minetaro Mochizuki
-Год выпуска: 1995
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>June the Little Queen</Name>
-    <Url>http://readmanga.me/june_the_little_queen</Url>
-    <Status>Томов: 8
-Просмотров: 589272
-Перевод: завершен
-Жанры: школа, комедия, романтика, фэнтези, сёдзё, трагедия
-Переводчики: Little Queen, Peremanga, Angelic_Pretty
-Категория: Манхва
-Автор: Kim Yeon-joo
-Год выпуска: 2002
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Young GTO! Shonan Junai Gumi</Name>
-    <Url>http://readmanga.me/young_gto__shonan_junai_gumi</Url>
-    <Status>Томов: 31
-Просмотров: 614212
-Перевод: продолжается
-Жанры: повседневность, комедия, боевик, сёнэн, романтика, школа
-Переводчики: Atom-sama, GorilaZZ, Knock!Project
-Автор: Fujisawa Tohru
-Год выпуска: 1990
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Yokohama Shopping Trip</Name>
-    <Url>http://readmanga.me/yokohama_shopping_trip</Url>
-    <Status>Томов: 14
-Просмотров: 256164
-Перевод: завершен
-Автор: Ashinano Hitoshi
-Жанры: повседневность, фантастика, сэйнэн
-Переводчики: Кафе Альфа, Манга - Русский проект
-Год выпуска: 1994
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Shibatora</Name>
-    <Url>http://readmanga.me/shibatora</Url>
-    <Status>Томов: 15
-Просмотров: 546258
-Перевод: продолжается
-Авторы: Ando Yuma, Asaki Masashi
-Жанры: комедия, драма, детектив, мистика
-Переводчик: Action Manga Team
-Год выпуска: 2007
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Ghost Byeolgok</Name>
-    <Url>http://readmanga.me/ghost_byeolgok</Url>
-    <Status>Томов: 9
-Просмотров: 567811
-Перевод: продолжается
-Жанры: боевик, комедия, сверхъестественное, сёнэн, романтика
-Переводчики: Time`s Cage, Tamashii Clan, Reverse
-Автор: Han Hyun Dong
-Категория: Манхва
-Год выпуска: 2008
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Working!!</Name>
-    <Url>http://readmanga.me/working</Url>
-    <Status>Томов: 13
-Просмотров: 377534
-Перевод: продолжается
-Переводчики: Okashii Obake, Rusalmanga
-Категория: Ёнкома
-Жанры: комедия, повседневность, сёнэн
-Автор: Takatsu Karino
-Год выпуска: 2005
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Crazy for You</Name>
-    <Url>http://readmanga.me/crazy_for_you</Url>
-    <Status>Томов: 6
-Просмотров: 526245
-Перевод: завершен
-Жанры: сёдзё, школа, романтика, драма
-Переводчик: Jiyuu Manga
-Автор: Shiina Karuho
-Год выпуска: 2003
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>In The First Grade</Name>
-    <Url>http://adultmanga.ru/in_the_first_grade</Url>
-    <Status>Томов: 9
-Просмотров: 609369
-Перевод: завершен
-Жанры: повседневность, школа, этти, гендерная интрига, комедия, драма, научная фантастика, сэйнэн
-Автор: Ooi Masakazu
-Переводчик: LoliconTeam
-Год выпуска: 2007
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>The Flower Crown Madonna</Name>
-    <Url>http://readmanga.me/the_flower_crown_madonna</Url>
-    <Status>Томов: 7
-Просмотров: 457208
-Перевод: завершен
-Жанры: приключения, гендерная интрига, сёдзё, боевик, гарем, история, мистика, драма, романтика &amp;hellip;
-Переводчики: Shoujo Manga, Holy Grail
-Автор: Saito Chiho
-Год выпуска: 1993
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>NG LIFE</Name>
-    <Url>http://readmanga.me/ng_life</Url>
-    <Status>Томов: 9
-Просмотров: 575699
-Перевод: завершен
-Переводчики: Sub Caelo, КоРиШи
-Жанры: романтика, драма, комедия, фэнтези, школа, сверхъестественное, сёдзё, сёнэн-ай, гендерная интрига, сёнэн &amp;hellip;
-Автор: Kusanagi Mizuho
-Год выпуска: 2006
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Melo Holic</Name>
-    <Url>http://readmanga.me/melo_holic</Url>
-    <Status>Томов: 1
-Просмотров: 816576
-Перевод: продолжается
-Жанры: комедия, психология, мистика, драма, романтика, сэйнэн, повседневность, сверхъестественное
-Категории: Манхва, Веб
-Переводчик: Fox-Clan
-Авторы: Team Get-name, Carnby, Aruani
-Год выпуска: 2010
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Parasite</Name>
-    <Url>http://adultmanga.ru/parasite</Url>
-    <Status>Томов: 8
-Просмотров: 3725919
-Перевод: завершен
-Переводчик: Scan Dogs
-Жанры: фантастика, драма, психология, ужасы, комедия, сэйнэн, школа
-Категория: Не Яой
-Автор: Iwaaki Hitoshi
-Год выпуска: 1990
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Angel Densetsu</Name>
-    <Url>http://readmanga.me/angel_densetsu</Url>
-    <Status>Томов: 15
-Просмотров: 3219335
-Перевод: завершен
-Жанры: школа, боевые искусства, комедия, романтика, сёнэн
-Переводчики: Itodama-Manga, Arai Kibou, Taiyaku Manga, Rikudou-Sennin Clan
-Автор: Yagi Norihiro
-Год выпуска: 1992
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Today, we'll start our love</Name>
-    <Url>http://readmanga.me/today__we_ll_start_our_love</Url>
-    <Status>Томов: 15
-Просмотров: 16978473
-Перевод: завершен
-Жанры: повседневность, школа, комедия, сёдзё, романтика, этти, драма, дзёсэй
-Переводчики: S.N.R.S.N., JazzWay team, She, Mashusick, SweetDreams, MAGIKANE
-Автор: Minami Kanan
-Год выпуска: 2008
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Unbreakable Machine Doll</Name>
-    <Url>http://readmanga.me/unbreakable_machine_doll</Url>
-    <Status>Томов: 8 , выпуск продолжается
-Просмотров: 1055879
-Перевод: продолжается
-Жанры: сэйнэн, гарем, фэнтези, школа, романтика, комедия, боевик
-Переводчик: Regios team
-Автор: TAKAGI Hakaru
-Год выпуска: 2010
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Girl the Wild's</Name>
-    <Url>http://readmanga.me/girl_the_wild_s</Url>
-    <Status>Томов: 1 , выпуск продолжается
-Просмотров: 13559396
-Перевод: продолжается
-Категории: Манхва, Веб
-Жанры: боевик, комедия, романтика, сёнэн, драма, боевые искусства, школа, гарем
-Авторы: Hun, Kim Hye Jin
-Переводчик: Shinra Tensei Manga Team
-Год выпуска: 2011
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Bloody Monday</Name>
-    <Url>http://adultmanga.ru/bloody_monday</Url>
-    <Status>Томов: 11
-Просмотров: 1844271
-Перевод: завершен
-Жанры: эротика, сёнэн, научная фантастика, школа, боевик, драма, психология
-Авторы: Megumi Kouji, Ryuumon Ryou
-Категория: Не Яой
-Переводчик: Rikudou-Sennin Clan
-Год выпуска: 2007
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>To Aru Kagaku no Railgun</Name>
-    <Url>http://readmanga.me/to_aru_kagaku_no_railgun</Url>
-    <Status>Томов: 11 , выпуск продолжается
-Просмотров: 659226
-Перевод: продолжается
-Жанры: сэйнэн, приключения, научная фантастика, комедия, сверхъестественное
-Переводчики: Rikudou-Sennin Clan, Поддался TEAM, Midori Ringo
-Автор: Kamachi Kazuma
-Год выпуска: 2007
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>A Certain Magical Index</Name>
-    <Url>http://readmanga.me/a_certain_magical_index</Url>
-    <Status>Томов: 14 , выпуск продолжается
-Просмотров: 413016
-Перевод: продолжается
-Жанры: сверхъестественное, научная фантастика, боевик, сёнэн, комедия
-Переводчики: Hanabi Manga Team, Gin no Tsuyaku, Karin^^, Шайтан
-Автор: Kamachi Kazuma
-Год выпуска: 2007
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>A Certain Magical Index - The Miracle of Endymion</Name>
-    <Url>http://readmanga.me/a_certain_magical_index___the_miracle_of_endymion</Url>
-    <Status>Томов: 2
-Просмотров: 24062
-Перевод: завершен
-Жанры: комедия, сверхъестественное, сэйнэн, научная фантастика, приключения, боевик
-Переводчик: Midori Ringo
-Авторы: Asakura Ryousuke, Kamachi Kazuma
-Год выпуска: 2013
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>To Aru Kagaku no Accelerator</Name>
-    <Url>http://readmanga.me/to_aru_kagaku_no_accelerator</Url>
-    <Status>Томов: 2 , выпуск продолжается
-Просмотров: 116613
-Перевод: продолжается
-Жанры: сёнэн, научная фантастика, боевик, сверхъестественное
-Переводчик: Kisaragi_Saemon
-Авторы: ARATA Yamaji, Kamachi Kazuma
-Год выпуска: 2013
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
   <Mangas xsi:type="Acomics">
     <Name>Слоёное Тесто</Name>
     <Url>http://acomics.ru/~flakypastry</Url>
@@ -1635,582 +39,297 @@
   <Mangas xsi:type="Readmanga">
     <Name>Sol in the flowerbed</Name>
     <Url>http://readmanga.me/sol_in_the_flowerbed</Url>
-    <Status>Томов: 1
-Просмотров: 450003
-Перевод: завершен
-Переводчик: Rikudou-Sennin Clan
-Жанры: повседневность, школа, комедия
-Автор: 209
-Категории: Манхва, Веб
-Год выпуска: 2011
-</Status>
+    <Status>
+      Томов: 1
+      Просмотров: 450003
+      Перевод: завершен
+      Переводчик: Rikudou-Sennin Clan
+      Жанры: повседневность, школа, комедия
+      Автор: 209
+      Категории: Манхва, Веб
+      Год выпуска: 2011
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>0</Downloaded>
   </Mangas>
   <Mangas xsi:type="Readmanga">
     <Name>Legend and the Hero</Name>
     <Url>http://readmanga.me/legend_and_the_hero</Url>
-    <Status>Томов: 3 , выпуск продолжается
-Просмотров: 2080566
-Перевод: продолжается
-Жанры: боевые искусства, фэнтези, боевик, история, сэйнэн, сверхъестественное
-Переводчики: Black Box, Rulate Project
-Автор: Zheng Jian He
-Категории: Маньхуа, В цвете
-Год выпуска: 2010
-</Status>
+    <Status>
+      Томов: 3 , выпуск продолжается
+      Просмотров: 2080566
+      Перевод: продолжается
+      Жанры: боевые искусства, фэнтези, боевик, история, сэйнэн, сверхъестественное
+      Переводчики: Black Box, Rulate Project
+      Автор: Zheng Jian He
+      Категории: Маньхуа, В цвете
+      Год выпуска: 2010
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>0</Downloaded>
   </Mangas>
   <Mangas xsi:type="Readmanga">
     <Name>Gantz</Name>
     <Url>http://adultmanga.ru/gantz</Url>
-    <Status>Томов: 37
-Просмотров: 22249944
-Перевод: завершен
-Переводчики: GhostAnime.com, Ghost Team, Python manga, JazzWay team, Paranoi-team, OJS-team
-Жанры: ужасы, научная фантастика, эротика, трагедия, сэйнэн, боевик, триллер
-Автор: Oku Hiroya
-Категория: Не Яой
-Год выпуска: 2000
-Для взрослых
-</Status>
+    <Status>
+      Томов: 37
+      Просмотров: 22249944
+      Перевод: завершен
+      Переводчики: GhostAnime.com, Ghost Team, Python manga, JazzWay team, Paranoi-team, OJS-team
+      Жанры: ужасы, научная фантастика, эротика, трагедия, сэйнэн, боевик, триллер
+      Автор: Oku Hiroya
+      Категория: Не Яой
+      Год выпуска: 2000
+      Для взрослых
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>0</Downloaded>
   </Mangas>
   <Mangas xsi:type="Readmanga">
     <Name>Addicted to Curry</Name>
     <Url>http://readmanga.me/addicted_to_curry</Url>
-    <Status>Томов: 49
-Просмотров: 378925
-Перевод: продолжается
-Жанры: сэйнэн, комедия, романтика, повседневность
-Переводчик: Shinra Tensei Manga Team
-Автор: Funatsu Kazuki
-Год выпуска: 2001
-Для взрослых
-</Status>
+    <Status>
+      Томов: 49
+      Просмотров: 378925
+      Перевод: продолжается
+      Жанры: сэйнэн, комедия, романтика, повседневность
+      Переводчик: Shinra Tensei Manga Team
+      Автор: Funatsu Kazuki
+      Год выпуска: 2001
+      Для взрослых
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>0</Downloaded>
   </Mangas>
   <Mangas xsi:type="Readmanga">
     <Name>Knight Run</Name>
     <Url>http://readmanga.me/knight_run</Url>
-    <Status>Томов: 2 , выпуск продолжается
-Просмотров: 451202
-Перевод: продолжается
-Категории: Манхва, Веб
-Жанры: сёнэн, трагедия, драма, фантастика, боевик, научная фантастика
-Переводчики: The Red Branch, Rikudou-Sennin Clan
-Автор: Kim Sung Min
-Год выпуска: 2009
-</Status>
+    <Status>
+      Томов: 2 , выпуск продолжается
+      Просмотров: 451202
+      Перевод: продолжается
+      Категории: Манхва, Веб
+      Жанры: сёнэн, трагедия, драма, фантастика, боевик, научная фантастика
+      Переводчики: The Red Branch, Rikudou-Sennin Clan
+      Автор: Kim Sung Min
+      Год выпуска: 2009
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>0</Downloaded>
   </Mangas>
   <Mangas xsi:type="Readmanga">
     <Name>DearS</Name>
     <Url>http://readmanga.me/dears</Url>
-    <Status>Томов: 8
-Просмотров: 298447
-Перевод: завершен
-Жанры: фантастика, гарем, романтика, этти, сёнэн, драма, комедия
-Переводчик: Living FLCL
-Автор: Peach-Pit
-Год выпуска: 2002
-Для взрослых
-</Status>
+    <Status>
+      Томов: 8
+      Просмотров: 298447
+      Перевод: завершен
+      Жанры: фантастика, гарем, романтика, этти, сёнэн, драма, комедия
+      Переводчик: Living FLCL
+      Автор: Peach-Pit
+      Год выпуска: 2002
+      Для взрослых
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>0</Downloaded>
   </Mangas>
   <Mangas xsi:type="Readmanga">
     <Name>Rough</Name>
     <Url>http://readmanga.me/rough</Url>
-    <Status>Томов: 12
-Просмотров: 392526
-Перевод: завершен
-Жанры: сёнэн, спорт, школа, комедия, романтика, повседневность
-Переводчик: Shinra Tensei Manga Team
-Автор: Adachi Mitsuru
-Год выпуска: 1987
-</Status>
+    <Status>
+      Томов: 12
+      Просмотров: 392526
+      Перевод: завершен
+      Жанры: сёнэн, спорт, школа, комедия, романтика, повседневность
+      Переводчик: Shinra Tensei Manga Team
+      Автор: Adachi Mitsuru
+      Год выпуска: 1987
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>0</Downloaded>
   </Mangas>
   <Mangas xsi:type="Readmanga">
     <Name>The Shining Wind</Name>
     <Url>http://readmanga.me/the_shining_wind</Url>
-    <Status>Томов: 35 , выпуск продолжается
-Просмотров: 272332
-Перевод: продолжается
-Переводчики: Cherry Manga, Kaze Hikaru
-Автор: Watanabe Taeko
-Жанры: самурайский боевик, история, гендерная интрига, дзёсэй, боевик, романтика
-Год выпуска: 1997
-</Status>
+    <Status>
+      Томов: 35 , выпуск продолжается
+      Просмотров: 272332
+      Перевод: продолжается
+      Переводчики: Cherry Manga, Kaze Hikaru
+      Автор: Watanabe Taeko
+      Жанры: самурайский боевик, история, гендерная интрига, дзёсэй, боевик, романтика
+      Год выпуска: 1997
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>0</Downloaded>
   </Mangas>
   <Mangas xsi:type="Readmanga">
     <Name>Battle Angel Alita</Name>
     <Url>http://readmanga.me/battle_angel_alita</Url>
-    <Status>Томов: 9
-Просмотров: 339758
-Перевод: завершен
-Жанры: постапокалиптика, сэйнэн, меха
-Автор: Kishiro Yukito
-Переводчики: RomGT, Jiyuu Manga, Alexeon и Хаос
-Год выпуска: 1990
-Для взрослых
-</Status>
+    <Status>
+      Томов: 9
+      Просмотров: 339758
+      Перевод: завершен
+      Жанры: постапокалиптика, сэйнэн, меха
+      Автор: Kishiro Yukito
+      Переводчики: RomGT, Jiyuu Manga, Alexeon и Хаос
+      Год выпуска: 1990
+      Для взрослых
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>0</Downloaded>
   </Mangas>
   <Mangas xsi:type="Readmanga">
     <Name>Hwaja</Name>
     <Url>http://readmanga.me/hwaja</Url>
-    <Status>Томов: 1
-Просмотров: 318604
-Перевод: завершен
-Жанры: психология, мистика, драма
-Переводчик: Rikudou-Sennin Clan
-Автор: Хон Джак Га
-Категории: Манхва, Веб
-Год выпуска: 2012
-</Status>
+    <Status>
+      Томов: 1
+      Просмотров: 318604
+      Перевод: завершен
+      Жанры: психология, мистика, драма
+      Переводчик: Rikudou-Sennin Clan
+      Автор: Хон Джак Га
+      Категории: Манхва, Веб
+      Год выпуска: 2012
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>0</Downloaded>
   </Mangas>
   <Mangas xsi:type="Readmanga">
     <Name>Limited Weapon</Name>
     <Url>http://readmanga.me/limited_weapon</Url>
-    <Status>Томов: 1
-Просмотров: 416899
-Перевод: продолжается
-Категории: Веб, Манхва
-Жанры: сверхъестественное, сёнэн, боевик
-Переводчик: Midnight Theater
-Автор: Radiya
-Год выпуска: 2010
-</Status>
+    <Status>
+      Томов: 1
+      Просмотров: 416899
+      Перевод: продолжается
+      Категории: Веб, Манхва
+      Жанры: сверхъестественное, сёнэн, боевик
+      Переводчик: Midnight Theater
+      Автор: Radiya
+      Год выпуска: 2010
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>0</Downloaded>
   </Mangas>
   <Mangas xsi:type="Readmanga">
     <Name>Good Morning Call</Name>
     <Url>http://readmanga.me/good_morning_call</Url>
-    <Status>Томов: 11
-Просмотров: 731539
-Перевод: продолжается
-Жанры: сёдзё, романтика, школа, комедия, повседневность
-Автор: Takasuka Yue
-Переводчик: SweetDreams
-Год выпуска: 1997
-</Status>
+    <Status>
+      Томов: 11
+      Просмотров: 731539
+      Перевод: продолжается
+      Жанры: сёдзё, романтика, школа, комедия, повседневность
+      Автор: Takasuka Yue
+      Переводчик: SweetDreams
+      Год выпуска: 1997
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>100</Downloaded>
   </Mangas>
   <Mangas xsi:type="Readmanga">
     <Name>Kare Kano: His and Her Circumstances</Name>
     <Url>http://readmanga.me/kare_kano__his_and_her_circumstances</Url>
-    <Status>Томов: 21
-Просмотров: 329542
-Перевод: продолжается
-Автор: Tsuda Masami
-Переводчики: Cheeza, Jiyuu Manga, Kitsune Akai, Living FLCL, dama4ka
-Жанры: романтика, драма, комедия, сёдзё, школа
-Год выпуска: 1996
-</Status>
+    <Status>
+      Томов: 21
+      Просмотров: 329542
+      Перевод: продолжается
+      Автор: Tsuda Masami
+      Переводчики: Cheeza, Jiyuu Manga, Kitsune Akai, Living FLCL, dama4ka
+      Жанры: романтика, драма, комедия, сёдзё, школа
+      Год выпуска: 1996
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>0</Downloaded>
   </Mangas>
   <Mangas xsi:type="Readmanga">
     <Name>Gekkan Shoujo Nozaki-kun</Name>
     <Url>http://readmanga.me/gekkan_shoujo_nozaki_kun</Url>
-    <Status>Томов: 5 , выпуск продолжается
-Просмотров: 508180
-Перевод: продолжается
-Переводчики: Студия альтернативного перевода Kowaichiki, Unauthorized Translation, Ignis, Dark Moon
-Жанры: сёнэн, комедия, романтика, школа
-Категория: Ёнкома
-Автор: Tsubaki Izumi
-Год выпуска: 2011
-</Status>
+    <Status>
+      Томов: 5 , выпуск продолжается
+      Просмотров: 508180
+      Перевод: продолжается
+      Переводчики: Студия альтернативного перевода Kowaichiki, Unauthorized Translation, Ignis, Dark Moon
+      Жанры: сёнэн, комедия, романтика, школа
+      Категория: Ёнкома
+      Автор: Tsubaki Izumi
+      Год выпуска: 2011
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>100</Downloaded>
   </Mangas>
   <Mangas xsi:type="Readmanga">
     <Name>Candy Candy</Name>
     <Url>http://readmanga.me/candy_candy</Url>
-    <Status>Томов: 9
-Просмотров: 277875
-Перевод: завершен
-Жанры: история, романтика, сёдзё, драма, повседневность
-Автор: Igarashi Yumiko
-Переводчики: Laboratory of Dreams, Anime - dreamland
-Год выпуска: 1975
-</Status>
+    <Status>
+      Томов: 9
+      Просмотров: 277875
+      Перевод: завершен
+      Жанры: история, романтика, сёдзё, драма, повседневность
+      Автор: Igarashi Yumiko
+      Переводчики: Laboratory of Dreams, Anime - dreamland
+      Год выпуска: 1975
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>0</Downloaded>
   </Mangas>
   <Mangas xsi:type="Readmanga">
     <Name>Mushishi</Name>
     <Url>http://readmanga.me/mushishi</Url>
-    <Status>Томов: 10
-Просмотров: 232699
-Перевод: завершен
-Переводчики: Kagerou Nikki, Rikudou-Sennin Clan, Hakusho, Harumanga
-Жанры: мистика, драма, сэйнэн, история, фэнтези
-Автор: Urushibara Yuki
-Год выпуска: 2000
-</Status>
+    <Status>
+      Томов: 10
+      Просмотров: 232699
+      Перевод: завершен
+      Переводчики: Kagerou Nikki, Rikudou-Sennin Clan, Hakusho, Harumanga
+      Жанры: мистика, драма, сэйнэн, история, фэнтези
+      Автор: Urushibara Yuki
+      Год выпуска: 2000
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>0</Downloaded>
   </Mangas>
   <Mangas xsi:type="Readmanga">
     <Name>Minami-ke</Name>
     <Url>http://readmanga.me/minami_ke</Url>
-    <Status>Томов: 11 , выпуск продолжается
-Просмотров: 135347
-Перевод: продолжается
-Переводчики: Aniblog, Jiyuu Manga, Reverse
-Жанры: повседневность, комедия, школа, сэйнэн
-Автор: Sakuraba Coharu
-Год выпуска: 2004
-</Status>
+    <Status>
+      Томов: 11 , выпуск продолжается
+      Просмотров: 135347
+      Перевод: продолжается
+      Переводчики: Aniblog, Jiyuu Manga, Reverse
+      Жанры: повседневность, комедия, школа, сэйнэн
+      Автор: Sakuraba Coharu
+      Год выпуска: 2004
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>0</Downloaded>
   </Mangas>
   <Mangas xsi:type="Readmanga">
     <Name>Ikigami</Name>
     <Url>http://readmanga.me/ikigami</Url>
-    <Status>Томов: 10
-Просмотров: 124791
-Перевод: продолжается
-Переводчик: Rikudou-Sennin Clan
-Жанры: сэйнэн, мистика, психология, драма
-Автор: Mase Motoro
-Год выпуска: 2005
-Для взрослых
-</Status>
+    <Status>
+      Томов: 10
+      Просмотров: 124791
+      Перевод: продолжается
+      Переводчик: Rikudou-Sennin Clan
+      Жанры: сэйнэн, мистика, психология, драма
+      Автор: Mase Motoro
+      Год выпуска: 2005
+      Для взрослых
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>0</Downloaded>
   </Mangas>
   <Mangas xsi:type="Readmanga">
     <Name>Cross Game</Name>
     <Url>http://readmanga.me/cross_game</Url>
-    <Status>Томов: 17
-Просмотров: 100914
-Перевод: продолжается
-Жанры: комедия, сёнэн, повседневность, трагедия, спорт, романтика
-Автор: Adachi Mitsuru
-Переводчик: Shinra Tensei Manga Team
-Год выпуска: 2005
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Strongest Disciple Kenichi</Name>
-    <Url>http://adultmanga.ru/strongest_disciple_kenichi</Url>
-    <Status>Томов: 61
-Просмотров: 17115240
-Перевод: завершен
-Жанры: гарем, приключения, романтика, драма, боевик, боевые искусства, школа, этти, сёнэн, комедия &amp;hellip;
-Переводчики: Ezergan Team, Regios-team, Venasera Team, DEATHAN, Takai group
-Автор: Matsuena Syun
-Категория: Не Яой
-Год выпуска: 2002
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Sun Ken Rock</Name>
-    <Url>http://adultmanga.ru/sun_ken_rock</Url>
-    <Status>Томов: 23 , выпуск продолжается
-Просмотров: 10380329
-Перевод: продолжается
-Автор: Boichi (Mujik Park)
-Переводчики: Mangani Team, Soul Hackers, Narutoproject, Уроборос
-Жанры: боевые искусства, сэйнэн, романтика, боевик, драма, этти, комедия
-Категория: Не Яой
-Год выпуска: 2006
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Wolf Guy - Wolfen Crest</Name>
-    <Url>http://adultmanga.ru/wolf_guy___wolfen_crest</Url>
-    <Status>Томов: 12
-Просмотров: 9130073
-Перевод: завершен
-Жанры: мистика, сэйнэн, школа, ужасы, фэнтези, психология, эротика, триллер, боевик, драма, романтика &amp;hellip;
-Переводчики: OJS-team, MadDogs, Remanga, Anime-Hall_team
-Категория: Не Яой
-Авторы: Tabata Yoshiaki, Yugo Yuuki
-Год выпуска: 2007
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Fist of the North Star</Name>
-    <Url>http://adultmanga.ru/fist_of_the_north_star</Url>
-    <Status>Томов: 27
-Просмотров: 1968481
-Перевод: завершен
-Жанры: боевик, приключения, сёнэн, постапокалиптика, драма, боевые искусства, фантастика
-Категория: Не Яой
-Авторы: Hara Tetsuo, Buronson
-Переводчик: Тайсейден
-Год выпуска: 1983
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>The Seven Deadly Sins</Name>
-    <Url>http://readmanga.me/the_seven_deadly_sins</Url>
-    <Status>Томов: 14 , выпуск продолжается
-Просмотров: 5457784
-Перевод: продолжается
-Жанры: сёнэн, сверхъестественное, приключения, фэнтези, боевик, комедия, романтика
-Автор: Suzuki Nakaba
-Переводчики: One-Piece.Ru, KuroMori Manga Team, Grand Line Pirates
-Год выпуска: 2012
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Dragon Who</Name>
-    <Url>http://adultmanga.ru/dragon_who</Url>
-    <Status>Томов: 5
-Просмотров: 906083
-Перевод: завершен
-Категории: Манхва, Не Яой
-Жанры: драма, романтика, сёнэн, школа, фэнтези, научная фантастика, комедия, эротика
-Авторы: Ha Yuhn, Kim Ju-ri
-Переводчик: Shinra Tensei Manga Team
-Год выпуска: 2009
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Multiplying Aizawa-san</Name>
-    <Url>http://readmanga.me/multiplying_aizawa_san</Url>
-    <Status>Томов: 1 , выпуск продолжается
-Просмотров: 89121
-Перевод: продолжается
-Жанры: романтика, гарем, сёнэн, комедия, сверхъестественное
-Автор: Shiki Seiichi
-Переводчик: Dzesukuru Kamui
-Год выпуска: 2013
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Twelve Beast</Name>
-    <Url>http://adultmanga.ru/twelve_beast</Url>
-    <Status>Томов: 2 , выпуск продолжается
-Просмотров: 282601
-Перевод: продолжается
-Жанры: фэнтези, гарем, сёнэн, боевик, комедия, приключения, этти
-Автор: INUI Takemaru
-Переводчик: Rulate Project
-Категория: Не Яой
-Год выпуска: 2013
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>The Hentai Prince and the Stony Cat</Name>
-    <Url>http://adultmanga.ru/the_hentai_prince_and_the_stony_cat</Url>
-    <Status>Томов: 6 , выпуск продолжается
-Просмотров: 358954
-Перевод: продолжается
-Жанры: комедия, сверхъестественное, сэйнэн, школа, гарем, романтика, этти
-Категории: Не Яой, Сборник
-Авторы: Sagara Sou, Okomeken, Kantoku
-Переводчики: MrDinja, ПростоЧел..., AkiTeam, Pink Tears
-Год выпуска: 2011
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Saru Lock</Name>
-    <Url>http://adultmanga.ru/saru_lock</Url>
-    <Status>Томов: 22
-Просмотров: 1725195
-Перевод: продолжается
-Переводчик: Rikudou-Sennin Clan
-Жанры: эротика, повседневность, комедия, драма, сэйнэн, мистика
-Категория: Не Яой
-Автор: Serizawa Naoki
-Год выпуска: 2003
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Otaku's Daughter</Name>
-    <Url>http://adultmanga.ru/otaku_s_daughter</Url>
-    <Status>Томов: 11
-Просмотров: 669468
-Перевод: завершен
-Жанры: комедия, романтика, этти, драма, сёнэн, повседневность, сэйнэн
-Переводчики: Тапки для Доминики из Бобра, Mysterium Lab
-Категория: Не Яой
-Автор: Stu-hiro
-Год выпуска: 2006
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>The New Secret Royal Commissioner</Name>
-    <Url>http://adultmanga.ru/the_new_secret_royal_commissioner</Url>
-    <Status>Томов: 17
-Просмотров: 993896
-Перевод: продолжается
-Категории: Не Яой, Манхва
-Жанры: сэйнэн, драма, этти, приключения, фэнтези, история
-Авторы: Youn In-Wan, Yang Kyung-Il
-Переводчики: Narutoproject, Gear Up!
-Год выпуска: 2001
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>100</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Aflame Inferno</Name>
-    <Url>http://adultmanga.ru/aflame_inferno</Url>
-    <Status>Томов: 6
-Просмотров: 983609
-Перевод: завершен
-Жанры: сверхъестественное, сёнэн, эротика, боевик, этти, драма
-Переводчик: Rhijitsu
-Авторы: Lim Dall Young, Kim Kwang Hyun, Im Dal Young
-Категории: Манхва, Не Яой
-Год выпуска: 2006
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Absolutely Lovely Children</Name>
-    <Url>http://adultmanga.ru/absolutely_lovely_children</Url>
-    <Status>Томов: 39 , выпуск продолжается
-Просмотров: 444291
-Перевод: продолжается
-Жанры: сёнэн, этти, гарем, боевик, сверхъестественное, комедия, романтика
-Переводчики: One-Piece.Ru, Nyash Myash Project, milaz712
-Автор: Shiina Takashi
-Категория: Не Яой
-Год выпуска: 2005
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Team Medical Dragon</Name>
-    <Url>http://adultmanga.ru/team_medical_dragon</Url>
-    <Status>Томов: 25
-Просмотров: 884028
-Перевод: продолжается
-Переводчики: Gemini Manga Clan, BRC Shizofreesia team, Hunters for Meat
-Жанры: сэйнэн, психология, драма
-Авторы: Nagai Akira, Nogizaka Tarou
-Год выпуска: 2002
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Umisho</Name>
-    <Url>http://adultmanga.ru/umisho</Url>
-    <Status>Томов: 9
-Просмотров: 368881
-Перевод: завершен
-Категория: Не Яой
-Автор: Hattori Mitsuru
-Жанры: этти, романтика, сёнэн, школа, комедия, спорт
-Переводчики: MangaLair, Gaikoku, Отаку Усолья
-Год выпуска: 2006
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Ichi the Killer</Name>
-    <Url>http://adultmanga.ru/ichi_the_killer</Url>
-    <Status>Томов: 10
-Просмотров: 388463
-Перевод: завершен
-Жанры: ужасы, приключения, триллер, драма, психология, сэйнэн
-Категория: Не Яой
-Автор: Yamamoto Hideo
-Переводчик: Square Circle Group
-Год выпуска: 1998
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Virgin with a Wild Imagination</Name>
-    <Url>http://adultmanga.ru/virgin_with_a_wild_imagination</Url>
-    <Status>Томов: 10
-Просмотров: 677578
-Перевод: продолжается
-Переводчики: OJS-team, Rikudou-Sennin Clan, Тиф
-Автор: Torikawa Sora
-Жанры: школа, повседневность, сёнэн, эротика, комедия, романтика
-Категория: Не Яой
-Год выпуска: 2008
-Для взрослых
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>Monochrome Factor</Name>
-    <Url>http://readmanga.me/monochrome_factor</Url>
-    <Status>Томов: 11
-Просмотров: 1104037
-Перевод: завершен
-Жанры: сверхъестественное, сёнэн-ай, фэнтези, комедия, сёнэн, боевик
-Переводчики: Call Of The Wind, Monochrome Factor
-Автор: Sorano Kairi
-Год выпуска: 2004
-</Status>
-    <NeedUpdate>true</NeedUpdate>
-    <Downloaded>0</Downloaded>
-  </Mangas>
-  <Mangas xsi:type="Readmanga">
-    <Name>The Knight of Cydonia</Name>
-    <Url>http://readmanga.me/the_knight_of_cydonia</Url>
-    <Status>Томов: 14 , выпуск продолжается
-Просмотров: 626692
-Перевод: продолжается
-Автор: Nihei Tsutomu
-Переводчики: NaKaMa TeaM, Midnight Theater, SRG, Valhalla Knights
-Жанры: меха, сёнэн, научная фантастика, приключения
-Год выпуска: 2009
-</Status>
+    <Status>
+      Томов: 17
+      Просмотров: 100914
+      Перевод: продолжается
+      Жанры: комедия, сёнэн, повседневность, трагедия, спорт, романтика
+      Автор: Adachi Mitsuru
+      Переводчик: Shinra Tensei Manga Team
+      Год выпуска: 2005
+    </Status>
     <NeedUpdate>true</NeedUpdate>
     <Downloaded>100</Downloaded>
   </Mangas>

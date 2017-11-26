@@ -182,7 +182,8 @@ namespace MangaReader.ViewModel.Manga
       this.NeedCompress = manga.NeedCompress;
       this.CompressionModes = new List<Compression.CompressionMode>(manga.AllowedCompressionModes);
       this.CompressionMode = manga.CompressionMode;
-      this.Downloaded = manga.Downloaded;
+      if (manga.Downloaded > Downloaded)
+        this.Downloaded = manga.Downloaded;
       SetCompletedIcon(manga.IsCompleted);
       SetType(manga);
       SetNeedUpdate(manga.NeedUpdate);

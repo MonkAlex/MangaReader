@@ -25,7 +25,7 @@ namespace Grouple
       var index = Servers.IndexOf(host);
       if (index < 0)
         throw new Exception($"Grouple not support host {link.Host}");
-      var nextIndex = index + 1 > Servers.Count ? 0 : index + 1;
+      var nextIndex = index + 1 >= Servers.Count ? 0 : index + 1;
       var newHost = Servers[nextIndex];
       return new UriBuilder(link) { Host = newHost.Host, Port = -1 }.Uri;
     }

@@ -20,7 +20,7 @@
 
 Всё добро под лицензией [MIT][License]
 
-Отдельное спасибо JetBrains за Open Source [лицензию на ReSharper](http://www.jetbrains.com/resharper/), <img src="https://raw.githubusercontent.com/JetBrains/logos/master/web/jetbrains/jetbrains.svg"/>
+Отдельное спасибо JetBrains за Open Source [лицензию на ReSharper](http://www.jetbrains.com/resharper/), <img src="https://raw.githubusercontent.com/JetBrains/logos/master/web/jetbrains/jetbrains.svg?sanitize=true"/>
 
 ***
 

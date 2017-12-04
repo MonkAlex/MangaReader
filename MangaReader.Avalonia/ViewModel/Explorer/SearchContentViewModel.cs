@@ -64,7 +64,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public SearchContentViewModel()
     {
-      this.items = new ObservableCollection<IManga>();
+      this.Items = new ObservableCollection<IManga>();
       this.StartSearch = new DelegateCommand(UpdateManga, () => !string.IsNullOrWhiteSpace(Search)) {Name = "Search"};
       this.AddManual = new DelegateCommand(AddManga, () => !string.IsNullOrWhiteSpace(ManualUri)) {Name = "Add"};
       this.PropertyChanged += (sender, args) =>

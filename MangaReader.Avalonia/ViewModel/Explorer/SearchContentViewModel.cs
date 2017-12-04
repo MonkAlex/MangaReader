@@ -10,7 +10,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 {
   public class SearchContentViewModel : ViewModelBase
   {
-    private ObservableCollection<IManga> items;
+    private ObservableCollection<MangaViewModel> items;
     private string search;
     private DelegateCommand startSearch;
     private string manualUri;
@@ -28,7 +28,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       set { RaiseAndSetIfChanged(ref startSearch, value); }
     }
 
-    public ObservableCollection<IManga> Items
+    public ObservableCollection<MangaViewModel> Items
     {
       get { return items; }
       set { RaiseAndSetIfChanged(ref items, value); }
@@ -52,7 +52,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       foreach (var manga in ConfigStorage.Plugins.SelectMany(p => p.GetParser().Search(Search)))
       {
         if (Items.All(i => i.Uri != manga.Uri))
-          Items.Add(manga);
+          Items.Add(new MangaViewModel(manga));
       }
     }
 
@@ -64,7 +64,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public SearchContentViewModel()
     {
-      this.Items = new ObservableCollection<IManga>();
+      this.Items = new ObservableCollection<MangaViewModel>();
       this.StartSearch = new DelegateCommand(UpdateManga, () => !string.IsNullOrWhiteSpace(Search)) {Name = "Search"};
       this.AddManual = new DelegateCommand(AddManga, () => !string.IsNullOrWhiteSpace(ManualUri)) {Name = "Add"};
       this.PropertyChanged += (sender, args) =>

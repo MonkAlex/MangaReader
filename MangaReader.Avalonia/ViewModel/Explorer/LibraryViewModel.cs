@@ -14,7 +14,7 @@ using ReactiveUI;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
 {
-  public class LibraryContentViewModel : ViewModelBase
+  public class LibraryViewModel : ExplorerTabViewModel
   {
     private ObservableCollection<IManga> items;
     private string search;
@@ -67,8 +67,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     }
 
     public ObservableCollection<BaseCommand> Commands { get; }
-    
-    public LibraryViewModel Library { get; }
+
+    public Core.Services.LibraryViewModel Library { get; }
 
     public async Task RefreshItems()
     {
@@ -100,16 +100,55 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
       if (Search == null)
         return true;
-      
+
       return manga.Name.IndexOf(Search, StringComparison.InvariantCultureIgnoreCase) >= 0;
     }
 
-    public LibraryContentViewModel()
+    public LibraryViewModel()
     {
+      this.Name = "Main";
+      this.Priority = 10;
       this.Commands = new ObservableCollection<BaseCommand>();
-      this.Library = new LibraryViewModel();
+      this.Library = new Core.Services.LibraryViewModel();
+      this.Library.LibraryChanged += LibraryOnLibraryChanged;
       this.Commands.Add(new UpdateWithPauseCommand(this, Library));
       this.Commands.Add(new OpenFolderCommand());
+    }
+
+    private void LibraryOnLibraryChanged(object sender, LibraryViewModelArgs args)
+    {
+      switch (args.LibraryOperation)
+      {
+        case LibraryOperation.UpdateStarted:
+          break;
+        case LibraryOperation.UpdatePercentChanged:
+          break;
+        case LibraryOperation.UpdateMangaChanged:
+          {
+            switch (args.MangaOperation)
+            {
+              case MangaOperation.Added:
+                this.Items.Add(args.Manga);
+                break;
+              case MangaOperation.Deleted:
+                this.Items.Remove(args.Manga);
+                break;
+              case MangaOperation.UpdateStarted:
+                break;
+              case MangaOperation.UpdateCompleted:
+                break;
+              case MangaOperation.None:
+                break;
+              default:
+                throw new ArgumentOutOfRangeException();
+            }
+            break;
+          }
+        case LibraryOperation.UpdateCompleted:
+          break;
+        default:
+          throw new ArgumentOutOfRangeException();
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using MangaReader.Avalonia.ViewModel.Explorer.Tabs;
+using MangaReader.Avalonia.ViewModel.Explorer;
 
 namespace MangaReader.Avalonia.ViewModel
 {
@@ -8,6 +8,8 @@ namespace MangaReader.Avalonia.ViewModel
   {
     private ExplorerTabViewModel selectedTab;
     public ObservableCollection<ExplorerTabViewModel> Tabs { get; }
+
+    public static ExplorerViewModel Instance { get; } = new ExplorerViewModel();
 
     public ExplorerTabViewModel SelectedTab
     {
@@ -20,11 +22,13 @@ namespace MangaReader.Avalonia.ViewModel
       this.SelectedTab = this.Tabs.OrderBy(t => t.Priority).FirstOrDefault();
     }
 
-    public ExplorerViewModel()
+    private ExplorerViewModel()
     {
-      this.Tabs = new ObservableCollection<ExplorerTabViewModel>();
-      this.Tabs.Add(new LibraryTabViewModel());
-      this.Tabs.Add(new SearchTabViewModel());
+      this.Tabs = new ObservableCollection<ExplorerTabViewModel>
+      {
+        new LibraryViewModel(),
+        new SearchViewModel()
+      };
     }
   }
 }

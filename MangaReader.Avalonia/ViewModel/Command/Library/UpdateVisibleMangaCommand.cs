@@ -1,12 +1,13 @@
 ﻿using System.Linq;
 using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Services;
+using LibraryViewModel = MangaReader.Avalonia.ViewModel.Explorer.LibraryViewModel;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Library
 {
   public class UpdateVisibleMangaCommand : LibraryBaseCommand
   {
-    private readonly LibraryContentViewModel viewModel;
+    private readonly LibraryViewModel viewModel;
 
     public override async void Execute(object parameter)
     {
@@ -16,7 +17,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Library
         await Library.ThreadAction(() => Library.Update(viewModel.FilteredItems.Select(i => i.Id)));
     }
 
-    public UpdateVisibleMangaCommand(LibraryContentViewModel viewModel, LibraryViewModel model) : base(model)
+    public UpdateVisibleMangaCommand(LibraryViewModel viewModel, Core.Services.LibraryViewModel model) : base(model)
     {
       this.viewModel = viewModel;
       this.Name = "Обновить";

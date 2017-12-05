@@ -16,7 +16,7 @@ namespace MangaReader.Avalonia
 {
   public class MainWindow : Window
   {
-    private ExplorerViewModel explorer;
+    private ExplorerViewModel explorer = ExplorerViewModel.Instance;
 
     public MainWindow()
     {
@@ -26,7 +26,6 @@ namespace MangaReader.Avalonia
       var processTest = new ProcessTest();
       processTest.StateChanged += ProcessTestOnStateChanged;
       Task.Run(() => MangaReader.Core.Client.Start(processTest));
-      explorer = new ExplorerViewModel();
       this.DataContext = explorer;
     }
 

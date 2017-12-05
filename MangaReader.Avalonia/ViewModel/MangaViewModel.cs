@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MangaReader.Avalonia.ViewModel.Command.Manga;
+using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Manga;
 
 namespace MangaReader.Avalonia.ViewModel
@@ -31,11 +33,29 @@ namespace MangaReader.Avalonia.ViewModel
       set => RaiseAndSetIfChanged(ref uri, value);
     }
 
+    public string Status
+    {
+      get => status;
+      set => RaiseAndSetIfChanged(ref status, value);
+    }
+
+    private string status;
+
+    public AddToLibraryCommand AddToLibrary
+    {
+      get => addToLibrary;
+      set => RaiseAndSetIfChanged(ref addToLibrary, value);
+    }
+
+    private AddToLibraryCommand addToLibrary;
+
     public MangaViewModel(IManga manga)
     {
       this.name = manga.Name;
       this.uri = manga.Uri;
       this.cover = manga.Cover;
+      this.status = manga.Status;
+      this.addToLibrary = new AddToLibraryCommand(ExplorerViewModel.Instance.Tabs.OfType<SearchViewModel>().Single());
     }
   }
 }

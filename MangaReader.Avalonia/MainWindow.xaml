@@ -5,7 +5,7 @@
         MinWidth="500" MinHeight="300"
         Title="{Binding SelectedTab.Name}">
   <Window.DataTemplates>
-    <DataTemplate DataType="c:LibraryContentViewModel">
+    <DataTemplate DataType="c:LibraryViewModel">
       <Grid RowDefinitions="Auto,*,Auto" DataContext="{Binding}">
         <TextBox Grid.Row="0" Text="{Binding Search}"/>
         <ListBox Grid.Row="1" Items="{Binding FilteredItems}" 
@@ -42,7 +42,7 @@
         </ListBox>
       </Grid>
     </DataTemplate>
-    <DataTemplate DataType="c:SearchContentViewModel">
+    <DataTemplate DataType="c:SearchViewModel">
       <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*, Auto" DataContext="{Binding}">
         <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding Search}"/>
         <Button Grid.Row="0" Grid.Column="1" DataContext="{Binding StartSearch}" Command="{Binding}" Content="{Binding Name}"/>
@@ -51,10 +51,11 @@
                  ScrollViewer.VerticalScrollBarVisibility="Auto">
           <ListBox.ItemTemplate>
             <DataTemplate>
-              <Grid RowDefinitions="*,Auto" Margin="10"
+              <Grid RowDefinitions="*,Auto,Auto" Margin="10"
                     Width="150" Height="300">
                 <Image Grid.Row="0" Source="{Binding Cover, Converter={x:Static av:BitmapTypeConverter.Instance}}"/>
                 <TextBlock Grid.Row="1" Text="{Binding Name}" TextWrapping="Wrap" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center"/>
+                <Button Grid.Row="2" Command="{Binding AddToLibrary}" CommandParameter="{Binding}" Content="{Binding AddToLibrary.Name}"/>
               </Grid>
             </DataTemplate>
           </ListBox.ItemTemplate>
@@ -83,6 +84,6 @@
         </DataTemplate>
       </ListBox.ItemTemplate>
     </ListBox>
-    <ContentPresenter Grid.Column="1" DataContext="{Binding SelectedTab}" Content="{Binding Content}"/>
+    <ContentPresenter Grid.Column="1" DataContext="{Binding SelectedTab}" Content="{Binding}"/>
   </Grid>
 </Window>

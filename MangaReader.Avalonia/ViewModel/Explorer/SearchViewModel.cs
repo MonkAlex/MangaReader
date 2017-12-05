@@ -8,7 +8,7 @@ using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
 {
-  public class SearchContentViewModel : ViewModelBase
+  public class SearchViewModel : ExplorerTabViewModel
   {
     private ObservableCollection<MangaViewModel> items;
     private string search;
@@ -59,11 +59,19 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     private void AddManga()
     {
       #warning Отсюда нужен переход к превью.
-      Mangas.CreateFromWeb(new Uri(ManualUri));
+      var libraries = ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().ToList();
+      var added = libraries.Any() && libraries.All(l => l.Library.Add(ManualUri));
+      if (added)
+      {
+        ManualUri = string.Empty;
+        ExplorerViewModel.Instance.SelectedTab = (ExplorerTabViewModel)libraries.FirstOrDefault() ?? this;
+      }
     }
 
-    public SearchContentViewModel()
+    public SearchViewModel()
     {
+      this.Name = "Search";
+      this.Priority = 20;
       this.Items = new ObservableCollection<MangaViewModel>();
       this.StartSearch = new DelegateCommand(UpdateManga, () => !string.IsNullOrWhiteSpace(Search)) {Name = "Search"};
       this.AddManual = new DelegateCommand(AddManga, () => !string.IsNullOrWhiteSpace(ManualUri)) {Name = "Add"};

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using MangaReader.Core.Manga;
@@ -15,6 +16,8 @@ namespace Tests.Convertation._1._20
     public void Convert_1_20_to_main()
     {
       Environment.DeployToRoot(Path.Combine("Tests.Convertation", "1.20"));
+
+      var startDate = DateTime.Now;
 
       MangaReader.Core.Client.Init();
       MangaReader.Core.Client.Start(new ReportProcess());
@@ -60,6 +63,7 @@ namespace Tests.Convertation._1._20
 
         Assert.AreEqual(loadedMangas.Sum(m => m.Histories.Count()), loadedHistoryRecord.Count());
         Assert.AreEqual(3606, loadedHistoryRecord.Count);
+        Assert.Less(loadedMangas.Max(m => m.Created), startDate);
       }
     }
 

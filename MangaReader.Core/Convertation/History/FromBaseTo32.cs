@@ -54,28 +54,7 @@ namespace MangaReader.Core.Convertation.History
         histories = histories.Where(h => !historyInDb.Contains(h.Uri)).Distinct().ToList();
         if (histories.Any())
           process.ProgressState = ProgressState.Normal;
-
-        // Актуализируем старые ссылки, с учетом переездов сайтов.
-        var mangaSettings = Repository.GetStateless<MangaSetting>();
-        foreach (var history in histories)
-        {
-          var settings = mangaSettings.Where(s => s.MangaSettingUris.Select(u => u.Host).Contains(history.Uri.Host));
-          foreach (var setting in settings)
-          {
-            var hosts = setting.MangaSettingUris.Where(s => !Equals(s, setting.MainUri)).Select(s => s.Host).ToList();
-            foreach (var host in hosts)
-            {
-              if (history.MangaUrl != null && history.MangaUrl.Contains(host))
-                history.MangaUrl = history.MangaUrl.Replace(host, setting.MainUri.Host);
-              if (history.Uri.Host == host)
-              {
-                var builder = new UriBuilder(history.Uri) { Host = setting.MainUri.Host, Port = -1 };
-                history.Uri = builder.Uri;
-              }
-            }
-          }
-        }
-
+        
         using (var tranc = context.OpenTransaction())
         {
           foreach (var manga in mangas)
@@ -122,6 +101,7 @@ namespace MangaReader.Core.Convertation.History
     public FromBaseTo32()
     {
       this.CanReportProcess = true;
+      this.Version = new Version(1, 0, 2);
     }
   }
 }

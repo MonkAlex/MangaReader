@@ -45,9 +45,9 @@ namespace Hentaichan.Mangachan
       base.Refresh();
     }
 
-    protected override void Created(Uri url)
+    protected override void CreatedFromWeb(Uri url)
     {
-      base.Created(url);
+      base.CreatedFromWeb(url);
 
       if (this.Uri != url && Parser.ParseUri(url).Kind != UriParseKind.Manga)
       {

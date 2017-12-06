@@ -81,7 +81,7 @@ namespace Grouple
       base.Refresh();
     }
 
-    protected override void Created(Uri url)
+    protected override void CreatedFromWeb(Uri url)
     {
       if (this.Uri != url && Parser.ParseUri(url).Kind != UriParseKind.Manga)
       {
@@ -91,7 +91,7 @@ namespace Grouple
         AddHistoryReadedUris(chapters, url);
       }
 
-      base.Created(url);
+      base.CreatedFromWeb(url);
     }
 
     #endregion

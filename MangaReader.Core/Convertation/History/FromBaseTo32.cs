@@ -54,20 +54,31 @@ namespace MangaReader.Core.Convertation.History
         histories = histories.Where(h => !historyInDb.Contains(h.Uri)).Distinct().ToList();
         if (histories.Any())
           process.ProgressState = ProgressState.Normal;
+
+        TryFillHistory(process, context, mangas, histories);
         
-        using (var tranc = context.OpenTransaction())
+        // Актуализируем старые ссылки, с учетом переездов сайтов.
+        var mangaSettings = Repository.GetStateless<MangaSetting>();
+        foreach (var history in histories)
         {
-          foreach (var manga in mangas)
+          var settings = mangaSettings.Where(s => s.MangaSettingUris.Select(u => u.Host).Contains(history.Uri.Host));
+          foreach (var setting in settings)
           {
-            process.Percent += 100.0 / mangas.Count;
-            var mangaHistory = histories.Where(h => h.MangaUrl == manga.Uri.OriginalString ||
-                                                    h.Uri.OriginalString.Contains(manga.Uri.OriginalString + "/")).ToList();
-            manga.Histories.AddRange(mangaHistory);
-            histories.RemoveAll(h => mangaHistory.Contains(h));
-            context.SaveOrUpdate(manga);
+            var hosts = setting.MangaSettingUris.Where(s => !Equals(s, setting.MainUri)).Select(s => s.Host).ToList();
+            foreach (var host in hosts)
+            {
+              if (history.MangaUrl != null && history.MangaUrl.Contains(host))
+                history.MangaUrl = history.MangaUrl.Replace(host, setting.MainUri.Host);
+              if (history.Uri.Host == host)
+              {
+                var builder = new UriBuilder(history.Uri) { Host = setting.MainUri.Host, Port = -1 };
+                history.Uri = builder.Uri;
+              }
+            }
           }
-          tranc.Commit();
         }
+
+        TryFillHistory(process, context, mangas, histories);
 
         using (var tranc = context.OpenTransaction())
         {
@@ -96,6 +107,23 @@ namespace MangaReader.Core.Convertation.History
       }
 
       Backup.MoveToBackup(HistoryFile);
+    }
+
+    private static void TryFillHistory(IProcess process, RepositoryContext context, List<IManga> mangas, List<MangaHistory> histories)
+    {
+      using (var tranc = context.OpenTransaction())
+      {
+        foreach (var manga in mangas)
+        {
+          process.Percent += 100.0 / mangas.Count;
+          var mangaHistory = histories.Where(h => h.MangaUrl == manga.Uri.OriginalString ||
+                                                  h.Uri.OriginalString.Contains(manga.Uri.OriginalString + "/")).ToList();
+          manga.Histories.AddRange(mangaHistory);
+          histories.RemoveAll(h => mangaHistory.Contains(h));
+          context.SaveOrUpdate(manga);
+        }
+        tranc.Commit();
+      }
     }
 
     public FromBaseTo32()

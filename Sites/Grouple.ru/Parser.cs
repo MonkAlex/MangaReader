@@ -313,7 +313,17 @@ namespace Grouple
         if (link == null)
           continue;
 
-        yield return client.DownloadData(link);
+        byte[] image = null;
+        try
+        {
+          image = client.DownloadData(link);
+        }
+        catch (Exception e)
+        {
+          Log.Exception(e);
+        }
+        if (image != null)
+          yield return image;
       }
     }
 

@@ -162,6 +162,7 @@
     <Compile Include="ViewModel\AddNewManga\AddFromUri.cs" />
     <Compile Include="ViewModel\AddNewManga\AddNewModel.cs" />
     <Compile Include="ViewModel\Commands\Manga\MangaSaveCommand.cs" />
+    <Compile Include="ViewModel\Commands\NavigationFromHistory.cs" />
     <Compile Include="ViewModel\Commands\Navigation\FirstMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\Navigation\LastMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\Navigation\NextMangaCommand.cs" />

@@ -9,7 +9,7 @@ using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Convertation.Mangas
 {
-  public class From44To45 : MangasConverter
+  public class From44To45Created : MangasConverter
   {
     private List<MangaProxy> mangaCreated = new List<MangaProxy>();
 
@@ -37,6 +37,9 @@ namespace MangaReader.Core.Convertation.Mangas
           foreach (var manga in mangas)
           {
             process.Percent += 100.0 / mangas.Count;
+            if (mangaCreated.Any(c => c.Id == manga.Id))
+              continue;
+
             DateTime? min = null;
             if (firstRun && manga.Histories.Any())
               min = manga.Histories.Min(h => h.Date);
@@ -75,8 +78,10 @@ namespace MangaReader.Core.Convertation.Mangas
             else
               hasEmptyRecords = true;
             if (manga.Created == null || manga.Created > min)
+            {
               manga.Created = min;
-            context.SaveOrUpdate(manga);
+              context.SaveOrUpdate(manga);
+            }
           }
           tranc.Commit();
         }
@@ -95,11 +100,11 @@ namespace MangaReader.Core.Convertation.Mangas
       return DateTime.Today.AddDays(-1);
     }
 
-    public From44To45()
+    public From44To45Created()
     {
       this.Version = new Version(1, 44, 11);
       this.CanReportProcess = true;
-      this.Name = "Определение даты добавления манги в библиотеку...";
+      this.Name = "Поиск примерной даты добавления манги...";
     }
 
     private class MangaProxy

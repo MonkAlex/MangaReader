@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -168,7 +169,7 @@ namespace MangaReader.Core.Services
     /// <param name="manga">Обновляемая манга.</param>
     public void Update(int manga)
     {
-      Update(new[] { manga });
+      Update(new List<int> { manga });
     }
 
     /// <summary>
@@ -176,7 +177,7 @@ namespace MangaReader.Core.Services
     /// </summary>
     public void Update()
     {
-      Update((IEnumerable<int>)null);
+      Update((List<int>)null);
     }
 
     /// <summary>
@@ -192,19 +193,22 @@ namespace MangaReader.Core.Services
     /// Обновить мангу.
     /// </summary>
     /// <param name="mangas">Обновляемая манга.</param>
-    public void Update(IEnumerable<int> mangas)
+    public void Update(List<int> mangas)
     {
       var saved = ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription;
       switch (saved.PropertyName)
       {
         case nameof(IManga.Created):
-          Update(mangas, m => m.OrderBy(manga => manga.Created));
+          Expression<Func<IManga, DateTime?>> createdSelector = m => m.Created;
+          Update(mangas, c => saved.Direction == ListSortDirection.Ascending ? c.OrderBy(createdSelector) : c.OrderByDescending(createdSelector));
           break;
         case nameof(IManga.DownloadedAt):
-          Update(mangas, m => m.OrderBy(manga => manga.DownloadedAt));
+          Expression<Func<IManga, DateTime?>> downloadSelector = m => m.DownloadedAt;
+          Update(mangas, c => saved.Direction == ListSortDirection.Ascending ? c.OrderBy(downloadSelector) : c.OrderByDescending(downloadSelector));
           break;
         default:
-          Update(mangas, m => m.OrderBy(manga => manga.Name));
+          Expression<Func<IManga, string>> nameSelector = m => m.Name;
+          Update(mangas, c => saved.Direction == ListSortDirection.Ascending ? c.OrderBy(nameSelector) : c.OrderByDescending(nameSelector));
           break;
       }
     }
@@ -214,7 +218,7 @@ namespace MangaReader.Core.Services
     /// </summary>
     /// <param name="mangas">Обновляемая манга.</param>
     /// <param name="orderBy">Сортировка.</param>
-    public void Update(IEnumerable<int> mangas, Func<IQueryable<IManga>, IOrderedQueryable<IManga>> orderBy)
+    public void Update(List<int> mangas, Func<IQueryable<IManga>, IOrderedQueryable<IManga>> orderBy)
     {
       OnLibraryChanged(new LibraryViewModelArgs(null, null, MangaOperation.None, LibraryOperation.UpdateStarted));
       Log.Info(Strings.Library_Status_Update);
@@ -224,9 +228,17 @@ namespace MangaReader.Core.Services
         using (var context = Repository.GetEntityContext())
         {
           var entities = context.Get<IManga>().Where(m => m.NeedUpdate && (mangas == null || mangas.Contains(m.Id)));
+
+          // Если явно не указаны ID, которые стоит скачать - пытаемся качать в порядке сортировки.
           if (orderBy != null && mangas == null)
             entities = orderBy(entities);
+
           var materialized = entities.ToList();
+
+          // Если указаны Id, пытаемся качать в их внутреннем порядке.
+          if (mangas != null)
+            materialized = materialized.OrderBy(m => mangas.IndexOf(m.Id)).ToList();
+
           mangasCount = materialized.Count;
           foreach (var current in materialized)
           {

@@ -398,7 +398,7 @@ namespace MangaReader.Core.Manga
 
       catch (AggregateException ae)
       {
-        foreach (var ex in ae.InnerExceptions)
+        foreach (var ex in ae.Flatten().InnerExceptions)
           Log.Exception(ex);
       }
       catch (System.Exception ex)

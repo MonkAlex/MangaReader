@@ -77,9 +77,15 @@ namespace MangaReader.Core.Services
       if (!IsAvaible)
         throw new MangaReaderException("Library not avaible.");
 
-      IsAvaible = false;
-      await Task.Run(action);
-      IsAvaible = true;
+      try
+      {
+        IsAvaible = false;
+        await Task.Run(action);
+      }
+      finally
+      {
+        IsAvaible = true;
+      }
     }
 
     #region Методы
@@ -170,16 +176,16 @@ namespace MangaReader.Core.Services
     /// </summary>
     public void Update()
     {
-      Update(ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription);
+      Update((IEnumerable<int>)null);
     }
 
     /// <summary>
     /// Обновить мангу.
     /// </summary>
-    /// <param name="sort">Сортировка.</param>
-    public void Update(SortDescription sort)
+    /// <param name="orderBy">Сортировка.</param>
+    public void Update(Func<IQueryable<IManga>, IOrderedQueryable<IManga>> orderBy)
     {
-      Update(null, sort);
+      Update(null, orderBy);
     }
 
     /// <summary>
@@ -188,15 +194,27 @@ namespace MangaReader.Core.Services
     /// <param name="mangas">Обновляемая манга.</param>
     public void Update(IEnumerable<int> mangas)
     {
-      Update(mangas, ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription);
+      var saved = ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription;
+      switch (saved.PropertyName)
+      {
+        case nameof(IManga.Created):
+          Update(mangas, m => m.OrderBy(manga => manga.Created));
+          break;
+        case nameof(IManga.DownloadedAt):
+          Update(mangas, m => m.OrderBy(manga => manga.DownloadedAt));
+          break;
+        default:
+          Update(mangas, m => m.OrderBy(manga => manga.Name));
+          break;
+      }
     }
 
     /// <summary>
     /// Обновить мангу.
     /// </summary>
     /// <param name="mangas">Обновляемая манга.</param>
-    /// <param name="sort">Сортировка.</param>
-    public void Update(IEnumerable<int> mangas, SortDescription sort)
+    /// <param name="orderBy">Сортировка.</param>
+    public void Update(IEnumerable<int> mangas, Func<IQueryable<IManga>, IOrderedQueryable<IManga>> orderBy)
     {
       OnLibraryChanged(new LibraryViewModelArgs(null, null, MangaOperation.None, LibraryOperation.UpdateStarted));
       Log.Info(Strings.Library_Status_Update);
@@ -205,12 +223,12 @@ namespace MangaReader.Core.Services
         mangaIndex = 0;
         using (var context = Repository.GetEntityContext())
         {
-          var entities = context.Get<IManga>().Where(m => m.NeedUpdate && (mangas == null || mangas.Contains(m.Id))).ToList();
-          entities = sort.Direction == ListSortDirection.Ascending ?
-            entities.OrderBy(m => m.Name).ToList() :
-            entities.OrderByDescending(m => m.Name).ToList();
-          mangasCount = entities.Count;
-          foreach (var current in entities)
+          var entities = context.Get<IManga>().Where(m => m.NeedUpdate && (mangas == null || mangas.Contains(m.Id)));
+          if (orderBy != null && mangas == null)
+            entities = orderBy(entities);
+          var materialized = entities.ToList();
+          mangasCount = materialized.Count;
+          foreach (var current in materialized)
           {
             DownloadManager.CheckPause().Wait();
 
@@ -229,7 +247,7 @@ namespace MangaReader.Core.Services
       }
       catch (AggregateException ae)
       {
-        foreach (var ex in ae.InnerExceptions)
+        foreach (var ex in ae.Flatten().InnerExceptions)
           Log.Exception(ex);
       }
       catch (System.Exception ex)

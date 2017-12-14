@@ -67,7 +67,7 @@ namespace MangaReader.Core.Manga
       }
       catch (AggregateException ae)
       {
-        foreach (var ex in ae.InnerExceptions)
+        foreach (var ex in ae.Flatten().InnerExceptions)
           Log.Exception(ex, $"Не удалось скачать главу {Name} по ссылке {Uri}");
       }
       catch (System.Exception ex)

@@ -259,7 +259,7 @@ namespace Grouple
 
         var document = new HtmlDocument();
         document.LoadHtml(page.Content);
-        var mangas = document.DocumentNode.SelectNodes("//div[@class='tile col-sm-6']");
+        var mangas = document.DocumentNode.SelectNodes("//div[contains(@class, 'col-sm-6')]");
         if (mangas == null)
           continue;
 

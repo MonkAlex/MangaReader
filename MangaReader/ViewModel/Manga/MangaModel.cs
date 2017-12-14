@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -165,6 +166,26 @@ namespace MangaReader.ViewModel.Manga
       }
     }
 
+    public DateTime? Created
+    {
+      get { return created; }
+      set
+      {
+        created = value;
+        OnPropertyChanged();
+      }
+    }
+
+    public DateTime? DownloadedAt
+    {
+      get { return downloadedAt; }
+      set
+      {
+        downloadedAt = value;
+        OnPropertyChanged();
+      }
+    }
+
     public int SettingsId { get; set; }
 
     #endregion
@@ -189,6 +210,8 @@ namespace MangaReader.ViewModel.Manga
       SetNeedUpdate(manga.NeedUpdate);
       this.Status = manga.Status;
       this.SettingsId = manga.Setting.Id;
+      this.Created = manga.Created;
+      this.DownloadedAt = manga.DownloadedAt;
     }
 
     private void SetCompletedIcon(bool isCompleted)
@@ -235,6 +258,8 @@ namespace MangaReader.ViewModel.Manga
     }
 
     private ObservableCollection<ContentMenuItem> mangaMenu;
+    private DateTime? created;
+    private DateTime? downloadedAt;
 
     public ObservableCollection<ContentMenuItem> MangaMenu
     {

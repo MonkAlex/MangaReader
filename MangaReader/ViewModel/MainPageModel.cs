@@ -195,21 +195,44 @@ namespace MangaReader.ViewModel
 
     private class MangaComparerImpl : IComparer, IComparer<IManga>
     {
+      private static LibraryFilter setting = ConfigStorage.Instance.ViewConfig.LibraryFilter;
+
       public int Compare(object x, object y)
       {
         if (x is MangaModel xM && y is MangaModel yM)
-          return Compare(xM.Name, yM.Name);
+        {
+          if (setting.SortDescription.PropertyName == nameof(IManga.Created))
+            return CompareByDate(xM.Created, yM.Created);
+          if (setting.SortDescription.PropertyName == nameof(IManga.DownloadedAt))
+            return CompareByDate(xM.DownloadedAt, yM.DownloadedAt);
+          return CompareByName(xM.Name, yM.Name);
+        }
         throw new MangaReaderException("Can compare only Mangas.");
       }
 
-      private static int Compare(string x, string y)
+      private static int CompareByDate(DateTime? x, DateTime? y)
       {
-        return string.Compare(x, y, StringComparison.Ordinal);
+        if (setting.SortDescription.Direction == ListSortDirection.Ascending)
+          return DateTime.Compare(x ?? DateTime.MinValue, y ?? DateTime.MinValue);
+
+        return DateTime.Compare(y ?? DateTime.MinValue, x ?? DateTime.MinValue);
+      }
+
+      private static int CompareByName(string x, string y)
+      {
+        if (setting.SortDescription.Direction == ListSortDirection.Ascending)
+          return string.Compare(x, y, StringComparison.InvariantCultureIgnoreCase);
+
+        return string.Compare(y, x, StringComparison.InvariantCultureIgnoreCase);
       }
 
       public int Compare(IManga x, IManga y)
       {
-        return Compare(x.Name, y.Name);
+        if (setting.SortDescription.PropertyName == nameof(IManga.Created))
+          return CompareByDate(x.Created, y.Created);
+        if (setting.SortDescription.PropertyName == nameof(IManga.DownloadedAt))
+          return CompareByDate(x.DownloadedAt, y.DownloadedAt);
+        return CompareByName(x.Name, y.Name);
       }
     }
 

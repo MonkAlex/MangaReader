@@ -127,7 +127,6 @@
     <Compile Include="UI\MainForm\Table.xaml.cs">
       <DependentUpon>Table.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\GridSort.cs" />
     <Compile Include="UI\GridViewColumnResize.cs" />
     <Compile Include="UI\AddNewManga\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
@@ -213,6 +212,8 @@
     <Compile Include="ViewModel\Primitive\ProcessModel.cs" />
     <Compile Include="ViewModel\Setting\SettingModel.cs" />
     <Compile Include="ViewModel\Setting\SettingViewModel.cs" />
+    <Compile Include="ViewModel\Setting\SortDto.cs" />
+    <Compile Include="ViewModel\Setting\SortModel.cs" />
     <Compile Include="ViewModel\ShutdownViewModel.cs" />
     <Compile Include="ViewModel\TaskbarIconModel.cs" />
     <Compile Include="ViewModel\VersionHistoryModel.cs" />

@@ -72,6 +72,8 @@ namespace MangaReader.ViewModel.Setting
 
     public FolderNamingModel FolderNamingStrategy { get; set; }
 
+    public SortModel Sort { get; set; }
+
     public override void Save()
     {
       base.Save();
@@ -88,6 +90,8 @@ namespace MangaReader.ViewModel.Setting
       var viewConfig = ConfigStorage.Instance.ViewConfig;
       if (Skin.Guid != Default.DefaultGuid || viewConfig.SkinGuid != Guid.Empty)
         viewConfig.SkinGuid = Skin.Guid;
+
+      viewConfig.LibraryFilter.SortDescription = Sort.SelectedDescription;
 
       using (var context = Repository.GetEntityContext())
       {
@@ -116,6 +120,11 @@ namespace MangaReader.ViewModel.Setting
         var config = context.Get<DatabaseConfig>().Single();
         this.FolderNamingStrategy.SelectedGuid = config.FolderNamingStrategy;
       }
+
+      this.Sort = new SortModel();
+      var appSort = ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription;
+      if (appSort.PropertyName != null)
+        Sort.SelectedDescription = appSort;
     }
   }
 }

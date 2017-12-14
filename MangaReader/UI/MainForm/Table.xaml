@@ -22,8 +22,7 @@
               MouseDown="ListView_MouseDown"
               SelectionMode="Single"
               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-              ui:GridViewColumnResize.Enabled="True"
-              ui:GridSort.AutoSort="True">
+              ui:GridViewColumnResize.Enabled="True">
       <ListView.ItemContainerStyle>
         <Style TargetType="{x:Type ListViewItem}">
           <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Mangas_clicked"/>
@@ -101,11 +100,8 @@
               </GridViewColumn.CellTemplate>
             </GridViewColumn>
             <GridViewColumn Header="{x:Static resx:Strings.Manga_Name}" DisplayMemberBinding="{Binding Path=Name}"
-                            ui:GridViewColumnResize.Width="*"
-                            ui:GridSort.PropertyName="Name"
-                            ui:GridSort.ShowSortGlyph="True"/>
-            <GridViewColumn Header="{x:Static resx:Strings.Manga_Update}"
-                            ui:GridSort.PropertyName="NeedUpdate">
+                            ui:GridViewColumnResize.Width="*"/>
+            <GridViewColumn Header="{x:Static resx:Strings.Manga_Update}">
               <GridViewColumn.CellTemplate>
                 <DataTemplate>
                   <Grid>
@@ -115,8 +111,7 @@
               </GridViewColumn.CellTemplate>
             </GridViewColumn>
             <GridViewColumn Header="{x:Static resx:Strings.Manga_Downloaded}"
-                                        Width="100"
-                            ui:GridSort.PropertyName="Downloaded">
+                                        Width="100">
               <GridViewColumn.CellTemplate>
                 <DataTemplate>
                   <Grid>

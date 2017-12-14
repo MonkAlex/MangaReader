@@ -457,6 +457,15 @@ namespace MangaReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Сортировка.
+        /// </summary>
+        public static string Settings_Sort {
+            get {
+                return ResourceManager.GetString("Settings_Sort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Обновлять мангу вместо полного скачивания.
         /// </summary>
         public static string Settings_Update {

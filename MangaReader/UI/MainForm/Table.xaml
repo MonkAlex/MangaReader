@@ -19,8 +19,9 @@
     <ListView x:Name="FormLibrary" 
               Grid.Row="1"
               ItemsSource="{Binding View}"
+              SelectionChanged="FormLibrary_OnSelectionChanged"
               MouseDown="ListView_MouseDown"
-              SelectionMode="Single"
+              SelectionMode="Extended"
               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
               ui:GridViewColumnResize.Enabled="True">
       <ListView.ItemContainerStyle>
@@ -73,7 +74,7 @@
                   </Trigger>
 
                   <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Background" Value="LightGray" />
                   </Trigger>
 
                   <Trigger Property="IsEnabled" Value="False">

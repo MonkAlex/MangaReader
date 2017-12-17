@@ -25,7 +25,6 @@ namespace MangaReader.ViewModel.Commands.Primitives
           {
             model.ContextManga = manga;
             this.Execute(manga);
-
           }
           catch (Exception e)
           {

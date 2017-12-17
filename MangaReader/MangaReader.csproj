@@ -167,6 +167,7 @@
     <Compile Include="ViewModel\Commands\Navigation\NextMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\Navigation\PreviousMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\OpenWikiCommand.cs" />
+    <Compile Include="ViewModel\Commands\Primitives\MultipleMangasBaseCommand.cs" />
     <Compile Include="ViewModel\Commands\Primitives\NavigationCommand.cs" />
     <Compile Include="ViewModel\Manga\MangaModel.cs" />
     <Compile Include="ViewModel\Primitive\ImageSourceVM.cs" />

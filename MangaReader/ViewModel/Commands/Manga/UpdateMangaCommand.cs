@@ -1,15 +1,17 @@
-﻿using MangaReader.Core.Manga;
+﻿using System.Collections.Generic;
+using System.Linq;
+using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands.Manga
 {
-  public class UpdateMangaCommand : MangaBaseCommand
+  public class UpdateMangaCommand : MultipleMangasBaseCommand
   {
-    public override void Execute(IManga parameter)
+    public override async void Execute(IEnumerable<IManga> mangas)
     {
-      Library.ThreadAction(() => Library.Update(parameter.Id));
+      await Library.ThreadAction(() => Library.Update(mangas.Select(m => m.Id).ToList()));
     }
 
     public UpdateMangaCommand(LibraryViewModel model) : base(model)

@@ -65,8 +65,8 @@
         <Setter.Value>
           <DataTemplate>
             <Button Command="{Binding Command}"
-                                Style="{StaticResource IconButton}"
-                                CommandParameter="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}}"/>
+                    Style="{StaticResource IconButton}"
+                    CommandParameter="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}}"/>
           </DataTemplate>
         </Setter.Value>
       </Setter>

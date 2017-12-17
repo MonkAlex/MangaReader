@@ -36,6 +36,8 @@ namespace MangaReader.ViewModel
 
     public ObservableCollection<MangaModel> MangaViewModels { get; private set; }
 
+    public ObservableCollection<MangaModel> SelectedMangaModels { get; }
+
     public LibraryFilter LibraryFilter { get; set; }
 
     public IDownloadable LastDownload
@@ -146,6 +148,7 @@ namespace MangaReader.ViewModel
       this.Library = new LibraryViewModel();
       using (var context = Repository.GetEntityContext())
         this.MangaViewModels = new ObservableCollection<MangaModel>(context.Get<IManga>().Select(m => new MangaModel(m, Library)));
+      this.SelectedMangaModels = new ObservableCollection<MangaModel>();
       Library.LibraryChanged += LibraryOnLibraryChanged;
       View = new ListCollectionView(MangaViewModels)
       {

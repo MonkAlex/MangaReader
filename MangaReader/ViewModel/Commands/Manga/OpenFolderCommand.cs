@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
@@ -7,11 +8,14 @@ using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands.Manga
 {
-  public class OpenFolderCommand : MangaBaseCommand
+  public class OpenFolderCommand : MultipleMangasBaseCommand
   {
-    public override void Execute(IManga manga)
+    public override void Execute(IEnumerable<IManga> mangas)
     {
-      this.Execute(manga as IDownloadable);
+      foreach (var m in mangas)
+      {
+        this.Execute(m as IDownloadable);
+      }
     }
 
     public void Execute(IDownloadable parameter)

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
+using MangaReader.ViewModel;
 using MangaReader.ViewModel.Manga;
 
 namespace MangaReader.UI.MainForm
@@ -42,6 +43,18 @@ namespace MangaReader.UI.MainForm
       {
         listView.SelectedIndex = -1;
       }
+    }
+
+    private void FormLibrary_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      var model = DataContext as MainPageModel;
+      if (model == null)
+        return;
+
+      foreach (MangaModel item in e.RemovedItems)
+        model.SelectedMangaModels.Remove(item);
+      foreach (MangaModel item in e.AddedItems)
+        model.SelectedMangaModels.Add(item);
     }
   }
   

@@ -257,19 +257,8 @@ namespace MangaReader.ViewModel.Manga
       this.NeedUpdateIcon = result;
     }
 
-    private ObservableCollection<ContentMenuItem> mangaMenu;
     private DateTime? created;
     private DateTime? downloadedAt;
-
-    public ObservableCollection<ContentMenuItem> MangaMenu
-    {
-      get { return mangaMenu; }
-      set
-      {
-        mangaMenu = value;
-        OnPropertyChanged();
-      }
-    }
 
     public ICommand Save => new MangaSaveCommand(this, WindowHelper.Library);
 
@@ -294,20 +283,8 @@ namespace MangaReader.ViewModel.Manga
       }
     }
 
-    public MangaModel(IManga manga, LibraryViewModel model)
+    public MangaModel(IManga manga)
     {
-      this.MangaMenu = new ObservableCollection<ContentMenuItem>
-      {
-        new OpenFolderCommand(model),
-        new ChangeUpdateMangaCommand(manga?.NeedUpdate ?? false, model),
-        new UpdateMangaCommand(model),
-        new CompressMangaCommand(model),
-        new OpenUrlMangaCommand(model),
-        new HistoryClearMangaCommand(model),
-        new DeleteMangaCommand(model),
-        new ShowPropertiesMangaCommand(model)
-      };
-      this.MangaMenu.First().IsDefault = true;
       UpdateProperties(manga);
     }
   }

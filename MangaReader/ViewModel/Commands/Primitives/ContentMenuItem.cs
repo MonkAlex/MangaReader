@@ -16,6 +16,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
     private bool isDefault;
     private BaseCommand baseCommand;
     private ImageSourceVM icon;
+    private bool isVisible;
 
     public FontWeight FontWeight
     {
@@ -68,6 +69,16 @@ namespace MangaReader.ViewModel.Commands.Primitives
       }
     }
 
+    public bool IsVisible
+    {
+      get { return isVisible; }
+      set
+      {
+        isVisible = value;
+        OnPropertyChanged();
+      }
+    }
+
     public ObservableCollection<ContentMenuItem> SubItems
     {
       get { return subItems; }
@@ -91,6 +102,8 @@ namespace MangaReader.ViewModel.Commands.Primitives
         this.Name = baseCommand.Name;
       if (args.PropertyName == nameof(baseCommand.Icon))
         this.Icon = new ImageSourceVM(baseCommand.Icon);
+      if (args.PropertyName == nameof(MultipleMangasBaseCommand.IsVisible))
+        this.IsVisible = ((MultipleMangasBaseCommand) baseCommand).IsVisible;
     }
 
     public ContentMenuItem(ICommand command, string name) : this(name)
@@ -101,6 +114,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
     public ContentMenuItem(string name)
     {
       this.Name = name;
+      this.IsVisible = true;
       this.SubItems = new ObservableCollection<ContentMenuItem>();
     }
   }

@@ -1,40 +1,29 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using MangaReader.Core.Manga;
-using MangaReader.Core.Services;
-using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands.Manga
 {
   public class OpenFolderCommand : MultipleMangasBaseCommand
   {
+    private readonly OpenFolderCommandBase baseCommand;
+
     public override void Execute(IEnumerable<IManga> mangas)
     {
       foreach (var m in mangas)
-      {
-        this.Execute(m as IDownloadable);
-      }
-    }
-
-    public void Execute(IDownloadable parameter)
-    {
-      if (parameter != null && Directory.Exists(parameter.GetAbsoulteFolderPath()))
-        Process.Start(parameter.GetAbsoulteFolderPath());
-      else
-        Log.Info(Strings.Library_Status_FolderNotFound);
+        baseCommand.Execute(m);
     }
 
     public override bool CanExecute(object parameter)
     {
-      return true;
+      return baseCommand.CanExecute(parameter);
     }
 
-    public OpenFolderCommand(LibraryViewModel model) : base(model)
+    public OpenFolderCommand(MainPageModel model) : base(model)
     {
-      this.Name = Strings.Manga_Action_OpenFolder;
-      this.Icon = "pack://application:,,,/Icons/Manga/open_folder.png";
+      this.baseCommand = new OpenFolderCommandBase();
+      this.Name = baseCommand.Name;
+      this.Icon = baseCommand.Icon;
       this.NeedRefresh = false;
     }
   }

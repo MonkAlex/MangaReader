@@ -9,12 +9,12 @@ namespace MangaReader.ViewModel.Commands.Manga
 {
   public class UpdateMangaCommand : MultipleMangasBaseCommand
   {
-    public override async void Execute(IEnumerable<IManga> mangas)
+    public override void Execute(IEnumerable<IManga> mangas)
     {
-      await Library.ThreadAction(() => Library.Update(mangas.Select(m => m.Id).ToList()));
+      Library.ThreadAction(() => Library.Update(mangas.Select(m => m.Id).ToList())).LogException();
     }
 
-    public UpdateMangaCommand(LibraryViewModel model) : base(model)
+    public UpdateMangaCommand(MainPageModel model) : base(model)
     {
       this.Name = Strings.Manga_Action_Update;
       this.Icon = "pack://application:,,,/Icons/Manga/start_update.png";

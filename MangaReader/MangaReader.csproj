@@ -161,6 +161,7 @@
     <Compile Include="ViewModel\AddNewManga\AddFromUri.cs" />
     <Compile Include="ViewModel\AddNewManga\AddNewModel.cs" />
     <Compile Include="ViewModel\Commands\Manga\MangaSaveCommand.cs" />
+    <Compile Include="ViewModel\Commands\Manga\OpenFolderCommandBase.cs" />
     <Compile Include="ViewModel\Commands\NavigationFromHistory.cs" />
     <Compile Include="ViewModel\Commands\Navigation\FirstMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\Navigation\LastMangaCommand.cs" />
@@ -184,7 +185,6 @@
     <Compile Include="ViewModel\Commands\Manga\OpenUrlMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\PauseCommand.cs" />
     <Compile Include="ViewModel\Commands\Primitives\ContextMenuItemHelper.cs" />
-    <Compile Include="ViewModel\Commands\Primitives\MangaBaseCommand.cs" />
     <Compile Include="ViewModel\Commands\Manga\DeleteMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\Manga\ShowPropertiesMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\Primitives\LibraryBaseCommand.cs" />

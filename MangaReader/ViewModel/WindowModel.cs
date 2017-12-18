@@ -153,6 +153,7 @@ namespace MangaReader.ViewModel
         sender.Hide();
     }
 
+    [Obsolete("По идее, больше ненужен")]
     public void Refresh()
     {
       if (model != null && model.View != null)

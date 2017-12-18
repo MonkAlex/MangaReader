@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MangaReader.ViewModel;
@@ -32,7 +33,10 @@ namespace MangaReader.UI.MainForm
       if (!(item.DataContext is MangaModel downloadable))
         return;
 
-      var defaultCommand = downloadable.MangaMenu.FirstOrDefault(m => m.IsDefault);
+      if (!(DataContext is MainPageModel model))
+        return;
+
+      var defaultCommand = model.MangaMenu.FirstOrDefault(m => m.IsDefault);
       if (defaultCommand != null && defaultCommand.Command.CanExecute(downloadable))
         defaultCommand.Command.Execute(downloadable);
     }
@@ -47,14 +51,22 @@ namespace MangaReader.UI.MainForm
 
     private void FormLibrary_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      var model = DataContext as MainPageModel;
-      if (model == null)
+      if (!(DataContext is MainPageModel model))
         return;
 
       foreach (MangaModel item in e.RemovedItems)
         model.SelectedMangaModels.Remove(item);
       foreach (MangaModel item in e.AddedItems)
         model.SelectedMangaModels.Add(item);
+    }
+
+    private void MangaContentMenuInitialized(object sender, EventArgs e)
+    {
+      if (!(DataContext is MainPageModel model))
+        return;
+
+      var menu = sender as ContextMenu;
+      menu.ItemsSource = model.MangaMenu;
     }
   }
   

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Windows;
 using MangaReader.Core.Manga;
@@ -10,27 +11,36 @@ using MangaReader.ViewModel.Manga;
 
 namespace MangaReader.ViewModel.Commands.Primitives
 {
-  public class MultipleMangasBaseCommand : LibraryBaseCommand
+  public abstract class MultipleMangasBaseCommand : LibraryBaseCommand
   {
-    private IEnumerable<MangaModel> selectedModels;
+    private bool canExecuteNeedSelection;
+    private bool isVisible;
     protected bool NeedRefresh { get; set; }
 
-    protected IEnumerable<MangaModel> SelectedModels
+    protected bool CanExecuteNeedSelection
     {
-      get
+      get { return canExecuteNeedSelection; }
+      set
       {
-        if (selectedModels == null)
-        {
-          if (WindowModel.Instance.Content is FrameworkElement fe)
-          {
-            if (fe.DataContext is MainPageModel pageModel)
-              selectedModels = pageModel.SelectedMangaModels;
-          }
-        }
-
-        return selectedModels;
+        canExecuteNeedSelection = value;
+        OnPropertyChanged();
+        SubscribeToSelection(canExecuteNeedSelection);
       }
     }
+
+    public bool IsVisible
+    {
+      get { return isVisible; }
+      set
+      {
+        isVisible = value;
+        OnPropertyChanged();
+      }
+    }
+
+    protected MainPageModel PageModel { get; }
+
+    protected IEnumerable<MangaModel> SelectedModels => PageModel.SelectedMangaModels;
 
     public override void Execute(object parameter)
     {
@@ -61,19 +71,39 @@ namespace MangaReader.ViewModel.Commands.Primitives
       }
 
       if (NeedRefresh)
-        WindowModel.Instance.Refresh();
+        PageModel.View.Refresh();
 
+      foreach (var command in PageModel.MangaMenu.Select(m => m.Command).Where(m => m.GetType() == GetType()).OfType<MultipleMangasBaseCommand>())
+        command.OnCanExecuteChanged();
+    }
+
+    public abstract void Execute(IEnumerable<IManga> mangas);
+
+    private void SubscribeToSelection(bool subscribe)
+    {
+      if (subscribe)
+        PageModel.SelectedMangaModels.CollectionChanged += SelectedMangaModelsOnCollectionChanged;
+      else
+        PageModel.SelectedMangaModels.CollectionChanged -= SelectedMangaModelsOnCollectionChanged;
       OnCanExecuteChanged();
     }
 
-    public virtual void Execute(IEnumerable<IManga> mangas)
+    private void SelectedMangaModelsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
     {
-
+      OnCanExecuteChanged();
     }
 
-    public MultipleMangasBaseCommand(LibraryViewModel model) : base(model)
+    protected MultipleMangasBaseCommand(MainPageModel model) : base(model.Library)
     {
+      PageModel = model;
       this.NeedRefresh = true;
+      this.CanExecuteNeedSelection = false;
+      this.CanExecuteChanged += OnCanExecuteChanged;
+    }
+
+    private void OnCanExecuteChanged(object sender, EventArgs eventArgs)
+    {
+      IsVisible = CanExecute(null);
     }
   }
 }

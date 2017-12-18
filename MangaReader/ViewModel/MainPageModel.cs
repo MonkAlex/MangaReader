@@ -92,6 +92,18 @@ namespace MangaReader.ViewModel
 
     public ObservableCollection<ContentMenuItem> NavigationMenu { get; set; }
 
+    private ObservableCollection<ContentMenuItem> mangaMenu;
+
+    public ObservableCollection<ContentMenuItem> MangaMenu
+    {
+      get { return mangaMenu; }
+      set
+      {
+        mangaMenu = value;
+        OnPropertyChanged();
+      }
+    }
+
     internal virtual bool Filter(object o)
     {
       var mangaModel = o as MangaModel;
@@ -147,7 +159,7 @@ namespace MangaReader.ViewModel
       LibraryFilter = ConfigStorage.Instance.ViewConfig.LibraryFilter;
       this.Library = new LibraryViewModel();
       using (var context = Repository.GetEntityContext())
-        this.MangaViewModels = new ObservableCollection<MangaModel>(context.Get<IManga>().Select(m => new MangaModel(m, Library)));
+        this.MangaViewModels = new ObservableCollection<MangaModel>(context.Get<IManga>().Select(m => new MangaModel(m)));
       this.SelectedMangaModels = new ObservableCollection<MangaModel>();
       Library.LibraryChanged += LibraryOnLibraryChanged;
       View = new ListCollectionView(MangaViewModels)
@@ -182,6 +194,20 @@ namespace MangaReader.ViewModel
       this.Menu.Add(file);
       this.Menu.Add(setting);
       this.Menu.Add(about);
+
+      this.MangaMenu = new ObservableCollection<ContentMenuItem>
+      {
+        new OpenFolderCommand(this),
+        new ChangeUpdateMangaCommand(false, this),
+        new ChangeUpdateMangaCommand(true, this),
+        new UpdateMangaCommand(this),
+        new CompressMangaCommand(this),
+        new OpenUrlMangaCommand(this),
+        new HistoryClearMangaCommand(this),
+        new DeleteMangaCommand(this),
+        new ShowPropertiesMangaCommand(this)
+      };
+      this.MangaMenu.First().IsDefault = true;
 
       #endregion
 
@@ -248,7 +274,7 @@ namespace MangaReader.ViewModel
         {
           case MangaOperation.Added:
             if (model == null)
-              Client.Dispatcher.Invoke(() => this.MangaViewModels.Add(new MangaModel(args.Manga, Library)));
+              Client.Dispatcher.Invoke(() => this.MangaViewModels.Add(new MangaModel(args.Manga)));
             break;
           case MangaOperation.Deleted:
             if (model != null)

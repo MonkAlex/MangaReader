@@ -16,6 +16,7 @@ namespace MangaReader.ViewModel.Commands.Manga
 
     public UpdateMangaCommand(MainPageModel model) : base(model)
     {
+      this.NeedRefresh = true;
       this.Name = Strings.Manga_Action_Update;
       this.Icon = "pack://application:,,,/Icons/Manga/start_update.png";
     }

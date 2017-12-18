@@ -49,7 +49,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
       using (var context = Repository.GetEntityContext())
       {
         var ids = SelectedModels.Select(m => m.Id).ToList();
-        var mangas = context.Get<IManga>().Where(m => ids.Contains(m.Id)).ToList();
+        var mangas = context.Get<IManga>().Where(m => ids.Contains(m.Id)).ToList().OrderBy(m => ids.IndexOf(m.Id)).ToList();
         try
         {
           foreach (var model in SelectedModels)

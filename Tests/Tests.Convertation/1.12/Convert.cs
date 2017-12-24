@@ -63,7 +63,7 @@ namespace Tests.Convertation._1._12
         Assert.AreEqual(153, loadedHistoryRecord.Count(h => h.Url.Contains("strawberry_100")));
         Assert.AreEqual(5, loadedHistoryRecord.Count(h => h.Url.Contains("amnesia_labyrinth")));
         Assert.AreEqual(252, loadedHistoryRecord.Count(h => h.Url.Contains("the_world_god_only_knows")));
-        Assert.AreEqual(43, loadedHistoryRecord.Count(h => h.Url.Contains("kiba_no_tabishounin___the_arms_peddler")));
+        Assert.AreEqual(43, loadedHistoryRecord.Count(h => h.Url.Contains("the_arms_peddler")));
         Assert.AreEqual(211, loadedHistoryRecord.Count(h => h.Url.Contains("a_town_where_you_live")));
         Assert.AreEqual(70, loadedHistoryRecord.Count(h => h.Url.Contains("kissxsis")));
         Assert.AreEqual(17, loadedHistoryRecord.Count(h => h.Url.Contains("coloured_in_love_maple")));

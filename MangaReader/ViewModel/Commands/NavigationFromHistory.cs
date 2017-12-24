@@ -10,6 +10,8 @@ namespace MangaReader.ViewModel.Commands
 
     public override void Execute(object parameter)
     {
+      base.Execute(parameter);
+
       var uri = new Uri($"{RepoUri}{parameter}");
       Process.Start(uri.ToString());
     }

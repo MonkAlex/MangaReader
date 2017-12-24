@@ -42,5 +42,11 @@ namespace MangaReader.ViewModel
       }
     }
 
+    public void InitializeSilent()
+    {
+      Core.Client.Init();
+      Core.Client.Start(this);
+    }
+
   }
 }

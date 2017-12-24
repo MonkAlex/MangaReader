@@ -9,6 +9,7 @@ namespace MangaReader.ViewModel.Commands
   {
     public override void Execute(object parameter)
     {
+      base.Execute(parameter);
       new SettingModel().Show();
     }
 

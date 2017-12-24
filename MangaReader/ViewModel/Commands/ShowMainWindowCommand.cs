@@ -8,6 +8,8 @@ namespace MangaReader.ViewModel.Commands
   {
     public override void Execute(object parameter)
     {
+      base.Execute(parameter);
+
       var mainWindow = Application.Current.MainWindow;
       if (mainWindow != null)
       {

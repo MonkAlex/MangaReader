@@ -5,10 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:resx="clr-namespace:MangaReader.Properties"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="450">
+             d:DesignHeight="250" d:DesignWidth="450">
     <StackPanel>
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -95,9 +96,13 @@
                   Content="{x:Static resx:Strings.Settings_UpdateReader}" 
                   VerticalAlignment="Center"/>
             <CheckBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
-                                  IsChecked="{Binding MinimizeToTray}"
-                  Content="{x:Static resx:Strings.Settings_MinimizeToTray}" 
-                  VerticalAlignment="Center"/>
+                      IsChecked="{Binding MinimizeToTray}"
+                      Content="{x:Static resx:Strings.Settings_MinimizeToTray}" 
+                      VerticalAlignment="Center"/>
+            <CheckBox Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
+                      IsChecked="{Binding StartAppMinimizedToTray}"
+                      Content="{x:Static resx:Strings.Settings_StartAppMinimizedToTray}" 
+                      VerticalAlignment="Center"/>
         </Grid>
     </StackPanel>
 </UserControl>

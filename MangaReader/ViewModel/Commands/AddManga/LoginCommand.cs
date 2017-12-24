@@ -13,7 +13,7 @@ namespace MangaReader.ViewModel.Commands.AddManga
       return base.CanExecute(parameter) && (!login.IsLogined || login.CanLogin);
     }
 
-    public async override void Execute(object parameter)
+    public override async void Execute(object parameter)
     {
       base.Execute(parameter);
 

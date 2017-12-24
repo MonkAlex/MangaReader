@@ -12,6 +12,7 @@ namespace MangaReader.ViewModel.Commands.Manga
 
     public override void Execute(object parameter)
     {
+      base.Execute(parameter);
       this.Execute(parameter as IDownloadable);
     }
 

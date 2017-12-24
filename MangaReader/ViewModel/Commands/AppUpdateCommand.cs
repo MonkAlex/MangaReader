@@ -10,6 +10,7 @@ namespace MangaReader.ViewModel.Commands
   {
     public override void Execute(object parameter)
     {
+      base.Execute(parameter);
       Updater.StartUpdate();
     }
 

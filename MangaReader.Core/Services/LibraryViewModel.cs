@@ -227,7 +227,11 @@ namespace MangaReader.Core.Services
         mangaIndex = 0;
         using (var context = Repository.GetEntityContext())
         {
-          var entities = context.Get<IManga>().Where(m => m.NeedUpdate && (mangas == null || mangas.Contains(m.Id)));
+          var entities = context.Get<IManga>().Where(m => m.NeedUpdate);
+
+          // Хибер не умеет в Contains от null, даже если для шарпа он не вычисляется.
+          if (mangas != null)
+            entities = entities.Where(m => mangas.Contains(m.Id));
 
           // Если явно не указаны ID, которые стоит скачать - пытаемся качать в порядке сортировки.
           if (orderBy != null && mangas == null)

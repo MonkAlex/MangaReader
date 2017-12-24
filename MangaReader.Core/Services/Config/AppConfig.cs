@@ -21,6 +21,11 @@ namespace MangaReader.Core.Services.Config
     public bool MinimizeToTray { get; set; }
 
     /// <summary>
+    /// Запускать программу свернутой в трей.
+    /// </summary>
+    public bool StartMinimizedToTray { get; set; }
+
+    /// <summary>
     /// Частота автообновления библиотеки в часах.
     /// </summary>
     public int AutoUpdateInHours { get; set; }
@@ -60,6 +65,7 @@ namespace MangaReader.Core.Services.Config
       this.Language = Languages.English;
       this.UpdateReader = true;
       this.MinimizeToTray = false;
+      this.StartMinimizedToTray = false;
       this.AutoUpdateInHours = 0;
       this.LastUpdate = DateTime.Now;
     }

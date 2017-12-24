@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using MangaReader.Core.Services;
 
 namespace MangaReader.ViewModel.Commands.Primitives
 {
@@ -38,7 +39,8 @@ namespace MangaReader.ViewModel.Commands.Primitives
 
     public virtual void Execute(object parameter)
     {
-      
+      var commandName = Name ?? GetType().Name;
+      Log.Add($"Command '{commandName}' started.");
     }
 
     public event EventHandler CanExecuteChanged;

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Core.Manga;
+using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
@@ -46,14 +48,16 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       set { RaiseAndSetIfChanged(ref addManual, value); }
     }
 
-    private void UpdateManga()
+    private async void UpdateManga()
     {
       Items.Clear();
-      foreach (var manga in ConfigStorage.Plugins.SelectMany(p => p.GetParser().Search(Search)))
+      var searches = ConfigStorage.Plugins.Select(p => p.GetParser().Search(Search)).ToList();
+      var tasks = searches.Select(s => Task.Run(() => s.ForEachAsync(a =>
       {
-        if (Items.All(i => i.Uri != manga.Uri))
-          Items.Add(new MangaViewModel(manga));
-      }
+        if (Items.All(i => i.Uri != a.Uri))
+          global::Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => Items.Add(new MangaViewModel(a)));
+      })));
+      await Task.WhenAll(tasks.Select(t => t.LogException()));
     }
 
     private void AddManga()

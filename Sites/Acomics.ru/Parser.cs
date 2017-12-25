@@ -202,42 +202,59 @@ namespace Acomics
       yield return result;
     }
 
-    public override IEnumerable<IManga> Search(string name)
+    public override IAsyncEnumerable<IManga> Search(string name)
     {
-      var hosts = ConfigStorage.Plugins
-        .Where(p => p.GetParser().GetType() == typeof(Parser))
-        .Select(p => p.GetSettings().MainUri);
-
-      var client = new CookieClient();
-      foreach (var host in hosts)
+      return AsyncEnumerable.CreateEnumerable(() =>
       {
-        var searchHost = new Uri(host, "search?keyword=" + WebUtility.UrlEncode(name));
-        var page = Page.GetPage(searchHost, client);
-        if (!page.HasContent)
-          continue;
+        IManga current = null;
+        var mangasPicture = new Queue<Tuple<IManga, Uri>>();
+        var hosts = ConfigStorage.Plugins
+          .Where(p => p.GetParser().GetType() == typeof(Parser))
+          .Select(p => p.GetSettings().MainUri);
 
-        var document = new HtmlDocument();
-        document.LoadHtml(page.Content);
-        var mangas = document.DocumentNode.SelectNodes("//table[@class='catalog-elem list-loadable']");
-        if (mangas == null)
-          continue;
-
-        foreach (var manga in mangas)
+        var client = new CookieClient();
+        foreach (var host in hosts)
         {
-          var image = manga.SelectSingleNode(".//td[@class='catdata1']//a//img");
-          var imageUri = image?.Attributes.Single(a => a.Name == "src").Value;
+          var searchHost = new Uri(host, "search?keyword=" + WebUtility.UrlEncode(name));
+          var page = Page.GetPage(searchHost, client);
+          if (!page.HasContent)
+            continue;
 
-          var mangaNode = manga.SelectSingleNode(".//div[@class='title']//a");
-          var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
-          var mangaName = mangaNode.InnerText;
+          var document = new HtmlDocument();
+          document.LoadHtml(page.Content);
+          var mangas = document.DocumentNode.SelectNodes("//table[@class='catalog-elem list-loadable']");
+          if (mangas == null)
+            continue;
 
-          var result = Mangas.Create(new Uri(host, mangaUri));
-          result.Name = WebUtility.HtmlDecode(mangaName);
-          if (imageUri != null)
-            result.Cover = client.DownloadData(new Uri(host, imageUri));
-          yield return result;
+          foreach (var manga in mangas)
+          {
+            var image = manga.SelectSingleNode(".//td[@class='catdata1']//a//img");
+            var imageUri = image?.Attributes.Single(a => a.Name == "src").Value;
+
+            var mangaNode = manga.SelectSingleNode(".//div[@class='title']//a");
+            var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
+            var mangaName = mangaNode.InnerText;
+
+            var result = Mangas.Create(new Uri(host, mangaUri));
+            result.Name = WebUtility.HtmlDecode(mangaName);
+            mangasPicture.Enqueue(new Tuple<IManga, Uri>(result, new Uri(host, imageUri)));
+          }
         }
-      }
+        // создаём энумератор при помощи готовой фабрики
+        return AsyncEnumerable.CreateEnumerator(
+          moveNext: async ct =>
+          {
+            if (mangasPicture.Count == 0)
+              return false;
+
+            var structure = mangasPicture.Dequeue();
+            structure.Item1.Cover = await client.DownloadDataTaskAsync(structure.Item2);
+            current = structure.Item1;
+            return current != null;
+          },
+          current: () => current,
+          dispose: () => { });
+      });
     }
 
     /// <summary>

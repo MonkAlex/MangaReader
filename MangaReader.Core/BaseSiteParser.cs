@@ -1,12 +1,18 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.EquivalencyExpression;
+using HtmlAgilityPack;
+using MangaReader.Core.Account;
 using MangaReader.Core.DataTrasferObject;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core
 {
@@ -99,7 +105,7 @@ namespace MangaReader.Core
 
     public abstract IEnumerable<byte[]> GetPreviews(IManga manga);
 
-    public abstract IEnumerable<IManga> Search(string name);
+    public abstract IAsyncEnumerable<IManga> Search(string name);
 
     public virtual IMapper GetMapper()
     {

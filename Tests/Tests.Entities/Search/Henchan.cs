@@ -21,7 +21,7 @@ namespace Tests.Entities.Search
 
     private IEnumerable<IManga> Search(string name)
     {
-      return new global::Hentaichan.Parser().Search(name);
+      return new global::Hentaichan.Parser().Search(name).ToEnumerable();
     }
 
   }

@@ -23,9 +23,9 @@ namespace MangaReader.Core.Convertation
       Log.AddFormat("Found {0} manga type settings:", mangaSettings.Count);
       mangaSettings.ForEach(s => Log.AddFormat("Load settings for {0}, guid {1}.", s.MangaName, s.Manga));
 
-      Convert<MangasConverter>(process);
-      Convert<DatabaseConverter>(process);
-      Convert<HistoryConverter>(process);
+      var converters = new List<BaseConverter>(Generic
+        .GetAllTypes<BaseConverter>().Where(t => !typeof(ConfigConverter).IsAssignableFrom(t)).Select(Activator.CreateInstance).OfType<BaseConverter>());
+      ConvertImpl(process, converters);
 
       Log.Add("Convert completed.");
 
@@ -45,6 +45,11 @@ namespace MangaReader.Core.Convertation
     private static void Convert<T>(IProcess process) where T : BaseConverter
     {
       var converters = new List<T>(Generic.GetAllTypes<T>().Select(Activator.CreateInstance).OfType<T>());
+      ConvertImpl(process, converters);
+    }
+
+    private static void ConvertImpl<T>(IProcess process, List<T> converters) where T : BaseConverter
+    {
       converters = converters.OrderBy(c => c.Version).ToList();
       foreach (var converter in converters)
       {

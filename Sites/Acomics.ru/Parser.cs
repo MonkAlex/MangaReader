@@ -198,7 +198,7 @@ namespace Acomics
           link = new Uri(src);
         result = client.DownloadData(link);
       }
-      catch (NullReferenceException ex) { Log.Exception(ex); }
+      catch (Exception ex) { Log.Exception(ex); }
       yield return result;
     }
 

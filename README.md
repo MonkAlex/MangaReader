@@ -2,7 +2,7 @@
 
 [![Supported platforms][badge-platforms]][Releases] [![Latest release][badge-release]][Releases] [![Open issues][badge-issues]][Issues] 
 
-[![Build status](https://ci.appveyor.com/api/projects/status/p6ge2s4cahiryuxn/branch/AvaloniaUI?svg=true)](https://ci.appveyor.com/project/MonkAlex/mangareader/branch/AvaloniaUI) [![codecov](https://codecov.io/gh/MonkAlex/MangaReader/branch/AvaloniaUI/graph/badge.svg)](https://codecov.io/gh/MonkAlex/MangaReader)
+[![Build status](https://ci.appveyor.com/api/projects/status/p6ge2s4cahiryuxn/branch/master?svg=true)](https://ci.appveyor.com/project/MonkAlex/mangareader/branch/master) [![codecov](https://codecov.io/gh/MonkAlex/MangaReader/branch/master/graph/badge.svg)](https://codecov.io/gh/MonkAlex/MangaReader)
 ***
 
 Программа предназначеня для скачивания манги с онлайн читалок.
@@ -10,7 +10,7 @@
 На текущий момент поддерживаются:
  1. [ReadManga](http://readmanga.me)
  2. [MintManga](http://mintmanga.com) (бывший adultmanga.ru)
- 3. [Hentaichan](http://henchan.me)
+ 3. [Hentaichan](http://hentai-chan.me/)
  4. [Acomics](https://acomics.ru)
  5. [Mangachan](http://mangachan.me/)
 
@@ -20,7 +20,7 @@
 
 Всё добро под лицензией [MIT][License]
 
-Отдельное спасибо JetBrains за Open Source [лицензию на ReSharper](http://www.jetbrains.com/resharper/), <img src="http://www.jetbrains.com/company/docs/logo_jetbrains.png"/>
+Отдельное спасибо JetBrains за Open Source [лицензию на ReSharper](http://www.jetbrains.com/resharper/), <img src="https://raw.githubusercontent.com/JetBrains/logos/master/web/jetbrains/jetbrains.svg?sanitize=true"/>
 
 ***
 

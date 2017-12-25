@@ -4,6 +4,7 @@
         xmlns:properties="clr-namespace:MangaReader.Properties"
         xmlns:ui="clr-namespace:MangaReader.UI"
         xmlns:xaml="clr-namespace:Markdown.Xaml"
+        xmlns:commands="clr-namespace:MangaReader.ViewModel.Commands"
         Title="{x:Static properties:Strings.Update_Title}" 
         Width="{Binding Path=Owner.Width, RelativeSource={RelativeSource Self}}" 
         Height="{Binding Path=Owner.Height, RelativeSource={RelativeSource Self}}" 
@@ -15,6 +16,7 @@
                 <ResourceDictionary.MergedDictionaries>
                     <ResourceDictionary Source="MarkdownStyles.xaml"/>
                 </ResourceDictionary.MergedDictionaries>
+                <commands:NavigationFromHistory x:Key="NavigationFromHistory"/>
                 <xaml:Markdown x:Key="Markdown"
                         DocumentStyle="{StaticResource DocumentStyle}"
                         Heading1Style="{StaticResource H1Style}"
@@ -23,6 +25,7 @@
                         Heading4Style="{StaticResource H4Style}"
                         LinkStyle="{StaticResource LinkStyle}"
                         ImageStyle="{StaticResource ImageStyle}"
+                        HyperlinkCommand="{StaticResource NavigationFromHistory}"
                         SeparatorStyle="{StaticResource SeparatorStyle}"/>
 
                 <ui:TextToFlowDocumentConverter x:Key="MdToFlow" 
@@ -38,6 +41,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <FlowDocumentScrollViewer Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
+                                  IsSelectionEnabled="False"
                                   Document="{Binding History, Converter={StaticResource MdToFlow}}"/>
         <Button Content="Ok" Grid.Row="1" Grid.Column="1" Click="Ok_Click" IsDefault="True"/>
         <StatusBar  Grid.Row="1" Grid.Column="0">

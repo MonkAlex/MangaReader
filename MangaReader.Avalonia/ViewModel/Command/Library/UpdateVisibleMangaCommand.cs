@@ -14,7 +14,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Library
       base.Execute(parameter);
 
       if (Library.IsAvaible)
-        await Library.ThreadAction(() => Library.Update(viewModel.FilteredItems.Select(i => i.Id)));
+        await Library.ThreadAction(() => Library.Update(viewModel.FilteredItems.Select(i => i.Id).ToList()));
     }
 
     public UpdateVisibleMangaCommand(LibraryViewModel viewModel, Core.Services.LibraryViewModel model) : base(model)

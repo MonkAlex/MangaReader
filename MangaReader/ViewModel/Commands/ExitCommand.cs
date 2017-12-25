@@ -14,6 +14,7 @@ namespace MangaReader.ViewModel.Commands
     {
       if (!CommandRunned)
       {
+        base.Execute(parameter);
         CommandRunned = true;
 
         Log.Add("Application will be closed.");

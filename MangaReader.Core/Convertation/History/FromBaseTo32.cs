@@ -55,6 +55,8 @@ namespace MangaReader.Core.Convertation.History
         if (histories.Any())
           process.ProgressState = ProgressState.Normal;
 
+        TryFillHistory(process, context, mangas, histories);
+        
         // Актуализируем старые ссылки, с учетом переездов сайтов.
         var mangaSettings = Repository.GetStateless<MangaSetting>();
         foreach (var history in histories)
@@ -76,19 +78,7 @@ namespace MangaReader.Core.Convertation.History
           }
         }
 
-        using (var tranc = context.OpenTransaction())
-        {
-          foreach (var manga in mangas)
-          {
-            process.Percent += 100.0 / mangas.Count;
-            var mangaHistory = histories.Where(h => h.MangaUrl == manga.Uri.OriginalString ||
-                                                    h.Uri.OriginalString.Contains(manga.Uri.OriginalString + "/")).ToList();
-            manga.Histories.AddRange(mangaHistory);
-            histories.RemoveAll(h => mangaHistory.Contains(h));
-            context.SaveOrUpdate(manga);
-          }
-          tranc.Commit();
-        }
+        TryFillHistory(process, context, mangas, histories);
 
         using (var tranc = context.OpenTransaction())
         {
@@ -119,9 +109,27 @@ namespace MangaReader.Core.Convertation.History
       Backup.MoveToBackup(HistoryFile);
     }
 
+    private static void TryFillHistory(IProcess process, RepositoryContext context, List<IManga> mangas, List<MangaHistory> histories)
+    {
+      using (var tranc = context.OpenTransaction())
+      {
+        foreach (var manga in mangas)
+        {
+          process.Percent += 100.0 / mangas.Count;
+          var mangaHistory = histories.Where(h => h.MangaUrl == manga.Uri.OriginalString ||
+                                                  h.Uri.OriginalString.Contains(manga.Uri.OriginalString + "/")).ToList();
+          manga.Histories.AddRange(mangaHistory);
+          histories.RemoveAll(h => mangaHistory.Contains(h));
+          context.SaveOrUpdate(manga);
+        }
+        tranc.Commit();
+      }
+    }
+
     public FromBaseTo32()
     {
       this.CanReportProcess = true;
+      this.Version = new Version(1, 0, 2);
     }
   }
 }

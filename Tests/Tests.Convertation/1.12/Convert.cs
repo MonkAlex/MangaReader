@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using MangaReader.Core.Manga;
@@ -15,6 +16,8 @@ namespace Tests.Convertation._1._12
     public void Convert_1_12_to_main()
     {
       Environment.DeployToRoot(Path.Combine("Tests.Convertation", "1.12"));
+
+      var startDate = DateTime.Now;
 
       MangaReader.Core.Client.Init();
       MangaReader.Core.Client.Start(new ReportProcess());
@@ -60,7 +63,7 @@ namespace Tests.Convertation._1._12
         Assert.AreEqual(153, loadedHistoryRecord.Count(h => h.Url.Contains("strawberry_100")));
         Assert.AreEqual(5, loadedHistoryRecord.Count(h => h.Url.Contains("amnesia_labyrinth")));
         Assert.AreEqual(252, loadedHistoryRecord.Count(h => h.Url.Contains("the_world_god_only_knows")));
-        Assert.AreEqual(43, loadedHistoryRecord.Count(h => h.Url.Contains("kiba_no_tabishounin___the_arms_peddler")));
+        Assert.AreEqual(43, loadedHistoryRecord.Count(h => h.Url.Contains("the_arms_peddler")));
         Assert.AreEqual(211, loadedHistoryRecord.Count(h => h.Url.Contains("a_town_where_you_live")));
         Assert.AreEqual(70, loadedHistoryRecord.Count(h => h.Url.Contains("kissxsis")));
         Assert.AreEqual(17, loadedHistoryRecord.Count(h => h.Url.Contains("coloured_in_love_maple")));
@@ -68,6 +71,8 @@ namespace Tests.Convertation._1._12
 
         Assert.AreEqual(loadedMangas.Sum(m => m.Histories.Count()), loadedHistoryRecord.Count);
         Assert.AreEqual(2772, loadedHistoryRecord.Count);
+        // 1.12 history create records now.
+        Assert.Less(startDate, loadedMangas.Min(m => m.Created));
       }
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Properties;
@@ -6,12 +7,14 @@ using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands.Manga
 {
-  public class OpenUrlMangaCommand : MangaBaseCommand
+  public class OpenUrlMangaCommand : MultipleMangasBaseCommand
   {
-    public override void Execute(IManga manga)
+    public override void Execute(IEnumerable<IManga> mangas)
     {
-      base.Execute(manga);
-      Process.Start(manga.Uri.OriginalString);
+      foreach (var manga in mangas)
+      {
+        Process.Start(manga.Uri.OriginalString);
+      }
     }
 
     public override bool CanExecute(object parameter)
@@ -19,7 +22,7 @@ namespace MangaReader.ViewModel.Commands.Manga
       return true;
     }
 
-    public OpenUrlMangaCommand(LibraryViewModel model) : base(model)
+    public OpenUrlMangaCommand(MainPageModel model) : base(model)
     {
       this.Name = Strings.Manga_Action_View;
       this.Icon = "pack://application:,,,/Icons/Manga/www.png";

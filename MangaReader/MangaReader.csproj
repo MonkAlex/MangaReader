@@ -127,7 +127,6 @@
     <Compile Include="UI\MainForm\Table.xaml.cs">
       <DependentUpon>Table.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\GridSort.cs" />
     <Compile Include="UI\GridViewColumnResize.cs" />
     <Compile Include="UI\AddNewManga\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
@@ -162,11 +161,14 @@
     <Compile Include="ViewModel\AddNewManga\AddFromUri.cs" />
     <Compile Include="ViewModel\AddNewManga\AddNewModel.cs" />
     <Compile Include="ViewModel\Commands\Manga\MangaSaveCommand.cs" />
+    <Compile Include="ViewModel\Commands\Manga\OpenFolderCommandBase.cs" />
+    <Compile Include="ViewModel\Commands\NavigationFromHistory.cs" />
     <Compile Include="ViewModel\Commands\Navigation\FirstMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\Navigation\LastMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\Navigation\NextMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\Navigation\PreviousMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\OpenWikiCommand.cs" />
+    <Compile Include="ViewModel\Commands\Primitives\MultipleMangasBaseCommand.cs" />
     <Compile Include="ViewModel\Commands\Primitives\NavigationCommand.cs" />
     <Compile Include="ViewModel\Manga\MangaModel.cs" />
     <Compile Include="ViewModel\Primitive\ImageSourceVM.cs" />
@@ -183,7 +185,6 @@
     <Compile Include="ViewModel\Commands\Manga\OpenUrlMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\PauseCommand.cs" />
     <Compile Include="ViewModel\Commands\Primitives\ContextMenuItemHelper.cs" />
-    <Compile Include="ViewModel\Commands\Primitives\MangaBaseCommand.cs" />
     <Compile Include="ViewModel\Commands\Manga\DeleteMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\Manga\ShowPropertiesMangaCommand.cs" />
     <Compile Include="ViewModel\Commands\Primitives\LibraryBaseCommand.cs" />
@@ -212,6 +213,8 @@
     <Compile Include="ViewModel\Primitive\ProcessModel.cs" />
     <Compile Include="ViewModel\Setting\SettingModel.cs" />
     <Compile Include="ViewModel\Setting\SettingViewModel.cs" />
+    <Compile Include="ViewModel\Setting\SortDto.cs" />
+    <Compile Include="ViewModel\Setting\SortModel.cs" />
     <Compile Include="ViewModel\ShutdownViewModel.cs" />
     <Compile Include="ViewModel\TaskbarIconModel.cs" />
     <Compile Include="ViewModel\VersionHistoryModel.cs" />

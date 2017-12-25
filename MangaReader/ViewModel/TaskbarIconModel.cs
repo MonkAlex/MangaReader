@@ -62,7 +62,7 @@ namespace MangaReader.ViewModel
       this.icon.TrayBalloonTipClicked += (sender, args) =>
       {
         if (LastShowed != null)
-          new OpenFolderCommand(library).Execute(LastShowed);
+          new OpenFolderCommandBase().Execute(LastShowed);
       };
     }
 

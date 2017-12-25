@@ -1,4 +1,6 @@
-﻿using MangaReader.Core.Manga;
+﻿using System.Collections.Generic;
+using System.Linq;
+using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
@@ -6,7 +8,7 @@ using MangaReader.ViewModel.Manga;
 
 namespace MangaReader.ViewModel.Commands.Manga
 {
-  public class ShowPropertiesMangaCommand : MangaBaseCommand
+  public class ShowPropertiesMangaCommand : MultipleMangasBaseCommand
   {
     private MangaModel model;
 
@@ -16,14 +18,19 @@ namespace MangaReader.ViewModel.Commands.Manga
       base.Execute(parameter);
     }
 
-    public override void Execute(IManga manga)
+    public override void Execute(IEnumerable<IManga> mangas)
     {
-      base.Execute(manga);
       model.Show();
     }
 
-    public ShowPropertiesMangaCommand(LibraryViewModel model) : base(model)
+    public override bool CanExecute(object parameter)
     {
+      return base.CanExecute(parameter) && SelectedModels.Count() == 1;
+    }
+
+    public ShowPropertiesMangaCommand(MainPageModel model) : base(model)
+    {
+      CanExecuteNeedSelection = true;
       this.Name = Strings.Manga_Settings;
       this.Icon = "pack://application:,,,/Icons/Manga/settings.png";
     }

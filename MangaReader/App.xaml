@@ -9,6 +9,7 @@
              ShutdownMode="OnExplicitShutdown"
              Exit="App_OnExit">
   <Application.Resources>
+    <BooleanToVisibilityConverter x:Key="B2V"/>
     <DataTemplate DataType="{x:Type primitive:ImageSourceVM}">
       <Image Source="{Binding Source}" Width="24" Height="24"/>
     </DataTemplate>
@@ -61,12 +62,13 @@
 
     <Style x:Key="ListViewItemButton" TargetType="ListViewItem">
       <Setter Property="Focusable" Value="False"/>
+      <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource B2V}}"/>
       <Setter Property="ContentTemplate">
         <Setter.Value>
           <DataTemplate>
             <Button Command="{Binding Command}"
-                                Style="{StaticResource IconButton}"
-                                CommandParameter="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}}"/>
+                    Style="{StaticResource IconButton}"
+                    CommandParameter="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}}"/>
           </DataTemplate>
         </Setter.Value>
       </Setter>
@@ -78,6 +80,7 @@
       <Setter Property="Command" Value="{Binding Command}"/>
       <Setter Property="ItemsSource" Value="{Binding SubItems}"/>
       <Setter Property="FontWeight" Value="{Binding FontWeight}"/>
+      <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource B2V}}"/>
       <Setter Property="CommandParameter" Value="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
     </Style>
 

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mainForm="clr-namespace:MangaReader.UI.MainForm"
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="400">
     <Grid>
@@ -24,7 +25,7 @@
             </RichTextBox>
         </DockPanel>
         <ToolBarPanel HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.Column="0">
-            <ListView BorderThickness="0" ItemsSource="{Binding MangaMenu}" ItemContainerStyle="{StaticResource ListViewItemButton}"/>
+            <ListView BorderThickness="0" ItemsSource="{Binding DataContext.MangaMenu, RelativeSource={RelativeSource AncestorType=mainForm:BaseForm}}" ItemContainerStyle="{StaticResource ListViewItemButton}"/>
         </ToolBarPanel>
     </Grid>
 </UserControl>

@@ -141,6 +141,8 @@ namespace MangaReader.Core.Manga
     [XmlIgnore]
     public virtual ICollection<MangaHistory> Histories { get; protected set; }
 
+    public virtual DateTime? Created { get; set; }
+
     [XmlIgnore]
     public virtual ICollection<Volume> Volumes { get; set; }
 
@@ -396,7 +398,7 @@ namespace MangaReader.Core.Manga
 
       catch (AggregateException ae)
       {
-        foreach (var ex in ae.InnerExceptions)
+        foreach (var ex in ae.Flatten().InnerExceptions)
           Log.Exception(ex);
       }
       catch (System.Exception ex)
@@ -552,6 +554,8 @@ namespace MangaReader.Core.Manga
           if (plugin != null)
           {
             manga = Activator.CreateInstance(plugin.MangaType) as IManga;
+            if (manga != null)
+              manga.Created = DateTime.Now;
             if (manga is Mangas mangas)
               mangas.Setting = setting;
           }
@@ -578,9 +582,9 @@ namespace MangaReader.Core.Manga
       var manga = Create(uri);
       if (manga != null)
       {
-        // Только для местной реализации - вызвать Created\Refresh.
+        // Только для местной реализации - вызвать CreatedFromWeb\Refresh.
         if (manga is Mangas mangas)
-          mangas.Created(uri);
+          mangas.CreatedFromWeb(uri);
 
         if (manga.IsValid())
           manga.Save();
@@ -589,7 +593,7 @@ namespace MangaReader.Core.Manga
       return manga;
     }
 
-    protected virtual void Created(Uri url)
+    protected virtual void CreatedFromWeb(Uri url)
     {
       this.Refresh();
     }

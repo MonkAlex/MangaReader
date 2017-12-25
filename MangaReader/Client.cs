@@ -6,10 +6,12 @@ using System.Windows.Shell;
 using System.Windows.Threading;
 using MangaReader.Core.ApplicationControl;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 using MangaReader.Services;
 using MangaReader.UI.Services;
 using MangaReader.ViewModel;
 using MangaReader.ViewModel.Commands;
+using MangaReader.ViewModel.Commands.Setting;
 using WindowState = System.Windows.WindowState;
 
 namespace MangaReader
@@ -48,11 +50,20 @@ namespace MangaReader
 
       // Обновление списка часто используемых элементов
       jumpList.Apply();
-      
-      var model = new Initialize();
-      model.Show();
 
-      WindowModel.Instance.Show();
+      var initialize = new Initialize();
+      var args = Environment.GetCommandLineArgs();
+      if (args.Contains("-m") || args.Contains("/min") || ConfigStorage.Instance.AppConfig.StartMinimizedToTray)
+      {
+        initialize.InitializeSilent();
+        WindowModel.Instance.InitializeSilent();
+        SaveSettingsCommand.ValidateMangaPaths();
+      }
+      else
+      {
+        initialize.Show();
+        WindowModel.Instance.Show();
+      }
     }
 
     private static async void ClientOnClientUpdated(object sender, Version version)

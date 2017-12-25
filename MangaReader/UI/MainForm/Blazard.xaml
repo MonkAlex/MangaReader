@@ -18,7 +18,7 @@
               ItemsSource="{Binding Menu}" ItemContainerStyle="{StaticResource ContentMenuItem}"/>
 
         <base:Filter Grid.Row="1" DataContext="{Binding LibraryFilter}"/>
-        <mangaUi:BlazardManga Grid.Row="2" DataContext="{Binding View.CurrentItem}"/>
+        <mangaUi:BlazardManga Grid.Row="2" DataContext="{Binding View.CurrentItem}" DataContextChanged="FrameworkElement_OnDataContextChanged"/>
         <ToolBarPanel HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Row="3" Orientation="Horizontal">
             <ListView BorderThickness="0" ItemsSource="{Binding NavigationMenu}" ItemContainerStyle="{StaticResource ListViewItemButton}">
                 <ListView.ItemsPanel>

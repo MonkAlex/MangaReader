@@ -48,6 +48,11 @@ namespace MangaReader.ViewModel
     public override void Show()
     {
       base.Show();
+      InitializeSilent().Show();
+    }
+
+    public Window InitializeSilent()
+    {
       var window = ViewService.Instance.TryGet<System.Windows.Window>(this);
       if (window != null)
       {
@@ -55,7 +60,6 @@ namespace MangaReader.ViewModel
         window.Closing += (o, a) => WindowOnClosing(window, a);
 
         ConfigStorage.Instance.ViewConfig.UpdateWindowState(window);
-        window.Show();
       }
       model = new MainPageModel();
       UpdateAll = new UpdateAllCommand(model.Library);
@@ -69,6 +73,7 @@ namespace MangaReader.ViewModel
       model.Show();
 
       Client.ClientOnClientBeenClosed(this, EventArgs.Empty);
+      return window;
     }
 
     private void LibraryOnPropertyChanged(object sender, PropertyChangedEventArgs args)
@@ -151,12 +156,6 @@ namespace MangaReader.ViewModel
     {
       if (ConfigStorage.Instance.AppConfig.MinimizeToTray && sender.WindowState == System.Windows.WindowState.Minimized)
         sender.Hide();
-    }
-
-    public void Refresh()
-    {
-      if (model != null && model.View != null)
-        model.View.Refresh();
     }
 
     public void Dispose()

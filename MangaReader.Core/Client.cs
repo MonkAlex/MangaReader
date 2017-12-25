@@ -31,7 +31,12 @@ namespace MangaReader.Core
       AppDomain.CurrentDomain.UnhandledException += (o, a) => Log.Exception(a.ExceptionObject as System.Exception);
 
       // Все необработанные в тасках (и забытые) - пробрасываем наружу, пусть пока падает в такой ситуации, чем зависает.
-      TaskScheduler.UnobservedTaskException += (o, a) => { a.SetObserved(); throw a.Exception; };
+      TaskScheduler.UnobservedTaskException += (o, a) =>
+      {
+        Log.Exception(a.Exception, "UnobservedTaskException");
+        a.SetObserved();
+        throw a.Exception;
+      };
     }
 
     public static void Start(IProcess process)

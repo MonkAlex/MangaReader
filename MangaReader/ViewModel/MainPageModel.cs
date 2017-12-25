@@ -36,6 +36,8 @@ namespace MangaReader.ViewModel
 
     public ObservableCollection<MangaModel> MangaViewModels { get; private set; }
 
+    public ObservableCollection<MangaModel> SelectedMangaModels { get; }
+
     public LibraryFilter LibraryFilter { get; set; }
 
     public IDownloadable LastDownload
@@ -89,6 +91,18 @@ namespace MangaReader.ViewModel
     }
 
     public ObservableCollection<ContentMenuItem> NavigationMenu { get; set; }
+
+    private ObservableCollection<ContentMenuItem> mangaMenu;
+
+    public ObservableCollection<ContentMenuItem> MangaMenu
+    {
+      get { return mangaMenu; }
+      set
+      {
+        mangaMenu = value;
+        OnPropertyChanged();
+      }
+    }
 
     internal virtual bool Filter(object o)
     {
@@ -145,7 +159,8 @@ namespace MangaReader.ViewModel
       LibraryFilter = ConfigStorage.Instance.ViewConfig.LibraryFilter;
       this.Library = new LibraryViewModel();
       using (var context = Repository.GetEntityContext())
-        this.MangaViewModels = new ObservableCollection<MangaModel>(context.Get<IManga>().Select(m => new MangaModel(m, Library)));
+        this.MangaViewModels = new ObservableCollection<MangaModel>(context.Get<IManga>().Select(m => new MangaModel(m)));
+      this.SelectedMangaModels = new ObservableCollection<MangaModel>();
       Library.LibraryChanged += LibraryOnLibraryChanged;
       View = new ListCollectionView(MangaViewModels)
       {
@@ -180,6 +195,20 @@ namespace MangaReader.ViewModel
       this.Menu.Add(setting);
       this.Menu.Add(about);
 
+      this.MangaMenu = new ObservableCollection<ContentMenuItem>
+      {
+        new OpenFolderCommand(this),
+        new ChangeUpdateMangaCommand(false, this),
+        new ChangeUpdateMangaCommand(true, this),
+        new UpdateMangaCommand(this),
+        new CompressMangaCommand(this),
+        new OpenUrlMangaCommand(this),
+        new HistoryClearMangaCommand(this),
+        new DeleteMangaCommand(this),
+        new ShowPropertiesMangaCommand(this)
+      };
+      this.MangaMenu.First().IsDefault = true;
+
       #endregion
 
       this.NavigationMenu = new ObservableCollection<ContentMenuItem>
@@ -195,21 +224,44 @@ namespace MangaReader.ViewModel
 
     private class MangaComparerImpl : IComparer, IComparer<IManga>
     {
+      private static LibraryFilter setting = ConfigStorage.Instance.ViewConfig.LibraryFilter;
+
       public int Compare(object x, object y)
       {
         if (x is MangaModel xM && y is MangaModel yM)
-          return Compare(xM.Name, yM.Name);
+        {
+          if (setting.SortDescription.PropertyName == nameof(IManga.Created))
+            return CompareByDate(xM.Created, yM.Created);
+          if (setting.SortDescription.PropertyName == nameof(IManga.DownloadedAt))
+            return CompareByDate(xM.DownloadedAt, yM.DownloadedAt);
+          return CompareByName(xM.Name, yM.Name);
+        }
         throw new MangaReaderException("Can compare only Mangas.");
       }
 
-      private static int Compare(string x, string y)
+      private static int CompareByDate(DateTime? x, DateTime? y)
       {
-        return string.Compare(x, y, StringComparison.Ordinal);
+        if (setting.SortDescription.Direction == ListSortDirection.Ascending)
+          return DateTime.Compare(x ?? DateTime.MinValue, y ?? DateTime.MinValue);
+
+        return DateTime.Compare(y ?? DateTime.MinValue, x ?? DateTime.MinValue);
+      }
+
+      private static int CompareByName(string x, string y)
+      {
+        if (setting.SortDescription.Direction == ListSortDirection.Ascending)
+          return string.Compare(x, y, StringComparison.InvariantCultureIgnoreCase);
+
+        return string.Compare(y, x, StringComparison.InvariantCultureIgnoreCase);
       }
 
       public int Compare(IManga x, IManga y)
       {
-        return Compare(x.Name, y.Name);
+        if (setting.SortDescription.PropertyName == nameof(IManga.Created))
+          return CompareByDate(x.Created, y.Created);
+        if (setting.SortDescription.PropertyName == nameof(IManga.DownloadedAt))
+          return CompareByDate(x.DownloadedAt, y.DownloadedAt);
+        return CompareByName(x.Name, y.Name);
       }
     }
 
@@ -222,7 +274,7 @@ namespace MangaReader.ViewModel
         {
           case MangaOperation.Added:
             if (model == null)
-              Client.Dispatcher.Invoke(() => this.MangaViewModels.Add(new MangaModel(args.Manga, Library)));
+              Client.Dispatcher.Invoke(() => this.MangaViewModels.Add(new MangaModel(args.Manga)));
             break;
           case MangaOperation.Deleted:
             if (model != null)

@@ -15,6 +15,7 @@ namespace MangaReader.ViewModel.Setting
     private Languages language;
     private string autoUpdateHours;
     private SkinSetting skin;
+    private bool startAppMinimizedToTray;
 
     public bool UpdateReader
     {
@@ -68,9 +69,21 @@ namespace MangaReader.ViewModel.Setting
       }
     }
 
+    public bool StartAppMinimizedToTray
+    {
+      get { return startAppMinimizedToTray; }
+      set
+      {
+        startAppMinimizedToTray = value;
+        OnPropertyChanged();
+      }
+    }
+
     public IReadOnlyList<SkinSetting> SkinSettings { get; private set; }
 
     public FolderNamingModel FolderNamingStrategy { get; set; }
+
+    public SortModel Sort { get; set; }
 
     public override void Save()
     {
@@ -80,6 +93,7 @@ namespace MangaReader.ViewModel.Setting
       appConfig.Language = Language;
       appConfig.UpdateReader = UpdateReader;
       appConfig.MinimizeToTray = MinimizeToTray;
+      appConfig.StartMinimizedToTray = StartAppMinimizedToTray;
 
       int hour;
       if (int.TryParse(AutoUpdateHours, out hour))
@@ -88,6 +102,8 @@ namespace MangaReader.ViewModel.Setting
       var viewConfig = ConfigStorage.Instance.ViewConfig;
       if (Skin.Guid != Default.DefaultGuid || viewConfig.SkinGuid != Guid.Empty)
         viewConfig.SkinGuid = Skin.Guid;
+
+      viewConfig.LibraryFilter.SortDescription = Sort.SelectedDescription;
 
       using (var context = Repository.GetEntityContext())
       {
@@ -109,6 +125,7 @@ namespace MangaReader.ViewModel.Setting
       this.Language = appConfig.Language;
       this.AutoUpdateHours = appConfig.AutoUpdateInHours.ToString();
       this.Skin = Skins.GetSkinSetting(ConfigStorage.Instance.ViewConfig.SkinGuid);
+      this.StartAppMinimizedToTray = appConfig.StartMinimizedToTray;
 
       this.FolderNamingStrategy = new FolderNamingModel();
       using (var context = Repository.GetEntityContext())
@@ -116,6 +133,11 @@ namespace MangaReader.ViewModel.Setting
         var config = context.Get<DatabaseConfig>().Single();
         this.FolderNamingStrategy.SelectedGuid = config.FolderNamingStrategy;
       }
+
+      this.Sort = new SortModel();
+      var appSort = ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription;
+      if (appSort.PropertyName != null)
+        Sort.SelectedDescription = appSort;
     }
   }
 }

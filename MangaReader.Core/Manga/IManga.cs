@@ -39,6 +39,8 @@ namespace MangaReader.Core.Manga
 
     ICollection<MangaHistory> Histories { get; }
 
+    System.DateTime? Created { get; set; }
+
     bool NeedUpdate { get; set; }
 
     bool IsValid();

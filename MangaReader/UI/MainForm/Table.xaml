@@ -6,9 +6,6 @@
         xmlns:resx="clr-namespace:MangaReader.Properties"
         xmlns:logViewer="clr-namespace:MangaReader.UI.LogViewer"
         Title="{x:Static resx:Strings.Title}"  MinHeight="350" MinWidth="525">
-  <base:BaseForm.Resources>
-    <BooleanToVisibilityConverter x:Key="B2V"/>
-  </base:BaseForm.Resources>
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
@@ -19,11 +16,14 @@
     <ListView x:Name="FormLibrary" 
               Grid.Row="1"
               ItemsSource="{Binding View}"
+              SelectionChanged="FormLibrary_OnSelectionChanged"
               MouseDown="ListView_MouseDown"
-              SelectionMode="Single"
+              SelectionMode="Extended"
               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-              ui:GridViewColumnResize.Enabled="True"
-              ui:GridSort.AutoSort="True">
+              ui:GridViewColumnResize.Enabled="True">
+      <ListView.Resources>
+        <ContextMenu x:Key="LibraryContextMenu" ItemContainerStyle="{StaticResource ContentMenuItem}" Initialized="MangaContentMenuInitialized"/>
+      </ListView.Resources>
       <ListView.ItemContainerStyle>
         <Style TargetType="{x:Type ListViewItem}">
           <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Mangas_clicked"/>
@@ -33,11 +33,7 @@
           <Setter Property="SnapsToDevicePixels" Value="True"/>
           <Setter Property="HorizontalContentAlignment" Value="Stretch" />
           <Setter Property="VerticalContentAlignment" Value="Stretch" />
-          <Setter Property="ContextMenu">
-            <Setter.Value>
-              <ContextMenu ItemsSource="{Binding MangaMenu}" ItemContainerStyle="{StaticResource ContentMenuItem}"/>
-            </Setter.Value>
-          </Setter>
+          <Setter Property="ContextMenu" Value="{StaticResource LibraryContextMenu}"/>
           <Setter Property="Template">
             <Setter.Value>
               <ControlTemplate TargetType="{x:Type ListViewItem}">
@@ -74,7 +70,7 @@
                   </Trigger>
 
                   <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Background" Value="LightGray" />
                   </Trigger>
 
                   <Trigger Property="IsEnabled" Value="False">
@@ -101,11 +97,8 @@
               </GridViewColumn.CellTemplate>
             </GridViewColumn>
             <GridViewColumn Header="{x:Static resx:Strings.Manga_Name}" DisplayMemberBinding="{Binding Path=Name}"
-                            ui:GridViewColumnResize.Width="*"
-                            ui:GridSort.PropertyName="Name"
-                            ui:GridSort.ShowSortGlyph="True"/>
-            <GridViewColumn Header="{x:Static resx:Strings.Manga_Update}"
-                            ui:GridSort.PropertyName="NeedUpdate">
+                            ui:GridViewColumnResize.Width="*"/>
+            <GridViewColumn Header="{x:Static resx:Strings.Manga_Update}">
               <GridViewColumn.CellTemplate>
                 <DataTemplate>
                   <Grid>
@@ -115,8 +108,7 @@
               </GridViewColumn.CellTemplate>
             </GridViewColumn>
             <GridViewColumn Header="{x:Static resx:Strings.Manga_Downloaded}"
-                                        Width="100"
-                            ui:GridSort.PropertyName="Downloaded">
+                                        Width="100">
               <GridViewColumn.CellTemplate>
                 <DataTemplate>
                   <Grid>

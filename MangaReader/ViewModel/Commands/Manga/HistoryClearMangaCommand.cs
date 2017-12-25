@@ -1,4 +1,8 @@
-﻿using MangaReader.Core.Manga;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using MangaReader.Core.Manga;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Properties;
 using MangaReader.Services;
@@ -6,22 +10,26 @@ using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands.Manga
 {
-  public class HistoryClearMangaCommand : MangaBaseCommand
+  public class HistoryClearMangaCommand : MultipleMangasBaseCommand
   {
-    public override void Execute(IManga manga)
+    public override void Execute(IEnumerable<IManga> mangas)
     {
-      base.Execute(manga);
+      var list = mangas.ToList();
 
-      var text = string.Format("Удалить историю {0}?", manga.Name);
+      var text = list.Count == 1 ? $"Удалить историю {list[0].Name}?" :
+        ("Удалить историю?" + Environment.NewLine + string.Join(Environment.NewLine, list.Select(l => $" - {l}")));
       var clear = Dialogs.ShowYesNoDialog("Удаление истории", text, "После удаления истории манга будет скачиваться целиком.");
       if (clear)
       {
-        manga.ClearHistory();
-        manga.Save();
+        foreach (var manga in list)
+        {
+          manga.ClearHistory();
+        }
+        list.SaveAll();
       }
     }
 
-    public HistoryClearMangaCommand(LibraryViewModel model) : base(model)
+    public HistoryClearMangaCommand(MainPageModel model) : base(model)
     {
       this.Name = Strings.Manga_Action_Remove + " историю";
       this.Icon = "pack://application:,,,/Icons/Manga/history_clear.png";

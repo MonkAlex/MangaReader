@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -51,10 +52,11 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     private async void UpdateManga()
     {
       Items.Clear();
+      var uniqueUris = new ConcurrentDictionary<Uri, bool>();
       var searches = ConfigStorage.Plugins.Select(p => p.GetParser().Search(Search)).ToList();
       var tasks = searches.Select(s => Task.Run(() => s.ForEachAsync(a =>
       {
-        if (Items.ToList().All(i => i.Uri != a.Uri))
+        if (uniqueUris.TryAdd(a.Uri, true))
           global::Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => Items.Add(new MangaViewModel(a)));
       })));
       await Task.WhenAll(tasks.Select(t => t.LogException()));

@@ -54,7 +54,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       var searches = ConfigStorage.Plugins.Select(p => p.GetParser().Search(Search)).ToList();
       var tasks = searches.Select(s => Task.Run(() => s.ForEachAsync(a =>
       {
-        if (Items.All(i => i.Uri != a.Uri))
+        if (Items.ToList().All(i => i.Uri != a.Uri))
           global::Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => Items.Add(new MangaViewModel(a)));
       })));
       await Task.WhenAll(tasks.Select(t => t.LogException()));

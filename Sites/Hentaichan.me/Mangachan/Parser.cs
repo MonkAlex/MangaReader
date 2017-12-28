@@ -137,59 +137,34 @@ namespace Hentaichan.Mangachan
       return GetPreviewsImpl(manga);
     }
 
-    public override IAsyncEnumerable<IManga> Search(string name)
+    protected override async Task<Tuple<HtmlNodeCollection, Uri>> GetMangaNodes(string name, Uri host, CookieClient client)
     {
-      return AsyncEnumerable.CreateEnumerable(() =>
+      var searchHost = new Uri(host, "?do=search&subaction=search&story=" + WebUtility.UrlEncode(name));
+      var page = await Page.GetPageAsync(searchHost, client);
+      if (!page.HasContent)
+        return null;
+
+      return await Task.Run(() =>
       {
-        IManga current = null;
-        var mangasPicture = new Queue<Tuple<IManga, Uri>>();
-        var hosts = ConfigStorage.Plugins
-          .Where(p => p.GetParser().GetType() == typeof(Parser))
-          .Select(p => p.GetSettings().MainUri);
-
-        var client = new CookieClient();
-        foreach (var host in hosts)
-        {
-          var searchHost = new Uri(host, "?do=search&subaction=search&story=" + WebUtility.UrlEncode(name));
-          var page = Page.GetPage(searchHost, client);
-          if (!page.HasContent)
-            continue;
-
-          var document = new HtmlDocument();
-          document.LoadHtml(page.Content);
-          var mangas = document.DocumentNode.SelectNodes("//div[@class='content_row']");
-          if (mangas == null)
-            continue;
-
-          foreach (var manga in mangas)
-          {
-            var image = manga.SelectSingleNode(".//div[@class='manga_images']//img");
-            var imageUri = image?.Attributes.Single(a => a.Name == "src").Value;
-
-            var mangaNode = manga.SelectSingleNode(".//h2//a");
-            var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
-            var mangaName = mangaNode.InnerText;
-
-            var result = Mangas.Create(new Uri(mangaUri));
-            result.Name = WebUtility.HtmlDecode(mangaName);
-            mangasPicture.Enqueue(new Tuple<IManga, Uri>(result, new Uri(host, imageUri)));
-          }
-        }
-        // создаём энумератор при помощи готовой фабрики
-        return AsyncEnumerable.CreateEnumerator(
-          moveNext: async ct =>
-          {
-            if (mangasPicture.Count == 0)
-              return false;
-
-            var structure = mangasPicture.Dequeue();
-            structure.Item1.Cover = await client.DownloadDataTaskAsync(structure.Item2);
-            current = structure.Item1;
-            return current != null;
-          },
-          current: () => current,
-          dispose: () => { });
+        var document = new HtmlDocument();
+        document.LoadHtml(page.Content);
+        return new Tuple<HtmlNodeCollection, Uri>(document.DocumentNode.SelectNodes("//div[@class='content_row']"), host);
       });
+    }
+
+    protected override async Task<IManga> GetMangaFromNode(Uri host, CookieClient client, HtmlNode manga)
+    {
+      var image = manga.SelectSingleNode(".//div[@class='manga_images']//img");
+      var imageUri = image?.Attributes.Single(a => a.Name == "src").Value;
+
+      var mangaNode = manga.SelectSingleNode(".//h2//a");
+      var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
+      var mangaName = mangaNode.InnerText;
+
+      var result = Mangas.Create(new Uri(mangaUri));
+      result.Name = WebUtility.HtmlDecode(mangaName);
+      result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri));
+      return result;
     }
 
     internal static IEnumerable<byte[]> GetPreviewsImpl(IManga manga)

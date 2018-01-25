@@ -61,7 +61,7 @@ namespace Hentaichan
                              .OfType<Group>()
                              .Select(g => g.Captures[0])
                              .OfType<Match>()
-                             .Select(m => new Uri(m.Groups[1].Value.Replace("/manga/", "/related/"))))
+                             .Select(m => new Uri(m.Groups[1].Value)))
           .Select(u =>
           {
             var manga = Mangas.Create(u);

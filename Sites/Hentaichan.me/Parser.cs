@@ -19,7 +19,8 @@ namespace Hentaichan
 {
   public class Parser : BaseSiteParser
   {
-    private static readonly string AdultOnly = "Доступ ограничен. Только зарегистрированные пользователи подтвердившие, что им 18 лет.";
+    private const string AdultOnly = "Доступ ограничен. Только зарегистрированные пользователи подтвердившие, что им 18 лет.";
+    private const string IsDevelopment = "?development_access=true";
 
     public static CookieClient GetClient()
     {
@@ -57,13 +58,15 @@ namespace Hentaichan
         var page = Page.GetPage(manga.Uri);
         document.LoadHtml(page.Content);
         var nameNode = document.DocumentNode.SelectSingleNode("//head/title");
-        string[] subString = { "Все главы", "Все части" };
-        if (nameNode != null && subString.Any(s => nameNode.InnerText.Contains(s)))
+        var splitter = "&raquo;";
+        if (nameNode != null && nameNode.InnerText.Contains(splitter))
         {
-          name = subString
-            .Aggregate(nameNode.InnerText, (current, s) => current.Replace(s, string.Empty))
-            .Trim().TrimEnd('-').Trim()
-            .Replace("\\'", "'");
+          var index = nameNode.InnerText.IndexOf(splitter, StringComparison.InvariantCultureIgnoreCase);
+          name = nameNode.InnerText.Substring(0, index);
+          index = name.LastIndexOf('-');
+          if (index > 0)
+            name = name.Substring(0, index);
+          name = name.Trim().TrimEnd('-').Trim().Replace("\\'", "'");
         }
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
@@ -78,39 +81,41 @@ namespace Hentaichan
       try
       {
         var document = new HtmlDocument();
-        var pages = new List<Uri>() { manga.Uri };
-        for (int i = 0; i < pages.Count; i++)
+        var url = manga.Uri.OriginalString.Replace(@"/manga/", @"/online/");
+        var uri = new Uri(url);
+        var page = Page.GetPage(uri, GetClient());
+        if (page.ResponseUri != uri)
         {
-          var content = Page.GetPage(pages[i], GetClient()).Content;
-          if (content.Contains(AdultOnly))
-            throw new GetSiteInfoException(AdultOnly, manga);
-          document.LoadHtml(content);
-
-          // Посчитать странички.
-          if (i == 0)
-          {
-            var pageNodes = document.DocumentNode.SelectNodes("//div[@id=\"pagination_related\"]//a");
-            if (pageNodes != null)
-            {
-              foreach (var node in pageNodes)
-              {
-                pages.Add(new Uri(manga.Uri, manga.Uri.AbsolutePath + node.Attributes[0].Value));
-              }
-              pages = pages.Distinct().ToList();
-            }
-          }
-
-          var chapterNodes = document.DocumentNode.SelectNodes("//div[@class=\"related_info\"]");
+          url = page.ResponseUri.OriginalString;
+          if (!url.EndsWith(IsDevelopment))
+            url += IsDevelopment;
+          uri = new Uri(url);
+          page = Page.GetPage(uri, GetClient());
+        }
+        var content = page.Content;
+        if (content.Contains(AdultOnly))
+          throw new GetSiteInfoException(AdultOnly, manga);
+        document.LoadHtml(content);
+        var headerNode = document.GetElementbyId("right");
+        if (!headerNode.InnerText.Contains("Похожая манга"))
+        {
+          var chapterNodes = headerNode.SelectNodes(".//option");
           if (chapterNodes != null)
           {
             foreach (var node in chapterNodes)
             {
-              var link = node.SelectSingleNode(".//h2//a");
-              var name = node.SelectSingleNode(".//div[@class=\"related_tag_list\"]");
-              var uri = new Uri(manga.Uri, link.Attributes[0].Value);
-              chapters.Add(new ChapterDto(uri, WebUtility.HtmlDecode(name.InnerText)) { Number = HentaichanChapter.GetChapterNumber(uri) });
+              var chapterUri = new Uri(uri, node.Attributes.Single(a => a.Name == "value").Value);
+              chapters.Add(new ChapterDto(chapterUri, WebUtility.HtmlDecode(node.NextSibling.InnerText))
+              {
+                Number = HentaichanChapter.GetChapterNumber(chapterUri)
+              });
             }
           }
+        }
+        else
+        {
+          // Это манга из одной главы.
+          chapters.Add(new ChapterDto(uri, manga.ServerName) { Number = 0 });
         }
       }
       catch (NullReferenceException ex)
@@ -127,7 +132,7 @@ namespace Hentaichan
 
     public override UriParseResult ParseUri(Uri uri)
     {
-      // Manga : http://henchan.me/related/14212-love-and-devil-glava-25.html
+      // Manga : http://henchan.me/manga/14212-love-and-devil-glava-25.html
       // Volume : -
       // Chapter : http://henchan.me/online/14212-love-and-devil-glava-25.html
       // Page : -
@@ -143,12 +148,12 @@ namespace Hentaichan
           continue;
 
         var relativeUri = uri.OriginalString.Remove(0, trimmedHost.Length);
-        var related = "/related/";
-        if (relativeUri.Contains(related))
+        var manga = "/manga/";
+        if (relativeUri.Contains(manga))
           return new UriParseResult(true, UriParseKind.Chapter, uri);
         var online = "/online/";
         if (relativeUri.Contains(online))
-          return new UriParseResult(true, UriParseKind.Chapter, new Uri(uri, relativeUri.Replace(online, related)));
+          return new UriParseResult(true, UriParseKind.Chapter, new Uri(uri, relativeUri.Replace(online, manga)));
       }
 
       return new UriParseResult(false, UriParseKind.Manga, null);

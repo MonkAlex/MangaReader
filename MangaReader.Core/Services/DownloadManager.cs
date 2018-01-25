@@ -33,7 +33,8 @@ namespace MangaReader.Core.Services
       byte[] result;
       WebResponse response;
       var file = new ImageFile();
-      var request = WebRequest.Create(uri);
+      var request = (HttpWebRequest)WebRequest.Create(uri);
+      request.Referer = uri.Host;
 
       try
       {

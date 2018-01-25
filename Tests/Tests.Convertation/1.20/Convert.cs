@@ -49,7 +49,7 @@ namespace Tests.Convertation._1._20
         Assert.AreEqual(47, loadedHistoryRecord.Count(h => h.Url.Contains("dears")));
         Assert.AreEqual(119, loadedHistoryRecord.Count(h => h.Url.Contains("rough")));
         Assert.AreEqual(88, loadedHistoryRecord.Count(h => h.Url.Contains("the_shining_wind")));
-        Assert.AreEqual(53, loadedHistoryRecord.Count(h => h.Url.Contains("gun_dream")));
+        Assert.AreEqual(53, loadedHistoryRecord.Count(h => h.Url.Contains("battle_angel_alita")));
         Assert.AreEqual(37, loadedHistoryRecord.Count(h => h.Url.Contains("hwaja")));
         Assert.AreEqual(52, loadedHistoryRecord.Count(h => h.Url.Contains("limited_weapon")));
         Assert.AreEqual(41, loadedHistoryRecord.Count(h => h.Url.Contains("good_morning_call")));

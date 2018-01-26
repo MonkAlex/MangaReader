@@ -20,6 +20,7 @@ namespace Hentaichan
   public class Parser : BaseSiteParser
   {
     private const string AdultOnly = "Доступ ограничен. Только зарегистрированные пользователи подтвердившие, что им 18 лет.";
+    private const string NeedRegister = "Контент запрещен на территории РФ";
     private const string IsDevelopment = "?development_access=true";
 
     public static CookieClient GetClient()
@@ -65,8 +66,12 @@ namespace Hentaichan
           name = nameNode.InnerText.Substring(0, index);
           index = name.LastIndexOf('-');
           if (index > 0)
-            name = name.Substring(0, index);
-          name = name.Trim().TrimEnd('-').Trim().Replace("\\'", "'");
+          {
+            var rightPart = name.Substring(index).ToLowerInvariant();
+            if (rightPart.Contains("глава") || rightPart.Contains("часть"))
+              name = name.Substring(0, index);
+          }
+          name = name.Trim();
         }
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
@@ -95,6 +100,8 @@ namespace Hentaichan
         var content = page.Content;
         if (content.Contains(AdultOnly))
           throw new GetSiteInfoException(AdultOnly, manga);
+        if (content.Contains(NeedRegister))
+          throw new GetSiteInfoException("Требуется регистрация.", manga);
         document.LoadHtml(content);
         var headerNode = document.GetElementbyId("right");
         if (!headerNode.InnerText.Contains("Похожая манга"))
@@ -124,7 +131,7 @@ namespace Hentaichan
       }
       catch (GetSiteInfoException ex)
       {
-        Log.Exception(ex, string.Format("{0}. {1}", manga.Name, AdultOnly));
+        Log.Exception(ex);
       }
 
       FillMangaChapters(manga, chapters);

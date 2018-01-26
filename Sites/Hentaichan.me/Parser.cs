@@ -86,18 +86,9 @@ namespace Hentaichan
       try
       {
         var document = new HtmlDocument();
-        var url = manga.Uri.OriginalString.Replace(@"/manga/", @"/online/");
-        var uri = new Uri(url);
-        var page = Page.GetPage(uri, GetClient());
-        if (page.ResponseUri != uri)
-        {
-          url = page.ResponseUri.OriginalString;
-          if (!url.EndsWith(IsDevelopment))
-            url += IsDevelopment;
-          uri = new Uri(url);
-          page = Page.GetPage(uri, GetClient());
-        }
-        var content = page.Content;
+        var page = GetPageWithRedirect(manga.Uri);
+        var content = page.Item1.Content;
+        var uri = page.Item2;
         if (content.Contains(AdultOnly))
           throw new GetSiteInfoException(AdultOnly, manga);
         if (content.Contains(NeedRegister))
@@ -135,6 +126,22 @@ namespace Hentaichan
       }
 
       FillMangaChapters(manga, chapters);
+    }
+
+    private static Tuple<Page, Uri> GetPageWithRedirect(Uri uri)
+    {
+      uri = new Uri(uri.OriginalString.Replace(@"/manga/", @"/online/"));
+      var page = Page.GetPage(uri, GetClient());
+      if (page.ResponseUri != uri)
+      {
+        var url = page.ResponseUri.OriginalString;
+        if (!url.EndsWith(IsDevelopment))
+          url += IsDevelopment;
+        uri = new Uri(url);
+        page = Page.GetPage(uri, GetClient());
+      }
+
+      return new Tuple<Page, Uri>(page, uri);
     }
 
     public override UriParseResult ParseUri(Uri uri)
@@ -220,8 +227,8 @@ namespace Hentaichan
       try
       {
         var document = new HtmlDocument();
-        var page = Page.GetPage(new Uri(chapter.Uri.OriginalString.Replace("/manga/", "/online/")), GetClient());
-        document.LoadHtml(page.Content);
+        var page = GetPageWithRedirect(chapter.Uri);
+        document.LoadHtml(page.Item1.Content);
 
         var imgs = Regex.Match(document.DocumentNode.OuterHtml, @"""(fullimg.*)", RegexOptions.IgnoreCase).Groups[1].Value.Remove(0, 9);
         var jsonParsed = JToken.Parse(imgs).Children().ToList();

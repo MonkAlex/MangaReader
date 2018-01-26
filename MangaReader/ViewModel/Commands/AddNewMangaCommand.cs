@@ -13,6 +13,11 @@ namespace MangaReader.ViewModel.Commands
       vm.Show();
     }
 
+    public override bool CanExecute(object parameter)
+    {
+      return true;
+    }
+
     public AddNewMangaCommand(LibraryViewModel model) : base(model)
     {
       this.Name = Strings.Library_Action_Add;

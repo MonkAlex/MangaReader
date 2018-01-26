@@ -244,8 +244,21 @@ namespace MangaReader.Core.Services
             materialized = materialized.OrderBy(m => mangas.IndexOf(m.Id)).ToList();
 
           mangasCount = materialized.Count;
-          foreach (var current in materialized)
+          
+          void OnMangaAddedWhenLibraryUpdating(object sender, LibraryViewModelArgs args)
           {
+            if (args.MangaOperation == MangaOperation.Added)
+            {
+              materialized.Add(args.Manga);
+              mangasCount = materialized.Count;
+              Log.Info($"Манга {args.Manga.Name} добавлена при обновлении и будет загружена автоматически");
+            }
+          }
+
+          LibraryChanged += OnMangaAddedWhenLibraryUpdating;
+          for (var i = 0; i < materialized.Count; i++)
+          {
+            var current = materialized[i];
             DownloadManager.CheckPause().Wait();
 
             Log.Info(Strings.Library_Status_MangaUpdate + current.Name);
@@ -259,6 +272,8 @@ namespace MangaReader.Core.Services
             if (current.IsDownloaded)
               OnLibraryChanged(new LibraryViewModelArgs(null, current, MangaOperation.UpdateCompleted, LibraryOperation.UpdateMangaChanged));
           }
+
+          LibraryChanged -= OnMangaAddedWhenLibraryUpdating;
         }
       }
       catch (AggregateException ae)

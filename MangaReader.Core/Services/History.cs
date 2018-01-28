@@ -9,6 +9,34 @@ namespace MangaReader.Core.Services
 {
   public static class History
   {
+
+    public static void FilterActiveElements(Mangas manga)
+    {
+      var histories = manga.Histories.ToList();
+
+      bool PageMustBeLoaded(MangaPage p)
+      {
+        return p.DownloadedAt == null && histories.All(m => m.Uri != p.Uri);
+      }
+
+      bool ChapterMustBeLoaded(Chapter ch)
+      {
+        if (ch.Container.Any())
+          return histories.All(m => m.Uri != ch.Uri) || ch.Container.Any(PageMustBeLoaded);
+
+        return ch.DownloadedAt == null && histories.All(m => m.Uri != ch.Uri);
+      }
+
+      bool VolumeMustBeLoaded(Volume v)
+      {
+        return v.Container.Any(ChapterMustBeLoaded);
+      }
+
+      manga.ActivePages = manga.ActivePages.Where(PageMustBeLoaded).ToList();
+      manga.ActiveChapters = manga.ActiveChapters.Where(ChapterMustBeLoaded).ToList();
+      manga.ActiveVolumes = manga.ActiveVolumes.Where(VolumeMustBeLoaded).ToList();
+    }
+
     /// <summary>
     /// Вернуть загружаемые элементы, которые не записаны в историю.
     /// </summary>

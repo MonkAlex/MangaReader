@@ -440,8 +440,11 @@ namespace MangaReader.Core.Manga
     /// </summary>
     public virtual void Compress()
     {
-      Log.Info(Strings.Mangas_Compress_Started + this.Name);
       var folder = this.GetAbsoulteFolderPath();
+      if (!Directory.Exists(folder))
+        return;
+
+      Log.Info(Strings.Mangas_Compress_Started + this.Name);
       switch (this.CompressionMode)
       {
         case Compression.CompressionMode.Manga:

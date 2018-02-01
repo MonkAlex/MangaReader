@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -16,12 +17,11 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 {
   public class LibraryViewModel : ExplorerTabViewModel
   {
-    private ObservableCollection<IManga> items;
+    private ObservableCollection<MangaModel> items;
     private string search;
-    private IReactiveDerivedList<IManga> filteredItems;
-    private IManga selectedManga;
+    private IReactiveDerivedList<MangaModel> filteredItems;
 
-    public ObservableCollection<IManga> Items
+    public ObservableCollection<MangaModel> Items
     {
       get
       {
@@ -32,7 +32,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       set { RaiseAndSetIfChanged(ref items, value); }
     }
 
-    public IReactiveDerivedList<IManga> FilteredItems
+    public IReactiveDerivedList<MangaModel> FilteredItems
     {
       get
       {
@@ -43,18 +43,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       private set { RaiseAndSetIfChanged(ref filteredItems, value); }
     }
 
-    public IManga SelectedManga
-    {
-      get { return selectedManga; }
-      set
-      {
-        RaiseAndSetIfChanged(ref selectedManga, value);
-        foreach (var command in Commands)
-        {
-          command.OnCanExecuteChanged();
-        }
-      }
-    }
+    public ObservableCollection<MangaModel> SelectedMangaModels { get; }
 
     public string Search
     {
@@ -78,22 +67,21 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         await Task.Delay(500);
       }
 #warning Тут по идее тоже DTO нужны.
-      List<IManga> mangas;
       using (var context = Core.NHibernate.Repository.GetEntityContext())
       {
-        mangas = context.Get<IManga>().ToList();
+        var mangas = context.Get<IManga>().Select(m => new MangaModel(m)).ToList();
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+          Items = new ObservableCollection<MangaModel>(mangas);
+          FilteredItems = Items.CreateDerivedCollection(
+            x => x,
+            Filter,
+            (original, filtered) => string.Compare(original.Name, filtered.Name, StringComparison.InvariantCultureIgnoreCase));
+        }, DispatcherPriority.ApplicationIdle);
       }
-      Dispatcher.UIThread.InvokeAsync(() =>
-      {
-        Items = new ObservableCollection<IManga>(mangas);
-        FilteredItems = Items.CreateDerivedCollection(
-          x => x,
-          Filter,
-          (original, filtered) => string.Compare(original.Name, filtered.Name, StringComparison.InvariantCultureIgnoreCase));
-      }, DispatcherPriority.ApplicationIdle);
     }
 
-    private bool Filter(IManga manga)
+    private bool Filter(MangaModel manga)
     {
       if (manga == null)
         return false;
@@ -109,10 +97,19 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       this.Name = "Main";
       this.Priority = 10;
       this.Commands = new ObservableCollection<BaseCommand>();
+      this.SelectedMangaModels = new ObservableCollection<MangaModel>();
+      this.SelectedMangaModels.CollectionChanged += SelectedMangaModelsOnCollectionChanged;
       this.Library = new Core.Services.LibraryViewModel();
       this.Library.LibraryChanged += LibraryOnLibraryChanged;
       this.Commands.Add(new UpdateWithPauseCommand(this, Library));
-      this.Commands.Add(new OpenFolderCommand());
+      this.Commands.Add(new OpenFolderCommand(this));
+    }
+
+    private void SelectedMangaModelsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
+    {
+#warning Может и н нужно, комманды вроде и сами достаточно умны.
+      foreach (var command in Commands)
+        command.OnCanExecuteChanged();
     }
 
     private void LibraryOnLibraryChanged(object sender, LibraryViewModelArgs args)
@@ -128,11 +125,15 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
             switch (args.MangaOperation)
             {
               case MangaOperation.Added:
-                this.Items.Add(args.Manga);
+                this.Items.Add(new MangaModel(args.Manga));
                 break;
               case MangaOperation.Deleted:
-                this.Items.Remove(args.Manga);
-                break;
+                {
+                  var mangaModels = this.Items.Where(i => i.Id == args.Manga.Id).ToList();
+                  foreach (var mangaModel in mangaModels)
+                    this.Items.Remove(mangaModel);
+                  break;
+                }
               case MangaOperation.UpdateStarted:
                 break;
               case MangaOperation.UpdateCompleted:

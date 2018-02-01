@@ -112,7 +112,7 @@ namespace MangaReader.Core
         .Where(p => p.GetParser().GetType() == this.GetType())
         .Select(p => p.GetSettings().MainUri);
       return hosts.SelectAsync(async host => await GetMangaNodes(name, host, client))
-        .Where(nc => nc != null)
+        .Where(nc => nc != null && nc.Item1 != null)
         .SelectMany(n => n.Item1.SelectAsync(node => GetMangaFromNode(n.Item2, client, node)))
         .Where(m => m != null);
     }

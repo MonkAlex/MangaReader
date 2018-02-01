@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:av="clr-namespace:MangaReader.Avalonia;assembly=MangaReader.Avalonia"
         xmlns:c="clr-namespace:MangaReader.Avalonia.ViewModel.Explorer;assembly=MangaReader.Avalonia"
-        MinWidth="500" MinHeight="300"
+        MinWidth="800" MinHeight="600"
         Title="{Binding SelectedTab.Name}">
   <Window.DataTemplates>
     <DataTemplate DataType="c:LibraryViewModel">
@@ -11,7 +11,8 @@
         <ListBox Grid.Row="1" Items="{Binding FilteredItems}" 
                  SelectedItem="{Binding SelectedManga}"
                  BorderThickness="0"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
           <ListBox.ItemTemplate>
             <DataTemplate>
               <Grid RowDefinitions="*,Auto" Margin="10"
@@ -48,7 +49,8 @@
         <Button Grid.Row="0" Grid.Column="1" DataContext="{Binding StartSearch}" Command="{Binding}" Content="{Binding Name}"/>
         <ListBox Grid.Row="1" Grid.ColumnSpan="2" Items="{Binding Items}" 
                  BorderThickness="0"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
           <ListBox.ItemTemplate>
             <DataTemplate>
               <Grid RowDefinitions="*,Auto,Auto" Margin="10"

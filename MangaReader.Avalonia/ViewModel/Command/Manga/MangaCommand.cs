@@ -1,34 +1,107 @@
-﻿using MangaReader.Core.Manga;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using MangaReader.Avalonia.ViewModel.Command.Library;
+using MangaReader.Core.Manga;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
-  public class MangaCommand : BaseCommand
+  public abstract class MultipleMangasBaseCommand : LibraryBaseCommand
   {
+    private bool canExecuteNeedSelection;
+    private bool isVisible;
+    protected bool NeedRefresh { get; set; }
+
+    protected bool CanExecuteNeedSelection
+    {
+      get { return canExecuteNeedSelection; }
+      set
+      {
+        canExecuteNeedSelection = value;
+        OnPropertyChanged();
+        SubscribeToSelection(canExecuteNeedSelection);
+      }
+    }
+
+    public bool IsVisible
+    {
+      get { return isVisible; }
+      set
+      {
+        isVisible = value;
+        OnPropertyChanged();
+      }
+    }
+
+    protected Explorer.LibraryViewModel LibraryModel { get; }
+
+    protected IEnumerable<MangaModel> SelectedModels => LibraryModel.SelectedMangaModels;
+
     public override void Execute(object parameter)
     {
-      var manga = parameter as IManga;
-      if (manga == null)
-        Log.AddFormat("Command runned not for manga, parameter = {0}", parameter);
+      base.Execute(parameter);
+
+      using (var context = Repository.GetEntityContext())
+      {
+        var ids = SelectedModels.Select(m => m.Id).ToList();
+        var mangas = context.Get<IManga>().Where(m => ids.Contains(m.Id)).ToList().OrderBy(m => ids.IndexOf(m.Id)).ToList();
+        try
+        {
+          foreach (var model in SelectedModels)
+            model.ContextManga = mangas.SingleOrDefault(m => m.Id == model.Id);
+          this.Execute(mangas);
+        }
+        catch (Exception e)
+        {
+          Log.Exception(e);
+        }
+        finally
+        {
+          foreach (var model in SelectedModels)
+          {
+            model.UpdateProperties(mangas.SingleOrDefault(m => m.Id == model.Id));
+            model.ContextManga = null;
+          }
+        }
+      }
+
+      if (NeedRefresh)
+        LibraryModel.FilteredItems.Reset();
+
+      foreach (var command in LibraryModel.Commands.Where(m => m.GetType() == GetType()).OfType<MultipleMangasBaseCommand>())
+        command.OnCanExecuteChanged();
+    }
+
+    public abstract void Execute(IEnumerable<IManga> mangas);
+
+    private void SubscribeToSelection(bool subscribe)
+    {
+      if (subscribe)
+        LibraryModel.SelectedMangaModels.CollectionChanged += SelectedMangaModelsOnCollectionChanged;
       else
-        Execute(manga);
+        LibraryModel.SelectedMangaModels.CollectionChanged -= SelectedMangaModelsOnCollectionChanged;
+      OnCanExecuteChanged();
     }
 
-    public virtual void Execute(IManga manga)
+    private void SelectedMangaModelsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
     {
-      
+      OnCanExecuteChanged();
     }
 
-    public override bool CanExecute(object parameter)
+    protected MultipleMangasBaseCommand(Explorer.LibraryViewModel model) : base(model.Library)
     {
-      var manga = parameter as IManga;
-      return manga != null && CanExecute(manga);
+      LibraryModel = model;
+      this.NeedRefresh = true;
+      this.CanExecuteNeedSelection = false;
+      this.CanExecuteChanged += OnCanExecuteChanged;
     }
 
-    public virtual bool CanExecute(IManga manga)
+    private void OnCanExecuteChanged(object sender, EventArgs eventArgs)
     {
-      return true;
+      IsVisible = CanExecute(null);
     }
-    
   }
 }

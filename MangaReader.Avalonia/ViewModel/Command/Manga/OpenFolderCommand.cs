@@ -1,33 +1,29 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.Collections.Generic;
 using MangaReader.Core.Manga;
-using MangaReader.Core.Services;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
-  public class OpenFolderCommand : MangaCommand
+  public class OpenFolderCommand : MultipleMangasBaseCommand
   {
-    public override void Execute(IManga manga)
+    private readonly OpenFolderCommandBase baseCommand;
+
+    public override void Execute(IEnumerable<IManga> mangas)
     {
-      this.Execute(manga);
+      foreach (var m in mangas)
+        baseCommand.Execute(m);
     }
 
-    public void Execute(IDownloadable parameter)
+    public override bool CanExecute(object parameter)
     {
-      if (parameter != null && Directory.Exists(parameter.GetAbsoulteFolderPath()))
-        Process.Start(parameter.GetAbsoulteFolderPath());
-      else
-        Log.Info("Папка не найдена.");
+      return baseCommand.CanExecute(parameter);
     }
 
-    public override bool CanExecute(IManga manga)
+    public OpenFolderCommand(Explorer.LibraryViewModel model) : base(model)
     {
-      return manga != null;
-    }
-
-    public OpenFolderCommand()
-    {
-      this.Name = "Открыть папку";
+      this.baseCommand = new OpenFolderCommandBase();
+      this.Name = baseCommand.Name;
+      this.Icon = baseCommand.Icon;
+      this.NeedRefresh = false;
     }
   }
 }

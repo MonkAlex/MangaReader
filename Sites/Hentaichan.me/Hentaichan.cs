@@ -34,8 +34,8 @@ namespace Hentaichan
     {
       this.UpdateContent();
       AddHistoryReadedUris(this.Chapters, new Uri(url.OriginalString
-        .Replace("/related/", "/manga/")
-        .Replace("/online/", "/manga/")));
+        .Replace("/related/", "/online/")
+        .Replace("/manga/", "/online/")));
 
       base.CreatedFromWeb(url);
     }

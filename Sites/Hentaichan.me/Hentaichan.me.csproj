@@ -63,6 +63,7 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="BaseLogin.cs" />
+    <Compile Include="Convertation\HentaichanFrom44To45.cs" />
     <Compile Include="HentaichanChapter.cs" />
     <Compile Include="Convertation\HenchanFrom43To44.cs" />
     <Compile Include="Convertation\HentaichanFrom38To39.cs" />

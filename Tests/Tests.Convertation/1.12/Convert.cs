@@ -45,7 +45,7 @@ namespace Tests.Convertation._1._12
         Assert.AreEqual(18, loadedHistoryRecord.Count(h => h.Url.Contains("berserk")));
         Assert.AreEqual(52, loadedHistoryRecord.Count(h => h.Url.Contains("the_god_of_poverty_is")));
         Assert.AreEqual(50, loadedHistoryRecord.Count(h => h.Url.Contains("i_love_my_little_sister")));
-        Assert.AreEqual(6, loadedHistoryRecord.Count(h => h.Url.Contains("come_come_vanilla")));
+        Assert.AreEqual(6, loadedHistoryRecord.Count(h => h.Url.Contains("come_and_wild_vanilla")));
         Assert.AreEqual(55, loadedHistoryRecord.Count(h => h.Url.Contains("deadman_wonderland")));
         Assert.AreEqual(67, loadedHistoryRecord.Count(h => h.Url.Contains("he_is_a_ultimate_teacher")));
         Assert.AreEqual(90, loadedHistoryRecord.Count(h => h.Url.Contains("cage_of_eden")));

@@ -318,17 +318,7 @@ namespace MangaReader.Core.Manga
 
       if (this.Setting.OnlyUpdate)
       {
-        var histories = this.Histories.ToList();
-
-        Func<MangaPage, bool> pagesFilter = p => histories.All(m => m.Uri != p.Uri);
-        Func<Chapter, bool> chaptersFilter = ch => histories.All(m => m.Uri != ch.Uri) || ch.Container.Any(pagesFilter);
-        Func<Volume, bool> volumesFilter = v => v.Container.Any(chaptersFilter);
-
-        this.ActivePages = this.ActivePages.Where(pagesFilter).ToList();
-        this.ActiveChapters = this.ActiveChapters.Where(chaptersFilter).ToList();
-        this.ActiveVolumes = this.ActiveVolumes.Where(volumesFilter).ToList();
-
-        histories.Clear();
+        History.FilterActiveElements(this);
       }
 
       if (!this.ActiveChapters.Any() && !this.ActiveVolumes.Any() && !this.ActivePages.Any())
@@ -450,8 +440,11 @@ namespace MangaReader.Core.Manga
     /// </summary>
     public virtual void Compress()
     {
-      Log.Info(Strings.Mangas_Compress_Started + this.Name);
       var folder = this.GetAbsoulteFolderPath();
+      if (!Directory.Exists(folder))
+        return;
+
+      Log.Info(Strings.Mangas_Compress_Started + this.Name);
       switch (this.CompressionMode)
       {
         case Compression.CompressionMode.Manga:

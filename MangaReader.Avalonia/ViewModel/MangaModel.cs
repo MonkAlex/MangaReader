@@ -128,6 +128,14 @@ namespace MangaReader.Avalonia.ViewModel
 
     public int SettingsId { get; set; }
 
+    public byte[] Cover
+    {
+      get => cover;
+      set => RaiseAndSetIfChanged(ref cover, value);
+    }
+
+    private byte[] cover;
+
     #endregion
 
     public void UpdateProperties(IManga manga)
@@ -152,6 +160,7 @@ namespace MangaReader.Avalonia.ViewModel
       this.SettingsId = manga.Setting.Id;
       this.Created = manga.Created;
       this.DownloadedAt = manga.DownloadedAt;
+      this.Cover = manga.Cover;
     }
 
     private void SetCompletedIcon(bool isCompleted)

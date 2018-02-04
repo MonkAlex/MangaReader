@@ -66,7 +66,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         Log.Add("Wait nhibernate initialization...");
         await Task.Delay(500);
       }
-#warning Тут по идее тоже DTO нужны.
+#warning Сортировка сделана только по имени, надо по настройкам.
       using (var context = Core.NHibernate.Repository.GetEntityContext())
       {
         var mangas = context.Get<IManga>().Select(m => new MangaModel(m)).ToList();
@@ -98,18 +98,21 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       this.Priority = 10;
       this.Commands = new ObservableCollection<BaseCommand>();
       this.SelectedMangaModels = new ObservableCollection<MangaModel>();
-      this.SelectedMangaModels.CollectionChanged += SelectedMangaModelsOnCollectionChanged;
       this.Library = new Core.Services.LibraryViewModel();
       this.Library.LibraryChanged += LibraryOnLibraryChanged;
       this.Commands.Add(new UpdateWithPauseCommand(this, Library));
-      this.Commands.Add(new OpenFolderCommand(this));
-    }
-
-    private void SelectedMangaModelsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
-    {
-#warning Может и н нужно, комманды вроде и сами достаточно умны.
-      foreach (var command in Commands)
-        command.OnCanExecuteChanged();
+      this.Commands.AddRange(new BaseCommand[] {
+        new OpenFolderCommand(this),
+        new ChangeUpdateMangaCommand(false, this),
+        new ChangeUpdateMangaCommand(true, this),
+        new UpdateMangaCommand(this),
+        new CompressMangaCommand(this),
+        new OpenUrlMangaCommand(this),
+        new HistoryClearMangaCommand(this),
+        new DeleteMangaCommand(this),
+        new ShowPropertiesMangaCommand(this)
+        }
+      );
     }
 
     private void LibraryOnLibraryChanged(object sender, LibraryViewModelArgs args)

@@ -9,7 +9,8 @@
       <Grid RowDefinitions="Auto,*,Auto" DataContext="{Binding}">
         <TextBox Grid.Row="0" Text="{Binding Search}"/>
         <ListBox Grid.Row="1" Items="{Binding FilteredItems}" 
-                 SelectedItem="{Binding SelectedManga}"
+                 SelectedItems="{Binding SelectedMangaModels}"
+                 SelectionMode="Multiple"
                  BorderThickness="0"
                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -28,16 +29,18 @@
             </ItemsPanelTemplate>
           </ListBox.ItemsPanel>
         </ListBox>
-        <ListBox Grid.Row="2" Items="{Binding Commands}">
+        <ListBox Grid.Row="2" Items="{Binding Commands}"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
           <ListBox.ItemTemplate>
             <DataTemplate>
               <Button Command="{Binding}" Content="{Binding Name}" 
-                      CommandParameter="{Binding DataContext.SelectedManga, RelativeSource={RelativeSource AncestorType=Grid}}"/>
+                      CommandParameter="{Binding DataContext.SelectedMangaModels, RelativeSource={RelativeSource AncestorType=Grid}}"/>
             </DataTemplate>
           </ListBox.ItemTemplate>
           <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
-              <StackPanel Orientation="Horizontal"/>
+              <WrapPanel/>
             </ItemsPanelTemplate>
           </ListBox.ItemsPanel>
         </ListBox>

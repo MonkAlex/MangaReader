@@ -57,8 +57,8 @@
       <HintPath>..\..\MangaReader.Core\Library\NHibernate.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="nunit.framework, Version=3.7.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
-      <HintPath>..\..\packages\NUnit.3.7.1\lib\net45\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=3.9.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NUnit.3.9.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
@@ -68,6 +68,7 @@
     </Reference>
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -93,12 +94,14 @@
     <Compile Include="Download\Readmanga.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="Library\Add.cs" />
+    <Compile Include="Library\Update.cs" />
     <Compile Include="MangaHistory\AcomicsChapters.cs" />
     <Compile Include="Manga\AcomicsStructure.cs" />
     <Compile Include="Manga\BonusesChapter.cs" />
     <Compile Include="Manga\HentaichanStructure.cs" />
     <Compile Include="Manga\MangachanStructure.cs" />
     <Compile Include="Manga\MangaHistoryMultithread.cs" />
+    <Compile Include="Manga\MangaLocalName.cs" />
     <Compile Include="Manga\MintmangaStructure.cs" />
     <Compile Include="Manga\ReadmangaCensored.cs" />
     <Compile Include="Manga\ReadmangaStructure.cs" />
@@ -134,6 +137,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Choose>

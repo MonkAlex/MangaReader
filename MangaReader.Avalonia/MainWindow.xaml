@@ -35,6 +35,7 @@
           <ListBox.ItemTemplate>
             <DataTemplate>
               <Button Command="{Binding}" Content="{Binding Name}" 
+                      IsVisible="{Binding $self.IsEnabled}"
                       CommandParameter="{Binding DataContext.SelectedMangaModels, RelativeSource={RelativeSource AncestorType=Grid}}"/>
             </DataTemplate>
           </ListBox.ItemTemplate>
@@ -74,7 +75,11 @@
             </ItemsPanelTemplate>
           </ListBox.ItemsPanel>
         </ListBox>
-        <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding ManualUri}"/>
+        <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding ManualUri}">
+          <TextBox.KeyBindings>
+            <KeyBinding Command="{Binding AddManual}" Gesture="Return"/>
+          </TextBox.KeyBindings>
+        </TextBox>
         <Button Grid.Row="2" Grid.Column="1" DataContext="{Binding AddManual}" Command="{Binding}" Content="{Binding Name}"/>
       </Grid>
     </DataTemplate>

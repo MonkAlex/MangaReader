@@ -13,11 +13,6 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
         baseCommand.Execute(m);
     }
 
-    public override bool CanExecute(object parameter)
-    {
-      return baseCommand.CanExecute(parameter);
-    }
-
     public OpenFolderCommand(Explorer.LibraryViewModel model) : base(model)
     {
       this.baseCommand = new OpenFolderCommandBase();

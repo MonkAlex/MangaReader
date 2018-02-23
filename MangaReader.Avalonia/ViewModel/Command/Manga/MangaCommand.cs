@@ -40,6 +40,11 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
 
     protected IEnumerable<MangaModel> SelectedModels => LibraryModel.SelectedMangaModels;
 
+    public override bool CanExecute(object parameter)
+    {
+      return base.CanExecute(parameter) && SelectedModels.Any();
+    }
+
     public override void Execute(object parameter)
     {
       base.Execute(parameter);
@@ -100,7 +105,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
     {
       LibraryModel = model;
       this.NeedRefresh = true;
-      this.CanExecuteNeedSelection = false;
+      this.CanExecuteNeedSelection = true;
       this.CanExecuteChanged += OnCanExecuteChanged;
     }
 

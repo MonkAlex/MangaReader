@@ -7,21 +7,14 @@ namespace MangaReader.Avalonia.ViewModel
 {
   public class ViewModelBase : ReactiveObject
   {
-    protected bool RaiseAndSetIfChanged<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+    public void RaiseAndSetIfChanged<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
     {
-      if (!EqualityComparer<T>.Default.Equals(field, value))
-      {
-        field = value;
-        (this as IReactiveObject)?.RaisePropertyChanged(new PropertyChangedEventArgs(propertyName));
-        return true;
-      }
-
-      return false;
+      IReactiveObjectExtensions.RaiseAndSetIfChanged(this, ref field, value, propertyName);
     }
 
-    protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+    public void RaisePropertyChanged([CallerMemberName] string propertyName = null)
     {
-      (this as IReactiveObject)?.RaisePropertyChanged(new PropertyChangedEventArgs(propertyName));
+      IReactiveObjectExtensions.RaisePropertyChanged(this, propertyName);
     }
   }
 }

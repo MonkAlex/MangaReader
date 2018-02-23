@@ -69,7 +69,12 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       }
 
       if (NeedRefresh)
+      {
+        var selected = SelectedModels.ToList();
         LibraryModel.FilteredItems.Reset();
+        foreach (var model in selected.Where(s => LibraryModel.FilteredItems.Contains(s)))
+          LibraryModel.SelectedMangaModels.Add(model);
+      }
 
       foreach (var command in LibraryModel.Commands.Where(m => m.GetType() == GetType()).OfType<MultipleMangasBaseCommand>())
         command.OnCanExecuteChanged();

@@ -48,7 +48,11 @@
     </DataTemplate>
     <DataTemplate DataType="c:SearchViewModel">
       <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*, Auto" DataContext="{Binding}">
-        <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding Search}"/>
+        <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding Search}">
+          <TextBox.KeyBindings>
+            <KeyBinding Command="{Binding StartSearch}" Gesture="Return"/>
+          </TextBox.KeyBindings>
+        </TextBox>
         <Button Grid.Row="0" Grid.Column="1" DataContext="{Binding StartSearch}" Command="{Binding}" Content="{Binding Name}"/>
         <ListBox Grid.Row="1" Grid.ColumnSpan="2" Items="{Binding Items}" 
                  BorderThickness="0"

@@ -17,10 +17,11 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       var text = isSingle ? string.Format("Удалить мангу {0}?", list[0].Name) :
         ("Удалить мангу?" + Environment.NewLine + string.Join(Environment.NewLine, list.Select(l => $" - {l}")));
 
-      var dialog = new Dialogs.Avalonia.SimpleDialog();
-      dialog.Title = "Удаление манги";
-      dialog.Description = text;
-      dialog.Description += "Манга и история её обновлений будет удалена.";
+      var dialog = new Dialogs.Avalonia.Dialog
+      {
+        Title = "Удаление манги",
+        Description = text + Environment.NewLine + "Манга и история её обновлений будет удалена."
+      };
       var deleteFolder = new BoolControl();
       dialog.Controls.Add(deleteFolder);
       deleteFolder.Name = isSingle ? $"Удалить папку {list[0].Folder}" : "Удалить связанные папки";

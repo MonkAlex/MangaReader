@@ -115,15 +115,17 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       );
     }
 
-    private void LibraryOnLibraryChanged(object sender, LibraryViewModelArgs args)
+    private async void LibraryOnLibraryChanged(object sender, LibraryViewModelArgs args)
     {
-      switch (args.LibraryOperation)
+      await Dispatcher.UIThread.InvokeAsync(() =>
       {
-        case LibraryOperation.UpdateStarted:
-          break;
-        case LibraryOperation.UpdatePercentChanged:
-          break;
-        case LibraryOperation.UpdateMangaChanged:
+        switch (args.LibraryOperation)
+        {
+          case LibraryOperation.UpdateStarted:
+            break;
+          case LibraryOperation.UpdatePercentChanged:
+            break;
+          case LibraryOperation.UpdateMangaChanged:
           {
             switch (args.MangaOperation)
             {
@@ -131,12 +133,12 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
                 this.Items.Add(new MangaModel(args.Manga));
                 break;
               case MangaOperation.Deleted:
-                {
-                  var mangaModels = this.Items.Where(i => i.Id == args.Manga.Id).ToList();
-                  foreach (var mangaModel in mangaModels)
-                    this.Items.Remove(mangaModel);
-                  break;
-                }
+              {
+                var mangaModels = this.Items.Where(i => i.Id == args.Manga.Id).ToList();
+                foreach (var mangaModel in mangaModels)
+                  this.Items.Remove(mangaModel);
+                break;
+              }
               case MangaOperation.UpdateStarted:
                 break;
               case MangaOperation.UpdateCompleted:
@@ -146,13 +148,15 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
               default:
                 throw new ArgumentOutOfRangeException();
             }
+
             break;
           }
-        case LibraryOperation.UpdateCompleted:
-          break;
-        default:
-          throw new ArgumentOutOfRangeException();
-      }
+          case LibraryOperation.UpdateCompleted:
+            break;
+          default:
+            throw new ArgumentOutOfRangeException();
+        }
+      });
     }
   }
 }

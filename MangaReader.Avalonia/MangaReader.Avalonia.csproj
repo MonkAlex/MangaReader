@@ -32,11 +32,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.5.2-build4505-alpha" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.5.2-build4505-alpha" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.5.2-build4505-alpha" />
+    <PackageReference Include="Avalonia" Version="0.6.1" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.6.1" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.6.1" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.1.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
     <PackageReference Include="System.Interactive.Async">
       <Version>3.1.1</Version>
     </PackageReference>

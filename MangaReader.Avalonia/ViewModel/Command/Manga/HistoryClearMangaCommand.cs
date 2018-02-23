@@ -16,10 +16,11 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       var text = list.Count == 1 ? $"Удалить историю {list[0].Name}?" :
         ("Удалить историю?" + Environment.NewLine + string.Join(Environment.NewLine, list.Select(l => $" - {l}")));
 
-      var dialog = new Dialogs.Avalonia.SimpleDialog();
-      dialog.Title = "Удаление истории";
-      dialog.Description = text;
-      dialog.Description += "После удаления истории манга будет скачиваться целиком.";
+      var dialog = new Dialogs.Avalonia.Dialog
+      {
+        Title = "Удаление истории",
+        Description = text + Environment.NewLine + "После удаления истории манга будет скачиваться целиком."
+      };
       var yes = dialog.Buttons.AddButton("Да");
       var no = dialog.Buttons.AddButton("Нет");
 

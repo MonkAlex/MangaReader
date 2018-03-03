@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using MangaReader.Avalonia.ViewModel.Explorer;
+using MangaReader.Core.Manga;
+using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Avalonia.ViewModel
 {
@@ -19,7 +21,13 @@ namespace MangaReader.Avalonia.ViewModel
 
     public void SelectDefaultTab()
     {
-      this.SelectedTab = this.Tabs.OrderBy(t => t.Priority).FirstOrDefault();
+      var hasManga = false;
+      using (var context = Repository.GetEntityContext())
+      {
+        hasManga = context.Get<IManga>().Any();
+      }
+
+      this.SelectedTab = hasManga ? Tabs.OrderBy(t => t.Priority).FirstOrDefault() : Tabs.OfType<SearchViewModel>().FirstOrDefault();
     }
 
     private ExplorerViewModel()

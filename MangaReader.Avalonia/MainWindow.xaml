@@ -7,7 +7,7 @@
   <Window.DataTemplates>
     <DataTemplate DataType="c:LibraryViewModel">
       <Grid RowDefinitions="Auto,*,Auto" DataContext="{Binding}">
-        <TextBox Grid.Row="0" Text="{Binding Search}"/>
+        <TextBox Grid.Row="0" Text="{Binding Search}" Watermark="Поиск по имени" UseFloatingWatermark="True"/>
         <ListBox Grid.Row="1" Items="{Binding FilteredItems}" 
                  SelectedItems="{Binding SelectedMangaModels}"
                  SelectionMode="Multiple"
@@ -49,7 +49,7 @@
     </DataTemplate>
     <DataTemplate DataType="c:SearchViewModel">
       <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*, Auto" DataContext="{Binding}">
-        <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding Search}">
+        <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding Search}" Watermark="Поиск по имени" UseFloatingWatermark="True">
           <TextBox.KeyBindings>
             <KeyBinding Command="{Binding StartSearch}" Gesture="Return"/>
           </TextBox.KeyBindings>
@@ -75,7 +75,7 @@
             </ItemsPanelTemplate>
           </ListBox.ItemsPanel>
         </ListBox>
-        <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding ManualUri}">
+        <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding ManualUri}" Watermark="Адрес манги, например http://readmanga.me/berserk">
           <TextBox.KeyBindings>
             <KeyBinding Command="{Binding AddManual}" Gesture="Return"/>
           </TextBox.KeyBindings>

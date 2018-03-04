@@ -19,9 +19,7 @@ namespace MangaReader.Core.Convertation.Mangas
 
     protected override bool ProtectedCanConvert(IProcess process)
     {
-      return base.ProtectedCanConvert(process) &&
-             this.Version.CompareTo(Repository.GetStateless<DatabaseConfig>().Single().Version) > 0 &&
-             process.Version.CompareTo(this.Version) >= 0;
+      return base.ProtectedCanConvert(process) && this.CanConvertVersion(process);
     }
 
     protected override void ProtectedConvert(IProcess process)

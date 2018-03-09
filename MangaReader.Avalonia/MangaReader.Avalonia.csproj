@@ -46,7 +46,11 @@
     <Reference Include="Dialogs.Interfaces">
       <HintPath>lib\Dialogs.Interfaces.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -78,9 +82,19 @@
     <Compile Include="ViewModel\Explorer\LibraryViewModel.cs" />
     <Compile Include="ViewModel\Explorer\SearchViewModel.cs" />
     <Compile Include="ViewModel\Explorer\ExplorerTabViewModel.cs" />
+    <Compile Include="ViewModel\Explorer\SettingsViewModel.cs" />
     <Compile Include="ViewModel\MangaModel.cs" />
     <Compile Include="ViewModel\MangaViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\Library.xaml.cs">
+      <DependentUpon>Library.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Search.xaml.cs">
+      <DependentUpon>Search.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SettingsMain.xaml.cs">
+      <DependentUpon>SettingsMain.xaml</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="App.xaml" />
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
@@ -106,6 +120,21 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="View\Library.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="View\Search.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="View\SettingsMain.xaml">
+      <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

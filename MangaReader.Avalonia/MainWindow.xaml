@@ -1,87 +1,18 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:av="clr-namespace:MangaReader.Avalonia;assembly=MangaReader.Avalonia"
         xmlns:c="clr-namespace:MangaReader.Avalonia.ViewModel.Explorer;assembly=MangaReader.Avalonia"
+        xmlns:view="clr-namespace:MangaReader.Avalonia.View;assembly=MangaReader.Avalonia"
         MinWidth="800" MinHeight="600"
         Title="{Binding SelectedTab.Name}">
   <Window.DataTemplates>
     <DataTemplate DataType="c:LibraryViewModel">
-      <Grid RowDefinitions="Auto,*,Auto" DataContext="{Binding}">
-        <TextBox Grid.Row="0" Text="{Binding Search}" Watermark="Поиск по имени" UseFloatingWatermark="True"/>
-        <ListBox Grid.Row="1" Items="{Binding FilteredItems}" 
-                 SelectedItems="{Binding SelectedMangaModels}"
-                 SelectionMode="Multiple"
-                 BorderThickness="0"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-          <ListBox.ItemTemplate>
-            <DataTemplate>
-              <Grid RowDefinitions="*,Auto" Margin="10"
-                  Width="150" Height="300">
-                <Image Grid.Row="0" Source="{Binding Cover, Converter={x:Static av:BitmapTypeConverter.Instance}}"/>
-                <TextBlock Grid.Row="1" Text="{Binding Name}" TextWrapping="Wrap" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center"/>
-              </Grid>
-            </DataTemplate>
-          </ListBox.ItemTemplate>
-          <ListBox.ItemsPanel>
-            <ItemsPanelTemplate>
-              <WrapPanel/>
-            </ItemsPanelTemplate>
-          </ListBox.ItemsPanel>
-        </ListBox>
-        <ListBox Grid.Row="2" Items="{Binding Commands}"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-          <ListBox.ItemTemplate>
-            <DataTemplate>
-              <Button Command="{Binding}" Content="{Binding Name}" 
-                      IsVisible="{Binding $self.IsEnabled}"
-                      CommandParameter="{Binding DataContext.SelectedMangaModels, RelativeSource={RelativeSource AncestorType=Grid}}"/>
-            </DataTemplate>
-          </ListBox.ItemTemplate>
-          <ListBox.ItemsPanel>
-            <ItemsPanelTemplate>
-              <WrapPanel/>
-            </ItemsPanelTemplate>
-          </ListBox.ItemsPanel>
-        </ListBox>
-      </Grid>
+      <view:Library/>
     </DataTemplate>
     <DataTemplate DataType="c:SearchViewModel">
-      <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*, Auto" DataContext="{Binding}">
-        <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding Search}" Watermark="Поиск по имени" UseFloatingWatermark="True">
-          <TextBox.KeyBindings>
-            <KeyBinding Command="{Binding StartSearch}" Gesture="Return"/>
-          </TextBox.KeyBindings>
-        </TextBox>
-        <Button Grid.Row="0" Grid.Column="1" DataContext="{Binding StartSearch}" Command="{Binding}" Content="{Binding Name}"/>
-        <ListBox Grid.Row="1" Grid.ColumnSpan="2" Items="{Binding Items}" 
-                 BorderThickness="0"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-          <ListBox.ItemTemplate>
-            <DataTemplate>
-              <Grid RowDefinitions="*,Auto,Auto" Margin="10"
-                    Width="150" Height="300">
-                <Image Grid.Row="0" Source="{Binding Cover, Converter={x:Static av:BitmapTypeConverter.Instance}}"/>
-                <TextBlock Grid.Row="1" Text="{Binding Name}" TextWrapping="Wrap" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center"/>
-                <Button Grid.Row="2" Command="{Binding AddToLibrary}" CommandParameter="{Binding}" Content="{Binding AddToLibrary.Name}"/>
-              </Grid>
-            </DataTemplate>
-          </ListBox.ItemTemplate>
-          <ListBox.ItemsPanel>
-            <ItemsPanelTemplate>
-              <WrapPanel/>
-            </ItemsPanelTemplate>
-          </ListBox.ItemsPanel>
-        </ListBox>
-        <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding ManualUri}" Watermark="Адрес манги, например http://readmanga.me/berserk">
-          <TextBox.KeyBindings>
-            <KeyBinding Command="{Binding AddManual}" Gesture="Return"/>
-          </TextBox.KeyBindings>
-        </TextBox>
-        <Button Grid.Row="2" Grid.Column="1" DataContext="{Binding AddManual}" Command="{Binding}" Content="{Binding Name}"/>
-      </Grid>
+      <view:Search/>
+    </DataTemplate>
+    <DataTemplate DataType="c:SettingsViewModel">
+      <view:SettingsMain/>
     </DataTemplate>
   </Window.DataTemplates>
   <Grid ColumnDefinitions="Auto,*" DataContext="{Binding}">

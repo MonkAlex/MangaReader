@@ -38,7 +38,8 @@ namespace MangaReader.Avalonia
           {
             var grid = this.LogicalChildren.OfType<Grid>().FirstOrDefault();
             var cp = grid?.GetLogicalChildren().OfType<ContentPresenter>().FirstOrDefault();
-            var cpGrid = cp?.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
+            var appliedUserControl = cp?.GetLogicalChildren().FirstOrDefault();
+            var cpGrid = appliedUserControl?.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
             var textBox = cpGrid?.GetLogicalChildren().OfType<TextBox>().FirstOrDefault();
             textBox?.Focus();
           }, DispatcherPriority.Background);

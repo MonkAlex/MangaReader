@@ -16,7 +16,13 @@ namespace MangaReader.Avalonia.ViewModel
     public ExplorerTabViewModel SelectedTab
     {
       get { return selectedTab; }
-      set { RaiseAndSetIfChanged(ref selectedTab, value); }
+      set
+      {
+        var previous = selectedTab;
+        selectedTab?.OnUnselected(value);
+        RaiseAndSetIfChanged(ref selectedTab, value);
+        selectedTab?.OnSelected(previous);
+      }
     }
 
     public void SelectDefaultTab()

@@ -80,14 +80,21 @@
     <Compile Include="ViewModel\Command\Manga\UpdateMangaCommand.cs" />
     <Compile Include="ViewModel\ExplorerViewModel.cs" />
     <Compile Include="ViewModel\Explorer\LibraryViewModel.cs" />
+    <Compile Include="ViewModel\Explorer\MangaSettingsViewModel.cs" />
     <Compile Include="ViewModel\Explorer\SearchViewModel.cs" />
     <Compile Include="ViewModel\Explorer\ExplorerTabViewModel.cs" />
     <Compile Include="ViewModel\Explorer\SettingsViewModel.cs" />
     <Compile Include="ViewModel\MangaModel.cs" />
     <Compile Include="ViewModel\MangaViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\FolderSelector.xaml.cs">
+      <DependentUpon>FolderSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Library.xaml.cs">
       <DependentUpon>Library.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MangaSettings.xaml.cs">
+      <DependentUpon>MangaSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Search.xaml.cs">
       <DependentUpon>Search.xaml</DependentUpon>
@@ -134,6 +141,16 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="View\SettingsMain.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="View\MangaSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="View\FolderSelector.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

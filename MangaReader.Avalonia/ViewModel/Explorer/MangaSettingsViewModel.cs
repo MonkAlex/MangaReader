@@ -27,6 +27,14 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     private bool? onlyUpdate;
 
+    public string Folder
+    {
+      get => folder;
+      set => RaiseAndSetIfChanged(ref folder, value);
+    }
+
+    private string folder;
+
     public override async Task OnUnselected(ExplorerTabViewModel newModel)
     {
       await base.OnUnselected(newModel);
@@ -50,6 +58,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         {
           this.Compress = setting.CompressManga;
           this.OnlyUpdate = setting.OnlyUpdate;
+          this.Folder = setting.Folder;
         }
       }
     }
@@ -63,6 +72,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         {
           setting.CompressManga = this.Compress == true;
           setting.OnlyUpdate = this.OnlyUpdate == true;
+          setting.Folder = this.Folder;
           setting.Save();
         }
       }

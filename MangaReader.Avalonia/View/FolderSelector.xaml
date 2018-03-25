@@ -7,8 +7,7 @@
                Text="Download to:  "/>
     <TextBlock Grid.Column="1" 
                x:Name="Path"
-               VerticalAlignment="Center"
-               Text="{Binding}"/>
+               VerticalAlignment="Center"/>
     <Button Grid.Column="2" 
             x:Name="Change"
             Content="Change" 

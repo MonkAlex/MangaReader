@@ -6,7 +6,8 @@
       Margin="30">
     <view:FolderSelector Grid.Row="0" 
                          Margin="0, 10, 0, 10"
-                         DataContext="{Binding Folder}"/>
+                         DataContext="{Binding}"
+                         FolderBindingPath="Folder"/>
 
     <WrapPanel Grid.Row="1" Margin="0, 10, 0, 10">
       <CheckBox IsChecked="{Binding CheckAppUpdateOnStart}"/>

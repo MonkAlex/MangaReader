@@ -8,6 +8,11 @@ namespace Hentaichan.Convertation
 {
   public class HentaichanFrom44To45 : MangasConverter
   {
+    protected override bool ProtectedCanConvert(IProcess process)
+    {
+      return base.ProtectedCanConvert(process) && this.CanConvertVersion(process);
+    }
+
     protected override void ProtectedConvert(IProcess process)
     {
       base.ProtectedConvert(process);

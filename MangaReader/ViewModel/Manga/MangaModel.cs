@@ -196,7 +196,7 @@ namespace MangaReader.ViewModel.Manga
         return;
 
       this.Id = manga.Id;
-      this.Name = manga.Name;
+      this.Name = manga.LocalName;
       this.OriginalName = manga.ServerName;
       this.Folder = manga.Folder;
       this.CanChangeName = manga.IsNameChanged;

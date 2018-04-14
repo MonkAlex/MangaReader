@@ -4,7 +4,6 @@ using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
-using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Convertation.Mangas
 {
@@ -12,9 +11,7 @@ namespace MangaReader.Core.Convertation.Mangas
   {
     protected override bool ProtectedCanConvert(IProcess process)
     {
-      return base.ProtectedCanConvert(process) &&
-             this.Version.CompareTo(Repository.GetStateless<DatabaseConfig>().Single().Version) > 0 &&
-             process.Version.CompareTo(this.Version) >= 0;
+      return base.ProtectedCanConvert(process) && this.CanConvertVersion(process);
     }
 
     protected override void ProtectedConvert(IProcess process)

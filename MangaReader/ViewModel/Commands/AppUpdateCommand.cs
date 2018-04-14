@@ -8,10 +8,10 @@ namespace MangaReader.ViewModel.Commands
 {
   public class AppUpdateCommand : LibraryBaseCommand
   {
-    public override void Execute(object parameter)
+    public override async void Execute(object parameter)
     {
       base.Execute(parameter);
-      Updater.StartUpdate();
+      await Updater.StartUpdate();
     }
 
     public AppUpdateCommand(LibraryViewModel model) : base(model)

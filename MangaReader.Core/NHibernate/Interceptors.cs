@@ -13,7 +13,7 @@ namespace MangaReader.Core.NHibernate
     public override bool OnFlushDirty(object entity, object id, object[] currentState, object[] previousState, string[] propertyNames,
       IType[] types)
     {
-      var nameIndex = propertyNames.ToList().IndexOf(nameof(Mangas.ServerName));
+      var nameIndex = entity is IManga ? propertyNames.ToList().IndexOf(nameof(Mangas.Name)) : 0;
       if (nameIndex > 0)
       {
         Log.Add(id != null

@@ -9,6 +9,7 @@ namespace MangaReader.Core.NHibernate
     public MangaMap()
     {
       Id(x => x.Id).GeneratedBy.Native();
+      Map(x => x.Name);
       Map(x => x.LocalName);
       Map(x => x.ServerName);
       Map(x => x.IsNameChanged);

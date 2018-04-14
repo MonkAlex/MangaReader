@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 using NHibernate;
 
 namespace MangaReader.Core.Convertation.Primitives
@@ -36,6 +38,12 @@ namespace MangaReader.Core.Convertation.Primitives
     protected virtual void ProtectedConvert(IProcess process)
     {
 
+    }
+
+    protected bool CanConvertVersion(IProcess process)
+    {
+      return this.Version.CompareTo(Repository.GetStateless<DatabaseConfig>().Single().Version) > 0 &&
+             process.Version.CompareTo(this.Version) >= 0;
     }
 
     protected object RunSql(string command)

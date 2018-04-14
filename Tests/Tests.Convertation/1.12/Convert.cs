@@ -36,7 +36,7 @@ namespace Tests.Convertation._1._12
         */
 
         Assert.AreEqual(42, loadedHistoryRecord.Count(h => h.Url.Contains("3x3_eyes")));
-        Assert.AreEqual(148, loadedHistoryRecord.Count(h => h.Url.Contains("oh_my_goddess")));
+        Assert.AreEqual(148, loadedHistoryRecord.Count(h => h.Url.Contains("oh__my_goddess_")));
         Assert.AreEqual(33, loadedHistoryRecord.Count(h => h.Url.Contains("anagle_mole")));
         Assert.AreEqual(36, loadedHistoryRecord.Count(h => h.Url.Contains("area_d")));
         Assert.AreEqual(226, loadedHistoryRecord.Count(h => h.Url.Contains("b_type_h_style")));

@@ -43,7 +43,7 @@ namespace MangaReader.Core
     {
       try
       {
-        Updater.Initialize();
+        Updater.Initialize().Wait();
 
         ConfigStorage.RefreshPlugins();
         NHibernate.Mapping.Initialize(process);

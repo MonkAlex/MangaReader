@@ -8,9 +8,8 @@ namespace MangaReader.Core.ApplicationControl
   {
     public static void Run(string uniqueId)
     {
-#warning Avalonia:Пайпы не хотят работать под моно.
       using (var server = new NamedPipeServerStream(uniqueId, PipeDirection.InOut,
-        NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Message, PipeOptions.None))
+        NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Byte, PipeOptions.None))
       {
         server.WaitForConnection();
         Task.Run(() => Run(uniqueId));

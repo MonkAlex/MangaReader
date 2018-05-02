@@ -103,7 +103,7 @@ namespace Hentaichan
             foreach (var node in chapterNodes)
             {
               var chapterUri = new Uri(uri, node.Attributes.Single(a => a.Name == "value").Value);
-              chapters.Add(new ChapterDto(chapterUri, WebUtility.HtmlDecode(node.NextSibling.InnerText))
+              chapters.Add(new ChapterDto(chapterUri, WebUtility.HtmlDecode((node.NextSibling ?? node).InnerText))
               {
                 Number = HentaichanChapter.GetChapterNumber(chapterUri)
               });

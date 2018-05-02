@@ -38,9 +38,6 @@ namespace Tests
       BeforeTestClean();
       MangaReader.Core.Loader.Init();
 
-      DeployToPlugins(Path.Combine(".", "..", "Sites", "Bin", "Debug"));
-      DeployToPlugins(Path.Combine(".", "..", "Sites", "Bin", "Release"));
-      DeployToPlugins(Path.Combine(".", "..", "Sites", "Bin", "Publish"));
       DeployToLib(Path.Combine(".", "..", "MangaReader.Core", "bin", "Debug"));
       DeployToLib(Path.Combine(".", "..", "MangaReader.Core", "bin", "Release"));
       DeployToLib(Path.Combine(".", "..", "MangaReader.Core", "bin", "Publish"));
@@ -144,7 +141,7 @@ namespace Tests
     {
       var dd = AppDomain.CurrentDomain.BaseDirectory;
       File.Delete(Path.Combine(dd, "storage.db"));
-      var masks = new[] {"System.Data.SQLite*", "*Hibernate*", "*.dbak"};
+      var masks = new[] {"System.Data.SQLite*", "*.dbak"};
       foreach (var mask in masks)
       {
         foreach (var file in Directory.GetFiles(dd, mask, SearchOption.TopDirectoryOnly))

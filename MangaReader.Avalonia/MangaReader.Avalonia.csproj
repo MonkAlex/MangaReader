@@ -1,11 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <ApplicationIcon />
     <StartupObject />
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\VersionInfo.cs" Link="Properties\VersionInfo.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia.Desktop" Version="0.6.1" />
@@ -17,10 +25,6 @@
     <ProjectReference Include="..\Sites\Acomics.ru\Acomics.ru.csproj" />
     <ProjectReference Include="..\Sites\Grouple.ru\Grouple.ru.csproj" />
     <ProjectReference Include="..\Sites\Hentaichan.me\Hentaichan.me.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>

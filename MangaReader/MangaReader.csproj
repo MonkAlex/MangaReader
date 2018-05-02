@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
@@ -377,7 +378,6 @@
     <Resource Include="Icons\Navigation\skip_to_start.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="Update\MangaReader.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -387,21 +387,32 @@
       <Project>{19d569ba-e9c5-4d82-8baa-897d7d2ea007}</Project>
       <Name>MangaReader.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Sites\Acomics.ru\Acomics.ru.csproj">
+      <Project>{6a7329f1-eaaa-42b0-97bc-c4f2bc6a5723}</Project>
+      <Name>Acomics.ru</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sites\Grouple.ru\Grouple.ru.csproj">
+      <Project>{b6b81632-31f6-4018-b365-c3dc8ad2a40f}</Project>
+      <Name>Grouple.ru</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sites\Hentaichan.me\Hentaichan.me.csproj">
+      <Project>{52a2b390-f993-4f56-9ac3-4304692a8137}</Project>
+      <Name>Hentaichan.me</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="lib\Hardcodet.Wpf.TaskbarNotification.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="lib\Ookii.Dialogs.Wpf.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-      xcopy /y /r /e "$(ProjectDir)\..\MangaReader.Core\bin\$(ConfigurationName)" "$(TargetDir)\lib"
-      xcopy /y /r /e "$(ProjectDir)\Library" "$(TargetDir)\lib"
-      xcopy /y /r /e "$(ProjectDir)\..\Sites\Bin\$(ConfigurationName)" "$(TargetDir)\Plugins"
-    </PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   -->
   <Target Name="BeforeBuild">
-    <MakeDir Directories="$(TargetDir)\lib" />
-    <MakeDir Directories="$(TargetDir)\Plugins" />
   </Target>
   <Target Name="AfterBuild">
   </Target>

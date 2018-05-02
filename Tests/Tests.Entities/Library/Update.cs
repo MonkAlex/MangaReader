@@ -5,6 +5,7 @@ using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using NUnit.Framework;
+using SortDescription = MangaReader.Core.Services.Config.SortDescription;
 
 namespace Tests.Entities.Library
 {

@@ -1,108 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D4BD1A69-EBDB-451E-B0FC-4E79644232B8}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Grouple</RootNamespace>
-    <AssemblyName>Grouple.ru</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=6.0.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\MangaReader.Core\Library\AutoMapper.dll</HintPath>
-    </Reference>
-    <Reference Include="AutoMapper.Collection, Version=3.1.2.0, Culture=neutral, PublicKeyToken=e57c3f0a3d6646db, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\MangaReader.Core\Library\AutoMapper.Collection.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentNHibernate">
-      <HintPath>..\..\MangaReader.Core\Library\FluentNHibernate.dll</HintPath>
-    </Reference>
-    <Reference Include="HtmlAgilityPack">
-      <HintPath>..\..\MangaReader.Core\Library\HtmlAgilityPack.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\MangaReader.Core\Library\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\..\MangaReader.Core\MangaReader.Core.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\VersionInfo.cs">
-      <Link>Properties\VersionInfo.cs</Link>
-    </Compile>
-    <Compile Include="GroupleChapter.cs" />
-    <Compile Include="Convertation\From37To38.cs" />
-    <Compile Include="Convertation\From41To42.cs" />
-    <Compile Include="Convertation\From42To43.cs" />
-    <Compile Include="GroupleMangaPage.cs" />
-    <Compile Include="NHibernate\GroupleChapterMap.cs" />
-    <Compile Include="NHibernate\GroupleMangaPageMap.cs" />
-    <Compile Include="Parser.cs" />
-    <Compile Include="GroupleLogin.cs" />
-    <Compile Include="GroupleManga.cs" />
-    <Compile Include="MangaName.cs" />
-    <Compile Include="Mintmanga.cs" />
-    <Compile Include="MintmangaPlugin.cs" />
-    <Compile Include="NHibernate\GroupleLoginMap.cs" />
-    <Compile Include="NHibernate\MintmangaMap.cs" />
-    <Compile Include="NHibernate\ReadmangaMap.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Readmanga.cs" />
-    <Compile Include="ReadmangaPlugin.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\MangaReader.Core\MangaReader.Core.csproj">
-      <Project>{19d569ba-e9c5-4d82-8baa-897d7d2ea007}</Project>
-      <Name>MangaReader.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets. -->
-  <Target Name="BeforeBuild">
-    <MakeDir Directories="$(ProjectDir)\..\Bin" />
-  </Target>
-  <Target Name="AfterBuild">
-    <ItemGroup>
-      <SourceFiles Include="$(TargetPath)" />
-    </ItemGroup>
-    <Copy SourceFiles="@(SourceFiles)" DestinationFolder="$(ProjectDir)\..\Bin\$(ConfigurationName)\" />
-  </Target>
+
 </Project>

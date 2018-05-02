@@ -14,6 +14,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MangaReader.Core\MangaReader.Core.csproj" />
+    <ProjectReference Include="..\Sites\Acomics.ru\Acomics.ru.csproj" />
+    <ProjectReference Include="..\Sites\Grouple.ru\Grouple.ru.csproj" />
+    <ProjectReference Include="..\Sites\Hentaichan.me\Hentaichan.me.csproj" />
   </ItemGroup>
 
   <ItemGroup>

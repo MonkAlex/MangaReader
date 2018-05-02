@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using MangaReader.Avalonia.ViewModel.Explorer.Tabs;
+using MangaReader.Avalonia.ViewModel.Explorer;
+using MangaReader.Core.Manga;
+using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Avalonia.ViewModel
 {
@@ -9,22 +11,39 @@ namespace MangaReader.Avalonia.ViewModel
     private ExplorerTabViewModel selectedTab;
     public ObservableCollection<ExplorerTabViewModel> Tabs { get; }
 
+    public static ExplorerViewModel Instance { get; } = new ExplorerViewModel();
+
     public ExplorerTabViewModel SelectedTab
     {
       get { return selectedTab; }
-      set { RaiseAndSetIfChanged(ref selectedTab, value); }
+      set
+      {
+        var previous = selectedTab;
+        selectedTab?.OnUnselected(value);
+        RaiseAndSetIfChanged(ref selectedTab, value);
+        selectedTab?.OnSelected(previous);
+      }
     }
 
     public void SelectDefaultTab()
     {
-      this.SelectedTab = this.Tabs.OrderBy(t => t.Priority).FirstOrDefault();
+      var hasManga = false;
+      using (var context = Repository.GetEntityContext())
+      {
+        hasManga = context.Get<IManga>().Any();
+      }
+
+      this.SelectedTab = hasManga ? Tabs.OrderBy(t => t.Priority).FirstOrDefault() : Tabs.OfType<SearchViewModel>().FirstOrDefault();
     }
 
-    public ExplorerViewModel()
+    private ExplorerViewModel()
     {
-      this.Tabs = new ObservableCollection<ExplorerTabViewModel>();
-      this.Tabs.Add(new LibraryTabViewModel());
-      this.Tabs.Add(new SearchTabViewModel());
+      this.Tabs = new ObservableCollection<ExplorerTabViewModel>
+      {
+        new LibraryViewModel(),
+        new SearchViewModel(),
+        new SettingsViewModel()
+      };
     }
   }
 }

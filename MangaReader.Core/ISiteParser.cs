@@ -42,7 +42,7 @@ namespace MangaReader.Core
     /// </summary>
     /// <param name="name">Название манги.</param>
     /// <returns>Найденная манга.</returns>
-    IEnumerable<IManga> Search(string name);
+    IAsyncEnumerable<IManga> Search(string name);
   }
 
   public class UriParseResult

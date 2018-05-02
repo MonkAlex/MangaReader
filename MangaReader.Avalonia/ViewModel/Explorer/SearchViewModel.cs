@@ -1,16 +1,19 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Core.Manga;
+using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
 {
-  public class SearchContentViewModel : ViewModelBase
+  public class SearchViewModel : ExplorerTabViewModel
   {
-    private ObservableCollection<IManga> items;
+    private ObservableCollection<MangaViewModel> items;
     private string search;
     private DelegateCommand startSearch;
     private string manualUri;
@@ -28,7 +31,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       set { RaiseAndSetIfChanged(ref startSearch, value); }
     }
 
-    public ObservableCollection<IManga> Items
+    public ObservableCollection<MangaViewModel> Items
     {
       get { return items; }
       set { RaiseAndSetIfChanged(ref items, value); }
@@ -46,25 +49,36 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       set { RaiseAndSetIfChanged(ref addManual, value); }
     }
 
-    private void UpdateManga()
+    private async void UpdateManga()
     {
       Items.Clear();
-      foreach (var manga in ConfigStorage.Plugins.SelectMany(p => p.GetParser().Search(Search)))
+      var uniqueUris = new ConcurrentDictionary<Uri, bool>();
+      var searches = ConfigStorage.Plugins.Select(p => p.GetParser().Search(Search)).ToList();
+      var tasks = searches.Select(s => Task.Run(() => s.ForEachAsync(a =>
       {
-        if (Items.All(i => i.Uri != manga.Uri))
-          Items.Add(manga);
-      }
+        if (uniqueUris.TryAdd(a.Uri, true))
+          global::Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => Items.Add(new MangaViewModel(a)));
+      })));
+      await Task.WhenAll(tasks.Select(t => t.LogException()));
     }
 
     private void AddManga()
     {
       #warning Отсюда нужен переход к превью.
-      Mangas.CreateFromWeb(new Uri(ManualUri));
+      var libraries = ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().ToList();
+      var added = libraries.Any() && libraries.All(l => l.Library.Add(ManualUri));
+      if (added)
+      {
+        ManualUri = string.Empty;
+        ExplorerViewModel.Instance.SelectedTab = (ExplorerTabViewModel)libraries.FirstOrDefault() ?? this;
+      }
     }
 
-    public SearchContentViewModel()
+    public SearchViewModel()
     {
-      this.items = new ObservableCollection<IManga>();
+      this.Name = "Search";
+      this.Priority = 20;
+      this.Items = new ObservableCollection<MangaViewModel>();
       this.StartSearch = new DelegateCommand(UpdateManga, () => !string.IsNullOrWhiteSpace(Search)) {Name = "Search"};
       this.AddManual = new DelegateCommand(AddManga, () => !string.IsNullOrWhiteSpace(ManualUri)) {Name = "Add"};
       this.PropertyChanged += (sender, args) =>

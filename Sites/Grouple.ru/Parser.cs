@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.EquivalencyExpression;
 using HtmlAgilityPack;
@@ -243,49 +244,41 @@ namespace Grouple
       return GetPreviewsImpl(manga);
     }
 
-    public override IEnumerable<IManga> Search(string name)
+    protected override async Task<Tuple<HtmlNodeCollection, Uri>> GetMangaNodes(string name, Uri host, CookieClient client)
     {
-      var hosts = ConfigStorage.Plugins
-        .Where(p => p.GetParser().GetType() == typeof(Parser))
-        .Select(p => p.GetSettings().MainUri);
+      var searchHost = new Uri(host, "search?q=" + WebUtility.UrlEncode(name));
+      var page = await Page.GetPageAsync(searchHost, client);
+      if (!page.HasContent)
+        return null;
 
-      var client = new CookieClient();
-      foreach (var host in hosts)
+      return await Task.Run(() =>
       {
-        var searchHost = new Uri(host, "search?q=" + WebUtility.UrlEncode(name));
-        var page = Page.GetPage(searchHost, client);
-        if (!page.HasContent)
-          continue;
-
         var document = new HtmlDocument();
         document.LoadHtml(page.Content);
-        var mangas = document.DocumentNode.SelectNodes("//div[contains(@class, 'col-sm-6')]");
-        if (mangas == null)
-          continue;
+        return new Tuple<HtmlNodeCollection, Uri>(document.DocumentNode.SelectNodes("//div[contains(@class, 'col-sm-6')]"), host);
+      });
+    }
 
-        foreach (var manga in mangas)
-        {
-          // Это переводчик, идем дальше.
-          if (manga.SelectSingleNode(".//i[@class='fa fa-user text-info']") != null)
-            continue;
+    protected override async Task<IManga> GetMangaFromNode(Uri host, CookieClient client, HtmlNode manga)
+    {
+      // Это переводчик, идем дальше.
+      if (manga.SelectSingleNode(".//i[@class='fa fa-user text-info']") != null)
+        return null;
 
-          var image = manga.SelectSingleNode(".//div[@class='img']//a//img");
-          var imageUri = image?.Attributes.Single(a => a.Name == "data-original").Value;
+      var image = manga.SelectSingleNode(".//div[@class='img']//a//img");
+      var imageUri = image?.Attributes.Single(a => a.Name == "data-original").Value;
 
-          var mangaNode = manga.SelectSingleNode(".//h3//a");
-          var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
-          var mangaName = mangaNode.Attributes.Single(a => a.Name == "title").Value;
+      var mangaNode = manga.SelectSingleNode(".//h3//a");
+      var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
+      var mangaName = mangaNode.Attributes.Single(a => a.Name == "title").Value;
 
-          if (!Uri.TryCreate(mangaUri, UriKind.Relative, out Uri test))
-            continue;
+      if (!Uri.TryCreate(mangaUri, UriKind.Relative, out Uri test))
+        return null;
 
-          var result = Mangas.Create(new Uri(host, mangaUri));
-          result.Name = WebUtility.HtmlDecode(mangaName);
-          if (imageUri != null)
-            result.Cover = client.DownloadData(imageUri);
-          yield return result;
-        }
-      }
+      var result = Mangas.Create(new Uri(host, mangaUri));
+      result.Name = WebUtility.HtmlDecode(mangaName);
+      result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri));
+      return result;
     }
 
     private IEnumerable<byte[]> GetPreviewsImpl(IManga manga)

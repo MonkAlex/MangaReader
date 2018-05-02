@@ -1,6 +1,7 @@
 ﻿using System;
 using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Services;
+using LibraryViewModel = MangaReader.Avalonia.ViewModel.Explorer.LibraryViewModel;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Library
 {
@@ -10,7 +11,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Library
     private BaseCommand Pause;
     private BaseCommand Continue;
     private BaseCommand activeCommand;
-    private LibraryViewModel library;
+    private Core.Services.LibraryViewModel library;
 
     private BaseCommand ActiveCommand
     {
@@ -57,7 +58,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Library
       }
     }
 
-    public UpdateWithPauseCommand(LibraryContentViewModel view, LibraryViewModel library)
+    public UpdateWithPauseCommand(LibraryViewModel view, Core.Services.LibraryViewModel library)
     {
       this.library = library;
       this.Update = new UpdateVisibleMangaCommand(view, library);

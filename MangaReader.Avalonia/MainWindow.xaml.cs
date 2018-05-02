@@ -1,22 +1,23 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
+using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using MangaReader.Avalonia.ViewModel;
 using MangaReader.Core.Convertation;
-using MangaReader.Core.Manga;
 using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Avalonia
 {
   public class MainWindow : Window
   {
-    private ExplorerViewModel explorer;
+    private ExplorerViewModel explorer = ExplorerViewModel.Instance;
 
     public MainWindow()
     {
@@ -26,8 +27,23 @@ namespace MangaReader.Avalonia
       var processTest = new ProcessTest();
       processTest.StateChanged += ProcessTestOnStateChanged;
       Task.Run(() => MangaReader.Core.Client.Start(processTest));
-      explorer = new ExplorerViewModel();
       this.DataContext = explorer;
+
+      // Focus to first textbox
+      explorer.Changed
+        .Where(c => c.PropertyName == nameof(ExplorerViewModel.SelectedTab))
+        .Subscribe(async args =>
+        {
+          await Dispatcher.UIThread.InvokeAsync(() =>
+          {
+            var grid = this.LogicalChildren.OfType<Grid>().FirstOrDefault();
+            var cp = grid?.GetLogicalChildren().OfType<ContentPresenter>().FirstOrDefault();
+            var appliedUserControl = cp?.GetLogicalChildren().FirstOrDefault();
+            var cpGrid = appliedUserControl?.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
+            var textBox = cpGrid?.GetLogicalChildren().OfType<TextBox>().FirstOrDefault();
+            textBox?.Focus();
+          }, DispatcherPriority.Background);
+        });
     }
 
     private void ProcessTestOnStateChanged(object sender, ConvertState convertState)

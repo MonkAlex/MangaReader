@@ -1,12 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System.Threading.Tasks;
 
-namespace MangaReader.Avalonia.ViewModel.Explorer.Tabs
+namespace MangaReader.Avalonia.ViewModel.Explorer
 {
   public class ExplorerTabViewModel : ViewModelBase
   {
     private string name;
     private int priority;
-    private INotifyPropertyChanged content;
 
     public string Name
     {
@@ -20,10 +19,14 @@ namespace MangaReader.Avalonia.ViewModel.Explorer.Tabs
       set { RaiseAndSetIfChanged(ref priority, value); }
     }
 
-    public INotifyPropertyChanged Content
+    public virtual async Task OnSelected(ExplorerTabViewModel previousModel)
     {
-      get { return content; }
-      set { RaiseAndSetIfChanged(ref content, value); }
+
+    }
+
+    public virtual async Task OnUnselected(ExplorerTabViewModel newModel)
+    {
+
     }
   }
 }

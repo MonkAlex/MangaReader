@@ -7,7 +7,6 @@ namespace MangaReader.Core.ApplicationControl
   {
     public static void Run(string uniqueId, Messages message)
     {
-#warning Avalonia:Пайпы не хотят работать под моно.
       using (var client = new NamedPipeClientStream(uniqueId))
       {
         client.Connect(5000);

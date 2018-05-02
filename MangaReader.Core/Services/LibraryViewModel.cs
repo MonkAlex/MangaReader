@@ -113,12 +113,18 @@ namespace MangaReader.Core.Services
       using (var context = Repository.GetEntityContext())
       {
         if (context.Get<IManga>().Any(m => m.Uri == uri))
+        {
+          Log.Info("Манга уже добавлена.");
           return false;
+        }
       }
 
       var newManga = Mangas.CreateFromWeb(uri);
       if (newManga == null || !newManga.IsValid())
+      {
+        Log.Info("Не удалось найти мангу.");
         return false;
+      }
 
       OnLibraryChanged(new LibraryViewModelArgs(null, newManga, MangaOperation.Added, LibraryOperation.UpdateMangaChanged));
       Log.Info(Strings.Library_Status_MangaAdded + newManga.Name);

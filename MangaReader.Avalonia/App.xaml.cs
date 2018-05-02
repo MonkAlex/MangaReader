@@ -11,6 +11,18 @@ namespace MangaReader.Avalonia
 {
   class App : Application
   {
+    public static AppBuilder BuildAvaloniaApp()
+    {
+      var app = AppBuilder.Configure<App>();
+
+      if (Environment.OSVersion.Platform == PlatformID.Unix ||
+          Environment.OSVersion.Platform == PlatformID.MacOSX)
+        app = app.UseSkia().UseGtk3();
+      else
+        app = app.UsePlatformDetect();
+      app = app.UseReactiveUI();
+      return app;
+    }
 
     public override void Initialize()
     {
@@ -20,29 +32,13 @@ namespace MangaReader.Avalonia
 
     static void Main(string[] args)
     {
-      InitializeLogging();
-      AppBuilder.Configure<App>()
-        .UsePlatformDetect()
-        .UseReactiveUI()
-        .Start<MainWindow>();
+      BuildAvaloniaApp().Start<MainWindow>();
     }
 
     public static void AttachDevTools(Window window)
     {
 #if DEBUG
       DevTools.Attach(window);
-#endif
-    }
-
-    private static void InitializeLogging()
-    {
-#if DEBUG
-      /*
-            SerilogLogger.Initialize(new LoggerConfiguration()
-                .MinimumLevel.Warning()
-                .WriteTo.Trace(outputTemplate: "{Area}: {Message}")
-                .CreateLogger());
-                */
 #endif
     }
   }

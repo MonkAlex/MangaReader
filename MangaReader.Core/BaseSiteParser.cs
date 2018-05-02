@@ -1,12 +1,18 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.EquivalencyExpression;
+using HtmlAgilityPack;
+using MangaReader.Core.Account;
 using MangaReader.Core.DataTrasferObject;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core
 {
@@ -99,7 +105,21 @@ namespace MangaReader.Core
 
     public abstract IEnumerable<byte[]> GetPreviews(IManga manga);
 
-    public abstract IEnumerable<IManga> Search(string name);
+    public virtual IAsyncEnumerable<IManga> Search(string name)
+    {
+      var client = new CookieClient();
+      var hosts = ConfigStorage.Plugins
+        .Where(p => p.GetParser().GetType() == this.GetType())
+        .Select(p => p.GetSettings().MainUri);
+      return hosts.SelectAsync(async host => await GetMangaNodes(name, host, client))
+        .Where(nc => nc != null && nc.Item1 != null)
+        .SelectMany(n => n.Item1.SelectAsync(node => GetMangaFromNode(n.Item2, client, node)))
+        .Where(m => m != null);
+    }
+
+    protected abstract Task<Tuple<HtmlNodeCollection, Uri>> GetMangaNodes(string name, Uri host, CookieClient client);
+
+    protected abstract Task<IManga> GetMangaFromNode(Uri host, CookieClient client, HtmlNode manga);
 
     public virtual IMapper GetMapper()
     {
@@ -116,7 +136,7 @@ namespace MangaReader.Core
             .EqualityComparison((src, dest) => src.ImageLink == dest.ImageLink);
         });
         return config.CreateMapper();
-      });      
+      });
     }
   }
 }

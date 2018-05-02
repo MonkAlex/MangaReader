@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Acomics</RootNamespace>
     <AssemblyName>Acomics.ru</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -74,7 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MangaReader.Core\MangaReader.Core.csproj">
-      <Project>{744f331a-938a-475a-840a-7fac985ebe61}</Project>
+      <Project>{19d569ba-e9c5-4d82-8baa-897d7d2ea007}</Project>
       <Name>MangaReader.Core</Name>
     </ProjectReference>
   </ItemGroup>

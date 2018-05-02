@@ -21,7 +21,9 @@ namespace MangaReader.Core.Services
     /// <param name="query"></param>
     public static void Update(this IEnumerable<Entity.Entity> query)
     {
-      query.ForEach(q => q.Update());
+#warning может выкинуть?
+      foreach (var q in query)
+        q.Update();
     }
 
     public static string HumanizeByteSize(this long byteCount)

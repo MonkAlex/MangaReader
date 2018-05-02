@@ -1,98 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CB38A54B-C280-4C63-90FC-1EA6BC017BA9}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>MangaReader.Avalonia</RootNamespace>
-    <AssemblyName>MangaReader.Avalonia</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <ApplicationIcon />
+    <StartupObject />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.5.2-build4115-alpha" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.5.2-build4115-alpha" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.5.2-build4115-alpha" />
-    <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.1.0" />
-    <Reference Include="System" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.6.1" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.6.1" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModel\Command\BaseCommand.cs" />
-    <Compile Include="ViewModel\Command\DelegateCommand.cs" />
-    <Compile Include="ViewModel\Command\Library\ContinueCommand.cs" />
-    <Compile Include="ViewModel\Command\Library\LibraryBaseCommand.cs" />
-    <Compile Include="ViewModel\Command\Library\PauseCommand.cs" />
-    <Compile Include="ViewModel\Command\Library\UpdateVisibleMangaCommand.cs" />
-    <Compile Include="ViewModel\Command\Library\UpdateWithPauseCommand.cs" />
-    <Compile Include="ViewModel\Command\Manga\MangaCommand.cs" />
-    <Compile Include="ViewModel\Command\Manga\OpenFolderCommand.cs" />
-    <Compile Include="ViewModel\ExplorerViewModel.cs" />
-    <Compile Include="ViewModel\Explorer\LibraryContentViewModel.cs" />
-    <Compile Include="ViewModel\Explorer\SearchContentViewModel.cs" />
-    <Compile Include="ViewModel\Explorer\Tabs\ExplorerTabViewModel.cs" />
-    <Compile Include="ViewModel\Explorer\Tabs\LibraryTabViewModel.cs" />
-    <Compile Include="ViewModel\Explorer\Tabs\SearchTabViewModel.cs" />
-    <Compile Include="ViewModel\ViewModelBase.cs" />
-    <EmbeddedResource Include="App.xaml" />
-    <Compile Include="..\VersionInfo.cs">
-      <Link>Properties\VersionInfo.cs</Link>
-    </Compile>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="MainWindow.xaml" />
-    <Compile Include="BitmapConverter.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
+    <ProjectReference Include="..\MangaReader.Core\MangaReader.Core.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\MangaReader.Core\MangaReader.Core.csproj">
-      <Project>{744f331a-938a-475a-840a-7fac985ebe61}</Project>
-      <Name>MangaReader.Core</Name>
-      <Private>False</Private>
-    </ProjectReference>
+    <Folder Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="UI\ListBox.xaml" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="BeforeBuild">
-    <MakeDir Directories="$(TargetDir)\Plugins" />
-  </Target>
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)\libSkiaSharp.dylib.so" DestinationFiles="$(TargetDir)\libSkiaSharp.so" />
-    <ItemGroup>
-      <SourceFiles Include="$(ProjectDir)\..\MangaReader.Core\bin\$(ConfigurationName)\**\*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(SourceFiles)" DestinationFolder="$(TargetDir)\%(RecursiveDir)" />
-    <ItemGroup>
-      <SourceFiles Include="$(ProjectDir)\..\Sites\Bin\$(ConfigurationName)\*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(SourceFiles)" DestinationFolder="$(TargetDir)\Plugins" />
-  </Target>
+
 </Project>

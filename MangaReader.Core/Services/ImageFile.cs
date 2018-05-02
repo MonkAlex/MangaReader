@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -39,8 +40,9 @@ namespace MangaReader.Core.Services
       {
         if (this.Exist && string.IsNullOrWhiteSpace(this.extension))
         {
+#warning Нужны тесты, чота непонятно, работает ли.
           var created = Image.FromStream(new MemoryStream(this.Body));
-          var parsed = new ImageFormatConverter().ConvertToString(created.RawFormat);
+          var parsed = new TypeConverter().ConvertToString(created.RawFormat);
           this.extension = (parsed ?? "jpg").ToLower();
         }
         return this.extension;

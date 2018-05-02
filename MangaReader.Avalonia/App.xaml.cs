@@ -11,9 +11,18 @@ namespace MangaReader.Avalonia
 {
   class App : Application
   {
-    public static AppBuilder BuildAvaloniaApp() => AppBuilder.Configure<App>()
-      .UsePlatformDetect()
-      .UseReactiveUI();
+    public static AppBuilder BuildAvaloniaApp()
+    {
+      var app = AppBuilder.Configure<App>();
+
+      if (Environment.OSVersion.Platform == PlatformID.Unix ||
+          Environment.OSVersion.Platform == PlatformID.MacOSX)
+        app = app.UseSkia().UseGtk3();
+      else
+        app = app.UsePlatformDetect();
+      app = app.UseReactiveUI();
+      return app;
+    }
 
     public override void Initialize()
     {

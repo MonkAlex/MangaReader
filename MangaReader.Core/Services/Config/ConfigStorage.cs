@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using MangaReader.Core.Exception;
 using Newtonsoft.Json;
@@ -131,8 +132,8 @@ namespace MangaReader.Core.Services.Config
         {
           var result = new List<IPlugin>();
           var container = new CompositionContainer(new DirectoryCatalog(path));
-          var imanga = typeof (Manga.IManga);
-          var ilogin = typeof (Account.ILogin);
+          var imanga = typeof(Manga.IManga);
+          var ilogin = typeof(Account.ILogin);
           foreach (var plugin in container.GetExportedValues<IPlugin>())
           {
             try
@@ -153,7 +154,13 @@ namespace MangaReader.Core.Services.Config
               Log.Exception(mre);
             }
           }
+
           return result;
+        }
+        catch (ReflectionTypeLoadException ex)
+        {
+          foreach (var exception in ex.LoaderExceptions)
+            Log.Exception(exception, "Loader exception:");
         }
         catch (System.Exception ex)
         {

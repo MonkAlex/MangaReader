@@ -15,10 +15,11 @@ artifacts:
     name: test logs
     type: zip
 after_build:
-  - nuget.exe install OpenCover -ExcludeVersion
+  - nuget install OpenCover -ExcludeVersion
+  - nuget install NUnit.Runners -ExcludeVersion
   - pip install codecov
 
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"packages\NUnit.ConsoleRunner.3.6.1\tools\nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.API\bin\Release\Tests.API.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"packages\NUnit.ConsoleRunner.3.6.1\tools\nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.Entities\bin\Release\Tests.Entities.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"packages\NUnit.ConsoleRunner.3.6.1\tools\nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.Convertation\bin\Release\Tests.Convertation.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.API\bin\Release\Tests.API.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.Entities\bin\Release\Tests.Entities.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.Convertation\bin\Release\Tests.Convertation.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All
   - codecov -f "coverage.xml"

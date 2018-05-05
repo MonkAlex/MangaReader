@@ -16,7 +16,7 @@ artifacts:
     type: zip
 after_build:
   - nuget install OpenCover -ExcludeVersion
-  - nuget install NUnit.Runners -ExcludeVersion
+  - nuget install NUnit.Runners -Version 3.7.0 -ExcludeVersion
   - pip install codecov
 
   - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.API\bin\Release\Tests.API.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All

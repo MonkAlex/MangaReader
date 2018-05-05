@@ -11,8 +11,6 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
   {
     public override void Execute(IEnumerable<IManga> mangas)
     {
-#warning Диалоги нужны для стандарта
-      /*
       var list = mangas.ToList();
 
       var text = list.Count == 1 ? $"Удалить историю {list[0].Name}?" :
@@ -34,7 +32,6 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
         }
         list.SaveAll();
       }
-      */
     }
 
     public HistoryClearMangaCommand(Explorer.LibraryViewModel model) : base(model)

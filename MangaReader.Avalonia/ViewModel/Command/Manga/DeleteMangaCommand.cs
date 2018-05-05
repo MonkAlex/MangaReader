@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-//using Dialogs.Controls;
+using Dialogs.Controls;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Avalonia.Properties;
@@ -12,8 +12,6 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
   {
     public override void Execute(IEnumerable<IManga> mangas)
     {
-#warning Диалоги нужны для стандарта
-      /*
       var list = mangas.ToList();
       var isSingle = list.Count == 1;
       var text = isSingle ? string.Format("Удалить мангу {0}?", list[0].Name) :
@@ -43,7 +41,6 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
           }
         }).LogException();
       }
-      */
     }
 
     public DeleteMangaCommand(Explorer.LibraryViewModel model) : base(model)

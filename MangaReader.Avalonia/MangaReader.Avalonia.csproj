@@ -36,4 +36,13 @@
     <ProjectReference Include="..\Sites\Hentaichan.me\Hentaichan.me.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Dialogs.Avalonia">
+      <HintPath>lib\Dialogs.Avalonia.dll</HintPath>
+    </Reference>
+    <Reference Include="Dialogs.Interfaces">
+      <HintPath>lib\Dialogs.Interfaces.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

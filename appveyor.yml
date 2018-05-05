@@ -16,10 +16,9 @@ artifacts:
     type: zip
 after_build:
   - nuget install OpenCover -ExcludeVersion
-  - nuget install NUnit.Runners -ExcludeVersion
   - pip install codecov
 
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.API\bin\Release\netcoreapp2.0\Tests.API.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.Entities\bin\Release\netcoreapp2.0\Tests.Entities.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.Convertation\bin\Release\netcoreapp2.0\Tests.Convertation.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test .\Tests\Tests.API\Tests.API.csproj" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test .\Tests\Tests.Convertation\Tests.Convertation.csproj" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test .\Tests\Tests.Entities\Tests.Entities.csproj" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle
   - codecov -f "coverage.xml"

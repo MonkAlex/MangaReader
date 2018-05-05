@@ -110,7 +110,7 @@ namespace Grouple
 
         // Фикс страницы с цензурой.
         if (!Uri.TryCreate(uriString, UriKind.Absolute, out Uri imageLink))
-          imageLink = new Uri(@"http://" + groupleChapter.Uri.Host + uriString);
+          imageLink = new Uri(groupleChapter.Uri.GetLeftPart(UriPartial.Authority) + uriString);
 
         groupleChapter.Container.Add(new GroupleMangaPage(groupleChapter.Uri, imageLink, i, serversList));
       }
@@ -172,7 +172,7 @@ namespace Grouple
           .ConvertAll(r => r.Attributes.ToList().ConvertAll(i => i.Value))
           .SelectMany(j => j)
           .Where(k => k != string.Empty)
-          .Select(s => @"http://" + page.ResponseUri.Host + s + "?mature=1")
+          .Select(s => page.ResponseUri.GetLeftPart(UriPartial.Authority) + s + "?mature=1")
           .Select(s => new Uri(s))
           .ToList();
         description = linkNodes

@@ -45,7 +45,8 @@ namespace MangaReader.Core.Services
       {
         Log.Exception(ex, $"{Strings.Page_GetPage_SiteOff}, ссылка: {url}, попытка номер - {restartCounter}");
 
-        if (ex.Status != WebExceptionStatus.Timeout && !DelayOnExpectationFailed(ex))
+        // Some HResult can be fix repeated.
+        if (ex.Status != WebExceptionStatus.Timeout && !DelayOnExpectationFailed(ex) && ex.HResult != -2146893023 && ex.HResult != 2147012721)
           return new Page(url);
         ++restartCounter;
         return GetPage(url, client, restartCounter);

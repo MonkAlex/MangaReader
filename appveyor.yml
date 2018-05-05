@@ -19,7 +19,7 @@ after_build:
   - nuget install NUnit.Runners -Version 3.7.0 -ExcludeVersion
   - pip install codecov
 
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.API\bin\Release\Tests.API.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.Entities\bin\Release\Tests.Entities.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.Convertation\bin\Release\Tests.Convertation.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.API\bin\Release\Tests.API.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.Entities\bin\Release\Tests.Entities.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.Convertation\bin\Release\Tests.Convertation.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle
   - codecov -f "coverage.xml"

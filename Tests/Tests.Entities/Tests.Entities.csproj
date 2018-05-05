@@ -1,172 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup>
-    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3B6A42FF-E0CB-4795-9C8E-054BFF696FD3}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tests.Entities</RootNamespace>
-    <AssemblyName>Tests.Entities</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
-    <IsCodedUITest>False</IsCodedUITest>
-    <TestProjectType>UnitTest</TestProjectType>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="FluentNHibernate">
-      <HintPath>..\..\MangaReader.Core\Library\FluentNHibernate.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="HtmlAgilityPack">
-      <HintPath>..\..\MangaReader.Core\Library\HtmlAgilityPack.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Iesi.Collections">
-      <HintPath>..\..\MangaReader.Core\Library\Iesi.Collections.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\MangaReader.Core\Library\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>..\..\MangaReader.Core\Library\NHibernate.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="nunit.framework, Version=3.7.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
-      <HintPath>..\..\packages\NUnit.3.7.1\lib\net45\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\MangaReader.Core\Library\System.Data.SQLite.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Interactive.Async">
-      <HintPath>..\..\packages\System.Interactive.Async.3.1.1\lib\net46\System.Interactive.Async.dll</HintPath>
-    </Reference>
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="WindowsBase" />
+    <Compile Include="..\..\MangaReader.Core\Loader.cs" Link="Loader.cs" />
   </ItemGroup>
-  <Choose>
-    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-      </ItemGroup>
-    </When>
-    <Otherwise />
-  </Choose>
+
   <ItemGroup>
-    <Compile Include="..\..\MangaReader.Core\Loader.cs">
-      <Link>Loader.cs</Link>
-    </Compile>
-    <Compile Include="Builder.cs" />
-    <Compile Include="Compression\MangaCompressionDeleteFolders.cs" />
-    <Compile Include="Compression\ArchiveNotInclude.cs" />
-    <Compile Include="Compression\CRUD.cs" />
-    <Compile Include="CRUD\MangaHistory.cs" />
-    <Compile Include="CRUD\Manga.cs" />
-    <Compile Include="Download\Acomics.cs" />
-    <Compile Include="Download\Hentaichan.cs" />
-    <Compile Include="Download\Mangachan.cs" />
-    <Compile Include="Download\Readmanga.cs" />
-    <Compile Include="Environment.cs" />
-    <Compile Include="Library\Add.cs" />
-    <Compile Include="Library\Update.cs" />
-    <Compile Include="MangaHistory\AcomicsChapters.cs" />
-    <Compile Include="Manga\AcomicsStructure.cs" />
-    <Compile Include="Manga\BonusesChapter.cs" />
-    <Compile Include="Manga\HentaichanStructure.cs" />
-    <Compile Include="Manga\MangachanStructure.cs" />
-    <Compile Include="Manga\MangaHistoryMultithread.cs" />
-    <Compile Include="Manga\MangaLocalName.cs" />
-    <Compile Include="Manga\MintmangaStructure.cs" />
-    <Compile Include="Manga\ReadmangaCensored.cs" />
-    <Compile Include="Manga\ReadmangaStructure.cs" />
-    <Compile Include="Mapping\Simple.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Manga\ReadmangaMoved.cs" />
-    <Compile Include="ReportProcess.cs" />
-    <Compile Include="Search\Acomics.cs" />
-    <Compile Include="Search\Grouple.cs" />
-    <Compile Include="Search\Henchan.cs" />
-    <Compile Include="Search\Mangachan.cs" />
-    <Compile Include="TestClass.cs" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
+    <PackageReference Include="NUnit" Version="3.10.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\..\MangaReader.Core\MangaReader.Core.csproj">
-      <Project>{19d569ba-e9c5-4d82-8baa-897d7d2ea007}</Project>
-      <Name>MangaReader.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Sites\Acomics.ru\Acomics.ru.csproj">
-      <Project>{6a7329f1-eaaa-42b0-97bc-c4f2bc6a5723}</Project>
-      <Name>Acomics.ru</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Sites\Grouple.ru\Grouple.ru.csproj">
-      <Project>{b6b81632-31f6-4018-b365-c3dc8ad2a40f}</Project>
-      <Name>Grouple.ru</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Sites\Hentaichan.me\Hentaichan.me.csproj">
-      <Project>{52a2b390-f993-4f56-9ac3-4304692a8137}</Project>
-      <Name>Hentaichan.me</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\MangaReader.Core\MangaReader.Core.csproj" />
+    <ProjectReference Include="..\..\Sites\Acomics.ru\Acomics.ru.csproj" />
+    <ProjectReference Include="..\..\Sites\Grouple.ru\Grouple.ru.csproj" />
+    <ProjectReference Include="..\..\Sites\Hentaichan.me\Hentaichan.me.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Choose>
-    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
+
 </Project>

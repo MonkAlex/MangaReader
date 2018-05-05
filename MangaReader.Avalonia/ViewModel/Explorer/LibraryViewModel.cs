@@ -117,6 +117,11 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     private async void LibraryOnLibraryChanged(object sender, LibraryViewModelArgs args)
     {
+      if (items == null)
+      {
+        await RefreshItems();
+      }
+
       await Dispatcher.UIThread.InvokeAsync(() =>
       {
         switch (args.LibraryOperation)

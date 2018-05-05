@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using MangaReader.Core.Services;
 using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands
@@ -13,7 +14,7 @@ namespace MangaReader.ViewModel.Commands
       base.Execute(parameter);
 
       var uri = new Uri($"{RepoUri}{parameter}");
-      Process.Start(uri.ToString());
+      Helper.StartUseShell(uri.ToString());
     }
   }
 }

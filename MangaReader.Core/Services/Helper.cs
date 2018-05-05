@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -56,6 +57,12 @@ namespace MangaReader.Core.Services
       byName.AddRange(ConfigStorage.Plugins.Select(p => p.Assembly));
       byName = byName.Distinct().ToList();
       return byName;
+    }
+
+    public static void StartUseShell(string uri)
+    {
+      var psi = new ProcessStartInfo(uri) { UseShellExecute = true };
+      Process.Start(psi);
     }
 
   }

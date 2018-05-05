@@ -43,7 +43,7 @@ namespace MangaReader.ViewModel.Commands.Setting
         {
           // TODO: потенциальная гонка условий, может не запуститься.
           new ExitCommand().Execute(parameter);
-          Process.Start(Application.ResourceAssembly.Location);
+          Helper.StartUseShell(Application.ResourceAssembly.Location);
         }
       }
 

@@ -13,7 +13,7 @@ namespace MangaReader.ViewModel.Commands.Manga
     {
       foreach (var manga in mangas)
       {
-        Process.Start(manga.Uri.OriginalString);
+        Helper.StartUseShell(manga.Uri.OriginalString);
       }
     }
 

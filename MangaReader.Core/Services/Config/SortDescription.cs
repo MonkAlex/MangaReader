@@ -10,7 +10,7 @@ namespace MangaReader.Core.Services.Config
     {
       this.PropertyName = propertyName;
       this.Direction = direction;
-      this.IsSealed = true;
+      this.IsSealed = false;
     }
     public ListSortDirection Direction { get; set; }
     public bool IsSealed { get; }

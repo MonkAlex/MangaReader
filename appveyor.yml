@@ -8,7 +8,7 @@ build:
   project: MangaReader.sln 
   verbosity: normal
 configuration:
-- Release
+- Debug
 test: off
 artifacts:
   - path: '**\*.log'

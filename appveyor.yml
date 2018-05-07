@@ -18,7 +18,7 @@ after_build:
   - nuget install OpenCover -ExcludeVersion
   - pip install codecov
 
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test .\Tests\Tests.API\Tests.API.csproj" -oldstyle
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test .\Tests\Tests.Convertation\Tests.Convertation.csproj" -oldstyle
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test .\Tests\Tests.Entities\Tests.Entities.csproj" -oldstyle
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test .\Tests\Tests.API\Tests.API.csproj" -oldstyle -filter:"+[*]* -[nunit*]*" -hideskipped:All
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test .\Tests\Tests.Convertation\Tests.Convertation.csproj" -oldstyle -filter:"+[*]* -[nunit*]*" -hideskipped:All
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test .\Tests\Tests.Entities\Tests.Entities.csproj" -oldstyle -filter:"+[*]* -[nunit*]*" -hideskipped:All
   - codecov -f "coverage.xml"

@@ -16,17 +16,6 @@ namespace MangaReader.Core.Services
 
     public static readonly Regex SpaceRegex = new Regex(@"\s{2,}", RegexOptions.Compiled);
 
-    /// <summary>
-    /// Перезагрузить коллекцию из базы.
-    /// </summary>
-    /// <param name="query"></param>
-    public static void Update(this IEnumerable<Entity.Entity> query)
-    {
-#warning может выкинуть?
-      foreach (var q in query)
-        q.Update();
-    }
-
     public static string HumanizeByteSize(this long byteCount)
     {
       string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; //Longs run out around EB

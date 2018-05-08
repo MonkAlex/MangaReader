@@ -8,7 +8,7 @@ build:
   project: MangaReader.sln 
   verbosity: normal
 configuration:
-- Debug
+- Release
 test: off
 artifacts:
   - path: '**\*.log'
@@ -16,9 +16,10 @@ artifacts:
     type: zip
 after_build:
   - nuget install OpenCover -ExcludeVersion
+  - nuget install NUnit.Runners -Version 3.7.0 -ExcludeVersion
   - pip install codecov
 
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test .\Tests\Tests.API\Tests.API.csproj" -oldstyle -filter:"+[*]* -[nunit*]*" -hideskipped:All
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test .\Tests\Tests.Convertation\Tests.Convertation.csproj" -oldstyle -filter:"+[*]* -[nunit*]*" -hideskipped:All
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test .\Tests\Tests.Entities\Tests.Entities.csproj" -oldstyle -filter:"+[*]* -[nunit*]*" -hideskipped:All
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.API\bin\Release\Tests.API.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.Entities\bin\Release\Tests.Entities.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.Convertation\bin\Release\Tests.Convertation.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle
   - codecov -f "coverage.xml"

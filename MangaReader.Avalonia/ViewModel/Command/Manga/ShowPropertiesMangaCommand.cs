@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Dialogs.Avalonia;
+using Dialogs.Buttons;
 using MangaReader.Core.Manga;
 using MangaReader.Avalonia.Properties;
 
@@ -9,16 +11,15 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
   {
     private MangaModel model;
 
-    public override void Execute(object parameter)
+    public override async void Execute(IEnumerable<IManga> mangas)
     {
-      model = (MangaModel)parameter;
-      base.Execute(parameter);
-    }
-
-    public override void Execute(IEnumerable<IManga> mangas)
-    {
+      var dialog = new Dialog();
+      dialog.Title = this.Name;
+      dialog.Description = "Не реализовано, возможно в след. версии.";
+      dialog.Buttons.AddButton(DefaultButtons.OkButton);
+      await dialog.ShowAsync();
 #warning Свойства пока не отображаем.
-      // model.Show();
+      //SelectedModels.SingleOrDefault()?.Show();
     }
 
     public override bool CanExecute(object parameter)

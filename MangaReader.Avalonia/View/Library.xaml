@@ -15,7 +15,7 @@
             <Grid RowDefinitions="*,Auto" Margin="10"
                 Width="150" Height="300">
               <Image Grid.Row="0" Source="{Binding Cover, Converter={x:Static av:BitmapTypeConverter.Instance}}"/>
-              <TextBlock Grid.Row="1" Text="{Binding Name}" TextWrapping="Wrap" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center"/>
+              <TextBlock Grid.Row="1" Text="{Binding MangaName}" TextWrapping="Wrap" ToolTip.Tip="{Binding MangaName}" HorizontalAlignment="Center"/>
             </Grid>
           </DataTemplate>
         </ListBox.ItemTemplate>

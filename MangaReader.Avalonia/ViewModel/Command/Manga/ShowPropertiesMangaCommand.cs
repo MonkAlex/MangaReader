@@ -4,22 +4,24 @@ using Dialogs.Avalonia;
 using Dialogs.Buttons;
 using MangaReader.Core.Manga;
 using MangaReader.Avalonia.Properties;
+using MangaReader.Avalonia.ViewModel.Explorer;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
   public class ShowPropertiesMangaCommand : MultipleMangasBaseCommand
   {
-    private MangaModel model;
-
-    public override async void Execute(IEnumerable<IManga> mangas)
+    public override void Execute(IEnumerable<IManga> mangas)
     {
-      var dialog = new Dialog();
-      dialog.Title = this.Name;
-      dialog.Description = "Не реализовано, возможно в след. версии.";
-      dialog.Buttons.AddButton(DefaultButtons.OkButton);
-      await dialog.ShowAsync();
-#warning Свойства пока не отображаем.
-      //SelectedModels.SingleOrDefault()?.Show();
+      var manga = mangas.Single();
+      var explorer = ExplorerViewModel.Instance;
+      var searchTab = explorer.Tabs.OfType<MangaModel>().SingleOrDefault(t => t.ContextManga == manga);
+      if (searchTab == null)
+      {
+        searchTab = new MangaModel(manga);
+        explorer.Tabs.Add(searchTab);
+      }
+
+      explorer.SelectedTab = searchTab;
     }
 
     public override bool CanExecute(object parameter)

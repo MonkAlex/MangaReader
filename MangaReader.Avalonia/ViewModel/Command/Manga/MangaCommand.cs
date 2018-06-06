@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using MangaReader.Avalonia.ViewModel.Command.Library;
+using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;

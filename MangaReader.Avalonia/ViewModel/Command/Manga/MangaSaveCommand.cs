@@ -1,6 +1,8 @@
 ﻿using MangaReader.Avalonia.ViewModel.Command.Library;
+using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Exception;
 using MangaReader.Core.Services;
+using LibraryViewModel = MangaReader.Core.Services.LibraryViewModel;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
-namespace MangaReader.Avalonia.ViewModel
+namespace MangaReader.Avalonia.ViewModel.Explorer
 {
-  public class MangaModel : ViewModelBase
+  public class MangaModel : ExplorerTabViewModel
   {
     #region MangaProperties
 
@@ -22,7 +23,7 @@ namespace MangaReader.Avalonia.ViewModel
 
     public int Id { get; set; }
 
-    public string Name
+    public string MangaName
     {
       get => CanChangeName ? name : OriginalName;
       set => RaiseAndSetIfChanged(ref name, value);
@@ -43,7 +44,7 @@ namespace MangaReader.Avalonia.ViewModel
       {
         RaiseAndSetIfChanged(ref canChangeName, value);
         this.NameIsReadonly = !value;
-        RaisePropertyChanged(nameof(Name));
+        RaisePropertyChanged(nameof(MangaName));
       }
     }
 
@@ -144,7 +145,7 @@ namespace MangaReader.Avalonia.ViewModel
         return;
 
       this.Id = manga.Id;
-      this.Name = manga.Name;
+      this.MangaName = manga.Name;
       this.OriginalName = manga.ServerName;
       this.Folder = manga.Folder;
       this.CanChangeName = manga.IsNameChanged;
@@ -209,6 +210,12 @@ namespace MangaReader.Avalonia.ViewModel
     private DateTime? created;
     private DateTime? downloadedAt;
 
+    public override Task OnUnselected(ExplorerTabViewModel newModel)
+    {
+      ExplorerViewModel.Instance.Tabs.Remove(this);
+      return base.OnUnselected(newModel);
+    }
+
     /*
     public ICommand Save => new MangaSaveCommand(this, WindowHelper.Library);
 
@@ -236,6 +243,7 @@ namespace MangaReader.Avalonia.ViewModel
     public MangaModel(IManga manga)
     {
       UpdateProperties(manga);
+      this.Name = manga.Name;
     }
   }
 }

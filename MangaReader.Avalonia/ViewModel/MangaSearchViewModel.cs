@@ -9,7 +9,7 @@ using MangaReader.Core.Manga;
 
 namespace MangaReader.Avalonia.ViewModel
 {
-  public class MangaViewModel : ViewModelBase
+  public class MangaSearchViewModel : ViewModelBase
   {
     private string name;
     private byte[] cover;
@@ -49,7 +49,7 @@ namespace MangaReader.Avalonia.ViewModel
 
     private AddToLibraryCommand addToLibrary;
 
-    public MangaViewModel(IManga manga)
+    public MangaSearchViewModel(IManga manga)
     {
       this.name = manga.Name;
       this.uri = manga.Uri;

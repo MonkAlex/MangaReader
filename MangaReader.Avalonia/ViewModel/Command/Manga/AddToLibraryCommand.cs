@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using MangaReader.Avalonia.ViewModel.Explorer;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
@@ -10,12 +9,21 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
 
     public override void Execute(object parameter)
     {
-      var model = parameter as MangaViewModel;
+      var model = parameter as MangaSearchViewModel;
       if (model == null)
         return;
       
       var libraries = ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().ToList();
-      var added = libraries.Any() && libraries.All(l => l.Library.Add(model.Uri));
+      var added = libraries.Any() && libraries.All(l =>
+      {
+        var result = l.Library.Add(model.Uri, out var manga);
+        if (result && manga.Cover == null)
+        {
+          manga.Cover = model.Cover;
+          manga.Save();
+        }
+        return result;
+      });
       if (added)
       {
         searchModel.Items.Remove(model);

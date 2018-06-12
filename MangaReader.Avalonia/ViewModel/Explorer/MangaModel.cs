@@ -141,6 +141,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public void UpdateProperties(IManga manga)
     {
+      this.Name = manga?.Name ?? "<Empty>";
+
       if (manga == null)
         return;
 
@@ -243,7 +245,6 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     public MangaModel(IManga manga)
     {
       UpdateProperties(manga);
-      this.Name = manga.Name;
     }
   }
 }

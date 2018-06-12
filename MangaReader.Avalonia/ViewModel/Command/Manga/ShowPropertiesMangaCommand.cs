@@ -17,9 +17,15 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       var searchTab = explorer.Tabs.OfType<MangaModel>().SingleOrDefault(t => t.ContextManga == manga);
       if (searchTab == null)
       {
-        searchTab = new MangaModel(manga);
+        searchTab = this.LibraryModel.SelectedMangaModels.SingleOrDefault(m => m.Id == manga.Id);
+        if (searchTab != null)
+          searchTab.UpdateProperties(manga);
+        else
+          searchTab = new MangaModel(manga);
         explorer.Tabs.Add(searchTab);
       }
+      else
+        searchTab.UpdateProperties(manga);
 
       explorer.SelectedTab = searchTab;
     }

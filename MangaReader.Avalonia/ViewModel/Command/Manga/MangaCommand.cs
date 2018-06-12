@@ -78,7 +78,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       {
         var selected = SelectedModels.ToList();
         LibraryModel.FilteredItems.Reset();
-        foreach (var model in selected.Where(s => LibraryModel.FilteredItems.Contains(s)))
+        foreach (var model in selected.Where(s => LibraryModel.FilteredItems.Contains(s) && !LibraryModel.SelectedMangaModels.Contains(s)))
           LibraryModel.SelectedMangaModels.Add(model);
       }
 

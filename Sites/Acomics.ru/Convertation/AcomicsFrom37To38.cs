@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Linq;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services.Config;
 
 namespace Acomics.Convertation
@@ -12,13 +12,16 @@ namespace Acomics.Convertation
     {
       base.ProtectedConvert(process);
 
-      var setting = ConfigStorage.GetPlugin<Acomics>().GetSettings();
-      if (setting != null && setting.MainUri == null)
+      using (Repository.GetEntityContext())
       {
-        setting.MainUri = new Uri("http://acomics.ru/");
-        setting.MangaSettingUris.Add(setting.MainUri);
-        setting.Login.MainUri = setting.MainUri;
-        setting.Save();
+        var setting = ConfigStorage.GetPlugin<Acomics>().GetSettings();
+        if (setting != null && setting.MainUri == null)
+        {
+          setting.MainUri = new Uri("http://acomics.ru/");
+          setting.MangaSettingUris.Add(setting.MainUri);
+          setting.Login.MainUri = setting.MainUri;
+          setting.Save();
+        }
       }
     }
 

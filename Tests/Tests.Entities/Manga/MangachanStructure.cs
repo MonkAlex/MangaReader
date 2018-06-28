@@ -12,10 +12,10 @@ namespace Tests.Entities.Manga
     [Test]
     public void AddMangachanMultiPages()
     {
-      var manga = GetManga("http://mangachan.me/manga/3828-12-prince.html");
+      var manga = GetManga("http://mangachan.me/manga/15659-this-girlfriend-is-fiction.html");
       new Hentaichan.Mangachan.Parser().UpdateContent(manga);
-      Assert.AreEqual(16, manga.Volumes.Count);
-      Assert.AreEqual(78, manga.Volumes.Sum(v => v.Container.Count()));
+      Assert.AreEqual(4, manga.Volumes.Count);
+      Assert.AreEqual(34, manga.Volumes.Sum(v => v.Container.Count()));
     }
 
     [Test]

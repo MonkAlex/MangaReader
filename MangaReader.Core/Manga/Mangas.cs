@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using MangaReader.Core.Entity;
 using MangaReader.Core.Exception;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Properties;
@@ -464,16 +465,18 @@ namespace MangaReader.Core.Manga
       Log.Info(Strings.Mangas_Compress_Completed);
     }
 
-    protected override void BeforeSave(object[] currentState, object[] previousState, string[] propertyNames)
+    public override void BeforeSave(ChangeTrackerArgs args)
     {
-      var mangaFolder = DirectoryHelpers.MakeValidPath(this.Name.Replace(Path.DirectorySeparatorChar, '.'));
-      Folder = DirectoryHelpers.MakeValidPath(Path.Combine(this.Setting.Folder, mangaFolder));
-      currentState[propertyNames.ToList().IndexOf(nameof(Folder))] = Folder;
+      if (!this.IsValid())
+        throw new SaveValidationException("Нельзя сохранять невалидную сущность", this);
+
+      RefreshFolder();
+      args.CurrentState[args.PropertyNames.ToList().IndexOf(nameof(Folder))] = Folder;
 
       if (CompressionMode == null)
       {
         CompressionMode = this.GetDefaultCompression();
-        currentState[propertyNames.ToList().IndexOf(nameof(CompressionMode))] = CompressionMode;
+        args.CurrentState[args.PropertyNames.ToList().IndexOf(nameof(CompressionMode))] = CompressionMode;
       }
 
       using (var context = Repository.GetEntityContext())
@@ -482,9 +485,9 @@ namespace MangaReader.Core.Manga
           throw new SaveValidationException($"Другая манга уже использует папку {this.Folder}.", this);
       }
 
-      if (previousState != null)
+      if (args.PreviousState != null)
       {
-        var dirName = previousState[propertyNames.ToList().IndexOf(nameof(Folder))] as string;
+        var dirName = args.PreviousState[args.PropertyNames.ToList().IndexOf(nameof(Folder))] as string;
         dirName = DirectoryHelpers.MakeValidPath(dirName);
         var newValue = this.GetAbsoulteFolderPath();
         var oldValue = DirectoryHelpers.GetAbsoulteFolderPath(dirName);
@@ -498,15 +501,13 @@ namespace MangaReader.Core.Manga
         }
       }
 
-      base.BeforeSave(currentState, previousState, propertyNames);
+      base.BeforeSave(args);
     }
 
-    public override void Save()
+    public virtual void RefreshFolder()
     {
-      if (!this.IsValid())
-        throw new SaveValidationException("Нельзя сохранять невалидную сущность", this);
-
-      base.Save();
+      var mangaFolder = DirectoryHelpers.MakeValidPath(this.Name.Replace(Path.DirectorySeparatorChar, '.'));
+      Folder = DirectoryHelpers.MakeValidPath(Path.Combine(this.Setting.Folder, mangaFolder));
     }
 
     public override string ToString()

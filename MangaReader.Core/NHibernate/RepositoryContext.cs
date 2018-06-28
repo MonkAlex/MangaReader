@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using MangaReader.Core.Entity;
+using MangaReader.Core.Services;
 using NHibernate;
 using NHibernate.Linq;
 
@@ -72,9 +73,17 @@ namespace MangaReader.Core.NHibernate
           count--;
           return;
         }
-        
-        Repositories.TryRemove(session, out _);
+
+        try
+        {
+          session?.Flush();
+        }
+        catch (System.Exception e)
+        {
+          Log.Exception(e);
+        }
         session?.Dispose();
+        Repositories.TryRemove(session, out _);
       }
     }
   }

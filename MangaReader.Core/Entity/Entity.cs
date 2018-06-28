@@ -21,17 +21,17 @@ namespace MangaReader.Core.Entity
 
     private int id = 0;
 
-    protected virtual void BeforeSave(object[] currentState, object[] previousState, string[] propertyNames)
-    {
-
-    }
-
     /// <summary>
     /// Сохранить в базу.
     /// </summary>
     public virtual void Save()
     {
       Repository.Save(this);
+    }
+
+    public virtual void BeforeSave(ChangeTrackerArgs args)
+    {
+
     }
 
     /// <summary>

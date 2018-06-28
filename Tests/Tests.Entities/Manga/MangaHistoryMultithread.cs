@@ -35,7 +35,7 @@ namespace Tests.Entities.Manga
       Directory.CreateDirectory(manga.GetAbsoulteFolderPath());
       var manga2 = Builder.CreateReadmanga();
 
-      var exception = Assert.Catch<TargetInvocationException>(() =>
+      var exception = Assert.Catch<SaveValidationException>(() =>
       {
         var manga3 = Builder.CreateReadmanga();
         Directory.CreateDirectory(manga3.GetAbsoulteFolderPath());
@@ -44,7 +44,7 @@ namespace Tests.Entities.Manga
         Assert.AreEqual(y, manga3.Histories.Count());
         manga3.Save();
       });
-      Assert.IsAssignableFrom<SaveValidationException>(exception.InnerException);
+      Assert.IsAssignableFrom<SaveValidationException>(exception);
 
       AddRandomHistory(manga2);
       manga2.Save();

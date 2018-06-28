@@ -13,17 +13,17 @@ namespace Acomics.Convertation
     {
       base.ProtectedConvert(process);
 
-      var setting = ConfigStorage.GetPlugin<Acomics>().GetSettings();
-      if (setting != null)
-      {
-        setting.MainUri = new Uri("https://acomics.ru/");
-        setting.MangaSettingUris.Add(setting.MainUri);
-        setting.Login.MainUri = setting.MainUri;
-        setting.Save();
-      }
-
       using (var context = Repository.GetEntityContext())
       {
+        var setting = ConfigStorage.GetPlugin<Acomics>().GetSettings();
+        if (setting != null)
+        {
+          setting.MainUri = new Uri("https://acomics.ru/");
+          setting.MangaSettingUris.Add(setting.MainUri);
+          setting.Login.MainUri = setting.MainUri;
+          setting.Save();
+        }
+
         var mangas = context.Get<Acomics>().ToList();
         foreach (var manga in mangas)
         {

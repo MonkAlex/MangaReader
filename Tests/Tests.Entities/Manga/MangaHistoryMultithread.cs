@@ -27,28 +27,41 @@ namespace Tests.Entities.Manga
     /// #102 - после исключения в beforesave история одной манги мешает создавать историю другой манги.
     /// </summary>
     [Test]
-    public void AddHistoryMultithreadAndSave()
+    public void AddHistoryMultithreadAndSave([Values(true, false)] bool inSession)
     {
-      var manga = Builder.CreateReadmanga();
-      var name = manga.Name;
-      manga.Save();
-      Directory.CreateDirectory(manga.GetAbsoulteFolderPath());
-      var manga2 = Builder.CreateReadmanga();
-
-      var exception = Assert.Catch<SaveValidationException>(() =>
+      using (inSession ? Repository.GetEntityContext() : null)
       {
-        var manga3 = Builder.CreateReadmanga();
-        Directory.CreateDirectory(manga3.GetAbsoulteFolderPath());
-        manga3.Name = name;
-        AddRandomHistory(manga3);
-        Assert.AreEqual(y, manga3.Histories.Count());
-        manga3.Save();
-      });
-      Assert.IsAssignableFrom<SaveValidationException>(exception);
+        var manga = Builder.CreateReadmanga();
+        var name = manga.Name;
+        manga.Save();
+        Directory.CreateDirectory(manga.GetAbsoulteFolderPath());
+        var manga2 = Builder.CreateReadmanga();
 
-      AddRandomHistory(manga2);
-      manga2.Save();
-      Assert.AreEqual(y, manga2.Histories.Count());
+        var exception = Assert.Catch<SaveValidationException>(() =>
+        {
+          var manga3 = Builder.CreateReadmanga();
+          Directory.CreateDirectory(manga3.GetAbsoulteFolderPath());
+          manga3.Name = name;
+          AddRandomHistory(manga3);
+          Assert.AreEqual(y, manga3.Histories.Count());
+          manga3.Save();
+        });
+        Assert.IsAssignableFrom<SaveValidationException>(exception);
+
+        AddRandomHistory(manga2);
+        if (inSession)
+        {
+#warning Сессия, запоротая исключением, запорота навсегда.
+          Assert.Catch<SaveValidationException>(() =>
+          {
+            manga2.Save();
+          });
+        }
+        else
+          manga2.Save();
+
+        Assert.AreEqual(y, manga2.Histories.Count());
+      }
     }
 
     private static void AddRandomHistory(Readmanga manga)

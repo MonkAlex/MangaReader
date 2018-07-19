@@ -155,7 +155,7 @@
     <Compile Include="NHibernate\MangaPageMap.cs" />
     <Compile Include="NHibernate\Mapping.cs" />
     <Compile Include="NHibernate\HistoryMap.cs" />
-    <Compile Include="NHibernate\Interceptors.cs" />
+    <Compile Include="NHibernate\SaveOrUpdateEvent.cs" />
     <Compile Include="NHibernate\LoginMap.cs" />
     <Compile Include="NHibernate\MangaMap.cs" />
     <Compile Include="NHibernate\MangaSettingMap.cs" />

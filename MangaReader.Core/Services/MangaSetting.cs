@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MangaReader.Core.Account;
 using MangaReader.Core.Entity;
+using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 
@@ -41,6 +42,9 @@ namespace MangaReader.Core.Services
 
     public override void BeforeSave(ChangeTrackerArgs args)
     {
+      if (args.PreviousState == null && Id != 0)
+        throw new SaveValidationException("Настройки можно сохранять только в рамках одной сессии", this);
+
       var folderIndex = args.PropertyNames.ToList().IndexOf(nameof(Folder));
       if (folderIndex > -1 && args.PreviousState != null)
       {
@@ -52,7 +56,10 @@ namespace MangaReader.Core.Services
           {
             var mangas = context.Get<IManga>().Where(m => m.Setting == this).ToList();
             foreach (var manga in mangas)
+            {
               manga.RefreshFolder();
+              context.SaveOrUpdate(manga);
+            }
           }
         }
       }

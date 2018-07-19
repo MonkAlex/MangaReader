@@ -1,6 +1,7 @@
 ﻿using System;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services.Config;
 
 namespace Grouple.Convertation
@@ -11,11 +12,14 @@ namespace Grouple.Convertation
     {
       base.ProtectedConvert(process);
 
-      var setting = ConfigStorage.GetPlugin<Readmanga>().GetSettings();
-      if (setting != null)
+      using (Repository.GetEntityContext())
       {
-        setting.Login.MainUri = new Uri("https://grouple.co/");
-        setting.Save();
+        var setting = ConfigStorage.GetPlugin<Readmanga>().GetSettings();
+        if (setting != null)
+        {
+          setting.Login.MainUri = new Uri("https://grouple.co/");
+          setting.Save();
+        }
       }
     }
 

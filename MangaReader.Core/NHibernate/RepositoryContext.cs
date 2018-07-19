@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using MangaReader.Core.Entity;
-using MangaReader.Core.Services;
 using NHibernate;
 using NHibernate.Linq;
 
@@ -23,12 +22,29 @@ namespace MangaReader.Core.NHibernate
 
     public void SaveOrUpdate<T>(T entity) where T : IEntity
     {
+      var state = GetState(entity);
+      entity.BeforeSave(state);
       session.SaveOrUpdate(entity);
     }
 
     public ITransaction OpenTransaction()
     {
       return session.BeginTransaction();
+    }
+
+    public ChangeTrackerArgs GetState<T>(T entity) where T : IEntity
+    {
+      var impl = session.GetSessionImplementation();
+      var key = impl.PersistenceContext.GetEntry(entity);
+      if (key == null)
+      {
+        var name = impl.GuessEntityName(entity);
+        var persister = impl.GetEntityPersister(name, entity);
+        return new ChangeTrackerArgs(persister.GetPropertyValues(entity, EntityMode.Poco), null, persister.PropertyNames);
+      }
+
+      var current = key.Persister.GetPropertyValues(entity, EntityMode.Poco);
+      return new ChangeTrackerArgs(current, key.LoadedState, key.Persister.PropertyNames);
     }
 
     public static RepositoryContext Create()
@@ -74,14 +90,6 @@ namespace MangaReader.Core.NHibernate
           return;
         }
 
-        try
-        {
-          session?.Flush();
-        }
-        catch (System.Exception e)
-        {
-          Log.Exception(e);
-        }
         session?.Dispose();
         Repositories.TryRemove(session, out _);
       }

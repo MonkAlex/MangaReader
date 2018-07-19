@@ -467,6 +467,8 @@ namespace MangaReader.Core.Manga
 
     public override void BeforeSave(ChangeTrackerArgs args)
     {
+      Log.Add(Id != 0 ? $"Save {GetType().Name} with id {Id} ({Name})." : $"New {GetType().Name} ({Name}).");
+
       if (!this.IsValid())
         throw new SaveValidationException("Нельзя сохранять невалидную сущность", this);
 

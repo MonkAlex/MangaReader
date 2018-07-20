@@ -25,7 +25,7 @@ namespace Tests.Convertation._1._12
       using (var context = Repository.GetEntityContext())
       {
         var loadedMangas = context.Get<IManga>().ToList();
-        Assert.AreEqual(32, loadedMangas.Count);
+        Assert.AreEqual(31, loadedMangas.Count);
 
         var loadedHistoryRecord = context.Get<MangaHistory>().ToList();
 
@@ -48,7 +48,6 @@ namespace Tests.Convertation._1._12
         Assert.AreEqual(55, loadedHistoryRecord.Count(h => h.Url.Contains("deadman_wonderland")));
         Assert.AreEqual(67, loadedHistoryRecord.Count(h => h.Url.Contains("he_is_a_ultimate_teacher")));
         Assert.AreEqual(90, loadedHistoryRecord.Count(h => h.Url.Contains("cage_of_eden")));
-        Assert.AreEqual(361, loadedHistoryRecord.Count(h => h.Url.Contains("fairytail")));
         Assert.AreEqual(92, loadedHistoryRecord.Count(h => h.Url.Contains("freezing")));
         Assert.AreEqual(54, loadedHistoryRecord.Count(h => h.Url.Contains("frogman")));
         Assert.AreEqual(32, loadedHistoryRecord.Count(h => h.Url.Contains("pals_with_fujimura_kun")));
@@ -69,7 +68,7 @@ namespace Tests.Convertation._1._12
         Assert.AreEqual(18, loadedHistoryRecord.Count(h => h.Url.Contains("this_older_woman_is_a_fiction")));
 
         Assert.AreEqual(loadedMangas.Sum(m => m.Histories.Count()), loadedHistoryRecord.Count);
-        Assert.AreEqual(2754, loadedHistoryRecord.Count);
+        Assert.AreEqual(2393, loadedHistoryRecord.Count);
         // 1.12 history create records now.
         Assert.Less(startDate, loadedMangas.Min(m => m.Created));
       }

@@ -100,7 +100,7 @@ namespace MangaReader.Core.Convertation.History
             foreach (var record in history)
               record.Uri = new Uri(record.Uri.OriginalString.Replace(history.Key.OriginalString.TrimEnd('/'), manga.Uri.OriginalString.TrimEnd('/')));
             manga.Histories.AddRange(history);
-            context.SaveOrUpdate(manga);
+            context.AddToTransaction(manga);
           }
           tranc.Commit();
         }
@@ -120,7 +120,7 @@ namespace MangaReader.Core.Convertation.History
                                                   h.Uri.OriginalString.Contains(manga.Uri.OriginalString + "/")).ToList();
           manga.Histories.AddRange(mangaHistory);
           histories.RemoveAll(h => mangaHistory.Contains(h));
-          context.SaveOrUpdate(manga);
+          context.AddToTransaction(manga);
         }
         tranc.Commit();
       }

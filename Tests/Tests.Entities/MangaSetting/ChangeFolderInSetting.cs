@@ -9,21 +9,21 @@ namespace Tests.Entities.MangaSetting
     [Test]
     public void ChangeFolderInSettingNoConflict()
     {
-      using (Repository.GetEntityContext())
+      using (var context = Repository.GetEntityContext())
       {
         var manga = Builder.CreateAcomics();
         var folder = manga.Folder;
         var settingFolder = manga.Setting.Folder;
         Assert.NotNull(folder);
         manga.Setting.Folder += "2";
-        manga.Setting.Save();
+        context.Save(manga.Setting);
 
         Assert.AreNotEqual(folder, manga.Folder);
-        manga.Update();
+        context.Refresh(manga);
         Assert.AreNotEqual(folder, manga.Folder);
 
         manga.Setting.Folder = settingFolder;
-        manga.Setting.Save();
+        context.Save(manga.Setting);
 
         Assert.AreEqual(folder, manga.Folder);
       }

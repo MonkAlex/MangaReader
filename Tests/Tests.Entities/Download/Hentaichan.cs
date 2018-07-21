@@ -41,14 +41,14 @@ namespace Tests.Entities.Download
 
     private void CreateLogin()
     {
-      using (Repository.GetEntityContext())
+      using (var context = Repository.GetEntityContext())
       {
         var setting = ConfigStorage.GetPlugin<Hentaichan.Hentaichan>().GetSettings();
         var login = setting.Login as Hentaichan.HentaichanLogin;
         login.UserId = "235332";
         login.PasswordHash = "0578caacc02411f8c9a1a0af31b3befa";
         login.IsLogined = true;
-        setting.Save();
+        context.Save(setting);
       }
     }
 

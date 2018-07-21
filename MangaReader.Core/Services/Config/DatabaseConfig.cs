@@ -41,11 +41,11 @@ namespace MangaReader.Core.Services.Config
     /// <summary>
     /// Создать дефолтные настройки для новых типов.
     /// </summary>
-    /// <param name="query">Коллекция уже имеющихся настроек.</param>
+    /// <param name="context">Контекст подключения к БД.</param>
     /// <returns>Коллекция всех настроек.</returns>
-    private static void CreateDefaultMangaSettings(List<MangaSetting> query)
+    private static void CreateDefaultMangaSettings(RepositoryContext context)
     {
-      var settings = new List<MangaSetting>(query);
+      var settings = context.Get<MangaSetting>().ToList();
       var plugins = ConfigStorage.Plugins;
       foreach (var plugin in plugins)
       {
@@ -61,7 +61,7 @@ namespace MangaReader.Core.Services.Config
           Login = Login.Get(plugin.LoginType)
         };
 
-        setting.Save();
+        context.Save(setting);
         settings.Add(setting);
       }
     }
@@ -75,8 +75,8 @@ namespace MangaReader.Core.Services.Config
     public static void Initialize()
     {
       Repository.GetStateless<DatabaseConfig>().SingleOrCreate();
-      var query = Repository.GetStateless<MangaSetting>().ToList();
-      CreateDefaultMangaSettings(query);
+      using (var context = Repository.GetEntityContext())
+        CreateDefaultMangaSettings(context);
     }
   }
 }

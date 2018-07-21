@@ -16,7 +16,7 @@ namespace Hentaichan.Convertation
     {
       base.ProtectedConvert(process);
 
-      using (Repository.GetEntityContext())
+      using (var context = Repository.GetEntityContext())
       {
         var setting = ConfigStorage.GetPlugin<Mangachan.Mangachan>().GetSettings();
         if (setting != null)
@@ -24,7 +24,7 @@ namespace Hentaichan.Convertation
           setting.MainUri = new Uri("http://mangachan.me");
           setting.MangaSettingUris.Add(setting.MainUri);
           setting.Login.MainUri = setting.MainUri;
-          setting.Save();
+          context.Save(setting);
         }
       }
     }

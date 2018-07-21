@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using MangaReader.Core.Manga;
+using MangaReader.Core.NHibernate;
 
 namespace Tests.Entities
 {
@@ -16,12 +16,15 @@ namespace Tests.Entities
     /// <returns></returns>
     public static Grouple.Readmanga CreateReadmanga()
     {
-      var manga = Mangas.Create(ReadmangaUri) as Grouple.Readmanga;
-      manga.Status = "example status";
-      manga.NeedUpdate = false;
-      manga.Name = "readmanga from example" + Guid.NewGuid();
-      manga.Save();
-      return manga;
+      using (var context = Repository.GetEntityContext())
+      {
+        var manga = Mangas.Create(ReadmangaUri) as Grouple.Readmanga;
+        manga.Status = "example status";
+        manga.NeedUpdate = false;
+        manga.Name = "readmanga from example" + Guid.NewGuid();
+        context.Save(manga);
+        return manga;
+      }
     }
 
     /// <summary>
@@ -33,17 +36,23 @@ namespace Tests.Entities
       if (manga == null)
         return;
 
-      manga.Delete();
+      using (var context = Repository.GetEntityContext())
+      {
+        context.Delete(manga);
+      }
     }
 
     public static Acomics.Acomics CreateAcomics()
     {
-      var manga = Mangas.Create(AcomicsUri) as Acomics.Acomics;
-      manga.Status = "example status";
-      manga.NeedUpdate = false;
-      manga.Name = "Acomics from example" + Guid.NewGuid();
-      manga.Save();
-      return manga;
+      using (var context = Repository.GetEntityContext())
+      {
+        var manga = Mangas.Create(AcomicsUri) as Acomics.Acomics;
+        manga.Status = "example status";
+        manga.NeedUpdate = false;
+        manga.Name = "Acomics from example" + Guid.NewGuid();
+        context.Save(manga);
+        return manga;
+      }
     }
 
     public static void DeleteAcomics(Acomics.Acomics manga)
@@ -51,20 +60,29 @@ namespace Tests.Entities
       if (manga == null)
         return;
 
-      manga.Delete();
+      using (var context = Repository.GetEntityContext())
+      {
+        context.Delete(manga);
+      }
     }
 
     public static void CreateMangaHistory(IManga manga)
     {
-      var history = new MangaReader.Core.Manga.MangaHistory(Url);
-      manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(history.Uri));
-      manga.Save();
+      using (var context = Repository.GetEntityContext())
+      {
+        var history = new MangaReader.Core.Manga.MangaHistory(Url);
+        manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(history.Uri));
+        context.Save(manga);
+      }
     }
 
     public static void DeleteMangaHistory(IManga manga)
     {
-      manga.ClearHistory();
-      manga.Save();
+      using (var context = Repository.GetEntityContext())
+      {
+        manga.ClearHistory();
+        context.Save(manga);
+      }
     }
   }
 }

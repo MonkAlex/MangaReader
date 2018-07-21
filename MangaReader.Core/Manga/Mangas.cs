@@ -382,7 +382,9 @@ namespace MangaReader.Core.Manga
           this.DownloadedAt = DateTime.Now;
           OnPropertyChanged(nameof(Downloaded));
         }
-        this.Save();
+
+        using (var context = Repository.GetEntityContext())
+          context.Save(this);
         NetworkSpeed.Clear();
         Log.AddFormat("Download end '{0}'.", this.Name);
       }
@@ -467,7 +469,8 @@ namespace MangaReader.Core.Manga
 
     public override void BeforeSave(ChangeTrackerArgs args)
     {
-      Log.Add(Id != 0 ? $"Save {GetType().Name} with id {Id} ({Name})." : $"New {GetType().Name} ({Name}).");
+      if (!args.CanAddEntities)
+        Log.Add(Id != 0 ? $"Save {GetType().Name} with id {Id} ({Name})." : $"New {GetType().Name} ({Name}).");
 
       if (!this.IsValid())
         throw new SaveValidationException("Нельзя сохранять невалидную сущность", this);
@@ -575,18 +578,21 @@ namespace MangaReader.Core.Manga
     /// <remarks>Сохранена в базе, если была создана валидная манга.</remarks>
     public static IManga CreateFromWeb(Uri uri)
     {
-      var manga = Create(uri);
-      if (manga != null)
+      using (var context = Repository.GetEntityContext())
       {
-        // Только для местной реализации - вызвать CreatedFromWeb\Refresh.
-        if (manga is Mangas mangas)
-          mangas.CreatedFromWeb(uri);
+        var manga = Create(uri);
+        if (manga != null)
+        {
+          // Только для местной реализации - вызвать CreatedFromWeb\Refresh.
+          if (manga is Mangas mangas)
+            mangas.CreatedFromWeb(uri);
 
-        if (manga.IsValid())
-          manga.Save();
+          if (manga.IsValid())
+            context.Save(manga);
+        }
+
+        return manga;
       }
-
-      return manga;
     }
 
     protected virtual void CreatedFromWeb(Uri url)

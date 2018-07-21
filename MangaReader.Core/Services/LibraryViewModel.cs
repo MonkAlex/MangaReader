@@ -137,7 +137,8 @@ namespace MangaReader.Core.Services
       OnLibraryChanged(new LibraryViewModelArgs(null, manga, MangaOperation.Deleted, LibraryOperation.UpdateMangaChanged));
       try
       {
-        manga.Delete();
+        using (var context = Repository.GetEntityContext())
+          context.Delete(manga);
         Log.Info(Strings.Library_Status_MangaRemoved + manga.Name);
       }
       catch (System.Exception e)
@@ -225,6 +226,7 @@ namespace MangaReader.Core.Services
       try
       {
         mangaIndex = 0;
+        List<int> materialized;
         using (var context = Repository.GetEntityContext())
         {
           var entities = context.Get<IManga>().Where(m => m.NeedUpdate);
@@ -237,30 +239,33 @@ namespace MangaReader.Core.Services
           if (orderBy != null && mangas == null)
             entities = orderBy(entities);
 
-          var materialized = entities.ToList();
+          materialized = entities.Select(e => e.Id).ToList();
 
           // Если указаны Id, пытаемся качать в их внутреннем порядке.
           if (mangas != null)
-            materialized = materialized.OrderBy(m => mangas.IndexOf(m.Id)).ToList();
+            materialized = materialized.OrderBy(m => mangas.IndexOf(m)).ToList();
 
           mangasCount = materialized.Count;
-          
-          void OnMangaAddedWhenLibraryUpdating(object sender, LibraryViewModelArgs args)
+        }
+
+        void OnMangaAddedWhenLibraryUpdating(object sender, LibraryViewModelArgs args)
+        {
+          if (args.MangaOperation == MangaOperation.Added)
           {
-            if (args.MangaOperation == MangaOperation.Added)
-            {
-              materialized.Add(args.Manga);
-              mangasCount = materialized.Count;
-              Log.Info($"Манга {args.Manga.Name} добавлена при обновлении и будет загружена автоматически");
-            }
+            materialized.Add(args.Manga.Id);
+            mangasCount = materialized.Count;
+            Log.Info($"Манга {args.Manga.Name} добавлена при обновлении и будет загружена автоматически");
           }
+        }
 
-          LibraryChanged += OnMangaAddedWhenLibraryUpdating;
-          for (var i = 0; i < materialized.Count; i++)
+        LibraryChanged += OnMangaAddedWhenLibraryUpdating;
+        for (var i = 0; i < materialized.Count; i++)
+        {
+          DownloadManager.CheckPause().Wait();
+
+          using (var context = Repository.GetEntityContext())
           {
-            var current = materialized[i];
-            DownloadManager.CheckPause().Wait();
-
+            var current = context.Get<IManga>().Single(m => m.Id == materialized[i]);
             Log.Info(Strings.Library_Status_MangaUpdate + current.Name);
             OnLibraryChanged(new LibraryViewModelArgs(null, current, MangaOperation.UpdateStarted, LibraryOperation.UpdateMangaChanged));
             current.PropertyChanged += CurrentOnDownloadChanged;
@@ -272,9 +277,9 @@ namespace MangaReader.Core.Services
             if (current.IsDownloaded)
               OnLibraryChanged(new LibraryViewModelArgs(null, current, MangaOperation.UpdateCompleted, LibraryOperation.UpdateMangaChanged));
           }
-
-          LibraryChanged -= OnMangaAddedWhenLibraryUpdating;
         }
+
+        LibraryChanged -= OnMangaAddedWhenLibraryUpdating;
       }
       catch (AggregateException ae)
       {

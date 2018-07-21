@@ -24,12 +24,15 @@ namespace MangaReader.Core.Convertation.Config
 
       try
       {
-        var mangaSettings = Repository.GetStateless<MangaSetting>().ToList();
-        if (settings[1] is bool)
-          mangaSettings.ForEach(ms => ms.OnlyUpdate = (bool)settings[1]);
-        if (settings[4] is bool)
-          mangaSettings.ForEach(ms => ms.CompressManga = (bool)settings[4]);
-        mangaSettings.SaveAll();
+        using (var context = Repository.GetEntityContext())
+        {
+          var mangaSettings = context.Get<MangaSetting>().ToList();
+          if (settings[1] is bool)
+            mangaSettings.ForEach(ms => ms.OnlyUpdate = (bool)settings[1]);
+          if (settings[4] is bool)
+            mangaSettings.ForEach(ms => ms.CompressManga = (bool)settings[4]);
+          mangaSettings.SaveAll(context);
+        }
       }
       catch (System.Exception ex)
       {

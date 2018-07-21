@@ -40,17 +40,17 @@ namespace Tests.Entities.CRUD
       newManga.Uri = url;
       Assert.AreEqual(url, newManga.Uri);
 
-      newManga.Update();
-      Assert.AreEqual(oldUrl, newManga.Uri);
-
       using (var context = Repository.GetEntityContext())
       {
+        context.Refresh(newManga);
+        Assert.AreEqual(oldUrl, newManga.Uri);
+
         var fromDb = context.Get<IManga>().FirstOrDefault(m => m.Id == mangaId);
         Assert.AreEqual(oldUrl, fromDb.Uri);
-      }
 
-      newManga.Uri = url;
-      newManga.Save();
+        newManga.Uri = url;
+        context.Save(newManga);
+      }
       Assert.AreEqual(url, newManga.Uri);
 
       using (var context = Repository.GetEntityContext())

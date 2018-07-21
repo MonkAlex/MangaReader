@@ -72,7 +72,7 @@ namespace MangaReader.ViewModel.Setting
         setting.OnlyUpdate = this.OnlyUpdate;
         setting.FolderNamingStrategy = this.FolderNamingStrategy.Selected.Id;
         this.Login.Save();
-        setting.Save();
+        context.Save(setting);
       }
     }
 

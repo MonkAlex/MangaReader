@@ -28,7 +28,7 @@ namespace Grouple.Convertation
             mintmanga.CompressManga = readmanga.CompressManga;
             mintmanga.OnlyUpdate = readmanga.OnlyUpdate;
             mintmanga.DefaultCompression = readmanga.DefaultCompression;
-            mintmanga.Save();
+            context.Save(mintmanga);
           }
         }
 
@@ -39,7 +39,7 @@ namespace Grouple.Convertation
           setting.MangaSettingUris.Add(setting.MainUri);
           setting.MangaSettingUris.Add(new Uri("http://readmanga.ru/"));
           setting.Login.MainUri = new Uri(@"https://grouple.ru/");
-          setting.Save();
+          context.Save(setting);
         }
 
         setting = ConfigStorage.GetPlugin<Mintmanga>().GetSettings();
@@ -49,7 +49,7 @@ namespace Grouple.Convertation
           setting.MangaSettingUris.Add(setting.MainUri);
           setting.MangaSettingUris.Add(new Uri("http://adultmanga.ru/"));
           setting.Login.MainUri = new Uri(@"https://grouple.ru/");
-          setting.Save();
+          context.Save(setting);
         }
       }
     }

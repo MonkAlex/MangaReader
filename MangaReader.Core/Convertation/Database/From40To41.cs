@@ -25,7 +25,7 @@ namespace MangaReader.Core.Convertation.Database
             var relativePath = DirectoryHelpers.GetRelativePath(ConfigStorage.WorkFolder, setting.Folder);
             setting.Folder = relativePath.StartsWith(@"..\..\") ? setting.Folder : relativePath;
           }
-          setting.Save();
+          context.Save(setting);
         }
       }
     }

@@ -3,6 +3,7 @@ using System.Linq;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.NHibernate;
+using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
 namespace Acomics.Convertation
@@ -21,7 +22,7 @@ namespace Acomics.Convertation
           setting.MainUri = new Uri("https://acomics.ru/");
           setting.MangaSettingUris.Add(setting.MainUri);
           setting.Login.MainUri = setting.MainUri;
-          setting.Save();
+          context.Save(setting);
         }
 
         var mangas = context.Get<Acomics>().ToList();
@@ -30,7 +31,7 @@ namespace Acomics.Convertation
           manga.Uri = new Uri(manga.Uri.OriginalString.Replace("http://acomics.ru", "https://acomics.ru"));
           process.Percent += 100.0 / mangas.Count;
         }
-        mangas.SaveAll();
+        mangas.SaveAll(context);
       }
     }
 

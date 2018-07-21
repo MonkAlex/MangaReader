@@ -126,6 +126,7 @@
     <Compile Include="DataTrasferObject\ChapterDto.cs" />
     <Compile Include="DataTrasferObject\MangaPageDto.cs" />
     <Compile Include="DataTrasferObject\VolumeDto.cs" />
+    <Compile Include="Entity\ChangeTrackerArgs.cs" />
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Entity\IEntity.cs" />
     <Compile Include="Exception\DownloadAttemptFailed.cs" />

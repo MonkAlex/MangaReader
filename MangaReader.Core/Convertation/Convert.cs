@@ -34,7 +34,7 @@ namespace MangaReader.Core.Convertation
         var databaseConfig = context.Get<DatabaseConfig>().Single();
         var oldVersion = databaseConfig.Version;
         databaseConfig.Version = process.Version;
-        databaseConfig.Save();
+        context.Save(databaseConfig);
         process.State = ConvertState.Completed;
 
         if (process.Version.CompareTo(oldVersion) > 0 && context.Get<IManga>().Any())

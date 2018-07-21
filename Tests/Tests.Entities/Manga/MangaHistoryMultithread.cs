@@ -31,20 +31,27 @@ namespace Tests.Entities.Manga
     {
       using (inSession ? Repository.GetEntityContext() : null)
       {
-        var manga = Builder.CreateReadmanga();
-        var name = manga.Name;
-        manga.Save();
-        Directory.CreateDirectory(manga.GetAbsoulteFolderPath());
+        string name;
+        using (var context = Repository.GetEntityContext())
+        {
+          var manga = Builder.CreateReadmanga();
+          name = manga.Name;
+          context.Save(manga);
+          Directory.CreateDirectory(manga.GetAbsoulteFolderPath());
+        }
         var manga2 = Builder.CreateReadmanga();
 
         var exception = Assert.Catch<SaveValidationException>(() =>
         {
-          var manga3 = Builder.CreateReadmanga();
-          Directory.CreateDirectory(manga3.GetAbsoulteFolderPath());
-          manga3.Name = name;
-          AddRandomHistory(manga3);
-          Assert.AreEqual(y, manga3.Histories.Count());
-          manga3.Save();
+          using (var context = Repository.GetEntityContext())
+          {
+            var manga3 = Builder.CreateReadmanga();
+            Directory.CreateDirectory(manga3.GetAbsoulteFolderPath());
+            manga3.Name = name;
+            AddRandomHistory(manga3);
+            Assert.AreEqual(y, manga3.Histories.Count());
+            context.Save(manga3);
+          }
         });
         Assert.IsAssignableFrom<SaveValidationException>(exception);
 
@@ -54,13 +61,22 @@ namespace Tests.Entities.Manga
 #warning Сессия, запоротая исключением, запорота навсегда.
           Assert.Catch<SaveValidationException>(() =>
           {
-            manga2.Save();
+            ResaveManga(manga2);
           });
         }
         else
-          manga2.Save();
+          ResaveManga(manga2);
 
         Assert.AreEqual(y, manga2.Histories.Count());
+      }
+    }
+
+    private static void ResaveManga(MangaReader.Core.Manga.IManga manga)
+    {
+      using (var context = Repository.GetEntityContext())
+      {
+        manga = context.Get<MangaReader.Core.Manga.IManga>().Single(m => m.Id == manga.Id);
+        context.Save(manga);
       }
     }
 

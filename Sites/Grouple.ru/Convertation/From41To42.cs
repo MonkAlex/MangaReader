@@ -12,13 +12,13 @@ namespace Grouple.Convertation
     {
       base.ProtectedConvert(process);
 
-      using (Repository.GetEntityContext())
+      using (var context = Repository.GetEntityContext())
       {
         var setting = ConfigStorage.GetPlugin<Readmanga>().GetSettings();
         if (setting != null)
         {
           setting.Login.MainUri = new Uri("https://grouple.ru/");
-          setting.Save();
+          context.Save(setting);
         }
       }
     }

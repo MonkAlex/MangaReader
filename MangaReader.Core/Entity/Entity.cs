@@ -1,6 +1,5 @@
 ﻿using System.Xml.Serialization;
 using MangaReader.Core.Exception;
-using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Core.Entity
 {
@@ -20,54 +19,10 @@ namespace MangaReader.Core.Entity
     }
 
     private int id = 0;
-
-    /// <summary>
-    /// Сохранить в базу.
-    /// </summary>
-    public virtual void Save()
-    {
-      Repository.Save(this);
-    }
-
+    
     public virtual void BeforeSave(ChangeTrackerArgs args)
     {
 
-    }
-
-    /// <summary>
-    ///  Загрузить свежую информацию из базы.
-    /// </summary>
-    public virtual void Update()
-    {
-      if (this.Id == 0)
-      {
-        // TODO: надо бы обнулить всю сущность.
-        return;
-      }
-
-      using (var context = Repository.GetEntityContext())
-        context.Refresh(this);
-    }
-
-    /// <summary>
-    /// Удалить из базы. Сохранение такой сущности создаст новую в базе.
-    /// </summary>
-    /// <returns>False, если сущности в базе ещё не было.</returns>
-    public virtual bool Delete()
-    {
-      if (this.Id == 0)
-        return false;
-
-      using (var context = Repository.GetEntityContext())
-      {
-        using (var tranc = context.OpenTransaction())
-        {
-          context.Delete(this);
-          tranc.Commit();
-          this.Id = 0;
-        }
-      }
-      return true;
     }
 
     public override bool Equals(object obj)

@@ -36,7 +36,7 @@ namespace MangaReader.Core.Convertation.Mangas
           var newHost = manga.Setting.MainUri.Host;
           var builder = new UriBuilder(manga.Uri) { Host = newHost, Port = -1 };
           manga.Uri = builder.Uri;
-          manga.Save();
+          context.Save(manga);
         }
       }
     }

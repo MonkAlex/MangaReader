@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using MangaReader.Core.Exception;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.ViewModel.Commands.Primitives;
 using MangaReader.ViewModel.Manga;
@@ -17,29 +18,35 @@ namespace MangaReader.ViewModel.Commands.Manga
       try
       {
         var manga = model.ContextManga;
-        if (model.CanChangeName)
+        using (var context = Repository.GetEntityContext())
         {
-          var name = model.Name;
-          manga.IsNameChanged = true;
-          manga.Name = name;
+          if (model.CanChangeName)
+          {
+            var name = model.Name;
+            manga.IsNameChanged = true;
+            manga.Name = name;
+          }
+          else
+            manga.IsNameChanged = false;
+
+          if (model.CompressionMode != null && model.CompressionModes.Contains(model.CompressionMode.Value))
+            manga.CompressionMode = model.CompressionMode;
+
+          manga.NeedCompress = model.NeedCompress;
+
+          context.Save(manga);
+          model.UpdateProperties(manga);
         }
-        else
-          manga.IsNameChanged = false;
-
-        if (model.CompressionMode != null && model.CompressionModes.Contains(model.CompressionMode.Value))
-          manga.CompressionMode = model.CompressionMode;
-
-        manga.NeedCompress = model.NeedCompress;
-
-        manga.Save();
-        model.UpdateProperties(manga);
         model.Close();
       }
       catch (MangaReaderException ex)
       {
         MessageBox.Show(ex.Message);
-        model.ContextManga.Update();
-        model.UpdateProperties(model.ContextManga);
+        using (var context = Repository.GetEntityContext())
+        {
+          context.Refresh(model.ContextManga);
+          model.UpdateProperties(model.ContextManga);
+        }
       }
     }
 

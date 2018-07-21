@@ -12,7 +12,7 @@ namespace Acomics.Convertation
     {
       base.ProtectedConvert(process);
 
-      using (Repository.GetEntityContext())
+      using (var context = Repository.GetEntityContext())
       {
         var setting = ConfigStorage.GetPlugin<Acomics>().GetSettings();
         if (setting != null && setting.MainUri == null)
@@ -20,7 +20,7 @@ namespace Acomics.Convertation
           setting.MainUri = new Uri("http://acomics.ru/");
           setting.MangaSettingUris.Add(setting.MainUri);
           setting.Login.MainUri = setting.MainUri;
-          setting.Save();
+          context.Save(setting);
         }
       }
     }

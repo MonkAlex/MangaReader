@@ -58,7 +58,7 @@ namespace MangaReader.Core.Services
             foreach (var manga in mangas)
             {
               manga.RefreshFolder();
-              context.SaveOrUpdate(manga);
+              context.AddToTransaction(manga);
             }
           }
         }

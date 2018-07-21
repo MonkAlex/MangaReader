@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using MangaReader.Core.Exception;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Properties;
 using MangaReader.Services;
@@ -27,10 +28,11 @@ namespace MangaReader.ViewModel.Commands.AddManga
         var selectedItems = mainModel.BookmarksModels.OfType<AddBookmarksModel>()
           .Where(m => m.IsBookmarksLoaded)
           .SelectMany(m => m.Bookmarks.Where(b => b.IsSelected));
-        foreach (var manga in selectedItems)
-        {
-          WindowHelper.Library.Add(manga.Value.Uri);
-        }
+        using (Repository.GetEntityContext("Add selected manga from bookmarks"))
+          foreach (var manga in selectedItems)
+          {
+            WindowHelper.Library.Add(manga.Value.Uri);
+          }
       }
       catch (MangaReaderException e)
       {

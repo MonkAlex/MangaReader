@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using MangaReader.Core.Entity;
 using MangaReader.Core.Exception;
@@ -14,9 +15,12 @@ namespace MangaReader.Core.NHibernate
   {
     private ISession session;
     private int count = 0;
+    private Stopwatch stopwatch;
 
     private static readonly ConcurrentDictionary<ISession, RepositoryContext> Repositories = new ConcurrentDictionary<ISession, RepositoryContext>();
     private static readonly object Lock = new object();
+
+    public string Name { get; set; }
 
     public IQueryable<T> Get<T>() where T : IEntity
     {
@@ -65,7 +69,7 @@ namespace MangaReader.Core.NHibernate
       return new ChangeTrackerArgs(current, key.LoadedState, key.Persister.PropertyNames, true);
     }
 
-    public static RepositoryContext Create()
+    public static RepositoryContext Create(string name)
     {
       lock (Lock)
       {
@@ -76,8 +80,10 @@ namespace MangaReader.Core.NHibernate
           return context;
         }
 
-        context = new RepositoryContext { session = session };
+        context = new RepositoryContext { session = session, Name = name };
         Repositories.AddOrUpdate(session, context, (s, r) => r);
+        context.stopwatch = new Stopwatch();
+        context.stopwatch.Start();
         return context;
       }
     }
@@ -132,6 +138,8 @@ namespace MangaReader.Core.NHibernate
           return;
         }
 
+        stopwatch.Stop();
+        Log.Add($"Context {Name} closed (Elapsed {stopwatch.Elapsed.TotalSeconds:F2} seconds)");
         session?.Dispose();
         Repositories.TryRemove(session, out _);
       }

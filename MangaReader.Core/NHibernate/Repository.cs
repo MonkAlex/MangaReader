@@ -10,7 +10,12 @@ namespace MangaReader.Core.NHibernate
   {
     public static RepositoryContext GetEntityContext()
     {
-      return RepositoryContext.Create();
+      return RepositoryContext.Create(Guid.NewGuid().ToString("D"));
+    }
+
+    public static RepositoryContext GetEntityContext(string name)
+    {
+      return RepositoryContext.Create(name);
     }
 
     public static T GetStateless<T>(int id) where T : Entity.IEntity
@@ -31,7 +36,7 @@ namespace MangaReader.Core.NHibernate
 
     public static Guid GetDatabaseUniqueId()
     {
-      using (var context = GetEntityContext())
+      using (var context = GetEntityContext("Get database unique id"))
       {
         return context.Get<DatabaseConfig>().Single().UniqueId;
       }

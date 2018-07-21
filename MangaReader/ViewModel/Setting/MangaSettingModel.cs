@@ -63,7 +63,7 @@ namespace MangaReader.ViewModel.Setting
     {
       base.Save();
 
-      using (var context = Repository.GetEntityContext())
+      using (var context = Repository.GetEntityContext($"Save settings for {Header}"))
       {
         var setting = context.Get<MangaSetting>().Single(s => s.Id == id);
         setting.CompressManga = this.CompressManga;

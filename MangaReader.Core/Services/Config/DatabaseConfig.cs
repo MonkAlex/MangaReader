@@ -75,7 +75,7 @@ namespace MangaReader.Core.Services.Config
     public static void Initialize()
     {
       Repository.GetStateless<DatabaseConfig>().SingleOrCreate();
-      using (var context = Repository.GetEntityContext())
+      using (var context = Repository.GetEntityContext("Initialize database config"))
         CreateDefaultMangaSettings(context);
     }
   }

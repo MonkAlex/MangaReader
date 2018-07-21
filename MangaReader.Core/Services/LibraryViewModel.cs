@@ -137,7 +137,7 @@ namespace MangaReader.Core.Services
       OnLibraryChanged(new LibraryViewModelArgs(null, manga, MangaOperation.Deleted, LibraryOperation.UpdateMangaChanged));
       try
       {
-        using (var context = Repository.GetEntityContext())
+        using (var context = Repository.GetEntityContext($"Remove manga {manga.Name}"))
           context.Delete(manga);
         Log.Info(Strings.Library_Status_MangaRemoved + manga.Name);
       }
@@ -227,7 +227,7 @@ namespace MangaReader.Core.Services
       {
         mangaIndex = 0;
         List<int> materialized;
-        using (var context = Repository.GetEntityContext())
+        using (var context = Repository.GetEntityContext("Prepare selected manga for update"))
         {
           var entities = context.Get<IManga>().Where(m => m.NeedUpdate);
 
@@ -263,7 +263,7 @@ namespace MangaReader.Core.Services
         {
           DownloadManager.CheckPause().Wait();
 
-          using (var context = Repository.GetEntityContext())
+          using (var context = Repository.GetEntityContext($"Download updates for manga with id {materialized[i]}"))
           {
             var current = context.Get<IManga>().Single(m => m.Id == materialized[i]);
             Log.Info(Strings.Library_Status_MangaUpdate + current.Name);

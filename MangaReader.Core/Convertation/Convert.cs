@@ -29,7 +29,7 @@ namespace MangaReader.Core.Convertation
 
       Log.Add("Convert completed.");
 
-      using (var context = NHibernate.Repository.GetEntityContext())
+      using (var context = NHibernate.Repository.GetEntityContext("Actualize app version in db"))
       {
         var databaseConfig = context.Get<DatabaseConfig>().Single();
         var oldVersion = databaseConfig.Version;

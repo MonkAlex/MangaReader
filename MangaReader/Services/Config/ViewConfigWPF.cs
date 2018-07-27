@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using MangaReader.Core.Services.Config;
+using MangaReader.UI;
 using MangaReader.UI.MainForm;
 using WindowState = MangaReader.Core.Services.Config.WindowState;
 
@@ -12,14 +14,18 @@ namespace MangaReader.Services.Config
     {
       if (config.WindowStates == null)
         return;
-      
-      main.WindowState = (System.Windows.WindowState)Enum.Parse(typeof(WindowState), config.WindowStates.WindowState.ToString(), true);
-      if (config.WindowStates.CanShow)
+
+      var monitor = Monitors.FullScreen();
+      if (config.WindowStates.Top < monitor.Height && config.WindowStates.Left < monitor.Width)
       {
-        main.Top = config.WindowStates.Top;
-        main.Left = config.WindowStates.Left;
-        main.Width = config.WindowStates.Width;
-        main.Height = config.WindowStates.Height;
+        main.WindowState = (System.Windows.WindowState)Enum.Parse(typeof(WindowState), config.WindowStates.WindowState.ToString(), true);
+        if (config.WindowStates.CanShow)
+        {
+          main.Top = config.WindowStates.Top;
+          main.Left = config.WindowStates.Left;
+          main.Width = config.WindowStates.Width;
+          main.Height = config.WindowStates.Height;
+        }
       }
     }
 

@@ -27,6 +27,9 @@ namespace MangaReader.Services.Config
           main.Height = config.WindowStates.Height;
         }
       }
+      void OnDisplaySettingsChanged(object sender, EventArgs args) => UpdateWindowState(config, main);
+      Microsoft.Win32.SystemEvents.DisplaySettingsChanged -= OnDisplaySettingsChanged;
+      Microsoft.Win32.SystemEvents.DisplaySettingsChanged += OnDisplaySettingsChanged;
     }
 
     public static void SaveWindowState(this ViewConfig config, Window main)

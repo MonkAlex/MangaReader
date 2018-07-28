@@ -42,9 +42,6 @@ namespace MangaReader.Core.Services
 
     public override void BeforeSave(ChangeTrackerArgs args)
     {
-      if (args.PreviousState == null && Id != 0)
-        throw new SaveValidationException("Настройки можно сохранять только в рамках одной сессии", this);
-
       var folderIndex = args.PropertyNames.ToList().IndexOf(nameof(Folder));
       if (folderIndex > -1 && args.PreviousState != null)
       {

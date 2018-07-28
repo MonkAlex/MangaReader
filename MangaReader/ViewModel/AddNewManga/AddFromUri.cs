@@ -49,7 +49,7 @@ namespace MangaReader.ViewModel
       if (parsers == null)
         parsers = ConfigStorage.Plugins.Select(p => p.GetParser()).ToList();
 
-#warning Запрос к базе на каждый введенный символ, нужен кеш настроек.
+#warning Запрос к базе на каждый введенный символ.
       using (Repository.GetEntityContext("Load settings for parsing uri"))
         foreach (var parser in parsers)
         {

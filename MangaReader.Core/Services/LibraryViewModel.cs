@@ -269,6 +269,7 @@ namespace MangaReader.Core.Services
             Log.Info(Strings.Library_Status_MangaUpdate + current.Name);
             OnLibraryChanged(new LibraryViewModelArgs(null, current, MangaOperation.UpdateStarted, LibraryOperation.UpdateMangaChanged));
             current.PropertyChanged += CurrentOnDownloadChanged;
+            UpdateDownloadPercent(current);
             current.Download().Wait();
             current.PropertyChanged -= CurrentOnDownloadChanged;
             if (current.NeedCompress ?? current.Setting.CompressManga)
@@ -303,9 +304,14 @@ namespace MangaReader.Core.Services
       if (args.PropertyName == nameof(IManga.Downloaded))
       {
         var mangas = (IManga)sender;
-        var percent = (double)(100 * mangaIndex + mangas.Downloaded) / (mangasCount * 100);
-        OnLibraryChanged(new LibraryViewModelArgs(percent, mangas, MangaOperation.None, LibraryOperation.UpdatePercentChanged));
+        UpdateDownloadPercent(mangas);
       }
+    }
+
+    private void UpdateDownloadPercent(IManga mangas)
+    {
+      var percent = (double) (100 * mangaIndex + mangas.Downloaded) / (mangasCount * 100);
+      OnLibraryChanged(new LibraryViewModelArgs(percent, mangas, MangaOperation.None, LibraryOperation.UpdatePercentChanged));
     }
 
     #endregion

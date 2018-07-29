@@ -209,7 +209,8 @@ namespace Hentaichan
 
       var result = Mangas.Create(new Uri(mangaUri));
       result.Name = WebUtility.HtmlDecode(mangaName);
-      result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri));
+      if (!string.IsNullOrWhiteSpace(imageUri))
+        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri));
       return result;
     }
 

@@ -43,11 +43,12 @@ namespace Hentaichan.Mangachan
 
     public override void UpdateNameAndStatus(IManga manga)
     {
+      var page = Page.GetPage(manga.Uri);
       var localizedName = new MangaName();
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(manga.Uri).Content);
+        document.LoadHtml(page.Content);
         var enName = Regex.Match(document.DocumentNode.InnerHtml, @"title>(.*?) &raquo", RegexOptions.IgnoreCase);
         if (enName.Success)
         {
@@ -62,6 +63,19 @@ namespace Hentaichan.Mangachan
       catch (NullReferenceException ex) { Log.Exception(ex); }
 
       UpdateName(manga, localizedName.ToString());
+
+      var status = string.Empty;
+      try
+      {
+        var document = new HtmlDocument();
+        document.LoadHtml(page.Content);
+        var nodes = document.DocumentNode.SelectNodes("//table[@class=\"mangatitle\"]//tr");
+        if (nodes != null)
+          status = nodes.Aggregate(status, (current, node) =>
+            current + Regex.Replace(WebUtility.HtmlDecode(node.InnerText).Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
+      }
+      catch (NullReferenceException ex) { Log.Exception(ex); }
+      manga.Status = status;
     }
 
     public override void UpdateContent(IManga manga)

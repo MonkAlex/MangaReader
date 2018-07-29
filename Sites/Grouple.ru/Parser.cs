@@ -146,7 +146,7 @@ namespace Grouple
         var nodes = document.DocumentNode.SelectNodes("//div[@class=\"subject-meta col-sm-7\"]//p");
         if (nodes != null)
           status = nodes.Aggregate(status, (current, node) =>
-              current + Regex.Replace(node.InnerText.Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
+            current + Regex.Replace(WebUtility.HtmlDecode(node.InnerText).Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
       manga.Status = status;

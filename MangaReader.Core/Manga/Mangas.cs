@@ -323,7 +323,11 @@ namespace MangaReader.Core.Manga
       }
 
       if (!this.ActiveChapters.Any() && !this.ActiveVolumes.Any() && !this.ActivePages.Any())
+      {
+        using (var context = Repository.GetEntityContext())
+          context.Save(this);
         return;
+      }
 
       Log.AddFormat("Download start '{0}'.", this.Name);
 

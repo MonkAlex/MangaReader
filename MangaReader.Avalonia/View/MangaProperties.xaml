@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:av="clr-namespace:MangaReader.Avalonia;assembly=MangaReader.Avalonia"
              xmlns:view="clr-namespace:MangaReader.Avalonia.View;assembly=MangaReader.Avalonia">
-  <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto"
+  <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
         ColumnDefinitions="Auto, Auto"
         DataContext="{Binding}"
         Margin="30">
@@ -13,28 +13,30 @@
            Margin="20"
            Source="{Binding Cover, Converter={x:Static av:BitmapTypeConverter.Instance}}"/>
 
-    <WrapPanel Grid.Row="0"
+    <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Status}"/>
+
+    <WrapPanel Grid.Row="1"
                Grid.Column="1"
                Margin="0, 10, 0, 10">
       <TextBlock VerticalAlignment="Center" Text="Name"/>
       <TextBox Margin="10, 0, 0, 0" VerticalAlignment="Center" Text="{Binding MangaName}" IsReadOnly="{Binding NameIsReadonly}"/>
     </WrapPanel>
 
-    <WrapPanel Grid.Row="1" 
+    <WrapPanel Grid.Row="2" 
                Grid.Column="1"
                Margin="0, 10, 0, 10">
       <CheckBox IsChecked="{Binding CanChangeName}"/>
       <TextBlock VerticalAlignment="Center" Text="Can rename"/>
     </WrapPanel>
 
-    <WrapPanel Grid.Row="2" 
+    <WrapPanel Grid.Row="3" 
                Grid.Column="1"
                Margin="0, 10, 0, 10">
       <TextBlock VerticalAlignment="Center" Text="Download to"/>
       <TextBox Margin="10, 0, 0, 0" VerticalAlignment="Center" Text="{Binding Folder}" IsReadOnly="true"/>
     </WrapPanel>
 
-    <WrapPanel Grid.Row="3" 
+    <WrapPanel Grid.Row="4" 
                Grid.Column="1"
                Margin="0, 10, 0, 10">
       <CheckBox IsChecked="{Binding NeedCompress}" IsThreeState="True"/>
@@ -42,7 +44,7 @@
       <DropDown Margin="10, 0, 0, 0" VerticalAlignment="Center" Items="{Binding CompressionModes}" SelectedItem="{Binding CompressionMode}"/>
     </WrapPanel>
 
-    <WrapPanel Grid.Row="4" 
+    <WrapPanel Grid.Row="5" 
                Grid.ColumnSpan="2"
                Margin="0, 10, 0, 10" 
                HorizontalAlignment="Right">

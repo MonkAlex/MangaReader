@@ -55,8 +55,7 @@ namespace Acomics
           manga.IsCompleted = status;
           var nodes = content.SelectNodes(".//div[@class=\"about-summary\"]//p");
           summary = nodes.Aggregate(summary, (current, node) =>
-            current + Regex.Replace(node.InnerText.Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
-          summary = WebUtility.HtmlDecode(summary);
+            current + Regex.Replace(WebUtility.HtmlDecode(node.InnerText).Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
           manga.Status = summary;
         }
       }

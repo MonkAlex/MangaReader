@@ -39,7 +39,7 @@ namespace MangaReader.Core.Convertation.Config
         {
           var databaseConfig = context.Get<DatabaseConfig>().Single();
           databaseConfig.Version = new Version((string)settings[9]);
-          databaseConfig.Save();
+          context.Save(databaseConfig);
         }
 
         Backup.MoveToBackup(SettingsOldPath);

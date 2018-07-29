@@ -46,7 +46,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
     {
       base.Execute(parameter);
 
-      using (var context = Repository.GetEntityContext())
+      using (var context = Repository.GetEntityContext($"Manga command '{this.Name}'"))
       {
         var ids = SelectedModels.Select(m => m.Id).ToList();
         var mangas = context.Get<IManga>().Where(m => ids.Contains(m.Id)).ToList().OrderBy(m => ids.IndexOf(m.Id)).ToList();

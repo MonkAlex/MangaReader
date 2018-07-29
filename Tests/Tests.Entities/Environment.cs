@@ -98,8 +98,7 @@ namespace Tests
             try
             {
               var dest = Path.Combine(subFolder, file.Name);
-              if (!File.Exists(dest))
-                file.CopyTo(dest, false);
+              file.CopyTo(dest, true);
             }
             catch (Exception ex)
             {
@@ -112,8 +111,7 @@ namespace Tests
           try
           {
             var dest = Path.Combine(dd, file.Name);
-            if (!File.Exists(dest))
-              file.CopyTo(dest, false);
+            file.CopyTo(dest, true);
           }
           catch (Exception ex)
           {

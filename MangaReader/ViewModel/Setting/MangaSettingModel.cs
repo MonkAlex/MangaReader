@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 
 namespace MangaReader.ViewModel.Setting
 {
   public class MangaSettingModel : SettingViewModel
   {
-    private readonly MangaSetting mangaSetting;
+    private int id;
     private Compression.CompressionMode defaultCompression;
     private bool onlyUpdate;
     private bool compressManga;
@@ -61,30 +63,34 @@ namespace MangaReader.ViewModel.Setting
     {
       base.Save();
 
-      this.mangaSetting.CompressManga = this.CompressManga;
-      this.mangaSetting.DefaultCompression = this.DefaultCompression;
-      this.mangaSetting.Folder = this.Folder;
-      this.mangaSetting.OnlyUpdate = this.OnlyUpdate;
-      this.mangaSetting.FolderNamingStrategy = this.FolderNamingStrategy.Selected.Id;
-      this.Login.Save();
-      this.mangaSetting.Save();
+      using (var context = Repository.GetEntityContext($"Save settings for {Header}"))
+      {
+        var setting = context.Get<MangaSetting>().Single(s => s.Id == id);
+        setting.CompressManga = this.CompressManga;
+        setting.DefaultCompression = this.DefaultCompression;
+        setting.Folder = this.Folder;
+        setting.OnlyUpdate = this.OnlyUpdate;
+        setting.FolderNamingStrategy = this.FolderNamingStrategy.Selected.Id;
+        this.Login.Save();
+        context.Save(setting);
+      }
     }
 
     public MangaSettingModel(MangaSetting setting)
     {
-      this.mangaSetting = setting;
+      this.id = setting.Id;
       this.Header = setting.MangaName;
       this.CompressionModes = Generic.GetEnumValues<Compression.CompressionMode>();
 
-      this.CompressManga = this.mangaSetting.CompressManga;
-      this.DefaultCompression = this.mangaSetting.DefaultCompression;
-      this.Folder = this.mangaSetting.Folder;
-      this.OnlyUpdate = this.mangaSetting.OnlyUpdate;
-      this.Login = new LoginModel(this.mangaSetting.Login) {IsEnabled = true};
+      this.CompressManga = setting.CompressManga;
+      this.DefaultCompression = setting.DefaultCompression;
+      this.Folder = setting.Folder;
+      this.OnlyUpdate = setting.OnlyUpdate;
+      this.Login = new LoginModel(setting.Login) {IsEnabled = true};
 
       this.FolderNamingStrategy = new FolderNamingModel();
       this.FolderNamingStrategy.Strategies.Insert(0, new FolderNamingStrategyDto() {Name = "Использовать общие настройки"});
-      this.FolderNamingStrategy.SelectedGuid = mangaSetting.FolderNamingStrategy;
+      this.FolderNamingStrategy.SelectedGuid = setting.FolderNamingStrategy;
     }
   }
 }

@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Threading;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using MangaReader.Core.Convertation;
@@ -96,7 +94,8 @@ namespace MangaReader.Core.NHibernate
           string.Join("', '", source.SubclassIterator.Select(i => i.DiscriminatorValue).Concat(new []{ source.DiscriminatorValue })));
       }
 
-      config.SetInterceptor(new BaseInterceptor());
+      config.EventListeners.PreInsertEventListeners = new IPreInsertEventListener[] { new SaveOrUpdateEvent() };
+      config.EventListeners.PreUpdateEventListeners = new IPreUpdateEventListener[] { new SaveOrUpdateEvent() };
       if (File.Exists(Path.Combine(ConfigStorage.WorkFolder, DbFile)))
         new SchemaUpdate(config).Execute(false, true);
       else

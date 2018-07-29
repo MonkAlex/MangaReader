@@ -24,12 +24,11 @@ namespace Tests.Entities.Manga
         var manga = Builder.CreateReadmanga();
         manga.Uri = new Uri("http://readmanga.me/btoom");
         manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(new Uri("http://readmanga.me/btoom/vol1/1?mature=1")));
-        manga.Save();
+        context.Save(manga);
 
         manga = context.Get<Grouple.Readmanga>().FirstOrDefault(m => m.Id == manga.Id);
         manga.Refresh();
-        manga.Save();
-
+        context.Save(manga);
 
         var volume = new Volume();
         volume.Container.Add(new Chapter(new Uri("http://mintmanga.com/btooom_/vol1/1?mature=1"), string.Empty));

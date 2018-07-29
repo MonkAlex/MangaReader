@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using MangaReader.Core.Manga;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
@@ -13,10 +14,13 @@ namespace MangaReader.ViewModel.Commands.Manga
 
     public override void Execute(IEnumerable<IManga> mangas)
     {
-      foreach (var manga in mangas.Where(m => m.NeedUpdate == NeedUpdate))
+      using (var context = Repository.GetEntityContext())
       {
-        manga.NeedUpdate = !manga.NeedUpdate;
-        manga.Save();
+        foreach (var manga in mangas.Where(m => m.NeedUpdate == NeedUpdate))
+        {
+          manga.NeedUpdate = !manga.NeedUpdate;
+          context.Save(manga);
+        }
       }
     }
 

@@ -24,7 +24,7 @@ namespace MangaReader.Core.Convertation.Config
         var config = context.Get<DatabaseConfig>().SingleOrCreate();
         if (context.Get<IManga>().Any())
           config.FolderNamingStrategy = Generic.GetNamingStrategyId<LegacyFolderNaming>();
-        config.Save();
+        context.Save(config);
       }
     }
 

@@ -2,6 +2,7 @@
 using System.Linq;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services.Config;
 
 namespace Hentaichan.Convertation
@@ -12,14 +13,17 @@ namespace Hentaichan.Convertation
     {
       base.ProtectedConvert(process);
 
-      var setting = ConfigStorage.GetPlugin<Hentaichan>().GetSettings();
-      if (setting != null && setting.MainUri == null)
+      using (var context = Repository.GetEntityContext())
       {
-        setting.MainUri = new Uri("http://hentaichan.me/");
-        setting.MangaSettingUris.Add(setting.MainUri);
-        setting.MangaSettingUris.Add(new Uri("http://hentaichan.ru/"));
-        setting.Login.MainUri = setting.MainUri;
-        setting.Save();
+        var setting = ConfigStorage.GetPlugin<Hentaichan>().GetSettings();
+        if (setting != null && setting.MainUri == null)
+        {
+          setting.MainUri = new Uri("http://hentaichan.me/");
+          setting.MangaSettingUris.Add(setting.MainUri);
+          setting.MangaSettingUris.Add(new Uri("http://hentaichan.ru/"));
+          setting.Login.MainUri = setting.MainUri;
+          context.Save(setting);
+        }
       }
     }
 

@@ -34,7 +34,7 @@ namespace MangaReader.Core.Convertation.Mangas
               Log.Add($"Манге {manga.Name} не удалось найти примерную дату скачивания.");
             if (manga.DownloadedAt == null || manga.DownloadedAt < downloaded)
               manga.DownloadedAt = downloaded;
-            context.SaveOrUpdate(manga);
+            context.AddToTransaction(manga);
           }
           tranc.Commit();
         }

@@ -111,6 +111,7 @@
     <Compile Include="UI\AddNewManga\AddNew.xaml.cs">
       <DependentUpon>AddNew.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Screens.cs" />
     <Compile Include="UI\Setting\AppSettingView.xaml.cs">
       <DependentUpon>AppSettingView.xaml</DependentUpon>
     </Compile>

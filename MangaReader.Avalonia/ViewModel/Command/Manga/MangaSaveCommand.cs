@@ -1,6 +1,7 @@
 ﻿using MangaReader.Avalonia.ViewModel.Command.Library;
 using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Exception;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using LibraryViewModel = MangaReader.Core.Services.LibraryViewModel;
 
@@ -17,30 +18,36 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       try
       {
         var manga = model.ContextManga;
-        if (model.CanChangeName)
+        using (var context = Repository.GetEntityContext())
         {
-          var name = model.Name;
-          manga.IsNameChanged = true;
-          manga.Name = name;
+          if (model.CanChangeName)
+          {
+            var name = model.Name;
+            manga.IsNameChanged = true;
+            manga.Name = name;
+          }
+          else
+            manga.IsNameChanged = false;
+
+          if (model.CompressionMode != null && model.CompressionModes.Contains(model.CompressionMode.Value))
+            manga.CompressionMode = model.CompressionMode;
+
+          manga.NeedCompress = model.NeedCompress;
+
+          context.Save(manga);
+          model.UpdateProperties(manga);
         }
-        else
-          manga.IsNameChanged = false;
-
-        if (model.CompressionMode != null && model.CompressionModes.Contains(model.CompressionMode.Value))
-          manga.CompressionMode = model.CompressionMode;
-
-        manga.NeedCompress = model.NeedCompress;
-
-        manga.Save();
-        model.UpdateProperties(manga);
 #warning Тут надо как то без окон обойтись
         // model.Close();
       }
       catch (MangaReaderException ex)
       {
         Log.Exception(ex);
-        model.ContextManga.Update();
-        model.UpdateProperties(model.ContextManga);
+        using (var context = Repository.GetEntityContext())
+        {
+          context.Refresh(model.ContextManga);
+          model.UpdateProperties(model.ContextManga);
+        }
       }
     }
 

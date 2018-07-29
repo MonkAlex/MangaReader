@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using MangaReader.Avalonia.ViewModel.Explorer;
+using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
@@ -14,16 +15,20 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
         return;
       
       var libraries = ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().ToList();
-      var added = libraries.Any() && libraries.All(l =>
+      var added = false;
+      using (var context = Repository.GetEntityContext("Add selected manga to library"))
       {
-        var result = l.Library.Add(model.Uri, out var manga);
-        if (result && manga.Cover == null)
+        added = libraries.Any() && libraries.All(l =>
         {
-          manga.Cover = model.Cover;
-          manga.Save();
-        }
-        return result;
-      });
+          var result = l.Library.Add(model.Uri, out var manga);
+          if (result && manga.Cover == null)
+          {
+            manga.Cover = model.Cover;
+            context.Save(manga);
+          }
+          return result;
+        });
+      }
       if (added)
       {
         searchModel.Items.Remove(model);

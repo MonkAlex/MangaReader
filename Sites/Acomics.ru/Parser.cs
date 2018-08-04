@@ -57,6 +57,16 @@ namespace Acomics
           summary = nodes.Aggregate(summary, (current, node) =>
             current + Regex.Replace(WebUtility.HtmlDecode(node.InnerText).Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
           manga.Status = summary;
+
+          var description = content.SelectSingleNode(".//div[@class=\"about-summary\"]");
+          if (description != null)
+            manga.Description = description.ChildNodes
+              .SkipWhile(n => n.Name != "p")
+              .Skip(1)
+              .TakeWhile(n => n.Name != "p")
+              .Aggregate(string.Empty, (current, node) => 
+                current + Regex.Replace(WebUtility.HtmlDecode(node.InnerText).Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine)
+              .Trim();
         }
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }

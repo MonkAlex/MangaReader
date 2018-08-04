@@ -18,7 +18,7 @@
       <view:MangaSettings/>
     </DataTemplate>
     <DataTemplate DataType="c:MangaModel">
-      <view:MangaProperties/>
+      <view:MangaView/>
     </DataTemplate>
   </Window.DataTemplates>
   <Grid ColumnDefinitions="Auto,*" DataContext="{Binding}">

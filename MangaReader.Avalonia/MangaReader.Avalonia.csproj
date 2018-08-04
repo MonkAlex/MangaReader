@@ -87,6 +87,7 @@
     <Compile Include="ViewModel\Explorer\MangaModel.cs" />
     <Compile Include="ViewModel\MangaSearchViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\Designer.cs" />
     <Compile Include="View\FolderSelector.xaml.cs">
       <DependentUpon>FolderSelector.xaml</DependentUpon>
     </Compile>
@@ -98,6 +99,9 @@
     </Compile>
     <Compile Include="View\MangaSettings.xaml.cs">
       <DependentUpon>MangaSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MangaView.xaml.cs">
+      <DependentUpon>MangaView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Search.xaml.cs">
       <DependentUpon>Search.xaml</DependentUpon>
@@ -159,6 +163,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="View\MangaProperties.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="View\MangaView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

@@ -20,9 +20,9 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
         var manga = model.ContextManga;
         using (var context = Repository.GetEntityContext())
         {
-          if (model.CanChangeName)
+          if (model.MangaName != manga.ServerName)
           {
-            var name = model.Name;
+            var name = model.MangaName;
             manga.IsNameChanged = true;
             manga.Name = name;
           }

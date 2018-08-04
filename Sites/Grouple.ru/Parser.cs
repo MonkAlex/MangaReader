@@ -150,6 +150,18 @@ namespace Grouple
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
       manga.Status = status;
+
+      var description = string.Empty;
+      try
+      {
+        var document = new HtmlDocument();
+        document.LoadHtml(page.Content);
+        var node = document.DocumentNode.SelectSingleNode("//div[@class=\"manga-description\"]");
+        if (node != null)
+          description = WebUtility.HtmlDecode(node.InnerText).Trim();
+      }
+      catch (Exception e) { Log.Exception(e); }
+      manga.Description = description;
     }
 
     public override void UpdateContent(IManga manga)

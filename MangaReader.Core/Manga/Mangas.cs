@@ -97,6 +97,19 @@ namespace MangaReader.Core.Manga
       }
     }
 
+    /// <summary>
+    /// Описание манги.
+    /// </summary>
+    public virtual string Description
+    {
+      get { return description; }
+      set
+      {
+        description = value;
+        OnPropertyChanged();
+      }
+    }
+
     public virtual bool? NeedCompress
     {
       get { return needCompress; }
@@ -186,6 +199,7 @@ namespace MangaReader.Core.Manga
 
     private string status;
     private byte[] cover;
+    private string description;
 
     /// <summary>
     /// Статус корректности манги.

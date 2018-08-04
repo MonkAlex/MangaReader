@@ -12,8 +12,8 @@ namespace Tests.Entities.Search
     [Test]
     public void SearchOnGrouple()
     {
-      var manga = Search("Дурень и Сиськи").FirstOrDefault();
-      Assert.AreEqual("Baka And Boing", manga.Name);
+      var manga = Search("Baka And Boing").FirstOrDefault();
+      Assert.AreEqual("Дурень и Сиськи", manga.Name);
     }
 
     private IEnumerable<IManga> Search(string name)

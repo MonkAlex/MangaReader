@@ -19,8 +19,7 @@
     <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Description}" TextWrapping="Wrap"/>
     <view:MangaProperties Grid.Column="1" Grid.Row="3" IsVisible="{Binding Saved}"/>
     <WrapPanel Grid.Column="1" Grid.Row="3" IsVisible="{Binding !Saved}" HorizontalAlignment="Center">
-      <Button Command="{Binding Save}" Content="Read (not implement)"/>
-      <Button Command="{Binding UndoChanged}" Content="Subscribe (not implement)"/>
+      <Button Command="{Binding AddToLibrary}" Content="Subscribe"/>
     </WrapPanel>
   </Grid>
 </UserControl>

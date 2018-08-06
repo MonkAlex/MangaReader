@@ -41,13 +41,13 @@ namespace MangaReader.Avalonia.ViewModel
 
     private string status;
 
-    public AddToLibraryCommand AddToLibrary
+    public PreviewFindedMangaCommand PreviewFindedManga
     {
-      get => addToLibrary;
-      set => RaiseAndSetIfChanged(ref addToLibrary, value);
+      get => previewFindedManga;
+      set => RaiseAndSetIfChanged(ref previewFindedManga, value);
     }
 
-    private AddToLibraryCommand addToLibrary;
+    private PreviewFindedMangaCommand previewFindedManga;
 
     public MangaSearchViewModel(IManga manga)
     {
@@ -55,7 +55,7 @@ namespace MangaReader.Avalonia.ViewModel
       this.uri = manga.Uri;
       this.cover = manga.Cover;
       this.status = manga.Status;
-      this.addToLibrary = new AddToLibraryCommand(ExplorerViewModel.Instance.Tabs.OfType<SearchViewModel>().Single());
+      this.previewFindedManga = new PreviewFindedMangaCommand(ExplorerViewModel.Instance.Tabs.OfType<SearchViewModel>().Single());
     }
   }
 }

@@ -66,7 +66,7 @@
     <Compile Include="ViewModel\Command\Library\PauseCommand.cs" />
     <Compile Include="ViewModel\Command\Library\UpdateVisibleMangaCommand.cs" />
     <Compile Include="ViewModel\Command\Library\UpdateWithPauseCommand.cs" />
-    <Compile Include="ViewModel\Command\Manga\AddToLibraryCommand.cs" />
+    <Compile Include="ViewModel\Command\Manga\PreviewFindedMangaCommand.cs" />
     <Compile Include="ViewModel\Command\Manga\ChangeUpdateMangaCommand.cs" />
     <Compile Include="ViewModel\Command\Manga\CompressMangaCommand.cs" />
     <Compile Include="ViewModel\Command\Manga\DeleteMangaCommand.cs" />

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using MangaReader.Avalonia.ViewModel.Command.Manga;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
@@ -12,14 +14,14 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
   {
     #region MangaProperties
 
-    internal IManga ContextManga { get; set; }
-
     private string name;
     private string folder;
     private bool? needCompress;
     private Compression.CompressionMode? compressionMode;
 
     public int Id { get; set; }
+
+    public Uri Uri { get; set; }
 
     public bool Saved { get { return Id != 0; } }
 
@@ -138,6 +140,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         return;
 
       this.Id = manga.Id;
+      this.Uri = manga.Uri;
       this.MangaName = manga.Name;
       this.OriginalName = manga.ServerName;
       this.Folder = manga.Folder;
@@ -180,6 +183,15 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       this.MangaName = this.OriginalName;
     }
 
+    public void AddToLibrary()
+    {
+      if (Saved)
+        return;
+
+      if (this.Save.CanExecute(this))
+        this.Save.Execute(this);
+    }
+
     private void SetType(IManga manga)
     {
       var result = "NA";
@@ -215,9 +227,9 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       return base.OnUnselected(newModel);
     }
 
-    /*
-    public ICommand Save => new MangaSaveCommand(this, WindowHelper.Library);
+    public ICommand Save => new MangaSaveCommand(this, ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().First().Library);
 
+    /*
     public override void Show()
     {
       base.Show();

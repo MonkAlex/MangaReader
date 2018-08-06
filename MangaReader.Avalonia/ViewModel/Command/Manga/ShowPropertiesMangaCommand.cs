@@ -14,7 +14,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
     {
       var manga = mangas.Single();
       var explorer = ExplorerViewModel.Instance;
-      var searchTab = explorer.Tabs.OfType<MangaModel>().SingleOrDefault(t => t.ContextManga == manga);
+      var searchTab = explorer.Tabs.OfType<MangaModel>().SingleOrDefault(t => t.Id == manga.Id);
       if (searchTab == null)
       {
         searchTab = this.LibraryModel.SelectedMangaModels.SingleOrDefault(m => m.Id == manga.Id);

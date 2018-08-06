@@ -56,8 +56,6 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
         var mangas = context.Get<IManga>().Where(m => ids.Contains(m.Id)).ToList().OrderBy(m => ids.IndexOf(m.Id)).ToList();
         try
         {
-          foreach (var model in SelectedModels)
-            model.ContextManga = mangas.SingleOrDefault(m => m.Id == model.Id);
           this.Execute(mangas);
         }
         catch (Exception e)
@@ -69,7 +67,6 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
           foreach (var model in SelectedModels)
           {
             model.UpdateProperties(mangas.SingleOrDefault(m => m.Id == model.Id));
-            model.ContextManga = null;
           }
         }
       }

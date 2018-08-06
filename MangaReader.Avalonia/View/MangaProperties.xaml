@@ -24,7 +24,7 @@
                HorizontalAlignment="Stretch"
                Text="{Binding MangaName}"/>
       <Button Grid.Column="1"
-              Margin="10"
+              Margin="10, 10, 20, 10"
               Command="{Binding RestoreName}"
               VerticalAlignment="Center">
         <Button.Template>

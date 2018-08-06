@@ -12,11 +12,18 @@
     <Image Grid.Column="0"
            Grid.Row="0"
            Grid.RowSpan="5"
+           Margin="0, 0, 10, 0"
            Source="{Binding Cover, Converter={x:Static av:BitmapTypeConverter.Instance}}"/>
 
-    <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding OriginalName}" TextWrapping="Wrap" FontSize="20"/>
-    <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Status}" TextWrapping="Wrap"/>
-    <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Description}" TextWrapping="Wrap"/>
+    <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" 
+               Margin="10, 0, 0, 10"
+               Text="{Binding OriginalName}" TextWrapping="Wrap" FontSize="20"/>
+    <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" 
+               Margin="10, 0, 0, 10"
+               Text="{Binding Status}" TextWrapping="Wrap"/>
+    <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"
+               Margin="10, 0, 0, 10"
+               Text="{Binding Description}" TextWrapping="Wrap"/>
     <view:MangaProperties Grid.Column="1" Grid.Row="3" IsVisible="{Binding Saved}"/>
     <WrapPanel Grid.Column="1" Grid.Row="3" IsVisible="{Binding !Saved}" HorizontalAlignment="Center">
       <Button Command="{Binding AddToLibrary}" Content="Subscribe"/>

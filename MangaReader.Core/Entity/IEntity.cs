@@ -8,19 +8,9 @@
     int Id { get; set; }
 
     /// <summary>
-    /// Сохранить в базу.
+    /// Событие перед сохранением - для валидации.
     /// </summary>
-    void Save();
-
-    /// <summary>
-    ///  Загрузить свежую информацию из базы.
-    /// </summary>
-    void Update();
-
-    /// <summary>
-    /// Удалить из базы.
-    /// </summary>
-    /// <returns>False, если сущности в базе ещё не было.</returns>
-    bool Delete();
+    /// <param name="args">Информация о событии.</param>
+    void BeforeSave(ChangeTrackerArgs args);
   }
 }

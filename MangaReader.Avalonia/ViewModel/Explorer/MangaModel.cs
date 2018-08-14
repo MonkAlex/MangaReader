@@ -1,30 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using MangaReader.Avalonia.ViewModel.Command.Manga;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
-namespace MangaReader.Avalonia.ViewModel
+namespace MangaReader.Avalonia.ViewModel.Explorer
 {
-  public class MangaModel : ViewModelBase
+  public class MangaModel : ExplorerTabViewModel
   {
     #region MangaProperties
 
-    internal IManga ContextManga { get; set; }
-
     private string name;
     private string folder;
-    private bool canChangeName;
-    private bool nameIsReadonly;
     private bool? needCompress;
     private Compression.CompressionMode? compressionMode;
 
     public int Id { get; set; }
 
-    public string Name
+    public Uri Uri { get; set; }
+
+    public bool Saved { get { return Id != 0; } }
+
+    public string MangaName
     {
-      get => CanChangeName ? name : OriginalName;
+      get => name;
       set => RaiseAndSetIfChanged(ref name, value);
     }
 
@@ -34,23 +37,6 @@ namespace MangaReader.Avalonia.ViewModel
     {
       get => folder;
       set => RaiseAndSetIfChanged(ref folder, value);
-    }
-
-    public bool CanChangeName
-    {
-      get => canChangeName;
-      set
-      {
-        RaiseAndSetIfChanged(ref canChangeName, value);
-        this.NameIsReadonly = !value;
-        RaisePropertyChanged(nameof(Name));
-      }
-    }
-
-    public bool NameIsReadonly
-    {
-      get => nameIsReadonly;
-      private set => RaiseAndSetIfChanged(ref nameIsReadonly, value);
     }
 
     public bool? NeedCompress
@@ -114,6 +100,14 @@ namespace MangaReader.Avalonia.ViewModel
       set => RaiseAndSetIfChanged(ref status, value);
     }
 
+    public string Description
+    {
+      get => description;
+      set => RaiseAndSetIfChanged(ref description, value);
+    }
+
+    private string description;
+
     public DateTime? Created
     {
       get => created;
@@ -140,14 +134,16 @@ namespace MangaReader.Avalonia.ViewModel
 
     public void UpdateProperties(IManga manga)
     {
+      this.Name = manga?.Name ?? "<Empty>";
+
       if (manga == null)
         return;
 
       this.Id = manga.Id;
-      this.Name = manga.Name;
+      this.Uri = manga.Uri;
+      this.MangaName = manga.Name;
       this.OriginalName = manga.ServerName;
       this.Folder = manga.Folder;
-      this.CanChangeName = manga.IsNameChanged;
       this.NeedCompress = manga.NeedCompress;
       this.CompressionModes = new List<Compression.CompressionMode>(manga.AllowedCompressionModes);
       this.CompressionMode = manga.CompressionMode;
@@ -157,10 +153,12 @@ namespace MangaReader.Avalonia.ViewModel
       SetType(manga);
       SetNeedUpdate(manga.NeedUpdate);
       this.Status = manga.Status;
-      this.SettingsId = manga.Setting.Id;
+      if (manga.Setting != null)
+        this.SettingsId = manga.Setting.Id;
       this.Created = manga.Created;
       this.DownloadedAt = manga.DownloadedAt;
       this.Cover = manga.Cover;
+      this.Description = manga.Description;
     }
 
     private void SetCompletedIcon(bool isCompleted)
@@ -180,10 +178,24 @@ namespace MangaReader.Avalonia.ViewModel
       this.CompletedIcon = result;
     }
 
+    public void RestoreName()
+    {
+      this.MangaName = this.OriginalName;
+    }
+
+    public void AddToLibrary()
+    {
+      if (Saved)
+        return;
+
+      if (this.Save.CanExecute(this))
+        this.Save.Execute(this);
+    }
+
     private void SetType(IManga manga)
     {
       var result = "NA";
-      var plugin = ConfigStorage.Plugins.SingleOrDefault(p => p.MangaType == manga.GetType());
+      var plugin = ConfigStorage.Plugins?.SingleOrDefault(p => p.MangaType == manga.GetType());
       if (plugin != null)
         result = plugin.ShortName;
       this.Type = result;
@@ -209,9 +221,15 @@ namespace MangaReader.Avalonia.ViewModel
     private DateTime? created;
     private DateTime? downloadedAt;
 
-    /*
-    public ICommand Save => new MangaSaveCommand(this, WindowHelper.Library);
+    public override Task OnUnselected(ExplorerTabViewModel newModel)
+    {
+      ExplorerViewModel.Instance.Tabs.Remove(this);
+      return base.OnUnselected(newModel);
+    }
 
+    public ICommand Save => new MangaSaveCommand(this, ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().First().Library);
+
+    /*
     public override void Show()
     {
       base.Show();

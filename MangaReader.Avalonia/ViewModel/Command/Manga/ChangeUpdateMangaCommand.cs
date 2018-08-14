@@ -3,6 +3,7 @@ using System.Linq;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Avalonia.Properties;
+using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
@@ -12,10 +13,13 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
 
     public override void Execute(IEnumerable<IManga> mangas)
     {
-      foreach (var manga in mangas.Where(m => m.NeedUpdate == NeedUpdate))
+      using (var context = Repository.GetEntityContext())
       {
-        manga.NeedUpdate = !manga.NeedUpdate;
-        manga.Save();
+        foreach (var manga in mangas.Where(m => m.NeedUpdate == NeedUpdate))
+        {
+          manga.NeedUpdate = !manga.NeedUpdate;
+          context.Save(manga);
+        }
       }
     }
 

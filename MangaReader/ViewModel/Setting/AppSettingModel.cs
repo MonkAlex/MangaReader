@@ -109,7 +109,7 @@ namespace MangaReader.ViewModel.Setting
       {
         var config = context.Get<DatabaseConfig>().Single();
         config.FolderNamingStrategy = FolderNamingStrategy.Selected.Id;
-        config.Save();
+        context.Save(config);
       }
     }
 

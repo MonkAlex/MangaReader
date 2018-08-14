@@ -9,7 +9,7 @@ using MangaReader.Core.Manga;
 
 namespace MangaReader.Avalonia.ViewModel
 {
-  public class MangaViewModel : ViewModelBase
+  public class MangaSearchViewModel : ViewModelBase
   {
     private string name;
     private byte[] cover;
@@ -41,21 +41,21 @@ namespace MangaReader.Avalonia.ViewModel
 
     private string status;
 
-    public AddToLibraryCommand AddToLibrary
+    public PreviewFindedMangaCommand PreviewFindedManga
     {
-      get => addToLibrary;
-      set => RaiseAndSetIfChanged(ref addToLibrary, value);
+      get => previewFindedManga;
+      set => RaiseAndSetIfChanged(ref previewFindedManga, value);
     }
 
-    private AddToLibraryCommand addToLibrary;
+    private PreviewFindedMangaCommand previewFindedManga;
 
-    public MangaViewModel(IManga manga)
+    public MangaSearchViewModel(IManga manga)
     {
       this.name = manga.Name;
       this.uri = manga.Uri;
       this.cover = manga.Cover;
       this.status = manga.Status;
-      this.addToLibrary = new AddToLibraryCommand(ExplorerViewModel.Instance.Tabs.OfType<SearchViewModel>().Single());
+      this.previewFindedManga = new PreviewFindedMangaCommand(ExplorerViewModel.Instance.Tabs.OfType<SearchViewModel>().Single());
     }
   }
 }

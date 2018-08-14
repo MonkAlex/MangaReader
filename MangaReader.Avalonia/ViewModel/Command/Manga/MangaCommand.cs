@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using MangaReader.Avalonia.ViewModel.Command.Library;
+using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
@@ -49,14 +50,12 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
     {
       base.Execute(parameter);
 
-      using (var context = Repository.GetEntityContext())
+      using (var context = Repository.GetEntityContext($"Manga command '{this.Name}'"))
       {
         var ids = SelectedModels.Select(m => m.Id).ToList();
         var mangas = context.Get<IManga>().Where(m => ids.Contains(m.Id)).ToList().OrderBy(m => ids.IndexOf(m.Id)).ToList();
         try
         {
-          foreach (var model in SelectedModels)
-            model.ContextManga = mangas.SingleOrDefault(m => m.Id == model.Id);
           this.Execute(mangas);
         }
         catch (Exception e)
@@ -68,7 +67,6 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
           foreach (var model in SelectedModels)
           {
             model.UpdateProperties(mangas.SingleOrDefault(m => m.Id == model.Id));
-            model.ContextManga = null;
           }
         }
       }
@@ -77,7 +75,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       {
         var selected = SelectedModels.ToList();
         LibraryModel.FilteredItems.Reset();
-        foreach (var model in selected.Where(s => LibraryModel.FilteredItems.Contains(s)))
+        foreach (var model in selected.Where(s => LibraryModel.FilteredItems.Contains(s) && !LibraryModel.SelectedMangaModels.Contains(s)))
           LibraryModel.SelectedMangaModels.Add(model);
       }
 

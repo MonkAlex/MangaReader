@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using MangaReader.Core.Account;
 using MangaReader.Core.Manga;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Properties;
 using MangaReader.Core.Services;
 
@@ -66,7 +67,9 @@ namespace Grouple
       }
 
       var parser = new Parser();
-      var loadedBookmarks = Regex
+      using (var context = Repository.GetEntityContext("Loading bookmarks"))
+      {
+        var loadedBookmarks = Regex
           .Matches(bookMarksNode.OuterHtml, @"href='(.*?)'", RegexOptions.IgnoreCase)
           .OfType<Group>()
           .Select(g => g.Captures[0])
@@ -79,7 +82,8 @@ namespace Grouple
             return manga;
           })
           .ToList();
-      bookmarks.AddRange(loadedBookmarks);
+        bookmarks.AddRange(loadedBookmarks);
+      }
       return bookmarks;
     }
 

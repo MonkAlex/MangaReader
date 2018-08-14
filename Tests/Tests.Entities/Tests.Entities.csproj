@@ -105,6 +105,7 @@
     <Compile Include="Library\Add.cs" />
     <Compile Include="Library\Update.cs" />
     <Compile Include="MangaHistory\AcomicsChapters.cs" />
+    <Compile Include="MangaSetting\ChangeFolderInSetting.cs" />
     <Compile Include="Manga\AcomicsStructure.cs" />
     <Compile Include="Manga\BonusesChapter.cs" />
     <Compile Include="Manga\HentaichanStructure.cs" />

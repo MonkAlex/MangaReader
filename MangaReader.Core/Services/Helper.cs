@@ -6,8 +6,8 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services.Config;
-using NHibernate.Util;
 using System.Threading.Tasks;
+using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Core.Services
 {
@@ -32,7 +32,7 @@ namespace MangaReader.Core.Services
       if (double.IsNaN(byteCount) || double.IsInfinity(byteCount) || byteCount == 0)
         return string.Empty;
 
-      return HumanizeByteSize((long) byteCount);
+      return HumanizeByteSize((long)byteCount);
     }
 
     /// <summary>
@@ -69,8 +69,11 @@ namespace MangaReader.Core.Services
       var single = query.SingleOrDefault();
       if (Equals(single, default(T)))
       {
-        single = new T();
-        single.Save();
+        using (var context = Repository.GetEntityContext())
+        {
+          single = new T();
+          context.Save(single);
+        }
       }
 
       return single;
@@ -115,6 +118,28 @@ namespace MangaReader.Core.Services
       }
 
       return null;
+    }
+
+    public static void SaveAll<T>(this IEnumerable<T> objects, RepositoryContext context) where T : Entity.IEntity
+    {
+      var list = objects.ToList();
+      if (!list.Any())
+        return;
+
+      using (var tranc = context.OpenTransaction())
+      {
+        try
+        {
+          foreach (var o in list)
+            context.AddToTransaction(o);
+          tranc.Commit();
+        }
+        catch (System.Exception)
+        {
+          tranc.Rollback();
+          throw;
+        }
+      }
     }
 
     public static Task LogException(this Task task)

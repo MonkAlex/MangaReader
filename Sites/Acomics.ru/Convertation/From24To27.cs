@@ -3,6 +3,7 @@ using System.Linq;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.NHibernate;
+using MangaReader.Core.Services;
 
 namespace Acomics.Convertation
 {
@@ -26,7 +27,7 @@ namespace Acomics.Convertation
           parser.UpdateContentType(acomic);
           process.Percent += 100.0 / acomics.Count;
         }
-        acomics.SaveAll();
+        acomics.SaveAll(context);
       }
     }
 

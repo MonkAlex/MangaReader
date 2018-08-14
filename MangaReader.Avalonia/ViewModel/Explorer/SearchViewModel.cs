@@ -13,7 +13,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 {
   public class SearchViewModel : ExplorerTabViewModel
   {
-    private ObservableCollection<MangaViewModel> items;
+    private ObservableCollection<MangaSearchViewModel> items;
     private string search;
     private DelegateCommand startSearch;
     private string manualUri;
@@ -31,7 +31,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       set { RaiseAndSetIfChanged(ref startSearch, value); }
     }
 
-    public ObservableCollection<MangaViewModel> Items
+    public ObservableCollection<MangaSearchViewModel> Items
     {
       get { return items; }
       set { RaiseAndSetIfChanged(ref items, value); }
@@ -57,7 +57,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       var tasks = searches.Select(s => Task.Run(() => s.ForEachAsync(a =>
       {
         if (uniqueUris.TryAdd(a.Uri, true))
-          global::Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => Items.Add(new MangaViewModel(a)));
+          global::Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => Items.Add(new MangaSearchViewModel(a)));
       })));
       await Task.WhenAll(tasks.Select(t => t.LogException()));
     }
@@ -78,7 +78,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     {
       this.Name = "Search";
       this.Priority = 20;
-      this.Items = new ObservableCollection<MangaViewModel>();
+      this.Items = new ObservableCollection<MangaSearchViewModel>();
       this.StartSearch = new DelegateCommand(UpdateManga, () => !string.IsNullOrWhiteSpace(Search)) {Name = "Search"};
       this.AddManual = new DelegateCommand(AddManga, () => !string.IsNullOrWhiteSpace(ManualUri)) {Name = "Add"};
       this.PropertyChanged += (sender, args) =>

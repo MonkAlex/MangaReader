@@ -20,6 +20,7 @@ namespace MangaReader.ViewModel.Commands.Manga
 
     public override void Execute(IEnumerable<IManga> mangas)
     {
+      model.UpdateProperties(model.ContextManga);
       model.Show();
     }
 

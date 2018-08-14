@@ -21,19 +21,20 @@ namespace Tests.Entities.Library
     {
       var library = new LibraryViewModel();
       using (var context = Repository.GetEntityContext())
-      foreach (var forDelete in context.Get<IManga>())
-        forDelete.Delete();
+        foreach (var forDelete in context.Get<IManga>())
+          context.Delete(forDelete);
       var manga = Builder.CreateReadmanga();
       TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.DownloadedAt));
       TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.Created));
       TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.Name));
-      manga.Delete();
+      using (var context = Repository.GetEntityContext())
+        context.Delete(manga);
     }
 
     private void TestUpdateFromConfig(LibraryViewModel library, ListSortDirection direction, string property)
     {
       ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription = new SortDescription()
-        {Direction = direction, PropertyName = property};
+      { Direction = direction, PropertyName = property };
       var lastErrorMessage = string.Empty;
 
       void OnLogReceived(LogEventStruct les)

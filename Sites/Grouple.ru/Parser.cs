@@ -146,10 +146,22 @@ namespace Grouple
         var nodes = document.DocumentNode.SelectNodes("//div[@class=\"subject-meta col-sm-7\"]//p");
         if (nodes != null)
           status = nodes.Aggregate(status, (current, node) =>
-              current + Regex.Replace(node.InnerText.Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
+            current + Regex.Replace(WebUtility.HtmlDecode(node.InnerText).Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
       manga.Status = status;
+
+      var description = string.Empty;
+      try
+      {
+        var document = new HtmlDocument();
+        document.LoadHtml(page.Content);
+        var node = document.DocumentNode.SelectSingleNode("//div[@class=\"manga-description\"]");
+        if (node != null)
+          description = WebUtility.HtmlDecode(node.InnerText).Trim();
+      }
+      catch (Exception e) { Log.Exception(e); }
+      manga.Description = description;
     }
 
     public override void UpdateContent(IManga manga)
@@ -277,7 +289,8 @@ namespace Grouple
 
       var result = Mangas.Create(new Uri(host, mangaUri));
       result.Name = WebUtility.HtmlDecode(mangaName);
-      result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri));
+      if (!string.IsNullOrWhiteSpace(imageUri))
+        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri));
       return result;
     }
 

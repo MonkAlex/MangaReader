@@ -158,7 +158,7 @@ namespace MangaReader.ViewModel
     {
       LibraryFilter = ConfigStorage.Instance.ViewConfig.LibraryFilter;
       this.Library = new LibraryViewModel();
-      using (var context = Repository.GetEntityContext())
+      using (var context = Repository.GetEntityContext("Get all manga for main view"))
         this.MangaViewModels = new ObservableCollection<MangaModel>(context.Get<IManga>().Select(m => new MangaModel(m)));
       this.SelectedMangaModels = new ObservableCollection<MangaModel>();
       Library.LibraryChanged += LibraryOnLibraryChanged;

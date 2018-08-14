@@ -3,6 +3,7 @@ using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using System.Linq;
+using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Core.Convertation.Database
 {
@@ -12,19 +13,21 @@ namespace MangaReader.Core.Convertation.Database
     {
       base.ProtectedConvert(process);
 
-      foreach (var setting in NHibernate.Repository.GetStateless<MangaSetting>())
+      using (var context = Repository.GetEntityContext())
       {
-        if (!Uri.TryCreate(setting.Folder, UriKind.RelativeOrAbsolute, out Uri folderUri))
-          continue;
-
-        if (folderUri.IsAbsoluteUri)
+        foreach (var setting in context.Get<MangaSetting>())
         {
-          var relativePath = DirectoryHelpers.GetRelativePath(ConfigStorage.WorkFolder, setting.Folder);
-          setting.Folder = relativePath.StartsWith(@"..\..\") ? setting.Folder : relativePath;
+          if (!Uri.TryCreate(setting.Folder, UriKind.RelativeOrAbsolute, out Uri folderUri))
+            continue;
+
+          if (folderUri.IsAbsoluteUri)
+          {
+            var relativePath = DirectoryHelpers.GetRelativePath(ConfigStorage.WorkFolder, setting.Folder);
+            setting.Folder = relativePath.StartsWith(@"..\..\") ? setting.Folder : relativePath;
+          }
+          context.Save(setting);
         }
-        setting.Save();
       }
-      
     }
 
     public From40To41()

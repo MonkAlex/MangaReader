@@ -1,6 +1,11 @@
-﻿using MangaReader.Avalonia.ViewModel.Command.Library;
+﻿using System.Linq;
+using MangaReader.Avalonia.ViewModel.Command.Library;
+using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Exception;
+using MangaReader.Core.Manga;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
+using LibraryViewModel = MangaReader.Core.Services.LibraryViewModel;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
@@ -14,31 +19,51 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
 
       try
       {
-        var manga = model.ContextManga;
-        if (model.CanChangeName)
+        using (var context = Repository.GetEntityContext())
         {
-          var name = model.Name;
-          manga.IsNameChanged = true;
-          manga.Name = name;
+          if (model.Saved)
+          {
+            var manga = context.Get<IManga>().First(m => m.Id == model.Id);
+            if (model.MangaName != manga.ServerName)
+            {
+              var name = model.MangaName;
+              manga.IsNameChanged = true;
+              manga.Name = name;
+            }
+            else
+              manga.IsNameChanged = false;
+
+            if (model.CompressionMode != null && model.CompressionModes.Contains(model.CompressionMode.Value))
+              manga.CompressionMode = model.CompressionMode;
+
+            manga.NeedCompress = model.NeedCompress;
+
+            context.Save(manga);
+            model.UpdateProperties(manga);
+          }
+          else
+          {
+            foreach (var viewModel in ExplorerViewModel.Instance.Tabs.OfType<Explorer.LibraryViewModel>())
+            {
+              if (viewModel.Library.Add(model.Uri, out IManga manga))
+              {
+                manga.Cover = model.Cover;
+                context.Save(manga);
+              }
+            }
+          }
         }
-        else
-          manga.IsNameChanged = false;
-
-        if (model.CompressionMode != null && model.CompressionModes.Contains(model.CompressionMode.Value))
-          manga.CompressionMode = model.CompressionMode;
-
-        manga.NeedCompress = model.NeedCompress;
-
-        manga.Save();
-        model.UpdateProperties(manga);
-#warning Тут надо как то без окон обойтись
-        // model.Close();
+        ExplorerViewModel.Instance.SelectedTab = ExplorerViewModel.Instance.Tabs.OfType<Explorer.LibraryViewModel>().FirstOrDefault();
       }
       catch (MangaReaderException ex)
       {
         Log.Exception(ex);
-        model.ContextManga.Update();
-        model.UpdateProperties(model.ContextManga);
+        if (model.Saved)
+          using (var context = Repository.GetEntityContext())
+          {
+            var manga = context.Get<IManga>().First(m => m.Id == model.Id);
+            model.UpdateProperties(manga);
+          }
       }
     }
 

@@ -78,7 +78,7 @@ namespace MangaReader.Core.Convertation.Mangas
             if (manga.Created == null || manga.Created > min)
             {
               manga.Created = min;
-              context.SaveOrUpdate(manga);
+              context.AddToTransaction(manga);
             }
           }
           tranc.Commit();

@@ -55,9 +55,18 @@ namespace Acomics
           manga.IsCompleted = status;
           var nodes = content.SelectNodes(".//div[@class=\"about-summary\"]//p");
           summary = nodes.Aggregate(summary, (current, node) =>
-            current + Regex.Replace(node.InnerText.Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
-          summary = WebUtility.HtmlDecode(summary);
+            current + Regex.Replace(WebUtility.HtmlDecode(node.InnerText).Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
           manga.Status = summary;
+
+          var description = content.SelectSingleNode(".//div[@class=\"about-summary\"]");
+          if (description != null)
+            manga.Description = description.ChildNodes
+              .SkipWhile(n => n.Name != "p")
+              .Skip(1)
+              .TakeWhile(n => n.Name != "p")
+              .Aggregate(string.Empty, (current, node) => 
+                current + Regex.Replace(WebUtility.HtmlDecode(node.InnerText).Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine)
+              .Trim();
         }
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
@@ -229,7 +238,8 @@ namespace Acomics
 
       var result = Mangas.Create(new Uri(host, mangaUri));
       result.Name = WebUtility.HtmlDecode(mangaName);
-      result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri));
+      if (!string.IsNullOrWhiteSpace(imageUri))
+        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri));
       return result;
     }
 

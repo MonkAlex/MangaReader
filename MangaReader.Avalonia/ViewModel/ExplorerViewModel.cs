@@ -18,6 +18,9 @@ namespace MangaReader.Avalonia.ViewModel
       get { return selectedTab; }
       set
       {
+        if (Equals(selectedTab, value))
+          return;
+
         var previous = selectedTab;
         selectedTab?.OnUnselected(value);
         RaiseAndSetIfChanged(ref selectedTab, value);

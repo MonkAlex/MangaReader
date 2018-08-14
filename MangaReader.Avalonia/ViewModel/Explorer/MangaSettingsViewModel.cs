@@ -73,7 +73,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           setting.CompressManga = this.Compress == true;
           setting.OnlyUpdate = this.OnlyUpdate == true;
           setting.Folder = this.Folder;
-          setting.Save();
+          context.Save(setting);
         }
       }
     }

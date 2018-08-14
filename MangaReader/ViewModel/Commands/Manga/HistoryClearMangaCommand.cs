@@ -25,7 +25,9 @@ namespace MangaReader.ViewModel.Commands.Manga
         {
           manga.ClearHistory();
         }
-        list.SaveAll();
+
+        using (var context = Repository.GetEntityContext())
+          list.SaveAll(context);
       }
     }
 

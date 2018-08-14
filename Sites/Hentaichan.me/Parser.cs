@@ -53,11 +53,11 @@ namespace Hentaichan
 
     public override void UpdateNameAndStatus(IManga manga)
     {
+      var page = Page.GetPage(manga.Uri);
       var name = string.Empty;
       try
       {
         var document = new HtmlDocument();
-        var page = Page.GetPage(manga.Uri);
         document.LoadHtml(page.Content);
         var nameNode = document.DocumentNode.SelectSingleNode("//head/title");
         var splitter = "&raquo;";
@@ -79,6 +79,31 @@ namespace Hentaichan
       name = WebUtility.HtmlDecode(name);
 
       UpdateName(manga, name);
+
+      var status = string.Empty;
+      try
+      {
+        var document = new HtmlDocument();
+        document.LoadHtml(page.Content);
+        var nodes = document.DocumentNode.SelectNodes("//div[@id=\"info_wrap\"]//div[@class=\"row\"]");
+        if (nodes != null)
+          status = nodes.Aggregate(status, (current, node) =>
+            current + Regex.Replace(WebUtility.HtmlDecode(node.InnerText).Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
+      }
+      catch (NullReferenceException ex) { Log.Exception(ex); }
+      manga.Status = status;
+
+      var description = string.Empty;
+      try
+      {
+        var document = new HtmlDocument();
+        document.LoadHtml(page.Content);
+        var node = document.DocumentNode.SelectSingleNode("//div[@id=\"description\"]");
+        if (node != null)
+          description = WebUtility.HtmlDecode(node.InnerText).Trim();
+      }
+      catch (Exception e) { Log.Exception(e); }
+      manga.Description = description;
     }
 
     public override void UpdateContent(IManga manga)
@@ -209,7 +234,8 @@ namespace Hentaichan
 
       var result = Mangas.Create(new Uri(mangaUri));
       result.Name = WebUtility.HtmlDecode(mangaName);
-      result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri));
+      if (!string.IsNullOrWhiteSpace(imageUri))
+        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri));
       return result;
     }
 

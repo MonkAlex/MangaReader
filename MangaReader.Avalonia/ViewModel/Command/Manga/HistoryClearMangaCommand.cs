@@ -4,6 +4,7 @@ using System.Linq;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Avalonia.Properties;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
@@ -30,7 +31,8 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
         {
           manga.ClearHistory();
         }
-        list.SaveAll();
+        using (var context = Repository.GetEntityContext())
+          list.SaveAll(context);
       }
     }
 

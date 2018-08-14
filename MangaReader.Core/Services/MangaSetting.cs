@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MangaReader.Core.Account;
+using MangaReader.Core.Entity;
+using MangaReader.Core.Exception;
+using MangaReader.Core.Manga;
+using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Core.Services
 {
@@ -34,6 +39,30 @@ namespace MangaReader.Core.Services
     /// Идентификатор выбранной стратегии именования папок.
     /// </summary>
     public Guid FolderNamingStrategy { get; set; }
+
+    public override void BeforeSave(ChangeTrackerArgs args)
+    {
+      var folderIndex = args.PropertyNames.ToList().IndexOf(nameof(Folder));
+      if (folderIndex > -1 && args.PreviousState != null)
+      {
+        var previous = args.PreviousState[folderIndex] as string;
+        var current = args.CurrentState[folderIndex] as string;
+        if (previous != current)
+        {
+          using (var context = Repository.GetEntityContext())
+          {
+            var mangas = context.Get<IManga>().Where(m => m.Setting == this).ToList();
+            foreach (var manga in mangas)
+            {
+              manga.RefreshFolder();
+              context.AddToTransaction(manga);
+            }
+          }
+        }
+      }
+
+      base.BeforeSave(args);
+    }
 
     public MangaSetting()
     {

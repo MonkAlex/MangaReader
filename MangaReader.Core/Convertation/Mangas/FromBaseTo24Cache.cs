@@ -45,7 +45,7 @@ namespace MangaReader.Core.Convertation.Mangas
         globalCollection = fromFileInDb.Concat(onlyInDb).ToList();
         foreach (var manga in globalCollection.Where(m => m.Setting == null).OfType<Manga.Mangas>())
           manga.Setting = settings.Single(s => s.Manga == ConfigStorage.GetPlugin(manga.GetType()).MangaGuid);
-        globalCollection.SaveAll();
+        globalCollection.SaveAll(context);
       }
 
       Backup.MoveToBackup(CacheFile);

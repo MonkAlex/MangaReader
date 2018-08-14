@@ -1,24 +1,33 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Dialogs.Avalonia;
+using Dialogs.Buttons;
 using MangaReader.Core.Manga;
 using MangaReader.Avalonia.Properties;
+using MangaReader.Avalonia.ViewModel.Explorer;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
   public class ShowPropertiesMangaCommand : MultipleMangasBaseCommand
   {
-    private MangaModel model;
-
-    public override void Execute(object parameter)
-    {
-      model = (MangaModel)parameter;
-      base.Execute(parameter);
-    }
-
     public override void Execute(IEnumerable<IManga> mangas)
     {
-#warning Свойства пока не отображаем.
-      // model.Show();
+      var manga = mangas.Single();
+      var explorer = ExplorerViewModel.Instance;
+      var searchTab = explorer.Tabs.OfType<MangaModel>().SingleOrDefault(t => t.Id == manga.Id);
+      if (searchTab == null)
+      {
+        searchTab = this.LibraryModel.SelectedMangaModels.SingleOrDefault(m => m.Id == manga.Id);
+        if (searchTab != null)
+          searchTab.UpdateProperties(manga);
+        else
+          searchTab = new MangaModel(manga);
+        explorer.Tabs.Add(searchTab);
+      }
+      else
+        searchTab.UpdateProperties(manga);
+
+      explorer.SelectedTab = searchTab;
     }
 
     public override bool CanExecute(object parameter)

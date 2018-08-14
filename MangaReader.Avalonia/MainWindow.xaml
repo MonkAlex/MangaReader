@@ -17,16 +17,21 @@
     <DataTemplate DataType="c:MangaSettingsViewModel">
       <view:MangaSettings/>
     </DataTemplate>
+    <DataTemplate DataType="c:MangaModel">
+      <view:MangaView/>
+    </DataTemplate>
   </Window.DataTemplates>
   <Grid ColumnDefinitions="Auto,*" DataContext="{Binding}">
     <ListBox Grid.Column="0" 
              Items="{Binding Tabs}" 
              SelectedItem="{Binding SelectedTab}"
+             Width="100"
              BorderThickness="0">
       <ListBox.ItemTemplate>
         <DataTemplate>
           <TextBlock Margin="10"
                      Text="{Binding Name}"
+                     TextWrapping="NoWrap"
                      ToolTip.Tip="{Binding Name}"
                      HorizontalAlignment="Center"/>
         </DataTemplate>

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Core.Manga;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using NUnit.Framework;
@@ -40,12 +41,15 @@ namespace Tests.Entities.Download
 
     private void CreateLogin()
     {
-      var setting = ConfigStorage.GetPlugin<Hentaichan.Hentaichan>().GetSettings();
-      var login = setting.Login as Hentaichan.HentaichanLogin;
-      login.UserId = "235332";
-      login.PasswordHash = "0578caacc02411f8c9a1a0af31b3befa";
-      login.IsLogined = true;
-      setting.Save();
+      using (var context = Repository.GetEntityContext())
+      {
+        var setting = ConfigStorage.GetPlugin<Hentaichan.Hentaichan>().GetSettings();
+        var login = setting.Login as Hentaichan.HentaichanLogin;
+        login.UserId = "235332";
+        login.PasswordHash = "0578caacc02411f8c9a1a0af31b3befa";
+        login.IsLogined = true;
+        context.Save(setting);
+      }
     }
 
     private void RmOnDownloadChanged(object sender, PropertyChangedEventArgs args)

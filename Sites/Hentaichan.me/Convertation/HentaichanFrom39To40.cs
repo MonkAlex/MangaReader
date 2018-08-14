@@ -16,13 +16,16 @@ namespace Hentaichan.Convertation
     {
       base.ProtectedConvert(process);
 
-      var setting = ConfigStorage.GetPlugin<Mangachan.Mangachan>().GetSettings();
-      if (setting != null)
+      using (var context = Repository.GetEntityContext())
       {
-        setting.MainUri = new Uri("http://mangachan.me");
-        setting.MangaSettingUris.Add(setting.MainUri);
-        setting.Login.MainUri = setting.MainUri;
-        setting.Save();
+        var setting = ConfigStorage.GetPlugin<Mangachan.Mangachan>().GetSettings();
+        if (setting != null)
+        {
+          setting.MainUri = new Uri("http://mangachan.me");
+          setting.MangaSettingUris.Add(setting.MainUri);
+          setting.Login.MainUri = setting.MainUri;
+          context.Save(setting);
+        }
       }
     }
 

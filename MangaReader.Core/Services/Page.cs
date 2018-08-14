@@ -61,7 +61,7 @@ namespace MangaReader.Core.Services
     public static bool DelayOnExpectationFailed(WebException ex)
     {
       var response = ex.Response as HttpWebResponse;
-      if (response != null && response.StatusCode == HttpStatusCode.ExpectationFailed)
+      if (response != null && (response.StatusCode == HttpStatusCode.ExpectationFailed || response.StatusCode == (HttpStatusCode)429))
       {
         Log.Exception(ex, $"Доступ к {response.ResponseUri} будет повторно проверен через 4 минуты.");
         var delay = new TimeSpan(0, 4, 0);

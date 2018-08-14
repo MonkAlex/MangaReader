@@ -17,6 +17,8 @@ namespace MangaReader.Core.Manga
 
     string Status { get; set; }
 
+    string Description { get; set; }
+
     MangaSetting Setting { get; }
 
     ISiteParser Parser { get; }
@@ -50,5 +52,7 @@ namespace MangaReader.Core.Manga
     void Refresh();
 
     void UpdateContent();
+
+    void RefreshFolder();
   }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using MangaReader.Core;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services.Config;
 using MangaReader.ViewModel.Commands.AddManga;
 using MangaReader.ViewModel.Setting;
@@ -48,31 +49,33 @@ namespace MangaReader.ViewModel
       if (parsers == null)
         parsers = ConfigStorage.Plugins.Select(p => p.GetParser()).ToList();
 
-      foreach (var parser in parsers)
-      {
-        var parseResult = parser.ParseUri(uri);
-        if (!parseResult.CanBeParsed)
-          continue;
-
-        switch (parseResult.Kind)
+#warning Запрос к базе на каждый введенный символ.
+      using (Repository.GetEntityContext("Load settings for parsing uri"))
+        foreach (var parser in parsers)
         {
-          case UriParseKind.Manga:
-            Hint = "Манга будет скачана c начала";
-            break;
-          case UriParseKind.Volume:
-            Hint = "Манга будет скачана только с указанного тома";
-            break;
-          case UriParseKind.Chapter:
-            Hint = "Манга будет скачана только с указанной главы";
-            break;
-          case UriParseKind.Page:
-            Hint = "Манга будет скачана только с указанной страницы";
-            break;
-          default:
-            throw new ArgumentOutOfRangeException();
+          var parseResult = parser.ParseUri(uri);
+          if (!parseResult.CanBeParsed)
+            continue;
+
+          switch (parseResult.Kind)
+          {
+            case UriParseKind.Manga:
+              Hint = "Манга будет скачана c начала";
+              break;
+            case UriParseKind.Volume:
+              Hint = "Манга будет скачана только с указанного тома";
+              break;
+            case UriParseKind.Chapter:
+              Hint = "Манга будет скачана только с указанной главы";
+              break;
+            case UriParseKind.Page:
+              Hint = "Манга будет скачана только с указанной страницы";
+              break;
+            default:
+              throw new ArgumentOutOfRangeException();
+          }
+          break;
         }
-        break;
-      }
     }
 
     public AddFromUri(AddNewModel parent)

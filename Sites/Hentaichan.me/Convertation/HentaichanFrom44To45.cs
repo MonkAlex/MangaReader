@@ -3,6 +3,7 @@ using System.Linq;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.NHibernate;
+using MangaReader.Core.Services;
 
 namespace Hentaichan.Convertation
 {
@@ -25,7 +26,7 @@ namespace Hentaichan.Convertation
           manga.Uri = new Uri(manga.Uri.OriginalString.Replace("/related/", "/manga/"));
           process.Percent += 100.0 / mangas.Count;
         }
-        mangas.SaveAll();
+        mangas.SaveAll(context);
       }
     }
 

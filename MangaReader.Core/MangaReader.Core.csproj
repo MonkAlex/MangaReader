@@ -21,21 +21,8 @@
     <PackageReference Include="NLog" Version="4.5.3" />
     <PackageReference Include="Octokit" Version="0.29.0" />
     <PackageReference Include="System.ComponentModel.Composition" Version="4.5.0" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.109" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
     <PackageReference Include="System.Interactive.Async" Version="3.1.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="lib\sqlite3">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="lib\System.Data.SQLite.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="lib\x64\sqlite3.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="lib\x86\sqlite3.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>

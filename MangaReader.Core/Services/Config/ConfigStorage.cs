@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
+using System.ComponentModel.Composition.Primitives;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -131,7 +132,7 @@ namespace MangaReader.Core.Services.Config
         try
         {
           var result = new List<IPlugin>();
-          var container = new CompositionContainer(new DirectoryCatalog(path));
+          var container = new CompositionContainer(new SafeDirectoryCatalog(path));
           var imanga = typeof(Manga.IManga);
           var ilogin = typeof(Account.ILogin);
           foreach (var plugin in container.GetExportedValues<IPlugin>())
@@ -186,6 +187,41 @@ namespace MangaReader.Core.Services.Config
     {
       this.AppConfig = new AppConfig();
       this.ViewConfig = new ViewConfig();
+    }
+
+    private class SafeDirectoryCatalog : ComposablePartCatalog
+    {
+      private readonly AggregateCatalog _catalog;
+
+      public SafeDirectoryCatalog(string directory)
+      {
+        var files = Directory.EnumerateFiles(directory, "*.dll", SearchOption.TopDirectoryOnly);
+
+        _catalog = new AggregateCatalog();
+
+        foreach (var file in files.Where(f => !f.StartsWith("System.")))
+        {
+          try
+          {
+            var asmCat = new AssemblyCatalog(file);
+
+            //Force MEF to load the plugin and figure out if there are any exports
+            // good assemblies will not throw the RTLE exception and can be added to the catalog
+            if (asmCat.Parts.ToList().Count > 0)
+              _catalog.Catalogs.Add(asmCat);
+          }
+          catch (ReflectionTypeLoadException)
+          {
+          }
+          catch (BadImageFormatException)
+          {
+          }
+        }
+      }
+      public override IQueryable<ComposablePartDefinition> Parts
+      {
+        get { return _catalog.Parts; }
+      }
     }
   }
 }

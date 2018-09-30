@@ -20,7 +20,7 @@ namespace Tests.Entities.Download
     [Test]
     public async Task DownloadReadmanga()
     {
-      var rm = Mangas.CreateFromWeb(new Uri(@"http://readmanga.me/black_butler_anthology_comic_dj____rainbow_butler"));
+      var rm = Mangas.CreateFromWeb(new Uri(@"http://readmanga.me/kuroshitsuji_dj___black_sheep"));
       var sw = new Stopwatch();
       sw.Start();
       rm.PropertyChanged += RmOnDownloadChanged;
@@ -30,9 +30,9 @@ namespace Tests.Entities.Download
       Log.Add($"manga loaded {sw.Elapsed.TotalSeconds}, iscompleted = {rm.IsDownloaded}, lastpercent = {lastPercent}");
       Assert.IsTrue(Directory.Exists(rm.GetAbsoulteFolderPath()));
       var files = Directory.GetFiles(rm.GetAbsoulteFolderPath(), "*", SearchOption.AllDirectories);
-      Assert.AreEqual(212, files.Length);
+      Assert.AreEqual(110, files.Length);
       var fileInfos = files.Select(f => new FileInfo(f)).ToList();
-      Assert.AreEqual(67470935, fileInfos.Sum(f => f.Length));
+      Assert.AreEqual(26853190, fileInfos.Sum(f => f.Length));
 
       // Количество повторяющихся картинок на мангу - не больше одной на главу.
       Assert.IsTrue(rm.Volumes.Sum(v => v.Container.Count()) >= fileInfos.GroupBy(f => f.Length).Max(g => g.Count()));

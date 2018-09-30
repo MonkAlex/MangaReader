@@ -38,9 +38,9 @@ namespace Tests
       BeforeTestClean();
       MangaReader.Core.Loader.Init();
 
-      DeployToLib(Path.Combine(".", "..", "MangaReader.Core", "bin", "Debug"));
-      DeployToLib(Path.Combine(".", "..", "MangaReader.Core", "bin", "Release"));
-      DeployToLib(Path.Combine(".", "..", "MangaReader.Core", "bin", "Publish"));
+      DeployToLib(Path.Combine(".", "..", "MangaReader.Core", "bin", "Debug", "net461"));
+      DeployToLib(Path.Combine(".", "..", "MangaReader.Core", "bin", "Release", "net461"));
+      DeployToLib(Path.Combine(".", "..", "MangaReader.Core", "bin", "Publish", "net461"));
       MangaReader.Core.Services.Config.ConfigStorage.Instance.AppConfig.UpdateReader = false;
 
       if (initSession && !Mapping.Initialized)

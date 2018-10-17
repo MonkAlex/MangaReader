@@ -45,4 +45,14 @@
     </Reference>
   </ItemGroup>
 
+  <!-- Copy native libs - skiasharp and sqlite interops -->
+  <Target Name="CopyNativeLibraries" AfterTargets="Publish">
+    <ItemGroup>
+      <Library Include="$(userprofile)\.nuget\packages\skiasharp\1.57.1\runtimes\osx\native\libSkiaSharp.dylib" />
+      <Library Include="$(userprofile)\.nuget\packages\skiasharp\1.57.1\runtimes\win7-x64\native\libSkiaSharp.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(Library)" 
+          DestinationFiles="@(Library->'$([System.IO.Path]::GetFullPath('$(PublishDir)'))\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+
 </Project>

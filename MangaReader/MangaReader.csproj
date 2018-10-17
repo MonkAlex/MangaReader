@@ -52,12 +52,9 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Hardcodet.Wpf.TaskbarNotification">
-      <HintPath>..\..\MangaReader\MangaReader\Library\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Ookii.Dialogs.Wpf">
-      <HintPath>..\..\MangaReader\MangaReader\Library\Ookii.Dialogs.Wpf.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\Ookii.Dialogs.Wpf.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -68,6 +65,11 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />

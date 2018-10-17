@@ -52,9 +52,12 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Hardcodet.Wpf.TaskbarNotification">
+      <HintPath>..\..\MangaReader\MangaReader\Library\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Ookii.Dialogs.Wpf">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Library\Ookii.Dialogs.Wpf.dll</HintPath>
+      <HintPath>..\..\MangaReader\MangaReader\Library\Ookii.Dialogs.Wpf.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -65,11 +68,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Library\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -387,26 +385,6 @@
       <Project>{19d569ba-e9c5-4d82-8baa-897d7d2ea007}</Project>
       <Name>MangaReader.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sites\Acomics.ru\Acomics.ru.csproj">
-      <Project>{6a7329f1-eaaa-42b0-97bc-c4f2bc6a5723}</Project>
-      <Name>Acomics.ru</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sites\Grouple.ru\Grouple.ru.csproj">
-      <Project>{b6b81632-31f6-4018-b365-c3dc8ad2a40f}</Project>
-      <Name>Grouple.ru</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sites\Hentaichan.me\Hentaichan.me.csproj">
-      <Project>{52a2b390-f993-4f56-9ac3-4304692a8137}</Project>
-      <Name>Hentaichan.me</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="lib\Hardcodet.Wpf.TaskbarNotification.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="lib\Ookii.Dialogs.Wpf.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -415,5 +393,19 @@
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
+    <ItemGroup>
+      <Libraries Include="$(ProjectDir)..\MangaReader.Core\bin\$(ConfigurationName)\net461\**\*" />
+      <Libraries Include="$(ProjectDir)lib\*" />
+    </ItemGroup>
+    <ItemGroup>
+      <Plugins Include="$(ProjectDir)\..\Sites\Bin\$(ConfigurationName)\net461\*" />
+    </ItemGroup>
+    <ItemGroup>
+      <Delete Include="$(TargetDir)\*.dll" />
+      <Delete Include="$(TargetDir)\MangaReader.Core.pdb" />
+    </ItemGroup>
+    <Copy SourceFiles="@(Libraries)" DestinationFiles="@(Libraries->'$(TargetDir)\lib\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(Plugins)" DestinationFiles="@(Plugins->'$(TargetDir)\Plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Delete Files="@(Delete)"/>
   </Target>
 </Project>

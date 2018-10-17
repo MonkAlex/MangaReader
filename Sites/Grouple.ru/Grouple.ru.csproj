@@ -13,4 +13,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\MangaReader.Core\MangaReader.Core.csproj" />
   </ItemGroup>
+  <Import Project="..\Sites.props"/>
 </Project>

@@ -1,0 +1,11 @@
+<Project>
+  <!-- Copy plugin dll and pdb files to shared folder after compile -->
+  <Target Name="CopyAfterCompile" AfterTargets="CopyFilesToOutputDirectory">
+    <ItemGroup>
+      <SourceFiles Include="$(TargetPath)" />
+      <SourceFiles Include="$(TargetDir)$(TargetName).pdb" />
+    </ItemGroup>
+    <Copy SourceFiles="@(SourceFiles)" 
+          DestinationFiles="@(SourceFiles->'$(ProjectDir)\..\Bin\$(ConfigurationName)\$(TargetFramework)\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target> 
+</Project>

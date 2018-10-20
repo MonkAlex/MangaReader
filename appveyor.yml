@@ -21,11 +21,11 @@ after_build:
   - codecov -f "coverage.xml"
 
 artifacts:
-  - path: %APPVEYOR_BUILD_FOLDER%\MangaReader\bin\$(configuration)
+  - path: MangaReader\bin\$(configuration)
     name: WPF App
     type: zip
 
-  - path: %APPVEYOR_BUILD_FOLDER%\MangaReader.Avalonia\bin\$(configuration)
+  - path: MangaReader.Avalonia\bin\$(configuration)
     name: Avalonia app (dotnet core required)
     type: zip
 

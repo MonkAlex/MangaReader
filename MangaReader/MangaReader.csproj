@@ -400,14 +400,10 @@
       <Libraries Include="$(ProjectDir)lib\*" />
     </ItemGroup>
     <ItemGroup>
-      <Plugins Include="$(ProjectDir)\..\Sites\Bin\$(ConfigurationName)\net461\*" />
-    </ItemGroup>
-    <ItemGroup>
       <Delete Include="$(TargetDir)\*.dll" />
       <Delete Include="$(TargetDir)\MangaReader.Core.pdb" />
     </ItemGroup>
     <Copy SourceFiles="@(Libraries)" DestinationFiles="@(Libraries->'$(TargetDir)\lib\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(Plugins)" DestinationFiles="@(Plugins->'$(TargetDir)\Plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Delete Files="@(Delete)"/>
   </Target>
 </Project>

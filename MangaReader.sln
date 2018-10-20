@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaReader", "MangaReader\MangaReader.csproj", "{49B3CB76-DC2D-4707-96CA-3D0DDCCD006B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B6B81632-31F6-4018-B365-C3DC8AD2A40F} = {B6B81632-31F6-4018-B365-C3DC8AD2A40F}
+		{52A2B390-F993-4F56-9AC3-4304692A8137} = {52A2B390-F993-4F56-9AC3-4304692A8137}
+		{6A7329F1-EAAA-42B0-97BC-C4F2BC6A5723} = {6A7329F1-EAAA-42B0-97BC-C4F2BC6A5723}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4BD81BC1-0BE7-46F8-91E4-773D2AFA2A9B}"
 	ProjectSection(SolutionItems) = preProject
@@ -28,12 +33,17 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MangaReader.Core", "MangaReader.Core\MangaReader.Core.csproj", "{19D569BA-E9C5-4D82-8BAA-897D7D2EA007}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MangaReader.Avalonia", "MangaReader.Avalonia\MangaReader.Avalonia.csproj", "{B49B7A4F-763E-434C-8DDB-CF576C869758}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B6B81632-31F6-4018-B365-C3DC8AD2A40F} = {B6B81632-31F6-4018-B365-C3DC8AD2A40F}
+		{52A2B390-F993-4F56-9AC3-4304692A8137} = {52A2B390-F993-4F56-9AC3-4304692A8137}
+		{6A7329F1-EAAA-42B0-97BC-C4F2BC6A5723} = {6A7329F1-EAAA-42B0-97BC-C4F2BC6A5723}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acomics.ru", "Sites\Acomics.ru\Acomics.ru.csproj", "{6A7329F1-EAAA-42B0-97BC-C4F2BC6A5723}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Acomics.ru", "Sites\Acomics.ru\Acomics.ru.csproj", "{6A7329F1-EAAA-42B0-97BC-C4F2BC6A5723}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grouple.ru", "Sites\Grouple.ru\Grouple.ru.csproj", "{B6B81632-31F6-4018-B365-C3DC8AD2A40F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grouple.ru", "Sites\Grouple.ru\Grouple.ru.csproj", "{B6B81632-31F6-4018-B365-C3DC8AD2A40F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hentaichan.me", "Sites\Hentaichan.me\Hentaichan.me.csproj", "{52A2B390-F993-4F56-9AC3-4304692A8137}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hentaichan.me", "Sites\Hentaichan.me\Hentaichan.me.csproj", "{52A2B390-F993-4F56-9AC3-4304692A8137}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

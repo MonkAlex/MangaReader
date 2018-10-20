@@ -43,11 +43,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Plugins Include="$(ProjectDir)\..\Sites\Bin\$(ConfigurationName)\netstandard2.0\*" />
+    <Plugins Include="$(TargetDir)\Plugins\*" />
   </ItemGroup>
-  <Target Name="CopyAfterCompile" AfterTargets="CopyFilesToOutputDirectory">
-    <Copy SourceFiles="@(Plugins)" DestinationFiles="@(Plugins->'$(TargetDir)\Plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
-  </Target>
 
   <!-- Copy native libs - skiasharp and sqlite interops -->
   <Target Name="CopyNativeLibraries" AfterTargets="Publish">

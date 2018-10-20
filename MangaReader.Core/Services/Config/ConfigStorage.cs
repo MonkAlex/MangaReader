@@ -147,7 +147,7 @@ namespace MangaReader.Core.Services.Config
                 throw new MangaReaderException($"Type in property {nameof(plugin.LoginType)} of " +
                                                $"type {plugin.GetType()} must be implement {ilogin} interface.");
 
-              Log.Add($"Plugin {plugin.Name} loaded.");
+              Log.Add($"Plugin {plugin.Name}-{plugin.Assembly.GetName().Version} loaded from {DirectoryHelpers.GetRelativePath(WorkFolder, plugin.Assembly.Location)}.");
               result.Add(plugin);
             }
             catch (MangaReaderException mre)

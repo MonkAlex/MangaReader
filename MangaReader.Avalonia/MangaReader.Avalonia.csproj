@@ -31,9 +31,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MangaReader.Core\MangaReader.Core.csproj" />
-    <ProjectReference Include="..\Sites\Acomics.ru\Acomics.ru.csproj" />
-    <ProjectReference Include="..\Sites\Grouple.ru\Grouple.ru.csproj" />
-    <ProjectReference Include="..\Sites\Hentaichan.me\Hentaichan.me.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,6 +41,13 @@
       <HintPath>lib\Dialogs.Interfaces.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+  <Target Name="CopyAfterCompile" AfterTargets="CopyFilesToOutputDirectory">
+    <ItemGroup>
+      <Plugins Include="$(ProjectDir)\..\Sites\Bin\$(ConfigurationName)\netstandard2.0\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(Plugins)" DestinationFiles="@(Plugins->'$(TargetDir)\Plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
 
   <!-- Copy native libs - skiasharp and sqlite interops -->
   <Target Name="CopyNativeLibraries" AfterTargets="Publish">

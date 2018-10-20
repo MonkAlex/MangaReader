@@ -43,7 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Plugins Include="$(TargetDir)\Plugins\*" />
+    <Plugins Include="$(ProjectDir)\Bin\$(ConfigurationName)\netcoreapp2.0\Plugins\*" />
   </ItemGroup>
 
   <!-- Copy native libs - skiasharp and sqlite interops -->

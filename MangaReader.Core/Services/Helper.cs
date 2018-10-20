@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services.Config;
@@ -50,8 +51,15 @@ namespace MangaReader.Core.Services
 
     public static void StartUseShell(string uri)
     {
-      var psi = new ProcessStartInfo(uri) { UseShellExecute = true };
-      Process.Start(psi);
+      if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+      {
+        Process.Start("xdg-open", uri);
+      }
+      else
+      {
+        var psi = new ProcessStartInfo(uri) { UseShellExecute = true };
+        Process.Start(psi);
+      }
     }
 
   }

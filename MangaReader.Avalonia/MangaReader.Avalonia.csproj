@@ -42,10 +42,10 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Plugins Include="$(ProjectDir)\..\Sites\Bin\$(ConfigurationName)\netstandard2.0\*" />
+  </ItemGroup>
   <Target Name="CopyAfterCompile" AfterTargets="CopyFilesToOutputDirectory">
-    <ItemGroup>
-      <Plugins Include="$(ProjectDir)\..\Sites\Bin\$(ConfigurationName)\netstandard2.0\*" />
-    </ItemGroup>
     <Copy SourceFiles="@(Plugins)" DestinationFiles="@(Plugins->'$(TargetDir)\Plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
 
@@ -62,6 +62,7 @@
     </ItemGroup>
     <Copy SourceFiles="@(Library)" 
           DestinationFiles="@(Library->'$([System.IO.Path]::GetFullPath('$(PublishDir)'))\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(Plugins)" DestinationFiles="@(Plugins->'$([System.IO.Path]::GetFullPath('$(PublishDir)'))\Plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
 
 </Project>

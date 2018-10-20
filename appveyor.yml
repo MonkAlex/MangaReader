@@ -10,10 +10,6 @@ build:
 configuration:
 - Debug
 test: off
-artifacts:
-  - path: '**\*.log'
-    name: test logs
-    type: zip
 after_build:
   - nuget install OpenCover -ExcludeVersion
   - nuget install NUnit.Runners -Version 3.7.0 -ExcludeVersion
@@ -23,3 +19,15 @@ after_build:
   - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.Entities\bin\Debug\Tests.Entities.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle
   - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.Convertation\bin\Debug\Tests.Convertation.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle
   - codecov -f "coverage.xml"
+
+artifacts:
+  - path: %APPVEYOR_BUILD_FOLDER%\MangaReader\bin\$(configuration)
+    name: WPF App
+    type: zip
+
+  - path: %APPVEYOR_BUILD_FOLDER%\MangaReader.Avalonia\bin\$(configuration)
+    name: Avalonia app (dotnet core required)
+    type: zip
+
+  - path: '**\*.log'
+    name: test logs

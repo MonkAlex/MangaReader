@@ -8,16 +8,42 @@ build:
   project: MangaReader.sln 
   verbosity: normal
 configuration:
-- Release
+- Debug
 test: off
+after_build:
+  - nuget install OpenCover -ExcludeVersion
+  - nuget install NUnit.Runners -Version 3.7.0 -ExcludeVersion
+  - pip install codecov
+
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.API\bin\Debug\Tests.API.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.Entities\bin\Debug\Tests.Entities.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.Convertation\bin\Debug\Tests.Convertation.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle
+  - codecov -f "coverage.xml"
+
+  - dotnet publish MangaReader.Avalonia\MangaReader.Avalonia.csproj /p:Configuration=Debug /p:Platform=AnyCPU /p:TargetFramework=netcoreapp2.1 /p:PublishDir=bin\Publish\netcoreapp2.1\win-x64\ /p:SelfContained=true /p:RuntimeIdentifier=win-x64
+  - dotnet publish MangaReader.Avalonia\MangaReader.Avalonia.csproj /p:Configuration=Debug /p:Platform=AnyCPU /p:TargetFramework=netcoreapp2.1 /p:PublishDir=bin\Publish\netcoreapp2.1\linux-x64\ /p:SelfContained=true /p:RuntimeIdentifier=linux-x64
+  - dotnet publish MangaReader.Avalonia\MangaReader.Avalonia.csproj /p:Configuration=Debug /p:Platform=AnyCPU /p:TargetFramework=netcoreapp2.1 /p:PublishDir=bin\Publish\netcoreapp2.1\osx-x64\ /p:SelfContained=true /p:RuntimeIdentifier=osx-x64
+
 artifacts:
+  - path: MangaReader\bin\$(configuration)
+    name: WPF App
+    type: zip
+
+  - path: MangaReader.Avalonia\bin\$(configuration)
+    name: Avalonia app (dotnet core required)
+    type: zip
+
+  - path: MangaReader.Avalonia\bin\Publish\netcoreapp2.1\win-x64
+    name: Avalonia app win-x64
+    type: zip
+
+  - path: MangaReader.Avalonia\bin\Publish\netcoreapp2.1\linux-x64
+    name: Avalonia app linux-x64
+    type: zip
+
+  - path: MangaReader.Avalonia\bin\Publish\netcoreapp2.1\osx-x64
+    name: Avalonia app osx-x64
+    type: zip
+
   - path: '**\*.log'
     name: test logs
-    type: zip
-after_build:
-- packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"packages\NUnit.ConsoleRunner.3.6.1\tools\nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.API\bin\Release\Tests.API.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All
-- packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"packages\NUnit.ConsoleRunner.3.6.1\tools\nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.Entities\bin\Release\Tests.Entities.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All
-- packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register:user -output:.\coverage.xml -target:"packages\NUnit.ConsoleRunner.3.6.1\tools\nunit3-console.exe"  -targetargs:"\"C:\projects\mangareader\Tests\Tests.Convertation\bin\Release\Tests.Convertation.dll\"" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All
-- "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
-- pip install codecov
-- codecov -f "coverage.xml"

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using MangaReader.Core.Manga;
 using MangaReader.Avalonia.Properties;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
@@ -11,7 +11,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
     {
       foreach (var manga in mangas)
       {
-        Process.Start(manga.Uri.OriginalString);
+        Helper.StartUseShell(manga.Uri.OriginalString);
       }
     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -110,7 +111,7 @@ namespace Grouple
 
         // Фикс страницы с цензурой.
         if (!Uri.TryCreate(uriString, UriKind.Absolute, out Uri imageLink))
-          imageLink = new Uri(@"http://" + groupleChapter.Uri.Host + uriString);
+          imageLink = new Uri(groupleChapter.Uri.GetLeftPart(UriPartial.Authority) + uriString);
 
         groupleChapter.Container.Add(new GroupleMangaPage(groupleChapter.Uri, imageLink, i, serversList));
       }
@@ -184,7 +185,7 @@ namespace Grouple
           .ConvertAll(r => r.Attributes.ToList().ConvertAll(i => i.Value))
           .SelectMany(j => j)
           .Where(k => k != string.Empty)
-          .Select(s => @"http://" + page.ResponseUri.Host + s + "?mature=1")
+          .Select(s => page.ResponseUri.GetLeftPart(UriPartial.Authority) + s + "?mature=1")
           .Select(s => new Uri(s))
           .ToList();
         description = linkNodes
@@ -258,15 +259,15 @@ namespace Grouple
 
     protected override async Task<Tuple<HtmlNodeCollection, Uri>> GetMangaNodes(string name, Uri host, CookieClient client)
     {
-      var searchHost = new Uri(host, "search?q=" + WebUtility.UrlEncode(name));
-      var page = await Page.GetPageAsync(searchHost, client);
-      if (!page.HasContent)
+      var searchHost = new Uri(host, "search");
+      var page = await client.UploadValuesTaskAsync(searchHost, new NameValueCollection() {{"q", WebUtility.UrlEncode(name)}});
+      if (page == null)
         return null;
 
       return await Task.Run(() =>
       {
         var document = new HtmlDocument();
-        document.LoadHtml(page.Content);
+        document.LoadHtml(Encoding.UTF8.GetString(page));
         return new Tuple<HtmlNodeCollection, Uri>(document.DocumentNode.SelectNodes("//div[contains(@class, 'col-sm-6')]"), host);
       });
     }

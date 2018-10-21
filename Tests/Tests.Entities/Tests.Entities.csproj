@@ -1,6 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{3B6A42FF-E0CB-4795-9C8E-054BFF696FD3}</ProjectGuid>
@@ -8,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tests.Entities</RootNamespace>
     <AssemblyName>Tests.Entities</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -16,6 +21,7 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -61,11 +67,6 @@
       <HintPath>..\..\packages\NUnit.3.7.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\MangaReader.Core\Library\System.Data.SQLite.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System.Interactive.Async">
       <HintPath>..\..\packages\System.Interactive.Async.3.1.1\lib\net46\System.Interactive.Async.dll</HintPath>
     </Reference>
@@ -121,23 +122,20 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MangaReader.Core\MangaReader.Core.csproj">
-      <Project>{744f331a-938a-475a-840a-7fac985ebe61}</Project>
+      <Project>{19d569ba-e9c5-4d82-8baa-897d7d2ea007}</Project>
       <Name>MangaReader.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Sites\Acomics.ru\Acomics.ru.csproj">
-      <Project>{3aabf85f-414f-4429-a1ab-812213771755}</Project>
+      <Project>{6a7329f1-eaaa-42b0-97bc-c4f2bc6a5723}</Project>
       <Name>Acomics.ru</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Sites\Hentaichan.me\Hentaichan.me.csproj">
-      <Project>{8bd693ba-7f23-4d27-9e16-84c1a154bd03}</Project>
-      <Name>Hentaichan.me</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Sites\Grouple.ru\Grouple.ru.csproj">
-      <Project>{d4bd1a69-ebdb-451e-b0fc-4e79644232b8}</Project>
+      <Project>{b6b81632-31f6-4018-b365-c3dc8ad2a40f}</Project>
       <Name>Grouple.ru</Name>
-      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Sites\Hentaichan.me\Hentaichan.me.csproj">
+      <Project>{52a2b390-f993-4f56-9ac3-4304692a8137}</Project>
+      <Name>Hentaichan.me</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

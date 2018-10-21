@@ -1,237 +1,29 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{744F331A-938A-475A-840A-7FAC985EBE61}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MangaReader.Core</RootNamespace>
-    <AssemblyName>MangaReader.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper">
-      <HintPath>Library\AutoMapper.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AutoMapper.Collection">
-      <HintPath>Library\AutoMapper.Collection.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="FluentNHibernate">
-      <HintPath>Library\FluentNHibernate.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="HtmlAgilityPack">
-      <HintPath>Library\HtmlAgilityPack.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Iesi.Collections">
-      <HintPath>Library\Iesi.Collections.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>Library\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>Library\NHibernate.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.5.3\lib\net45\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="Octokit">
-      <HintPath>Library\Octokit.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite">
-      <HintPath>Library\System.Data.SQLite.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Interactive.Async, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Interactive.Async.3.1.1\lib\net46\System.Interactive.Async.dll</HintPath>
-    </Reference>
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Transactions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
+    <Compile Include="..\VersionInfo.cs" Link="Properties\VersionInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\VersionInfo.cs">
-      <Link>Properties\VersionInfo.cs</Link>
-    </Compile>
-    <Compile Include="Account\CookieClient.cs" />
-    <Compile Include="Account\ILogin.cs" />
-    <Compile Include="Account\Login.cs" />
-    <Compile Include="ApplicationControl\Client.cs" />
-    <Compile Include="ApplicationControl\Messages.cs" />
-    <Compile Include="ApplicationControl\Server.cs" />
-    <Compile Include="BasePlugin.cs" />
-    <Compile Include="BaseSiteParser.cs" />
-    <Compile Include="Client.cs" />
-    <Compile Include="Convertation\Config\From30to31.cs" />
-    <Compile Include="Convertation\Config\FromBaseTo30.cs" />
-    <Compile Include="Convertation\Database\From24To27.cs" />
-    <Compile Include="Convertation\Config\From27To28.cs" />
-    <Compile Include="Convertation\Config\From29To30.cs" />
-    <Compile Include="Convertation\Database\From40To41.cs" />
-    <Compile Include="Convertation\Config\From43To44.cs" />
-    <Compile Include="Convertation\Database\FromBaseTo24.cs" />
-    <Compile Include="Convertation\History\From32To33.cs" />
-    <Compile Include="Convertation\History\From43To44.cs" />
-    <Compile Include="Convertation\History\FromBaseTo32.cs" />
-    <Compile Include="Convertation\IProcess.cs" />
-    <Compile Include="Convertation\Mangas\From37To38.cs" />
-    <Compile Include="Convertation\Mangas\From44To45DownloadedAt.cs" />
-    <Compile Include="Convertation\Mangas\From44To45Created.cs" />
-    <Compile Include="Convertation\Mangas\FromBaseTo24Db.cs" />
-    <Compile Include="Convertation\Primitives\BaseConverter.cs" />
-    <Compile Include="Convertation\Primitives\ConfigConverter.cs" />
-    <Compile Include="Convertation\Primitives\DatabaseConverter.cs" />
-    <Compile Include="Convertation\Primitives\HistoryConverter.cs" />
-    <Compile Include="Convertation\Primitives\MangasConverter.cs" />
-    <Compile Include="DataTrasferObject\ChapterDto.cs" />
-    <Compile Include="DataTrasferObject\MangaPageDto.cs" />
-    <Compile Include="DataTrasferObject\VolumeDto.cs" />
-    <Compile Include="Entity\ChangeTrackerArgs.cs" />
-    <Compile Include="Entity\Entity.cs" />
-    <Compile Include="Entity\IEntity.cs" />
-    <Compile Include="Exception\DownloadAttemptFailed.cs" />
-    <Compile Include="Exception\EntityException.cs" />
-    <Compile Include="Exception\GetSiteInfoException.cs" />
-    <Compile Include="Exception\MangaDirectoryExists.cs" />
-    <Compile Include="Exception\MangaReaderException.cs" />
-    <Compile Include="Exception\CopyDirectoryFailed.cs" />
-    <Compile Include="Exception\SaveValidationException.cs" />
-    <Compile Include="ISiteParser.cs" />
-    <Compile Include="Loader.cs" />
-    <Compile Include="Manga\DownloadableContainerImpl.cs" />
-    <Compile Include="Manga\HistoryCollection.cs" />
-    <Compile Include="Manga\MangaName.cs" />
-    <Compile Include="Manga\Chapter.cs" />
-    <Compile Include="Manga\ICompressible.cs" />
-    <Compile Include="Manga\IDownloadable.cs" />
-    <Compile Include="Manga\IManga.cs" />
-    <Compile Include="Manga\MangaHistory.cs" />
-    <Compile Include="Manga\MangaPage.cs" />
-    <Compile Include="Manga\Mangas.cs" />
-    <Compile Include="Manga\Volume.cs" />
-    <Compile Include="NHibernate\AsyncContext.cs" />
-    <Compile Include="NHibernate\ChapterMap.cs" />
-    <Compile Include="NHibernate\DatabaseConfigMap.cs" />
-    <Compile Include="NHibernate\HistoryBugType.cs" />
-    <Compile Include="NHibernate\MangaPageMap.cs" />
-    <Compile Include="NHibernate\Mapping.cs" />
-    <Compile Include="NHibernate\HistoryMap.cs" />
-    <Compile Include="NHibernate\SaveOrUpdateEvent.cs" />
-    <Compile Include="NHibernate\LoginMap.cs" />
-    <Compile Include="NHibernate\MangaMap.cs" />
-    <Compile Include="NHibernate\MangaSettingMap.cs" />
-    <Compile Include="NHibernate\Repository.cs" />
-    <Compile Include="NHibernate\RepositoryContext.cs" />
-    <Compile Include="NHibernate\VolumeMap.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Strings.Designer.cs">
-      <DependentUpon>Strings.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Services\Backup.cs" />
-    <Compile Include="Convertation\Mangas\FromBaseTo24Cache.cs" />
-    <Compile Include="Services\Compression.cs" />
-    <Compile Include="Services\Config\AppConfig.cs" />
-    <Compile Include="Services\Config\ConfigStorage.cs" />
-    <Compile Include="Services\Config\DatabaseConfig.cs" />
-    <Compile Include="IPlugin.cs" />
-    <Compile Include="Services\Config\LibraryFilter.cs" />
-    <Compile Include="Services\Config\ViewConfig.cs" />
-    <Compile Include="Convertation\Convert.cs" />
-    <Compile Include="Services\DirectoryHelpers.cs" />
-    <Compile Include="Services\DownloadManager.cs" />
-    <Compile Include="Services\FolderNamingStrategy\FolderNamingStrategies.cs" />
-    <Compile Include="Services\FolderNamingStrategy\NameWithNumberPrefixFolderNaming.cs" />
-    <Compile Include="Services\FolderNamingStrategy\NumberPrefixFolderNaming.cs" />
-    <Compile Include="Services\Helper.cs" />
-    <Compile Include="Services\History.cs" />
-    <Compile Include="Services\FolderNamingStrategy\IFolderNamingStrategy.cs" />
-    <Compile Include="Services\ImageFile.cs" />
-    <Compile Include="Services\FolderNamingStrategy\LegacyFolderNaming.cs" />
-    <Compile Include="Services\LibraryViewModel.cs" />
-    <Compile Include="Services\Log.cs" />
-    <Compile Include="Services\LogEventStruct.cs" />
-    <Compile Include="Services\MangaSetting.cs" />
-    <Compile Include="Services\NetworkSpeed.cs" />
-    <Compile Include="Services\Page.cs" />
-    <Compile Include="Services\Serializer.cs" />
-    <Compile Include="Services\ThrottleService.cs" />
-    <Compile Include="Update\Updater.cs" />
-    <Compile Include="Update\VersionHistory.cs" />
+    <EmbeddedResource Include="..\CHANGELOG.md" Link="Update\CHANGELOG.md" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Strings.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <PackageReference Include="AutoMapper.Collection" Version="3.1.3" />
+    <PackageReference Include="FluentNHibernate" Version="2.1.2" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.8.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="NLog" Version="4.5.3" />
+    <PackageReference Include="Octokit" Version="0.32.0" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="4.5.0" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.109.2" />
+    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
+    <PackageReference Include="System.Interactive.Async" Version="3.1.1" />
+    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.0.0" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="..\CHANGELOG.md">
-      <Link>Update\CHANGELOG.md</Link>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets. -->
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-    <ItemGroup>
-      <SourceFiles Include="$(ProjectDir)\Library\**\*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(SourceFiles)" DestinationFolder="$(TargetDir)\%(RecursiveDir)" />
-  </Target>
 </Project>

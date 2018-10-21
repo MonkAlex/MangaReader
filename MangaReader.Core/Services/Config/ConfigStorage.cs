@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
+using System.ComponentModel.Composition.Primitives;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using MangaReader.Core.Exception;
 using Newtonsoft.Json;
@@ -130,9 +132,9 @@ namespace MangaReader.Core.Services.Config
         try
         {
           var result = new List<IPlugin>();
-          var container = new CompositionContainer(new DirectoryCatalog(path));
-          var imanga = typeof (Manga.IManga);
-          var ilogin = typeof (Account.ILogin);
+          var container = new CompositionContainer(new SafeDirectoryCatalog(path));
+          var imanga = typeof(Manga.IManga);
+          var ilogin = typeof(Account.ILogin);
           foreach (var plugin in container.GetExportedValues<IPlugin>())
           {
             try
@@ -145,7 +147,7 @@ namespace MangaReader.Core.Services.Config
                 throw new MangaReaderException($"Type in property {nameof(plugin.LoginType)} of " +
                                                $"type {plugin.GetType()} must be implement {ilogin} interface.");
 
-              Log.Add($"Plugin {plugin.Name} loaded.");
+              Log.Add($"Plugin {plugin.Name}-{plugin.Assembly.GetName().Version} loaded from {DirectoryHelpers.GetRelativePath(WorkFolder, plugin.Assembly.Location)}.");
               result.Add(plugin);
             }
             catch (MangaReaderException mre)
@@ -153,7 +155,13 @@ namespace MangaReader.Core.Services.Config
               Log.Exception(mre);
             }
           }
+
           return result;
+        }
+        catch (ReflectionTypeLoadException ex)
+        {
+          foreach (var exception in ex.LoaderExceptions)
+            Log.Exception(exception, "Loader exception:");
         }
         catch (System.Exception ex)
         {
@@ -179,6 +187,41 @@ namespace MangaReader.Core.Services.Config
     {
       this.AppConfig = new AppConfig();
       this.ViewConfig = new ViewConfig();
+    }
+
+    private class SafeDirectoryCatalog : ComposablePartCatalog
+    {
+      private readonly AggregateCatalog _catalog;
+
+      public SafeDirectoryCatalog(string directory)
+      {
+        var files = Directory.EnumerateFiles(directory, "*.dll", SearchOption.TopDirectoryOnly);
+
+        _catalog = new AggregateCatalog();
+
+        foreach (var file in files.Where(f => !f.StartsWith("System.")))
+        {
+          try
+          {
+            var asmCat = new AssemblyCatalog(file);
+
+            //Force MEF to load the plugin and figure out if there are any exports
+            // good assemblies will not throw the RTLE exception and can be added to the catalog
+            if (asmCat.Parts.ToList().Count > 0)
+              _catalog.Catalogs.Add(asmCat);
+          }
+          catch (ReflectionTypeLoadException)
+          {
+          }
+          catch (BadImageFormatException)
+          {
+          }
+        }
+      }
+      public override IQueryable<ComposablePartDefinition> Parts
+      {
+        get { return _catalog.Parts; }
+      }
     }
   }
 }

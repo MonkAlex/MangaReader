@@ -11,7 +11,7 @@ namespace Tests.Entities.Manga
     [Test]
     public void AddAcomicsOnlyPages()
     {
-      var manga = GetManga("http://acomics.ru/~supersciencefriends");
+      var manga = GetManga("https://acomics.ru/~supersciencefriends");
       Assert.AreEqual(44, manga.Pages.Count);
       Assert.IsTrue(manga.OnlyPages);
     }
@@ -19,7 +19,7 @@ namespace Tests.Entities.Manga
     [Test]
     public void AddAcomicsChapters()
     {
-      var manga = GetManga("http://acomics.ru/~hotblood");
+      var manga = GetManga("https://acomics.ru/~hotblood");
 
       // Страниц, не привязанных к главам.
       Assert.AreEqual(7, manga.Pages.Count);
@@ -33,14 +33,14 @@ namespace Tests.Entities.Manga
       Assert.IsTrue(manga.HasChapters);
       Assert.IsFalse(manga.HasVolumes);
 
-      manga = GetManga("http://acomics.ru/~jonbot-vs-martha");
+      manga = GetManga("https://acomics.ru/~jonbot-vs-martha");
       Assert.AreEqual(4, manga.Chapters.Count);
     }
 
     [Test]
     public void AddAcomicsVolume()
     {
-      var manga = GetManga("http://acomics.ru/~strays");
+      var manga = GetManga("https://acomics.ru/~strays");
 
       Assert.AreEqual(1, manga.Pages.Count);
       Assert.AreEqual(0, manga.Chapters.Count);
@@ -51,7 +51,7 @@ namespace Tests.Entities.Manga
       Assert.IsTrue(manga.HasChapters);
       Assert.IsTrue(manga.HasVolumes);
 
-      manga = GetManga("http://acomics.ru/~girl-genius");
+      manga = GetManga("https://acomics.ru/~girl-genius");
       Assert.AreEqual(14, manga.Volumes.Count);
       Assert.IsTrue(manga.HasVolumes);
     }

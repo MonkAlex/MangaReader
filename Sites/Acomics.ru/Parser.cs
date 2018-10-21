@@ -260,7 +260,7 @@ namespace Acomics
         document.LoadHtml(Page.GetPage(uri, adultClient).Content);
         var last = document.DocumentNode.SelectSingleNode("//nav[@class='serial']//a[@class='read2']").Attributes[1].Value;
         var count = int.Parse(last.Remove(0, last.LastIndexOf('/') + 1));
-        var list = @"http://" + uri.Host + document.DocumentNode.SelectSingleNode("//nav[@class='serial']//a[@class='read3']").Attributes[1].Value;
+        var list = uri.GetLeftPart(UriPartial.Authority) + document.DocumentNode.SelectSingleNode("//nav[@class='serial']//a[@class='read3']").Attributes[1].Value;
         for (var i = 0; i < count; i = i + 5)
         {
           document.LoadHtml(Page.GetPage(new Uri(list + "?skip=" + i), adultClient).Content);
@@ -270,7 +270,7 @@ namespace Acomics
             var imgNode = node.ChildNodes
               .Single(n => n.Name == "img" && !n.Attributes.Any(a => a.Name == "class" && a.Value == "blank-img"));
             description.Add(imgNode.Attributes.Where(a => a.Name == "alt").Select(a => a.Value).FirstOrDefault());
-            images.Add(imgNode.Attributes.Where(a => a.Name == "src").Select(a => new Uri(@"http://" + uri.Host + a.Value)).Single());
+            images.Add(imgNode.Attributes.Where(a => a.Name == "src").Select(a => new Uri(uri.GetLeftPart(UriPartial.Authority) + a.Value)).Single());
           }
         }
       }

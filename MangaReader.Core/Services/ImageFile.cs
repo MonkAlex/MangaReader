@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Security.Cryptography;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Reflection;
+using System.Drawing.Imaging;
 
 namespace MangaReader.Core.Services
 {
@@ -40,9 +37,10 @@ namespace MangaReader.Core.Services
         if (this.Exist && string.IsNullOrWhiteSpace(this.extension))
         {
           var created = Image.FromStream(new MemoryStream(this.Body));
-          var parsed = new ImageFormatConverter().ConvertToString(created.RawFormat);
-          this.extension = (parsed ?? "jpg").ToLower();
+          var parsed = ImageFileExtension(created.RawFormat, "jpg");
+          this.extension = parsed.ToLower();
         }
+
         return this.extension;
       }
       set { this.extension = value; }
@@ -72,6 +70,7 @@ namespace MangaReader.Core.Services
       {
         await sourceStream.WriteAsync(this.Body, 0, this.Body.Length);
       }
+
       this.Path = path;
     }
 
@@ -87,6 +86,19 @@ namespace MangaReader.Core.Services
       }
 
       File.Delete(this.Path);
+    }
+
+    // Code reworked from https://referencesource.microsoft.com/#System.Drawing/commonui/System/Drawing/Advanced/ImageFormatConverter.cs
+    private static string ImageFileExtension(ImageFormat value, string defaultValue)
+    {
+      var props = typeof(ImageFormat).GetProperties(BindingFlags.Static | BindingFlags.Public);
+      foreach (var p in props)
+      {
+        if (p.GetValue(null, null).Equals(value))
+          return p.Name;
+      }
+
+      return defaultValue;
     }
   }
 }

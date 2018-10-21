@@ -19,14 +19,14 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       set { RaiseAndSetIfChanged(ref priority, value); }
     }
 
-    public virtual async Task OnSelected(ExplorerTabViewModel previousModel)
+    public virtual Task OnSelected(ExplorerTabViewModel previousModel)
     {
-
+      return Task.CompletedTask;
     }
 
-    public virtual async Task OnUnselected(ExplorerTabViewModel newModel)
+    public virtual Task OnUnselected(ExplorerTabViewModel newModel)
     {
-
+      return Task.CompletedTask;
     }
   }
 }

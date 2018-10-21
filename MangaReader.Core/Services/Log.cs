@@ -131,7 +131,6 @@ namespace MangaReader.Core.Services
       catch (System.Exception e)
       {
         Console.WriteLine(e);
-        EventLog.WriteEntry(nameof(MangaReader), e.ToString(), EventLogEntryType.Error);
       }
     }
 

@@ -4,7 +4,6 @@ using System.Linq;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
-using NHibernate.Linq;
 using NUnit.Framework;
 
 namespace Tests.Entities.Manga

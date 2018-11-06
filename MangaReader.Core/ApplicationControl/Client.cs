@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.IO.Pipes;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Core.ApplicationControl
 {
@@ -14,6 +15,7 @@ namespace MangaReader.Core.ApplicationControl
         {
           writer.WriteLine(message.ToString("G"));
           writer.Flush();
+          Log.Add($"Send command to server : {message}");
         }
       }
     }

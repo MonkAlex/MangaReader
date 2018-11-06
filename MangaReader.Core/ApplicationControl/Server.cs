@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.IO.Pipes;
 using System.Threading.Tasks;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Core.ApplicationControl
 {
@@ -18,6 +19,7 @@ namespace MangaReader.Core.ApplicationControl
           while (!reader.EndOfStream)
           {
             var line = reader.ReadLine();
+            Log.Add($"Server get command : {line}");
             Core.Client.OnOtherAppRunning(line);
           }
         }

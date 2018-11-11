@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.EquivalencyExpression;
 using HtmlAgilityPack;
@@ -52,11 +53,11 @@ namespace Hentaichan
 
     public override void UpdateNameAndStatus(IManga manga)
     {
+      var page = Page.GetPage(manga.Uri);
       var name = string.Empty;
       try
       {
         var document = new HtmlDocument();
-        var page = Page.GetPage(manga.Uri);
         document.LoadHtml(page.Content);
         var nameNode = document.DocumentNode.SelectSingleNode("//head/title");
         var splitter = "&raquo;";
@@ -78,6 +79,31 @@ namespace Hentaichan
       name = WebUtility.HtmlDecode(name);
 
       UpdateName(manga, name);
+
+      var status = string.Empty;
+      try
+      {
+        var document = new HtmlDocument();
+        document.LoadHtml(page.Content);
+        var nodes = document.DocumentNode.SelectNodes("//div[@id=\"info_wrap\"]//div[@class=\"row\"]");
+        if (nodes != null)
+          status = nodes.Aggregate(status, (current, node) =>
+            current + Regex.Replace(WebUtility.HtmlDecode(node.InnerText).Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
+      }
+      catch (NullReferenceException ex) { Log.Exception(ex); }
+      manga.Status = status;
+
+      var description = string.Empty;
+      try
+      {
+        var document = new HtmlDocument();
+        document.LoadHtml(page.Content);
+        var node = document.DocumentNode.SelectSingleNode("//div[@id=\"description\"]");
+        if (node != null)
+          description = WebUtility.HtmlDecode(node.InnerText).Trim();
+      }
+      catch (Exception e) { Log.Exception(e); }
+      manga.Description = description;
     }
 
     public override void UpdateContent(IManga manga)
@@ -103,7 +129,7 @@ namespace Hentaichan
             foreach (var node in chapterNodes)
             {
               var chapterUri = new Uri(uri, node.Attributes.Single(a => a.Name == "value").Value);
-              chapters.Add(new ChapterDto(chapterUri, WebUtility.HtmlDecode(node.NextSibling.InnerText))
+              chapters.Add(new ChapterDto(chapterUri, WebUtility.HtmlDecode((node.NextSibling ?? node).InnerText))
               {
                 Number = HentaichanChapter.GetChapterNumber(chapterUri)
               });
@@ -178,46 +204,39 @@ namespace Hentaichan
       return Mangachan.Parser.GetPreviewsImpl(manga);
     }
 
-    public override IEnumerable<IManga> Search(string name)
+    protected override async Task<Tuple<HtmlNodeCollection, Uri>> GetMangaNodes(string name, Uri host, CookieClient client)
     {
-      var hosts = ConfigStorage.Plugins
-        .Where(p => p.GetParser().GetType() == typeof(Parser))
-        .Select(p => p.GetSettings().MainUri);
+      var searchHost = new Uri(host, "?do=search&subaction=search&story=" + WebUtility.UrlEncode(name));
+      var page = await Page.GetPageAsync(searchHost, client);
+      if (!page.HasContent)
+        return null;
 
-      var client = new CookieClient();
-      foreach (var host in hosts)
+      return await Task.Run(() =>
       {
-        var searchHost = new Uri(host, "?do=search&subaction=search&story=" + WebUtility.UrlEncode(name));
-        var page = Page.GetPage(searchHost, client);
-        if (!page.HasContent)
-          continue;
-
         var document = new HtmlDocument();
         document.LoadHtml(page.Content);
-        var mangas = document.DocumentNode.SelectNodes("//div[@class='content_row']");
-        if (mangas == null)
-          continue;
+        return new Tuple<HtmlNodeCollection, Uri>(document.DocumentNode.SelectNodes("//div[@class='content_row']"), host);
+      });
+    }
 
-        foreach (var manga in mangas)
-        {
-          var image = manga.SelectSingleNode(".//div[@class='manga_images']//img");
-          var imageUri = image?.Attributes.Single(a => a.Name == "src").Value;
+    protected override async Task<IManga> GetMangaFromNode(Uri host, CookieClient client, HtmlNode manga)
+    {
+      var image = manga.SelectSingleNode(".//div[@class='manga_images']//img");
+      var imageUri = image?.Attributes.Single(a => a.Name == "src").Value;
 
-          var mangaNode = manga.SelectSingleNode(".//h2//a");
-          var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
-          var mangaName = mangaNode.InnerText;
+      var mangaNode = manga.SelectSingleNode(".//h2//a");
+      var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
+      var mangaName = mangaNode.InnerText;
 
-          // Это не манга, идем дальше.
-          if (!mangaUri.Contains("/manga/"))
-            continue;
+      // Это не манга, идем дальше.
+      if (!mangaUri.Contains("/manga/"))
+        return null;
 
-          var result = Mangas.Create(new Uri(mangaUri));
-          result.Name = WebUtility.HtmlDecode(mangaName);
-          if (imageUri != null)
-            result.Cover = client.DownloadData(new Uri(host, imageUri));
-          yield return result;
-        }
-      }
+      var result = Mangas.Create(new Uri(mangaUri));
+      result.Name = WebUtility.HtmlDecode(mangaName);
+      if (!string.IsNullOrWhiteSpace(imageUri))
+        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri));
+      return result;
     }
 
     public static void UpdatePages(MangaReader.Core.Manga.Chapter chapter)

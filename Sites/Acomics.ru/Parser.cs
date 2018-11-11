@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.EquivalencyExpression;
 using HtmlAgilityPack;
@@ -54,9 +55,18 @@ namespace Acomics
           manga.IsCompleted = status;
           var nodes = content.SelectNodes(".//div[@class=\"about-summary\"]//p");
           summary = nodes.Aggregate(summary, (current, node) =>
-            current + Regex.Replace(node.InnerText.Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
-          summary = WebUtility.HtmlDecode(summary);
+            current + Regex.Replace(WebUtility.HtmlDecode(node.InnerText).Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
           manga.Status = summary;
+
+          var description = content.SelectSingleNode(".//div[@class=\"about-summary\"]");
+          if (description != null)
+            manga.Description = description.ChildNodes
+              .SkipWhile(n => n.Name != "p")
+              .Skip(1)
+              .TakeWhile(n => n.Name != "p")
+              .Aggregate(string.Empty, (current, node) => 
+                current + Regex.Replace(WebUtility.HtmlDecode(node.InnerText).Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine)
+              .Trim();
         }
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
@@ -202,42 +212,35 @@ namespace Acomics
       yield return result;
     }
 
-    public override IEnumerable<IManga> Search(string name)
+    protected override async Task<Tuple<HtmlNodeCollection, Uri>> GetMangaNodes(string name, Uri host, CookieClient client)
     {
-      var hosts = ConfigStorage.Plugins
-        .Where(p => p.GetParser().GetType() == typeof(Parser))
-        .Select(p => p.GetSettings().MainUri);
+      var searchHost = new Uri(host, "search?keyword=" + WebUtility.UrlEncode(name));
+      var page = await Page.GetPageAsync(searchHost, client);
+      if (!page.HasContent)
+        return null;
 
-      var client = new CookieClient();
-      foreach (var host in hosts)
+      return await Task.Run(() =>
       {
-        var searchHost = new Uri(host, "search?keyword=" + WebUtility.UrlEncode(name));
-        var page = Page.GetPage(searchHost, client);
-        if (!page.HasContent)
-          continue;
-
         var document = new HtmlDocument();
         document.LoadHtml(page.Content);
-        var mangas = document.DocumentNode.SelectNodes("//table[@class='catalog-elem list-loadable']");
-        if (mangas == null)
-          continue;
+        return new Tuple<HtmlNodeCollection, Uri>(document.DocumentNode.SelectNodes("//table[@class='catalog-elem list-loadable']"), host);
+      });
+    }
 
-        foreach (var manga in mangas)
-        {
-          var image = manga.SelectSingleNode(".//td[@class='catdata1']//a//img");
-          var imageUri = image?.Attributes.Single(a => a.Name == "src").Value;
+    protected override async Task<IManga> GetMangaFromNode(Uri host, CookieClient client, HtmlNode manga)
+    {
+      var image = manga.SelectSingleNode(".//td[@class='catdata1']//a//img");
+      var imageUri = image?.Attributes.Single(a => a.Name == "src").Value;
 
-          var mangaNode = manga.SelectSingleNode(".//div[@class='title']//a");
-          var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
-          var mangaName = mangaNode.InnerText;
+      var mangaNode = manga.SelectSingleNode(".//div[@class='title']//a");
+      var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
+      var mangaName = mangaNode.InnerText;
 
-          var result = Mangas.Create(new Uri(host, mangaUri));
-          result.Name = WebUtility.HtmlDecode(mangaName);
-          if (imageUri != null)
-            result.Cover = client.DownloadData(new Uri(host, imageUri));
-          yield return result;
-        }
-      }
+      var result = Mangas.Create(new Uri(host, mangaUri));
+      result.Name = WebUtility.HtmlDecode(mangaName);
+      if (!string.IsNullOrWhiteSpace(imageUri))
+        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri));
+      return result;
     }
 
     /// <summary>
@@ -257,7 +260,7 @@ namespace Acomics
         document.LoadHtml(Page.GetPage(uri, adultClient).Content);
         var last = document.DocumentNode.SelectSingleNode("//nav[@class='serial']//a[@class='read2']").Attributes[1].Value;
         var count = int.Parse(last.Remove(0, last.LastIndexOf('/') + 1));
-        var list = @"http://" + uri.Host + document.DocumentNode.SelectSingleNode("//nav[@class='serial']//a[@class='read3']").Attributes[1].Value;
+        var list = uri.GetLeftPart(UriPartial.Authority) + document.DocumentNode.SelectSingleNode("//nav[@class='serial']//a[@class='read3']").Attributes[1].Value;
         for (var i = 0; i < count; i = i + 5)
         {
           document.LoadHtml(Page.GetPage(new Uri(list + "?skip=" + i), adultClient).Content);
@@ -267,7 +270,7 @@ namespace Acomics
             var imgNode = node.ChildNodes
               .Single(n => n.Name == "img" && !n.Attributes.Any(a => a.Name == "class" && a.Value == "blank-img"));
             description.Add(imgNode.Attributes.Where(a => a.Name == "alt").Select(a => a.Value).FirstOrDefault());
-            images.Add(imgNode.Attributes.Where(a => a.Name == "src").Select(a => new Uri(@"http://" + uri.Host + a.Value)).Single());
+            images.Add(imgNode.Attributes.Where(a => a.Name == "src").Select(a => new Uri(uri.GetLeftPart(UriPartial.Authority) + a.Value)).Single());
           }
         }
       }

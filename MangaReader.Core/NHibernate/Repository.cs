@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using NHibernate.Linq;
 
@@ -38,7 +39,9 @@ namespace MangaReader.Core.NHibernate
     {
       using (var context = GetEntityContext("Get database unique id"))
       {
-        return context.Get<DatabaseConfig>().Single().UniqueId;
+        var id = context.Get<DatabaseConfig>().Single().UniqueId;
+        Log.Add($"Database unique id = {id:D}");
+        return id;
       }
     }
   }

@@ -17,6 +17,7 @@ namespace MangaReader.Core.NHibernate
       Map(x => x.HasChapters);
       Map(x => x.Uri);
       Map(x => x.Status);
+      Map(x => x.Description);
       Map(x => x.NeedUpdate);
       Map(x => x.IsCompleted);
       Map(x => x.Folder);

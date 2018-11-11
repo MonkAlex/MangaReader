@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.IO.Pipes;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Core.ApplicationControl
 {
@@ -7,7 +8,6 @@ namespace MangaReader.Core.ApplicationControl
   {
     public static void Run(string uniqueId, Messages message)
     {
-#warning Avalonia:Пайпы не хотят работать под моно.
       using (var client = new NamedPipeClientStream(uniqueId))
       {
         client.Connect(5000);
@@ -15,6 +15,7 @@ namespace MangaReader.Core.ApplicationControl
         {
           writer.WriteLine(message.ToString("G"));
           writer.Flush();
+          Log.Add($"Send command to server : {message}");
         }
       }
     }

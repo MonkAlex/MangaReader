@@ -1,0 +1,16 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Grid ColumnDefinitions="Auto, *, Auto">
+    <TextBlock Grid.Column="0"
+               Margin="0, 10, 0, 10"
+               VerticalAlignment="Center"
+               Text="Download to:  "/>
+    <TextBlock Grid.Column="1" 
+               x:Name="Path"
+               VerticalAlignment="Center"/>
+    <Button Grid.Column="2" 
+            x:Name="Change"
+            Content="Change" 
+            Height="30"/>
+  </Grid>
+</UserControl>

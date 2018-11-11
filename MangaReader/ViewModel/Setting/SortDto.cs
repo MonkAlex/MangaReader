@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+﻿using MangaReader.Core.Services.Config;
 
 namespace MangaReader.ViewModel.Setting
 {

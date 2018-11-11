@@ -19,7 +19,7 @@ namespace MangaReader.ViewModel.Commands.Manga
     public void Execute(IDownloadable parameter)
     {
       if (parameter != null && Directory.Exists(parameter.GetAbsoulteFolderPath()))
-        Process.Start(parameter.GetAbsoulteFolderPath());
+        Helper.StartUseShell(parameter.GetAbsoulteFolderPath());
       else
         Log.Info(Strings.Library_Status_FolderNotFound);
     }

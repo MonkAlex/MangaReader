@@ -5,6 +5,7 @@ using System.Linq;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.ViewModel.Primitive;
+using SortDescription = MangaReader.Core.Services.Config.SortDescription;
 
 namespace MangaReader.ViewModel.Setting
 {

@@ -62,10 +62,10 @@ namespace MangaReader.Core.NHibernate
       {
         var name = impl.GuessEntityName(entity);
         var persister = impl.GetEntityPersister(name, entity);
-        return new ChangeTrackerArgs(persister.GetPropertyValues(entity, EntityMode.Poco), null, persister.PropertyNames, true);
+        return new ChangeTrackerArgs(persister.GetPropertyValues(entity), null, persister.PropertyNames, true);
       }
 
-      var current = key.Persister.GetPropertyValues(entity, EntityMode.Poco);
+      var current = key.Persister.GetPropertyValues(entity);
       return new ChangeTrackerArgs(current, key.LoadedState, key.Persister.PropertyNames, true);
     }
 

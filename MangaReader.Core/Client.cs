@@ -50,7 +50,7 @@ namespace MangaReader.Core
         DatabaseConfig.Initialize();
 
         var name = NHibernate.Repository.GetDatabaseUniqueId().ToString("D");
-        mutex = new Mutex(false, name, out bool isSingle);
+        mutex = new Mutex(false, $"Global\\{name}", out bool isSingle);
         if (!isSingle)
         {
           try

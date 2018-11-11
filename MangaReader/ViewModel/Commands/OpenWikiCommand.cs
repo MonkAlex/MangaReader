@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using MangaReader.Core.Services;
 using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands
@@ -9,7 +10,7 @@ namespace MangaReader.ViewModel.Commands
     {
       base.Execute(parameter);
 
-      Process.Start("https://github.com/MonkAlex/MangaReader/wiki");
+      Helper.StartUseShell("https://github.com/MonkAlex/MangaReader/wiki");
     }
 
     public OpenWikiCommand()

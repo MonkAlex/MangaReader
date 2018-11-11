@@ -1,87 +1,42 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
-        xmlns:av="clr-namespace:MangaReader.Avalonia;assembly=MangaReader.Avalonia"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:c="clr-namespace:MangaReader.Avalonia.ViewModel.Explorer;assembly=MangaReader.Avalonia"
-        MinWidth="500" MinHeight="300"
+        xmlns:view="clr-namespace:MangaReader.Avalonia.View;assembly=MangaReader.Avalonia"
+        MinWidth="800" MinHeight="600"
         Title="{Binding SelectedTab.Name}">
   <Window.DataTemplates>
-    <DataTemplate DataType="c:LibraryContentViewModel">
-      <Grid RowDefinitions="Auto,*,Auto" DataContext="{Binding}">
-        <TextBox Grid.Row="0" Text="{Binding Search}"/>
-        <ListBox Grid.Row="1" Items="{Binding FilteredItems}" 
-                 SelectedItem="{Binding SelectedManga}"
-                 BorderThickness="0"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto">
-          <ListBox.ItemTemplate>
-            <DataTemplate>
-              <Grid RowDefinitions="*,Auto" Margin="10"
-                  Width="150" Height="300">
-                <Image Grid.Row="0" Source="{Binding Cover, Converter={Static av:BitmapTypeConverter.Instance}}"/>
-                <TextBlock Grid.Row="1" Text="{Binding Name}" TextWrapping="Wrap" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center"/>
-              </Grid>
-            </DataTemplate>
-          </ListBox.ItemTemplate>
-          <ListBox.ItemsPanel>
-            <ItemsPanelTemplate>
-              <WrapPanel/>
-            </ItemsPanelTemplate>
-          </ListBox.ItemsPanel>
-        </ListBox>
-        <ListBox Grid.Row="2" Items="{Binding Commands}">
-          <ListBox.ItemTemplate>
-            <DataTemplate>
-              <Button Command="{Binding}" Content="{Binding Name}" 
-                      CommandParameter="{Binding DataContext.SelectedManga, RelativeSource={RelativeSource AncestorType=Grid}}"/>
-            </DataTemplate>
-          </ListBox.ItemTemplate>
-          <ListBox.ItemsPanel>
-            <ItemsPanelTemplate>
-              <StackPanel Orientation="Horizontal"/>
-            </ItemsPanelTemplate>
-          </ListBox.ItemsPanel>
-        </ListBox>
-      </Grid>
+    <DataTemplate DataType="c:LibraryViewModel">
+      <view:Library/>
     </DataTemplate>
-    <DataTemplate DataType="c:SearchContentViewModel">
-      <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*, Auto" DataContext="{Binding}">
-        <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding Search}"/>
-        <Button Grid.Row="0" Grid.Column="1" DataContext="{Binding StartSearch}" Command="{Binding}" Content="{Binding Name}"/>
-        <ListBox Grid.Row="1" Grid.ColumnSpan="2" Items="{Binding Items}" 
-                 BorderThickness="0"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto">
-          <ListBox.ItemTemplate>
-            <DataTemplate>
-              <Grid RowDefinitions="*,Auto" Margin="10"
-                    Width="150" Height="300">
-                <Image Grid.Row="0" Source="{Binding Cover, Converter={Static av:BitmapTypeConverter.Instance}}"/>
-                <TextBlock Grid.Row="1" Text="{Binding Name}" TextWrapping="Wrap" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center"/>
-              </Grid>
-            </DataTemplate>
-          </ListBox.ItemTemplate>
-          <ListBox.ItemsPanel>
-            <ItemsPanelTemplate>
-              <WrapPanel/>
-            </ItemsPanelTemplate>
-          </ListBox.ItemsPanel>
-        </ListBox>
-        <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding ManualUri}"/>
-        <Button Grid.Row="2" Grid.Column="1" DataContext="{Binding AddManual}" Command="{Binding}" Content="{Binding Name}"/>
-      </Grid>
+    <DataTemplate DataType="c:SearchViewModel">
+      <view:Search/>
+    </DataTemplate>
+    <DataTemplate DataType="c:SettingsViewModel">
+      <view:SettingsMain/>
+    </DataTemplate>
+    <DataTemplate DataType="c:MangaSettingsViewModel">
+      <view:MangaSettings/>
+    </DataTemplate>
+    <DataTemplate DataType="c:MangaModel">
+      <view:MangaView/>
     </DataTemplate>
   </Window.DataTemplates>
   <Grid ColumnDefinitions="Auto,*" DataContext="{Binding}">
     <ListBox Grid.Column="0" 
              Items="{Binding Tabs}" 
              SelectedItem="{Binding SelectedTab}"
+             Width="100"
              BorderThickness="0">
       <ListBox.ItemTemplate>
         <DataTemplate>
           <TextBlock Margin="10"
                      Text="{Binding Name}"
+                     TextWrapping="NoWrap"
                      ToolTip.Tip="{Binding Name}"
                      HorizontalAlignment="Center"/>
         </DataTemplate>
       </ListBox.ItemTemplate>
     </ListBox>
-    <ContentPresenter Grid.Column="1" DataContext="{Binding SelectedTab}" Content="{Binding Content}"/>
+    <ContentPresenter Grid.Column="1" DataContext="{Binding SelectedTab}" Content="{Binding}"/>
   </Grid>
 </Window>

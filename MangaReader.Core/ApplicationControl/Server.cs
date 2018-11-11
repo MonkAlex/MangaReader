@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.IO.Pipes;
 using System.Threading.Tasks;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Core.ApplicationControl
 {
@@ -8,9 +9,8 @@ namespace MangaReader.Core.ApplicationControl
   {
     public static void Run(string uniqueId)
     {
-#warning Avalonia:Пайпы не хотят работать под моно.
       using (var server = new NamedPipeServerStream(uniqueId, PipeDirection.InOut,
-        NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Message, PipeOptions.None))
+        NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Byte, PipeOptions.None))
       {
         server.WaitForConnection();
         Task.Run(() => Run(uniqueId));
@@ -19,6 +19,7 @@ namespace MangaReader.Core.ApplicationControl
           while (!reader.EndOfStream)
           {
             var line = reader.ReadLine();
+            Log.Add($"Server get command : {line}");
             Core.Client.OnOtherAppRunning(line);
           }
         }

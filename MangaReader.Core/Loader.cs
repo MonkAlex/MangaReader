@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -78,15 +77,14 @@ namespace MangaReader.Core
       }
       catch (System.Exception ex)
       {
-        EventLog.WriteEntry(nameof(MangaReader), $"{args.Name} \r\n {ex}", EventLogEntryType.Error);
+        Console.WriteLine(ex);
       }
       return null;
     }
 
     private static void ProcessInternetZoneOnFiles(System.Exception ex, string libraryName)
     {
-      EventLog.WriteEntry(nameof(MangaReader), $"Just restart app \r\n {libraryName} \r\n {ex}",
-        EventLogEntryType.Warning);
+      Console.WriteLine($"Just restart app \r\n {libraryName} \r\n {ex}");
       foreach (var s in new[] {LibPath, PluginPath})
       foreach (var fileInfo in new DirectoryInfo(s).GetFiles())
       {

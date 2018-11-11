@@ -1,0 +1,45 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:av="clr-namespace:MangaReader.Avalonia;assembly=MangaReader.Avalonia"
+             Design.Width="400" Design.Height="300">
+    <Grid RowDefinitions="Auto,*,Auto" DataContext="{Binding}">
+      <TextBox Grid.Row="0" Text="{Binding Search}" Watermark="Поиск по имени" UseFloatingWatermark="True"/>
+      <ListBox Grid.Row="1" Items="{Binding FilteredItems}"
+               SelectedItems="{Binding SelectedMangaModels}"
+               SelectionMode="Multiple"
+               BorderThickness="0"
+               ScrollViewer.VerticalScrollBarVisibility="Auto"
+               ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <Grid RowDefinitions="*,Auto" Margin="10"
+                Width="150" Height="300">
+              <Image Grid.Row="0" Source="{Binding Cover, Converter={x:Static av:BitmapTypeConverter.Instance}}"/>
+              <TextBlock Grid.Row="1" Text="{Binding MangaName}" TextWrapping="Wrap" ToolTip.Tip="{Binding MangaName}" HorizontalAlignment="Center"/>
+            </Grid>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+        <ListBox.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel/>
+          </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+      </ListBox>
+      <ListBox Grid.Row="2" Items="{Binding Commands}"
+               ScrollViewer.VerticalScrollBarVisibility="Auto"
+               ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <Button Command="{Binding}" Content="{Binding Name}"
+                    IsVisible="{Binding $self.IsEnabled}"
+                    CommandParameter="{Binding DataContext.SelectedMangaModels, RelativeSource={RelativeSource AncestorType=Grid}}"/>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+        <ListBox.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel/>
+          </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+      </ListBox>
+    </Grid>
+</UserControl>

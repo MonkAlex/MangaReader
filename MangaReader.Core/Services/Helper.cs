@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services.Config;
@@ -45,6 +47,19 @@ namespace MangaReader.Core.Services
       byName.AddRange(ConfigStorage.Plugins.Select(p => p.Assembly));
       byName = byName.Distinct().ToList();
       return byName;
+    }
+
+    public static void StartUseShell(string uri)
+    {
+      if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+      {
+        Process.Start("xdg-open", uri);
+      }
+      else
+      {
+        var psi = new ProcessStartInfo(uri) { UseShellExecute = true };
+        Process.Start(psi);
+      }
     }
 
   }
@@ -148,6 +163,25 @@ namespace MangaReader.Core.Services
           Log.Exception(t.Exception, onfail);
         else if (!string.IsNullOrWhiteSpace(onsuccess))
           Log.Info(onsuccess);
+      });
+    }
+
+    public static IAsyncEnumerable<TR> SelectAsync<T, TR>(this IEnumerable<T> seq, Func<T, Task<TR>> selector)
+    {
+      return AsyncEnumerable.CreateEnumerable(() =>
+      {
+        IEnumerator<T> seqEnum = seq.GetEnumerator();
+        var current = default(TR);
+        return AsyncEnumerable.CreateEnumerator(
+          moveNext: async ct =>
+          {
+            if (!seqEnum.MoveNext())
+              return false;
+            current = await selector(seqEnum.Current);
+            return true;
+          },
+          current: () => current,
+          dispose: seqEnum.Dispose);
       });
     }
   }

@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MangaReader</RootNamespace>
     <AssemblyName>MangaReader</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -54,7 +54,12 @@
   <ItemGroup>
     <Reference Include="Ookii.Dialogs.Wpf">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Library\Ookii.Dialogs.Wpf.dll</HintPath>
+      <HintPath>lib\Ookii.Dialogs.Wpf.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -65,11 +70,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Library\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -346,13 +346,6 @@
     <Resource Include="Icons\yes.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MangaReader.Core\MangaReader.Core.csproj">
-      <Project>{744f331a-938a-475a-840a-7fac985ebe61}</Project>
-      <Name>MangaReader.Core</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Icons\Manga\need_update.png" />
     <Resource Include="Icons\Manga\not_update.png" />
   </ItemGroup>
@@ -385,26 +378,32 @@
     <Resource Include="Icons\Navigation\skip_to_start.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="Update\MangaReader.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MangaReader.Core\MangaReader.Core.csproj">
+      <Project>{19d569ba-e9c5-4d82-8baa-897d7d2ea007}</Project>
+      <Name>MangaReader.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-      xcopy /y /r /e "$(ProjectDir)\..\MangaReader.Core\bin\$(ConfigurationName)" "$(TargetDir)\lib"
-      xcopy /y /r /e "$(ProjectDir)\Library" "$(TargetDir)\lib"
-      xcopy /y /r /e "$(ProjectDir)\..\Sites\Bin\$(ConfigurationName)" "$(TargetDir)\Plugins"
-    </PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   -->
   <Target Name="BeforeBuild">
-    <MakeDir Directories="$(TargetDir)\lib" />
-    <MakeDir Directories="$(TargetDir)\Plugins" />
   </Target>
   <Target Name="AfterBuild">
+    <ItemGroup>
+      <Libraries Include="$(ProjectDir)..\MangaReader.Core\bin\$(ConfigurationName)\net461\**\*" />
+      <Libraries Include="$(ProjectDir)lib\*" />
+    </ItemGroup>
+    <ItemGroup>
+      <Delete Include="$(TargetDir)\*.dll" />
+      <Delete Include="$(TargetDir)\MangaReader.Core.pdb" />
+    </ItemGroup>
+    <Copy SourceFiles="@(Libraries)" DestinationFiles="@(Libraries->'$(TargetDir)\lib\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Delete Files="@(Delete)"/>
   </Target>
 </Project>

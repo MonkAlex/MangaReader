@@ -110,7 +110,7 @@ namespace MangaReader.Core.Services
       }
       else if (!folderUri.IsAbsoluteUri)
       {
-        return Path.Combine(ConfigStorage.WorkFolder, folder);
+        return Path.GetFullPath(Path.Combine(ConfigStorage.WorkFolder, folder));
       }
       else
       {

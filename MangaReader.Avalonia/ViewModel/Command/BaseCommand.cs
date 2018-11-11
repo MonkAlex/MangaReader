@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-// using Avalonia.Threading;
+using Avalonia.Threading;
 
 namespace MangaReader.Avalonia.ViewModel.Command
 {
@@ -45,10 +45,10 @@ namespace MangaReader.Avalonia.ViewModel.Command
 
     public virtual void OnCanExecuteChanged()
     {
-      // if (Dispatcher.UIThread.CheckAccess())
+      if (Dispatcher.UIThread.CheckAccess())
         CanExecuteChanged?.Invoke(this, EventArgs.Empty);
-      // else
-        // Dispatcher.UIThread.InvokeAsync(() => CanExecuteChanged?.Invoke(this, EventArgs.Empty));
+      else
+        Dispatcher.UIThread.InvokeAsync(() => CanExecuteChanged?.Invoke(this, EventArgs.Empty));
     }
     
     public event PropertyChangedEventHandler PropertyChanged;

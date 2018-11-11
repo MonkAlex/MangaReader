@@ -107,21 +107,40 @@ namespace MangaReader.Core.Services
     /// <summary>
     /// Добавить мангу.
     /// </summary>
-    /// <param name="uri"></param>
+    /// <param name="uri">Ссылка на мангу.</param>
     public bool Add(Uri uri)
+    {
+      return Add(uri, out _);
+    }
+
+    /// <summary>
+    /// Добавить мангу.
+    /// </summary>
+    /// <param name="uri">Ссылка на мангу.</param>
+    /// <param name="manga">Манга, может быть null.</param>
+    public bool Add(Uri uri, out IManga manga)
     {
       using (var context = Repository.GetEntityContext())
       {
-        if (context.Get<IManga>().Any(m => m.Uri == uri))
+        manga = context.Get<IManga>().FirstOrDefault(m => m.Uri == uri);
+        if (manga != null)
+        {
+          Log.Info("Манга уже добавлена.");
           return false;
+        }
       }
 
       var newManga = Mangas.CreateFromWeb(uri);
       if (newManga == null || !newManga.IsValid())
+      {
+        Log.Info("Не удалось найти мангу.");
+        manga = null;
         return false;
+      }
 
       OnLibraryChanged(new LibraryViewModelArgs(null, newManga, MangaOperation.Added, LibraryOperation.UpdateMangaChanged));
       Log.Info(Strings.Library_Status_MangaAdded + newManga.Name);
+      manga = newManga;
       return true;
     }
 

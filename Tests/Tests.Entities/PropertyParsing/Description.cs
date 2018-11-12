@@ -37,9 +37,9 @@ namespace Tests.Entities.PropertyParsing
     [Test]
     public void CheckMintmanga()
     {
-      var manga = CreateMangaIgnoreError("http://mintmanga.com/love_mate");
-      Assert.AreEqual("Ямато, приехал учиться в высшей школе в Токио из предместья Хиросимы. По пути к своей тёте, у которой он поселился на время учёбы,  встречает красивую девушку и влюбляется в нее с первого взгляда. Позже оказывается, что девушка — его соседка, зовут её Судзука, и она  поступила в ту же высшую школу. Он пытается привлечь её внимание, и даже вступает в команду по лёгкой атлетике, в которой она состоит.", manga.Description);
-      Assert.AreEqual("Томов: 18\r\nПеревод: завершен\r\nЖанры: гарем, этти, повседневность, школа, драма, сёнэн, романтика, спорт …\r\nКатегория: Не Яой\r\nАвтор: Сэо Кодзи\r\nГод выпуска: 2003\r\nИздательство: Kodansha\r\nЖурнал: Shuukan Shounen Magazine\r\nПереводчики: Ной Студия, AngelVan, cheer_less\r\n", manga.Status);
+      var manga = CreateMangaIgnoreError("http://readmanga.me/love_mate_2");
+      Assert.AreEqual("4-кадровая манга дополнительно включенная в тома манги \"Город,в котором ты живешь\"", manga.Description);
+      Assert.AreEqual("Томов: 1\r\nПеревод: завершен\r\nЖанры: комедия, повседневность\r\nКатегория: Ёнкома\r\nАвтор: Сэо Кодзи\r\nГод выпуска: 2008\r\nИздательство: Kodansha\r\nПереводчик: Aoshi Shinomori\r\n", manga.Status);
     }
 
     [Test]

@@ -46,18 +46,7 @@
     <Plugins Include="$(ProjectDir)\Bin\$(ConfigurationName)\netcoreapp2.1\Plugins\*" />
   </ItemGroup>
 
-  <!-- Copy native libs - skiasharp and sqlite interops -->
-  <Target Name="CopyNativeLibraries" AfterTargets="Publish">
-    <PropertyGroup>
-      <UserRoot>$(userprofile)</UserRoot>
-      <UserRoot Condition="'$(userprofile)' == ''">$(HOME)</UserRoot>
-    </PropertyGroup>
-    <ItemGroup>
-      <Library Include="$(UserRoot)\.nuget\packages\skiasharp\1.57.1\runtimes\osx\native\libSkiaSharp.dylib" />
-      <Library Include="$(UserRoot)\.nuget\packages\skiasharp\1.57.1\runtimes\win7-x64\native\libSkiaSharp.dll" />
-      <Library Include="$(UserRoot)\.nuget\packages\avalonia.skia.linux.natives\1.57.1.3\runtimes\linux-x64\native\libSkiaSharp.so" />
-    </ItemGroup>
-    <Copy SourceFiles="@(Library)" DestinationFiles="@(Library-&gt;'$([System.IO.Path]::GetFullPath('$(PublishDir)'))\%(RecursiveDir)%(Filename)%(Extension)')" />
+  <Target Name="CopyPlugins" AfterTargets="Publish">
     <Copy SourceFiles="@(Plugins)" DestinationFiles="@(Plugins-&gt;'$([System.IO.Path]::GetFullPath('$(PublishDir)'))\Plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
 

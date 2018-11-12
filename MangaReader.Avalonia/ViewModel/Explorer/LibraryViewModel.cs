@@ -11,7 +11,7 @@ using MangaReader.Avalonia.ViewModel.Command.Library;
 using MangaReader.Avalonia.ViewModel.Command.Manga;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
-using ReactiveUI;
+using ReactiveUI.Legacy;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
 {

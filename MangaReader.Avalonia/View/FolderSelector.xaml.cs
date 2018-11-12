@@ -6,10 +6,8 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Avalonia.Markup.Xaml.Data;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
-using ReactiveUI;
 
 namespace MangaReader.Avalonia.View
 {
@@ -53,7 +51,7 @@ namespace MangaReader.Avalonia.View
         InitialDirectory = defaultPath,
         Title = "Select folder"
       };
-      var result = await dialog.ShowAsync(Window.OpenWindows.FirstOrDefault(w => w.IsActive));
+      var result = await dialog.ShowAsync(App.Current.Windows.FirstOrDefault(w => w.IsActive));
       if (!string.IsNullOrWhiteSpace(result))
       {
         var relativePath = DirectoryHelpers.GetRelativePath(ConfigStorage.WorkFolder, result);

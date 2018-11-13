@@ -39,7 +39,8 @@ namespace Tests.Entities.PropertyParsing
     {
       var manga = CreateMangaIgnoreError("http://readmanga.me/love_mate_2");
       Assert.AreEqual("4-кадровая манга дополнительно включенная в тома манги \"Город,в котором ты живешь\"", manga.Description);
-      Assert.AreEqual("Томов: 1\r\nПеревод: завершен\r\nЖанры: комедия, повседневность\r\nКатегория: Ёнкома\r\nАвтор: Сэо Кодзи\r\nГод выпуска: 2008\r\nИздательство: Kodansha\r\nПереводчик: Aoshi Shinomori\r\n", manga.Status);
+      Assert.IsTrue(manga.Status.Contains("Томов: 1\r\nПеревод: завершен\r\n"));
+      Assert.IsTrue(manga.Status.Contains("Категория: Ёнкома\r\nАвтор: Сэо Кодзи\r\nГод выпуска: 2008\r\nИздательство: Kodansha\r\nПереводчик: Aoshi Shinomori\r\n"));
     }
 
     [Test]

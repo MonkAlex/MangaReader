@@ -1,7 +1,9 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Diagnostics;
 using Avalonia.Markup.Xaml;
+using MangaReader.Avalonia.ViewModel.Command;
 
 namespace MangaReader.Avalonia
 {
@@ -15,8 +17,15 @@ namespace MangaReader.Avalonia
       base.Initialize();
     }
 
+    protected override void OnExiting(object sender, EventArgs e)
+    {
+      base.OnExiting(sender, e);
+      new ExitCommand().Execute(sender);
+    }
+
     static void Main(string[] args)
     {
+      MangaReader.Core.Client.Init();
       BuildAvaloniaApp().Start<MainWindow>();
     }
 

@@ -9,6 +9,7 @@ using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using MangaReader.Avalonia.Services;
 using MangaReader.Avalonia.ViewModel;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Services.Config;
@@ -22,8 +23,8 @@ namespace MangaReader.Avalonia
     public MainWindow()
     {
       this.InitializeComponent();
+      ConfigStorage.Instance.ViewConfig.UpdateWindowState(this);
       App.AttachDevTools(this);
-      MangaReader.Core.Client.Init();
       var processTest = new ProcessTest();
       processTest.StateChanged += ProcessTestOnStateChanged;
       Task.Run(() => MangaReader.Core.Client.Start(processTest));
@@ -44,6 +45,12 @@ namespace MangaReader.Avalonia
             textBox?.Focus();
           }, DispatcherPriority.Background);
         });
+    }
+
+    protected override bool HandleClosing()
+    {
+      ConfigStorage.Instance.ViewConfig.SaveWindowState(this);
+      return base.HandleClosing();
     }
 
     private void ProcessTestOnStateChanged(object sender, ConvertState convertState)

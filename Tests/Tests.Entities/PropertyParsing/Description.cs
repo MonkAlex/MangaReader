@@ -51,6 +51,14 @@ namespace Tests.Entities.PropertyParsing
       Assert.AreEqual("Другие названия Kono Kanojo wa Fiction desu\r\nТип Манга\r\nАвтор ﻿Watanabe Shizumu\r\nСтатус (Томов) 4 тома, выпуск завершен\r\nЗагружено 34 глав, перевод завершен\r\nТэги эротика, сёнэн, школа, романтика, комедия, сверхъестественное\r\nПереводчики ﻿Ready Steady GO! (R.S.G.), Syndicate Manga Team\r\n", manga.Status);
     }
 
+    [Test]
+    public void CheckMangachanWithHtml()
+    {
+      var manga = CreateMangaIgnoreError("http://mangachan.me/manga/64187-eve-scramble.html");
+      Assert.AreEqual("Есть девушка, способная осчастливить жизнь любого, даже проведя с ним всего лишь один день. Эта девушка, по имени Ева, когда её похитил неизвестный, присылает мне сообщение с просьбой о помощи. Однако, похоже, не я один был готов, бросив всё, бежать к ней на выручку. В действие вступает грандиозный план по вызволению Евы, разработанный особым альянсом бывших парней , который был создан с целью спасти любимую девушку!", manga.Description);
+      Assert.AreEqual("Другие названия\r\nТип Манхва\r\nАвтор ﻿Hale, Gaonbi\r\nСтатус (Томов) 1 том, выпуск продолжается\r\nЗагружено 5 глав, перевод продолжается\r\nТэги драма, мистика, романтика, ужасы, веб\r\nПереводчики ﻿Disolver el lirio, Черный розариум\r\n", manga.Status);
+    }
+
     protected IManga CreateMangaIgnoreError(string uri)
     {
       using (var context = Repository.GetEntityContext(nameof(Description)))

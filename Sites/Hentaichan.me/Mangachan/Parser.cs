@@ -84,7 +84,7 @@ namespace Hentaichan.Mangachan
         document.LoadHtml(page.Content);
         var node = document.DocumentNode.SelectSingleNode("//div[@id=\"description\"]");
         if (node != null)
-          description = WebUtility.HtmlDecode(node.FirstChild.InnerText).Trim();
+          description = WebUtility.HtmlDecode(node.InnerText).Trim().Replace("Прислать описание", "").TrimEnd();
       }
       catch (Exception e) { Log.Exception(e); }
       manga.Description = description;

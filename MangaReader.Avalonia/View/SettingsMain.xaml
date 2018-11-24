@@ -5,23 +5,36 @@
         DataContext="{Binding}"
         Margin="30">
     <WrapPanel Grid.Row="0" Margin="0, 10, 0, 10">
+      <WrapPanel.Styles>
+        <Style Selector="NumericUpDown.picker">
+          <Setter Property="Margin" Value="2"/>
+          <Setter Property="Padding" Value="1"/>
+        </Style>
+        <Style Selector="NumericUpDown.picker /template/ TextBox#PART_Spinner">
+          <Setter Property="Padding" Value="1"/>
+        </Style>
+        <Style Selector="ButtonSpinner /template/ RepeatButton">
+          <Setter Property="Padding" Value="1"/>
+        </Style>
+        <Style Selector="NumericUpDown.picker /template/ TextBox#PART_TextBox">
+          <Setter Property="Margin" Value="1"/>
+          <Setter Property="Padding" Value="3"/>
+        </Style>
+      </WrapPanel.Styles>
       <TextBlock Margin="0, 10, 0, 10"
                  VerticalAlignment="Center"
                  Text="Update manga in library every, hours  "/>
-      <TextBox VerticalAlignment="Center"
-               Width="50"
-               Text="{Binding AutoupdateLibraryInHours}"/>
+      <NumericUpDown Value="{Binding AutoupdateLibraryInHours}" VerticalAlignment="Center"
+                     Width="40" Minimum="0" Maximum="99" HorizontalAlignment="Center"/>
     </WrapPanel>
 
-    <WrapPanel Grid.Row="1" Margin="0, 10, 0, 10">
-      <CheckBox IsChecked="{Binding CheckAppUpdateOnStart}"/>
+    <CheckBox Grid.Row="1" Margin="0, 10, 0, 10" IsChecked="{Binding CheckAppUpdateOnStart}">
       <TextBlock VerticalAlignment="Center" Text="Update app on start"/>
-    </WrapPanel>
+    </CheckBox>
 
-    <WrapPanel Grid.Row="2" Margin="0, 10, 0, 10">
-      <CheckBox IsChecked="{Binding MinimizeToTray}"/>
+    <CheckBox Grid.Row="2" Margin="0, 10, 0, 10" IsChecked="{Binding MinimizeToTray}">
       <TextBlock VerticalAlignment="Center" Text="Minimize to tray"/>
-    </WrapPanel>
+    </CheckBox>
 
     <WrapPanel Grid.Row="3" Margin="0, 10, 0, 10" HorizontalAlignment="Right">
       <Button Command="{Binding Save}" Content="Save"/>

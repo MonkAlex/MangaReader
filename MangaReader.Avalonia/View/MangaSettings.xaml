@@ -4,20 +4,18 @@
   <Grid RowDefinitions="Auto, Auto, Auto, Auto"
       DataContext="{Binding}"
       Margin="30">
-    <view:FolderSelector Grid.Row="0" 
+    <view:FolderSelector Grid.Row="0"
                          Margin="0, 10, 0, 10"
                          DataContext="{Binding}"
                          FolderBindingPath="Folder"/>
 
-    <WrapPanel Grid.Row="1" Margin="0, 10, 0, 10">
-      <CheckBox IsChecked="{Binding CheckAppUpdateOnStart}"/>
+    <CheckBox Grid.Row="1" Margin="0, 10, 0, 10" IsChecked="{Binding OnlyUpdate}">
       <TextBlock VerticalAlignment="Center" Text="Only update mangas"/>
-    </WrapPanel>
+    </CheckBox>
 
-    <WrapPanel Grid.Row="2" Margin="0, 10, 0, 10">
-      <CheckBox IsChecked="{Binding Compress}"/>
+    <CheckBox Grid.Row="2" Margin="0, 10, 0, 10" IsChecked="{Binding Compress}">
       <TextBlock VerticalAlignment="Center" Text="Compress after update"/>
-    </WrapPanel>
+    </CheckBox>
 
     <WrapPanel Grid.Row="3" Margin="0, 10, 0, 10" HorizontalAlignment="Right">
       <Button Command="{Binding Save}" Content="Save"/>

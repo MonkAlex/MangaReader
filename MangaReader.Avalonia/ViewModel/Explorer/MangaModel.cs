@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using MangaReader.Avalonia.ViewModel.Command.Manga;
 using MangaReader.Core.Manga;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
@@ -223,34 +224,31 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public override Task OnUnselected(ExplorerTabViewModel newModel)
     {
+      this.UndoChangedImpl();
       ExplorerViewModel.Instance.Tabs.Remove(this);
       return base.OnUnselected(newModel);
     }
 
     public ICommand Save => new MangaSaveCommand(this, ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().First().Library);
 
-    /*
-    public override void Show()
+    public void UndoChanged()
     {
-      base.Show();
+      UndoChangedImpl();
+      ExplorerViewModel.Instance.SelectedTab = ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().FirstOrDefault();
+    }
 
-      var window = ViewService.Instance.TryGet<System.Windows.Window>(this);
-      if (window != null)
+    private void UndoChangedImpl()
+    {
+      using (var context = Repository.GetEntityContext())
       {
-        window.Closing += (sender, args) => ViewService.Instance.TryRemove(this);
-        window.ShowDialog();
+        if (Saved)
+        {
+          var manga = context.Get<IManga>().First(m => m.Id == Id);
+          UpdateProperties(manga);
+        }
       }
     }
 
-    public void Close()
-    {
-      var window = ViewService.Instance.TryGet<System.Windows.Window>(this);
-      if (window != null)
-      {
-        window.Close();
-      }
-    }
-    */
     public MangaModel(IManga manga)
     {
       UpdateProperties(manga);

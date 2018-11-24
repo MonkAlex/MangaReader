@@ -46,6 +46,20 @@
     <Plugins Include="$(ProjectDir)\Bin\$(ConfigurationName)\netcoreapp2.1\Plugins\*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Properties\chuunibyou.jpg" />
+    <None Remove="Properties\denpa.jpg" />
+    <None Remove="Properties\mirai_nikki.jpg" />
+    <None Remove="Properties\namiuchigiwa.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\chuunibyou.jpg" />
+    <EmbeddedResource Include="Properties\denpa.jpg" />
+    <EmbeddedResource Include="Properties\mirai_nikki.jpg" />
+    <EmbeddedResource Include="Properties\namiuchigiwa.jpg" />
+  </ItemGroup>
+
   <Target Name="CopyPlugins" AfterTargets="Publish">
     <Copy SourceFiles="@(Plugins)" DestinationFiles="@(Plugins-&gt;'$([System.IO.Path]::GetFullPath('$(PublishDir)'))\Plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using MangaReader.Core.Services;
@@ -11,11 +14,13 @@ namespace MangaReader.Avalonia
   {
     public static BitmapTypeConverter Instance => new BitmapTypeConverter();
 
+    private static readonly Bitmap DefaultImage = GetNotFoundImage();
+
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
       var array = value as byte[];
       if (array == null)
-        return null;
+        return DefaultImage;
 
       try
       {
@@ -28,7 +33,21 @@ namespace MangaReader.Avalonia
       {
         Log.Exception(e);
       }
-      return null;
+      return DefaultImage;
+    }
+
+    private static Bitmap GetNotFoundImage()
+    {
+      return new Bitmap(System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(GetNotFoundImageName()));
+    }
+
+    private static string GetNotFoundImageName()
+    {
+      var random = new Random();
+      return System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames()
+        .Where(n => n.StartsWith("MangaReader.Avalonia.Properties.") && n.EndsWith(".jpg"))
+        .OrderBy(n => random.Next())
+        .FirstOrDefault();
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

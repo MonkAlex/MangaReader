@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MangaReader.Avalonia.ViewModel.Command;
@@ -34,14 +35,35 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     private bool minimizeToTray;
 
+    public Languages Language
+    {
+      get => language;
+      set => RaiseAndSetIfChanged(ref language, value);
+    }
+
+    private Languages language;
+
+    public List<Languages> AllowedLanguages => Generic.GetEnumValues<Languages>();
+
+    public IFolderNamingStrategy FolderNamingStrategy
+    {
+      get => folderNamingStrategy;
+      set => RaiseAndSetIfChanged(ref folderNamingStrategy, value);
+    }
+
+    private IFolderNamingStrategy folderNamingStrategy;
+
+    public List<IFolderNamingStrategy> FolderNamingStrategies => Core.Services.FolderNamingStrategies.Strategies.ToList();
+
     public override async Task OnSelected(ExplorerTabViewModel previousModel)
     {
       await base.OnSelected(previousModel);
 
       if (!ExplorerViewModel.Instance.Tabs.OfType<MangaSettingsViewModel>().Any())
       {
-        using (var context = Repository.GetEntityContext())
+        using (var context = Repository.GetEntityContext("Load manga settings"))
         {
+          ReloadConfig();
           var settings = context.Get<MangaSetting>().ToList();
           ExplorerViewModel.Instance.Tabs.AddRange(settings.Select(s => new MangaSettingsViewModel(s)));
         }
@@ -68,6 +90,13 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       this.CheckAppUpdateOnStart = appConfig.UpdateReader;
       this.MinimizeToTray = appConfig.MinimizeToTray;
       this.AutoupdateLibraryInHours = appConfig.AutoUpdateInHours;
+      this.Language = appConfig.Language;
+
+      using (var context = Repository.GetEntityContext())
+      {
+        var config = context.Get<DatabaseConfig>().Single();
+        this.FolderNamingStrategy = FolderNamingStrategies.FirstOrDefault(s => s.Id == config.FolderNamingStrategy);
+      }
     }
 
     private void SaveConfig()
@@ -77,7 +106,15 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       appConfig.UpdateReader = this.CheckAppUpdateOnStart;
       appConfig.MinimizeToTray = this.MinimizeToTray;
       appConfig.AutoUpdateInHours = this.AutoupdateLibraryInHours;
+      appConfig.Language = this.Language;
       configStorage.Save();
+
+      using (var context = Repository.GetEntityContext())
+      {
+        var config = context.Get<DatabaseConfig>().Single();
+        config.FolderNamingStrategy = FolderNamingStrategy.Id;
+        context.Save(config);
+      }
     }
 
     public SettingsViewModel()
@@ -85,7 +122,6 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       this.Name = "Settings";
       this.Priority = 100;
 
-      ReloadConfig();
       this.Save = new DelegateCommand(SaveConfig);
       this.UndoChanged = new DelegateCommand(ReloadConfig);
     }

@@ -45,7 +45,7 @@ namespace MangaReader.Avalonia
     {
       var random = new Random();
       return System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames()
-        .Where(n => n.StartsWith("MangaReader.Avalonia.Properties.") && n.EndsWith(".jpg"))
+        .Where(n => n.StartsWith("MangaReader.Avalonia.Assets.") && n.EndsWith(".jpg"))
         .OrderBy(n => random.Next())
         .FirstOrDefault();
     }

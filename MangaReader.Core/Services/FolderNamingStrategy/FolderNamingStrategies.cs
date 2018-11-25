@@ -11,7 +11,7 @@ namespace MangaReader.Core.Services
   public static class FolderNamingStrategies
   {
     private static readonly Lazy<List<IFolderNamingStrategy>> StrategiesLazy = new Lazy<List<IFolderNamingStrategy>>(() =>
-      new List<IFolderNamingStrategy>(Generic.GetAllTypes<IFolderNamingStrategy>().Select(Activator.CreateInstance).OfType<IFolderNamingStrategy>()));
+      new List<IFolderNamingStrategy>(Generic.GetAllPublicTypes<IFolderNamingStrategy>().Select(Activator.CreateInstance).OfType<IFolderNamingStrategy>()));
 
     private static readonly ConcurrentDictionary<IManga, IFolderNamingStrategy> mangaCache = new ConcurrentDictionary<IManga, IFolderNamingStrategy>();
 

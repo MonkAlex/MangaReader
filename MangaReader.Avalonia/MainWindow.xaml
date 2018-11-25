@@ -3,6 +3,7 @@
         xmlns:c="clr-namespace:MangaReader.Avalonia.ViewModel.Explorer;assembly=MangaReader.Avalonia"
         xmlns:view="clr-namespace:MangaReader.Avalonia.View;assembly=MangaReader.Avalonia"
         MinWidth="800" MinHeight="600"
+        Icon="resm:MangaReader.Avalonia.Assets.main.ico"
         Title="{Binding SelectedTab.Name}">
   <Window.DataTemplates>
     <DataTemplate DataType="c:LibraryViewModel">

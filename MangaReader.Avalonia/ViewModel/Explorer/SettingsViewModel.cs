@@ -55,6 +55,16 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public List<IFolderNamingStrategy> FolderNamingStrategies => Core.Services.FolderNamingStrategies.Strategies.ToList();
 
+    public IReadOnlyList<SortSetting> SortSettings => SortSetting.Sorts;
+
+    public SortSetting SortSetting
+    {
+      get => sortSetting;
+      set => RaiseAndSetIfChanged(ref sortSetting, value);
+    }
+
+    private SortSetting sortSetting;
+
     public override async Task OnSelected(ExplorerTabViewModel previousModel)
     {
       await base.OnSelected(previousModel);
@@ -77,6 +87,10 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       {
         foreach (var tab in ExplorerViewModel.Instance.Tabs.OfType<MangaSettingsViewModel>().ToList())
           ExplorerViewModel.Instance.Tabs.Remove(tab);
+
+#warning Нужно ресетить только после изменения порядка сортировки.
+        foreach (var model in ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>())
+          model.FilteredItems.Reset();
       }
     }
 
@@ -91,6 +105,11 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       this.MinimizeToTray = appConfig.MinimizeToTray;
       this.AutoupdateLibraryInHours = appConfig.AutoUpdateInHours;
       this.Language = appConfig.Language;
+
+      var viewConfig = ConfigStorage.Instance.ViewConfig;
+      this.SortSetting = SortSettings
+        .OrderByDescending(s => s.SortDescription.PropertyName == viewConfig.LibraryFilter.SortDescription.PropertyName)
+        .FirstOrDefault();
 
       using (var context = Repository.GetEntityContext())
       {
@@ -107,6 +126,10 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       appConfig.MinimizeToTray = this.MinimizeToTray;
       appConfig.AutoUpdateInHours = this.AutoupdateLibraryInHours;
       appConfig.Language = this.Language;
+
+      var viewConfig = configStorage.ViewConfig;
+      viewConfig.LibraryFilter.SortDescription = SortSetting.SortDescription;
+
       configStorage.Save();
 
       using (var context = Repository.GetEntityContext())

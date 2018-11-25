@@ -214,7 +214,6 @@
     <Compile Include="ViewModel\Primitive\ProcessModel.cs" />
     <Compile Include="ViewModel\Setting\SettingModel.cs" />
     <Compile Include="ViewModel\Setting\SettingViewModel.cs" />
-    <Compile Include="ViewModel\Setting\SortDto.cs" />
     <Compile Include="ViewModel\Setting\SortModel.cs" />
     <Compile Include="ViewModel\ShutdownViewModel.cs" />
     <Compile Include="ViewModel\TaskbarIconModel.cs" />
@@ -404,6 +403,6 @@
       <Delete Include="$(TargetDir)\MangaReader.Core.pdb" />
     </ItemGroup>
     <Copy SourceFiles="@(Libraries)" DestinationFiles="@(Libraries->'$(TargetDir)\lib\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Delete Files="@(Delete)"/>
+    <Delete Files="@(Delete)" />
   </Target>
 </Project>

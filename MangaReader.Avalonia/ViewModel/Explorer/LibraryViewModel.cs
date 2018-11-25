@@ -11,6 +11,7 @@ using MangaReader.Avalonia.ViewModel.Command.Library;
 using MangaReader.Avalonia.ViewModel.Command.Manga;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 using ReactiveUI.Legacy;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
@@ -76,7 +77,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           FilteredItems = Items.CreateDerivedCollection(
             x => x,
             Filter,
-            (original, filtered) => string.Compare(original.Name, filtered.Name, StringComparison.InvariantCultureIgnoreCase));
+            ConfigStorage.Instance.ViewConfig.LibraryFilter.Compare);
         }, DispatcherPriority.ApplicationIdle);
       }
     }

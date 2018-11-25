@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Core.Services;
 using System.Windows.Input;
+using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
@@ -35,6 +38,26 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     private string folder;
 
+    public IFolderNamingStrategy FolderNamingStrategy
+    {
+      get => folderNamingStrategy;
+      set => RaiseAndSetIfChanged(ref folderNamingStrategy, value);
+    }
+
+    private IFolderNamingStrategy folderNamingStrategy;
+
+    public List<IFolderNamingStrategy> FolderNamingStrategies { get; }
+
+    public List<Compression.CompressionMode> Compressions => Generic.GetEnumValues<Compression.CompressionMode>();
+
+    public Compression.CompressionMode Compression
+    {
+      get => compression;
+      set => RaiseAndSetIfChanged(ref compression, value);
+    }
+
+    private Compression.CompressionMode compression;
+
     public override async Task OnUnselected(ExplorerTabViewModel newModel)
     {
       await base.OnUnselected(newModel);
@@ -59,6 +82,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           this.Compress = setting.CompressManga;
           this.OnlyUpdate = setting.OnlyUpdate;
           this.Folder = setting.Folder;
+          this.Compression = setting.DefaultCompression;
+          this.FolderNamingStrategy = FolderNamingStrategies.FirstOrDefault(s => s.Id == setting.FolderNamingStrategy);
         }
       }
     }
@@ -73,6 +98,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           setting.CompressManga = this.Compress == true;
           setting.OnlyUpdate = this.OnlyUpdate == true;
           setting.Folder = this.Folder;
+          setting.DefaultCompression = this.Compression;
+          setting.FolderNamingStrategy = this.FolderNamingStrategy.Id;
           context.Save(setting);
         }
       }
@@ -83,10 +110,32 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       this.Name = setting.MangaName;
       this.Priority = 500;
       this.mangaSettingsId = setting.Id;
+      this.FolderNamingStrategies = Core.Services.FolderNamingStrategies.Strategies.ToList();
+      this.FolderNamingStrategies.Insert(0, new BaseFolderNameStrategy("Использовать общие настройки"));
 
       ReloadConfig();
       this.Save = new DelegateCommand(SaveConfig);
       this.UndoChanged = new DelegateCommand(ReloadConfig);
+    }
+
+    private class BaseFolderNameStrategy : IFolderNamingStrategy
+    {
+      public Guid Id { get; }
+      public string Name { get; }
+      public string FormateChapterFolder(Chapter chapter)
+      {
+        throw new NotImplementedException();
+      }
+
+      public string FormateVolumeFolder(Volume volume)
+      {
+        throw new NotImplementedException();
+      }
+
+      public BaseFolderNameStrategy(string name)
+      {
+        this.Name = name;
+      }
     }
   }
 }

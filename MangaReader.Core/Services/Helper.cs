@@ -93,9 +93,16 @@ namespace MangaReader.Core.Services
       foreach (var assembly in Helper.AllowedAssemblies())
       {
         types.AddRange(assembly.GetTypes()
-          .Where(t => !t.IsAbstract && t.IsClass && typeof(T).IsAssignableFrom(t)));
+          .Where(t => !t.IsAbstract
+                      && t.IsClass
+                      && typeof(T).IsAssignableFrom(t)));
       }
       return types;
+    }
+
+    public static List<Type> GetAllPublicTypes<T>()
+    {
+      return GetAllTypes<T>().Where(t => t.IsPublic).ToList();
     }
 
     public static List<T> GetEnumValues<T>()

@@ -165,7 +165,7 @@ namespace MangaReader.ViewModel
       View = new ListCollectionView(MangaViewModels)
       {
         Filter = Filter,
-        CustomSort = mangaComparer.Value
+        CustomSort = mangaComparer
       };
       View.MoveCurrentToFirst();
 
@@ -220,50 +220,7 @@ namespace MangaReader.ViewModel
       };
     }
 
-    private Lazy<IComparer> mangaComparer = new Lazy<IComparer>(() => new MangaComparerImpl());
-
-    private class MangaComparerImpl : IComparer, IComparer<IManga>
-    {
-      private static LibraryFilter setting = ConfigStorage.Instance.ViewConfig.LibraryFilter;
-
-      public int Compare(object x, object y)
-      {
-        if (x is MangaModel xM && y is MangaModel yM)
-        {
-          if (setting.SortDescription.PropertyName == nameof(IManga.Created))
-            return CompareByDate(xM.Created, yM.Created);
-          if (setting.SortDescription.PropertyName == nameof(IManga.DownloadedAt))
-            return CompareByDate(xM.DownloadedAt, yM.DownloadedAt);
-          return CompareByName(xM.Name, yM.Name);
-        }
-        throw new MangaReaderException("Can compare only Mangas.");
-      }
-
-      private static int CompareByDate(DateTime? x, DateTime? y)
-      {
-        if (setting.SortDescription.Direction == ListSortDirection.Ascending)
-          return DateTime.Compare(x ?? DateTime.MinValue, y ?? DateTime.MinValue);
-
-        return DateTime.Compare(y ?? DateTime.MinValue, x ?? DateTime.MinValue);
-      }
-
-      private static int CompareByName(string x, string y)
-      {
-        if (setting.SortDescription.Direction == ListSortDirection.Ascending)
-          return string.Compare(x, y, StringComparison.InvariantCultureIgnoreCase);
-
-        return string.Compare(y, x, StringComparison.InvariantCultureIgnoreCase);
-      }
-
-      public int Compare(IManga x, IManga y)
-      {
-        if (setting.SortDescription.PropertyName == nameof(IManga.Created))
-          return CompareByDate(x.Created, y.Created);
-        if (setting.SortDescription.PropertyName == nameof(IManga.DownloadedAt))
-          return CompareByDate(x.DownloadedAt, y.DownloadedAt);
-        return CompareByName(x.Name, y.Name);
-      }
-    }
+    private IComparer mangaComparer = ConfigStorage.Instance.ViewConfig.LibraryFilter;
 
     private void LibraryOnLibraryChanged(object o, LibraryViewModelArgs args)
     {

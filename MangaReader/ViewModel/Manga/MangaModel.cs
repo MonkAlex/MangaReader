@@ -14,7 +14,7 @@ using MangaReader.ViewModel.Primitive;
 
 namespace MangaReader.ViewModel.Manga
 {
-  public class MangaModel : BaseViewModel
+  public class MangaModel : BaseViewModel, ILibraryFilterableItem
   {
     #region MangaProperties
 

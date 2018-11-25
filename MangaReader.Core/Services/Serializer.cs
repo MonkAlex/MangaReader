@@ -11,21 +11,6 @@ namespace MangaReader.Core.Services
   class Serializer<T>
   {
     /// <summary>
-    /// Сохранить в файл.
-    /// </summary>
-    /// <param name="path"></param>
-    /// <param name="data"></param>
-    public static void Save(string path, T data)
-    {
-      var formatter = new XmlSerializer(typeof(T));
-
-      using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Write))
-      {
-        formatter.Serialize(stream, data);
-      }
-    }
-
-    /// <summary>
     /// Загрузить из файла.
     /// </summary>
     /// <param name="path"></param>

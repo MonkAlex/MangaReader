@@ -43,7 +43,8 @@ namespace MangaReader.Core
     {
       try
       {
-        Updater.Initialize().Wait();
+        if (!Updater.Initialize().Wait(1500))
+          Log.Add($"Updater ignored by timeout.");
 
         ConfigStorage.RefreshPlugins();
         NHibernate.Mapping.Initialize(process);

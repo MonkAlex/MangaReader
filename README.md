@@ -20,7 +20,7 @@
 
 Всё добро под лицензией [MIT][License]
 
-Отдельное спасибо JetBrains за Open Source [лицензию на ReSharper](https://www.jetbrains.com/?from=MangaReader), <img src="https://raw.githubusercontent.com/JetBrains/logos/master/web/jetbrains/jetbrains.svg?sanitize=true"/>
+Отдельное спасибо JetBrains за Open Source лицензию <a href="https://www.jetbrains.com/?from=MangaReader" target="_blank"><img src="https://raw.githubusercontent.com/JetBrains/logos/master/web/jetbrains/jetbrains.svg?sanitize=true"/></a>
 
 ***
 
@@ -28,7 +28,7 @@
   [Issues]: ../../issues "Issues"
   [Wiki]: ../../wiki "Wiki"
   [License]: /LICENSE "License"
-  [badge-platforms]: https://img.shields.io/badge/platform-Windows%20WPF%20%7C%20Linux%20(mono%20CLI)-green.svg "Supported platforms"
+  [badge-platforms]: https://img.shields.io/badge/platform-Windows%20|%20Linux%20|%20OSX-green.svg "Supported platforms"
   [badge-release]: https://img.shields.io/github/release/MonkAlex/MangaReader.svg "Latest release"
   [badge-issues]: https://img.shields.io/github/issues/MonkAlex/MangaReader.svg "Open issues"
 

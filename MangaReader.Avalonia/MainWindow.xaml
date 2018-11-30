@@ -24,6 +24,7 @@
   </Window.DataTemplates>
   <Grid ColumnDefinitions="Auto,*" DataContext="{Binding}">
     <ListBox Grid.Column="0" 
+             IsVisible="{Binding Loaded}"
              Items="{Binding Tabs}" 
              SelectedItem="{Binding SelectedTab}"
              Width="100"
@@ -38,6 +39,11 @@
         </DataTemplate>
       </ListBox.ItemTemplate>
     </ListBox>
-    <ContentPresenter Grid.Column="1" DataContext="{Binding SelectedTab}" Content="{Binding}"/>
+    <ContentPresenter Grid.Column="1" DataContext="{Binding SelectedTab}" Content="{Binding}" IsVisible="{Binding Loaded}"/>
+    <TextBlock Grid.ColumnSpan="2"
+               IsVisible="{Binding !Loaded}"
+               Text="Loading..." 
+               HorizontalAlignment="Center" 
+               VerticalAlignment="Center"/>
   </Grid>
 </Window>

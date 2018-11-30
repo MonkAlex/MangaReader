@@ -23,7 +23,7 @@ namespace MangaReader.Avalonia
     public MainWindow()
     {
       this.InitializeComponent();
-      Title = "MangaReader loading...";
+      Title = "Loading...";
       ConfigStorage.Instance.ViewConfig.UpdateWindowState(this);
       App.AttachDevTools(this);
       var processTest = new ProcessTest();

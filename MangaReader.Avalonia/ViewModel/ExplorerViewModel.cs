@@ -13,6 +13,14 @@ namespace MangaReader.Avalonia.ViewModel
 
     public static ExplorerViewModel Instance { get; } = new ExplorerViewModel();
 
+    public bool Loaded
+    {
+      get => loaded;
+      set => RaiseAndSetIfChanged(ref loaded, value);
+    }
+
+    private bool loaded;
+
     public ExplorerTabViewModel SelectedTab
     {
       get { return selectedTab; }
@@ -24,6 +32,7 @@ namespace MangaReader.Avalonia.ViewModel
         var previous = selectedTab;
         selectedTab?.OnUnselected(value);
         RaiseAndSetIfChanged(ref selectedTab, value);
+        this.Loaded = selectedTab != null;
         selectedTab?.OnSelected(previous);
       }
     }

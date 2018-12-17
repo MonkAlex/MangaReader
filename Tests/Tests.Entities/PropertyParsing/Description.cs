@@ -14,8 +14,8 @@ namespace Tests.Entities.PropertyParsing
     {
       var manga = CreateMangaIgnoreError("https://acomics.ru/~supersciencefriends");
       Assert.AreEqual("Комикс \"\r\nДрузья Супер Ученые\r\n: 2099\" является дополнением к анимационному сериалу\r\n\"Друзья Супер Ученые\"\r\n.", manga.Description);
-      Assert.AreEqual("https://acomics.ru/~supersciencefriends\r\nАвтор оригинала: Tinman Creative Studios\r\nАвтор оригинала: Tinman Creative Studios\r\nПереводчик: CrownedPenguin\r\nКоличество выпусков: 44\r\nКоличество подписчиков: 281\r\nОфициальный сайт: http://supersciencefriends.com/2099/\r\nВозрастной рейтинг: Parents strongly cautioned (Не рекомендуется лицам до 13 лет)\r\nЛицензия: Нет лицензии или не CC\r\n", manga.Status);
-      
+      Assert.IsTrue(manga.Status.Contains("https://acomics.ru/~supersciencefriends\r\nАвтор оригинала: Tinman Creative Studios\r\nАвтор оригинала: Tinman Creative Studios\r\nПереводчик: CrownedPenguin\r\nКоличество выпусков: 44\r\nКоличество подписчиков:"));
+      Assert.IsTrue(manga.Status.Contains("\r\nОфициальный сайт: http://supersciencefriends.com/2099/\r\nВозрастной рейтинг: Parents strongly cautioned (Не рекомендуется лицам до 13 лет)\r\nЛицензия: Нет лицензии или не CC\r\n"));
     }
 
     [Test]

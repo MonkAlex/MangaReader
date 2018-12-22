@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using MangaReader.Core.Manga;
 using MangaReader.Avalonia.Properties;
 using MangaReader.Core.Services;
@@ -11,7 +12,17 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
     {
       foreach (var manga in mangas)
       {
-        Helper.StartUseShell(manga.Uri.OriginalString);
+        if (true)
+          Helper.StartUseShell(manga.Uri.OriginalString);
+        else
+        {
+          var lastVolume = manga.Volumes.OrderByDescending(v => v.Number).FirstOrDefault();
+          var lastChapter = (lastVolume?.Container ?? manga.Chapters).OrderByDescending(v => v.Number).FirstOrDefault();
+          var lastPage = (lastChapter?.Container ?? manga.Pages).OrderByDescending(v => v.Number).FirstOrDefault();
+          var downloadable = lastPage ?? (IDownloadable)lastChapter ?? lastVolume;
+          var s = lastVolume?.Number + lastChapter?.Number + lastPage?.Number;
+          Helper.StartUseShell(downloadable?.Uri?.OriginalString ?? manga.Uri.OriginalString);
+        }
       }
     }
 

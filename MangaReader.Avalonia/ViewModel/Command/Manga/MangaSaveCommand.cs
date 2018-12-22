@@ -13,6 +13,11 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
   {
     private readonly MangaModel model;
 
+    public override bool CanExecute(object parameter)
+    {
+      return base.CanExecute(parameter) || !model.Saved;
+    }
+
     public override void Execute(object parameter)
     {
       base.Execute(parameter);

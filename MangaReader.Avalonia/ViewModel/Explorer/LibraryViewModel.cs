@@ -58,6 +58,14 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public ObservableCollection<BaseCommand> Commands { get; }
 
+    public double? UpdatePercent
+    {
+      get => updatePercent;
+      set => RaiseAndSetIfChanged(ref updatePercent, value);
+    }
+
+    private double? updatePercent;
+
     public Core.Services.LibraryViewModel Library { get; }
 
     public async Task RefreshItems()
@@ -128,8 +136,10 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         switch (args.LibraryOperation)
         {
           case LibraryOperation.UpdateStarted:
+            UpdatePercent = null;
             break;
           case LibraryOperation.UpdatePercentChanged:
+            UpdatePercent = args.Percent == 0 ? null : args.Percent;
             break;
           case LibraryOperation.UpdateMangaChanged:
           {
@@ -158,6 +168,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
             break;
           }
           case LibraryOperation.UpdateCompleted:
+            UpdatePercent = null;
             break;
           default:
             throw new ArgumentOutOfRangeException();

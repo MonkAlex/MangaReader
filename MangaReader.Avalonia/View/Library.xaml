@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:av="clr-namespace:MangaReader.Avalonia;assembly=MangaReader.Avalonia"
              Design.Width="400" Design.Height="300">
-    <Grid RowDefinitions="Auto,*,Auto" DataContext="{Binding}">
+    <Grid RowDefinitions="Auto,*,Auto,Auto" DataContext="{Binding}">
       <TextBox Grid.Row="0" Text="{Binding Search}" Watermark="Поиск по имени" UseFloatingWatermark="True"/>
       <ListBox Grid.Row="1" Items="{Binding FilteredItems}"
                SelectedItems="{Binding SelectedMangaModels}"
@@ -25,7 +25,8 @@
           </ItemsPanelTemplate>
         </ListBox.ItemsPanel>
       </ListBox>
-      <ListBox Grid.Row="2" Items="{Binding Commands}"
+      <ProgressBar Grid.Row="2" IsVisible="{Binding !!UpdatePercent}" Value="{Binding UpdatePercent}" Minimum="0" Maximum="1"/>
+      <ListBox Grid.Row="3" Items="{Binding Commands}"
                ScrollViewer.VerticalScrollBarVisibility="Auto"
                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         <ListBox.ItemTemplate>

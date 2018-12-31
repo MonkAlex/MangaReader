@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using MangaReader.Core.Manga;
+using MangaReader.Core.NHibernate;
 using NUnit.Framework;
 
 namespace Tests.Entities.Manga
@@ -31,10 +32,17 @@ namespace Tests.Entities.Manga
     [Test]
     public void MintmangaBonus()
     {
-      var manga = Mangas.CreateFromWeb(new Uri("http://mintmanga.com/haruka_na_receive"));
-      manga.Parser.UpdateContent(manga);
-      var chapters = manga.Volumes.SelectMany(v => v.Container).OfType<Grouple.GroupleChapter>();
-      Assert.AreEqual(1, chapters.Count(c => c.VolumeNumber == 1 && c.Number == 0));
+      using (var context = Repository.GetEntityContext())
+      {
+        var uri = new Uri("http://mintmanga.com/haruka_na_receive");
+        var toRemove = context.Get<IManga>().Where(m => m.Uri == uri).ToList();
+        foreach (var remove in toRemove)
+          context.Delete(remove);
+        var manga = Mangas.CreateFromWeb(uri);
+        manga.Parser.UpdateContent(manga);
+        var chapters = manga.Volumes.SelectMany(v => v.Container).OfType<Grouple.GroupleChapter>();
+        Assert.AreEqual(1, chapters.Count(c => c.VolumeNumber == 1 && c.Number == 0));
+      }
     }
   }
 }

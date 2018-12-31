@@ -39,6 +39,16 @@ namespace MangaReader.ViewModel.Manga
       }
     }
 
+    public string Uri
+    {
+      get => uri;
+      set
+      {
+        uri = value;
+        OnPropertyChanged();
+      }
+    }
+
     public string OriginalName { get; protected set; }
 
     public string Folder
@@ -199,6 +209,7 @@ namespace MangaReader.ViewModel.Manga
       this.Name = manga.LocalName;
       this.OriginalName = manga.ServerName;
       this.Folder = manga.Folder;
+      this.Uri = manga.Uri.OriginalString;
       this.CanChangeName = manga.IsNameChanged;
       this.NeedCompress = manga.NeedCompress;
       this.CompressionModes = new List<Compression.CompressionMode>(manga.AllowedCompressionModes);
@@ -259,6 +270,7 @@ namespace MangaReader.ViewModel.Manga
 
     private DateTime? created;
     private DateTime? downloadedAt;
+    private string uri;
 
     public ICommand Save => new MangaSaveCommand(this, WindowHelper.Library);
 

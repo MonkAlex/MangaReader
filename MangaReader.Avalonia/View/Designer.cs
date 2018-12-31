@@ -18,6 +18,7 @@ namespace MangaReader.Avalonia.View
     {
       var proxy = new MangaProxy();
       proxy.Id = -1;
+      proxy.Uri = new Uri("http://mintmanga.com/berserk");
       proxy.ServerName = "Berserk";
       proxy.IsNameChanged = true;
       proxy.LocalName = "Берсерк";

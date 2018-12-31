@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using MangaReader.Core.Exception;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
@@ -33,6 +34,9 @@ namespace MangaReader.ViewModel.Commands.Manga
             manga.CompressionMode = model.CompressionMode;
 
           manga.NeedCompress = model.NeedCompress;
+
+          if (Uri.TryCreate(model.Uri, UriKind.Absolute, out Uri parsedUri) && parsedUri != manga.Uri)
+            manga.Uri = parsedUri;
 
           context.Save(manga);
           model.UpdateProperties(manga);

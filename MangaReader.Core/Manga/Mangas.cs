@@ -487,11 +487,31 @@ namespace MangaReader.Core.Manga
 
     public override void BeforeSave(ChangeTrackerArgs args)
     {
-      if (!args.CanAddEntities)
-        Log.Add(Id != 0 ? $"Save {GetType().Name} with id {Id} ({Name})." : $"New {GetType().Name} ({Name}).");
+      if (!args.IsNewEntity)
+      {
+        var uriState = args.GetPropertyState<Uri>(nameof(Uri));
+        if (uriState.IsChanged)
+        {
+          using (Repository.GetEntityContext("Manga uri changed"))
+          {
+            var settings = ConfigStorage.Plugins.Where(p => p.GetParser().GetType() == Parser.GetType()).Select(p => p.GetSettings());
+            var allowedUris = settings.SelectMany(s => s.MangaSettingUris).ToList();
+            if (allowedUris.Any(s => s.Host == uriState.OldValue.Host) &&
+                allowedUris.All(s => s.Host != uriState.Value.Host))
+              throw new SaveValidationException("Нельзя менять источник манги на другой сайт.", this);
+          }
+
+          var parseResult = Parser.ParseUri(uriState.Value);
+          if (!parseResult.CanBeParsed || parseResult.Kind != UriParseKind.Manga)
+            throw new SaveValidationException("Источник манги не поддерживается.", this);
+        }
+      }
 
       if (!this.IsValid())
         throw new SaveValidationException("Нельзя сохранять невалидную сущность", this);
+
+      if (!args.CanAddEntities)
+        Log.Add(Id != 0 ? $"Save {GetType().Name} with id {Id} ({Name})." : $"New {GetType().Name} ({Name}).");
 
       RefreshFolder();
       args.CurrentState[args.PropertyNames.ToList().IndexOf(nameof(Folder))] = Folder;
@@ -508,9 +528,9 @@ namespace MangaReader.Core.Manga
           throw new SaveValidationException($"Другая манга уже использует папку {this.Folder}.", this);
       }
 
-      if (args.PreviousState != null)
+      if (!args.IsNewEntity)
       {
-        var dirName = args.PreviousState[args.PropertyNames.ToList().IndexOf(nameof(Folder))] as string;
+        var dirName = args.GetPropertyState<string>(nameof(Folder)).OldValue;
         dirName = DirectoryHelpers.MakeValidPath(dirName);
         var newValue = this.GetAbsoulteFolderPath();
         var oldValue = DirectoryHelpers.GetAbsoulteFolderPath(dirName);

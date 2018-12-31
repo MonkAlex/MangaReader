@@ -6,9 +6,9 @@ namespace Tests.Entities
 {
   public static class Builder
   {
-    private static readonly Uri Url = new Uri("http://example.com");
-    private static readonly Uri ReadmangaUri = new Uri("http://readmanga.me");
-    private static readonly Uri AcomicsUri = new Uri("http://acomics.ru");
+    public static readonly Uri Url = new Uri("http://example.com");
+    public static readonly Uri ReadmangaUri = new Uri("http://readmanga.me");
+    public static readonly Uri AcomicsUri = new Uri("http://acomics.ru");
 
     /// <summary>
     /// Создать мангу.

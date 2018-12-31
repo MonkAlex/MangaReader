@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using MangaReader.Avalonia.ViewModel.Command.Library;
 using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Exception;
@@ -43,6 +44,9 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
 
             manga.NeedCompress = model.NeedCompress;
 
+            if (Uri.TryCreate(model.Uri, UriKind.Absolute, out Uri parsedUri) && parsedUri != manga.Uri)
+              manga.Uri = parsedUri;
+
             context.Save(manga);
             model.UpdateProperties(manga);
           }
@@ -50,7 +54,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
           {
             foreach (var viewModel in ExplorerViewModel.Instance.Tabs.OfType<Explorer.LibraryViewModel>())
             {
-              if (viewModel.Library.Add(model.Uri, out IManga manga))
+              if (viewModel.Library.Add(new Uri(model.Uri), out IManga manga))
               {
                 manga.Cover = model.Cover;
                 context.Save(manga);

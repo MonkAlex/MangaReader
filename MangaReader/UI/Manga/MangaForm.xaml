@@ -5,7 +5,7 @@
         WindowStartupLocation="CenterOwner"
         WindowStyle="None"
         ShowInTaskbar="False"
-        Title="{Binding Name}" Height="170" Width="400">
+        Title="{Binding Name}" Height="204" Width="400">
     <StackPanel>
         <Grid>
             <Grid.RowDefinitions>
@@ -30,13 +30,17 @@
                      Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}" 
                      IsReadOnly="{Binding NameIsReadonly}"/>
             <Label Grid.Row="2" Grid.Column="0"
-                   Content="Манга скачивается в: "/>
+                   Content="Ссылка на источник: "/>
             <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+                     Text="{Binding Path=Uri}"/>
+            <Label Grid.Row="3" Grid.Column="0"
+                   Content="Манга скачивается в: "/>
+            <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
                      Text="{Binding Path=Folder}" IsReadOnly="True"/>
-            <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+            <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
                       IsChecked="{Binding Path=NeedCompress}" IsThreeState="True"
                       Content="{x:Static resx:Strings.Settings_Compress}" />
-            <ComboBox Grid.Row="3" Grid.Column="2" x:Name="CompressBox" 
+            <ComboBox Grid.Row="4" Grid.Column="2" x:Name="CompressBox" 
                       ItemsSource="{Binding Path=CompressionModes}" 
                       SelectedItem="{Binding Path=CompressionMode}"/>
 

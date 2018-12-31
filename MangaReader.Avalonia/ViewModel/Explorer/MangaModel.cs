@@ -22,7 +22,13 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public int Id { get; set; }
 
-    public Uri Uri { get; set; }
+    public string Uri
+    {
+      get => uri;
+      set => RaiseAndSetIfChanged(ref uri, value);
+    }
+
+    private string uri;
 
     public bool Saved { get { return Id != 0; } }
 
@@ -141,7 +147,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         return;
 
       this.Id = manga.Id;
-      this.Uri = manga.Uri;
+      this.Uri = manga.Uri.OriginalString;
       this.MangaName = manga.Name;
       this.OriginalName = manga.ServerName;
       this.Folder = manga.Folder;
@@ -182,6 +188,11 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     public void RestoreName()
     {
       this.MangaName = this.OriginalName;
+    }
+
+    public void OpenHyperlink()
+    {
+      Helper.StartUseShell(this.Uri);
     }
 
     public void AddToLibrary()

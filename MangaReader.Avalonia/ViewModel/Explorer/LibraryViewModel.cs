@@ -76,7 +76,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         await Task.Delay(500);
       }
 #warning Сортировка сделана только по имени, надо по настройкам.
-      using (var context = Core.NHibernate.Repository.GetEntityContext())
+      using (var context = Core.NHibernate.Repository.GetEntityContext("Library items loading"))
       {
         var mangas = context.Get<IManga>().Select(m => new MangaModel(m)).ToList();
         await Dispatcher.UIThread.InvokeAsync(() =>

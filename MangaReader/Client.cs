@@ -103,8 +103,7 @@ namespace MangaReader
               window.WindowState = WindowState.Minimized;
             }
 
-            if (window.WindowState == WindowState.Minimized)
-              window.WindowState = state;
+            window.WindowState = state;
 
             if (window.Owner != null)
               window.Owner.Activate();

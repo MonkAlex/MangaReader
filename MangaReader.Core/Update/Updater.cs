@@ -13,13 +13,15 @@ namespace MangaReader.Core.Update
   {
     private const int RepositoryId = 17180556;
 
-    private const string RepositoryReleaseUri = "https://github.com/MonkAlex/MangaReader/releases/latest";
+    public static readonly string RepositoryReleaseUri = "https://github.com/MonkAlex/MangaReader/releases/latest";
 
     private static string UpdateFilename = Path.Combine(ConfigStorage.WorkFolder, "Update", "GitHubUpdater.Launcher.exe");
 
     private static string UpdateConfig = Path.Combine(ConfigStorage.WorkFolder, "Update", "MangaReader.config");
 
     public static Version ClientVersion = AppConfig.Version;
+
+    public static event EventHandler<string> NewVersionFound;
 
     /// <summary>
     /// Запуск обновления, вызываемый до инициализации программы.
@@ -46,7 +48,10 @@ namespace MangaReader.Core.Update
         var release = await client.Repository.Release.GetLatest(RepositoryId);
         var lastVersion = release.TagName;
         if (lastVersion != ClientVersion.ToString())
+        {
           Log.Info($"Для {productName} найдена версия {lastVersion}. {RepositoryReleaseUri}");
+          OnNewVersionFound(lastVersion);
+        }
         else
         {
           Log.Info($"Обновления не найдены");
@@ -88,6 +93,11 @@ namespace MangaReader.Core.Update
         }
       }
       catch { }
+    }
+
+    private static void OnNewVersionFound(string e)
+    {
+      NewVersionFound?.Invoke(null, e);
     }
   }
 }

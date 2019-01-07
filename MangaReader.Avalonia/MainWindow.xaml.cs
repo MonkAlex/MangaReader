@@ -12,6 +12,7 @@ using Avalonia.VisualTree;
 using MangaReader.Avalonia.Services;
 using MangaReader.Avalonia.ViewModel;
 using MangaReader.Core.Convertation;
+using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Avalonia
@@ -28,6 +29,7 @@ namespace MangaReader.Avalonia
       App.AttachDevTools(this);
       var processTest = new ProcessTest();
       processTest.StateChanged += ProcessTestOnStateChanged;
+      MangaReader.Core.Update.Updater.NewVersionFound += UpdaterOnNewVersionFound;
       Task.Run(() => MangaReader.Core.Client.Start(processTest));
       this.DataContext = explorer;
 
@@ -46,6 +48,25 @@ namespace MangaReader.Avalonia
             textBox?.Focus();
           }, DispatcherPriority.Background);
         });
+    }
+
+    private async void UpdaterOnNewVersionFound(object sender, string e)
+    {
+      var dialog = new Dialogs.Avalonia.Dialog
+      {
+        Title = $"Найдено обновление {e}",
+        Description = "Автоматическое обновление не реализовано в текущей версии, обновитесь вручную."
+      };
+      var download = dialog.Buttons.AddButton("Скачать обновление");
+      var close = dialog.Buttons.AddButton("Закрыть");
+
+      await Dispatcher.UIThread.InvokeAsync(() =>
+      {
+        if (dialog.Show() == download)
+        {
+          Helper.StartUseShell(MangaReader.Core.Update.Updater.RepositoryReleaseUri);
+        }
+      }).LogException();
     }
 
     protected override bool HandleClosing()

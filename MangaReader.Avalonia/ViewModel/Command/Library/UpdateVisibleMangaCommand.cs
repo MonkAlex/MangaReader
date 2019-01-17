@@ -20,7 +20,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Library
     public UpdateVisibleMangaCommand(LibraryViewModel viewModel, Core.Services.LibraryViewModel model) : base(model)
     {
       this.viewModel = viewModel;
-      this.Name = "Обновить";
+      this.Name = "Обновить библиотеку";
       this.Icon = "pack://application:,,,/Icons/Main/update_any.png";
     }
   }

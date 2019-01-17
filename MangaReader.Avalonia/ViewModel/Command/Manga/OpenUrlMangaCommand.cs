@@ -26,6 +26,11 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       }
     }
 
+    public override bool CanExecute(object parameter)
+    {
+      return CanExecuteMangaCommand();
+    }
+
     public OpenUrlMangaCommand(Explorer.LibraryViewModel model) : base(model)
     {
       this.Name = Strings.Manga_Action_View;

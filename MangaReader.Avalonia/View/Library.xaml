@@ -41,6 +41,11 @@
             <WrapPanel/>
           </ItemsPanelTemplate>
         </ListBox.ItemsPanel>
+        <ListBox.Styles>
+          <Style Selector="ListBoxItem">
+            <Setter Property="IsVisible" Value="{Binding IsVisible}"/>
+          </Style>
+        </ListBox.Styles>
       </ListBox>
     </Grid>
 </UserControl>

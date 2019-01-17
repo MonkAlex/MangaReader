@@ -10,6 +10,7 @@ namespace MangaReader.Avalonia.ViewModel.Command
   {
     private string name;
     private string icon;
+    private bool isVisible = true;
 
     public string Name
     {
@@ -29,6 +30,23 @@ namespace MangaReader.Avalonia.ViewModel.Command
         icon = value;
         OnPropertyChanged();
       }
+    }
+
+    public bool IsVisible
+    {
+      get { return isVisible; }
+      set
+      {
+        isVisible = value;
+        OnPropertyChanged();
+      }
+    }
+
+    bool ICommand.CanExecute(object parameter)
+    {
+      var canExecute = this.CanExecute(parameter);
+      IsVisible = canExecute;
+      return canExecute;
     }
 
     public virtual bool CanExecute(object parameter)

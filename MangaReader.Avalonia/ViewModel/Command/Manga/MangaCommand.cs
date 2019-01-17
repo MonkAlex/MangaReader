@@ -13,7 +13,6 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
   public abstract class MultipleMangasBaseCommand : LibraryBaseCommand
   {
     private bool canExecuteNeedSelection;
-    private bool isVisible;
     protected bool NeedRefresh { get; set; }
 
     protected bool CanExecuteNeedSelection
@@ -27,23 +26,18 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       }
     }
 
-    public bool IsVisible
-    {
-      get { return isVisible; }
-      set
-      {
-        isVisible = value;
-        OnPropertyChanged();
-      }
-    }
-
     protected Explorer.LibraryViewModel LibraryModel { get; }
 
     protected IEnumerable<MangaModel> SelectedModels => LibraryModel.SelectedMangaModels;
 
     public override bool CanExecute(object parameter)
     {
-      return base.CanExecute(parameter) && SelectedModels.Any();
+      return base.CanExecute(parameter) && CanExecuteMangaCommand();
+    }
+
+    protected bool CanExecuteMangaCommand()
+    {
+      return SelectedModels.Any();
     }
 
     public override void Execute(object parameter)
@@ -104,12 +98,6 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       LibraryModel = model;
       this.NeedRefresh = true;
       this.CanExecuteNeedSelection = true;
-      this.CanExecuteChanged += OnCanExecuteChanged;
-    }
-
-    private void OnCanExecuteChanged(object sender, EventArgs eventArgs)
-    {
-      IsVisible = CanExecute(null);
     }
   }
 }

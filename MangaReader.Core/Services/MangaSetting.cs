@@ -40,19 +40,21 @@ namespace MangaReader.Core.Services
 
     public override void BeforeSave(ChangeTrackerArgs args)
     {
-      var folderIndex = args.PropertyNames.ToList().IndexOf(nameof(Folder));
-      if (folderIndex > -1 && args.PreviousState != null)
+      if (!args.IsNewEntity)
       {
-        var previous = args.PreviousState[folderIndex] as string;
-        var current = args.CurrentState[folderIndex] as string;
-        if (previous != current)
+        var folderState = args.GetPropertyState<string>(nameof(Folder));
+        var uriState = args.GetPropertyState<Uri>(nameof(MainUri));
+        if (folderState.IsChanged || uriState.IsChanged)
         {
           using (var context = Repository.GetEntityContext())
           {
             var mangas = context.Get<IManga>().Where(m => m.Setting == this).ToList();
             foreach (var manga in mangas)
             {
-              manga.RefreshFolder();
+              if (uriState.IsChanged)
+                manga.Uri = new Uri(manga.Uri.OriginalString.Replace(uriState.OldValue.GetLeftPart(UriPartial.Authority), uriState.Value.GetLeftPart(UriPartial.Authority)));
+              if (folderState.IsChanged)
+                manga.RefreshFolder();
               context.AddToTransaction(manga);
             }
           }

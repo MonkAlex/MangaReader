@@ -23,14 +23,6 @@ namespace Hentaichan.Convertation
           setting.Login.MainUri = setting.MainUri;
           context.Save(setting);
         }
-
-        var mangas = context.Get<Hentaichan>().ToList();
-        foreach (var manga in mangas)
-        {
-          manga.Uri = new Uri(manga.Uri.OriginalString.Replace("hentaichan.me", "henchan.me"));
-          process.Percent += 100.0 / mangas.Count;
-        }
-        mangas.SaveAll(context);
       }
     }
 

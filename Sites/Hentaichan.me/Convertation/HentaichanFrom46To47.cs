@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.NHibernate;
-using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
 namespace Hentaichan.Convertation
@@ -23,14 +21,6 @@ namespace Hentaichan.Convertation
           setting.Login.MainUri = setting.MainUri;
           context.Save(setting);
         }
-
-        var mangas = context.Get<Hentaichan>().ToList();
-        foreach (var manga in mangas)
-        {
-          manga.Uri = new Uri(manga.Uri.OriginalString.Replace("hentai-chan.me", "henchan.me"));
-          process.Percent += 100.0 / mangas.Count;
-        }
-        mangas.SaveAll(context);
       }
     }
 
@@ -38,6 +28,7 @@ namespace Hentaichan.Convertation
     {
       this.Version = new Version(1, 47, 3);
       this.CanReportProcess = true;
+      this.Name = "Обновляем ссылки на henchan.me...";
     }
   }
 }

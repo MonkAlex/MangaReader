@@ -23,14 +23,6 @@ namespace Acomics.Convertation
           setting.Login.MainUri = setting.MainUri;
           context.Save(setting);
         }
-
-        var mangas = context.Get<Acomics>().ToList();
-        foreach (var manga in mangas)
-        {
-          manga.Uri = new Uri(manga.Uri.OriginalString.Replace("http://acomics.ru", "https://acomics.ru"));
-          process.Percent += 100.0 / mangas.Count;
-        }
-        mangas.SaveAll(context);
       }
     }
 

@@ -36,7 +36,7 @@ namespace MangaReader.Core.Entity
     {
       Value = value;
       OldValue = oldValue;
-      IsChanged = Value != OldValue;
+      IsChanged = !Equals(value, oldValue);
     }
   }
 }

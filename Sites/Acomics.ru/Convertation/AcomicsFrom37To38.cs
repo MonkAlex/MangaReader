@@ -18,7 +18,6 @@ namespace Acomics.Convertation
         if (setting != null && setting.MainUri == null)
         {
           setting.MainUri = new Uri("http://acomics.ru/");
-          setting.Login.MainUri = setting.MainUri;
           context.Save(setting);
         }
       }

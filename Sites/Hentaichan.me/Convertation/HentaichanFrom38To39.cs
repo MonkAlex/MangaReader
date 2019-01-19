@@ -20,7 +20,6 @@ namespace Hentaichan.Convertation
         if (setting != null)
         {
           setting.MainUri = new Uri("http://henchan.me");
-          setting.Login.MainUri = setting.MainUri;
           context.Save(setting);
         }
       }

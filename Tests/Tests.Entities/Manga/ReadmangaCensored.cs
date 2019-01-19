@@ -14,14 +14,14 @@ namespace Tests.Entities.Manga
   public class ReadmangaCensored : TestClass
   {
     // Not censored
-    // http://readmanga.me/black_butler_anthology_comic_dj____rainbow_butler/vol1/6
+    // http://readmanga.me/black_butler_anthology_comic_rainbow_butler/vol1/6
     // Censored
     // http://readmanga.me/school_teacher/vol2/10?mature=1
 
     [Test]
     public void NotCensoredReadmanga()
     {
-      var manga = Get(@"http://readmanga.me/black_butler_anthology_comic_dj____rainbow_butler/vol1/6");
+      var manga = Get(@"http://readmanga.me/black_butler_anthology_comic_rainbow_butler/vol1/6");
       var chapter = manga.Volumes.Single(v => v.Number == 1).Container.ToList()[0];
       Grouple.Parser.UpdatePages(chapter as Grouple.GroupleChapter);
       Assert.IsTrue(chapter.Container.First().ImageLink.IsAbsoluteUri);

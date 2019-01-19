@@ -138,7 +138,7 @@ namespace Hentaichan.Mangachan
 
       var hosts = ConfigStorage.Plugins
         .Where(p => p.GetParser().GetType() == typeof(Parser))
-        .SelectMany(p => p.GetSettings().MangaSettingUris);
+        .Select(p => p.GetSettings().MainUri);
 
       foreach (var host in hosts)
       {

@@ -21,12 +21,18 @@ namespace Tests.Entities.Manga
           model.Remove(remove);
 
         var manga = Builder.CreateReadmanga();
-        manga.Uri = new Uri("http://readmanga.me/btoom");
+        var readmangaUri = new Uri("http://readmanga.me/btoom");
+        manga.Uri = readmangaUri;
         manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(new Uri("http://readmanga.me/btoom/vol1/1?mature=1")));
         context.Save(manga);
 
         manga = context.Get<Grouple.Readmanga>().FirstOrDefault(m => m.Id == manga.Id);
         manga.Refresh();
+        
+        // Если сайт больше не редиректит, осталась возможность редиректа вручную в клиенте.
+        if (manga.Uri == readmangaUri)
+          manga.Uri = new Uri("http://mintmanga.com/btooom_");
+
         context.Save(manga);
 
         var volume = new Volume();

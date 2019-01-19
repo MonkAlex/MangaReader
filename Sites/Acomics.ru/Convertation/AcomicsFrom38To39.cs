@@ -20,7 +20,6 @@ namespace Acomics.Convertation
         if (setting != null)
         {
           setting.MainUri = new Uri("https://acomics.ru/");
-          setting.MangaSettingUris.Add(setting.MainUri);
           setting.Login.MainUri = setting.MainUri;
           context.Save(setting);
         }

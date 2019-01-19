@@ -33,8 +33,6 @@ namespace MangaReader.Core.Services
 
     public Uri MainUri { get; set; }
 
-    public IList<Uri> MangaSettingUris { get; set; }
-
     /// <summary>
     /// Идентификатор выбранной стратегии именования папок.
     /// </summary>
@@ -68,7 +66,6 @@ namespace MangaReader.Core.Services
     {
       this.CompressManga = true;
       this.OnlyUpdate = true;
-      this.MangaSettingUris = new List<Uri>();
     }
   }
 }

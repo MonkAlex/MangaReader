@@ -21,7 +21,7 @@ namespace Tests.Entities.Download
     public async Task DownloadHentaichan()
     {
       CreateLogin();
-      var rm = Mangas.CreateFromWeb(new Uri(@"http://hentai-chan.me/manga/12850-twisted-intent-chast-1.html"));
+      var rm = Mangas.CreateFromWeb(new Uri(@"http://henchan.me/manga/12850-twisted-intent-chast-1.html"));
       var sw = new Stopwatch();
       sw.Start();
       rm.PropertyChanged += RmOnDownloadChanged;

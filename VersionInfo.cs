@@ -5,10 +5,10 @@
 // associated with an assembly.
 [assembly: AssemblyCompany("Intruders")]
 [assembly: AssemblyProduct("MangaReader")]
-[assembly: AssemblyCopyright("Copyright © Intruders 2014-2018")]
+[assembly: AssemblyCopyright("Copyright © Intruders 2014-2019")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-[assembly: AssemblyVersion("1.46.4.17")]
+[assembly: AssemblyVersion("1.47.3.0")]

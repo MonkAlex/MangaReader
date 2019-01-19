@@ -495,7 +495,7 @@ namespace MangaReader.Core.Manga
           using (Repository.GetEntityContext("Manga uri changed"))
           {
             var settings = ConfigStorage.Plugins.Where(p => p.GetParser().GetType() == Parser.GetType()).Select(p => p.GetSettings());
-            var allowedUris = settings.SelectMany(s => s.MangaSettingUris).ToList();
+            var allowedUris = settings.Select(s => s.MainUri).ToList();
             if (allowedUris.Any(s => s.Host == uriState.OldValue.Host) &&
                 allowedUris.All(s => s.Host != uriState.Value.Host))
               throw new SaveValidationException("Нельзя менять источник манги на другой сайт.", this);
@@ -584,7 +584,7 @@ namespace MangaReader.Core.Manga
 
       using (var context = Repository.GetEntityContext())
       {
-        setting = context.Get<MangaSetting>().ToList().SingleOrDefault(s => s.MangaSettingUris.Any(u => u.Host == uri.Host));
+        setting = context.Get<MangaSetting>().ToList().SingleOrDefault(s => s.MainUri.Host == uri.Host);
         if (setting != null)
         {
           var plugin = ConfigStorage.Plugins.SingleOrDefault(p => Equals(p.GetSettings(), setting));

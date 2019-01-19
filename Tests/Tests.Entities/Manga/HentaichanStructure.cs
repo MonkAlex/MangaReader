@@ -15,7 +15,7 @@ namespace Tests.Entities.Manga
     public void AddHentaichanMultiPages()
     {
       Login();
-      var manga = GetManga("http://hentai-chan.me/manga/14212-love-and-devil-glava-25.html");
+      var manga = GetManga("http://henchan.me/manga/14212-love-and-devil-glava-25.html");
       Unlogin();
       Assert.AreEqual(25, manga.Chapters.Count);
       Assert.IsTrue(manga.HasChapters);
@@ -24,7 +24,7 @@ namespace Tests.Entities.Manga
     [Test]
     public void AddHentaichanOneChapter()
     {
-      var manga = GetManga("http://hentai-chan.me/manga/15131-chuui-horeru-to-yakui-kara.html");
+      var manga = GetManga("http://henchan.me/manga/15131-chuui-horeru-to-yakui-kara.html");
       Assert.AreEqual(1, manga.Chapters.Count);
       Assert.IsTrue(manga.HasChapters);
     }
@@ -32,7 +32,7 @@ namespace Tests.Entities.Manga
     [Test]
     public void AddHentaichanSubdomain()
     {
-      var manga = GetManga("http://hentai-chan.me/manga/23083-ponpharse-tokubetsu-hen-chast-1.html");
+      var manga = GetManga("http://henchan.me/manga/23083-ponpharse-tokubetsu-hen-chast-1.html");
       Assert.AreEqual(2, manga.Chapters.Count);
       Assert.IsTrue(manga.HasChapters);
     }
@@ -42,27 +42,27 @@ namespace Tests.Entities.Manga
     public void HentaichanNameParsing()
     {
       // Спецсимвол \
-      TestNameParsing("http://hentai-chan.me/manga/14504-lets-play-lovegames-shall-we-glava-1.html",
+      TestNameParsing("http://henchan.me/manga/14504-lets-play-lovegames-shall-we-glava-1.html",
         "Let's Play Lovegames, Shall We?");
 
       // Спецсимвол # и одна глава
-      TestNameParsing("http://hentai-chan.me/manga/15109-exhibitionist-renko-chan.html",
+      TestNameParsing("http://henchan.me/manga/15109-exhibitionist-renko-chan.html",
         "#Exhibitionist Renko-chan");
 
       // Символ звездочки *
-      TestNameParsing("http://hentai-chan.me/manga/15131-chuui-horeru-to-yakui-kara.html",
+      TestNameParsing("http://henchan.me/manga/15131-chuui-horeru-to-yakui-kara.html",
         "*Chuui* Horeru to Yakui kara");
 
       // Символ /
-      TestNameParsing("http://hentai-chan.me/manga/10535-blush-dc.-glava-1.html",
+      TestNameParsing("http://henchan.me/manga/10535-blush-dc.-glava-1.html",
         "/Blush-DC.");
 
       // На всякий случай
-      TestNameParsing("http://hentai-chan.me/manga/23083-ponpharse-tokubetsu-hen-chast-1.html",
+      TestNameParsing("http://henchan.me/manga/23083-ponpharse-tokubetsu-hen-chast-1.html",
         "Ponpharse - Tokubetsu Hen");
 
       // Манга требующая регистрации для просмотра
-      TestNameParsing("http://hentai-chan.me/manga/14212-love-and-devil-glava-25.html",
+      TestNameParsing("http://henchan.me/manga/14212-love-and-devil-glava-25.html",
         "Love and Devil");
     }
 

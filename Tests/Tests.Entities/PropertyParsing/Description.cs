@@ -29,7 +29,7 @@ namespace Tests.Entities.PropertyParsing
     [Test]
     public void CheckHentaichan()
     {
-      var manga = CreateMangaIgnoreError("http://hentai-chan.me/manga/14212-love-and-devil-glava-25.html");
+      var manga = CreateMangaIgnoreError("http://henchan.me/manga/14212-love-and-devil-glava-25.html");
       Assert.AreEqual("Конец серии + бонусная история", manga.Description);
       Assert.AreEqual("Серия Оригинальные работы\r\nАвтор ﻿Yanagi Masashi\r\nПереводчик ﻿Илион\r\nЯзык На русском\r\n", manga.Status);
     }

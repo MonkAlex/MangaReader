@@ -22,7 +22,6 @@ namespace Hentaichan.Convertation
         if (setting != null)
         {
           setting.MainUri = new Uri("http://mangachan.me");
-          setting.MangaSettingUris.Add(setting.MainUri);
           setting.Login.MainUri = setting.MainUri;
           context.Save(setting);
         }

@@ -190,7 +190,7 @@ namespace Hentaichan
         var relativeUri = uri.OriginalString.Remove(0, trimmedHost.Length);
         var manga = "/manga/";
         if (relativeUri.Contains(manga))
-          return new UriParseResult(true, UriParseKind.Chapter, uri);
+          return new UriParseResult(true, UriParseKind.Manga, uri);
         var online = "/online/";
         if (relativeUri.Contains(online))
           return new UriParseResult(true, UriParseKind.Chapter, new Uri(uri, relativeUri.Replace(online, manga)));

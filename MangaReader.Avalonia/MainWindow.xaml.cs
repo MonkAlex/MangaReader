@@ -27,10 +27,9 @@ namespace MangaReader.Avalonia
       Title = "Loading...";
       ConfigStorage.Instance.ViewConfig.UpdateWindowState(this);
       App.AttachDevTools(this);
-      var processTest = new ProcessTest();
-      processTest.StateChanged += ProcessTestOnStateChanged;
       MangaReader.Core.Update.Updater.NewVersionFound += UpdaterOnNewVersionFound;
-      Task.Run(() => MangaReader.Core.Client.Start(processTest));
+      explorer.LoadingProcess.Status = Title;
+      Task.Run(() => MangaReader.Core.Client.Start(explorer.LoadingProcess));
       this.DataContext = explorer;
 
       // Focus to first textbox
@@ -75,75 +74,9 @@ namespace MangaReader.Avalonia
       return base.HandleClosing();
     }
 
-    private void ProcessTestOnStateChanged(object sender, ConvertState convertState)
-    {
-      if (convertState == ConvertState.Completed)
-      {
-        explorer.SelectDefaultTab();
-      }
-    }
-
     private void InitializeComponent()
     {
       AvaloniaXamlLoader.Load(this);
-    }
-
-    private class ProcessTest : IProcess
-    {
-      private double percent;
-      private ProgressState progressState;
-      private string status;
-      private Version version;
-      private ConvertState state;
-
-      public double Percent
-      {
-        get { return percent; }
-        set { percent = value; }
-      }
-
-      public ProgressState ProgressState
-      {
-        get { return progressState; }
-        set { progressState = value; }
-      }
-
-      public string Status
-      {
-        get { return status; }
-        set { status = value; }
-      }
-
-      public Version Version
-      {
-        get { return version; }
-        set { version = value; }
-      }
-
-      public ConvertState State
-      {
-        get { return state; }
-        set
-        {
-          if (!Equals(state, value))
-          {
-            state = value;
-            OnStateChanged(value);
-          }
-        }
-      }
-
-      public event EventHandler<ConvertState> StateChanged;
-
-      public ProcessTest()
-      {
-        Version = AppConfig.Version;
-      }
-
-      protected virtual void OnStateChanged(ConvertState e)
-      {
-        StateChanged?.Invoke(this, e);
-      }
     }
   }
 }

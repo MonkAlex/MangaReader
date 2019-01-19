@@ -58,6 +58,9 @@ namespace MangaReader.Core.Convertation
         process.ProgressState = converter.CanReportProcess ? ProgressState.Normal : ProgressState.Indeterminate;
         converter.Convert(process);
       }
+
+      process.ProgressState = ProgressState.Indeterminate;
+      process.Status = string.Empty;
     }
   }
 

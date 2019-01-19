@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using MangaReader.Avalonia.ViewModel.Explorer;
+using MangaReader.Core.Convertation;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 
@@ -10,6 +11,8 @@ namespace MangaReader.Avalonia.ViewModel
   {
     private ExplorerTabViewModel selectedTab;
     public ObservableCollection<ExplorerTabViewModel> Tabs { get; }
+
+    public IProcess LoadingProcess { get; set; }
 
     public static ExplorerViewModel Instance { get; } = new ExplorerViewModel();
 
@@ -48,6 +51,15 @@ namespace MangaReader.Avalonia.ViewModel
       this.SelectedTab = hasManga ? Tabs.OrderBy(t => t.Priority).FirstOrDefault() : Tabs.OfType<SearchViewModel>().FirstOrDefault();
     }
 
+
+    private void LoadingProcessOnStateChanged(object sender, ConvertState e)
+    {
+      if (e == ConvertState.Completed)
+      {
+        SelectDefaultTab();
+      }
+    }
+
     private ExplorerViewModel()
     {
       this.Tabs = new ObservableCollection<ExplorerTabViewModel>
@@ -56,6 +68,8 @@ namespace MangaReader.Avalonia.ViewModel
         new SearchViewModel(),
         new SettingsViewModel()
       };
+      LoadingProcess = new ProcessModel();
+      LoadingProcess.StateChanged += LoadingProcessOnStateChanged;
     }
   }
 }

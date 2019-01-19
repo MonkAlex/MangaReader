@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
@@ -12,6 +13,7 @@ namespace MangaReader.ViewModel.Setting
     private bool onlyUpdate;
     private bool compressManga;
     private string folder;
+    private string mainUri;
 
     public LoginModel Login { get; }
 
@@ -57,6 +59,16 @@ namespace MangaReader.ViewModel.Setting
       }
     }
 
+    public string MainUri
+    {
+      get { return mainUri; }
+      set
+      {
+        mainUri = value;
+        OnPropertyChanged();
+      }
+    }
+
     public FolderNamingModel FolderNamingStrategy { get; set; }
 
     public override void Save()
@@ -71,6 +83,8 @@ namespace MangaReader.ViewModel.Setting
         setting.Folder = this.Folder;
         setting.OnlyUpdate = this.OnlyUpdate;
         setting.FolderNamingStrategy = this.FolderNamingStrategy.Selected.Id;
+        if (Uri.TryCreate(this.MainUri, UriKind.Absolute, out Uri parsedUri) && parsedUri != setting.MainUri)
+          setting.MainUri = parsedUri;
         this.Login.Save();
         context.Save(setting);
       }
@@ -87,6 +101,7 @@ namespace MangaReader.ViewModel.Setting
       this.Folder = setting.Folder;
       this.OnlyUpdate = setting.OnlyUpdate;
       this.Login = new LoginModel(setting.Login) {IsEnabled = true};
+      this.MainUri = setting.MainUri.OriginalString;
 
       this.FolderNamingStrategy = new FolderNamingModel();
       this.FolderNamingStrategy.Strategies.Insert(0, new FolderNamingStrategyDto() {Name = "Использовать общие настройки"});

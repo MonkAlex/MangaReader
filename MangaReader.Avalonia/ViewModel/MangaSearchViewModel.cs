@@ -55,7 +55,7 @@ namespace MangaReader.Avalonia.ViewModel
       this.uri = manga.Uri;
       this.cover = manga.Cover;
       this.status = manga.Status;
-      this.previewFindedManga = new PreviewFindedMangaCommand(ExplorerViewModel.Instance.Tabs.OfType<SearchViewModel>().Single());
+      this.previewFindedManga = new PreviewFindedMangaCommand();
     }
   }
 }

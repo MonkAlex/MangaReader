@@ -48,6 +48,14 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public List<IFolderNamingStrategy> FolderNamingStrategies { get; }
 
+    public string MainUri
+    {
+      get => mainUri;
+      set => RaiseAndSetIfChanged(ref mainUri, value);
+    }
+
+    private string mainUri;
+
     public List<Compression.CompressionMode> Compressions => Generic.GetEnumValues<Compression.CompressionMode>();
 
     public Compression.CompressionMode Compression
@@ -84,6 +92,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           this.Folder = setting.Folder;
           this.Compression = setting.DefaultCompression;
           this.FolderNamingStrategy = FolderNamingStrategies.FirstOrDefault(s => s.Id == setting.FolderNamingStrategy);
+          this.MainUri = setting.MainUri.OriginalString;
         }
       }
     }
@@ -100,6 +109,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           setting.Folder = this.Folder;
           setting.DefaultCompression = this.Compression;
           setting.FolderNamingStrategy = this.FolderNamingStrategy.Id;
+          if (Uri.TryCreate(this.MainUri, UriKind.Absolute, out Uri parsedUri) && parsedUri != setting.MainUri)
+            setting.MainUri = parsedUri;
           context.Save(setting);
         }
       }

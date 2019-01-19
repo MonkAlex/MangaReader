@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Core.Manga;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
@@ -64,13 +65,15 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     private void AddManga()
     {
-      #warning Отсюда нужен переход к превью.
-      var libraries = ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().ToList();
-      var added = libraries.Any() && libraries.All(l => l.Library.Add(ManualUri));
-      if (added)
+      if (Uri.TryCreate(ManualUri, UriKind.Absolute, out Uri parsedUri))
       {
-        ManualUri = string.Empty;
-        ExplorerViewModel.Instance.SelectedTab = (ExplorerTabViewModel)libraries.FirstOrDefault() ?? this;
+        using (Repository.GetEntityContext("Try to add manga from uri"))
+        {
+          var manga = Mangas.Create(parsedUri);
+          var model = new MangaSearchViewModel(manga);
+          model.Cover = manga.Parser.GetPreviews(manga).FirstOrDefault();
+          model.PreviewFindedManga.Execute(model);
+        }
       }
     }
 

@@ -582,7 +582,7 @@ namespace MangaReader.Core.Manga
       IManga manga = null;
       MangaSetting setting;
 
-      using (var context = Repository.GetEntityContext())
+      using (var context = Repository.GetEntityContext($"Local create manga from {uri}"))
       {
         setting = context.Get<MangaSetting>().ToList().SingleOrDefault(s => s.MainUri.Host == uri.Host);
         if (setting != null)
@@ -616,7 +616,7 @@ namespace MangaReader.Core.Manga
     /// <remarks>Сохранена в базе, если была создана валидная манга.</remarks>
     public static IManga CreateFromWeb(Uri uri)
     {
-      using (var context = Repository.GetEntityContext())
+      using (var context = Repository.GetEntityContext($"Web create manga from {uri}"))
       {
         var manga = Create(uri);
         if (manga != null)

@@ -32,6 +32,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public bool Saved { get { return Id != 0; } }
 
+    public bool IsUndoCompleted { get; private set; }
+
     public string MangaName
     {
       get => name;
@@ -166,6 +168,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       this.DownloadedAt = manga.DownloadedAt;
       this.Cover = manga.Cover;
       this.Description = manga.Description;
+
+      this.IsUndoCompleted = false;
     }
 
     private void SetCompletedIcon(bool isCompleted)
@@ -201,7 +205,10 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         return;
 
       if (this.Save.CanExecute(this))
-        this.Save.Execute(this);
+        using (Repository.GetEntityContext($"Add new manga {this.OriginalName} from {Uri}"))
+        {
+          this.Save.Execute(this);
+        }
     }
 
     private void SetType(IManga manga)
@@ -250,13 +257,15 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     private void UndoChangedImpl()
     {
-      using (var context = Repository.GetEntityContext())
+      if (Saved && !IsUndoCompleted)
       {
-        if (Saved)
+        using (var context = Repository.GetEntityContext($"Undo any changes in memory for manga {OriginalName}"))
         {
           var manga = context.Get<IManga>().First(m => m.Id == Id);
           UpdateProperties(manga);
         }
+
+        IsUndoCompleted = true;
       }
     }
 

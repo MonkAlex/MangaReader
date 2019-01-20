@@ -58,9 +58,12 @@ namespace MangaReader.Avalonia
       get { return state; }
       set
       {
-        state = value;
-        RaisePropertyChanged();
-        OnStateChanged(value);
+        if (!Equals(value, state))
+        {
+          state = value;
+          RaisePropertyChanged();
+          OnStateChanged(value);
+        }
       }
     }
 

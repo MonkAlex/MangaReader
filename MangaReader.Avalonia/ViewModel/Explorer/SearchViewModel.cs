@@ -52,6 +52,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     private async void UpdateManga()
     {
+      Log.Add($"Start search '{Search}'");
       Items.Clear();
       var uniqueUris = new ConcurrentDictionary<Uri, bool>();
       var searches = ConfigStorage.Plugins.Select(p => p.GetParser().Search(Search)).ToList();
@@ -61,13 +62,14 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           global::Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => Items.Add(new MangaSearchViewModel(a)));
       })));
       await Task.WhenAll(tasks.Select(t => t.LogException()));
+      Log.Add($"Completed search '{Search}'");
     }
 
-    private void AddManga()
+    private void ShowPreview()
     {
       if (Uri.TryCreate(ManualUri, UriKind.Absolute, out Uri parsedUri))
       {
-        using (Repository.GetEntityContext("Try to add manga from uri"))
+        using (Repository.GetEntityContext($"Show preview for manga from uri {parsedUri}"))
         {
           var manga = Mangas.Create(parsedUri);
           var model = new MangaSearchViewModel(manga);
@@ -83,7 +85,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       this.Priority = 20;
       this.Items = new ObservableCollection<MangaSearchViewModel>();
       this.StartSearch = new DelegateCommand(UpdateManga, () => !string.IsNullOrWhiteSpace(Search)) {Name = "Search"};
-      this.AddManual = new DelegateCommand(AddManga, () => !string.IsNullOrWhiteSpace(ManualUri)) {Name = "Add"};
+      this.AddManual = new DelegateCommand(ShowPreview, () => !string.IsNullOrWhiteSpace(ManualUri)) {Name = "Add"};
       this.PropertyChanged += (sender, args) =>
       {
         if (args.PropertyName == nameof(Search))

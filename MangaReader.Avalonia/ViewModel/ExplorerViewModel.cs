@@ -43,7 +43,7 @@ namespace MangaReader.Avalonia.ViewModel
     public void SelectDefaultTab()
     {
       var hasManga = false;
-      using (var context = Repository.GetEntityContext())
+      using (var context = Repository.GetEntityContext("Check has any manga to select default tab"))
       {
         hasManga = context.Get<IManga>().Any();
       }

@@ -307,53 +307,55 @@ namespace MangaReader.Core.Manga
 
     public virtual async Task Download(string mangaFolder = null)
     {
-      if (!this.NeedUpdate)
-        return;
-
-      try
+      using (ThrottleService.SetThrottler(new Throttler(15)))
       {
-        this.Refresh();
+        if (!this.NeedUpdate)
+          return;
 
-        if (Cover == null)
-          Cover = Parser.GetPreviews(this).FirstOrDefault();
-
-        if (mangaFolder == null)
-          mangaFolder = this.GetAbsoulteFolderPath();
-
-        this.UpdateContent();
-      }
-      catch (System.Exception ex)
-      {
-        Log.Exception(ex, $"Не удалось получить информацию о манге {Name} ({Uri})");
-      }
-
-      this.ActiveVolumes = this.Volumes;
-      this.ActiveChapters = this.Chapters;
-      this.ActivePages = this.Pages;
-
-      if (this.Setting.OnlyUpdate)
-      {
-        History.FilterActiveElements(this);
-      }
-
-      if (!this.ActiveChapters.Any() && !this.ActiveVolumes.Any() && !this.ActivePages.Any())
-      {
-        using (var context = Repository.GetEntityContext())
-          context.Save(this);
-        return;
-      }
-
-      Log.AddFormat("Download start '{0}'.", this.Name);
-
-      // Формируем путь к главе вида Папка_манги\Том_001\Глава_0001
-      try
-      {
-        using (FolderNamingStrategies.BlockStrategy(this))
-        using (new Timer(state => OnPropertyChanged(nameof(Downloaded)), null, 750, 750))
+        try
         {
-          NetworkSpeed.Clear();
-          var plugin = Plugin;
-          var tasks = this.ActiveVolumes.Select(
+          this.Refresh();
+
+          if (Cover == null)
+            Cover = Parser.GetPreviews(this).FirstOrDefault();
+
+          if (mangaFolder == null)
+            mangaFolder = this.GetAbsoulteFolderPath();
+
+          this.UpdateContent();
+        }
+        catch (System.Exception ex)
+        {
+          Log.Exception(ex, $"Не удалось получить информацию о манге {Name} ({Uri})");
+        }
+
+        this.ActiveVolumes = this.Volumes;
+        this.ActiveChapters = this.Chapters;
+        this.ActivePages = this.Pages;
+
+        if (this.Setting.OnlyUpdate)
+        {
+          History.FilterActiveElements(this);
+        }
+
+        if (!this.ActiveChapters.Any() && !this.ActiveVolumes.Any() && !this.ActivePages.Any())
+        {
+          using (var context = Repository.GetEntityContext())
+            context.Save(this);
+          return;
+        }
+
+        Log.AddFormat("Download start '{0}'.", this.Name);
+
+        // Формируем путь к главе вида Папка_манги\Том_001\Глава_0001
+        try
+        {
+          using (FolderNamingStrategies.BlockStrategy(this))
+          using (new Timer(state => OnPropertyChanged(nameof(Downloaded)), null, 750, 750))
+          {
+            NetworkSpeed.Clear();
+            var plugin = Plugin;
+            var tasks = this.ActiveVolumes.Select(
               v =>
               {
                 v.OnlyUpdate = this.Setting.OnlyUpdate;
@@ -369,52 +371,53 @@ namespace MangaReader.Core.Manga
                     AddToHistory(v.InDownloading.SelectMany(ch => ch.InDownloading).Where(p => p.IsDownloaded).ToArray());
                 });
               });
-          var chTasks = this.ActiveChapters.Select(
-            ch =>
-            {
-              ch.OnlyUpdate = this.Setting.OnlyUpdate;
-              return ch.Download(mangaFolder).ContinueWith(t =>
+            var chTasks = this.ActiveChapters.Select(
+              ch =>
               {
-                if (t.Exception != null)
-                  Log.Exception(t.Exception, ch.Uri?.ToString());
+                ch.OnlyUpdate = this.Setting.OnlyUpdate;
+                return ch.Download(mangaFolder).ContinueWith(t =>
+                {
+                  if (t.Exception != null)
+                    Log.Exception(t.Exception, ch.Uri?.ToString());
 
-                if (ch.IsDownloaded && plugin.HistoryType == HistoryType.Chapter)
-                  AddToHistory(ch);
+                  if (ch.IsDownloaded && plugin.HistoryType == HistoryType.Chapter)
+                    AddToHistory(ch);
 
-                if (plugin.HistoryType == HistoryType.Page)
-                  AddToHistory(ch.InDownloading.Where(c => c.IsDownloaded).ToArray());
+                  if (plugin.HistoryType == HistoryType.Page)
+                    AddToHistory(ch.InDownloading.Where(c => c.IsDownloaded).ToArray());
+                });
               });
-            });
-          var pTasks = this.ActivePages.Select(
-            p =>
-            {
-              return p.Download(mangaFolder).ContinueWith(t =>
+            var pTasks = this.ActivePages.Select(
+              p =>
               {
-                if (t.Exception != null)
-                  Log.Exception(t.Exception, $"Не удалось скачать изображение {p.ImageLink} со страницы {p.Uri}");
-                if (p.IsDownloaded && plugin.HistoryType == HistoryType.Page)
-                  AddToHistory(p);
+                return p.Download(mangaFolder).ContinueWith(t =>
+                {
+                  if (t.Exception != null)
+                    Log.Exception(t.Exception, $"Не удалось скачать изображение {p.ImageLink} со страницы {p.Uri}");
+                  if (p.IsDownloaded && plugin.HistoryType == HistoryType.Page)
+                    AddToHistory(p);
+                });
               });
-            });
-          await Task.WhenAll(tasks.Concat(chTasks).Concat(pTasks).ToArray());
-          this.DownloadedAt = DateTime.Now;
-          OnPropertyChanged(nameof(Downloaded));
+            await Task.WhenAll(tasks.Concat(chTasks).Concat(pTasks).ToArray());
+            this.DownloadedAt = DateTime.Now;
+            OnPropertyChanged(nameof(Downloaded));
+          }
+
+          using (var context = Repository.GetEntityContext())
+            context.Save(this);
+          NetworkSpeed.Clear();
+          Log.AddFormat("Download end '{0}'.", this.Name);
         }
 
-        using (var context = Repository.GetEntityContext())
-          context.Save(this);
-        NetworkSpeed.Clear();
-        Log.AddFormat("Download end '{0}'.", this.Name);
-      }
-
-      catch (AggregateException ae)
-      {
-        foreach (var ex in ae.Flatten().InnerExceptions)
+        catch (AggregateException ae)
+        {
+          foreach (var ex in ae.Flatten().InnerExceptions)
+            Log.Exception(ex);
+        }
+        catch (System.Exception ex)
+        {
           Log.Exception(ex);
-      }
-      catch (System.Exception ex)
-      {
-        Log.Exception(ex);
+        }
       }
     }
 

@@ -1,39 +1,105 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace MangaReader.Core.Services
 {
-  public class ThrottleService : IDisposable
+  public class ThrottleService
   {
-    private static SemaphoreSlim throttler = new SemaphoreSlim(15);
+    private const string ThrottlerName = nameof(IThrottler);
 
-    private bool? released = null;
+    private static readonly IThrottler DefaultThrottler = new Throttler(15);
 
-    public static async Task<IDisposable> WaitAsync()
+    public static Task<IDisposable> WaitAsync()
     {
-      await throttler.WaitAsync();
-      return new ThrottleService();
+      return GetThrottler().WaitAsync();
     }
 
     public static IDisposable Wait()
     {
-      throttler.Wait();
-      return new ThrottleService();
+      return GetThrottler().Wait();
     }
 
-    private ThrottleService()
+    public static IDisposable SetThrottler(IThrottler throttler)
     {
-      released = false;
+      CallContext<IThrottler>.SetData(ThrottlerName, throttler);
+      return new DisposeAction(() => CallContext<IThrottler>.RemoveData(ThrottlerName));
+    }
+
+    private static IThrottler GetThrottler()
+    {
+      return CallContext<IThrottler>.GetData(ThrottlerName) ?? DefaultThrottler;
+    }
+  }
+
+  public interface IThrottler
+  {
+    IDisposable Wait();
+    Task<IDisposable> WaitAsync();
+  }
+
+  public class Throttler : IThrottler
+  {
+    private readonly SemaphoreSlim semaphore;
+
+    public Throttler(int maxRequests)
+    {
+      semaphore = new SemaphoreSlim(maxRequests);
+    }
+
+    public IDisposable Wait()
+    {
+      semaphore.Wait();
+      return new DisposeAction(() =>
+      {
+        semaphore.Release();
+      });
+    }
+
+    public async Task<IDisposable> WaitAsync()
+    {
+      await semaphore.WaitAsync();
+      return new DisposeAction(() =>
+      {
+        semaphore.Release();
+      });
+    }
+
+  }
+
+  internal struct DisposeAction : IDisposable
+  {
+    private Action action;
+    private bool disposed;
+
+    public DisposeAction(Action action)
+    {
+      this.action = action;
+      this.disposed = false;
     }
 
     public void Dispose()
     {
-      if (released == false)
+      if (!disposed)
       {
-        throttler.Release();
-        released = true;
+        this.action();
+        disposed = true;
       }
     }
+  }
+
+  public static class CallContext<T>
+  {
+    static ConcurrentDictionary<string, AsyncLocal<T>> state = new ConcurrentDictionary<string, AsyncLocal<T>>();
+
+    public static void SetData(string name, T data) =>
+      state.AddOrUpdate(name, new AsyncLocal<T>(), (_, __) => new AsyncLocal<T>()).Value = data;
+
+    public static T GetData(string name) =>
+      state.TryGetValue(name, out AsyncLocal<T> data) ? data.Value : default(T);
+
+    public static bool RemoveData(string name) =>
+      state.TryRemove(name, out _);
   }
 }

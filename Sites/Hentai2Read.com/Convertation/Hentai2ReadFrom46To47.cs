@@ -4,9 +4,9 @@ using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services.Config;
 
-namespace Hentaichan.Convertation
+namespace Hentai2Read.com.Convertation
 {
-  public class HentaichanFrom46To47 : ConfigConverter
+  public class Hentai2ReadFrom46To47 : ConfigConverter
   {
     protected override void ProtectedConvert(IProcess process)
     {
@@ -14,19 +14,19 @@ namespace Hentaichan.Convertation
 
       using (var context = Repository.GetEntityContext())
       {
-        var setting = ConfigStorage.GetPlugin<Hentaichan>().GetSettings();
+        var setting = ConfigStorage.GetPlugin<Hentai2Read>().GetSettings();
         if (setting != null)
         {
-          setting.MainUri = new Uri("http://henchan.me");
+          setting.MainUri = new Uri("https://hentai2read.com");
           context.Save(setting);
         }
       }
     }
 
-    public HentaichanFrom46To47()
+    public Hentai2ReadFrom46To47()
     {
       this.Version = new Version(1, 47, 3);
-      this.Name = "Обновляем ссылки на henchan.me...";
+      this.Name = "Обновляем ссылки на hentai2read.com";
     }
   }
 }

@@ -14,6 +14,9 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
         return;
 
       var manga = Mangas.Create(model.Uri);
+      if (manga == null)
+        return;
+
       manga.Cover = model.Cover;
       manga.Refresh();
       if (manga.IsValid())

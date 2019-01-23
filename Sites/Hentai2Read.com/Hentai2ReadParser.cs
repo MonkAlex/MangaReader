@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -15,6 +16,7 @@ using MangaReader.Core.DataTrasferObject;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
+using Newtonsoft.Json.Linq;
 
 namespace Hentai2Read.com
 {
@@ -37,30 +39,37 @@ namespace Hentai2Read.com
           UpdateName(manga, name);
         }
 
-        #warning Нет поддержки статуса и прочего
-        var content = document.GetElementbyId("contentMargin");
+        var content = document.DocumentNode.SelectSingleNode("//ul[@class=\"list list-simple-mini\"]");
         if (content != null)
         {
           var summary = string.Empty;
-          var status = WebUtility.HtmlDecode(content.SelectSingleNode(".//h2").InnerText).ToLowerInvariant().Contains("(закончен)");
-          manga.IsCompleted = status;
-          var nodes = content.SelectNodes(".//div[@class=\"about-summary\"]//p");
-          summary = nodes.Aggregate(summary, (current, node) =>
-            current + Regex.Replace(WebUtility.HtmlDecode(node.InnerText).Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
+          var completed = content.SelectNodes(".//a").Any(n => WebUtility.HtmlDecode(n.InnerText).ToLowerInvariant().Contains("completed"));
+          manga.IsCompleted = completed;
+          var nodes = content.SelectNodes(".//li[@class=\"text-primary\"]");
+          summary = nodes
+            .Where(n => !n.InnerText.Contains("Storyline"))
+            .Aggregate(summary, GetStatusNodeText);
           manga.Status = summary;
 
-          var description = content.SelectSingleNode(".//div[@class=\"about-summary\"]");
+          var description = nodes
+            .FirstOrDefault(n => n.InnerText.Contains("Storyline") && !n.InnerText.Contains("Nothing yet!"));
           if (description != null)
             manga.Description = description.ChildNodes
-              .SkipWhile(n => n.Name != "p")
-              .Skip(1)
-              .TakeWhile(n => n.Name != "p")
-              .Aggregate(string.Empty, (current, node) => 
+              .Aggregate(string.Empty, (current, node) =>
                 current + Regex.Replace(WebUtility.HtmlDecode(node.InnerText).Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine)
               .Trim();
         }
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
+    }
+
+    private static string GetStatusNodeText(string current, HtmlNode node)
+    {
+      current += WebUtility.HtmlDecode(node.ChildNodes.First(n => n.Name == "b").InnerText).Trim();
+      current += "  ";
+      current += string.Join(", ", node.ChildNodes.Where(n => n.Name == "a").Select(n => WebUtility.HtmlDecode(n.InnerText).Trim()));
+      current += Environment.NewLine;
+      return current;
     }
 
     /// <summary>
@@ -75,13 +84,14 @@ namespace Hentai2Read.com
         var document = new HtmlDocument();
         document.LoadHtml(Page.GetPage(manga.Uri).Content);
 
-        var chapterNodes = document.DocumentNode.SelectNodes("//a[@class=\"pull-left font-w600\"]");
+        var chapterNodes = document.DocumentNode.SelectNodes("//a[@class=\"pull-left font-w600\"]").Reverse();
         foreach (var chapterNode in chapterNodes)
         {
           var uri = chapterNode.Attributes.Single(a => a.Name == "href").Value;
-          var text = chapterNode.InnerText;
+          var text = WebUtility.HtmlDecode(chapterNode.FirstChild.InnerText.Trim());
           var number = Regex.Match(text, "^[0-9\\.]+", RegexOptions.Compiled).Value;
-          chapters.Add(new ChapterDto(uri, text){Number = double.Parse(number)});
+          var parsedNumber = double.Parse(number, NumberStyles.Float, CultureInfo.InvariantCulture);
+          chapters.Add(new ChapterDto(uri, text) { Number = parsedNumber });
         }
       }
       catch (NullReferenceException ex) { Log.Exception(ex); }
@@ -89,12 +99,35 @@ namespace Hentai2Read.com
       FillMangaChapters(manga, chapters);
     }
 
+    public override void UpdatePages(Chapter chapter)
+    {
+      chapter.Container.Clear();
+      var pages = new List<MangaPage>();
+      try
+      {
+        var document = new HtmlDocument();
+        var page = Page.GetPage(chapter.Uri);
+        document.LoadHtml(page.Content);
+
+        var imgs = Regex.Match(document.DocumentNode.OuterHtml, @"\'images\'\s*:\s*(\[.+\])", RegexOptions.IgnoreCase).Groups[1].Value;
+        var jsonParsed = JToken.Parse(imgs).Children().ToList();
+        for (var i = 0; i < jsonParsed.Count; i++)
+        {
+          var uriString = jsonParsed[i].ToString();
+          pages.Add(new MangaPage(chapter.Uri, new Uri("https://static.hentaicdn.com/hentai" + uriString), i + 1));
+        }
+      }
+      catch (Exception ex) { Log.Exception(ex); }
+
+      chapter.Container.AddRange(pages);
+    }
+
     public override UriParseResult ParseUri(Uri uri)
     {
       // Manga : https://hentai2read.com/daily_life_with_a_monster_girl/
       // Volume : -
       // Chapter : https://hentai2read.com/daily_life_with_a_monster_girl/60.1/
-      // Page : https://hentai2read.com/daily_life_with_a_monster_girl/60.1/5/
+      // Page : -
 
       var hosts = ConfigStorage.Plugins
         .Where(p => p.GetParser().GetType() == typeof(Hentai2ReadParser))
@@ -108,9 +141,7 @@ namespace Hentai2Read.com
 
         if (uri.Segments.Length > 1)
         {
-          var mangaUri = new Uri(host, uri.Segments[1].TrimEnd('/'));
-          if (uri.Segments.Length == 4)
-            return new UriParseResult(true, UriParseKind.Page, mangaUri);
+          var mangaUri = new Uri(host, uri.Segments[1]);
           if (uri.Segments.Length == 3)
             return new UriParseResult(true, UriParseKind.Chapter, mangaUri);
           if (uri.Segments.Length == 2)
@@ -140,7 +171,7 @@ namespace Hentai2Read.com
     protected override async Task<Tuple<HtmlNodeCollection, Uri>> GetMangaNodes(string name, Uri host, CookieClient client)
     {
       var searchHost = new Uri(host, "hentai-list/search/");
-      var page = await client.UploadValuesTaskAsync(searchHost, new NameValueCollection() 
+      var page = await client.UploadValuesTaskAsync(searchHost, new NameValueCollection()
         { { "cmd_wpm_wgt_mng_sch_sbm", "Search" }, {"txt_wpm_wgt_mng_sch_nme", WebUtility.UrlEncode(name)}});
       if (page == null)
         return null;

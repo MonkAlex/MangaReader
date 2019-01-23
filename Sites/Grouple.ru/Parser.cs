@@ -89,7 +89,7 @@ namespace Grouple
     /// </summary>
     /// <param name="groupleChapter">Глава.</param>
     /// <returns>Список ссылок на изображения главы.</returns>
-    public static void UpdatePages(GroupleChapter groupleChapter)
+    public override void UpdatePages(Chapter groupleChapter)
     {
       groupleChapter.Container.Clear();
       var document = new HtmlDocument();

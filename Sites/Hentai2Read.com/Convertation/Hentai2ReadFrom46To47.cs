@@ -25,7 +25,7 @@ namespace Hentai2Read.com.Convertation
 
     public Hentai2ReadFrom46To47()
     {
-      this.Version = new Version(1, 47, 3);
+      this.Version = new Version(1, 47, 4);
       this.Name = "Обновляем ссылки на hentai2read.com";
     }
   }

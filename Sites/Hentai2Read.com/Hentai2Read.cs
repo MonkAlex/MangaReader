@@ -11,8 +11,6 @@ namespace Hentai2Read.com
   /// </summary>
   public class Hentai2Read : MangaReader.Core.Manga.Mangas
   {
-    #region Свойства
-
     public override List<Compression.CompressionMode> AllowedCompressionModes
     {
       get { return base.AllowedCompressionModes.Where(m => !Equals(m, Compression.CompressionMode.Chapter)).ToList(); }
@@ -24,18 +22,14 @@ namespace Hentai2Read.com
 
     protected override void CreatedFromWeb(Uri url)
     {
+      base.CreatedFromWeb(url);
+
       if (this.Uri != url && Parser.ParseUri(url).Kind != UriParseKind.Manga)
       {
         this.UpdateContent();
 
-#warning Поработать над обработкой уже прочитанных, если грузим по ссылке.
-        //AddHistoryReadedUris(pages, url);
+        AddHistoryReadedUris(this.Chapters, url);
       }
-
-      base.CreatedFromWeb(url);
     }
-
-    #endregion
-
   }
 }

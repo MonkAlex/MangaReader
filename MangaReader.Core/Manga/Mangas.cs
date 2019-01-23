@@ -590,19 +590,21 @@ namespace MangaReader.Core.Manga
           var plugin = ConfigStorage.Plugins.SingleOrDefault(p => Equals(p.GetSettings(), setting));
           if (plugin != null)
           {
-            manga = Activator.CreateInstance(plugin.MangaType) as IManga;
-            if (manga != null)
-              manga.Created = DateTime.Now;
-            if (manga is Mangas mangas)
-              mangas.Setting = setting;
+            var parser = plugin.GetParser();
+            var parseResult = parser.ParseUri(uri);
+            if (parseResult != null && parseResult.CanBeParsed)
+            {
+              manga = Activator.CreateInstance(plugin.MangaType) as IManga;
+              if (manga != null)
+              {
+                manga.Uri = parseResult.MangaUri;
+                manga.Created = DateTime.Now;
+              }
+              if (manga is Mangas mangas)
+                mangas.Setting = setting;
+            }
           }
         }
-      }
-
-      if (manga != null)
-      {
-        var parseResult = manga.Parser.ParseUri(uri);
-        manga.Uri = parseResult.CanBeParsed ? parseResult.MangaUri : uri;
       }
 
       return manga;

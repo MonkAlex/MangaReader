@@ -17,19 +17,6 @@ namespace Grouple
 
     #endregion
 
-    #region Методы
-
-    /// <summary>
-    /// Заполнить хранилище ссылок.
-    /// </summary>
-    protected override void UpdatePages()
-    {
-      Parser.UpdatePages(this);
-      base.UpdatePages();
-    }
-
-    #endregion
-
     #region Конструктор
 
     /// <summary>

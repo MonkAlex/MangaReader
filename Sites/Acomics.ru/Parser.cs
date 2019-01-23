@@ -145,6 +145,11 @@ namespace Acomics
       FillMangaPages(manga, pages);
     }
 
+    public override void UpdatePages(Chapter chapter)
+    {
+      // Acomics do that in UpdateContent
+    }
+
     private static ChapterDto CreateChapterDto(HtmlNode cn)
     {
       var uri = cn.Attributes[0].Value;

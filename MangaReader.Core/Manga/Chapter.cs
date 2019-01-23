@@ -82,6 +82,9 @@ namespace MangaReader.Core.Manga
     /// <remarks>Каждая конкретная глава сама забьет коллекцию this.Container.</remarks>
     protected virtual void UpdatePages()
     {
+      var parser = this.Volume?.Manga?.Parser ?? this.Manga.Parser;
+      parser.UpdatePages(this);
+
       if (this.Container == null)
         throw new ArgumentNullException(nameof(Container));
     }

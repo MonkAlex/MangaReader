@@ -6,12 +6,6 @@ namespace Hentaichan
 {
   public class HentaichanChapter : MangaReader.Core.Manga.Chapter
   {
-    protected override void UpdatePages()
-    {
-      Parser.UpdatePages(this);
-      base.UpdatePages();
-    }
-
     internal static double GetChapterNumber(Uri uri)
     {
       return double.Parse(Regex.Match(uri.OriginalString, @"/*(\d+\.\d+|\d+)", RegexOptions.RightToLeft).Groups[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture);

@@ -239,7 +239,7 @@ namespace Hentaichan
       return result;
     }
 
-    public static void UpdatePages(MangaReader.Core.Manga.Chapter chapter)
+    public override void UpdatePages(MangaReader.Core.Manga.Chapter chapter)
     {
       chapter.Container.Clear();
       var pages = new List<MangaPage>();

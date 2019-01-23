@@ -221,12 +221,16 @@ namespace MangaReader.Core.Services
         DeleteEmptyFolder(subfolder);
       }
 
-      try
+      if (!Directory.EnumerateFileSystemEntries(folder).Any())
       {
-        Directory.Delete(folder);
-      }
-      catch (IOException)
-      {
+        try
+        {
+          Directory.Delete(folder);
+        }
+        catch (IOException ex)
+        {
+          Log.Exception(ex);
+        }
       }
     }
   }

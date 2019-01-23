@@ -29,6 +29,8 @@ namespace MangaReader.Core
 
     public abstract void UpdateContent(IManga manga);
 
+    public abstract void UpdatePages(Chapter chapter);
+
     public abstract UriParseResult ParseUri(Uri uri);
 
     protected static void UpdateName(IManga manga, string newName)

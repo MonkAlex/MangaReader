@@ -90,7 +90,7 @@ namespace MangaReader.Core.Services
       else
         correctName = name.Replace(":", replacement);
 
-      var invalidChars = Regex.Escape(string.Concat(new string(Path.GetInvalidPathChars()), "?", "/", "*"));
+      var invalidChars = Regex.Escape(string.Concat(new string(Path.GetInvalidPathChars()), "?", "/", "*", "\""));
       var invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
 
       return Regex.Replace(correctName, invalidRegStr, replacement);

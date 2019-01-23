@@ -8,12 +8,6 @@ namespace Hentaichan.Mangachan
   {
     public int VolumeNumber { get; }
 
-    protected override void UpdatePages()
-    {
-      Parser.UpdatePages(this);
-      base.UpdatePages();
-    }
-
     public MangachanChapter(Uri uri, string name)
       : base(uri, name)
     {

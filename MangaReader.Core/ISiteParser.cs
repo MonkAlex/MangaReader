@@ -22,7 +22,13 @@ namespace MangaReader.Core
     /// </summary>
     /// <param name="manga"></param>
     void UpdateContent(IManga manga);
-    
+
+    /// <summary>
+    /// Update pages (and other info) in chapter.
+    /// </summary>
+    /// <param name="chapter">Chapter</param>
+    void UpdatePages(Chapter chapter);
+
     /// <summary>
     /// Распарсить ссылку на мангу.
     /// </summary>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using MangaReader.Core.Account;
@@ -14,11 +15,11 @@ namespace Hentai2Read.com
 {
   public class Hentai2ReadLogin : Login
   {
-    public virtual string PasswordHash { get; set; }
-
     public override Uri MainUri { get; set; }
-    public override Uri LogoutUri { get { return new Uri(this.MainUri, "auth/logout"); } }
-    public override Uri BookmarksUri { get { return new Uri(this.MainUri, "settings/subscribes"); } }
+    public override Uri LogoutUri { get { return new Uri(this.MainUri, "logout"); } }
+    public override Uri BookmarksUri { get { return new Uri(this.MainUri, "bookmark"); } }
+
+    internal string LogoutNonce { get; set; }
 
     public override async Task<bool> DoLogin()
     {
@@ -27,20 +28,23 @@ namespace Hentai2Read.com
 
       var loginData = new NameValueCollection
             {
-                {"submit", "login"},
-                {"username", this.Name},
-                {"password", this.Password},
-                {"check", "1"}
+              {"action", "login" },
+              {"log", this.Name },
+              {"pwd", this.Password },
+              {"rememberme", "forever" },
+              {"wp-submit", "" },
+              {"instance", "" },
+              {"redirect_to", BookmarksUri.OriginalString },
             };
 
       try
       {
-        await GetClient().UploadValuesTaskAsync(new Uri(this.MainUri + "action/authLogin"), "POST", loginData);
-        this.PasswordHash = ClientCookie.GetCookies(this.MainUri)
-            .Cast<Cookie>()
-            .Single(c => c.Name == "hash")
-            .Value;
-        this.IsLogined = true;
+        var loginResult = await GetClient().UploadValuesTaskAsync(new Uri(this.MainUri + "login"), "POST", loginData);
+        LogoutNonce = Regex.Match(System.Text.Encoding.UTF8.GetString(loginResult), "logout\\/\\?_wpnonce=([a-z0-9]+)&", RegexOptions.Compiled).Groups[1].Value;
+        var hasLoginCookie = ClientCookie.GetCookies(this.MainUri)
+          .Cast<Cookie>()
+          .Any(c => c.Name.StartsWith("wordpress_logged_in"));
+        this.IsLogined = hasLoginCookie;
       }
       catch (System.Exception ex)
       {
@@ -48,6 +52,14 @@ namespace Hentai2Read.com
         this.IsLogined = false;
       }
       return IsLogined;
+    }
+
+    public override async Task<bool> Logout()
+    {
+      // https://hentai2read.com/logout/?_wpnonce=368febb749
+      IsLogined = false;
+      await Page.GetPageAsync(new Uri(LogoutUri.OriginalString + $"/?_wpnonce={LogoutNonce}"), GetClient());
+      return true;
     }
 
     protected override async Task<List<IManga>> DownloadBookmarks()
@@ -63,20 +75,18 @@ namespace Hentai2Read.com
       var page = await Page.GetPageAsync(BookmarksUri, GetClient());
       document.LoadHtml(page.Content);
 
-      var nodes = document.DocumentNode.SelectNodes("//table[@class=\"decor\"]//a");
-
+      var nodes = document.DocumentNode.SelectNodes("//div[@class=\"col-xs-6 col-sm-4 col-md-3 col-lg-2b col-xl-2\"]");
+      
       if (nodes == null)
       {
         Log.AddFormat("Bookmarks from '{0}' not found.", this.MainUri);
         return bookmarks;
       }
 
+      var parser = new Hentai2ReadParser();
       foreach (var node in nodes)
       {
-        var name = WebUtility.HtmlDecode(node.ChildNodes.Single().InnerText);
-        var url = node.Attributes.Single().Value;
-        var manga = Mangas.Create(new Uri(this.MainUri, url));
-        manga.Name = name;
+        var manga = await parser.GetMangaFromBookmarks(MainUri, null, node);
         bookmarks.Add(manga);
       }
 

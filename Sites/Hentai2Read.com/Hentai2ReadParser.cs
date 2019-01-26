@@ -184,6 +184,11 @@ namespace Hentai2Read.com
       });
     }
 
+    public Task<IManga> GetMangaFromBookmarks(Uri host, CookieClient client, HtmlNode mangaNode)
+    {
+      return GetMangaFromNode(host, client, mangaNode);
+    }
+
     protected override async Task<IManga> GetMangaFromNode(Uri host, CookieClient client, HtmlNode manga)
     {
       var image = manga.SelectSingleNode(".//img");
@@ -195,7 +200,7 @@ namespace Hentai2Read.com
 
       var result = Mangas.Create(new Uri(host, mangaUri));
       result.Name = WebUtility.HtmlDecode(mangaName);
-      if (!string.IsNullOrWhiteSpace(imageUri))
+      if (!string.IsNullOrWhiteSpace(imageUri) && client != null)
         result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri));
       return result;
     }

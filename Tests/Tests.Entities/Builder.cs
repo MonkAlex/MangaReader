@@ -1,6 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
+using MangaReader.Core.Services;
+using Newtonsoft.Json;
 
 namespace Tests.Entities
 {
@@ -9,6 +15,7 @@ namespace Tests.Entities
     public static readonly Uri Url = new Uri("http://example.com");
     public static readonly Uri ReadmangaUri = new Uri("http://readmanga.me/adele");
     public static readonly Uri AcomicsUri = new Uri("https://acomics.ru/~doodle-time");
+    private static List<MangaInfo> _mangaInfos;
 
     /// <summary>
     /// Создать мангу.
@@ -83,6 +90,42 @@ namespace Tests.Entities
         manga.ClearHistory();
         context.Save(manga);
       }
+    }
+
+    public static async Task<MangaInfo> Generate(InfoCacheAttribute cacheAttribute)
+    {
+      var info = new MangaInfo();
+      info.Uri = cacheAttribute.Uri;
+
+      var manga = Mangas.CreateFromWeb(new Uri(cacheAttribute.Uri));
+      if (cacheAttribute.Downloadable)
+      {
+        await manga.Download();
+
+        var files = Directory.GetFiles(manga.GetAbsoulteFolderPath(), "*", SearchOption.AllDirectories);
+        var fileInfos = files.Select(f => new FileInfo(f)).ToList();
+        info.FilesInFolder = fileInfos.Count;
+        info.FolderSize = fileInfos.Sum(f => f.Length);
+
+        info.AllFilesUnique = 1 == fileInfos.GroupBy(f => f.Length).Max(g => g.Count());
+      }
+
+      info.Status = manga.Status;
+      info.Description = manga.Description;
+
+      return info;
+    }
+
+    public static MangaInfo LoadFromCache(InfoCacheAttribute cacheAttribute)
+    {
+      if (File.Exists(Environment.MangaCache))
+      {
+        if (_mangaInfos == null)
+          _mangaInfos = JsonConvert.DeserializeObject<List<MangaInfo>>(File.ReadAllText(Environment.MangaCache));
+        return _mangaInfos.FirstOrDefault(m => m.Uri == cacheAttribute.Uri);
+      }
+
+      return default(MangaInfo);
     }
   }
 }

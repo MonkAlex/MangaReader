@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using NUnit.Framework;
+using Tests.Entities;
 
 namespace Tests
 {
@@ -51,7 +54,9 @@ namespace Tests
       }
     }
 
-    private static readonly string TestsDirectory = SearchTestDirectory();
+    internal static readonly string TestsDirectory = SearchTestDirectory();
+
+    internal static readonly string MangaCache = Path.Combine(Environment.TestsDirectory, nameof(Tests) + "." + nameof(Entities), "Cache.json");
 
     public static void DeployToLib(string from)
     {

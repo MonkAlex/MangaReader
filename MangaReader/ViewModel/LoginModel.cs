@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MangaReader.Core.Account;
 using MangaReader.Core.Manga;
+using MangaReader.Core.NHibernate;
 using MangaReader.ViewModel.Commands.AddManga;
 using MangaReader.ViewModel.Primitive;
 
@@ -87,8 +89,14 @@ namespace MangaReader.ViewModel
     {
       if (this.login != null)
       {
-        this.login.Name = this.Login;
-        this.login.Password = this.Password;
+        using (var context = Repository.GetEntityContext($"Save settings for {LoginId}"))
+        {
+          var actualLogin = context.Get<ILogin>().Single(s => s.Id == LoginId);
+          actualLogin.Name = this.Login;
+          actualLogin.Password = this.Password;
+          context.Save(actualLogin);
+          this.login = actualLogin;
+        }
       }
     }
   }

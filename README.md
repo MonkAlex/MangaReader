@@ -13,8 +13,13 @@
  3. [Hentaichan](http://henchan.me/)
  4. [Acomics](https://acomics.ru)
  5. [Mangachan](http://mangachan.me/)
+ 6. [Hentai2Read](https://hentai2read.com//)
 
 Больше информации по поддержке сайтов - в [справке][Wiki].
+
+***
+
+![WPF](../../raw/master/Docs/WPF.png) ![Avalonia](../../raw/master/Docs/Avalonia.png)
 
 ***
 

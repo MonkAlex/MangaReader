@@ -51,9 +51,10 @@ namespace MangaReader.Core.Services
 
     public static void StartUseShell(string uri)
     {
+      Log.Add($"Try to start '{uri}'");
       if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
       {
-        Process.Start("xdg-open", uri);
+        Process.Start("xdg-open", $"\"{uri}\"");
       }
       else
       {

@@ -19,7 +19,9 @@
 
 ***
 
-![WPF](../../raw/master/Docs/WPF.png) ![Avalonia](../../raw/master/Docs/Avalonia.png)
+| WPF (Windows) | Avalonia (Cross-platform) |
+|---|---|
+|![WPF](../../raw/master/Docs/WPF.png)|![Avalonia](../../raw/master/Docs/Avalonia.png)|
 
 ***
 

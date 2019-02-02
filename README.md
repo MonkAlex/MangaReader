@@ -27,7 +27,11 @@
 
 Всё добро под лицензией [MIT][License]
 
-Отдельное спасибо JetBrains за Open Source лицензию <a href="https://www.jetbrains.com/?from=MangaReader" target="_blank"><img src="https://raw.githubusercontent.com/JetBrains/logos/master/web/jetbrains/jetbrains.svg?sanitize=true"/></a>
+Отдельное спасибо:
+
+ - JetBrains за Open Source лицензию <a href="https://www.jetbrains.com/?from=MangaReader" target="_blank"><img src="https://raw.githubusercontent.com/JetBrains/logos/master/web/jetbrains/jetbrains.svg?sanitize=true" height="100"/></a>
+
+ - MacStadium за Open Source доступ к MacMini <a href="https://www.macstadium.com/opensource" target="_blank"><img src="https://uploads-ssl.webflow.com/5ac3c046c82724970fc60918/5c019d917bba312af7553b49_MacStadium-developerlogo.png" height="100"/></a>
 
 ***
 

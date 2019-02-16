@@ -16,12 +16,6 @@ namespace MangaReader.Core.Services
       return new ThrottleService();
     }
 
-    public static IDisposable Wait()
-    {
-      throttler.Wait();
-      return new ThrottleService();
-    }
-
     private ThrottleService()
     {
       released = false;

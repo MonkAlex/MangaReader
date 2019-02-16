@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.NHibernate;
@@ -10,10 +11,8 @@ namespace Hentaichan.Convertation
 {
   public class HentaichanFrom38To39 : ConfigConverter
   {
-    protected override void ProtectedConvert(IProcess process)
+    protected override Task ProtectedConvert(IProcess process)
     {
-      base.ProtectedConvert(process);
-
       using (var context = Repository.GetEntityContext())
       {
         var setting = ConfigStorage.GetPlugin<Hentaichan>().GetSettings();
@@ -23,6 +22,8 @@ namespace Hentaichan.Convertation
           context.Save(setting);
         }
       }
+
+      return Task.CompletedTask;
     }
 
     public HentaichanFrom38To39()

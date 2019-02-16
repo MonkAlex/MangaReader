@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core;
 using MangaReader.Core.Services;
 
@@ -25,11 +26,11 @@ namespace Acomics
       }
     }
 
-    protected override void CreatedFromWeb(Uri url)
+    protected override async Task CreatedFromWeb(Uri url)
     {
       if (this.Uri != url && Parser.ParseUri(url).Kind != UriParseKind.Manga)
       {
-        this.UpdateContent();
+        await this.UpdateContent();
 
         var pages = this.Volumes.SelectMany(v => v.Container).SelectMany(c => c.Container)
           .Union(this.Chapters.SelectMany(c => c.Container))
@@ -38,7 +39,7 @@ namespace Acomics
         AddHistoryReadedUris(pages, url);
       }
 
-      base.CreatedFromWeb(url);
+      await base.CreatedFromWeb(url);
     }
 
     #endregion

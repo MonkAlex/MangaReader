@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using MangaReader.Core;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Properties;
@@ -52,9 +53,9 @@ namespace Grouple
     /// <summary>
     /// Обновить информацию о манге - название, главы, обложка.
     /// </summary>
-    public override void Refresh()
+    public override async Task Refresh()
     {
-      var page = Page.GetPage(this.Uri);
+      var page = await Page.GetPageAsync(this.Uri);
       if (!page.HasContent)
         return;
 
@@ -62,36 +63,36 @@ namespace Grouple
       if (page.ResponseUri != this.Uri)
       {
         this.Uri = page.ResponseUri;
-        this.Refresh();
+        await this.Refresh();
         return;
       }
 
       // Если на странице редирект - выполняем его и получаем новую ссылку на мангу.
       if (page.Content.ToLowerInvariant().Contains(Grouple.Parser.CookieKey))
       {
-        var newUri = Grouple.Parser.GetRedirectUri(page);
+        var newUri = await Grouple.Parser.GetRedirectUri(page);
         if (!this.Uri.Equals(newUri))
         {
           this.Uri = newUri;
-          this.Refresh();
+          await this.Refresh();
           return;
         }
       }
 
-      base.Refresh();
+      await base.Refresh();
     }
 
-    protected override void CreatedFromWeb(Uri url)
+    protected override async Task CreatedFromWeb(Uri url)
     {
       if (this.Uri != url && Parser.ParseUri(url).Kind != UriParseKind.Manga)
       {
-        this.UpdateContent();
+        await this.UpdateContent();
 
         var chapters = this.Volumes.SelectMany(v => v.Container);
         AddHistoryReadedUris(chapters, url);
       }
 
-      base.CreatedFromWeb(url);
+      await base.CreatedFromWeb(url);
     }
 
     #endregion

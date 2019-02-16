@@ -39,13 +39,12 @@ namespace MangaReader.Core
       };
     }
 
-    public static void Start(IProcess process)
+    public static async Task Start(IProcess process)
     {
       try
       {
-        if (!Updater.Initialize().Wait(1500))
-          Log.Add($"Updater ignored by timeout.");
-
+        await Updater.Initialize();
+        
         ConfigStorage.RefreshPlugins();
         NHibernate.Mapping.Initialize(process);
         DatabaseConfig.Initialize();
@@ -74,7 +73,7 @@ namespace MangaReader.Core
           ApplicationControl.Server.Run(name);
         });
 
-        Converter.Convert(process);
+        await Converter.Convert(process);
       }
       catch (System.Exception ex)
       {

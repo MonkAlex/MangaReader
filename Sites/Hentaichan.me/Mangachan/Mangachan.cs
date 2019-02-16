@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using MangaReader.Core;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
@@ -27,11 +28,11 @@ namespace Hentaichan.Mangachan
       }
     }
 
-    public override void Refresh()
+    public override async Task Refresh()
     {
       if (Parser.ParseUri(Uri).Kind != UriParseKind.Manga)
       {
-        var page = Page.GetPage(Uri);
+        var page = await Page.GetPageAsync(Uri);
         if (page.HasContent)
         {
           var match = Regex.Match(page.Content, "content_id\":\"(.*?)\"", RegexOptions.IgnoreCase);
@@ -42,16 +43,16 @@ namespace Hentaichan.Mangachan
         }
       }
 
-      base.Refresh();
+      await base.Refresh();
     }
 
-    protected override void CreatedFromWeb(Uri url)
+    protected override async Task CreatedFromWeb(Uri url)
     {
-      base.CreatedFromWeb(url);
+      await base.CreatedFromWeb(url);
 
       if (this.Uri != url && Parser.ParseUri(url).Kind != UriParseKind.Manga)
       {
-        this.UpdateContent();
+        await this.UpdateContent();
         
         var chapters = this.Volumes.SelectMany(v => v.Container);
         AddHistoryReadedUris(chapters, url);

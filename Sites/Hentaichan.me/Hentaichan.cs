@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
@@ -30,14 +31,14 @@ namespace Hentaichan
       }
     }
 
-    protected override void CreatedFromWeb(Uri url)
+    protected override async Task CreatedFromWeb(Uri url)
     {
-      this.UpdateContent();
+      await this.UpdateContent();
       AddHistoryReadedUris(this.Chapters, new Uri(url.OriginalString
         .Replace("/related/", "/online/")
         .Replace("/manga/", "/online/")));
 
-      base.CreatedFromWeb(url);
+      await base.CreatedFromWeb(url);
     }
   }
 }

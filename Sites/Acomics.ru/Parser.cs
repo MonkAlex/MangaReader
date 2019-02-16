@@ -34,12 +34,12 @@ namespace Acomics
     /// Обновить название и статус манги.
     /// </summary>
     /// <param name="manga">Манга.</param>
-    public override void UpdateNameAndStatus(IManga manga)
+    public override async Task UpdateNameAndStatus(IManga manga)
     {
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/about"), this.GetAdultClient()).Content);
+        document.LoadHtml((await Page.GetPageAsync(new Uri(manga.Uri.OriginalString + @"/about"), this.GetAdultClient())).Content);
         var nameNode = document.DocumentNode.SelectSingleNode("//head//meta[@property=\"og:title\"]");
         if (nameNode != null && nameNode.Attributes.Any(a => Equals(a.Name, "content")))
         {
@@ -64,7 +64,7 @@ namespace Acomics
               .SkipWhile(n => n.Name != "p")
               .Skip(1)
               .TakeWhile(n => n.Name != "p")
-              .Aggregate(string.Empty, (current, node) => 
+              .Aggregate(string.Empty, (current, node) =>
                 current + Regex.Replace(WebUtility.HtmlDecode(node.InnerText).Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine)
               .Trim();
         }
@@ -72,12 +72,12 @@ namespace Acomics
       catch (NullReferenceException ex) { Log.Exception(ex); }
     }
 
-    public override void UpdateContentType(IManga manga)
+    public override async Task UpdateContentType(IManga manga)
     {
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), this.GetAdultClient()).Content);
+        document.LoadHtml((await Page.GetPageAsync(new Uri(manga.Uri.OriginalString + @"/content"), this.GetAdultClient())).Content);
         manga.HasVolumes = document.DocumentNode.SelectNodes(VolumeXPath) != null;
         manga.HasChapters = document.DocumentNode.SelectNodes(ChapterXPath) != null;
       }
@@ -88,7 +88,7 @@ namespace Acomics
     /// Получить содержание манги - тома и главы.
     /// </summary>
     /// <param name="manga">Манга.</param>
-    public override void UpdateContent(IManga manga)
+    public override async Task UpdateContent(IManga manga)
     {
       var volumes = new List<VolumeDto>();
       var chapters = new List<ChapterDto>();
@@ -96,7 +96,7 @@ namespace Acomics
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/content"), this.GetAdultClient()).Content);
+        document.LoadHtml((await Page.GetPageAsync(new Uri(manga.Uri.OriginalString + @"/content"), this.GetAdultClient())).Content);
 
         var volumeNodes = document.DocumentNode.SelectNodes(VolumeXPath);
         if (volumeNodes != null)
@@ -125,7 +125,7 @@ namespace Acomics
             chapters.AddRange(nodes.Select(CreateChapterDto));
         }
 
-        var allPages = GetMangaPages(manga.Uri);
+        var allPages = await GetMangaPages(manga.Uri);
         var innerChapters = chapters.Count == 0 ? volumes.SelectMany(v => v.Container).ToList() : chapters;
         for (int i = 0; i < innerChapters.Count; i++)
         {
@@ -145,9 +145,10 @@ namespace Acomics
       FillMangaPages(manga, pages);
     }
 
-    public override void UpdatePages(Chapter chapter)
+    public override Task UpdatePages(Chapter chapter)
     {
       // Acomics do that in UpdateContent
+      return Task.CompletedTask;
     }
 
     private static ChapterDto CreateChapterDto(HtmlNode cn)
@@ -195,14 +196,14 @@ namespace Acomics
       return new UriParseResult(false, UriParseKind.Manga, null);
     }
 
-    public override IEnumerable<byte[]> GetPreviews(IManga manga)
+    public override async Task<IEnumerable<byte[]>> GetPreviews(IManga manga)
     {
       byte[] result = null;
       try
       {
         var document = new HtmlDocument();
         var client = this.GetAdultClient();
-        document.LoadHtml(Page.GetPage(new Uri(manga.Uri.OriginalString + @"/banner"), client).Content);
+        document.LoadHtml((await Page.GetPageAsync(new Uri(manga.Uri.OriginalString + @"/banner"), client)).Content);
         var banners = document.DocumentNode.SelectSingleNode("//div[@class='serial-content']");
         var image = banners.ChildNodes.SkipWhile(n => n.InnerText != "160x90").Skip(1).FirstOrDefault();
         var src = image.ChildNodes[0].Attributes.Single(a => a.Name == "src").Value;
@@ -214,7 +215,7 @@ namespace Acomics
         result = client.DownloadData(link);
       }
       catch (Exception ex) { Log.Exception(ex); }
-      yield return result;
+      return new[] { result };
     }
 
     protected override async Task<Tuple<HtmlNodeCollection, Uri>> GetMangaNodes(string name, Uri host, CookieClient client)
@@ -253,7 +254,7 @@ namespace Acomics
     /// </summary>
     /// <param name="uri">Ссылка на мангу.</param>
     /// <returns>Словарь (ссылка, описание).</returns>
-    private List<MangaPageDto> GetMangaPages(Uri uri)
+    private async Task<List<MangaPageDto>> GetMangaPages(Uri uri)
     {
       var links = new List<Uri>();
       var description = new List<string>();
@@ -262,13 +263,13 @@ namespace Acomics
       {
         var adultClient = this.GetAdultClient();
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(uri, adultClient).Content);
+        document.LoadHtml((await Page.GetPageAsync(uri, adultClient)).Content);
         var last = document.DocumentNode.SelectSingleNode("//nav[@class='serial']//a[@class='read2']").Attributes[1].Value;
         var count = int.Parse(last.Remove(0, last.LastIndexOf('/') + 1));
         var list = uri.GetLeftPart(UriPartial.Authority) + document.DocumentNode.SelectSingleNode("//nav[@class='serial']//a[@class='read3']").Attributes[1].Value;
         for (var i = 0; i < count; i = i + 5)
         {
-          document.LoadHtml(Page.GetPage(new Uri(list + "?skip=" + i), adultClient).Content);
+          document.LoadHtml((await Page.GetPageAsync(new Uri(list + "?skip=" + i), adultClient)).Content);
           foreach (var node in document.DocumentNode.SelectNodes("//div[@class=\"issue\"]//a"))
           {
             links.Add(new Uri(node.Attributes[0].Value));

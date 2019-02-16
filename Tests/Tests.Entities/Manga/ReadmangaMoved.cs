@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
@@ -12,7 +13,7 @@ namespace Tests.Entities.Manga
   public class ReadmangaMoved : TestClass
   {
     [Test]
-    public void CreateWithHistoryAndMove()
+    public async Task CreateWithHistoryAndMove()
     {
       var model = new MangaReader.Core.Services.LibraryViewModel();
       using (var context = Repository.GetEntityContext())
@@ -27,7 +28,7 @@ namespace Tests.Entities.Manga
         context.Save(manga);
 
         manga = context.Get<Grouple.Readmanga>().FirstOrDefault(m => m.Id == manga.Id);
-        manga.Refresh();
+        await manga.Refresh();
         
         // Если сайт больше не редиректит, осталась возможность редиректа вручную в клиенте.
         if (manga.Uri == readmangaUri)

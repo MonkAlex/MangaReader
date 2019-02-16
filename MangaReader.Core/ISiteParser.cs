@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 
 namespace MangaReader.Core
@@ -9,25 +10,25 @@ namespace MangaReader.Core
     /// Обновить имя и статус манги.
     /// </summary>
     /// <param name="manga">Манга.</param>
-    void UpdateNameAndStatus(IManga manga);
+    Task UpdateNameAndStatus(IManga manga);
     
     /// <summary>
     /// Обновить служебную информацию - например признак наличия глав и томов в манге.
     /// </summary>
     /// <param name="manga">Манга.</param>
-    void UpdateContentType(IManga manga);
+    Task UpdateContentType(IManga manga);
     
     /// <summary>
     /// Обновить служебную информацию - особенно ту, что нужна для скачивания манги, главы, тома, прочее.
     /// </summary>
     /// <param name="manga"></param>
-    void UpdateContent(IManga manga);
+    Task UpdateContent(IManga manga);
 
     /// <summary>
     /// Update pages (and other info) in chapter.
     /// </summary>
     /// <param name="chapter">Chapter</param>
-    void UpdatePages(Chapter chapter);
+    Task UpdatePages(Chapter chapter);
 
     /// <summary>
     /// Распарсить ссылку на мангу.
@@ -41,7 +42,7 @@ namespace MangaReader.Core
     /// </summary>
     /// <param name="manga">Манга.</param>
     /// <returns>Превью для манги. Может быть пустым или содержать несколько вариантов превью.</returns>
-    IEnumerable<byte[]> GetPreviews(IManga manga);
+    Task<IEnumerable<byte[]>> GetPreviews(IManga manga);
 
     /// <summary>
     /// Искать мангу на сайте.

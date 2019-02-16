@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Threading.Tasks;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Avalonia.ViewModel.Command
 {
   public class DelegateCommand : BaseCommand
   {
-    protected Action execute;
+    protected Func<Task> taskExecute;
+    protected Action actionExecute;
     protected Func<bool> canExecute;
     
     public override bool CanExecute(object parameter)
@@ -12,21 +15,32 @@ namespace MangaReader.Avalonia.ViewModel.Command
       return base.CanExecute(parameter) && canExecute.Invoke();
     }
 
-    public override void Execute(object parameter)
+    public override async void Execute(object parameter)
     {
       base.Execute(parameter);
-      
-      execute.Invoke();
+
+      try
+      {
+        if (taskExecute != null)
+          await taskExecute.Invoke();
+        else
+          actionExecute.Invoke();
+      }
+      catch (Exception e)
+      {
+        Log.Exception(e);
+      }
     }
 
-    public DelegateCommand(Action execute) : this(execute, () => true)
+    public DelegateCommand(Action execute)
     {
-      
+      this.actionExecute = execute;
+      this.canExecute = () => true;
     }
 
-    public DelegateCommand(Action execute, Func<bool> canExecute)
+    public DelegateCommand(Func<Task> execute, Func<bool> canExecute)
     {
-      this.execute = execute;
+      this.taskExecute = execute;
       this.canExecute = canExecute;
     }
   }

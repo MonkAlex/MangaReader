@@ -20,16 +20,17 @@ namespace MangaReader.Core
   {
     protected static ConcurrentDictionary<Type, IMapper> Mappers = new ConcurrentDictionary<Type, IMapper>();
 
-    public abstract void UpdateNameAndStatus(IManga manga);
+    public abstract Task UpdateNameAndStatus(IManga manga);
 
-    public virtual void UpdateContentType(IManga manga)
+    public virtual Task UpdateContentType(IManga manga)
     {
-      // Content type cannot be changed.
+      // Content type can be not changed.
+      return Task.CompletedTask;
     }
 
-    public abstract void UpdateContent(IManga manga);
+    public abstract Task UpdateContent(IManga manga);
 
-    public abstract void UpdatePages(Chapter chapter);
+    public abstract Task UpdatePages(Chapter chapter);
 
     public abstract UriParseResult ParseUri(Uri uri);
 
@@ -105,7 +106,7 @@ namespace MangaReader.Core
       }
     }
 
-    public abstract IEnumerable<byte[]> GetPreviews(IManga manga);
+    public abstract Task<IEnumerable<byte[]>> GetPreviews(IManga manga);
 
     public virtual IAsyncEnumerable<IManga> Search(string name)
     {

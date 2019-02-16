@@ -41,9 +41,9 @@ namespace Hentaichan.Mangachan
       return client;
     }
 
-    public override void UpdateNameAndStatus(IManga manga)
+    public override async Task UpdateNameAndStatus(IManga manga)
     {
-      var page = Page.GetPage(manga.Uri);
+      var page = await Page.GetPageAsync(manga.Uri);
       var localizedName = new MangaName();
       try
       {
@@ -90,13 +90,13 @@ namespace Hentaichan.Mangachan
       manga.Description = description;
     }
 
-    public override void UpdateContent(IManga manga)
+    public override async Task UpdateContent(IManga manga)
     {
       var chapters = new List<MangachanChapter>();
       try
       {
         var document = new HtmlDocument();
-        var content = Page.GetPage(manga.Uri, GetClient()).Content;
+        var content = (await Page.GetPageAsync(manga.Uri, GetClient())).Content;
         document.LoadHtml(content);
 
         var chapterNodes = document.DocumentNode.SelectNodes("//table[@class=\"table_cha\"]//a");
@@ -158,7 +158,7 @@ namespace Hentaichan.Mangachan
       return new UriParseResult(false, UriParseKind.Manga, null);
     }
 
-    public override IEnumerable<byte[]> GetPreviews(IManga manga)
+    public override Task<IEnumerable<byte[]>> GetPreviews(IManga manga)
     {
       return GetPreviewsImpl(manga);
     }
@@ -194,14 +194,14 @@ namespace Hentaichan.Mangachan
       return result;
     }
 
-    internal static IEnumerable<byte[]> GetPreviewsImpl(IManga manga)
+    internal static async Task<IEnumerable<byte[]>> GetPreviewsImpl(IManga manga)
     {
       var links = new List<Uri>();
       var client = GetClient();
       try
       {
         var document = new HtmlDocument();
-        var content = Page.GetPage(manga.Uri, client).Content;
+        var content = (await Page.GetPageAsync(manga.Uri, client)).Content;
         document.LoadHtml(content);
 
         var chapterNodes = document.DocumentNode.SelectNodes("//img[@id='cover']");
@@ -223,6 +223,8 @@ namespace Hentaichan.Mangachan
       {
         Log.Exception(ex, $"Возможно, требуется регистрация для доступа к {manga.Uri}");
       }
+
+      var images = new List<byte[]>();
       foreach (var link in links)
       {
         byte[] image = null;
@@ -235,18 +237,20 @@ namespace Hentaichan.Mangachan
           Log.Exception(e);
         }
         if (image != null)
-          yield return image;
+          images.Add(image);
       }
+
+      return images;
     }
 
-    public override void UpdatePages(MangaReader.Core.Manga.Chapter chapter)
+    public override async Task UpdatePages(MangaReader.Core.Manga.Chapter chapter)
     {
       chapter.Container.Clear();
       var pages = new List<MangaPage>();
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(chapter.Uri, GetClient()).Content);
+        document.LoadHtml((await Page.GetPageAsync(chapter.Uri, GetClient())).Content);
 
         var i = 0;
         var imgs = Regex.Match(document.DocumentNode.OuterHtml, @"""(fullimg.*)", RegexOptions.IgnoreCase).Groups[1].Value.Remove(0, 9);

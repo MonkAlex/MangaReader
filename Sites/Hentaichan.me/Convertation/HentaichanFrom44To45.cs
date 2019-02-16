@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.NHibernate;
@@ -14,10 +15,8 @@ namespace Hentaichan.Convertation
       return base.ProtectedCanConvert(process) && this.CanConvertVersion(process);
     }
 
-    protected override void ProtectedConvert(IProcess process)
+    protected override Task ProtectedConvert(IProcess process)
     {
-      base.ProtectedConvert(process);
-
       using (var context = Repository.GetEntityContext())
       {
         var mangas = context.Get<Hentaichan>().ToList();
@@ -28,6 +27,8 @@ namespace Hentaichan.Convertation
         }
         mangas.SaveAll(context);
       }
+
+      return Task.CompletedTask;
     }
 
     public HentaichanFrom44To45()

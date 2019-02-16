@@ -19,7 +19,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       return base.CanExecute(parameter) || !model.Saved;
     }
 
-    public override void Execute(object parameter)
+    public override async void Execute(object parameter)
     {
       base.Execute(parameter);
 
@@ -54,10 +54,11 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
           {
             foreach (var viewModel in ExplorerViewModel.Instance.Tabs.OfType<Explorer.LibraryViewModel>())
             {
-              if (viewModel.Library.Add(new Uri(model.Uri), out IManga manga))
+              var added = await viewModel.Library.Add(new Uri(model.Uri));
+              if (added.Success)
               {
-                manga.Cover = model.Cover;
-                context.Save(manga);
+                added.Manga.Cover = model.Cover;
+                context.Save(added.Manga);
               }
             }
           }

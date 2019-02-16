@@ -36,12 +36,12 @@ namespace Grouple
     /// </summary>
     /// <param name="page">Содержимое страницы по ссылке.</param>
     /// <returns>Новая ссылка.</returns>
-    public static Uri GetRedirectUri(Page page)
+    public static Task<Uri> GetRedirectUri(Page page)
     {
       return GetRedirectUriInternal(page, 0);
     }
 
-    private static Uri GetRedirectUriInternal(Page page, int restartCount)
+    private static async Task<Uri> GetRedirectUriInternal(Page page, int restartCount)
     {
       var fullUri = page.ResponseUri.OriginalString;
 
@@ -75,10 +75,10 @@ namespace Grouple
         if (restartCount > 3)
           return null;
 
-        if (!Page.DelayOnExpectationFailed(ex))
+        if (!(await Page.DelayOnExpectationFailed(ex)))
           throw;
 
-        return GetRedirectUriInternal(page, restartCount);
+        return await GetRedirectUriInternal(page, restartCount);
       }
 
       return client?.ResponseUri;
@@ -89,11 +89,11 @@ namespace Grouple
     /// </summary>
     /// <param name="groupleChapter">Глава.</param>
     /// <returns>Список ссылок на изображения главы.</returns>
-    public override void UpdatePages(Chapter groupleChapter)
+    public override async Task UpdatePages(Chapter groupleChapter)
     {
       groupleChapter.Container.Clear();
       var document = new HtmlDocument();
-      document.LoadHtml(Page.GetPage(groupleChapter.Uri).Content);
+      document.LoadHtml((await Page.GetPageAsync(groupleChapter.Uri)).Content);
       var node = document.DocumentNode.SelectNodes("//div[@class=\"pageBlock container reader-bottom\"]").FirstOrDefault();
       if (node == null)
         return;
@@ -117,9 +117,9 @@ namespace Grouple
       }
     }
 
-    public override void UpdateNameAndStatus(IManga manga)
+    public override async Task UpdateNameAndStatus(IManga manga)
     {
-      var page = Page.GetPage(manga.Uri);
+      var page = await Page.GetPageAsync(manga.Uri);
       var localizedName = new MangaName();
       try
       {
@@ -165,12 +165,12 @@ namespace Grouple
       manga.Description = description;
     }
 
-    public override void UpdateContent(IManga manga)
+    public override async Task UpdateContent(IManga manga)
     {
       var dic = new Dictionary<Uri, string>();
       var links = new List<Uri> { };
       var description = new List<string> { };
-      var page = Page.GetPage(manga.Uri);
+      var page = await Page.GetPageAsync(manga.Uri);
       var hasCopyrightNotice = false;
       try
       {
@@ -252,7 +252,7 @@ namespace Grouple
       return new UriParseResult(false, UriParseKind.Manga, null);
     }
 
-    public override IEnumerable<byte[]> GetPreviews(IManga manga)
+    public override Task<IEnumerable<byte[]>> GetPreviews(IManga manga)
     {
       return GetPreviewsImpl(manga);
     }
@@ -295,12 +295,13 @@ namespace Grouple
       return result;
     }
 
-    private IEnumerable<byte[]> GetPreviewsImpl(IManga manga)
+    private async Task<IEnumerable<byte[]>> GetPreviewsImpl(IManga manga)
     {
       var document = new HtmlDocument();
       var client = new CookieClient();
-      document.LoadHtml(Page.GetPage(manga.Uri, client).Content);
+      document.LoadHtml((await Page.GetPageAsync(manga.Uri, client)).Content);
       var banners = document.DocumentNode.SelectSingleNode("//div[@class='picture-fotorama']");
+      var images = new List<byte[]>();
       foreach (var node in banners.ChildNodes)
       {
         Uri link = null;
@@ -330,8 +331,10 @@ namespace Grouple
           Log.Exception(e);
         }
         if (image != null)
-          yield return image;
+          images.Add(image);
       }
+
+      return images;
     }
 
     public override IMapper GetMapper()

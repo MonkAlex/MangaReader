@@ -1,14 +1,13 @@
 ﻿using System;
+using System.Threading.Tasks;
 using MangaReader.Core.Convertation.Primitives;
 
 namespace MangaReader.Core.Convertation.Config
 {
   public class From29To30 : ConfigConverter
   {
-    protected override void ProtectedConvert(IProcess process)
+    protected override Task ProtectedConvert(IProcess process)
     {
-      base.ProtectedConvert(process);
-
       RunSql(@"update Login 
           set Type = 'f526cd85-7846-4f32-85a7-c57e3983dfb1'
           where Id = (select Login_id from MangaSetting where MangaName = 'Acomics')");
@@ -20,6 +19,8 @@ namespace MangaReader.Core.Convertation.Config
       RunSql(@"update Login
           set Type = '0bbe71b1-16e0-44f4-b7c6-3450e44e9a15'
           where Id = (select Login_id from MangaSetting where MangaName = 'Readmanga')");
+
+      return Task.CompletedTask;
     }
 
     public From29To30()

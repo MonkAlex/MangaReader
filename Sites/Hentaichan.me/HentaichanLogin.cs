@@ -61,17 +61,15 @@ namespace Hentaichan
                              .OfType<Group>()
                              .Select(g => g.Captures[0])
                              .OfType<Match>()
-                             .Select(m => new Uri(m.Groups[1].Value)))
-          .Select(u =>
-          {
-            var manga = Mangas.Create(u);
-            parser.UpdateNameAndStatus(manga);
-            return manga;
-          })
-          .Where(m => !string.IsNullOrWhiteSpace(m.Name))
-          .ToList();
+                             .Select(m => new Uri(m.Groups[1].Value)));
 
-        bookmarks.AddRange(mangas);
+        await Task.WhenAll(mangas.Select(async m =>
+          {
+            var manga = Mangas.Create(m);
+            await parser.UpdateNameAndStatus(manga);
+            if (!string.IsNullOrWhiteSpace(manga.Name))
+              bookmarks.Add(manga);
+          }));
       }
 
       return bookmarks;

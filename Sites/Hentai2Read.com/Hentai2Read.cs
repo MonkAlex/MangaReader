@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core;
 using MangaReader.Core.Services;
 
@@ -20,13 +21,13 @@ namespace Hentai2Read.com
 
     public override bool HasChapters { get { return true; } }
 
-    protected override void CreatedFromWeb(Uri url)
+    protected override async Task CreatedFromWeb(Uri url)
     {
-      base.CreatedFromWeb(url);
+      await base.CreatedFromWeb(url);
 
       if (this.Uri != url && Parser.ParseUri(url).Kind != UriParseKind.Manga)
       {
-        this.UpdateContent();
+        await this.UpdateContent();
 
         AddHistoryReadedUris(this.Chapters, url);
       }

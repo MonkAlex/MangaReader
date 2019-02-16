@@ -15,57 +15,14 @@ namespace MangaReader.Core.Services
 
     public Uri ResponseUri { get; set; }
 
-    /// <summary>
-    /// Получить текст страницы.
-    /// </summary>
-    /// <param name="url">Ссылка на страницу.</param>
-    /// <param name="client">Клиент, если нужен специфичный.</param>
-    /// <param name="restartCounter">Попыток скачивания.</param>
-    /// <returns>Исходный код страницы.</returns>
-    public static Page GetPage(Uri url, CookieClient client = null, int restartCounter = 0)
-    {
-      try
-      {
-        if (restartCounter > 3)
-          throw new DownloadAttemptFailed(restartCounter, url);
-
-        using (ThrottleService.Wait())
-        {
-          var webClient = client ?? new CookieClient();
-          var content = webClient.DownloadString(url);
-          return new Page(content, webClient.ResponseUri);
-        }
-      }
-      catch (UriFormatException ex)
-      {
-        Log.Exception(ex, $"Некорректная ссылка: {url}");
-        return new Page(url);
-      }
-      catch (WebException ex)
-      {
-        Log.Exception(ex, $"{Strings.Page_GetPage_SiteOff}, ссылка: {url}, попытка номер - {restartCounter}");
-
-        // Some HResult can be fix repeated.
-        if (ex.Status != WebExceptionStatus.Timeout && !DelayOnExpectationFailed(ex) && ex.HResult != -2146893023 && ex.HResult != 2147012721)
-          return new Page(url);
-        ++restartCounter;
-        return GetPage(url, client, restartCounter);
-      }
-      catch (System.Exception ex)
-      {
-        Log.Exception(ex, $"Не удалось получить страницу: {url}");
-        return new Page(url);
-      }
-    }
-
-    public static bool DelayOnExpectationFailed(WebException ex)
+    public static async Task<bool> DelayOnExpectationFailed(WebException ex)
     {
       var response = ex.Response as HttpWebResponse;
       if (response != null && (response.StatusCode == HttpStatusCode.ExpectationFailed || response.StatusCode == (HttpStatusCode)429))
       {
         Log.Exception(ex, $"Доступ к {response.ResponseUri} будет повторно проверен через 4 минуты.");
         var delay = new TimeSpan(0, 4, 0);
-        Task.Delay(delay).Wait();
+        await Task.Delay(delay);
         return true;
       }
       return false;
@@ -100,7 +57,7 @@ namespace MangaReader.Core.Services
       catch (WebException ex)
       {
         Log.Exception(ex, $"{Strings.Page_GetPage_SiteOff}, ссылка: {url}, попытка номер - {restartCounter}");
-        if (ex.Status != WebExceptionStatus.Timeout)
+        if (ex.Status != WebExceptionStatus.Timeout && !(await DelayOnExpectationFailed(ex)) && ex.HResult != -2146893023 && ex.HResult != 2147012721)
           return new Page(url);
         ++restartCounter;
         return await GetPageAsync(url, client, restartCounter).ConfigureAwait(false);

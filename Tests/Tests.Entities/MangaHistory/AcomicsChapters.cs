@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
@@ -10,7 +11,7 @@ namespace Tests.Entities.MangaHistory
   public class AcomicsChapters : TestClass
   {
     [Test]
-    public void CreateWithHistoryAndGetLastVolume()
+    public async Task CreateWithHistoryAndGetLastVolume()
     {
       using (var context = Repository.GetEntityContext())
       {
@@ -22,7 +23,7 @@ namespace Tests.Entities.MangaHistory
         manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(chapterUri));
         context.Save(manga);
 
-        manga.Refresh();
+        await manga.Refresh();
         manga.Name = Guid.NewGuid().ToString();
         context.Save(manga);
 
@@ -37,7 +38,7 @@ namespace Tests.Entities.MangaHistory
     }
 
     [Test]
-    public void CreateWithHistoryAndGetNotLastVolume()
+    public async Task CreateWithHistoryAndGetNotLastVolume()
     {
       using (var context = Repository.GetEntityContext())
       {
@@ -49,7 +50,7 @@ namespace Tests.Entities.MangaHistory
         manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(chapterUri));
         context.Save(manga);
 
-        manga.Refresh();
+        await manga.Refresh();
         manga.Name = Guid.NewGuid().ToString();
         context.Save(manga);
 

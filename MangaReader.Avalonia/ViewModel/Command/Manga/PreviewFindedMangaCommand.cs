@@ -7,7 +7,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
   public class PreviewFindedMangaCommand : BaseCommand
   {
-    public override void Execute(object parameter)
+    public override async void Execute(object parameter)
     {
       var model = parameter as MangaSearchViewModel;
       if (model == null)
@@ -18,7 +18,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
         return;
 
       manga.Cover = model.Cover;
-      manga.Refresh();
+      await manga.Refresh();
       if (manga.IsValid())
       {
         var explorer = ExplorerViewModel.Instance;

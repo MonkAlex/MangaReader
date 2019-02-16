@@ -91,12 +91,12 @@ namespace MangaReader.Avalonia.View
       }
 
       public bool IsCompleted { get; set; }
-      public void Refresh()
+      public Task Refresh()
       {
         throw new NotImplementedException();
       }
 
-      public void UpdateContent()
+      public Task UpdateContent()
       {
         throw new NotImplementedException();
       }

@@ -71,6 +71,27 @@ namespace MangaReader.Core.Services
     /// <summary>
     /// Выполнить тяжелое действие изменения библиотеки в отдельном потоке.
     /// </summary>
+    /// <param name="func">Выполняемое действие.</param>
+    /// <remarks>Только одно действие за раз. Доступность выполнения можно проверить в IsAvaible.</remarks>
+    public async Task ThreadAction(Func<Task> func)
+    {
+      if (!IsAvaible)
+        throw new MangaReaderException("Library not avaible.");
+
+      try
+      {
+        IsAvaible = false;
+        await Task.Run(func);
+      }
+      finally
+      {
+        IsAvaible = true;
+      }
+    }
+
+    /// <summary>
+    /// Выполнить тяжелое действие изменения библиотеки в отдельном потоке.
+    /// </summary>
     /// <param name="action">Выполняемое действие.</param>
     /// <remarks>Только одно действие за раз. Доступность выполнения можно проверить в IsAvaible.</remarks>
     public async Task ThreadAction(Action action)
@@ -95,10 +116,14 @@ namespace MangaReader.Core.Services
     /// Добавить мангу.
     /// </summary>
     /// <param name="url"></param>
-    public bool Add(string url)
+    public async Task<bool> Add(string url)
     {
-      if (Uri.TryCreate(url, UriKind.Absolute, out Uri uri) && Add(uri))
-        return true;
+      if (Uri.TryCreate(url, UriKind.Absolute, out Uri uri))
+      {
+        var added = await Add(uri);
+        if (added.Success)
+          return true;
+      }
 
       Log.Info("Некорректная ссылка.");
       return false;
@@ -108,40 +133,28 @@ namespace MangaReader.Core.Services
     /// Добавить мангу.
     /// </summary>
     /// <param name="uri">Ссылка на мангу.</param>
-    public bool Add(Uri uri)
-    {
-      return Add(uri, out _);
-    }
-
-    /// <summary>
-    /// Добавить мангу.
-    /// </summary>
-    /// <param name="uri">Ссылка на мангу.</param>
-    /// <param name="manga">Манга, может быть null.</param>
-    public bool Add(Uri uri, out IManga manga)
+    public async Task<(bool Success, IManga Manga)> Add(Uri uri)
     {
       using (var context = Repository.GetEntityContext())
       {
-        manga = context.Get<IManga>().FirstOrDefault(m => m.Uri == uri);
+        var manga = context.Get<IManga>().FirstOrDefault(m => m.Uri == uri);
         if (manga != null)
         {
           Log.Info("Манга уже добавлена.");
-          return false;
+          return (false, manga);
         }
       }
 
-      var newManga = Mangas.CreateFromWeb(uri);
+      var newManga = await Mangas.CreateFromWeb(uri);
       if (newManga == null || !newManga.IsValid())
       {
         Log.Info("Не удалось найти мангу.");
-        manga = null;
-        return false;
+        return (false, null);
       }
 
       OnLibraryChanged(new LibraryViewModelArgs(null, newManga, MangaOperation.Added, LibraryOperation.UpdateMangaChanged));
       Log.Info(Strings.Library_Status_MangaAdded + newManga.Name);
-      manga = newManga;
-      return true;
+      return (true, newManga);
     }
 
     /// <summary>
@@ -187,49 +200,46 @@ namespace MangaReader.Core.Services
     /// Обновить мангу.
     /// </summary>
     /// <param name="manga">Обновляемая манга.</param>
-    public void Update(int manga)
+    public Task Update(int manga)
     {
-      Update(new List<int> { manga });
+      return Update(new List<int> { manga });
     }
 
     /// <summary>
     /// Обновить мангу.
     /// </summary>
-    public void Update()
+    public Task Update()
     {
-      Update((List<int>)null);
+      return Update((List<int>)null);
     }
 
     /// <summary>
     /// Обновить мангу.
     /// </summary>
     /// <param name="orderBy">Сортировка.</param>
-    public void Update(Func<IQueryable<IManga>, IOrderedQueryable<IManga>> orderBy)
+    public Task Update(Func<IQueryable<IManga>, IOrderedQueryable<IManga>> orderBy)
     {
-      Update(null, orderBy);
+      return Update(null, orderBy);
     }
 
     /// <summary>
     /// Обновить мангу.
     /// </summary>
     /// <param name="mangas">Обновляемая манга.</param>
-    public void Update(List<int> mangas)
+    public Task Update(List<int> mangas)
     {
       var saved = ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription;
       switch (saved.PropertyName)
       {
         case nameof(IManga.Created):
           Expression<Func<IManga, DateTime?>> createdSelector = m => m.Created;
-          Update(mangas, c => saved.Direction == ListSortDirection.Ascending ? c.OrderBy(createdSelector) : c.OrderByDescending(createdSelector));
-          break;
+          return Update(mangas, c => saved.Direction == ListSortDirection.Ascending ? c.OrderBy(createdSelector) : c.OrderByDescending(createdSelector));
         case nameof(IManga.DownloadedAt):
           Expression<Func<IManga, DateTime?>> downloadSelector = m => m.DownloadedAt;
-          Update(mangas, c => saved.Direction == ListSortDirection.Ascending ? c.OrderBy(downloadSelector) : c.OrderByDescending(downloadSelector));
-          break;
+          return Update(mangas, c => saved.Direction == ListSortDirection.Ascending ? c.OrderBy(downloadSelector) : c.OrderByDescending(downloadSelector));
         default:
           Expression<Func<IManga, string>> nameSelector = m => m.Name;
-          Update(mangas, c => saved.Direction == ListSortDirection.Ascending ? c.OrderBy(nameSelector) : c.OrderByDescending(nameSelector));
-          break;
+          return Update(mangas, c => saved.Direction == ListSortDirection.Ascending ? c.OrderBy(nameSelector) : c.OrderByDescending(nameSelector));
       }
     }
 
@@ -238,7 +248,7 @@ namespace MangaReader.Core.Services
     /// </summary>
     /// <param name="mangas">Обновляемая манга.</param>
     /// <param name="orderBy">Сортировка.</param>
-    public void Update(List<int> mangas, Func<IQueryable<IManga>, IOrderedQueryable<IManga>> orderBy)
+    public async Task Update(List<int> mangas, Func<IQueryable<IManga>, IOrderedQueryable<IManga>> orderBy)
     {
       OnLibraryChanged(new LibraryViewModelArgs(null, null, MangaOperation.None, LibraryOperation.UpdateStarted));
       Log.Info(Strings.Library_Status_Update);
@@ -280,7 +290,7 @@ namespace MangaReader.Core.Services
         LibraryChanged += OnMangaAddedWhenLibraryUpdating;
         for (var i = 0; i < materialized.Count; i++)
         {
-          DownloadManager.CheckPause().Wait();
+          await DownloadManager.CheckPause();
 
           using (var context = Repository.GetEntityContext($"Download updates for manga with id {materialized[i]}"))
           {
@@ -289,7 +299,7 @@ namespace MangaReader.Core.Services
             OnLibraryChanged(new LibraryViewModelArgs(null, current, MangaOperation.UpdateStarted, LibraryOperation.UpdateMangaChanged));
             current.PropertyChanged += CurrentOnDownloadChanged;
             UpdateDownloadPercent(current);
-            current.Download().Wait();
+            await current.Download();
             current.PropertyChanged -= CurrentOnDownloadChanged;
             if (current.NeedCompress ?? current.Setting.CompressManga)
               current.Compress();

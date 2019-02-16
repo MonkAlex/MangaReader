@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using NUnit.Framework;
@@ -12,13 +13,13 @@ namespace Tests.Entities.Library
     protected LibraryViewModel model = new MangaReader.Core.Services.LibraryViewModel();
 
     [Test]
-    public void AddInvalidUrl()
+    public async Task AddInvalidUrl()
     {
       var error = false;
       var result = false;
       try
       {
-        result = model.Add(@"http://example.com/");
+        result = await model.Add(@"http://example.com/");
       }
       catch (Exception)
       {
@@ -29,7 +30,7 @@ namespace Tests.Entities.Library
     }
 
     [Test]
-    public void AddValidUrl()
+    public async Task AddValidUrl()
     {
       var error = false;
       var result = false;
@@ -47,7 +48,7 @@ namespace Tests.Entities.Library
 
       try
       {
-        result = model.Add(uri);
+        result = (await model.Add(uri)).Success;
       }
       catch (Exception)
       {
@@ -57,7 +58,7 @@ namespace Tests.Entities.Library
       Assert.IsTrue(result);
 
       // Проверка повторного добавления.
-      result = model.Add(uri);
+      result = (await model.Add(uri)).Success;
       Assert.IsFalse(result);
     }
   }

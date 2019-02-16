@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.NHibernate;
@@ -14,17 +15,15 @@ namespace Acomics.Convertation
       return base.ProtectedCanConvert(process) && this.CanConvertVersion(process);
     }
 
-    protected override void ProtectedConvert(IProcess process)
+    protected override async Task ProtectedConvert(IProcess process)
     {
-      base.ProtectedConvert(process);
-
       var parser = new Parser();
       using (var context = Repository.GetEntityContext())
       {
         var acomics = context.Get<Acomics>().ToList();
         foreach (var acomic in acomics)
         {
-          parser.UpdateContentType(acomic);
+          await parser.UpdateContentType(acomic);
           process.Percent += 100.0 / acomics.Count;
         }
         acomics.SaveAll(context);

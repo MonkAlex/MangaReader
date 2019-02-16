@@ -1,14 +1,13 @@
 ﻿using System;
+using System.Threading.Tasks;
 using MangaReader.Core.Convertation.Primitives;
 
 namespace MangaReader.Core.Convertation.Config
 {
   public class From27To28 : ConfigConverter
   {
-    protected override void ProtectedConvert(IProcess process)
+    protected override Task ProtectedConvert(IProcess process)
     {
-      base.ProtectedConvert(process);
-
       RunSql(@"update MangaSetting 
           set DefaultCompression = 'Volume'
           where MangaName = 'Readmanga'");
@@ -16,6 +15,8 @@ namespace MangaReader.Core.Convertation.Config
       RunSql(@"update MangaSetting
           set DefaultCompression = 'Manga'
           where MangaName = 'Acomics'");
+
+      return Task.CompletedTask;
     }
 
     public From27To28()

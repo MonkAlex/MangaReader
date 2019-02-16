@@ -52,7 +52,7 @@ namespace Tests
       var sw = new Stopwatch();
       using (Repository.GetEntityContext($"Test to download {mangaInfo.Uri}"))
       {
-        manga = Mangas.CreateFromWeb(new Uri(mangaInfo.Uri));
+        manga = await Mangas.CreateFromWeb(new Uri(mangaInfo.Uri));
         sw.Start();
         DirectoryHelpers.DeleteDirectory(manga.GetAbsoulteFolderPath());
         await manga.Download();
@@ -72,7 +72,7 @@ namespace Tests
     }
 
     [Test, TestCaseSource(nameof(MangaToValidateStatusAndDescription))]
-    public void ValidateStatusAndDescription(MangaInfo mangaInfo)
+    public async Task ValidateStatusAndDescription(MangaInfo mangaInfo)
     {
       IManga manga;
       using (var context = Repository.GetEntityContext("Description"))
@@ -81,7 +81,7 @@ namespace Tests
         var existsManga = context.Get<IManga>().FirstOrDefault(m => m.Uri == mangaUri);
         if (existsManga != null)
           context.Delete(existsManga);
-        manga = Mangas.CreateFromWeb(mangaUri);
+        manga = await Mangas.CreateFromWeb(mangaUri);
       }
 
       Assert.AreEqual(mangaInfo.Description, manga.Description);

@@ -281,7 +281,7 @@ namespace MangaReader.Core.Manga
     /// Обновить содержимое манги.
     /// </summary>
     /// <remarks>Каждая конкретная манга сама забьет коллекцию Volumes\Chapters\Pages.</remarks>
-    public virtual void UpdateContent()
+    public virtual async Task UpdateContent()
     {
       if (this.Pages == null)
         throw new ArgumentNullException("Pages");
@@ -292,7 +292,7 @@ namespace MangaReader.Core.Manga
       if (this.Volumes == null)
         throw new ArgumentNullException("Volumes");
 
-      Parser.UpdateContent(this);
+      await Parser.UpdateContent(this);
     }
 
     protected void AddToHistory(params IDownloadable[] downloadables)
@@ -312,15 +312,15 @@ namespace MangaReader.Core.Manga
 
       try
       {
-        this.Refresh();
+        await this.Refresh();
 
         if (Cover == null)
-          Cover = Parser.GetPreviews(this).FirstOrDefault();
+          Cover = (await Parser.GetPreviews(this)).FirstOrDefault();
 
         if (mangaFolder == null)
           mangaFolder = this.GetAbsoulteFolderPath();
 
-        this.UpdateContent();
+        await this.UpdateContent();
       }
       catch (System.Exception ex)
       {
@@ -449,10 +449,10 @@ namespace MangaReader.Core.Manga
     /// <summary>
     /// Обновить информацию о манге - название, главы, обложка.
     /// </summary>
-    public virtual void Refresh()
+    public virtual async Task Refresh()
     {
-      Parser.UpdateNameAndStatus(this);
-      Parser.UpdateContentType(this);
+      await Parser.UpdateNameAndStatus(this);
+      await Parser.UpdateContentType(this);
       OnPropertyChanged(nameof(IsCompleted));
     }
 
@@ -616,7 +616,7 @@ namespace MangaReader.Core.Manga
     /// <param name="uri">Ссылка на мангу.</param>
     /// <returns>Манга.</returns>
     /// <remarks>Сохранена в базе, если была создана валидная манга.</remarks>
-    public static IManga CreateFromWeb(Uri uri)
+    public static async Task<IManga> CreateFromWeb(Uri uri)
     {
       using (var context = Repository.GetEntityContext($"Web create manga from {uri}"))
       {
@@ -625,7 +625,7 @@ namespace MangaReader.Core.Manga
         {
           // Только для местной реализации - вызвать CreatedFromWeb\Refresh.
           if (manga is Mangas mangas)
-            mangas.CreatedFromWeb(uri);
+            await mangas.CreatedFromWeb(uri);
 
           if (manga.IsValid())
             context.Save(manga);
@@ -635,9 +635,9 @@ namespace MangaReader.Core.Manga
       }
     }
 
-    protected virtual void CreatedFromWeb(Uri url)
+    protected virtual async Task CreatedFromWeb(Uri url)
     {
-      this.Refresh();
+      await this.Refresh();
     }
 
     protected void AddHistoryReadedUris<T>(T source, Uri url) where T : IEnumerable<IDownloadable>

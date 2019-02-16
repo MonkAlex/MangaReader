@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
@@ -20,12 +21,12 @@ namespace MangaReader.Core.Convertation.Primitives
       return ProtectedCanConvert(process);
     }
 
-    public void Convert(IProcess process)
+    public async Task Convert(IProcess process)
     {
       if (this.CanConvert(process))
       {
         Log.AddFormat("Converter '{0}{1}' started", this.Name, this.Version);
-        this.ProtectedConvert(process);
+        await this.ProtectedConvert(process);
         Log.AddFormat("Converter '{0}{1}' completed", this.Name, this.Version);
       }
     }
@@ -35,10 +36,7 @@ namespace MangaReader.Core.Convertation.Primitives
       return true;
     }
 
-    protected virtual void ProtectedConvert(IProcess process)
-    {
-
-    }
+    protected abstract Task ProtectedConvert(IProcess process);
 
     protected bool CanConvertVersion(IProcess process)
     {

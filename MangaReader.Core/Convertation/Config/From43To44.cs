@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
@@ -9,10 +10,8 @@ namespace MangaReader.Core.Convertation.Config
 {
   public class From43To44 : ConfigConverter
   {
-    protected override void ProtectedConvert(IProcess process)
+    protected override Task ProtectedConvert(IProcess process)
     {
-      base.ProtectedConvert(process);
-
       var settings = NHibernate.Repository.GetStateless<MangaSetting>();
       foreach (var setting in settings)
       {
@@ -26,6 +25,8 @@ namespace MangaReader.Core.Convertation.Config
           config.FolderNamingStrategy = Generic.GetNamingStrategyId<LegacyFolderNaming>();
         context.Save(config);
       }
+
+      return Task.CompletedTask;
     }
 
     public From43To44()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
@@ -11,13 +12,13 @@ namespace MangaReader.Core.Convertation
 
   public static class Converter
   {
-    public static void Convert(IProcess process)
+    public static async Task Convert(IProcess process)
     {
       process.State = ConvertState.Started;
 
       Log.Add("Convert started.");
 
-      Convert<ConfigConverter>(process);
+      await Convert<ConfigConverter>(process);
 
       var mangaSettings = NHibernate.Repository.GetStateless<MangaSetting>();
       Log.AddFormat("Found {0} manga type settings:", mangaSettings.Count);
@@ -25,7 +26,7 @@ namespace MangaReader.Core.Convertation
 
       var converters = new List<BaseConverter>(Generic
         .GetAllTypes<BaseConverter>().Where(t => !typeof(ConfigConverter).IsAssignableFrom(t)).Select(Activator.CreateInstance).OfType<BaseConverter>());
-      ConvertImpl(process, converters);
+      await ConvertImpl(process, converters);
 
       Log.Add("Convert completed.");
 
@@ -42,13 +43,13 @@ namespace MangaReader.Core.Convertation
       }
     }
 
-    private static void Convert<T>(IProcess process) where T : BaseConverter
+    private static async Task Convert<T>(IProcess process) where T : BaseConverter
     {
       var converters = new List<T>(Generic.GetAllTypes<T>().Select(Activator.CreateInstance).OfType<T>());
-      ConvertImpl(process, converters);
+      await ConvertImpl(process, converters);
     }
 
-    private static void ConvertImpl<T>(IProcess process, List<T> converters) where T : BaseConverter
+    private static async Task ConvertImpl<T>(IProcess process, List<T> converters) where T : BaseConverter
     {
       converters = converters.OrderBy(c => c.Version).ToList();
       foreach (var converter in converters)
@@ -56,7 +57,7 @@ namespace MangaReader.Core.Convertation
         process.Status = converter.Name;
         process.Percent = 0;
         process.ProgressState = converter.CanReportProcess ? ProgressState.Normal : ProgressState.Indeterminate;
-        converter.Convert(process);
+        await converter.Convert(process);
       }
 
       process.ProgressState = ProgressState.Indeterminate;

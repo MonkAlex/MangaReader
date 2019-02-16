@@ -51,9 +51,9 @@ namespace Hentaichan
       return client;
     }
 
-    public override void UpdateNameAndStatus(IManga manga)
+    public override async Task UpdateNameAndStatus(IManga manga)
     {
-      var page = Page.GetPage(manga.Uri);
+      var page = await Page.GetPageAsync(manga.Uri);
       var name = string.Empty;
       try
       {
@@ -106,13 +106,13 @@ namespace Hentaichan
       manga.Description = description;
     }
 
-    public override void UpdateContent(IManga manga)
+    public override async Task UpdateContent(IManga manga)
     {
       var chapters = new List<ChapterDto>();
       try
       {
         var document = new HtmlDocument();
-        var page = GetPageWithRedirect(manga.Uri);
+        var page = await GetPageWithRedirect(manga.Uri);
         var content = page.Item1.Content;
         var uri = page.Item2;
         if (content.Contains(AdultOnly))
@@ -154,17 +154,17 @@ namespace Hentaichan
       FillMangaChapters(manga, chapters);
     }
 
-    private static Tuple<Page, Uri> GetPageWithRedirect(Uri uri)
+    private static async Task<Tuple<Page, Uri>> GetPageWithRedirect(Uri uri)
     {
       uri = new Uri(uri.OriginalString.Replace(@"/manga/", @"/online/"));
-      var page = Page.GetPage(uri, GetClient());
+      var page = await Page.GetPageAsync(uri, GetClient());
       if (page.ResponseUri != uri)
       {
         var url = page.ResponseUri.OriginalString;
         if (!url.EndsWith(IsDevelopment))
           url += IsDevelopment;
         uri = new Uri(url);
-        page = Page.GetPage(uri, GetClient());
+        page = await Page.GetPageAsync(uri, GetClient());
       }
 
       return new Tuple<Page, Uri>(page, uri);
@@ -199,7 +199,7 @@ namespace Hentaichan
       return new UriParseResult(false, UriParseKind.Manga, null);
     }
 
-    public override IEnumerable<byte[]> GetPreviews(IManga manga)
+    public override Task<IEnumerable<byte[]>> GetPreviews(IManga manga)
     {
       return Mangachan.Parser.GetPreviewsImpl(manga);
     }
@@ -239,14 +239,14 @@ namespace Hentaichan
       return result;
     }
 
-    public override void UpdatePages(MangaReader.Core.Manga.Chapter chapter)
+    public override async Task UpdatePages(MangaReader.Core.Manga.Chapter chapter)
     {
       chapter.Container.Clear();
       var pages = new List<MangaPage>();
       try
       {
         var document = new HtmlDocument();
-        var page = GetPageWithRedirect(chapter.Uri);
+        var page = await GetPageWithRedirect(chapter.Uri);
         document.LoadHtml(page.Item1.Content);
 
         var imgs = Regex.Match(document.DocumentNode.OuterHtml, @"""(fullimg.*)", RegexOptions.IgnoreCase).Groups[1].Value.Remove(0, 9);

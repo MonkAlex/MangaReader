@@ -12,10 +12,8 @@ namespace Hentaichan.Convertation
 {
   public class MangachanFrom39To40 : ConfigConverter
   {
-    protected override void ProtectedConvert(IProcess process)
+    protected override Task ProtectedConvert(IProcess process)
     {
-      base.ProtectedConvert(process);
-
       using (var context = Repository.GetEntityContext())
       {
         var setting = ConfigStorage.GetPlugin<Mangachan.Mangachan>().GetSettings();
@@ -25,6 +23,8 @@ namespace Hentaichan.Convertation
           context.Save(setting);
         }
       }
+
+      return Task.CompletedTask;
     }
 
     public MangachanFrom39To40()

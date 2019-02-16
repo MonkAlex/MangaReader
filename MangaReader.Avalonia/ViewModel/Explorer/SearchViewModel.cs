@@ -50,7 +50,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       set { RaiseAndSetIfChanged(ref addManual, value); }
     }
 
-    private async void UpdateManga()
+    private async Task UpdateManga()
     {
       Log.Add($"Start search '{Search}'");
       Items.Clear();
@@ -65,7 +65,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       Log.Add($"Completed search '{Search}'");
     }
 
-    private void ShowPreview()
+    private async Task ShowPreview()
     {
       if (Uri.TryCreate(ManualUri, UriKind.Absolute, out Uri parsedUri))
       {
@@ -76,7 +76,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
             return;
 
           var model = new MangaSearchViewModel(manga);
-          model.Cover = manga.Parser.GetPreviews(manga).FirstOrDefault();
+          model.Cover = (await manga.Parser.GetPreviews(manga)).FirstOrDefault();
           model.PreviewFindedManga.Execute(model);
         }
       }

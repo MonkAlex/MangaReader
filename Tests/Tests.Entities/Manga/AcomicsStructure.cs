@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using NUnit.Framework;
 
@@ -9,17 +10,17 @@ namespace Tests.Entities.Manga
   public class AcomicsStructure : TestClass
   {
     [Test]
-    public void AddAcomicsOnlyPages()
+    public async Task AddAcomicsOnlyPages()
     {
-      var manga = GetManga("https://acomics.ru/~supersciencefriends");
+      var manga = await GetManga("https://acomics.ru/~supersciencefriends");
       Assert.AreEqual(44, manga.Pages.Count);
       Assert.IsTrue(manga.OnlyPages);
     }
 
     [Test]
-    public void AddAcomicsChapters()
+    public async Task AddAcomicsChapters()
     {
-      var manga = GetManga("https://acomics.ru/~hotblood");
+      var manga = await GetManga("https://acomics.ru/~hotblood");
 
       // Страниц, не привязанных к главам.
       Assert.AreEqual(7, manga.Pages.Count);
@@ -33,14 +34,14 @@ namespace Tests.Entities.Manga
       Assert.IsTrue(manga.HasChapters);
       Assert.IsFalse(manga.HasVolumes);
 
-      manga = GetManga("https://acomics.ru/~jonbot-vs-martha");
+      manga = await GetManga("https://acomics.ru/~jonbot-vs-martha");
       Assert.AreEqual(4, manga.Chapters.Count);
     }
 
     [Test]
-    public void AddAcomicsVolume()
+    public async Task AddAcomicsVolume()
     {
-      var manga = GetManga("https://acomics.ru/~strays");
+      var manga = await GetManga("https://acomics.ru/~strays");
 
       Assert.AreEqual(1, manga.Pages.Count);
       Assert.AreEqual(0, manga.Chapters.Count);
@@ -51,15 +52,15 @@ namespace Tests.Entities.Manga
       Assert.IsTrue(manga.HasChapters);
       Assert.IsTrue(manga.HasVolumes);
 
-      manga = GetManga("https://acomics.ru/~girl-genius");
+      manga = await GetManga("https://acomics.ru/~girl-genius");
       Assert.AreEqual(14, manga.Volumes.Count);
       Assert.IsTrue(manga.HasVolumes);
     }
 
-    private Acomics.Acomics GetManga(string uri)
+    private async Task<Acomics.Acomics> GetManga(string uri)
     {
-      var manga = Mangas.CreateFromWeb(new Uri(uri)) as Acomics.Acomics;
-      new Acomics.Parser().UpdateContent(manga);
+      var manga = await Mangas.CreateFromWeb(new Uri(uri)) as Acomics.Acomics;
+      await new Acomics.Parser().UpdateContent(manga);
       return manga;
     }
   }

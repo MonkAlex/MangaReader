@@ -74,15 +74,14 @@ namespace Grouple
           .OfType<Group>()
           .Select(g => g.Captures[0])
           .OfType<Match>()
-          .Select(m => new Uri(m.Groups[1].Value))
-          .Select(s =>
-          {
-            var manga = Mangas.Create(s);
-            parser.UpdateNameAndStatus(manga);
-            return manga;
-          })
-          .ToList();
-        bookmarks.AddRange(loadedBookmarks);
+          .Select(m => new Uri(m.Groups[1].Value));
+
+        await Task.WhenAll(loadedBookmarks.Select(async b =>
+        {
+          var manga = Mangas.Create(b);
+          await parser.UpdateNameAndStatus(manga);
+          bookmarks.Add(manga);
+        }));
       }
       return bookmarks;
     }

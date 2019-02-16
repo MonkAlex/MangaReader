@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using MangaReader.Core.Entity;
 using MangaReader.Core.Services;
 
@@ -49,9 +50,9 @@ namespace MangaReader.Core.Manga
 
     bool IsCompleted { get; set; }
 
-    void Refresh();
+    Task Refresh();
 
-    void UpdateContent();
+    Task UpdateContent();
 
     void RefreshFolder();
   }

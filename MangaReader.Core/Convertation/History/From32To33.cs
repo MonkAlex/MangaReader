@@ -3,6 +3,7 @@ using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MangaReader.Core.Convertation.History
 {
@@ -13,13 +14,13 @@ namespace MangaReader.Core.Convertation.History
       return base.ProtectedCanConvert(process) && this.CanConvertVersion(process);
     }
 
-    protected override void ProtectedConvert(IProcess process)
+    protected override Task ProtectedConvert(IProcess process)
     {
-      base.ProtectedConvert(process);
-
       RunSql(@"update MangaHistory
                set Uri = Replace(Uri, ':80/', '/')
                where Uri like '%:80/%'");
+
+      return Task.CompletedTask;
     }
 
     public From32To33()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
@@ -14,10 +15,8 @@ namespace MangaReader.Core.Convertation.Mangas
       return base.ProtectedCanConvert(process) && this.CanConvertVersion(process);
     }
 
-    protected override void ProtectedConvert(IProcess process)
+    protected override Task ProtectedConvert(IProcess process)
     {
-      base.ProtectedConvert(process);
-
       process.Percent = 0;
       using (var context = Repository.GetEntityContext())
       {
@@ -39,6 +38,8 @@ namespace MangaReader.Core.Convertation.Mangas
           tranc.Commit();
         }
       }
+
+      return Task.CompletedTask;
     }
 
     public From44To45DownloadedAt()

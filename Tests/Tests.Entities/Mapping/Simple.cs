@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using NUnit.Framework;
@@ -10,7 +11,7 @@ namespace Tests.Entities.Mapping
   public class Simple : TestClass
   {
     [Test, Order(2)]
-    public void AcomicsVolumesChaptersAndPages()
+    public async Task AcomicsVolumesChaptersAndPages()
     {
       using (var context = Repository.GetEntityContext())
       {
@@ -23,8 +24,8 @@ namespace Tests.Entities.Mapping
         var chapterRenamed = "Test";
         var manga = Builder.CreateAcomics();
         manga.Uri = new Uri("https://acomics.ru/~strays");
-        manga.Refresh();
-        manga.Parser.UpdateContent(manga);
+        await manga.Refresh();
+        await manga.Parser.UpdateContent(manga);
         context.Save(manga);
         Assert.AreEqual(3, manga.Volumes.Count);
         Assert.AreEqual(1, manga.Pages.Count);
@@ -46,7 +47,7 @@ namespace Tests.Entities.Mapping
         Assert.IsNotEmpty(manga.Volumes.SelectMany(v => v.Container));
 
         // Перечитываем состояние с сайта.
-        manga.Parser.UpdateContent(manga);
+        await manga.Parser.UpdateContent(manga);
         context.Save(manga);
         Assert.AreEqual(3, manga.Volumes.Count);
         Assert.AreEqual(1, manga.Pages.Count);

@@ -3,16 +3,15 @@ using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Core.Convertation.Database
 {
   public class From40To41 : DatabaseConverter
   {
-    protected override void ProtectedConvert(IProcess process)
+    protected override Task ProtectedConvert(IProcess process)
     {
-      base.ProtectedConvert(process);
-
       using (var context = Repository.GetEntityContext())
       {
         foreach (var setting in context.Get<MangaSetting>())
@@ -28,6 +27,8 @@ namespace MangaReader.Core.Convertation.Database
           context.Save(setting);
         }
       }
+
+      return Task.CompletedTask;
     }
 
     public From40To41()

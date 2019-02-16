@@ -26,12 +26,12 @@ namespace Hentai2Read.com
     /// Обновить название и статус манги.
     /// </summary>
     /// <param name="manga">Манга.</param>
-    public override void UpdateNameAndStatus(IManga manga)
+    public override async Task UpdateNameAndStatus(IManga manga)
     {
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(manga.Uri).Content);
+        document.LoadHtml((await Page.GetPageAsync(manga.Uri)).Content);
         var nameNode = document.DocumentNode.SelectSingleNode("//span[@itemprop=\"name\"]");
         if (nameNode != null)
         {
@@ -76,13 +76,13 @@ namespace Hentai2Read.com
     /// Получить содержание манги - главы.
     /// </summary>
     /// <param name="manga">Манга.</param>
-    public override void UpdateContent(IManga manga)
+    public override async Task UpdateContent(IManga manga)
     {
       var chapters = new List<ChapterDto>();
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml(Page.GetPage(manga.Uri).Content);
+        document.LoadHtml((await Page.GetPageAsync(manga.Uri)).Content);
 
         var chapterNodes = document.DocumentNode.SelectNodes("//a[@class=\"pull-left font-w600\"]").Reverse();
         foreach (var chapterNode in chapterNodes)
@@ -99,14 +99,14 @@ namespace Hentai2Read.com
       FillMangaChapters(manga, chapters);
     }
 
-    public override void UpdatePages(Chapter chapter)
+    public override async Task UpdatePages(Chapter chapter)
     {
       chapter.Container.Clear();
       var pages = new List<MangaPage>();
       try
       {
         var document = new HtmlDocument();
-        var page = Page.GetPage(chapter.Uri);
+        var page = await Page.GetPageAsync(chapter.Uri);
         document.LoadHtml(page.Content);
 
         var imgs = Regex.Match(document.DocumentNode.OuterHtml, @"\'images\'\s*:\s*(\[.+\])", RegexOptions.IgnoreCase).Groups[1].Value;
@@ -152,20 +152,20 @@ namespace Hentai2Read.com
       return new UriParseResult(false, UriParseKind.Manga, null);
     }
 
-    public override IEnumerable<byte[]> GetPreviews(IManga manga)
+    public override async Task<IEnumerable<byte[]>> GetPreviews(IManga manga)
     {
       byte[] result = null;
       try
       {
         var document = new HtmlDocument();
         var client = new CookieClient();
-        document.LoadHtml(Page.GetPage(manga.Uri, client).Content);
+        document.LoadHtml((await Page.GetPageAsync(manga.Uri, client)).Content);
         var imageBlock = document.DocumentNode.SelectSingleNode("//img[@class=\"img-responsive border-black-op\"]");
         var src = imageBlock.Attributes.Single(a => a.Name == "src").Value;
         result = client.DownloadData(src);
       }
       catch (Exception ex) { Log.Exception(ex); }
-      yield return result;
+      return new[] { result };
     }
 
     protected override async Task<Tuple<HtmlNodeCollection, Uri>> GetMangaNodes(string name, Uri host, CookieClient client)

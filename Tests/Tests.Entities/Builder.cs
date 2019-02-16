@@ -97,7 +97,7 @@ namespace Tests.Entities
       var info = new MangaInfo();
       info.Uri = cacheAttribute.Uri;
 
-      var manga = Mangas.CreateFromWeb(new Uri(cacheAttribute.Uri));
+      var manga = await Mangas.CreateFromWeb(new Uri(cacheAttribute.Uri));
       if (cacheAttribute.Downloadable)
       {
         await manga.Download();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
@@ -15,9 +16,8 @@ namespace MangaReader.Core.Convertation.History
       return base.ProtectedCanConvert(process) && this.CanConvertVersion(process);
     }
 
-    protected override void ProtectedConvert(IProcess process)
+    protected override async Task ProtectedConvert(IProcess process)
     {
-      base.ProtectedConvert(process);
       using (var context = Repository.GetEntityContext())
       {
         var mangas = context.Get<Manga.Mangas>().Where(m => !m.Volumes.Any() && !m.Chapters.Any() && !m.Pages.Any()).ToList();
@@ -30,8 +30,8 @@ namespace MangaReader.Core.Convertation.History
 
           try
           {
-            manga.Refresh();
-            manga.UpdateContent();
+            await manga.Refresh();
+            await manga.UpdateContent();
             var history = manga.Histories.ToList();
             if (manga.Plugin.HistoryType != HistoryType.Page)
             {

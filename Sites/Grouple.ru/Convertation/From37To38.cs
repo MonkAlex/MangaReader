@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.NHibernate;
@@ -9,10 +10,8 @@ namespace Grouple.Convertation
 {
   public class From37To38 : ConfigConverter
   {
-    protected override void ProtectedConvert(IProcess process)
+    protected override Task ProtectedConvert(IProcess process)
     {
-      base.ProtectedConvert(process);
-
       using (var context = Repository.GetEntityContext())
       {
         var settings = context.Get<MangaReader.Core.Services.MangaSetting>().ToList();
@@ -48,6 +47,8 @@ namespace Grouple.Convertation
           context.Save(setting);
         }
       }
+
+      return Task.CompletedTask;
     }
 
     public From37To38()

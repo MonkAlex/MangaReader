@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.NHibernate;
@@ -8,10 +9,8 @@ namespace Hentai2Read.com.Convertation
 {
   public class Hentai2ReadFrom46To47 : ConfigConverter
   {
-    protected override void ProtectedConvert(IProcess process)
+    protected override Task ProtectedConvert(IProcess process)
     {
-      base.ProtectedConvert(process);
-
       using (var context = Repository.GetEntityContext())
       {
         var setting = ConfigStorage.GetPlugin<Hentai2Read>().GetSettings();
@@ -21,6 +20,8 @@ namespace Hentai2Read.com.Convertation
           context.Save(setting);
         }
       }
+
+      return Task.CompletedTask;
     }
 
     public Hentai2ReadFrom46To47()

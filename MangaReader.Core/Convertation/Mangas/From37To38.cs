@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
@@ -13,10 +14,8 @@ namespace MangaReader.Core.Convertation.Mangas
       return base.ProtectedCanConvert(process) && this.CanConvertVersion(process);
     }
 
-    protected override void ProtectedConvert(IProcess process)
+    protected override Task ProtectedConvert(IProcess process)
     {
-      base.ProtectedConvert(process);
-
       RunSql(@"update Mangas
                set Type = '64ac91ef-bdb3-4086-be17-bb1dbe7a7656'
                where Uri like '%mintmanga.com%' or Uri like '%adultmanga.ru%'");
@@ -39,6 +38,8 @@ namespace MangaReader.Core.Convertation.Mangas
           context.Save(manga);
         }
       }
+
+      return Task.CompletedTask;
     }
 
     public From37To38()

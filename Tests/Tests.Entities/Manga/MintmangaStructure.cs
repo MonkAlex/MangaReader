@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using NUnit.Framework;
 
@@ -9,16 +10,16 @@ namespace Tests.Entities.Manga
   public class MintmangaStructure : TestClass
   {
     [Test]
-    public void AddMintmangaWithExtra()
+    public async Task AddMintmangaWithExtra()
     {
-      var chapters = GetCountOfChapters("http://mintmanga.com/love_mate");
+      var chapters = await GetCountOfChapters("http://mintmanga.com/love_mate");
       Assert.AreEqual(168, chapters);
     }
 
-    private int GetCountOfChapters(string url)
+    private async Task<int> GetCountOfChapters(string url)
     {
       var manga = Mangas.Create(new Uri(url));
-      new Grouple.Parser().UpdateContent(manga);
+      await new Grouple.Parser().UpdateContent(manga);
       return manga.Volumes.Sum(v => v.Container.Count());
     }
   }

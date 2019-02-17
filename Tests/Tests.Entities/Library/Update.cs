@@ -17,21 +17,21 @@ namespace Tests.Entities.Library
   {
     [Test]
     [Parallelizable(ParallelScope.None)]
-    public void TestUpdate()
+    public async Task TestUpdate()
     {
       var library = new LibraryViewModel();
       using (var context = Repository.GetEntityContext())
         foreach (var forDelete in context.Get<IManga>())
           context.Delete(forDelete);
       var manga = Builder.CreateReadmanga();
-      TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.DownloadedAt));
-      TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.Created));
-      TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.Name));
+      await TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.DownloadedAt));
+      await TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.Created));
+      await TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.Name));
       using (var context = Repository.GetEntityContext())
         context.Delete(manga);
     }
 
-    private void TestUpdateFromConfig(LibraryViewModel library, ListSortDirection direction, string property)
+    private async Task TestUpdateFromConfig(LibraryViewModel library, ListSortDirection direction, string property)
     {
       ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription = new SortDescription()
       { Direction = direction, PropertyName = property };
@@ -44,7 +44,7 @@ namespace Tests.Entities.Library
       }
 
       Log.LogReceived += OnLogReceived;
-      library.Update();
+      await library.Update();
       Log.LogReceived -= OnLogReceived;
       if (!string.IsNullOrWhiteSpace(lastErrorMessage))
         Assert.Fail(lastErrorMessage);
@@ -68,7 +68,7 @@ namespace Tests.Entities.Library
       Assert.AreEqual(false, library.IsPaused);
       Assert.AreEqual(inProcess, library.InProcess);
 
-      var task = library.ThreadAction(() => library.Update(new List<int>(){manga.Id}, mangas => mangas.OrderBy(m => m.DownloadedAt)));
+      var task = library.ThreadAction(async () => await library.Update(new List<int>(){manga.Id}, mangas => mangas.OrderBy(m => m.DownloadedAt)));
 
       Assert.AreEqual(task.IsCompleted, library.IsAvaible);
       Assert.AreEqual(false, library.IsPaused);

@@ -46,7 +46,7 @@ namespace MangaReader.Core.Manga
       var chapterFolder = Path.Combine(downloadFolder, this.Folder);
 
       if (this.Container == null || !this.Container.Any())
-        this.UpdatePages();
+        await this.UpdatePages();
 
       this.InDownloading = this.Container.ToList();
       if (this.OnlyUpdate)
@@ -80,10 +80,10 @@ namespace MangaReader.Core.Manga
     /// Обновить список страниц.
     /// </summary>
     /// <remarks>Каждая конкретная глава сама забьет коллекцию this.Container.</remarks>
-    protected virtual void UpdatePages()
+    protected virtual async Task UpdatePages()
     {
       var parser = this.Volume?.Manga?.Parser ?? this.Manga.Parser;
-      parser.UpdatePages(this);
+      await parser.UpdatePages(this);
 
       if (this.Container == null)
         throw new ArgumentNullException(nameof(Container));

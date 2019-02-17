@@ -190,7 +190,7 @@ namespace MangaReader.Core.Services
 
         if (IsAvaible)
         {
-          ThreadAction(() => Update())
+          ThreadAction(async () => await Update())
             .LogException("Автоматическое обновление успешно завершено", "Автоматическое обновление завершено с ошибкой");
         }
       }

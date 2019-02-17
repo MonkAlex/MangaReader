@@ -16,13 +16,13 @@ namespace MangaReader
       new ExitCommand().Execute(sender);
     }
 
-    private void App_OnStartup(object sender, StartupEventArgs e)
+    private async void App_OnStartup(object sender, StartupEventArgs e)
     {
       if (Environment.GetCommandLineArgs().Contains("-t"))
         ShowConsoleWindow();
 
       Core.Loader.Init();
-      Client.Run();
+      await Client.Run();
     }
     
     #region Консоль

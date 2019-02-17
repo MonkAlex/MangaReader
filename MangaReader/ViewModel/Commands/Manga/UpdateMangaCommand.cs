@@ -9,9 +9,9 @@ namespace MangaReader.ViewModel.Commands.Manga
 {
   public class UpdateMangaCommand : MultipleMangasBaseCommand
   {
-    public override void Execute(IEnumerable<IManga> mangas)
+    public override async void Execute(IEnumerable<IManga> mangas)
     {
-      Library.ThreadAction(() => Library.Update(mangas.Select(m => m.Id).ToList())).LogException();
+      await Library.ThreadAction(async () => await Library.Update(mangas.Select(m => m.Id).ToList())).LogException();
     }
 
     public UpdateMangaCommand(MainPageModel model) : base(model)

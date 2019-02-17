@@ -22,25 +22,25 @@ namespace Tests.Entities.Manga
     // http://readmanga.me/school_teacher/vol2/10?mature=1
 
     [Test]
-    public void NotCensoredReadmanga()
+    public async Task NotCensoredReadmanga()
     {
-      var manga = Get(@"http://readmanga.me/black_butler_anthology_comic_rainbow_butler/vol1/6");
+      var manga = await Get(@"http://readmanga.me/black_butler_anthology_comic_rainbow_butler/vol1/6");
       var chapter = manga.Volumes.Single(v => v.Number == 1).Container.ToList()[0];
-      parser.UpdatePages(chapter);
+      await parser.UpdatePages(chapter);
       Assert.IsTrue(chapter.Container.First().ImageLink.IsAbsoluteUri);
     }
 
     [Test]
-    public void CensoredReadmanga()
+    public async Task CensoredReadmanga()
     {
-      var manga = Get(@"http://readmanga.me/school_teacher/vol2/10?mature=1");
+      var manga = await Get(@"http://readmanga.me/school_teacher/vol2/10?mature=1");
       var chapter = manga.Volumes.Single(v => v.Number == 2).Container.ToList()[5];
-      parser.UpdatePages(chapter);
+      await parser.UpdatePages(chapter);
       Assert.IsTrue(chapter.Container.First().ImageLink.IsAbsoluteUri);
     }
 
     [Test]
-    public void MangaRemovedCopyright()
+    public async Task MangaRemovedCopyright()
     {
       var error = string.Empty;
 
@@ -51,17 +51,17 @@ namespace Tests.Entities.Manga
       }
 
       Log.LogReceived += OnLogOnLogReceived;
-      var manga = Get(@"http://mintmanga.com/in_the_first_grade");
+      var manga = await Get(@"http://mintmanga.com/in_the_first_grade");
       Log.LogReceived -= OnLogOnLogReceived;
       var chapters = manga.Volumes.SelectMany(v => v.Container).ToList();
       Assert.IsTrue(!chapters.Any());
       Assert.AreEqual("Запрещена публикация произведения по копирайту, адрес манги http://mintmanga.com/in_the_first_grade", error);
     }
 
-    private IManga Get(string url)
+    private async Task<IManga> Get(string url)
     {
       var manga = Mangas.Create(new Uri(url));
-      parser.UpdateContent(manga);
+      await parser.UpdateContent(manga);
       return manga;
     }
   }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Shell;
 using System.Windows.Threading;
@@ -22,7 +23,7 @@ namespace MangaReader
 
     public static Dispatcher Dispatcher { get { return Application.Current.Dispatcher; } }
 
-    public static void Run()
+    public static async Task Run()
     {
       ViewResolver.Instance.ViewInit();
       MangaReader.Core.Client.OtherAppRunning += ClientOnOtherAppRunning;
@@ -55,7 +56,7 @@ namespace MangaReader
       var args = Environment.GetCommandLineArgs();
       if (args.Contains("-m") || args.Contains("/min") || ConfigStorage.Instance.AppConfig.StartMinimizedToTray)
       {
-        initialize.InitializeSilent();
+        await initialize.InitializeSilent();
         WindowModel.Instance.InitializeSilent();
         SaveSettingsCommand.ValidateMangaPaths();
       }

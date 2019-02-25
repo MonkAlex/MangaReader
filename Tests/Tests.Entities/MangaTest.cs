@@ -54,14 +54,14 @@ namespace Tests
       {
         manga = await Mangas.CreateFromWeb(new Uri(mangaInfo.Uri));
         sw.Start();
-        DirectoryHelpers.DeleteDirectory(manga.GetAbsoulteFolderPath());
+        DirectoryHelpers.DeleteDirectory(manga.GetAbsoluteFolderPath());
         await manga.Download();
       }
 
       sw.Stop();
       Log.Add($"manga loaded {sw.Elapsed.TotalSeconds}, iscompleted = {manga.IsDownloaded}, downloaded = {manga.Downloaded}%");
-      Assert.IsTrue(Directory.Exists(manga.GetAbsoulteFolderPath()));
-      var files = Directory.GetFiles(manga.GetAbsoulteFolderPath(), "*", SearchOption.AllDirectories);
+      Assert.IsTrue(Directory.Exists(manga.GetAbsoluteFolderPath()));
+      var files = Directory.GetFiles(manga.GetAbsoluteFolderPath(), "*", SearchOption.AllDirectories);
       Assert.AreEqual(mangaInfo.FilesInFolder, files.Length);
       var fileInfos = files.Select(f => new FileInfo(f)).ToList();
       Assert.AreEqual(mangaInfo.FolderSize, fileInfos.Sum(f => f.Length));

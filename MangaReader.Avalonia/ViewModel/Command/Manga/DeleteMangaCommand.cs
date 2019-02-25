@@ -37,7 +37,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
             Library.Remove(manga);
 
             if (deleteFolder.Value)
-              DirectoryHelpers.DeleteDirectory(manga.GetAbsoulteFolderPath());
+              DirectoryHelpers.DeleteDirectory(manga.GetAbsoluteFolderPath());
           }
         }).LogException();
       }

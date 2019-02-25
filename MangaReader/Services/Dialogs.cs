@@ -84,7 +84,7 @@ namespace MangaReader.Services
         dialog.CenterParent = true;
         dialog.WindowTitle = "Папки загрузки недоступны";
         dialog.MainInstruction = "Папки загрузки недоступны, рекомендуется исправить их в настройках.";
-        dialog.Content = "Недоступны папки:\r\n" + string.Join(Environment.NewLine, mangaSettings.Select(m => $"{m.MangaName}: {DirectoryHelpers.GetAbsoulteFolderPath(m.Folder)}"));
+        dialog.Content = "Недоступны папки:\r\n" + string.Join(Environment.NewLine, mangaSettings.Select(m => $"{m.MangaName}: {DirectoryHelpers.GetAbsoluteFolderPath(m.Folder)}"));
         dialog.MainIcon = TaskDialogIcon.Error;
         var settings = new TaskDialogButton(Strings.Library_Action_Settings);
         dialog.Buttons.Add(settings);

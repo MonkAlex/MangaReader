@@ -26,7 +26,6 @@ namespace MangaReader.Core.Manga
     /// <summary>
     /// Ссылка в историю.
     /// </summary>
-    [XmlIgnore]
     public Uri Uri { get; set; }
 
     /// <summary>

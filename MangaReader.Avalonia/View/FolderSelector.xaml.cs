@@ -42,7 +42,7 @@ namespace MangaReader.Avalonia.View
 
     private async void OnChangeClick(object sender, RoutedEventArgs routedEventArgs)
     {
-      var absolutePath = DirectoryHelpers.GetAbsoulteFolderPath(this.Path.Text);
+      var absolutePath = DirectoryHelpers.GetAbsoluteFolderPath(this.Path.Text);
       var defaultPath = Directory.Exists(absolutePath) ? absolutePath : ConfigStorage.WorkFolder;
 
       var dialog = new OpenFolderDialog

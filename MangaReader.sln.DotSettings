@@ -27,4 +27,5 @@
 &#xD;
 private $type$ $property$;&#xD;
 &#xD;
-$END$</s:String></wpf:ResourceDictionary>
+$END$</s:String>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=manga/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

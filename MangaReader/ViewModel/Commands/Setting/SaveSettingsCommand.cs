@@ -59,7 +59,7 @@ namespace MangaReader.ViewModel.Commands.Setting
       var paths = Core.NHibernate.Repository.GetStateless<MangaSetting>().ToList()
         .Where(p =>
         {
-          var absolute = DirectoryHelpers.GetAbsoulteFolderPath(p.Folder);
+          var absolute = DirectoryHelpers.GetAbsoluteFolderPath(p.Folder);
           return !DirectoryHelpers.Equals(AppConfig.DownloadFolder, absolute) && !Directory.Exists(absolute);
         })
         .ToList();

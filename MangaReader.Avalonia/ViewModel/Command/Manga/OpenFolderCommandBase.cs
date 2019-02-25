@@ -17,8 +17,8 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
 
     public void Execute(IDownloadable parameter)
     {
-      if (parameter != null && Directory.Exists(parameter.GetAbsoulteFolderPath()))
-        Helper.StartUseShell(parameter.GetAbsoulteFolderPath());
+      if (parameter != null && Directory.Exists(parameter.GetAbsoluteFolderPath()))
+        Helper.StartUseShell(parameter.GetAbsoluteFolderPath());
       else
         Log.Info(Strings.Library_Status_FolderNotFound);
     }

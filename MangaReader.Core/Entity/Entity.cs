@@ -5,7 +5,6 @@ namespace MangaReader.Core.Entity
 {
   public class Entity : IEntity
   {
-    [XmlIgnore]
     public virtual int Id
     {
       set

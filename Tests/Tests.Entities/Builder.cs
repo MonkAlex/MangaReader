@@ -102,7 +102,7 @@ namespace Tests.Entities
       {
         await manga.Download();
 
-        var files = Directory.GetFiles(manga.GetAbsoulteFolderPath(), "*", SearchOption.AllDirectories);
+        var files = Directory.GetFiles(manga.GetAbsoluteFolderPath(), "*", SearchOption.AllDirectories);
         var fileInfos = files.Select(f => new FileInfo(f)).ToList();
         info.FilesInFolder = fileInfos.Count;
         info.FolderSize = fileInfos.Sum(f => f.Length);

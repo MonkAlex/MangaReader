@@ -30,7 +30,7 @@ namespace MangaReader.ViewModel.Commands.Manga
             Library.Remove(manga);
 
             if (dialogResult.Item2)
-              DirectoryHelpers.DeleteDirectory(manga.GetAbsoulteFolderPath());
+              DirectoryHelpers.DeleteDirectory(manga.GetAbsoluteFolderPath());
           }
         }).LogException();
       }

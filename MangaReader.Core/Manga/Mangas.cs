@@ -71,7 +71,6 @@ namespace MangaReader.Core.Manga
     /// <summary>
     /// Ссылка на мангу.
     /// </summary>
-    [XmlIgnore]
     public virtual Uri Uri
     {
       get { return this.uri; }
@@ -146,33 +145,25 @@ namespace MangaReader.Core.Manga
     /// <summary>
     /// Настройки манги.
     /// </summary>
-    [XmlIgnore]
     public virtual MangaSetting Setting { get; protected internal set; }
 
     /// <summary>
     /// История манги.
     /// </summary>
-    [XmlIgnore]
     public virtual ICollection<MangaHistory> Histories { get; protected set; }
 
     public virtual DateTime? Created { get; set; }
 
-    [XmlIgnore]
     public virtual ICollection<Volume> Volumes { get; set; }
 
-    [XmlIgnore]
     public virtual ICollection<Volume> ActiveVolumes { get; set; }
 
-    [XmlIgnore]
     public virtual ICollection<Chapter> Chapters { get; set; }
 
-    [XmlIgnore]
     public virtual ICollection<Chapter> ActiveChapters { get; set; }
 
-    [XmlIgnore]
     public virtual ICollection<MangaPage> Pages { get; set; }
 
-    [XmlIgnore]
     public virtual ICollection<MangaPage> ActivePages { get; set; }
 
     /// <summary>
@@ -318,7 +309,7 @@ namespace MangaReader.Core.Manga
           Cover = (await Parser.GetPreviews(this)).FirstOrDefault();
 
         if (mangaFolder == null)
-          mangaFolder = this.GetAbsoulteFolderPath();
+          mangaFolder = this.GetAbsoluteFolderPath();
 
         await this.UpdateContent();
       }
@@ -461,7 +452,7 @@ namespace MangaReader.Core.Manga
     /// </summary>
     public virtual void Compress()
     {
-      var folder = this.GetAbsoulteFolderPath();
+      var folder = this.GetAbsoluteFolderPath();
       if (!Directory.Exists(folder))
         return;
 
@@ -532,8 +523,8 @@ namespace MangaReader.Core.Manga
       {
         var dirName = args.GetPropertyState<string>(nameof(Folder)).OldValue;
         dirName = DirectoryHelpers.MakeValidPath(dirName);
-        var newValue = this.GetAbsoulteFolderPath();
-        var oldValue = DirectoryHelpers.GetAbsoulteFolderPath(dirName);
+        var newValue = this.GetAbsoluteFolderPath();
+        var oldValue = DirectoryHelpers.GetAbsoluteFolderPath(dirName);
         if (oldValue != null && !DirectoryHelpers.Equals(newValue, oldValue) && Directory.Exists(oldValue))
         {
           if (Directory.Exists(newValue))

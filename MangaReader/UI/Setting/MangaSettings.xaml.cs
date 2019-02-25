@@ -20,7 +20,7 @@ namespace MangaReader.UI.Setting
 
     private void ChangeFolder_OnClick(object sender, RoutedEventArgs e)
     {
-      var absolutePath = DirectoryHelpers.GetAbsoulteFolderPath(this.FolderPath.Text);
+      var absolutePath = DirectoryHelpers.GetAbsoluteFolderPath(this.FolderPath.Text);
       var selectedPath = Dialogs.SelectFolder(absolutePath);
       var relativePath = DirectoryHelpers.GetRelativePath(ConfigStorage.WorkFolder, selectedPath);
       this.FolderPath.Text = relativePath.StartsWith(@"..\..\") ? selectedPath : relativePath;

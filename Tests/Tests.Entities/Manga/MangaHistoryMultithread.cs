@@ -37,7 +37,7 @@ namespace Tests.Entities.Manga
           var manga = Builder.CreateReadmanga();
           name = manga.Name;
           context.Save(manga);
-          Directory.CreateDirectory(manga.GetAbsoulteFolderPath());
+          Directory.CreateDirectory(manga.GetAbsoluteFolderPath());
         }
         var manga2 = Builder.CreateReadmanga();
 
@@ -46,7 +46,7 @@ namespace Tests.Entities.Manga
           using (var context = Repository.GetEntityContext())
           {
             var manga3 = Builder.CreateReadmanga();
-            Directory.CreateDirectory(manga3.GetAbsoulteFolderPath());
+            Directory.CreateDirectory(manga3.GetAbsoluteFolderPath());
             manga3.Name = name;
             AddRandomHistory(manga3);
             Assert.AreEqual(y, manga3.Histories.Count());

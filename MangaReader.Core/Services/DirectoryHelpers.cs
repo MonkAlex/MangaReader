@@ -97,12 +97,12 @@ namespace MangaReader.Core.Services
     }
 
 
-    public static string GetAbsoulteFolderPath(this IDownloadable downloadable)
+    public static string GetAbsoluteFolderPath(this IDownloadable downloadable)
     {
-      return GetAbsoulteFolderPath(downloadable.Folder);
+      return GetAbsoluteFolderPath(downloadable.Folder);
     }
 
-    public static string GetAbsoulteFolderPath(string folder)
+    public static string GetAbsoluteFolderPath(string folder)
     {
       if (!Uri.TryCreate(folder, UriKind.RelativeOrAbsolute, out Uri folderUri))
       {

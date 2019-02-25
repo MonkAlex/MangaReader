@@ -42,7 +42,7 @@ namespace MangaReader.Core.Convertation.Mangas
               min = manga.Histories.Min(h => h.Date);
             if (firstRun && min == null)
             {
-              var folder = new System.IO.DirectoryInfo(manga.GetAbsoulteFolderPath());
+              var folder = new System.IO.DirectoryInfo(manga.GetAbsoluteFolderPath());
               if (folder.Exists)
                 min = folder.CreationTime;
             }

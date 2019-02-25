@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
+using NHibernate.Exceptions;
 using NHibernate.Linq;
 
 namespace MangaReader.Core.Services
@@ -48,14 +49,9 @@ namespace MangaReader.Core.Services
       if (!internalContainer.Any())
         return internalContainer;
 
-      var uris = internalContainer.Select(c => c.Uri).ToList();
+      var uris = internalContainer.Select(c => c.Uri).Distinct().ToList();
       
-      // В многопоточном коде нельзя обращаться к одной сессии.
-      List<Uri> exists;
-      using (var session = Repository.GetEntityContext())
-      {
-        exists = session.Get<MangaHistory>().Where(h => uris.Contains(h.Uri)).Select(h => h.Uri).ToList();
-      }
+      var exists = Repository.GetStateless<MangaHistory>().Where(h => uris.Contains(h.Uri)).Select(h => h.Uri).ToList();
 
       foreach (var item in internalContainer.OfType<IDownloadableContainer<IDownloadable>>())
       {

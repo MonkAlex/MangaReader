@@ -19,7 +19,7 @@ namespace Tests.Entities.Library
       var result = false;
       try
       {
-        result = await model.Add(@"http://example.com/");
+        result = await model.Add(@"http://example.com/").ConfigureAwait(false);
       }
       catch (Exception)
       {
@@ -48,7 +48,7 @@ namespace Tests.Entities.Library
 
       try
       {
-        result = (await model.Add(uri)).Success;
+        result = (await model.Add(uri).ConfigureAwait(false)).Success;
       }
       catch (Exception)
       {
@@ -58,7 +58,7 @@ namespace Tests.Entities.Library
       Assert.IsTrue(result);
 
       // Проверка повторного добавления.
-      result = (await model.Add(uri)).Success;
+      result = (await model.Add(uri).ConfigureAwait(false)).Success;
       Assert.IsFalse(result);
     }
   }

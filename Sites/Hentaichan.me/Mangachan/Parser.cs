@@ -43,7 +43,7 @@ namespace Hentaichan.Mangachan
 
     public override async Task UpdateNameAndStatus(IManga manga)
     {
-      var page = await Page.GetPageAsync(manga.Uri);
+      var page = await Page.GetPageAsync(manga.Uri).ConfigureAwait(false);
       var localizedName = new MangaName();
       try
       {
@@ -96,7 +96,7 @@ namespace Hentaichan.Mangachan
       try
       {
         var document = new HtmlDocument();
-        var content = (await Page.GetPageAsync(manga.Uri, GetClient())).Content;
+        var content = (await Page.GetPageAsync(manga.Uri, GetClient()).ConfigureAwait(false)).Content;
         document.LoadHtml(content);
 
         var chapterNodes = document.DocumentNode.SelectNodes("//table[@class=\"table_cha\"]//a");
@@ -166,7 +166,7 @@ namespace Hentaichan.Mangachan
     protected override async Task<Tuple<HtmlNodeCollection, Uri>> GetMangaNodes(string name, Uri host, CookieClient client)
     {
       var searchHost = new Uri(host, "?do=search&subaction=search&story=" + WebUtility.UrlEncode(name));
-      var page = await Page.GetPageAsync(searchHost, client);
+      var page = await Page.GetPageAsync(searchHost, client).ConfigureAwait(false);
       if (!page.HasContent)
         return null;
 
@@ -175,7 +175,7 @@ namespace Hentaichan.Mangachan
         var document = new HtmlDocument();
         document.LoadHtml(page.Content);
         return new Tuple<HtmlNodeCollection, Uri>(document.DocumentNode.SelectNodes("//div[@class='content_row']"), host);
-      });
+      }).ConfigureAwait(false);
     }
 
     protected override async Task<IManga> GetMangaFromNode(Uri host, CookieClient client, HtmlNode manga)
@@ -190,7 +190,7 @@ namespace Hentaichan.Mangachan
       var result = Mangas.Create(new Uri(mangaUri));
       result.Name = WebUtility.HtmlDecode(mangaName);
       if (!string.IsNullOrWhiteSpace(imageUri))
-        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri));
+        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri)).ConfigureAwait(false);
       return result;
     }
 
@@ -201,7 +201,7 @@ namespace Hentaichan.Mangachan
       try
       {
         var document = new HtmlDocument();
-        var content = (await Page.GetPageAsync(manga.Uri, client)).Content;
+        var content = (await Page.GetPageAsync(manga.Uri, client).ConfigureAwait(false)).Content;
         document.LoadHtml(content);
 
         var chapterNodes = document.DocumentNode.SelectNodes("//img[@id='cover']");
@@ -250,7 +250,7 @@ namespace Hentaichan.Mangachan
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml((await Page.GetPageAsync(chapter.Uri, GetClient())).Content);
+        document.LoadHtml((await Page.GetPageAsync(chapter.Uri, GetClient()).ConfigureAwait(false)).Content);
 
         var i = 0;
         var imgs = Regex.Match(document.DocumentNode.OuterHtml, @"""(fullimg.*)", RegexOptions.IgnoreCase).Groups[1].Value.Remove(0, 9);

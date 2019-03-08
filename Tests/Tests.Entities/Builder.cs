@@ -97,10 +97,10 @@ namespace Tests.Entities
       var info = new MangaInfo();
       info.Uri = cacheAttribute.Uri;
 
-      var manga = await Mangas.CreateFromWeb(new Uri(cacheAttribute.Uri));
+      var manga = await Mangas.CreateFromWeb(new Uri(cacheAttribute.Uri)).ConfigureAwait(false);
       if (cacheAttribute.Downloadable)
       {
-        await manga.Download();
+        await manga.Download().ConfigureAwait(false);
 
         var files = Directory.GetFiles(manga.GetAbsoluteFolderPath(), "*", SearchOption.AllDirectories);
         var fileInfos = files.Select(f => new FileInfo(f)).ToList();

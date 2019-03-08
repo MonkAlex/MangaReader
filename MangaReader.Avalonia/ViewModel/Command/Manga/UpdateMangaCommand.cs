@@ -10,7 +10,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
   {
     public override async void Execute(IEnumerable<IManga> mangas)
     {
-      await Library.ThreadAction(async () => await Library.Update(mangas.Select(m => m.Id).ToList())).LogException();
+      await Library.ThreadAction(Library.Update(mangas.Select(m => m.Id).ToList())).LogException().ConfigureAwait(false);
     }
 
     public UpdateMangaCommand(Explorer.LibraryViewModel model) : base(model)

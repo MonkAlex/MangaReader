@@ -52,7 +52,7 @@ namespace MangaReader.Core.Account
     public virtual async Task<bool> Logout()
     {
       IsLogined = false;
-      await Page.GetPageAsync(LogoutUri, GetClient());
+      await Page.GetPageAsync(LogoutUri, GetClient()).ConfigureAwait(false);
       return true;
     }
 
@@ -61,7 +61,7 @@ namespace MangaReader.Core.Account
       if (this.CanLogin)
       {
         Log.AddFormat("Start load bookmarks from '{0}'.", this.MainUri);
-        var bookmarks = await DownloadBookmarks();
+        var bookmarks = await DownloadBookmarks().ConfigureAwait(false);
         Log.AddFormat("Finish load bookmarks from '{0}'.", this.MainUri);
         return bookmarks;
       }

@@ -88,7 +88,7 @@ namespace Hentaichan
 
       try
       {
-        await GetClient().UploadValuesTaskAsync(new Uri(MainUri, "index.php"), "POST", loginData);
+        await GetClient().UploadValuesTaskAsync(new Uri(MainUri, "index.php"), "POST", loginData).ConfigureAwait(false);
         this.UserId = ClientCookie.GetCookies(this.MainUri)
             .Cast<Cookie>()
             .Single(c => c.Name == "dle_user_id")

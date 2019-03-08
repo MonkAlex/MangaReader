@@ -11,9 +11,11 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MangaReader.Avalonia.Services;
 using MangaReader.Avalonia.ViewModel;
+using MangaReader.Core;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
+using MangaReader.Core.Update;
 
 namespace MangaReader.Avalonia
 {
@@ -29,7 +31,7 @@ namespace MangaReader.Avalonia
       App.AttachDevTools(this);
       MangaReader.Core.Update.Updater.NewVersionFound += UpdaterOnNewVersionFound;
       explorer.LoadingProcess.Status = Title;
-      Task.Run(async () => await MangaReader.Core.Client.Start(explorer.LoadingProcess));
+      Client.Start(explorer.LoadingProcess).ConfigureAwait(false);
       this.DataContext = explorer;
 
       // Focus to first textbox
@@ -45,7 +47,7 @@ namespace MangaReader.Avalonia
             var cpGrid = appliedUserControl?.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
             var textBox = cpGrid?.GetLogicalChildren().OfType<TextBox>().FirstOrDefault();
             textBox?.Focus();
-          }, DispatcherPriority.Background);
+          }, DispatcherPriority.Background).ConfigureAwait(false);
         });
     }
 
@@ -63,9 +65,9 @@ namespace MangaReader.Avalonia
       {
         if (dialog.Show() == download)
         {
-          Helper.StartUseShell(MangaReader.Core.Update.Updater.RepositoryReleaseUri);
+          Helper.StartUseShell(Updater.RepositoryReleaseUri);
         }
-      }).LogException();
+      }).LogException().ConfigureAwait(false);
     }
 
     protected override bool HandleClosing()

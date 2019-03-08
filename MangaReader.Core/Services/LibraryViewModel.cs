@@ -71,9 +71,9 @@ namespace MangaReader.Core.Services
     /// <summary>
     /// Выполнить тяжелое действие изменения библиотеки в отдельном потоке.
     /// </summary>
-    /// <param name="func">Выполняемое действие.</param>
+    /// <param name="task">Выполняемое действие.</param>
     /// <remarks>Только одно действие за раз. Доступность выполнения можно проверить в IsAvaible.</remarks>
-    public async Task ThreadAction(Func<Task> func)
+    public async Task ThreadAction(Task task)
     {
       if (!IsAvaible)
         throw new MangaReaderException("Library not avaible.");
@@ -81,7 +81,7 @@ namespace MangaReader.Core.Services
       try
       {
         IsAvaible = false;
-        await Task.Run(func);
+        await task.ConfigureAwait(false);
       }
       finally
       {
@@ -102,7 +102,7 @@ namespace MangaReader.Core.Services
       try
       {
         IsAvaible = false;
-        await Task.Run(action);
+        await Task.Run(action).ConfigureAwait(false);
       }
       finally
       {
@@ -120,7 +120,7 @@ namespace MangaReader.Core.Services
     {
       if (Uri.TryCreate(url, UriKind.Absolute, out Uri uri))
       {
-        var added = await Add(uri);
+        var added = await Add(uri).ConfigureAwait(false);
         if (added.Success)
           return true;
       }
@@ -145,7 +145,7 @@ namespace MangaReader.Core.Services
         }
       }
 
-      var newManga = await Mangas.CreateFromWeb(uri);
+      var newManga = await Mangas.CreateFromWeb(uri).ConfigureAwait(false);
       if (newManga == null || !newManga.IsValid())
       {
         Log.Info("Не удалось найти мангу.");
@@ -190,8 +190,7 @@ namespace MangaReader.Core.Services
 
         if (IsAvaible)
         {
-          ThreadAction(async () => await Update())
-            .LogException("Автоматическое обновление успешно завершено", "Автоматическое обновление завершено с ошибкой");
+          ThreadAction(Update()).LogException("Автоматическое обновление успешно завершено", "Автоматическое обновление завершено с ошибкой");
         }
       }
     }
@@ -290,7 +289,7 @@ namespace MangaReader.Core.Services
         LibraryChanged += OnMangaAddedWhenLibraryUpdating;
         for (var i = 0; i < materialized.Count; i++)
         {
-          await DownloadManager.CheckPause();
+          await DownloadManager.CheckPause().ConfigureAwait(false);
 
           using (var context = Repository.GetEntityContext($"Download updates for manga with id {materialized[i]}"))
           {
@@ -299,7 +298,7 @@ namespace MangaReader.Core.Services
             OnLibraryChanged(new LibraryViewModelArgs(null, current, MangaOperation.UpdateStarted, LibraryOperation.UpdateMangaChanged));
             current.PropertyChanged += CurrentOnDownloadChanged;
             UpdateDownloadPercent(current);
-            await current.Download();
+            await current.Download().ConfigureAwait(false);
             current.PropertyChanged -= CurrentOnDownloadChanged;
             if (current.NeedCompress ?? current.Setting.CompressManga)
               current.Compress();

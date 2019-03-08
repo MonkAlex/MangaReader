@@ -44,7 +44,7 @@ namespace MangaReader.Core.Services
         FileMode.Create, FileAccess.Write, FileShare.None,
         bufferSize: 4096, useAsync: true))
       {
-        await sourceStream.WriteAsync(this.Body, 0, this.Body.Length);
+        await sourceStream.WriteAsync(this.Body, 0, this.Body.Length).ConfigureAwait(false);
       }
 
       this.Path = path;

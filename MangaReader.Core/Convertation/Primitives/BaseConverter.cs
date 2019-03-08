@@ -26,7 +26,7 @@ namespace MangaReader.Core.Convertation.Primitives
       if (this.CanConvert(process))
       {
         Log.AddFormat("Converter '{0}{1}' started", this.Name, this.Version);
-        await this.ProtectedConvert(process);
+        await this.ProtectedConvert(process).ConfigureAwait(false);
         Log.AddFormat("Converter '{0}{1}' completed", this.Name, this.Version);
       }
     }

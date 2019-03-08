@@ -55,7 +55,7 @@ namespace Grouple
     /// </summary>
     public override async Task Refresh()
     {
-      var page = await Page.GetPageAsync(this.Uri);
+      var page = await Page.GetPageAsync(this.Uri).ConfigureAwait(false);
       if (!page.HasContent)
         return;
 
@@ -63,36 +63,36 @@ namespace Grouple
       if (page.ResponseUri != this.Uri)
       {
         this.Uri = page.ResponseUri;
-        await this.Refresh();
+        await this.Refresh().ConfigureAwait(false);
         return;
       }
 
       // Если на странице редирект - выполняем его и получаем новую ссылку на мангу.
       if (page.Content.ToLowerInvariant().Contains(Grouple.Parser.CookieKey))
       {
-        var newUri = await Grouple.Parser.GetRedirectUri(page);
+        var newUri = await Grouple.Parser.GetRedirectUri(page).ConfigureAwait(false);
         if (!this.Uri.Equals(newUri))
         {
           this.Uri = newUri;
-          await this.Refresh();
+          await this.Refresh().ConfigureAwait(false);
           return;
         }
       }
 
-      await base.Refresh();
+      await base.Refresh().ConfigureAwait(false);
     }
 
     protected override async Task CreatedFromWeb(Uri url)
     {
       if (this.Uri != url && Parser.ParseUri(url).Kind != UriParseKind.Manga)
       {
-        await this.UpdateContent();
+        await this.UpdateContent().ConfigureAwait(false);
 
         var chapters = this.Volumes.SelectMany(v => v.Container);
         AddHistoryReadedUris(chapters, url);
       }
 
-      await base.CreatedFromWeb(url);
+      await base.CreatedFromWeb(url).ConfigureAwait(false);
     }
 
     #endregion

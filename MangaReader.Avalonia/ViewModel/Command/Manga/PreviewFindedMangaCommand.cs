@@ -18,7 +18,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
         return;
 
       manga.Cover = model.Cover;
-      await manga.Refresh();
+      await manga.Refresh().ConfigureAwait(true);
       if (manga.IsValid())
       {
         var explorer = ExplorerViewModel.Instance;

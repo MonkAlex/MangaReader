@@ -114,7 +114,7 @@ namespace MangaReader.Core
       var hosts = ConfigStorage.Plugins
         .Where(p => p.GetParser().GetType() == this.GetType())
         .Select(p => p.GetSettings().MainUri);
-      return hosts.SelectAsync(async host => await GetMangaNodes(name, host, client))
+      return hosts.SelectAsync(async host => await GetMangaNodes(name, host, client).ConfigureAwait(false))
         .Where(nc => nc != null && nc.Item1 != null)
         .SelectMany(n => n.Item1.SelectAsync(node => GetMangaFromNode(n.Item2, client, node)))
         .Where(m => m != null);

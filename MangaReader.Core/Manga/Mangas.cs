@@ -283,7 +283,7 @@ namespace MangaReader.Core.Manga
       if (this.Volumes == null)
         throw new ArgumentNullException("Volumes");
 
-      await Parser.UpdateContent(this);
+      await Parser.UpdateContent(this).ConfigureAwait(false);
     }
 
     protected void AddToHistory(params IDownloadable[] downloadables)
@@ -303,15 +303,15 @@ namespace MangaReader.Core.Manga
 
       try
       {
-        await this.Refresh();
+        await this.Refresh().ConfigureAwait(false);
 
         if (Cover == null)
-          Cover = (await Parser.GetPreviews(this)).FirstOrDefault();
+          Cover = (await Parser.GetPreviews(this).ConfigureAwait(false)).FirstOrDefault();
 
         if (mangaFolder == null)
           mangaFolder = this.GetAbsoluteFolderPath();
 
-        await this.UpdateContent();
+        await this.UpdateContent().ConfigureAwait(false);
       }
       catch (System.Exception ex)
       {
@@ -387,7 +387,7 @@ namespace MangaReader.Core.Manga
                   AddToHistory(p);
               });
             });
-          await Task.WhenAll(tasks.Concat(chTasks).Concat(pTasks).ToArray());
+          await Task.WhenAll(tasks.Concat(chTasks).Concat(pTasks).ToArray()).ConfigureAwait(false);
           this.DownloadedAt = DateTime.Now;
           OnPropertyChanged(nameof(Downloaded));
         }
@@ -442,8 +442,8 @@ namespace MangaReader.Core.Manga
     /// </summary>
     public virtual async Task Refresh()
     {
-      await Parser.UpdateNameAndStatus(this);
-      await Parser.UpdateContentType(this);
+      await Parser.UpdateNameAndStatus(this).ConfigureAwait(false);
+      await Parser.UpdateContentType(this).ConfigureAwait(false);
       OnPropertyChanged(nameof(IsCompleted));
     }
 
@@ -616,7 +616,7 @@ namespace MangaReader.Core.Manga
         {
           // Только для местной реализации - вызвать CreatedFromWeb\Refresh.
           if (manga is Mangas mangas)
-            await mangas.CreatedFromWeb(uri);
+            await mangas.CreatedFromWeb(uri).ConfigureAwait(false);
 
           if (manga.IsValid())
             context.Save(manga);
@@ -628,7 +628,7 @@ namespace MangaReader.Core.Manga
 
     protected virtual async Task CreatedFromWeb(Uri url)
     {
-      await this.Refresh();
+      await this.Refresh().ConfigureAwait(false);
     }
 
     protected void AddHistoryReadedUris<T>(T source, Uri url) where T : IEnumerable<IDownloadable>

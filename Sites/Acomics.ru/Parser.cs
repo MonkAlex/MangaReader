@@ -39,7 +39,7 @@ namespace Acomics
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml((await Page.GetPageAsync(new Uri(manga.Uri.OriginalString + @"/about"), this.GetAdultClient())).Content);
+        document.LoadHtml((await Page.GetPageAsync(new Uri(manga.Uri.OriginalString + @"/about"), this.GetAdultClient()).ConfigureAwait(false)).Content);
         var nameNode = document.DocumentNode.SelectSingleNode("//head//meta[@property=\"og:title\"]");
         if (nameNode != null && nameNode.Attributes.Any(a => Equals(a.Name, "content")))
         {
@@ -77,7 +77,7 @@ namespace Acomics
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml((await Page.GetPageAsync(new Uri(manga.Uri.OriginalString + @"/content"), this.GetAdultClient())).Content);
+        document.LoadHtml((await Page.GetPageAsync(new Uri(manga.Uri.OriginalString + @"/content"), this.GetAdultClient()).ConfigureAwait(false)).Content);
         manga.HasVolumes = document.DocumentNode.SelectNodes(VolumeXPath) != null;
         manga.HasChapters = document.DocumentNode.SelectNodes(ChapterXPath) != null;
       }
@@ -96,7 +96,7 @@ namespace Acomics
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml((await Page.GetPageAsync(new Uri(manga.Uri.OriginalString + @"/content"), this.GetAdultClient())).Content);
+        document.LoadHtml((await Page.GetPageAsync(new Uri(manga.Uri.OriginalString + @"/content"), this.GetAdultClient()).ConfigureAwait(false)).Content);
 
         var volumeNodes = document.DocumentNode.SelectNodes(VolumeXPath);
         if (volumeNodes != null)
@@ -125,7 +125,7 @@ namespace Acomics
             chapters.AddRange(nodes.Select(CreateChapterDto));
         }
 
-        var allPages = await GetMangaPages(manga.Uri);
+        var allPages = await GetMangaPages(manga.Uri).ConfigureAwait(false);
         var innerChapters = chapters.Count == 0 ? volumes.SelectMany(v => v.Container).ToList() : chapters;
         for (int i = 0; i < innerChapters.Count; i++)
         {
@@ -203,7 +203,7 @@ namespace Acomics
       {
         var document = new HtmlDocument();
         var client = this.GetAdultClient();
-        document.LoadHtml((await Page.GetPageAsync(new Uri(manga.Uri.OriginalString + @"/banner"), client)).Content);
+        document.LoadHtml((await Page.GetPageAsync(new Uri(manga.Uri.OriginalString + @"/banner"), client).ConfigureAwait(false)).Content);
         var banners = document.DocumentNode.SelectSingleNode("//div[@class='serial-content']");
         var image = banners.ChildNodes.SkipWhile(n => n.InnerText != "160x90").Skip(1).FirstOrDefault();
         var src = image.ChildNodes[0].Attributes.Single(a => a.Name == "src").Value;
@@ -221,7 +221,7 @@ namespace Acomics
     protected override async Task<Tuple<HtmlNodeCollection, Uri>> GetMangaNodes(string name, Uri host, CookieClient client)
     {
       var searchHost = new Uri(host, "search?keyword=" + WebUtility.UrlEncode(name));
-      var page = await Page.GetPageAsync(searchHost, client);
+      var page = await Page.GetPageAsync(searchHost, client).ConfigureAwait(false);
       if (!page.HasContent)
         return null;
 
@@ -230,7 +230,7 @@ namespace Acomics
         var document = new HtmlDocument();
         document.LoadHtml(page.Content);
         return new Tuple<HtmlNodeCollection, Uri>(document.DocumentNode.SelectNodes("//table[@class='catalog-elem list-loadable']"), host);
-      });
+      }).ConfigureAwait(false);
     }
 
     protected override async Task<IManga> GetMangaFromNode(Uri host, CookieClient client, HtmlNode manga)
@@ -245,7 +245,7 @@ namespace Acomics
       var result = Mangas.Create(new Uri(host, mangaUri));
       result.Name = WebUtility.HtmlDecode(mangaName);
       if (!string.IsNullOrWhiteSpace(imageUri))
-        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri));
+        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri)).ConfigureAwait(false);
       return result;
     }
 
@@ -263,13 +263,13 @@ namespace Acomics
       {
         var adultClient = this.GetAdultClient();
         var document = new HtmlDocument();
-        document.LoadHtml((await Page.GetPageAsync(uri, adultClient)).Content);
+        document.LoadHtml((await Page.GetPageAsync(uri, adultClient).ConfigureAwait(false)).Content);
         var last = document.DocumentNode.SelectSingleNode("//nav[@class='serial']//a[@class='read2']").Attributes[1].Value;
         var count = int.Parse(last.Remove(0, last.LastIndexOf('/') + 1));
         var list = uri.GetLeftPart(UriPartial.Authority) + document.DocumentNode.SelectSingleNode("//nav[@class='serial']//a[@class='read3']").Attributes[1].Value;
         for (var i = 0; i < count; i = i + 5)
         {
-          document.LoadHtml((await Page.GetPageAsync(new Uri(list + "?skip=" + i), adultClient)).Content);
+          document.LoadHtml((await Page.GetPageAsync(new Uri(list + "?skip=" + i), adultClient).ConfigureAwait(false)).Content);
           foreach (var node in document.DocumentNode.SelectNodes("//div[@class=\"issue\"]//a"))
           {
             links.Add(new Uri(node.Attributes[0].Value));

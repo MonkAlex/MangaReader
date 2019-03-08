@@ -24,12 +24,12 @@ namespace Hentaichan.Mangachan
       var bookmarks = new List<IManga>();
       var document = new HtmlDocument();
 
-      await this.DoLogin();
+      await this.DoLogin().ConfigureAwait(false);
 
       if (!IsLogined)
         return bookmarks;
 
-      var page = await Page.GetPageAsync(BookmarksUri, GetClient());
+      var page = await Page.GetPageAsync(BookmarksUri, GetClient()).ConfigureAwait(false);
       document.LoadHtml(page.Content);
 
       var nodes = document.DocumentNode

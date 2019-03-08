@@ -16,7 +16,7 @@ namespace Tests.Entities.Manga
     public async Task AddHentaichanMultiPages()
     {
       Login();
-      var manga = await GetManga("http://henchan.me/manga/14212-love-and-devil-glava-25.html");
+      var manga = await GetManga("http://henchan.me/manga/14212-love-and-devil-glava-25.html").ConfigureAwait(false);
       Unlogin();
       Assert.AreEqual(25, manga.Chapters.Count);
       Assert.IsTrue(manga.HasChapters);
@@ -25,7 +25,7 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task AddHentaichanOneChapter()
     {
-      var manga = await GetManga("http://henchan.me/manga/15131-chuui-horeru-to-yakui-kara.html");
+      var manga = await GetManga("http://henchan.me/manga/15131-chuui-horeru-to-yakui-kara.html").ConfigureAwait(false);
       Assert.AreEqual(1, manga.Chapters.Count);
       Assert.IsTrue(manga.HasChapters);
     }
@@ -33,7 +33,7 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task AddHentaichanSubdomain()
     {
-      var manga = await GetManga("http://henchan.me/manga/23083-ponpharse-tokubetsu-hen-chast-1.html");
+      var manga = await GetManga("http://henchan.me/manga/23083-ponpharse-tokubetsu-hen-chast-1.html").ConfigureAwait(false);
       Assert.AreEqual(2, manga.Chapters.Count);
       Assert.IsTrue(manga.HasChapters);
     }
@@ -44,39 +44,39 @@ namespace Tests.Entities.Manga
     {
       // Спецсимвол \
       await TestNameParsing("http://henchan.me/manga/14504-lets-play-lovegames-shall-we-glava-1.html",
-        "Let's Play Lovegames, Shall We?");
+        "Let's Play Lovegames, Shall We?").ConfigureAwait(false);
 
       // Спецсимвол # и одна глава
       await TestNameParsing("http://henchan.me/manga/15109-exhibitionist-renko-chan.html",
-        "#Exhibitionist Renko-chan");
+        "#Exhibitionist Renko-chan").ConfigureAwait(false);
 
       // Символ звездочки *
       await TestNameParsing("http://henchan.me/manga/15131-chuui-horeru-to-yakui-kara.html",
-        "*Chuui* Horeru to Yakui kara");
+        "*Chuui* Horeru to Yakui kara").ConfigureAwait(false);
 
       // Символ /
       await TestNameParsing("http://henchan.me/manga/10535-blush-dc.-glava-1.html",
-        "/Blush-DC.");
+        "/Blush-DC.").ConfigureAwait(false);
 
       // На всякий случай
       await TestNameParsing("http://henchan.me/manga/23083-ponpharse-tokubetsu-hen-chast-1.html",
-        "Ponpharse - Tokubetsu Hen");
+        "Ponpharse - Tokubetsu Hen").ConfigureAwait(false);
 
       // Манга требующая регистрации для просмотра
       await TestNameParsing("http://henchan.me/manga/14212-love-and-devil-glava-25.html",
-        "Love and Devil");
+        "Love and Devil").ConfigureAwait(false);
     }
 
     private async Task TestNameParsing(string uri, string name)
     {
       ConfigStorage.Instance.AppConfig.Language = Languages.English;
-      var manga = await GetManga(uri);
+      var manga = await GetManga(uri).ConfigureAwait(false);
       Assert.AreEqual(name, manga.Name);
     }
 
     private async Task<Hentaichan.Hentaichan> GetManga(string url)
     {
-      var manga = await Mangas.CreateFromWeb(new Uri(url)) as Hentaichan.Hentaichan;
+      var manga = await Mangas.CreateFromWeb(new Uri(url)).ConfigureAwait(false) as Hentaichan.Hentaichan;
       return manga;
     }
 

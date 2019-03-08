@@ -33,7 +33,7 @@ namespace Grouple
       };
       try
       {
-        var result = await GetClient().UploadValuesTaskAsync("login/authenticate", "POST", loginData);
+        var result = await GetClient().UploadValuesTaskAsync("login/authenticate", "POST", loginData).ConfigureAwait(false);
         IsLogined = Encoding.UTF8.GetString(result).Contains("login/logout");
       }
       catch (System.Exception ex)
@@ -48,12 +48,12 @@ namespace Grouple
       var bookmarks = new List<IManga>();
       var document = new HtmlDocument();
 
-      await this.DoLogin();
+      await this.DoLogin().ConfigureAwait(false);
 
       if (!IsLogined)
         return bookmarks;
 
-      var page = await Page.GetPageAsync(BookmarksUri, GetClient());
+      var page = await Page.GetPageAsync(BookmarksUri, GetClient()).ConfigureAwait(false);
       document.LoadHtml(page.Content);
 
       var firstOrDefault = document.DocumentNode
@@ -79,9 +79,9 @@ namespace Grouple
         await Task.WhenAll(loadedBookmarks.Select(async b =>
         {
           var manga = Mangas.Create(b);
-          await parser.UpdateNameAndStatus(manga);
+          await parser.UpdateNameAndStatus(manga).ConfigureAwait(false);
           bookmarks.Add(manga);
-        }));
+        })).ConfigureAwait(false);
       }
       return bookmarks;
     }

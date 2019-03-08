@@ -11,7 +11,7 @@ namespace MangaReader.ViewModel.Commands.Manga
   {
     public override async void Execute(IEnumerable<IManga> mangas)
     {
-      await Library.ThreadAction(async () => await Library.Update(mangas.Select(m => m.Id).ToList())).LogException();
+      await Library.ThreadAction(Library.Update(mangas.Select(m => m.Id).ToList())).LogException().ConfigureAwait(false);
     }
 
     public UpdateMangaCommand(MainPageModel model) : base(model)

@@ -35,7 +35,7 @@ namespace Acomics
 
       try
       {
-        await GetClient().UploadValuesTaskAsync(new Uri(this.MainUri + "action/authLogin"), "POST", loginData);
+        await GetClient().UploadValuesTaskAsync(new Uri(this.MainUri + "action/authLogin"), "POST", loginData).ConfigureAwait(false);
         this.PasswordHash = ClientCookie.GetCookies(this.MainUri)
             .Cast<Cookie>()
             .Single(c => c.Name == "hash")
@@ -55,12 +55,12 @@ namespace Acomics
       var bookmarks = new List<IManga>();
       var document = new HtmlDocument();
 
-      await this.DoLogin();
+      await this.DoLogin().ConfigureAwait(false);
 
       if (!IsLogined)
         return bookmarks;
 
-      var page = await Page.GetPageAsync(BookmarksUri, GetClient());
+      var page = await Page.GetPageAsync(BookmarksUri, GetClient()).ConfigureAwait(false);
       document.LoadHtml(page.Content);
 
       var nodes = document.DocumentNode.SelectNodes("//table[@class=\"decor\"]//a");

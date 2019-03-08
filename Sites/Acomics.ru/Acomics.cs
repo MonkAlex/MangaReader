@@ -30,7 +30,7 @@ namespace Acomics
     {
       if (this.Uri != url && Parser.ParseUri(url).Kind != UriParseKind.Manga)
       {
-        await this.UpdateContent();
+        await this.UpdateContent().ConfigureAwait(false);
 
         var pages = this.Volumes.SelectMany(v => v.Container).SelectMany(c => c.Container)
           .Union(this.Chapters.SelectMany(c => c.Container))
@@ -39,7 +39,7 @@ namespace Acomics
         AddHistoryReadedUris(pages, url);
       }
 
-      await base.CreatedFromWeb(url);
+      await base.CreatedFromWeb(url).ConfigureAwait(false);
     }
 
     #endregion

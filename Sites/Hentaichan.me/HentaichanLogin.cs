@@ -21,7 +21,7 @@ namespace Hentaichan
       var bookmarks = new List<IManga>();
       var document = new HtmlDocument();
 
-      await this.DoLogin();
+      await this.DoLogin().ConfigureAwait(false);
 
       if (!IsLogined)
         return bookmarks;
@@ -30,7 +30,7 @@ namespace Hentaichan
 
       for (int i = 0; i < pages.Count; i++)
       {
-        var page = await Page.GetPageAsync(pages[i], GetClient());
+        var page = await Page.GetPageAsync(pages[i], GetClient()).ConfigureAwait(false);
         document.LoadHtml(page.Content);
 
         if (i == 0)
@@ -64,12 +64,12 @@ namespace Hentaichan
                              .Select(m => new Uri(m.Groups[1].Value)));
 
         await Task.WhenAll(mangas.Select(async m =>
-          {
-            var manga = Mangas.Create(m);
-            await parser.UpdateNameAndStatus(manga);
-            if (!string.IsNullOrWhiteSpace(manga.Name))
-              bookmarks.Add(manga);
-          }));
+        {
+          var manga = Mangas.Create(m);
+          await parser.UpdateNameAndStatus(manga).ConfigureAwait(false);
+          if (!string.IsNullOrWhiteSpace(manga.Name))
+            bookmarks.Add(manga);
+        })).ConfigureAwait(false);
       }
 
       return bookmarks;

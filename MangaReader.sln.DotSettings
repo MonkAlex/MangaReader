@@ -28,4 +28,5 @@
 private $type$ $property$;&#xD;
 &#xD;
 $END$</s:String>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Avalonia/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=manga/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

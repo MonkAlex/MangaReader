@@ -82,19 +82,19 @@ namespace MangaReader.Core.Manga
 
       try
       {
-        await DownloadManager.CheckPause();
-        using (await ThrottleService.WaitAsync())
+        await DownloadManager.CheckPause().ConfigureAwait(false);
+        using (await ThrottleService.WaitAsync().ConfigureAwait(false))
         {
-          await DownloadManager.CheckPause();
+          await DownloadManager.CheckPause().ConfigureAwait(false);
           chapterFolder = DirectoryHelpers.MakeValidPath(chapterFolder);
           if (!Directory.Exists(chapterFolder))
             Directory.CreateDirectory(chapterFolder);
 
-          var file = await DownloadManager.DownloadImage(this.ImageLink);
+          var file = await DownloadManager.DownloadImage(this.ImageLink).ConfigureAwait(false);
           if (!file.Exist)
             OnDownloadFailed();
           var fileName = this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + file.Extension;
-          await file.Save(Path.Combine(chapterFolder, fileName));
+          await file.Save(Path.Combine(chapterFolder, fileName)).ConfigureAwait(false);
           this.IsDownloaded = true;
         }
       }
@@ -102,7 +102,7 @@ namespace MangaReader.Core.Manga
       {
         Log.Exception(ex, this.Uri.OriginalString);
         ++restartCounter;
-        await Download(chapterFolder);
+        await Download(chapterFolder).ConfigureAwait(false);
       }
     }
 

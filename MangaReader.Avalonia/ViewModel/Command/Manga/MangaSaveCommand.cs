@@ -54,7 +54,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
           {
             foreach (var viewModel in ExplorerViewModel.Instance.Tabs.OfType<Explorer.LibraryViewModel>())
             {
-              var added = await viewModel.Library.Add(new Uri(model.Uri));
+              var added = await viewModel.Library.Add(new Uri(model.Uri)).ConfigureAwait(false);
               if (added.Success)
               {
                 added.Manga.Cover = model.Cover;

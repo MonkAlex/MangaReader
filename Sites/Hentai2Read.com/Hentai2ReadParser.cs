@@ -31,7 +31,7 @@ namespace Hentai2Read.com
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml((await Page.GetPageAsync(manga.Uri)).Content);
+        document.LoadHtml((await Page.GetPageAsync(manga.Uri).ConfigureAwait(false)).Content);
         var nameNode = document.DocumentNode.SelectSingleNode("//span[@itemprop=\"name\"]");
         if (nameNode != null)
         {
@@ -82,7 +82,7 @@ namespace Hentai2Read.com
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml((await Page.GetPageAsync(manga.Uri)).Content);
+        document.LoadHtml((await Page.GetPageAsync(manga.Uri).ConfigureAwait(false)).Content);
 
         var chapterNodes = document.DocumentNode.SelectNodes("//a[@class=\"pull-left font-w600\"]").Reverse();
         foreach (var chapterNode in chapterNodes)
@@ -106,7 +106,7 @@ namespace Hentai2Read.com
       try
       {
         var document = new HtmlDocument();
-        var page = await Page.GetPageAsync(chapter.Uri);
+        var page = await Page.GetPageAsync(chapter.Uri).ConfigureAwait(false);
         document.LoadHtml(page.Content);
 
         var imgs = Regex.Match(document.DocumentNode.OuterHtml, @"\'images\'\s*:\s*(\[.+\])", RegexOptions.IgnoreCase).Groups[1].Value;
@@ -159,7 +159,7 @@ namespace Hentai2Read.com
       {
         var document = new HtmlDocument();
         var client = new CookieClient();
-        document.LoadHtml((await Page.GetPageAsync(manga.Uri, client)).Content);
+        document.LoadHtml((await Page.GetPageAsync(manga.Uri, client).ConfigureAwait(false)).Content);
         var imageBlock = document.DocumentNode.SelectSingleNode("//img[@class=\"img-responsive border-black-op\"]");
         var src = imageBlock.Attributes.Single(a => a.Name == "src").Value;
         result = client.DownloadData(src);
@@ -172,7 +172,7 @@ namespace Hentai2Read.com
     {
       var searchHost = new Uri(host, "hentai-list/search/");
       var page = await client.UploadValuesTaskAsync(searchHost, new NameValueCollection()
-        { { "cmd_wpm_wgt_mng_sch_sbm", "Search" }, {"txt_wpm_wgt_mng_sch_nme", WebUtility.UrlEncode(name)}});
+        { { "cmd_wpm_wgt_mng_sch_sbm", "Search" }, {"txt_wpm_wgt_mng_sch_nme", WebUtility.UrlEncode(name)}}).ConfigureAwait(false);
       if (page == null)
         return null;
 
@@ -181,7 +181,7 @@ namespace Hentai2Read.com
         var document = new HtmlDocument();
         document.LoadHtml(Encoding.UTF8.GetString(page));
         return new Tuple<HtmlNodeCollection, Uri>(document.DocumentNode.SelectNodes("//div[@class=\"col-xs-6 col-sm-4 col-md-3 col-lg-2b col-xl-2\"]"), host);
-      });
+      }).ConfigureAwait(false);
     }
 
     public Task<IManga> GetMangaFromBookmarks(Uri host, CookieClient client, HtmlNode mangaNode)
@@ -201,7 +201,7 @@ namespace Hentai2Read.com
       var result = Mangas.Create(new Uri(host, mangaUri));
       result.Name = WebUtility.HtmlDecode(mangaName);
       if (!string.IsNullOrWhiteSpace(imageUri) && client != null)
-        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri));
+        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri)).ConfigureAwait(false);
       return result;
     }
 

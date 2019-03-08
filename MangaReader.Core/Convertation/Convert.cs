@@ -18,7 +18,7 @@ namespace MangaReader.Core.Convertation
 
       Log.Add("Convert started.");
 
-      await Convert<ConfigConverter>(process);
+      await Convert<ConfigConverter>(process).ConfigureAwait(false);
 
       var mangaSettings = NHibernate.Repository.GetStateless<MangaSetting>();
       Log.AddFormat("Found {0} manga type settings:", mangaSettings.Count);
@@ -26,7 +26,7 @@ namespace MangaReader.Core.Convertation
 
       var converters = new List<BaseConverter>(Generic
         .GetAllTypes<BaseConverter>().Where(t => !typeof(ConfigConverter).IsAssignableFrom(t)).Select(Activator.CreateInstance).OfType<BaseConverter>());
-      await ConvertImpl(process, converters);
+      await ConvertImpl(process, converters).ConfigureAwait(false);
 
       Log.Add("Convert completed.");
 
@@ -46,7 +46,7 @@ namespace MangaReader.Core.Convertation
     private static async Task Convert<T>(IProcess process) where T : BaseConverter
     {
       var converters = new List<T>(Generic.GetAllTypes<T>().Select(Activator.CreateInstance).OfType<T>());
-      await ConvertImpl(process, converters);
+      await ConvertImpl(process, converters).ConfigureAwait(false);
     }
 
     private static async Task ConvertImpl<T>(IProcess process, List<T> converters) where T : BaseConverter
@@ -57,7 +57,7 @@ namespace MangaReader.Core.Convertation
         process.Status = converter.Name;
         process.Percent = 0;
         process.ProgressState = converter.CanReportProcess ? ProgressState.Normal : ProgressState.Indeterminate;
-        await converter.Convert(process);
+        await converter.Convert(process).ConfigureAwait(false);
       }
 
       process.ProgressState = ProgressState.Indeterminate;

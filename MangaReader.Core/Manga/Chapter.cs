@@ -42,28 +42,28 @@ namespace MangaReader.Core.Manga
     /// <param name="downloadFolder">Папка для файлов.</param>
     public override async Task Download(string downloadFolder = null)
     {
-      await DownloadManager.CheckPause();
+      await DownloadManager.CheckPause().ConfigureAwait(false);
       var chapterFolder = Path.Combine(downloadFolder, this.Folder);
 
       if (this.Container == null || !this.Container.Any())
-        await this.UpdatePages();
+        await this.UpdatePages().ConfigureAwait(false);
 
       this.InDownloading = this.Container.ToList();
       if (this.OnlyUpdate)
       {
-        await DownloadManager.CheckPause();
+        await DownloadManager.CheckPause().ConfigureAwait(false);
         this.InDownloading = History.GetItemsWithoutHistory(this);
       }
 
       try
       {
-        await DownloadManager.CheckPause();
+        await DownloadManager.CheckPause().ConfigureAwait(false);
         chapterFolder = DirectoryHelpers.MakeValidPath(chapterFolder);
         if (!Directory.Exists(chapterFolder))
           Directory.CreateDirectory(chapterFolder);
 
         var pTasks = this.InDownloading.Select(page => page.Download(chapterFolder).LogException(string.Empty, $"Не удалось скачать изображение {page.ImageLink} со страницы {page.Uri}"));
-        await Task.WhenAll(pTasks.ToArray());
+        await Task.WhenAll(pTasks.ToArray()).ConfigureAwait(false);
       }
       catch (AggregateException ae)
       {
@@ -83,7 +83,7 @@ namespace MangaReader.Core.Manga
     protected virtual async Task UpdatePages()
     {
       var parser = this.Volume?.Manga?.Parser ?? this.Manga.Parser;
-      await parser.UpdatePages(this);
+      await parser.UpdatePages(this).ConfigureAwait(false);
 
       if (this.Container == null)
         throw new ArgumentNullException(nameof(Container));

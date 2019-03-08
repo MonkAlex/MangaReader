@@ -24,9 +24,9 @@ namespace Tests.Entities.Library
         foreach (var forDelete in context.Get<IManga>())
           context.Delete(forDelete);
       var manga = Builder.CreateReadmanga();
-      await TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.DownloadedAt));
-      await TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.Created));
-      await TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.Name));
+      await TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.DownloadedAt)).ConfigureAwait(false);
+      await TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.Created)).ConfigureAwait(false);
+      await TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.Name)).ConfigureAwait(false);
       using (var context = Repository.GetEntityContext())
         context.Delete(manga);
     }
@@ -44,7 +44,7 @@ namespace Tests.Entities.Library
       }
 
       Log.LogReceived += OnLogReceived;
-      await library.Update();
+      await library.Update().ConfigureAwait(false);
       Log.LogReceived -= OnLogReceived;
       if (!string.IsNullOrWhiteSpace(lastErrorMessage))
         Assert.Fail(lastErrorMessage);
@@ -68,7 +68,7 @@ namespace Tests.Entities.Library
       Assert.AreEqual(false, library.IsPaused);
       Assert.AreEqual(inProcess, library.InProcess);
 
-      var task = library.ThreadAction(async () => await library.Update(new List<int>(){manga.Id}, mangas => mangas.OrderBy(m => m.DownloadedAt)));
+      var task = library.ThreadAction(library.Update(new List<int>(){manga.Id}, mangas => mangas.OrderBy(m => m.DownloadedAt)));
 
       Assert.AreEqual(task.IsCompleted, library.IsAvaible);
       Assert.AreEqual(false, library.IsPaused);
@@ -82,7 +82,7 @@ namespace Tests.Entities.Library
 
       library.IsPaused = false;
 
-      await task;
+      await task.ConfigureAwait(false);
 
       library.Remove(manga);
       library.LibraryChanged -= LibraryOnLibraryChanged;

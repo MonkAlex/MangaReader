@@ -12,7 +12,7 @@ namespace MangaReader.Core.Services
 
     public static async Task<IDisposable> WaitAsync()
     {
-      await throttler.WaitAsync();
+      await throttler.WaitAsync().ConfigureAwait(false);
       return new ThrottleService();
     }
 

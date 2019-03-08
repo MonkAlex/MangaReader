@@ -43,7 +43,7 @@ namespace MangaReader.Core
     {
       try
       {
-        await Updater.Initialize();
+        await Updater.Initialize().ConfigureAwait(false);
         
         ConfigStorage.RefreshPlugins();
         NHibernate.Mapping.Initialize(process);
@@ -73,7 +73,7 @@ namespace MangaReader.Core
           ApplicationControl.Server.Run(name);
         });
 
-        await Converter.Convert(process);
+        await Converter.Convert(process).ConfigureAwait(false);
       }
       catch (System.Exception ex)
       {

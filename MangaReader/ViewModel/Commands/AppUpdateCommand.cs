@@ -11,7 +11,7 @@ namespace MangaReader.ViewModel.Commands
     public override async void Execute(object parameter)
     {
       base.Execute(parameter);
-      await Updater.StartUpdate();
+      await Updater.StartUpdate().ConfigureAwait(false);
     }
 
     public AppUpdateCommand(LibraryViewModel model) : base(model)

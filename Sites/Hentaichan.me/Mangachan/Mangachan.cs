@@ -32,7 +32,7 @@ namespace Hentaichan.Mangachan
     {
       if (Parser.ParseUri(Uri).Kind != UriParseKind.Manga)
       {
-        var page = await Page.GetPageAsync(Uri);
+        var page = await Page.GetPageAsync(Uri).ConfigureAwait(false);
         if (page.HasContent)
         {
           var match = Regex.Match(page.Content, "content_id\":\"(.*?)\"", RegexOptions.IgnoreCase);
@@ -43,16 +43,16 @@ namespace Hentaichan.Mangachan
         }
       }
 
-      await base.Refresh();
+      await base.Refresh().ConfigureAwait(false);
     }
 
     protected override async Task CreatedFromWeb(Uri url)
     {
-      await base.CreatedFromWeb(url);
+      await base.CreatedFromWeb(url).ConfigureAwait(false);
 
       if (this.Uri != url && Parser.ParseUri(url).Kind != UriParseKind.Manga)
       {
-        await this.UpdateContent();
+        await this.UpdateContent().ConfigureAwait(false);
         
         var chapters = this.Volumes.SelectMany(v => v.Container);
         AddHistoryReadedUris(chapters, url);

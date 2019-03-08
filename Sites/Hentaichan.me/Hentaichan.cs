@@ -33,12 +33,12 @@ namespace Hentaichan
 
     protected override async Task CreatedFromWeb(Uri url)
     {
-      await this.UpdateContent();
+      await this.UpdateContent().ConfigureAwait(false);
       AddHistoryReadedUris(this.Chapters, new Uri(url.OriginalString
         .Replace("/related/", "/online/")
         .Replace("/manga/", "/online/")));
 
-      await base.CreatedFromWeb(url);
+      await base.CreatedFromWeb(url).ConfigureAwait(false);
     }
   }
 }

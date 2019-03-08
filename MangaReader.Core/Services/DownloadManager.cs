@@ -19,7 +19,7 @@ namespace MangaReader.Core.Services
 
       while (IsPaused)
       {
-        await Task.Delay(1000);
+        await Task.Delay(1000).ConfigureAwait(false);
       }      
     }
 
@@ -38,8 +38,8 @@ namespace MangaReader.Core.Services
 
       try
       {
-        response = await request.GetResponseAsync();
-        result = await CopyTo(response.GetResponseStream());
+        response = await request.GetResponseAsync().ConfigureAwait(false);
+        result = await CopyTo(response.GetResponseStream()).ConfigureAwait(false);
       }
       catch (System.Exception ex)
       {

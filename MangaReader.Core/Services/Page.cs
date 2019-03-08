@@ -22,7 +22,7 @@ namespace MangaReader.Core.Services
       {
         Log.Exception(ex, $"Доступ к {response.ResponseUri} будет повторно проверен через 4 минуты.");
         var delay = new TimeSpan(0, 4, 0);
-        await Task.Delay(delay);
+        await Task.Delay(delay).ConfigureAwait(false);
         return true;
       }
       return false;
@@ -42,7 +42,7 @@ namespace MangaReader.Core.Services
         if (restartCounter > 3)
           throw new DownloadAttemptFailed(restartCounter, url);
 
-        using (await ThrottleService.WaitAsync())
+        using (await ThrottleService.WaitAsync().ConfigureAwait(false))
         {
           var webClient = client ?? new CookieClient();
           var task = webClient.DownloadStringTaskAsync(url).ConfigureAwait(false);
@@ -57,7 +57,7 @@ namespace MangaReader.Core.Services
       catch (WebException ex)
       {
         Log.Exception(ex, $"{Strings.Page_GetPage_SiteOff}, ссылка: {url}, попытка номер - {restartCounter}");
-        if (ex.Status != WebExceptionStatus.Timeout && !(await DelayOnExpectationFailed(ex)) && ex.HResult != -2146893023 && ex.HResult != 2147012721)
+        if (ex.Status != WebExceptionStatus.Timeout && !(await DelayOnExpectationFailed(ex).ConfigureAwait(false)) && ex.HResult != -2146893023 && ex.HResult != 2147012721)
           return new Page(url);
         ++restartCounter;
         return await GetPageAsync(url, client, restartCounter).ConfigureAwait(false);

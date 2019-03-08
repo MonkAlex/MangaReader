@@ -185,7 +185,7 @@ namespace MangaReader.Core.Services
           {
             if (!seqEnum.MoveNext())
               return false;
-            current = await selector(seqEnum.Current);
+            current = await selector(seqEnum.Current).ConfigureAwait(false);
             return true;
           },
           current: () => current,

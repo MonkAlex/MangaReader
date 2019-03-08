@@ -52,10 +52,10 @@ namespace Tests
       var sw = new Stopwatch();
       using (Repository.GetEntityContext($"Test to download {mangaInfo.Uri}"))
       {
-        manga = await Mangas.CreateFromWeb(new Uri(mangaInfo.Uri));
+        manga = await Mangas.CreateFromWeb(new Uri(mangaInfo.Uri)).ConfigureAwait(false);
         sw.Start();
         DirectoryHelpers.DeleteDirectory(manga.GetAbsoluteFolderPath());
-        await manga.Download();
+        await manga.Download().ConfigureAwait(false);
       }
 
       sw.Stop();
@@ -81,7 +81,7 @@ namespace Tests
         var existsManga = context.Get<IManga>().FirstOrDefault(m => m.Uri == mangaUri);
         if (existsManga != null)
           context.Delete(existsManga);
-        manga = await Mangas.CreateFromWeb(mangaUri);
+        manga = await Mangas.CreateFromWeb(mangaUri).ConfigureAwait(false);
       }
 
       Assert.AreEqual(mangaInfo.Description, manga.Description);
@@ -100,7 +100,7 @@ namespace Tests
       var fields = typeof(MangaInfos).GetNestedTypes().SelectMany(t => t.GetFields(BindingFlags.Static | BindingFlags.Public));
       var cacheAttributes = fields.Select(f => f.GetCustomAttribute<InfoCacheAttribute>()).ToList();
       var tasks = cacheAttributes.Select(u => Builder.Generate(u)).ToArray();
-      await Task.WhenAll(tasks);
+      await Task.WhenAll(tasks).ConfigureAwait(false);
       var infos = tasks.Select(t => t.Result).OrderBy(i => i.Uri).ToList();
       var json = JsonConvert.SerializeObject(infos);
       File.WriteAllText(Environment.MangaCache, json);

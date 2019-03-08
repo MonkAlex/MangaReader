@@ -30,8 +30,8 @@ namespace MangaReader.Core.Convertation.History
 
           try
           {
-            await manga.Refresh();
-            await manga.UpdateContent();
+            await manga.Refresh().ConfigureAwait(false);
+            await manga.UpdateContent().ConfigureAwait(false);
             var history = manga.Histories.ToList();
             if (manga.Plugin.HistoryType != HistoryType.Page)
             {

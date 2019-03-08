@@ -23,11 +23,11 @@ namespace Hentai2Read.com
 
     protected override async Task CreatedFromWeb(Uri url)
     {
-      await base.CreatedFromWeb(url);
+      await base.CreatedFromWeb(url).ConfigureAwait(false);
 
       if (this.Uri != url && Parser.ParseUri(url).Kind != UriParseKind.Manga)
       {
-        await this.UpdateContent();
+        await this.UpdateContent().ConfigureAwait(false);
 
         AddHistoryReadedUris(this.Chapters, url);
       }

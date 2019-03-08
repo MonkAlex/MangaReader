@@ -75,10 +75,10 @@ namespace Grouple
         if (restartCount > 3)
           return null;
 
-        if (!(await Page.DelayOnExpectationFailed(ex)))
+        if (!(await Page.DelayOnExpectationFailed(ex).ConfigureAwait(false)))
           throw;
 
-        return await GetRedirectUriInternal(page, restartCount);
+        return await GetRedirectUriInternal(page, restartCount).ConfigureAwait(false);
       }
 
       return client?.ResponseUri;
@@ -93,7 +93,7 @@ namespace Grouple
     {
       groupleChapter.Container.Clear();
       var document = new HtmlDocument();
-      document.LoadHtml((await Page.GetPageAsync(groupleChapter.Uri)).Content);
+      document.LoadHtml((await Page.GetPageAsync(groupleChapter.Uri).ConfigureAwait(false)).Content);
       var node = document.DocumentNode.SelectNodes("//div[@class=\"pageBlock container reader-bottom\"]").FirstOrDefault();
       if (node == null)
         return;
@@ -119,7 +119,7 @@ namespace Grouple
 
     public override async Task UpdateNameAndStatus(IManga manga)
     {
-      var page = await Page.GetPageAsync(manga.Uri);
+      var page = await Page.GetPageAsync(manga.Uri).ConfigureAwait(false);
       var localizedName = new MangaName();
       try
       {
@@ -170,7 +170,7 @@ namespace Grouple
       var dic = new Dictionary<Uri, string>();
       var links = new List<Uri> { };
       var description = new List<string> { };
-      var page = await Page.GetPageAsync(manga.Uri);
+      var page = await Page.GetPageAsync(manga.Uri).ConfigureAwait(false);
       var hasCopyrightNotice = false;
       try
       {
@@ -260,7 +260,7 @@ namespace Grouple
     protected override async Task<Tuple<HtmlNodeCollection, Uri>> GetMangaNodes(string name, Uri host, CookieClient client)
     {
       var searchHost = new Uri(host, "search");
-      var page = await client.UploadValuesTaskAsync(searchHost, new NameValueCollection() {{"q", WebUtility.UrlEncode(name)}});
+      var page = await client.UploadValuesTaskAsync(searchHost, new NameValueCollection() {{"q", WebUtility.UrlEncode(name)}}).ConfigureAwait(false);
       if (page == null)
         return null;
 
@@ -269,7 +269,7 @@ namespace Grouple
         var document = new HtmlDocument();
         document.LoadHtml(Encoding.UTF8.GetString(page));
         return new Tuple<HtmlNodeCollection, Uri>(document.DocumentNode.SelectNodes("//div[contains(@class, 'col-sm-6')]"), host);
-      });
+      }).ConfigureAwait(false);
     }
 
     protected override async Task<IManga> GetMangaFromNode(Uri host, CookieClient client, HtmlNode manga)
@@ -291,7 +291,7 @@ namespace Grouple
       var result = Mangas.Create(new Uri(host, mangaUri));
       result.Name = WebUtility.HtmlDecode(mangaName);
       if (!string.IsNullOrWhiteSpace(imageUri))
-        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri));
+        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri)).ConfigureAwait(false);
       return result;
     }
 
@@ -299,7 +299,7 @@ namespace Grouple
     {
       var document = new HtmlDocument();
       var client = new CookieClient();
-      document.LoadHtml((await Page.GetPageAsync(manga.Uri, client)).Content);
+      document.LoadHtml((await Page.GetPageAsync(manga.Uri, client).ConfigureAwait(false)).Content);
       var banners = document.DocumentNode.SelectSingleNode("//div[@class='picture-fotorama']");
       var images = new List<byte[]>();
       foreach (var node in banners.ChildNodes)

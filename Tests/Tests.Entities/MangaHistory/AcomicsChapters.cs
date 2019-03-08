@@ -23,7 +23,7 @@ namespace Tests.Entities.MangaHistory
         manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(chapterUri));
         context.Save(manga);
 
-        await manga.Refresh();
+        await manga.Refresh().ConfigureAwait(false);
         manga.Name = Guid.NewGuid().ToString();
         context.Save(manga);
 
@@ -50,7 +50,7 @@ namespace Tests.Entities.MangaHistory
         manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(chapterUri));
         context.Save(manga);
 
-        await manga.Refresh();
+        await manga.Refresh().ConfigureAwait(false);
         manga.Name = Guid.NewGuid().ToString();
         context.Save(manga);
 

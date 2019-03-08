@@ -32,7 +32,7 @@ namespace MangaReader.Core.Update
       Clean();
       Log.InfoFormat("Версия приложения - {0}.", ClientVersion);
       if (ConfigStorage.Instance.AppConfig.UpdateReader)
-        await StartUpdate();
+        await StartUpdate().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -43,9 +43,9 @@ namespace MangaReader.Core.Update
       try
       {
         var client = new GitHubClient(new ProductHeaderValue(string.Format("MonkAlex-{0}-{1}", RepositoryId, ClientVersion)));
-        var repo = await client.Repository.Get(RepositoryId);
+        var repo = await client.Repository.Get(RepositoryId).ConfigureAwait(false);
         var productName = repo.Name;
-        var release = await client.Repository.Release.GetLatest(RepositoryId);
+        var release = await client.Repository.Release.GetLatest(RepositoryId).ConfigureAwait(false);
         var lastVersion = release.TagName;
         if (lastVersion != ClientVersion.ToString())
         {

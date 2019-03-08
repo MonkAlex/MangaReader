@@ -51,7 +51,7 @@ namespace MangaReader.Avalonia.View
         InitialDirectory = defaultPath,
         Title = "Select folder"
       };
-      var result = await dialog.ShowAsync(App.Current.Windows.FirstOrDefault(w => w.IsActive));
+      var result = await dialog.ShowAsync(App.Current.Windows.FirstOrDefault(w => w.IsActive)).ConfigureAwait(true);
       if (!string.IsNullOrWhiteSpace(result))
       {
         var relativePath = DirectoryHelpers.GetRelativePath(ConfigStorage.WorkFolder, result);

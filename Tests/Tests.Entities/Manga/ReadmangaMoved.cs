@@ -28,7 +28,7 @@ namespace Tests.Entities.Manga
         context.Save(manga);
 
         manga = context.Get<Grouple.Readmanga>().FirstOrDefault(m => m.Id == manga.Id);
-        await manga.Refresh();
+        await manga.Refresh().ConfigureAwait(false);
         
         // Если сайт больше не редиректит, осталась возможность редиректа вручную в клиенте.
         if (manga.Uri == readmangaUri)

@@ -24,8 +24,8 @@ namespace Tests.Entities.Mapping
         var chapterRenamed = "Test";
         var manga = Builder.CreateAcomics();
         manga.Uri = new Uri("https://acomics.ru/~strays");
-        await manga.Refresh();
-        await manga.Parser.UpdateContent(manga);
+        await manga.Refresh().ConfigureAwait(false);
+        await manga.Parser.UpdateContent(manga).ConfigureAwait(false);
         context.Save(manga);
         Assert.AreEqual(3, manga.Volumes.Count);
         Assert.AreEqual(1, manga.Pages.Count);
@@ -47,7 +47,7 @@ namespace Tests.Entities.Mapping
         Assert.IsNotEmpty(manga.Volumes.SelectMany(v => v.Container));
 
         // Перечитываем состояние с сайта.
-        await manga.Parser.UpdateContent(manga);
+        await manga.Parser.UpdateContent(manga).ConfigureAwait(false);
         context.Save(manga);
         Assert.AreEqual(3, manga.Volumes.Count);
         Assert.AreEqual(1, manga.Pages.Count);

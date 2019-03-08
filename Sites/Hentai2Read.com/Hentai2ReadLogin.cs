@@ -39,7 +39,7 @@ namespace Hentai2Read.com
 
       try
       {
-        var loginResult = await GetClient().UploadValuesTaskAsync(new Uri(this.MainUri + "login"), "POST", loginData);
+        var loginResult = await GetClient().UploadValuesTaskAsync(new Uri(this.MainUri + "login"), "POST", loginData).ConfigureAwait(false);
         LogoutNonce = Regex.Match(System.Text.Encoding.UTF8.GetString(loginResult), "logout\\/\\?_wpnonce=([a-z0-9]+)&", RegexOptions.Compiled).Groups[1].Value;
         var hasLoginCookie = ClientCookie.GetCookies(this.MainUri)
           .Cast<Cookie>()
@@ -58,7 +58,7 @@ namespace Hentai2Read.com
     {
       // https://hentai2read.com/logout/?_wpnonce=368febb749
       IsLogined = false;
-      await Page.GetPageAsync(new Uri(LogoutUri.OriginalString + $"/?_wpnonce={LogoutNonce}"), GetClient());
+      await Page.GetPageAsync(new Uri(LogoutUri.OriginalString + $"/?_wpnonce={LogoutNonce}"), GetClient()).ConfigureAwait(false);
       return true;
     }
 
@@ -67,12 +67,12 @@ namespace Hentai2Read.com
       var bookmarks = new List<IManga>();
       var document = new HtmlDocument();
 
-      await this.DoLogin();
+      await this.DoLogin().ConfigureAwait(false);
 
       if (!IsLogined)
         return bookmarks;
 
-      var page = await Page.GetPageAsync(BookmarksUri, GetClient());
+      var page = await Page.GetPageAsync(BookmarksUri, GetClient()).ConfigureAwait(false);
       document.LoadHtml(page.Content);
 
       var nodes = document.DocumentNode.SelectNodes("//div[@class=\"col-xs-6 col-sm-4 col-md-3 col-lg-2b col-xl-2\"]");
@@ -86,7 +86,7 @@ namespace Hentai2Read.com
       var parser = new Hentai2ReadParser();
       foreach (var node in nodes)
       {
-        var manga = await parser.GetMangaFromBookmarks(MainUri, null, node);
+        var manga = await parser.GetMangaFromBookmarks(MainUri, null, node).ConfigureAwait(false);
         bookmarks.Add(manga);
       }
 

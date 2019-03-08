@@ -23,7 +23,7 @@ namespace Acomics.Convertation
         var acomics = context.Get<Acomics>().ToList();
         foreach (var acomic in acomics)
         {
-          await parser.UpdateContentType(acomic);
+          await parser.UpdateContentType(acomic).ConfigureAwait(false);
           process.Percent += 100.0 / acomics.Count;
         }
         acomics.SaveAll(context);

@@ -25,11 +25,11 @@ namespace MangaReader.ViewModel
       var window = ViewService.Instance.TryGet<System.Windows.Window>(this);
       if (window != null)
       {
-        window.ContentRendered += (sender, args) => Task.Run(async () =>
+        window.ContentRendered += async (sender, args) => 
         {
           try
           {
-            await Core.Client.Start(this);
+            await Core.Client.Start(this).ConfigureAwait(false);
 
             SaveSettingsCommand.ValidateMangaPaths();
           }
@@ -37,7 +37,7 @@ namespace MangaReader.ViewModel
           {
             Log.Exception(e, "Инициализация не закончилась.");
           }
-        });
+        };
         window.ShowDialog();
       }
     }
@@ -45,7 +45,7 @@ namespace MangaReader.ViewModel
     public async Task InitializeSilent()
     {
       Core.Client.Init();
-      await Core.Client.Start(this);
+      await Core.Client.Start(this).ConfigureAwait(false);
     }
 
   }

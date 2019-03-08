@@ -53,7 +53,7 @@ namespace Hentaichan
 
     public override async Task UpdateNameAndStatus(IManga manga)
     {
-      var page = await Page.GetPageAsync(manga.Uri);
+      var page = await Page.GetPageAsync(manga.Uri).ConfigureAwait(false);
       var name = string.Empty;
       try
       {
@@ -112,7 +112,7 @@ namespace Hentaichan
       try
       {
         var document = new HtmlDocument();
-        var page = await GetPageWithRedirect(manga.Uri);
+        var page = await GetPageWithRedirect(manga.Uri).ConfigureAwait(false);
         var content = page.Item1.Content;
         var uri = page.Item2;
         if (content.Contains(AdultOnly))
@@ -157,14 +157,14 @@ namespace Hentaichan
     private static async Task<Tuple<Page, Uri>> GetPageWithRedirect(Uri uri)
     {
       uri = new Uri(uri.OriginalString.Replace(@"/manga/", @"/online/"));
-      var page = await Page.GetPageAsync(uri, GetClient());
+      var page = await Page.GetPageAsync(uri, GetClient()).ConfigureAwait(false);
       if (page.ResponseUri != uri)
       {
         var url = page.ResponseUri.OriginalString;
         if (!url.EndsWith(IsDevelopment))
           url += IsDevelopment;
         uri = new Uri(url);
-        page = await Page.GetPageAsync(uri, GetClient());
+        page = await Page.GetPageAsync(uri, GetClient()).ConfigureAwait(false);
       }
 
       return new Tuple<Page, Uri>(page, uri);
@@ -207,7 +207,7 @@ namespace Hentaichan
     protected override async Task<Tuple<HtmlNodeCollection, Uri>> GetMangaNodes(string name, Uri host, CookieClient client)
     {
       var searchHost = new Uri(host, "?do=search&subaction=search&story=" + WebUtility.UrlEncode(name));
-      var page = await Page.GetPageAsync(searchHost, client);
+      var page = await Page.GetPageAsync(searchHost, client).ConfigureAwait(false);
       if (!page.HasContent)
         return null;
 
@@ -216,7 +216,7 @@ namespace Hentaichan
         var document = new HtmlDocument();
         document.LoadHtml(page.Content);
         return new Tuple<HtmlNodeCollection, Uri>(document.DocumentNode.SelectNodes("//div[@class='content_row']"), host);
-      });
+      }).ConfigureAwait(false);
     }
 
     protected override async Task<IManga> GetMangaFromNode(Uri host, CookieClient client, HtmlNode manga)
@@ -235,7 +235,7 @@ namespace Hentaichan
       var result = Mangas.Create(new Uri(mangaUri));
       result.Name = WebUtility.HtmlDecode(mangaName);
       if (!string.IsNullOrWhiteSpace(imageUri))
-        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri));
+        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri)).ConfigureAwait(false);
       return result;
     }
 
@@ -246,7 +246,7 @@ namespace Hentaichan
       try
       {
         var document = new HtmlDocument();
-        var page = await GetPageWithRedirect(chapter.Uri);
+        var page = await GetPageWithRedirect(chapter.Uri).ConfigureAwait(false);
         document.LoadHtml(page.Item1.Content);
 
         var imgs = Regex.Match(document.DocumentNode.OuterHtml, @"""(fullimg.*)", RegexOptions.IgnoreCase).Groups[1].Value.Remove(0, 9);

@@ -56,7 +56,7 @@ namespace MangaReader
       var args = Environment.GetCommandLineArgs();
       if (args.Contains("-m") || args.Contains("/min") || ConfigStorage.Instance.AppConfig.StartMinimizedToTray)
       {
-        await initialize.InitializeSilent().ConfigureAwait(false);
+        await initialize.InitializeSilent().ConfigureAwait(true);
         WindowModel.Instance.InitializeSilent();
         SaveSettingsCommand.ValidateMangaPaths();
       }

@@ -36,7 +36,7 @@ namespace MangaReader.Avalonia.View
       Init();
     }
 
-    class MangaProxy : IManga
+    private class MangaProxy : IManga
     {
       public bool IsDownloaded { get; }
       public double Downloaded { get; set; }

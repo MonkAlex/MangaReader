@@ -34,7 +34,7 @@ namespace MangaReader.ViewModel
     
     private async Task LoadBookmarks()
     {
-      var siteBookmarks = await Login.GetBookmarks().ConfigureAwait(false);
+      var siteBookmarks = await Login.GetBookmarks().ConfigureAwait(true);
       foreach (var bookmark in siteBookmarks)
       {
         if (!bookmarks.Any(b => Equals(b.Value.Uri, bookmark.Uri)))
@@ -55,9 +55,12 @@ namespace MangaReader.ViewModel
 
     private async void LoginOnLoginStateChanged(object sender, bool b)
     {
-      if (b && Login.IsEnabled && !Bookmarks.Any())
+      if (b && Login.IsEnabled && !IsBookmarksLoaded)
       {
-        await LoadBookmarks().ConfigureAwait(false);
+        if (Client.Dispatcher.CheckAccess())
+          await LoadBookmarks().ConfigureAwait(false);
+        else
+          await Client.Dispatcher.InvokeAsync(async () => await LoadBookmarks().ConfigureAwait(false));
       }
     }
   }

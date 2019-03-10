@@ -32,6 +32,7 @@ namespace MangaReader.Avalonia.ViewModel
         if (Equals(selectedTab, value))
           return;
 
+        #warning Тут два асинхронных обработчика, похоже нужна команда, а не свойство?
         var previous = selectedTab;
         selectedTab?.OnUnselected(value);
         RaiseAndSetIfChanged(ref selectedTab, value);

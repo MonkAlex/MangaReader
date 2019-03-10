@@ -67,7 +67,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public override async Task OnSelected(ExplorerTabViewModel previousModel)
     {
-      await base.OnSelected(previousModel).ConfigureAwait(false);
+      await base.OnSelected(previousModel).ConfigureAwait(true);
 
       if (!ExplorerViewModel.Instance.Tabs.OfType<MangaSettingsViewModel>().Any())
       {

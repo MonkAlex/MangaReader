@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Avalonia.Properties;
@@ -11,7 +12,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
   {
     protected readonly bool NeedUpdate;
 
-    public override void Execute(IEnumerable<IManga> mangas)
+    public override Task Execute(IEnumerable<IManga> mangas)
     {
       using (var context = Repository.GetEntityContext())
       {
@@ -21,6 +22,8 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
           context.Save(manga);
         }
       }
+
+      return Task.CompletedTask;
     }
 
     public override bool CanExecute(object parameter)

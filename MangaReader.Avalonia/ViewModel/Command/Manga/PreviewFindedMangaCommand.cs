@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
@@ -7,7 +8,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
   public class PreviewFindedMangaCommand : BaseCommand
   {
-    public override async void Execute(object parameter)
+    public override async Task Execute(object parameter)
     {
       var model = parameter as MangaSearchViewModel;
       if (model == null)

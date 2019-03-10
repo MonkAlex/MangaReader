@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Dialogs.Controls;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
@@ -10,7 +11,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
   public class DeleteMangaCommand : MultipleMangasBaseCommand
   {
-    public override void Execute(IEnumerable<IManga> mangas)
+    public override async Task Execute(IEnumerable<IManga> mangas)
     {
       var list = mangas.ToList();
       var isSingle = list.Count == 1;
@@ -30,7 +31,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
 
       if (dialog.Show() == yes)
       {
-        Library.ThreadAction(() =>
+        await Library.ThreadAction(() =>
         {
           foreach (var manga in list)
           {
@@ -39,7 +40,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
             if (deleteFolder.Value)
               DirectoryHelpers.DeleteDirectory(manga.GetAbsoluteFolderPath());
           }
-        }).LogException();
+        }).LogException().ConfigureAwait(false);
       }
     }
 

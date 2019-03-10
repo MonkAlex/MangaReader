@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Services;
 using LibraryViewModel = MangaReader.Avalonia.ViewModel.Explorer.LibraryViewModel;
@@ -30,13 +31,13 @@ namespace MangaReader.Avalonia.ViewModel.Command.Library
       return ActiveCommand.CanExecute(parameter);
     }
 
-    public override void Execute(object parameter)
+    public override async Task Execute(object parameter)
     {
       if (ActiveCommand == Update)
       {
         if (ActiveCommand.CanExecute(parameter))
         {
-          ActiveCommand.Execute(parameter);
+          await ActiveCommand.Execute(parameter).ConfigureAwait(false);
           ActiveCommand = Pause;
         }
       }
@@ -44,7 +45,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Library
       {
         if (ActiveCommand.CanExecute(parameter))
         {
-          ActiveCommand.Execute(parameter);
+          await ActiveCommand.Execute(parameter).ConfigureAwait(false);
           ActiveCommand = Continue;
         }
       }
@@ -52,7 +53,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Library
       {
         if (ActiveCommand.CanExecute(parameter))
         {
-          ActiveCommand.Execute(parameter);
+          await ActiveCommand.Execute(parameter).ConfigureAwait(false);
           ActiveCommand = Pause;
         }
       }

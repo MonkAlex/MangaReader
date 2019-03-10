@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Avalonia.ViewModel.Command.Library;
 using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Manga;
@@ -40,17 +41,15 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       return SelectedModels.Any();
     }
 
-    public override void Execute(object parameter)
+    public override async Task Execute(object parameter)
     {
-      base.Execute(parameter);
-
       using (var context = Repository.GetEntityContext($"Manga command '{this.Name}'"))
       {
         var ids = SelectedModels.Select(m => m.Id).ToList();
         var mangas = context.Get<IManga>().Where(m => ids.Contains(m.Id)).ToList().OrderBy(m => ids.IndexOf(m.Id)).ToList();
         try
         {
-          this.Execute(mangas);
+          await this.Execute(mangas).ConfigureAwait(true);
         }
         catch (Exception e)
         {
@@ -77,7 +76,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
         command.OnCanExecuteChanged();
     }
 
-    public abstract void Execute(IEnumerable<IManga> mangas);
+    public abstract Task Execute(IEnumerable<IManga> mangas);
 
     private void SubscribeToSelection(bool subscribe)
     {

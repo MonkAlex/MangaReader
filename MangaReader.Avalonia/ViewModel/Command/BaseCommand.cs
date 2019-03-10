@@ -1,12 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Threading;
 
 namespace MangaReader.Avalonia.ViewModel.Command
 {
-  public class BaseCommand : ICommand, INotifyPropertyChanged
+  public abstract class BaseCommand : ICommand, INotifyPropertyChanged
   {
     private string name;
     private string icon;
@@ -49,15 +50,17 @@ namespace MangaReader.Avalonia.ViewModel.Command
       return canExecute;
     }
 
+    async void ICommand.Execute(object parameter)
+    {
+      await Execute(parameter).ConfigureAwait(false);
+    }
+
     public virtual bool CanExecute(object parameter)
     {
       return true;
     }
 
-    public virtual void Execute(object parameter)
-    {
-      
-    }
+    public abstract Task Execute(object parameter);
 
     public event EventHandler CanExecuteChanged;
 

@@ -1,6 +1,5 @@
 ﻿using System.Linq;
-using MangaReader.Avalonia.ViewModel.Explorer;
-using MangaReader.Core.Services;
+using System.Threading.Tasks;
 using LibraryViewModel = MangaReader.Avalonia.ViewModel.Explorer.LibraryViewModel;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Library
@@ -9,10 +8,8 @@ namespace MangaReader.Avalonia.ViewModel.Command.Library
   {
     private readonly LibraryViewModel viewModel;
 
-    public override async void Execute(object parameter)
+    public override async Task Execute(object parameter)
     {
-      base.Execute(parameter);
-
       if (Library.IsAvaible)
         await Library.ThreadAction(Library.Update(viewModel.FilteredItems.Select(i => i.Id).ToList())).ConfigureAwait(false);
     }

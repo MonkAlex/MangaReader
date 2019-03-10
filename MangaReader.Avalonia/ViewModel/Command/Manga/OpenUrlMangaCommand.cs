@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Avalonia.Properties;
 using MangaReader.Core.Services;
@@ -8,7 +9,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
   public class OpenUrlMangaCommand : MultipleMangasBaseCommand
   {
-    public override void Execute(IEnumerable<IManga> mangas)
+    public override Task Execute(IEnumerable<IManga> mangas)
     {
       foreach (var manga in mangas)
       {
@@ -24,6 +25,8 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
           Helper.StartUseShell(downloadable?.Uri?.OriginalString ?? manga.Uri.OriginalString);
         }
       }
+
+      return Task.CompletedTask;
     }
 
     public override bool CanExecute(object parameter)

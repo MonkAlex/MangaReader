@@ -15,10 +15,8 @@ namespace MangaReader.Avalonia.ViewModel.Command
       return base.CanExecute(parameter) && canExecute.Invoke();
     }
 
-    public override async void Execute(object parameter)
+    public override async Task Execute(object parameter)
     {
-      base.Execute(parameter);
-
       try
       {
         if (taskExecute != null)

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Avalonia.Properties;
@@ -9,10 +10,10 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
   public class OpenFolderCommandBase : BaseCommand
   {
 
-    public override void Execute(object parameter)
+    public override Task Execute(object parameter)
     {
-      base.Execute(parameter);
       this.Execute(parameter as IDownloadable);
+      return Task.CompletedTask;
     }
 
     public void Execute(IDownloadable parameter)

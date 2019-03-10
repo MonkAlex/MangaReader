@@ -50,7 +50,7 @@ namespace Tests
       {
         var process = new ReportProcess();
         MangaReader.Core.Client.Init();
-        MangaReader.Core.Client.Start(process);
+        MangaReader.Core.Client.Start(process).GetAwaiter().GetResult();
       }
     }
 

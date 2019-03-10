@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Avalonia.ViewModel.Command.Library;
 using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Exception;
@@ -19,10 +20,8 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       return base.CanExecute(parameter) || !model.Saved;
     }
 
-    public override async void Execute(object parameter)
+    public override async Task Execute(object parameter)
     {
-      base.Execute(parameter);
-
       try
       {
         using (var context = Repository.GetEntityContext())
@@ -54,7 +53,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
           {
             foreach (var viewModel in ExplorerViewModel.Instance.Tabs.OfType<Explorer.LibraryViewModel>())
             {
-              var added = await viewModel.Library.Add(new Uri(model.Uri)).ConfigureAwait(false);
+              var added = await viewModel.Library.Add(new Uri(model.Uri)).ConfigureAwait(true);
               if (added.Success)
               {
                 added.Manga.Cover = model.Cover;

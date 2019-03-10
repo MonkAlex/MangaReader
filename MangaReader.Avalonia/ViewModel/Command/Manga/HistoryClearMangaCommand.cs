@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Avalonia.Properties;
@@ -10,7 +11,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
   public class HistoryClearMangaCommand : MultipleMangasBaseCommand
   {
-    public override void Execute(IEnumerable<IManga> mangas)
+    public override Task Execute(IEnumerable<IManga> mangas)
     {
       var list = mangas.ToList();
 
@@ -34,6 +35,8 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
         using (var context = Repository.GetEntityContext())
           list.SaveAll(context);
       }
+
+      return Task.CompletedTask;
     }
 
     public HistoryClearMangaCommand(Explorer.LibraryViewModel model) : base(model)

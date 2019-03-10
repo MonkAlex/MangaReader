@@ -3,7 +3,7 @@ using MangaReader.Core.Services;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Library
 {
-  public class LibraryBaseCommand : BaseCommand
+  public abstract class LibraryBaseCommand : BaseCommand
   {
     protected LibraryViewModel Library { get; }
 
@@ -12,7 +12,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Library
       return base.CanExecute(parameter) && Library.IsAvaible;
     }
 
-    public LibraryBaseCommand(LibraryViewModel model)
+    protected LibraryBaseCommand(LibraryViewModel model)
     {
       Library = model;
       Library.PropertyChanged += LibraryOnPropertyChanged;

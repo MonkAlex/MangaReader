@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Avalonia;
 using MangaReader.Avalonia.Properties;
 using MangaReader.Core;
@@ -10,11 +11,10 @@ namespace MangaReader.Avalonia.ViewModel.Command
   {
     public static bool CommandRunned { get; set; }
 
-    public override void Execute(object parameter)
+    public override Task Execute(object parameter)
     {
       if (!CommandRunned)
       {
-        base.Execute(parameter);
         CommandRunned = true;
 
         Log.Add("Application will be closed.");
@@ -22,6 +22,8 @@ namespace MangaReader.Avalonia.ViewModel.Command
         Application.Current.OnExit += (sender, args) => Environment.Exit(0);
         Application.Current.Exit();
       }
+
+      return Task.CompletedTask;
     }
 
     public ExitCommand()

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
@@ -8,10 +9,12 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
   {
     private readonly OpenFolderCommandBase baseCommand;
 
-    public override void Execute(IEnumerable<IManga> mangas)
+    public override Task Execute(IEnumerable<IManga> mangas)
     {
       foreach (var m in mangas)
         baseCommand.Execute(m);
+
+      return Task.CompletedTask;
     }
 
     public override bool CanExecute(object parameter)

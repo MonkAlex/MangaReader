@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Hentaichan.Mangachan;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
@@ -77,6 +78,15 @@ namespace Tests
       IManga manga;
       using (var context = Repository.GetEntityContext("Description"))
       {
+        if (mangaInfo.Uri == MangaInfos.Mangachan.EveScramble.Uri)
+        {
+          var login = context.Get<MangachanLogin>().Single();
+          login.PasswordHash = "e84fce6c43aacd7f8452409a63083c18";
+          login.UserId = "282433";
+          login.IsLogined = true;
+          context.Save(login);
+        }
+
         var mangaUri = new Uri(mangaInfo.Uri);
         var existsManga = context.Get<IManga>().FirstOrDefault(m => m.Uri == mangaUri);
         if (existsManga != null)

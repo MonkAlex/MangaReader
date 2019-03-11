@@ -43,7 +43,7 @@ namespace Hentaichan.Mangachan
 
     public override async Task UpdateNameAndStatus(IManga manga)
     {
-      var page = await Page.GetPageAsync(manga.Uri).ConfigureAwait(false);
+      var page = await Page.GetPageAsync(manga.Uri, GetClient()).ConfigureAwait(false);
       var localizedName = new MangaName();
       try
       {

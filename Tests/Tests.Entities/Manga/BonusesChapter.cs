@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Hentaichan.Mangachan;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using NUnit.Framework;
@@ -13,6 +14,15 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task MangachanBonus()
     {
+      using (var context = Repository.GetEntityContext())
+      { 
+        var login = context.Get<MangachanLogin>().Single();
+        login.PasswordHash = "e84fce6c43aacd7f8452409a63083c18";
+        login.UserId = "282433";
+        login.IsLogined = true;
+        context.Save(login);
+      }
+
       var manga = await Mangas.CreateFromWeb(new Uri("http://mangachan.me/manga/5335-the-breaker-new-waves.html")).ConfigureAwait(false);
       await manga.Parser.UpdateContent(manga).ConfigureAwait(false);
       var chapters = manga.Volumes.SelectMany(v => v.Container).ToList();

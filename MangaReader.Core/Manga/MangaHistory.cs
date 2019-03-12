@@ -11,12 +11,6 @@ namespace MangaReader.Core.Manga
   public class MangaHistory : Entity.Entity
   {
 
-    /// <summary>
-    /// Ссылка на мангу.
-    /// Исключительно для десериализации старых данных.
-    /// </summary>
-    public string MangaUrl { get; set; }
-
     public string Url
     {
       get { return Uri == null ? null : Uri.ToString(); }
@@ -50,17 +44,6 @@ namespace MangaReader.Core.Manga
     }
 
     #endregion
-
-    /// <summary>
-    /// Создать историю из ссылок.
-    /// </summary>
-    /// <param name="messages"></param>
-    /// <returns></returns>
-    [Obsolete]
-    public static List<MangaHistory> CreateHistories(IEnumerable<string> messages)
-    {
-      return messages.Select(message => new MangaHistory(new Uri(message))).ToList();
-    }
 
     protected MangaHistory()
     {

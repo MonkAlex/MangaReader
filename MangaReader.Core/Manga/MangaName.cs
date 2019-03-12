@@ -58,17 +58,6 @@ namespace MangaReader.Core.Manga
     }
 
     /// <summary>
-    /// Проверка наличия названия на любом языке.
-    /// </summary>
-    public bool IsValid
-    {
-      get
-      {
-        return !string.IsNullOrEmpty(this.Japanese);
-      }
-    }
-
-    /// <summary>
     /// Определение строкового значения по настройкам.
     /// </summary>
     /// <returns>Название манги.</returns>
@@ -79,33 +68,6 @@ namespace MangaReader.Core.Manga
       if (ConfigStorage.Instance.AppConfig.Language == Languages.Russian)
         return Russian;
       return Japanese;
-    }
-
-    /// <summary>
-    /// Имя манги.
-    /// </summary>
-    public MangaName() { }
-
-    /// <summary>
-    /// Имя манги.
-    /// </summary>
-    /// <param name="name">Имя на любом языке. Будет записано в японский.</param>
-    public MangaName(string name)
-    {
-      this.Japanese = name;
-    }
-
-    /// <summary>
-    /// Имя манги.
-    /// </summary>
-    /// <param name="english">Английское название.</param>
-    /// <param name="russian">Русское название.</param>
-    /// <param name="japanese">Японское название.</param>
-    public MangaName(string english, string russian, string japanese)
-    {
-      this.English = english;
-      this.Russian = russian;
-      this.Japanese = japanese;
     }
   }
 }

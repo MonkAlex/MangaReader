@@ -26,7 +26,7 @@ namespace Acomics.Convertation
           await parser.UpdateContentType(acomic).ConfigureAwait(false);
           process.Percent += 100.0 / acomics.Count;
         }
-        acomics.SaveAll(context);
+        await acomics.SaveAll(context).ConfigureAwait(false);
       }
     }
 

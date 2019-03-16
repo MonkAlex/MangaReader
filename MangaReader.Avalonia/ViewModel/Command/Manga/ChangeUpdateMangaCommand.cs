@@ -12,18 +12,16 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
   {
     protected readonly bool NeedUpdate;
 
-    public override Task Execute(IEnumerable<IManga> mangas)
+    public override async Task Execute(IEnumerable<IManga> mangas)
     {
       using (var context = Repository.GetEntityContext())
       {
         foreach (var manga in mangas.Where(m => m.NeedUpdate == NeedUpdate))
         {
           manga.NeedUpdate = !manga.NeedUpdate;
-          context.Save(manga);
+          await context.Save(manga).ConfigureAwait(true);
         }
       }
-
-      return Task.CompletedTask;
     }
 
     public override bool CanExecute(object parameter)

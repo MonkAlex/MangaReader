@@ -87,13 +87,13 @@ namespace Tests
           login.PasswordHash = "e84fce6c43aacd7f8452409a63083c18";
           login.UserId = "282433";
           login.IsLogined = true;
-          context.Save(login);
+          await context.Save(login).ConfigureAwait(false);
         }
 
         var mangaUri = new Uri(mangaInfo.Uri);
         var existsManga = context.Get<IManga>().FirstOrDefault(m => m.Uri == mangaUri);
         if (existsManga != null)
-          context.Delete(existsManga);
+          await context.Delete(existsManga).ConfigureAwait(false);
         manga = await Mangas.CreateFromWeb(mangaUri).ConfigureAwait(false);
       }
 

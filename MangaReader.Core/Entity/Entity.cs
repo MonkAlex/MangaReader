@@ -1,4 +1,4 @@
-﻿using System.Xml.Serialization;
+﻿using System.Threading.Tasks;
 using MangaReader.Core.Exception;
 
 namespace MangaReader.Core.Entity
@@ -19,9 +19,9 @@ namespace MangaReader.Core.Entity
 
     private int id = 0;
     
-    public virtual void BeforeSave(ChangeTrackerArgs args)
+    public virtual Task BeforeSave(ChangeTrackerArgs args)
     {
-
+      return Task.CompletedTask;
     }
 
     public override bool Equals(object obj)

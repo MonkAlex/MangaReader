@@ -46,7 +46,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
             if (Uri.TryCreate(model.Uri, UriKind.Absolute, out Uri parsedUri) && parsedUri != manga.Uri)
               manga.Uri = parsedUri;
 
-            context.Save(manga);
+            await context.Save(manga).ConfigureAwait(true);
             model.UpdateProperties(manga);
           }
           else
@@ -57,7 +57,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
               if (added.Success)
               {
                 added.Manga.Cover = model.Cover;
-                context.Save(added.Manga);
+                await context.Save(added.Manga).ConfigureAwait(true);
               }
             }
           }

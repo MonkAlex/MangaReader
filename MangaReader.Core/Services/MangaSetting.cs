@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Account;
 using MangaReader.Core.Entity;
 using MangaReader.Core.Exception;
@@ -38,7 +39,7 @@ namespace MangaReader.Core.Services
     /// </summary>
     public Guid FolderNamingStrategy { get; set; }
 
-    public override void BeforeSave(ChangeTrackerArgs args)
+    public override async Task BeforeSave(ChangeTrackerArgs args)
     {
       if (!args.IsNewEntity)
       {
@@ -61,13 +62,13 @@ namespace MangaReader.Core.Services
                 manga.Uri = new Uri(manga.Uri.OriginalString.Replace(uriState.OldValue.GetLeftPart(UriPartial.Authority), uriState.Value.GetLeftPart(UriPartial.Authority)));
               if (folderState.IsChanged)
                 manga.RefreshFolder();
-              context.AddToTransaction(manga);
+              await context.AddToTransaction(manga).ConfigureAwait(false);
             }
           }
         }
       }
 
-      base.BeforeSave(args);
+      await base.BeforeSave(args).ConfigureAwait(false);
     }
 
     public MangaSetting()

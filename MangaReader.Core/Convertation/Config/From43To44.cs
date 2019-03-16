@@ -10,23 +10,22 @@ namespace MangaReader.Core.Convertation.Config
 {
   public class From43To44 : ConfigConverter
   {
-    protected override Task ProtectedConvert(IProcess process)
+    protected override async Task ProtectedConvert(IProcess process)
     {
       var settings = NHibernate.Repository.GetStateless<MangaSetting>();
       foreach (var setting in settings)
       {
-        this.RunSql($"update Mangas set Setting = {setting.Id} where Setting is null and Type = \"{setting.Manga}\"");
+        await RunSql($"update Mangas set Setting = {setting.Id} where Setting is null and Type = \"{setting.Manga}\"")
+          .ConfigureAwait(false);
       }
 
       using (var context = NHibernate.Repository.GetEntityContext())
       {
-        var config = context.Get<DatabaseConfig>().SingleOrCreate();
+        var config = await context.Get<DatabaseConfig>().SingleOrCreate().ConfigureAwait(false);
         if (context.Get<IManga>().Any())
           config.FolderNamingStrategy = Generic.GetNamingStrategyId<LegacyFolderNaming>();
-        context.Save(config);
+        await context.Save(config).ConfigureAwait(false);
       }
-
-      return Task.CompletedTask;
     }
 
     public From43To44()

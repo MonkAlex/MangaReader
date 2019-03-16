@@ -9,7 +9,7 @@ namespace Hentai2Read.com.Convertation
 {
   public class Hentai2ReadFrom46To47 : ConfigConverter
   {
-    protected override Task ProtectedConvert(IProcess process)
+    protected override async Task ProtectedConvert(IProcess process)
     {
       using (var context = Repository.GetEntityContext())
       {
@@ -17,11 +17,9 @@ namespace Hentai2Read.com.Convertation
         if (setting != null)
         {
           setting.MainUri = new Uri("https://hentai2read.com");
-          context.Save(setting);
+          await context.Save(setting).ConfigureAwait(false);
         }
       }
-
-      return Task.CompletedTask;
     }
 
     public Hentai2ReadFrom46To47()

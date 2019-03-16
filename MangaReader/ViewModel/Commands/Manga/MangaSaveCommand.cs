@@ -38,7 +38,7 @@ namespace MangaReader.ViewModel.Commands.Manga
           if (Uri.TryCreate(model.Uri, UriKind.Absolute, out Uri parsedUri) && parsedUri != manga.Uri)
             manga.Uri = parsedUri;
 
-          context.Save(manga);
+          context.Save(manga).GetAwaiter().GetResult();
           model.UpdateProperties(manga);
         }
         model.Close();
@@ -48,7 +48,7 @@ namespace MangaReader.ViewModel.Commands.Manga
         MessageBox.Show(ex.Message);
         using (var context = Repository.GetEntityContext())
         {
-          context.Refresh(model.ContextManga);
+          context.Refresh(model.ContextManga).GetAwaiter().GetResult();
           model.UpdateProperties(model.ContextManga);
         }
       }

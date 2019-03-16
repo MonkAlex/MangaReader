@@ -43,7 +43,7 @@ namespace Tests.Entities.Library
           .Where(m => m.Uri.AbsoluteUri.Contains("berserk"))
           .ToList();
         foreach (var manga in mangas)
-          model.Remove(manga);
+          await model.Remove(manga).ConfigureAwait(false);
       }
 
       try

@@ -9,7 +9,7 @@ namespace Hentaichan.Convertation
 {
   public class HentaichanFrom46To47 : ConfigConverter
   {
-    protected override Task ProtectedConvert(IProcess process)
+    protected override async Task ProtectedConvert(IProcess process)
     {
       using (var context = Repository.GetEntityContext())
       {
@@ -17,11 +17,9 @@ namespace Hentaichan.Convertation
         if (setting != null)
         {
           setting.MainUri = new Uri("http://henchan.me");
-          context.Save(setting);
+          await context.Save(setting).ConfigureAwait(false);
         }
       }
-
-      return Task.CompletedTask;
     }
 
     public HentaichanFrom46To47()

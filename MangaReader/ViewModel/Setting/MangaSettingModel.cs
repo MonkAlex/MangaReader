@@ -86,7 +86,7 @@ namespace MangaReader.ViewModel.Setting
         if (Uri.TryCreate(this.MainUri, UriKind.Absolute, out Uri parsedUri) && parsedUri != setting.MainUri)
           setting.MainUri = parsedUri;
         this.Login.Save();
-        context.Save(setting);
+        context.Save(setting).GetAwaiter().GetResult();
       }
     }
 

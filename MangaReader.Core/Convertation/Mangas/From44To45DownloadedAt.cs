@@ -15,12 +15,12 @@ namespace MangaReader.Core.Convertation.Mangas
       return base.ProtectedCanConvert(process) && this.CanConvertVersion(process);
     }
 
-    protected override Task ProtectedConvert(IProcess process)
+    protected override async Task ProtectedConvert(IProcess process)
     {
       process.Percent = 0;
       using (var context = Repository.GetEntityContext())
       {
-        using (var tranc = context.OpenTransaction())
+        using (var transaction = context.OpenTransaction())
         {
           var mangas = context.Get<IManga>().Where(m => m.DownloadedAt == null).OrderBy(m => m.Id).ToList();
           foreach (var manga in mangas)
@@ -33,13 +33,11 @@ namespace MangaReader.Core.Convertation.Mangas
               Log.Add($"Манге {manga.Name} не удалось найти примерную дату скачивания.");
             if (manga.DownloadedAt == null || manga.DownloadedAt < downloaded)
               manga.DownloadedAt = downloaded;
-            context.AddToTransaction(manga);
+            await context.AddToTransaction(manga).ConfigureAwait(false);
           }
-          tranc.Commit();
+          await transaction.CommitAsync().ConfigureAwait(false);
         }
       }
-
-      return Task.CompletedTask;
     }
 
     public From44To45DownloadedAt()

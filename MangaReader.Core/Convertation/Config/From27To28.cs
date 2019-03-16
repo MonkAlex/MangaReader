@@ -6,17 +6,15 @@ namespace MangaReader.Core.Convertation.Config
 {
   public class From27To28 : ConfigConverter
   {
-    protected override Task ProtectedConvert(IProcess process)
+    protected override async Task ProtectedConvert(IProcess process)
     {
-      RunSql(@"update MangaSetting 
+      await RunSql(@"update MangaSetting 
           set DefaultCompression = 'Volume'
-          where MangaName = 'Readmanga'");
+          where MangaName = 'Readmanga'").ConfigureAwait(false);
 
-      RunSql(@"update MangaSetting
+      await RunSql(@"update MangaSetting
           set DefaultCompression = 'Manga'
-          where MangaName = 'Acomics'");
-
-      return Task.CompletedTask;
+          where MangaName = 'Acomics'").ConfigureAwait(false);
     }
 
     public From27To28()

@@ -94,7 +94,7 @@ namespace MangaReader.ViewModel
           var actualLogin = context.Get<ILogin>().Single(s => s.Id == LoginId);
           actualLogin.Name = this.Login;
           actualLogin.Password = this.Password;
-          context.Save(actualLogin);
+          context.Save(actualLogin).GetAwaiter().GetResult();
           this.login = actualLogin;
         }
       }

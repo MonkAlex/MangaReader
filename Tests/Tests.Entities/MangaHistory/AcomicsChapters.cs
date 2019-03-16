@@ -15,17 +15,17 @@ namespace Tests.Entities.MangaHistory
     {
       using (var context = Repository.GetEntityContext())
       {
-        var manga = Builder.CreateAcomics();
+        var manga = await Builder.CreateAcomics().ConfigureAwait(false);
         manga.Uri = new Uri("https://acomics.ru/~ma3");
 
         var volumeUri = new Uri("https://acomics.ru/~ma3/935");
         var chapterUri = new Uri("https://acomics.ru/~ma3/1129");
         manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(chapterUri));
-        context.Save(manga);
+        await context.Save(manga).ConfigureAwait(false);
 
         await manga.Refresh().ConfigureAwait(false);
         manga.Name = Guid.NewGuid().ToString();
-        context.Save(manga);
+        await context.Save(manga).ConfigureAwait(false);
 
         var chapter = new Chapter(chapterUri, string.Empty);
         chapter.Container.Add(new MangaPage(new Uri("https://acomics.ru/~ma3/1130"), null, 1));
@@ -42,17 +42,17 @@ namespace Tests.Entities.MangaHistory
     {
       using (var context = Repository.GetEntityContext())
       {
-        var manga = Builder.CreateAcomics();
+        var manga = await Builder.CreateAcomics().ConfigureAwait(false);
         manga.Uri = new Uri("https://acomics.ru/~ma3");
 
         var volumeUri = new Uri("https://acomics.ru/~ma3/777");
         var chapterUri = new Uri("https://acomics.ru/~ma3/793");
         manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(chapterUri));
-        context.Save(manga);
+        await context.Save(manga).ConfigureAwait(false);
 
         await manga.Refresh().ConfigureAwait(false);
         manga.Name = Guid.NewGuid().ToString();
-        context.Save(manga);
+        await context.Save(manga).ConfigureAwait(false);
 
         var chapter = new Chapter(chapterUri, string.Empty);
         chapter.Container.Add(new MangaPage(new Uri("https://acomics.ru/~ma3/794"), null, 1));

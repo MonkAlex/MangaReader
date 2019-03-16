@@ -22,13 +22,13 @@ namespace Tests.Entities.Library
       var library = new LibraryViewModel();
       using (var context = Repository.GetEntityContext())
         foreach (var forDelete in context.Get<IManga>())
-          context.Delete(forDelete);
-      var manga = Builder.CreateReadmanga();
+          await context.Delete(forDelete).ConfigureAwait(false);
+      var manga = await Builder.CreateReadmanga().ConfigureAwait(false);
       await TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.DownloadedAt)).ConfigureAwait(false);
       await TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.Created)).ConfigureAwait(false);
       await TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.Name)).ConfigureAwait(false);
       using (var context = Repository.GetEntityContext())
-        context.Delete(manga);
+        await context.Delete(manga).ConfigureAwait(false);
     }
 
     private async Task TestUpdateFromConfig(LibraryViewModel library, ListSortDirection direction, string property)
@@ -59,7 +59,7 @@ namespace Tests.Entities.Library
         events.Add(e);
       }
 
-      var manga = Builder.CreateReadmanga();
+      var manga = await Builder.CreateReadmanga().ConfigureAwait(false);
       var library = new LibraryViewModel();
       library.LibraryChanged += LibraryOnLibraryChanged;
 
@@ -84,7 +84,7 @@ namespace Tests.Entities.Library
 
       await task.ConfigureAwait(false);
 
-      library.Remove(manga);
+      await library.Remove(manga).ConfigureAwait(false);
       library.LibraryChanged -= LibraryOnLibraryChanged;
       Assert.AreEqual(0, manga.Id);
 

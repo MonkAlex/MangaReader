@@ -10,7 +10,7 @@ namespace MangaReader.Core.Convertation.Database
 {
   public class From40To41 : DatabaseConverter
   {
-    protected override Task ProtectedConvert(IProcess process)
+    protected override async Task ProtectedConvert(IProcess process)
     {
       using (var context = Repository.GetEntityContext())
       {
@@ -24,11 +24,9 @@ namespace MangaReader.Core.Convertation.Database
             var relativePath = DirectoryHelpers.GetRelativePath(ConfigStorage.WorkFolder, setting.Folder);
             setting.Folder = relativePath.StartsWith(@"..\..\") ? setting.Folder : relativePath;
           }
-          context.Save(setting);
+          await context.Save(setting).ConfigureAwait(false);
         }
       }
-
-      return Task.CompletedTask;
     }
 
     public From40To41()

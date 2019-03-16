@@ -17,16 +17,16 @@ namespace Tests.Entities.Mapping
       {
         var mangas = context.Get<IManga>().Where(m => m.ServerName == "Strays");
         foreach (var deleting in mangas)
-          context.Delete(deleting);
+          await context.Delete(deleting).ConfigureAwait(false);
 
         // Init
         var firstChapterName = "Глава 1. Беспризорница";
         var chapterRenamed = "Test";
-        var manga = Builder.CreateAcomics();
+        var manga = await Builder.CreateAcomics().ConfigureAwait(false);
         manga.Uri = new Uri("https://acomics.ru/~strays");
         await manga.Refresh().ConfigureAwait(false);
         await manga.Parser.UpdateContent(manga).ConfigureAwait(false);
-        context.Save(manga);
+        await context.Save(manga).ConfigureAwait(false);
         Assert.AreEqual(3, manga.Volumes.Count);
         Assert.AreEqual(1, manga.Pages.Count);
         Assert.AreEqual(firstChapterName, manga.Volumes.First().Container.First().Name);
@@ -40,7 +40,7 @@ namespace Tests.Entities.Mapping
 
         // Первой попавшейся главе меняем имя.
         manga.Volumes.First().Container.First().Name = chapterRenamed;
-        context.Save(manga);
+        await context.Save(manga).ConfigureAwait(false);
         Assert.AreEqual(2, manga.Volumes.Count);
         Assert.AreEqual(0, manga.Pages.Count);
         Assert.AreEqual(chapterRenamed, manga.Volumes.First().Container.First().Name);
@@ -48,7 +48,7 @@ namespace Tests.Entities.Mapping
 
         // Перечитываем состояние с сайта.
         await manga.Parser.UpdateContent(manga).ConfigureAwait(false);
-        context.Save(manga);
+        await context.Save(manga).ConfigureAwait(false);
         Assert.AreEqual(3, manga.Volumes.Count);
         Assert.AreEqual(1, manga.Pages.Count);
         Assert.AreEqual(firstChapterName, manga.Volumes.First().Container.First().Name);

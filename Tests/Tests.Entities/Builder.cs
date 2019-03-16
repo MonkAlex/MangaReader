@@ -21,7 +21,7 @@ namespace Tests.Entities
     /// Создать мангу.
     /// </summary>
     /// <returns></returns>
-    public static Grouple.Readmanga CreateReadmanga()
+    public static async Task<Grouple.Readmanga> CreateReadmanga()
     {
       using (var context = Repository.GetEntityContext())
       {
@@ -29,7 +29,7 @@ namespace Tests.Entities
         manga.Status = "example status";
         manga.NeedUpdate = false;
         manga.Name = "readmanga from example" + Guid.NewGuid();
-        context.Save(manga);
+        await context.Save(manga).ConfigureAwait(false);
         return manga;
       }
     }
@@ -38,18 +38,18 @@ namespace Tests.Entities
     /// Удалить мангу.
     /// </summary>
     /// <param name="manga"></param>
-    public static void DeleteReadmanga(Grouple.Readmanga manga)
+    public static async Task DeleteReadmanga(Grouple.Readmanga manga)
     {
       if (manga == null)
         return;
 
       using (var context = Repository.GetEntityContext())
       {
-        context.Delete(manga);
+        await context.Delete(manga).ConfigureAwait(false);
       }
     }
 
-    public static Acomics.Acomics CreateAcomics()
+    public static async Task<Acomics.Acomics> CreateAcomics()
     {
       using (var context = Repository.GetEntityContext())
       {
@@ -57,38 +57,38 @@ namespace Tests.Entities
         manga.Status = "example status";
         manga.NeedUpdate = false;
         manga.Name = "Acomics from example" + Guid.NewGuid();
-        context.Save(manga);
+        await context.Save(manga).ConfigureAwait(false);
         return manga;
       }
     }
 
-    public static void DeleteAcomics(Acomics.Acomics manga)
+    public static async Task DeleteAcomics(Acomics.Acomics manga)
     {
       if (manga == null)
         return;
 
       using (var context = Repository.GetEntityContext())
       {
-        context.Delete(manga);
+        await context.Delete(manga).ConfigureAwait(false);
       }
     }
 
-    public static void CreateMangaHistory(IManga manga)
+    public static async Task CreateMangaHistory(IManga manga)
     {
       using (var context = Repository.GetEntityContext())
       {
         var history = new MangaReader.Core.Manga.MangaHistory(Url);
         manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(history.Uri));
-        context.Save(manga);
+        await context.Save(manga).ConfigureAwait(false);
       }
     }
 
-    public static void DeleteMangaHistory(IManga manga)
+    public static async Task DeleteMangaHistory(IManga manga)
     {
       using (var context = Repository.GetEntityContext())
       {
         manga.ClearHistory();
-        context.Save(manga);
+        await context.Save(manga).ConfigureAwait(false);
       }
     }
 

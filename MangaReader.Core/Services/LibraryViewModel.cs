@@ -161,7 +161,7 @@ namespace MangaReader.Core.Services
     /// Удалить мангу.
     /// </summary>
     /// <param name="manga"></param>
-    public void Remove(IManga manga)
+    public async Task Remove(IManga manga)
     {
       if (manga == null)
         return;
@@ -170,7 +170,7 @@ namespace MangaReader.Core.Services
       try
       {
         using (var context = Repository.GetEntityContext($"Remove manga {manga.Name}"))
-          context.Delete(manga);
+          await context.Delete(manga).ConfigureAwait(false);
         Log.Info(Strings.Library_Status_MangaRemoved + manga.Name);
       }
       catch (System.Exception e)

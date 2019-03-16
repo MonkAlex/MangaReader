@@ -7,17 +7,15 @@ namespace MangaReader.Core.Convertation.Database
 {
   public class FromBaseTo24 : DatabaseConverter
   {
-    protected override Task ProtectedConvert(IProcess process)
+    protected override async Task ProtectedConvert(IProcess process)
     {
-      RunSql(@"update Mangas 
+      await RunSql(@"update Mangas 
           set CompressionMode = 'Volume'
-          where CompressionMode is null and Type = '2c98bbf4-db46-47c4-ab0e-f207e283142d'");
+          where CompressionMode is null and Type = '2c98bbf4-db46-47c4-ab0e-f207e283142d'").ConfigureAwait(false);
 
-      RunSql(@"update Mangas 
+      await RunSql(@"update Mangas 
           set CompressionMode = 'Manga'
-          where CompressionMode is null and Type = 'f090b9a2-1400-4f5e-b298-18cd35341c34'");
-
-      return Task.CompletedTask;
+          where CompressionMode is null and Type = 'f090b9a2-1400-4f5e-b298-18cd35341c34'").ConfigureAwait(false);
     }
 
     public FromBaseTo24()

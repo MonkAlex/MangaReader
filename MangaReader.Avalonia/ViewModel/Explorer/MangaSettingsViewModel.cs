@@ -97,7 +97,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       }
     }
 
-    private void SaveConfig()
+    private async Task SaveConfig()
     {
       using (var context = Repository.GetEntityContext())
       {
@@ -111,7 +111,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           setting.FolderNamingStrategy = this.FolderNamingStrategy.Id;
           if (Uri.TryCreate(this.MainUri, UriKind.Absolute, out Uri parsedUri) && parsedUri != setting.MainUri)
             setting.MainUri = parsedUri;
-          context.Save(setting);
+          await context.Save(setting).ConfigureAwait(true);
         }
       }
     }
@@ -125,7 +125,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       this.FolderNamingStrategies.Insert(0, new BaseFolderNameStrategy("Использовать общие настройки"));
 
       ReloadConfig();
-      this.Save = new DelegateCommand(SaveConfig);
+      this.Save = new DelegateCommand(SaveConfig, () => true);
       this.UndoChanged = new DelegateCommand(ReloadConfig);
     }
 

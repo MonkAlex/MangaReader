@@ -47,7 +47,7 @@ namespace MangaReader.Core
         
         ConfigStorage.RefreshPlugins();
         NHibernate.Mapping.Initialize(process);
-        DatabaseConfig.Initialize();
+        await DatabaseConfig.Initialize().ConfigureAwait(false);
 
         var name = NHibernate.Repository.GetDatabaseUniqueId().ToString("D");
         mutex = new Mutex(false, $"Global\\{name}", out bool isSingle);
@@ -68,10 +68,13 @@ namespace MangaReader.Core
           }
         }
 
+        // Сервер стартует отдельно и рекурсивно сам себя поддерживает. Ждать его не нужно и нет никакого смысла.
+#pragma warning disable 4014
         Task.Run(() =>
         {
           ApplicationControl.Server.Run(name);
         });
+#pragma warning restore 4014
 
         await Converter.Convert(process).ConfigureAwait(false);
       }

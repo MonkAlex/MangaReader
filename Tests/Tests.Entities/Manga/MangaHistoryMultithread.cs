@@ -16,9 +16,9 @@ namespace Tests.Entities.Manga
   {
     const int y = 100;
     [Test]
-    public void AddHistoryMultithread()
+    public async Task AddHistoryMultithread()
     {
-      var manga = Builder.CreateReadmanga();
+      var manga = await Builder.CreateReadmanga().ConfigureAwait(false);
       AddRandomHistory(manga);
       Assert.AreEqual(y, manga.Histories.Count());
     }
@@ -27,30 +27,30 @@ namespace Tests.Entities.Manga
     /// #102 - после исключения в beforesave история одной манги мешает создавать историю другой манги.
     /// </summary>
     [Test]
-    public void AddHistoryMultithreadAndSave([Values(true, false)] bool inSession)
+    public async Task AddHistoryMultithreadAndSave([Values(true, false)] bool inSession)
     {
       using (inSession ? Repository.GetEntityContext() : null)
       {
         string name;
         using (var context = Repository.GetEntityContext())
         {
-          var manga = Builder.CreateReadmanga();
+          var manga = await Builder.CreateReadmanga().ConfigureAwait(false);
           name = manga.Name;
-          context.Save(manga);
+          await context.Save(manga).ConfigureAwait(false);
           Directory.CreateDirectory(manga.GetAbsoluteFolderPath());
         }
-        var manga2 = Builder.CreateReadmanga();
+        var manga2 = await Builder.CreateReadmanga().ConfigureAwait(false);
 
-        var exception = Assert.Catch<SaveValidationException>(() =>
+        var exception = Assert.CatchAsync<SaveValidationException>(async () =>
         {
           using (var context = Repository.GetEntityContext())
           {
-            var manga3 = Builder.CreateReadmanga();
+            var manga3 = await Builder.CreateReadmanga().ConfigureAwait(false);
             Directory.CreateDirectory(manga3.GetAbsoluteFolderPath());
             manga3.Name = name;
             AddRandomHistory(manga3);
             Assert.AreEqual(y, manga3.Histories.Count());
-            context.Save(manga3);
+            await context.Save(manga3).ConfigureAwait(false);
           }
         });
         Assert.IsAssignableFrom<SaveValidationException>(exception);
@@ -59,24 +59,24 @@ namespace Tests.Entities.Manga
         if (inSession)
         {
 #warning Сессия, запоротая исключением, запорота навсегда.
-          Assert.Catch<SaveValidationException>(() =>
+          Assert.CatchAsync<SaveValidationException>(async () =>
           {
-            ResaveManga(manga2);
+            await ResaveManga(manga2).ConfigureAwait(false);
           });
         }
         else
-          ResaveManga(manga2);
+          await ResaveManga(manga2).ConfigureAwait(false);
 
         Assert.AreEqual(y, manga2.Histories.Count());
       }
     }
 
-    private static void ResaveManga(MangaReader.Core.Manga.IManga manga)
+    private static async Task ResaveManga(MangaReader.Core.Manga.IManga manga)
     {
       using (var context = Repository.GetEntityContext())
       {
         manga = context.Get<MangaReader.Core.Manga.IManga>().Single(m => m.Id == manga.Id);
-        context.Save(manga);
+        await context.Save(manga).ConfigureAwait(false);
       }
     }
 

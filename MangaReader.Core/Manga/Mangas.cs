@@ -330,7 +330,7 @@ namespace MangaReader.Core.Manga
       if (!this.ActiveChapters.Any() && !this.ActiveVolumes.Any() && !this.ActivePages.Any())
       {
         using (var context = Repository.GetEntityContext())
-          context.Save(this);
+          await context.Save(this).ConfigureAwait(false);
         return;
       }
 
@@ -393,7 +393,7 @@ namespace MangaReader.Core.Manga
         }
 
         using (var context = Repository.GetEntityContext())
-          context.Save(this);
+          await context.Save(this).ConfigureAwait(false);
         NetworkSpeed.Clear();
         Log.AddFormat("Download end '{0}'.", this.Name);
       }
@@ -476,7 +476,7 @@ namespace MangaReader.Core.Manga
       Log.Info(Strings.Mangas_Compress_Completed);
     }
 
-    public override void BeforeSave(ChangeTrackerArgs args)
+    public override Task BeforeSave(ChangeTrackerArgs args)
     {
       if (!args.IsNewEntity)
       {
@@ -535,7 +535,7 @@ namespace MangaReader.Core.Manga
         }
       }
 
-      base.BeforeSave(args);
+      return base.BeforeSave(args);
     }
 
     public virtual void RefreshFolder()
@@ -619,7 +619,7 @@ namespace MangaReader.Core.Manga
             await mangas.CreatedFromWeb(uri).ConfigureAwait(false);
 
           if (manga.IsValid())
-            context.Save(manga);
+            await context.Save(manga).ConfigureAwait(false);
         }
 
         return manga;

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MangaReader.Core.Entity;
 using MangaReader.Core.Exception;
@@ -8,32 +9,32 @@ namespace MangaReader.Core.NHibernate
 {
   class SaveOrUpdateEvent : IPreUpdateEventListener, IPreInsertEventListener
   {
-    public Task<bool> OnPreUpdateAsync(PreUpdateEvent e, CancellationToken cancellationToken)
-    {
-      return Task.FromResult(this.OnPreUpdate(e));
-    }
-
-    public bool OnPreUpdate(PreUpdateEvent e)
+    public async Task<bool> OnPreUpdateAsync(PreUpdateEvent e, CancellationToken cancellationToken)
     {
       if (e.Entity is IEntity entity)
       {
         if (e.OldState == null && entity.Id != 0)
           throw new EntityException("Сущности можно обновлять только в контексте подключения к БД (получение, изменение, сохранение).", entity);
-        entity.BeforeSave(new ChangeTrackerArgs(e.State, e.OldState, e.Persister.PropertyNames, false));
+        await entity.BeforeSave(new ChangeTrackerArgs(e.State, e.OldState, e.Persister.PropertyNames, false)).ConfigureAwait(false);
       }
       return false;
     }
 
-    public Task<bool> OnPreInsertAsync(PreInsertEvent e, CancellationToken cancellationToken)
+    public bool OnPreUpdate(PreUpdateEvent e)
     {
-      return Task.FromResult(this.OnPreInsert(e));
+      throw new NotImplementedException();
+    }
+
+    public async Task<bool> OnPreInsertAsync(PreInsertEvent e, CancellationToken cancellationToken)
+    {
+      if (e.Entity is IEntity entity)
+        await entity.BeforeSave(new ChangeTrackerArgs(e.State, null, e.Persister.PropertyNames, false)).ConfigureAwait(false);
+      return false;
     }
 
     public bool OnPreInsert(PreInsertEvent e)
     {
-      if (e.Entity is IEntity entity)
-        entity.BeforeSave(new ChangeTrackerArgs(e.State, null, e.Persister.PropertyNames, false));
-      return false;
+      throw new NotImplementedException();
     }
   }
 }

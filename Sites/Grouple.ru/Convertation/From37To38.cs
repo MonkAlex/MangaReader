@@ -10,7 +10,7 @@ namespace Grouple.Convertation
 {
   public class From37To38 : ConfigConverter
   {
-    protected override Task ProtectedConvert(IProcess process)
+    protected override async Task ProtectedConvert(IProcess process)
     {
       using (var context = Repository.GetEntityContext())
       {
@@ -27,7 +27,7 @@ namespace Grouple.Convertation
             mintmanga.CompressManga = readmanga.CompressManga;
             mintmanga.OnlyUpdate = readmanga.OnlyUpdate;
             mintmanga.DefaultCompression = readmanga.DefaultCompression;
-            context.Save(mintmanga);
+            await context.Save(mintmanga).ConfigureAwait(false);
           }
         }
 
@@ -36,7 +36,7 @@ namespace Grouple.Convertation
         {
           setting.MainUri = new Uri("http://readmanga.me/");
           setting.Login.MainUri = new Uri(@"https://grouple.ru/");
-          context.Save(setting);
+          await context.Save(setting).ConfigureAwait(false);
         }
 
         setting = ConfigStorage.GetPlugin<Mintmanga>().GetSettings();
@@ -44,11 +44,9 @@ namespace Grouple.Convertation
         {
           setting.MainUri = new Uri("http://mintmanga.com/");
           setting.Login.MainUri = new Uri(@"https://grouple.ru/");
-          context.Save(setting);
+          await context.Save(setting).ConfigureAwait(false);
         }
       }
-
-      return Task.CompletedTask;
     }
 
     public From37To38()

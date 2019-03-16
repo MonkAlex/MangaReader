@@ -20,7 +20,7 @@ namespace Tests.Entities.Manga
         login.PasswordHash = "e84fce6c43aacd7f8452409a63083c18";
         login.UserId = "282433";
         login.IsLogined = true;
-        context.Save(login);
+        await context.Save(login).ConfigureAwait(false);
       }
 
       var manga = await Mangas.CreateFromWeb(new Uri("http://mangachan.me/manga/5335-the-breaker-new-waves.html")).ConfigureAwait(false);
@@ -48,7 +48,7 @@ namespace Tests.Entities.Manga
         var uri = new Uri("http://mintmanga.com/haruka_na_receive");
         var toRemove = context.Get<IManga>().Where(m => m.Uri == uri).ToList();
         foreach (var remove in toRemove)
-          context.Delete(remove);
+          await context.Delete(remove).ConfigureAwait(false);
         var manga = await Mangas.CreateFromWeb(uri).ConfigureAwait(false);
         await manga.Parser.UpdateContent(manga).ConfigureAwait(false);
         var chapters = manga.Volumes.SelectMany(v => v.Container).OfType<Grouple.GroupleChapter>();

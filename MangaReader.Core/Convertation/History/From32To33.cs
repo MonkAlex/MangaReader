@@ -14,13 +14,11 @@ namespace MangaReader.Core.Convertation.History
       return base.ProtectedCanConvert(process) && this.CanConvertVersion(process);
     }
 
-    protected override Task ProtectedConvert(IProcess process)
+    protected override async Task ProtectedConvert(IProcess process)
     {
-      RunSql(@"update MangaHistory
+      await RunSql(@"update MangaHistory
                set Uri = Replace(Uri, ':80/', '/')
-               where Uri like '%:80/%'");
-
-      return Task.CompletedTask;
+               where Uri like '%:80/%'").ConfigureAwait(false);
     }
 
     public From32To33()

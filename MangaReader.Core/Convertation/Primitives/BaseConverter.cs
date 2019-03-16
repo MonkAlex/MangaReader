@@ -44,11 +44,11 @@ namespace MangaReader.Core.Convertation.Primitives
              process.Version.CompareTo(this.Version) >= 0;
     }
 
-    protected object RunSql(string command)
+    protected async Task<object> RunSql(string command)
     {
       using (var session = Repository.GetEntityContext())
       {
-        return session.CreateSqlQuery(command);
+        return await session.CreateSqlQuery(command).ConfigureAwait(false);
       }
     }
   }

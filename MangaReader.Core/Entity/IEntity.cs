@@ -11,6 +11,6 @@
     /// Событие перед сохранением - для валидации.
     /// </summary>
     /// <param name="args">Информация о событии.</param>
-    void BeforeSave(ChangeTrackerArgs args);
+    System.Threading.Tasks.Task BeforeSave(ChangeTrackerArgs args);
   }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Account;
 using MangaReader.Core.NHibernate;
 
@@ -43,7 +44,7 @@ namespace MangaReader.Core.Services.Config
     /// </summary>
     /// <param name="context">Контекст подключения к БД.</param>
     /// <returns>Коллекция всех настроек.</returns>
-    private static void CreateDefaultMangaSettings(RepositoryContext context)
+    private static async Task CreateDefaultMangaSettings(RepositoryContext context)
     {
       var settings = context.Get<MangaSetting>().ToList();
       var plugins = ConfigStorage.Plugins;
@@ -61,7 +62,7 @@ namespace MangaReader.Core.Services.Config
           Login = Login.Get(plugin.LoginType)
         };
 
-        context.Save(setting);
+        await context.Save(setting).ConfigureAwait(false);
         settings.Add(setting);
       }
     }
@@ -72,11 +73,11 @@ namespace MangaReader.Core.Services.Config
       this.FolderNamingStrategy = Generic.GetNamingStrategyId<NumberPrefixFolderNaming>();
     }
 
-    public static void Initialize()
+    public static async Task Initialize()
     {
-      Repository.GetStateless<DatabaseConfig>().SingleOrCreate();
+      await Repository.GetStateless<DatabaseConfig>().SingleOrCreate().ConfigureAwait(false);
       using (var context = Repository.GetEntityContext("Initialize database config"))
-        CreateDefaultMangaSettings(context);
+        await CreateDefaultMangaSettings(context).ConfigureAwait(false);
     }
   }
 }

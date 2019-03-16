@@ -31,11 +31,11 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
 
       if (dialog.Show() == yes)
       {
-        await Library.ThreadAction(() =>
+        await Library.ThreadAction(async () =>
         {
           foreach (var manga in list)
           {
-            Library.Remove(manga);
+            await Library.Remove(manga).ConfigureAwait(false);
 
             if (deleteFolder.Value)
               DirectoryHelpers.DeleteDirectory(manga.GetAbsoluteFolderPath());

@@ -23,11 +23,11 @@ namespace MangaReader.ViewModel.Commands.Manga
 
       if (dialogResult.Item1)
       {
-        Library.ThreadAction(() =>
+        Library.ThreadAction(async () =>
         {
           foreach (var manga in list)
           {
-            Library.Remove(manga);
+            await Library.Remove(manga).ConfigureAwait(false);
 
             if (dialogResult.Item2)
               DirectoryHelpers.DeleteDirectory(manga.GetAbsoluteFolderPath());

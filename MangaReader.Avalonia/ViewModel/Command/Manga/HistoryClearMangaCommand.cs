@@ -11,7 +11,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
   public class HistoryClearMangaCommand : MultipleMangasBaseCommand
   {
-    public override Task Execute(IEnumerable<IManga> mangas)
+    public override async Task Execute(IEnumerable<IManga> mangas)
     {
       var list = mangas.ToList();
 
@@ -33,10 +33,8 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
           manga.ClearHistory();
         }
         using (var context = Repository.GetEntityContext())
-          list.SaveAll(context);
+          await list.SaveAll(context).ConfigureAwait(true);
       }
-
-      return Task.CompletedTask;
     }
 
     public HistoryClearMangaCommand(Explorer.LibraryViewModel model) : base(model)

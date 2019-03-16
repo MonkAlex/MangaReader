@@ -1,4 +1,5 @@
-﻿using MangaReader.Core.NHibernate;
+﻿using System.Threading.Tasks;
+using MangaReader.Core.NHibernate;
 using NUnit.Framework;
 
 namespace Tests.Entities.MangaSetting
@@ -7,23 +8,23 @@ namespace Tests.Entities.MangaSetting
   public class ChangeFolderInSetting : TestClass
   {
     [Test]
-    public void ChangeFolderInSettingNoConflict()
+    public async Task ChangeFolderInSettingNoConflict()
     {
       using (var context = Repository.GetEntityContext())
       {
-        var manga = Builder.CreateAcomics();
+        var manga = await Builder.CreateAcomics().ConfigureAwait(false);
         var folder = manga.Folder;
         var settingFolder = manga.Setting.Folder;
         Assert.NotNull(folder);
         manga.Setting.Folder += "2";
-        context.Save(manga.Setting);
+        await context.Save(manga.Setting).ConfigureAwait(false);
 
         Assert.AreNotEqual(folder, manga.Folder);
-        context.Refresh(manga);
+        await context.Refresh(manga).ConfigureAwait(false);
         Assert.AreNotEqual(folder, manga.Folder);
 
         manga.Setting.Folder = settingFolder;
-        context.Save(manga.Setting);
+        await context.Save(manga.Setting).ConfigureAwait(false);
 
         Assert.AreEqual(folder, manga.Folder);
       }

@@ -15,9 +15,9 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task AddHentaichanMultiPages()
     {
-      Login();
+      await Login().ConfigureAwait(false);
       var manga = await GetManga("http://henchan.me/manga/14212-love-and-devil-glava-25.html").ConfigureAwait(false);
-      Unlogin();
+      await Unlogin().ConfigureAwait(false);
       Assert.AreEqual(25, manga.Chapters.Count);
       Assert.IsTrue(manga.HasChapters);
     }
@@ -80,7 +80,7 @@ namespace Tests.Entities.Manga
       return manga;
     }
 
-    private void Login()
+    private async Task Login()
     {
       using (var context = Repository.GetEntityContext())
       {
@@ -92,12 +92,12 @@ namespace Tests.Entities.Manga
           login.UserId = userId;
           login.PasswordHash = "0578caacc02411f8c9a1a0af31b3befa";
           login.IsLogined = true;
-          context.Save(setting);
+          await context.Save(setting).ConfigureAwait(false);
         }
       }
     }
 
-    private void Unlogin()
+    private async Task Unlogin()
     {
       using (var context = Repository.GetEntityContext())
       {
@@ -106,7 +106,7 @@ namespace Tests.Entities.Manga
         login.UserId = "";
         login.PasswordHash = "";
         login.IsLogined = false;
-        context.Save(setting);
+        await context.Save(setting).ConfigureAwait(false);
       }
     }
   }

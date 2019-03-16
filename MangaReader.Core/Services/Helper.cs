@@ -73,7 +73,7 @@ namespace MangaReader.Core.Services
       return obj.Id;
     }
 
-    public static T SingleOrCreate<T>(this IEnumerable<T> query) where T : Entity.Entity, new()
+    public static async Task<T> SingleOrCreate<T>(this IEnumerable<T> query) where T : Entity.Entity, new()
     {
       var single = query.SingleOrDefault();
       if (Equals(single, default(T)))
@@ -81,7 +81,7 @@ namespace MangaReader.Core.Services
         using (var context = Repository.GetEntityContext())
         {
           single = new T();
-          context.Save(single);
+          await context.Save(single).ConfigureAwait(false);
         }
       }
 
@@ -136,23 +136,23 @@ namespace MangaReader.Core.Services
       return null;
     }
 
-    public static void SaveAll<T>(this IEnumerable<T> objects, RepositoryContext context) where T : Entity.IEntity
+    public static async Task SaveAll<T>(this IEnumerable<T> objects, RepositoryContext context) where T : Entity.IEntity
     {
       var list = objects.ToList();
       if (!list.Any())
         return;
 
-      using (var tranc = context.OpenTransaction())
+      using (var transaction = context.OpenTransaction())
       {
         try
         {
           foreach (var o in list)
-            context.AddToTransaction(o);
-          tranc.Commit();
+            await context.AddToTransaction(o).ConfigureAwait(false);
+          await transaction.CommitAsync().ConfigureAwait(false);
         }
         catch (System.Exception)
         {
-          tranc.Rollback();
+          await transaction.RollbackAsync().ConfigureAwait(false);
           throw;
         }
       }

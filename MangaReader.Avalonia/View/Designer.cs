@@ -62,7 +62,7 @@ namespace MangaReader.Avalonia.View
       public List<Compression.CompressionMode> AllowedCompressionModes { get; } = Generic.GetEnumValues<Compression.CompressionMode>();
       public Compression.CompressionMode? CompressionMode { get; set; }
       public int Id { get; set; }
-      public void BeforeSave(ChangeTrackerArgs args)
+      public Task BeforeSave(ChangeTrackerArgs args)
       {
         throw new NotImplementedException();
       }

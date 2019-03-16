@@ -19,13 +19,13 @@ namespace Tests.Entities.Manga
       using (var context = Repository.GetEntityContext())
       {
         foreach (var remove in context.Get<IManga>().ToList().Where(m => m.ServerName.Contains("btooom")))
-          model.Remove(remove);
+          await model.Remove(remove).ConfigureAwait(false);
 
-        var manga = Builder.CreateReadmanga();
+        var manga = await Builder.CreateReadmanga().ConfigureAwait(false);
         var readmangaUri = new Uri("http://readmanga.me/btoom");
         manga.Uri = readmangaUri;
         manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(new Uri("http://readmanga.me/btoom/vol1/1?mature=1")));
-        context.Save(manga);
+        await context.Save(manga).ConfigureAwait(false);
 
         manga = context.Get<Grouple.Readmanga>().FirstOrDefault(m => m.Id == manga.Id);
         await manga.Refresh().ConfigureAwait(false);
@@ -34,7 +34,7 @@ namespace Tests.Entities.Manga
         if (manga.Uri == readmangaUri)
           manga.Uri = new Uri("http://mintmanga.com/btooom_");
 
-        context.Save(manga);
+        await context.Save(manga).ConfigureAwait(false);
 
         var volume = new Volume();
         volume.Container.Add(new Chapter(new Uri("http://mintmanga.com/btooom_/vol1/1?mature=1"), string.Empty));

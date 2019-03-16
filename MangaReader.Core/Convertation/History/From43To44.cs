@@ -44,7 +44,7 @@ namespace MangaReader.Core.Convertation.History
               var chapterPages = manga.Chapters.SelectMany(c => c.Container);
               SetDownloadableDate(history, volumePages.Concat(chapterPages).Concat(manga.Pages));
             }
-            context.Save(manga);
+            await context.Save(manga).ConfigureAwait(false);
           }
           catch (System.Exception ex)
           {

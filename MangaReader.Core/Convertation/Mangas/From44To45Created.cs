@@ -23,12 +23,12 @@ namespace MangaReader.Core.Convertation.Mangas
       return base.ProtectedCanConvert(process) && this.CanConvertVersion(process);
     }
 
-    protected override Task ProtectedConvert(IProcess process)
+    protected override async Task ProtectedConvert(IProcess process)
     {
       process.Percent = 0;
       using (var context = Repository.GetEntityContext())
       {
-        using (var tranc = context.OpenTransaction())
+        using (var transaction = context.OpenTransaction())
         {
           var mangas = context.Get<IManga>().OrderBy(m => m.Id).ToList();
           foreach (var manga in mangas)
@@ -77,10 +77,10 @@ namespace MangaReader.Core.Convertation.Mangas
             if (manga.Created == null || manga.Created > min)
             {
               manga.Created = min;
-              context.AddToTransaction(manga);
+              await context.AddToTransaction(manga).ConfigureAwait(false);
             }
           }
-          tranc.Commit();
+          await transaction.CommitAsync().ConfigureAwait(false);
         }
       }
 
@@ -88,10 +88,8 @@ namespace MangaReader.Core.Convertation.Mangas
       {
         hasEmptyRecords = false;
         firstRun = false;
-        ProtectedConvert(process);
+        await ProtectedConvert(process).ConfigureAwait(false);
       }
-
-      return Task.CompletedTask;
     }
 
     private static DateTime GetDefaultDate()

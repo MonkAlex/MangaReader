@@ -118,7 +118,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       }
     }
 
-    private void SaveConfig()
+    private async Task SaveConfig()
     {
       var configStorage = ConfigStorage.Instance;
       var appConfig = configStorage.AppConfig;
@@ -136,7 +136,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       {
         var config = context.Get<DatabaseConfig>().Single();
         config.FolderNamingStrategy = FolderNamingStrategy.Id;
-        context.Save(config);
+        await context.Save(config).ConfigureAwait(true);
       }
     }
 
@@ -145,7 +145,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       this.Name = "Settings";
       this.Priority = 100;
 
-      this.Save = new DelegateCommand(SaveConfig);
+      this.Save = new DelegateCommand(SaveConfig, () => true);
       this.UndoChanged = new DelegateCommand(ReloadConfig);
     }
   }

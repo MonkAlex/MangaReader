@@ -15,7 +15,7 @@ namespace Hentaichan.Convertation
       return base.ProtectedCanConvert(process) && this.CanConvertVersion(process);
     }
 
-    protected override Task ProtectedConvert(IProcess process)
+    protected override async Task ProtectedConvert(IProcess process)
     {
       using (var context = Repository.GetEntityContext())
       {
@@ -25,10 +25,8 @@ namespace Hentaichan.Convertation
           manga.Uri = new Uri(manga.Uri.OriginalString.Replace("/related/", "/manga/"));
           process.Percent += 100.0 / mangas.Count;
         }
-        mangas.SaveAll(context);
+        await mangas.SaveAll(context).ConfigureAwait(false);
       }
-
-      return Task.CompletedTask;
     }
 
     public HentaichanFrom44To45()

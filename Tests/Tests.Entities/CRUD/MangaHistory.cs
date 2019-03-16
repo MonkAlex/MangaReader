@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using NUnit.Framework;
@@ -10,12 +11,12 @@ namespace Tests.Entities.CRUD
   public class MangaHistory : TestClass
   {
     [Test]
-    public void MangaHistoryCreateDelete()
+    public async Task MangaHistoryCreateDelete()
     {
       using (var context = Repository.GetEntityContext())
       {
-        var manga = Builder.CreateAcomics();
-        Builder.CreateMangaHistory(manga);
+        var manga = await Builder.CreateAcomics().ConfigureAwait(false);
+        await Builder.CreateMangaHistory(manga).ConfigureAwait(false);
         var history = manga.Histories.FirstOrDefault();
         var historyId = history.Id;
         var mangaId = manga.Id;
@@ -28,8 +29,8 @@ namespace Tests.Entities.CRUD
         var mangas = context.Get<IManga>().FirstOrDefault(m => m.Id == mangaId);
         Assert.AreNotEqual(null, mangas);
 
-        Builder.DeleteMangaHistory(manga);
-        Builder.DeleteAcomics(manga);
+        await Builder.DeleteMangaHistory(manga).ConfigureAwait(false);
+        await Builder.DeleteAcomics(manga).ConfigureAwait(false);
 
         mangaHistory = context.Get<MangaReader.Core.Manga.MangaHistory>().FirstOrDefault(h => h.Id == historyId);
         Assert.AreEqual(null, mangaHistory);
@@ -40,13 +41,13 @@ namespace Tests.Entities.CRUD
     }
 
     [Test]
-    public void MangaHistoryReadUpdate()
+    public async Task MangaHistoryReadUpdate()
     {
       var url = new Uri("http://rutracker.org/forum/viewforum.php?f=52");
       using (var context = Repository.GetEntityContext())
       {
-        var manga = Builder.CreateReadmanga();
-        Builder.CreateMangaHistory(manga);
+        var manga = await Builder.CreateReadmanga().ConfigureAwait(false);
+        await Builder.CreateMangaHistory(manga).ConfigureAwait(false);
         var history = manga.Histories.FirstOrDefault();
         var oldUrl = history.Uri;
         var historyId = history.Id;
@@ -54,21 +55,21 @@ namespace Tests.Entities.CRUD
         history.Uri = url;
         Assert.AreEqual(url, history.Uri);
 
-        context.Refresh(history);
+        await context.Refresh(history).ConfigureAwait(false);
         Assert.AreEqual(oldUrl, history.Uri);
 
         var mangaHistory = Repository.GetStateless<MangaReader.Core.Manga.MangaHistory>(historyId);
         Assert.AreEqual(oldUrl, mangaHistory.Uri);
 
         history.Uri = url;
-        context.Save(history);
+        await context.Save(history).ConfigureAwait(false);
         Assert.AreEqual(url, history.Uri);
 
         mangaHistory = Repository.GetStateless<MangaReader.Core.Manga.MangaHistory>(historyId);
         Assert.AreEqual(url, mangaHistory.Uri);
 
-        Builder.DeleteMangaHistory(manga);
-        Builder.DeleteReadmanga(manga);
+        await Builder.DeleteMangaHistory(manga).ConfigureAwait(false);
+        await Builder.DeleteReadmanga(manga).ConfigureAwait(false);
       }
     }
   }

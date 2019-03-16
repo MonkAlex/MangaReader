@@ -27,7 +27,7 @@ namespace MangaReader.ViewModel.Commands.Manga
         }
 
         using (var context = Repository.GetEntityContext())
-          list.SaveAll(context);
+          list.SaveAll(context).GetAwaiter().GetResult();
       }
     }
 

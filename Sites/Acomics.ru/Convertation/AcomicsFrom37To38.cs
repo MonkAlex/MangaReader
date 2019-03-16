@@ -9,7 +9,7 @@ namespace Acomics.Convertation
 {
   public class AcomicsFrom37To38 : ConfigConverter
   {
-    protected override Task ProtectedConvert(IProcess process)
+    protected override async Task ProtectedConvert(IProcess process)
     {
       using (var context = Repository.GetEntityContext())
       {
@@ -17,11 +17,9 @@ namespace Acomics.Convertation
         if (setting != null && setting.MainUri == null)
         {
           setting.MainUri = new Uri("http://acomics.ru/");
-          context.Save(setting);
+          await context.Save(setting).ConfigureAwait(false);
         }
       }
-
-      return Task.CompletedTask;
     }
 
     public AcomicsFrom37To38()

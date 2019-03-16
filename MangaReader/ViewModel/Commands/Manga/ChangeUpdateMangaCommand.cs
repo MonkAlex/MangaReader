@@ -19,7 +19,7 @@ namespace MangaReader.ViewModel.Commands.Manga
         foreach (var manga in mangas.Where(m => m.NeedUpdate == NeedUpdate))
         {
           manga.NeedUpdate = !manga.NeedUpdate;
-          context.Save(manga);
+          context.Save(manga).GetAwaiter().GetResult();
         }
       }
     }

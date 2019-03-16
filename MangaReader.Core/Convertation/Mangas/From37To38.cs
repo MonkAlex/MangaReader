@@ -14,15 +14,15 @@ namespace MangaReader.Core.Convertation.Mangas
       return base.ProtectedCanConvert(process) && this.CanConvertVersion(process);
     }
 
-    protected override Task ProtectedConvert(IProcess process)
+    protected override async Task ProtectedConvert(IProcess process)
     {
-      RunSql(@"update Mangas
+      await RunSql(@"update Mangas
                set Type = '64ac91ef-bdb3-4086-be17-bb1dbe7a7656'
-               where Uri like '%mintmanga.com%' or Uri like '%adultmanga.ru%'");
+               where Uri like '%mintmanga.com%' or Uri like '%adultmanga.ru%'").ConfigureAwait(false);
 
-      RunSql(@"update Mangas
+      await RunSql(@"update Mangas
                set Setting = (select Id from MangaSetting where MangaName = 'Mintmanga')
-               where Type = '64ac91ef-bdb3-4086-be17-bb1dbe7a7656'");
+               where Type = '64ac91ef-bdb3-4086-be17-bb1dbe7a7656'").ConfigureAwait(false);
 
       var mainHosts = Repository.GetStateless<Services.MangaSetting>().Select(s => s.MainUri.Host).Distinct().ToList();
       using (var context = Repository.GetEntityContext())
@@ -35,11 +35,9 @@ namespace MangaReader.Core.Convertation.Mangas
           var newHost = manga.Setting.MainUri.Host;
           var builder = new UriBuilder(manga.Uri) { Host = newHost, Port = -1 };
           manga.Uri = builder.Uri;
-          context.Save(manga);
+          await context.Save(manga).ConfigureAwait(false);
         }
       }
-
-      return Task.CompletedTask;
     }
 
     public From37To38()

@@ -9,7 +9,7 @@ namespace Grouple.Convertation
 {
   public class From42To43 : ConfigConverter
   {
-    protected override Task ProtectedConvert(IProcess process)
+    protected override async Task ProtectedConvert(IProcess process)
     {
       using (var context = Repository.GetEntityContext())
       {
@@ -17,11 +17,9 @@ namespace Grouple.Convertation
         if (setting != null)
         {
           setting.Login.MainUri = new Uri("https://grouple.co/");
-          context.Save(setting);
+          await context.Save(setting).ConfigureAwait(false);
         }
       }
-
-      return Task.CompletedTask;
     }
 
     public From42To43()

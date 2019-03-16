@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
@@ -11,9 +12,9 @@ namespace Tests.Entities.CRUD
   public class Manga : TestClass
   {
     [Test]
-    public void MangaCreateDelete()
+    public async Task MangaCreateDelete()
     {
-      var newManga = Builder.CreateReadmanga();
+      var newManga = await Builder.CreateReadmanga().ConfigureAwait(false);
       var mangaId = newManga.Id;
       Assert.AreNotEqual(0, newManga.Id);
 
@@ -22,7 +23,7 @@ namespace Tests.Entities.CRUD
         var fromDb = context.Get<IManga>().FirstOrDefault(m => m.Id == mangaId);
         Assert.AreNotEqual(null, fromDb);
 
-        Builder.DeleteReadmanga(newManga);
+        await Builder.DeleteReadmanga(newManga).ConfigureAwait(false);
         Assert.AreEqual(0, newManga.Id);
 
         fromDb = context.Get<IManga>().FirstOrDefault(m => m.Id == mangaId);
@@ -31,9 +32,9 @@ namespace Tests.Entities.CRUD
     }
 
     [Test]
-    public void MangaReadUpdate()
+    public async Task MangaReadUpdate()
     {
-      var newManga = Builder.CreateAcomics();
+      var newManga = await Builder.CreateAcomics().ConfigureAwait(false);
       var mangaId = newManga.Id;
       var name = newManga.Name;
       var updatedName = name + "2";
@@ -43,7 +44,7 @@ namespace Tests.Entities.CRUD
         var manga = context.Get<IManga>().Single(m => m.Id == mangaId);
         Assert.AreEqual(name, manga.Name);
         manga.Name = updatedName;
-        context.Save(manga);
+        await context.Save(manga).ConfigureAwait(false);
       }
 
       using (var context = Repository.GetEntityContext())
@@ -54,9 +55,9 @@ namespace Tests.Entities.CRUD
     }
 
     [Test]
-    public void MangaChangeUri()
+    public async Task MangaChangeUri()
     {
-      var newManga = Builder.CreateAcomics();
+      var newManga = await Builder.CreateAcomics().ConfigureAwait(false);
       var mangaId = newManga.Id;
       var uri = newManga.Uri;
       var testUri = new Uri(uri, "test");
@@ -65,7 +66,7 @@ namespace Tests.Entities.CRUD
       {
         var manga = context.Get<IManga>().Single(m => m.Id == mangaId);
         manga.Uri = testUri;
-        context.Save(manga);
+        await context.Save(manga).ConfigureAwait(false);
         Assert.AreNotEqual(uri, manga.Uri);
       }
 
@@ -73,7 +74,7 @@ namespace Tests.Entities.CRUD
       {
         var manga = context.Get<IManga>().Single(m => m.Id == mangaId);
         manga.Uri = Builder.ReadmangaUri;
-        Assert.Catch<SaveValidationException>(() => context.Save(manga));
+        Assert.CatchAsync<SaveValidationException>(async () => await context.Save(manga).ConfigureAwait(false));
         Assert.AreEqual(Builder.ReadmangaUri, manga.Uri);
       }
 

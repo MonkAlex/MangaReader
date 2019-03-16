@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Entity;
 using MangaReader.Core.Exception;
 using MangaReader.Core.Services;
@@ -32,11 +33,11 @@ namespace MangaReader.Core.NHibernate
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="entity">Сущность.</param>
-    public void AddToTransaction<T>(T entity) where T : IEntity
+    public async Task AddToTransaction<T>(T entity) where T : IEntity
     {
       var state = GetState(entity);
-      entity.BeforeSave(state);
-      session.SaveOrUpdate(entity);
+      await entity.BeforeSave(state).ConfigureAwait(false);
+      await session.SaveOrUpdateAsync(entity).ConfigureAwait(false);
     }
 
     public ITransaction OpenTransaction()
@@ -88,32 +89,32 @@ namespace MangaReader.Core.NHibernate
       }
     }
 
-    public object CreateSqlQuery(string command)
+    public Task<object> CreateSqlQuery(string command)
     {
-      return session.CreateSQLQuery(command).UniqueResult();
+      return session.CreateSQLQuery(command).UniqueResultAsync();
     }
 
     /// <summary>
     ///  Загрузить свежую информацию из базы.
     /// </summary>
-    public void Refresh<T>(T entity) where T : IEntity
+    public Task Refresh<T>(T entity) where T : IEntity
     {
-      session.Refresh(entity);
+      return session.RefreshAsync(entity);
     }
 
     /// <summary>
     /// Удалить из базы. Сохранение такой сущности создаст новую в базе.
     /// </summary>
-    public void Delete<T>(T entity) where T : IEntity
+    public async Task Delete<T>(T entity) where T : IEntity
     {
       if (entity == null || entity.Id == 0)
         return;
 
-      using (var tranc = OpenTransaction())
+      using (var transaction = OpenTransaction())
       {
-        var loaded = session.Load(entity.GetType(), entity.Id);
-        session.Delete(loaded);
-        tranc.Commit();
+        var loaded = await session.LoadAsync(entity.GetType(), entity.Id).ConfigureAwait(false);
+        await session.DeleteAsync(loaded).ConfigureAwait(false);
+        await transaction.CommitAsync().ConfigureAwait(false);
         entity.Id = 0;
       }
     }
@@ -123,9 +124,9 @@ namespace MangaReader.Core.NHibernate
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="obj">Сущность.</param>
-    public void Save<T>(T obj) where T : Entity.IEntity
+    public Task Save<T>(T obj) where T : Entity.IEntity
     {
-      new[] { obj }.SaveAll(this);
+      return new[] { obj }.SaveAll(this);
     }
 
     public void Dispose()

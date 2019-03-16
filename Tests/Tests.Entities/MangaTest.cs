@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Hentaichan.Mangachan;
 using MangaReader.Core.Manga;
@@ -119,9 +122,12 @@ namespace Tests
       File.WriteAllText(Environment.MangaCache, json);
     }
 
-    public static string[] GetWords(string str)
+    public static List<string> GetWords(string str)
     {
-      return str.Split(new[] {" ", ",", System.Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
+      return str
+        .Split(new[] {" ", ",", System.Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
+        .Select(s => Regex.Replace(s, "\\d+(,\\d+)*", "some_counts", RegexOptions.None))
+        .ToList();
     }
   }
 }

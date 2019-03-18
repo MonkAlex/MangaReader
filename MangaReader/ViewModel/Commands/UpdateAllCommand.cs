@@ -12,7 +12,7 @@ namespace MangaReader.ViewModel.Commands
       base.Execute(parameter);
 
       if (Library.IsAvaible)
-        await Library.ThreadAction(Library.Update()).ConfigureAwait(false);
+        await Library.ThreadAction(Library.Update()).ConfigureAwait(true);
     }
 
     public UpdateAllCommand(LibraryViewModel model) : base(model)

@@ -61,7 +61,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         if (uniqueUris.TryAdd(a.Uri, true))
           global::Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => Items.Add(new MangaSearchViewModel(a)));
       })));
-      await Task.WhenAll(tasks.Select(t => t.LogException())).ConfigureAwait(false);
+      await Task.WhenAll(tasks.Select(t => t.LogException())).ConfigureAwait(true);
       Log.Add($"Completed search '{Search}'");
     }
 
@@ -77,7 +77,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
           var model = new MangaSearchViewModel(manga);
           model.Cover = (await manga.Parser.GetPreviews(manga).ConfigureAwait(true)).FirstOrDefault();
-          await model.PreviewFindedManga.Execute(model).ConfigureAwait(false);
+          await model.PreviewFindedManga.Execute(model).ConfigureAwait(true);
         }
       }
     }

@@ -37,7 +37,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Library
       {
         if (ActiveCommand.CanExecute(parameter))
         {
-          await ActiveCommand.Execute(parameter).ConfigureAwait(false);
+          await ActiveCommand.Execute(parameter).ConfigureAwait(true);
           ActiveCommand = Pause;
         }
       }
@@ -45,7 +45,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Library
       {
         if (ActiveCommand.CanExecute(parameter))
         {
-          await ActiveCommand.Execute(parameter).ConfigureAwait(false);
+          await ActiveCommand.Execute(parameter).ConfigureAwait(true);
           ActiveCommand = Continue;
         }
       }
@@ -53,7 +53,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Library
       {
         if (ActiveCommand.CanExecute(parameter))
         {
-          await ActiveCommand.Execute(parameter).ConfigureAwait(false);
+          await ActiveCommand.Execute(parameter).ConfigureAwait(true);
           ActiveCommand = Pause;
         }
       }

@@ -52,7 +52,7 @@ namespace MangaReader.Avalonia.ViewModel.Command
 
     async void ICommand.Execute(object parameter)
     {
-      await Execute(parameter).ConfigureAwait(false);
+      await Execute(parameter).ConfigureAwait(true);
     }
 
     public virtual bool CanExecute(object parameter)

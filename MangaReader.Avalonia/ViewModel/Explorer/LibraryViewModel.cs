@@ -73,7 +73,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       while (!Core.NHibernate.Mapping.Initialized)
       {
         Log.Add("Wait nhibernate initialization...");
-        await Task.Delay(500).ConfigureAwait(false);
+        await Task.Delay(500).ConfigureAwait(true);
       }
       using (var context = Core.NHibernate.Repository.GetEntityContext("Library items loading"))
       {
@@ -85,7 +85,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
             x => x,
             Filter,
             ConfigStorage.Instance.ViewConfig.LibraryFilter.Compare);
-        }, DispatcherPriority.ApplicationIdle).ConfigureAwait(false);
+        }, DispatcherPriority.ApplicationIdle).ConfigureAwait(true);
       }
     }
 
@@ -127,7 +127,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     {
       if (items == null)
       {
-        await RefreshItems().ConfigureAwait(false);
+        await RefreshItems().ConfigureAwait(true);
       }
 
       await Dispatcher.UIThread.InvokeAsync(() =>
@@ -172,7 +172,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           default:
             throw new ArgumentOutOfRangeException();
         }
-      }).ConfigureAwait(false);
+      }).ConfigureAwait(true);
     }
   }
 }

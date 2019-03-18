@@ -58,9 +58,9 @@ namespace MangaReader.ViewModel
       if (b && Login.IsEnabled && !IsBookmarksLoaded)
       {
         if (Client.Dispatcher.CheckAccess())
-          await LoadBookmarks().ConfigureAwait(false);
+          await LoadBookmarks().ConfigureAwait(true);
         else
-          await Client.Dispatcher.InvokeAsync(async () => await LoadBookmarks().ConfigureAwait(false));
+          await Client.Dispatcher.InvokeAsync(async () => await LoadBookmarks().ConfigureAwait(true));
       }
     }
   }

@@ -23,7 +23,7 @@ namespace MangaReader.ViewModel.Commands.AddManga
       try
       {
         if (Uri.TryCreate(model.InputText, UriKind.Absolute, out Uri uri))
-          await WindowHelper.Library.Add(uri).ConfigureAwait(false);
+          await WindowHelper.Library.Add(uri).ConfigureAwait(true);
 
         var selectedItems = mainModel.BookmarksModels.OfType<AddBookmarksModel>()
           .Where(m => m.IsBookmarksLoaded)
@@ -31,7 +31,7 @@ namespace MangaReader.ViewModel.Commands.AddManga
         using (Repository.GetEntityContext("Add selected manga from bookmarks"))
           foreach (var manga in selectedItems)
           {
-            await WindowHelper.Library.Add(manga.Value.Uri).ConfigureAwait(false);
+            await WindowHelper.Library.Add(manga.Value.Uri).ConfigureAwait(true);
           }
       }
       catch (MangaReaderException e)

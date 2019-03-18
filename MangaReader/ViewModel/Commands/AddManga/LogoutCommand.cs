@@ -17,7 +17,7 @@ namespace MangaReader.ViewModel.Commands.AddManga
     {
       base.Execute(parameter);
 
-      await login.Logout().ConfigureAwait(false);
+      await login.Logout().ConfigureAwait(true);
     }
 
     public LogoutCommand(ILogin login)

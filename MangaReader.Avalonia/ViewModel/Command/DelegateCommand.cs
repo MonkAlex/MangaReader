@@ -20,7 +20,7 @@ namespace MangaReader.Avalonia.ViewModel.Command
       try
       {
         if (taskExecute != null)
-          await taskExecute.Invoke().ConfigureAwait(false);
+          await taskExecute.Invoke().ConfigureAwait(true);
         else
           actionExecute.Invoke();
       }

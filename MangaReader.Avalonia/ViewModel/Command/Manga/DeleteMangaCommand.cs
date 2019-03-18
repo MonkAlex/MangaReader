@@ -35,12 +35,12 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
         {
           foreach (var manga in list)
           {
-            await Library.Remove(manga).ConfigureAwait(false);
+            await Library.Remove(manga).ConfigureAwait(true);
 
             if (deleteFolder.Value)
               DirectoryHelpers.DeleteDirectory(manga.GetAbsoluteFolderPath());
           }
-        }).LogException().ConfigureAwait(false);
+        }).LogException().ConfigureAwait(true);
       }
     }
 

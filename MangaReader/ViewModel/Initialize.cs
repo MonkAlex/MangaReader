@@ -29,7 +29,7 @@ namespace MangaReader.ViewModel
         {
           try
           {
-            await Core.Client.Start(this).ConfigureAwait(false);
+            await Core.Client.Start(this).ConfigureAwait(true);
 
             SaveSettingsCommand.ValidateMangaPaths();
           }
@@ -45,7 +45,7 @@ namespace MangaReader.ViewModel
     public async Task InitializeSilent()
     {
       Core.Client.Init();
-      await Core.Client.Start(this).ConfigureAwait(false);
+      await Core.Client.Start(this).ConfigureAwait(true);
     }
 
   }

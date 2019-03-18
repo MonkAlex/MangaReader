@@ -11,7 +11,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
   {
     public override async Task Execute(IEnumerable<IManga> mangas)
     {
-      await Library.ThreadAction(Library.Update(mangas.Select(m => m.Id).ToList())).LogException().ConfigureAwait(false);
+      await Library.ThreadAction(Library.Update(mangas.Select(m => m.Id).ToList())).LogException().ConfigureAwait(true);
     }
 
     public UpdateMangaCommand(Explorer.LibraryViewModel model) : base(model)

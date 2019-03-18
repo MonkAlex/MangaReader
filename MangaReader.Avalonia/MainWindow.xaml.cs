@@ -31,7 +31,7 @@ namespace MangaReader.Avalonia
       App.AttachDevTools(this);
       MangaReader.Core.Update.Updater.NewVersionFound += UpdaterOnNewVersionFound;
       explorer.LoadingProcess.Status = Title;
-      Client.Start(explorer.LoadingProcess).ConfigureAwait(false);
+      Client.Start(explorer.LoadingProcess).ConfigureAwait(true);
       this.DataContext = explorer;
 
       // Focus to first textbox
@@ -47,7 +47,7 @@ namespace MangaReader.Avalonia
             var cpGrid = appliedUserControl?.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
             var textBox = cpGrid?.GetLogicalChildren().OfType<TextBox>().FirstOrDefault();
             textBox?.Focus();
-          }, DispatcherPriority.Background).ConfigureAwait(false);
+          }, DispatcherPriority.Background).ConfigureAwait(true);
         });
     }
 
@@ -67,7 +67,7 @@ namespace MangaReader.Avalonia
         {
           Helper.StartUseShell(Updater.RepositoryReleaseUri);
         }
-      }).LogException().ConfigureAwait(false);
+      }).LogException().ConfigureAwait(true);
     }
 
     protected override bool HandleClosing()

@@ -60,7 +60,7 @@ namespace MangaReader.ViewModel
     public async Task<List<IManga>> GetBookmarks()
     {
       if (login != null)
-        return await login.GetBookmarks().ConfigureAwait(false);
+        return await login.GetBookmarks().ConfigureAwait(true);
       return new List<IManga>();
     }
 

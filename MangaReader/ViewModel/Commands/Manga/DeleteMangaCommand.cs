@@ -27,7 +27,7 @@ namespace MangaReader.ViewModel.Commands.Manga
         {
           foreach (var manga in list)
           {
-            await Library.Remove(manga).ConfigureAwait(false);
+            await Library.Remove(manga).ConfigureAwait(true);
 
             if (dialogResult.Item2)
               DirectoryHelpers.DeleteDirectory(manga.GetAbsoluteFolderPath());

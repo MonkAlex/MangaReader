@@ -22,7 +22,7 @@ namespace MangaReader
         ShowConsoleWindow();
 
       Core.Loader.Init();
-      await Client.Run().ConfigureAwait(false);
+      await Client.Run().ConfigureAwait(true);
     }
     
     #region Консоль

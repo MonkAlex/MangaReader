@@ -5,6 +5,7 @@ using MangaReader.Core.Services.Config;
 using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Core.NHibernate;
+using NHibernate.Linq;
 
 namespace MangaReader.Core.Convertation.Database
 {
@@ -14,7 +15,7 @@ namespace MangaReader.Core.Convertation.Database
     {
       using (var context = Repository.GetEntityContext())
       {
-        foreach (var setting in context.Get<MangaSetting>())
+        foreach (var setting in await context.Get<MangaSetting>().ToListAsync().ConfigureAwait(false))
         {
           if (!Uri.TryCreate(setting.Folder, UriKind.RelativeOrAbsolute, out Uri folderUri))
             continue;

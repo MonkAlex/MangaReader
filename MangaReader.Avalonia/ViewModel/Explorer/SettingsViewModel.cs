@@ -6,6 +6,7 @@ using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
+using NHibernate.Linq;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
 {
@@ -73,8 +74,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       {
         using (var context = Repository.GetEntityContext("Load manga settings"))
         {
-          ReloadConfig();
-          var settings = context.Get<MangaSetting>().ToList();
+          await ReloadConfig().ConfigureAwait(true);
+          var settings = await context.Get<MangaSetting>().ToListAsync().ConfigureAwait(true);
           ExplorerViewModel.Instance.Tabs.AddRange(settings.Select(s => new MangaSettingsViewModel(s)));
         }
       }
@@ -98,7 +99,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public ICommand UndoChanged { get; }
 
-    private void ReloadConfig()
+    private async Task ReloadConfig()
     {
       var appConfig = ConfigStorage.Instance.AppConfig;
       this.CheckAppUpdateOnStart = appConfig.UpdateReader;
@@ -113,7 +114,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
       using (var context = Repository.GetEntityContext())
       {
-        var config = context.Get<DatabaseConfig>().Single();
+        var config = await context.Get<DatabaseConfig>().SingleAsync().ConfigureAwait(true);
         this.FolderNamingStrategy = FolderNamingStrategies.FirstOrDefault(s => s.Id == config.FolderNamingStrategy);
       }
     }
@@ -134,7 +135,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
       using (var context = Repository.GetEntityContext())
       {
-        var config = context.Get<DatabaseConfig>().Single();
+        var config = await context.Get<DatabaseConfig>().SingleAsync().ConfigureAwait(true);
         config.FolderNamingStrategy = FolderNamingStrategy.Id;
         await context.Save(config).ConfigureAwait(true);
       }
@@ -146,7 +147,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       this.Priority = 100;
 
       this.Save = new DelegateCommand(SaveConfig, () => true);
-      this.UndoChanged = new DelegateCommand(ReloadConfig);
+      this.UndoChanged = new DelegateCommand(ReloadConfig, () => true);
     }
   }
 }

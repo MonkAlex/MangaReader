@@ -5,6 +5,7 @@ using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
+using NHibernate.Linq;
 
 namespace MangaReader.Core.Convertation.Config
 {
@@ -22,7 +23,7 @@ namespace MangaReader.Core.Convertation.Config
       using (var context = NHibernate.Repository.GetEntityContext())
       {
         var config = await context.Get<DatabaseConfig>().SingleOrCreate().ConfigureAwait(false);
-        if (context.Get<IManga>().Any())
+        if (await context.Get<IManga>().AnyAsync().ConfigureAwait(false))
           config.FolderNamingStrategy = Generic.GetNamingStrategyId<LegacyFolderNaming>();
         await context.Save(config).ConfigureAwait(false);
       }

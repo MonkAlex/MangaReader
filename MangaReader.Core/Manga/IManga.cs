@@ -46,7 +46,7 @@ namespace MangaReader.Core.Manga
 
     bool NeedUpdate { get; set; }
 
-    bool IsValid();
+    Task<bool> IsValid();
 
     bool IsCompleted { get; set; }
 

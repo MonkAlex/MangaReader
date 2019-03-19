@@ -14,13 +14,13 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       if (model == null)
         return;
 
-      var manga = Mangas.Create(model.Uri);
+      var manga = await Mangas.Create(model.Uri).ConfigureAwait(true);
       if (manga == null)
         return;
 
       manga.Cover = model.Cover;
       await manga.Refresh().ConfigureAwait(true);
-      if (manga.IsValid())
+      if (await manga.IsValid().ConfigureAwait(true))
       {
         var explorer = ExplorerViewModel.Instance;
         var searchTab = new MangaModel(manga);

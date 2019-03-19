@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
+using NHibernate.Linq;
 
 namespace Hentaichan
 {
@@ -19,15 +20,15 @@ namespace Hentaichan
 
     public override bool HasChapters { get { return true; } }
 
-    public override bool IsValid()
+    public override async Task<bool> IsValid()
     {
-      var baseValidation = base.IsValid();
+      var baseValidation = await base.IsValid().ConfigureAwait(false);
       if (!baseValidation)
         return false;
 
       using (var context = Repository.GetEntityContext())
       {
-        return !context.Get<Hentaichan>().Any(m => m.Id != Id && m.ServerName == ServerName);
+        return !(await context.Get<Hentaichan>().AnyAsync(m => m.Id != Id && m.ServerName == ServerName).ConfigureAwait(false));
       }
     }
 

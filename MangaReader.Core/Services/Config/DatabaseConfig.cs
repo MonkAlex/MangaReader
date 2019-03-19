@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Core.Account;
 using MangaReader.Core.NHibernate;
+using NHibernate.Linq;
 
 namespace MangaReader.Core.Services.Config
 {
@@ -46,7 +47,7 @@ namespace MangaReader.Core.Services.Config
     /// <returns>Коллекция всех настроек.</returns>
     private static async Task CreateDefaultMangaSettings(RepositoryContext context)
     {
-      var settings = context.Get<MangaSetting>().ToList();
+      var settings = await context.Get<MangaSetting>().ToListAsync().ConfigureAwait(false);
       var plugins = ConfigStorage.Plugins;
       foreach (var plugin in plugins)
       {
@@ -59,7 +60,7 @@ namespace MangaReader.Core.Services.Config
           Manga = plugin.MangaGuid,
           MangaName = plugin.Name,
           DefaultCompression = Compression.CompressionMode.Manga,
-          Login = Login.Get(plugin.LoginType)
+          Login = await Login.Get(plugin.LoginType).ConfigureAwait(false)
         };
 
         await context.Save(setting).ConfigureAwait(false);

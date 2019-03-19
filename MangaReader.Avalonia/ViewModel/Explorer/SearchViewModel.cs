@@ -71,7 +71,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       {
         using (Repository.GetEntityContext($"Show preview for manga from uri {parsedUri}"))
         {
-          var manga = Mangas.Create(parsedUri);
+          var manga = await Mangas.Create(parsedUri).ConfigureAwait(true);
           if (manga == null)
             return;
 

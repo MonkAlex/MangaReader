@@ -7,6 +7,7 @@ using MangaReader.Core.Entity;
 using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
+using NHibernate.Linq;
 
 namespace MangaReader.Core.Services
 {
@@ -55,7 +56,7 @@ namespace MangaReader.Core.Services
                 !Equals(Login.MainUri, uriState.Value))
               Login.MainUri = MainUri;
 
-            var mangas = context.Get<IManga>().Where(m => m.Setting == this).ToList();
+            var mangas = await context.Get<IManga>().Where(m => m.Setting == this).ToListAsync().ConfigureAwait(false);
             foreach (var manga in mangas)
             {
               if (uriState.IsChanged)

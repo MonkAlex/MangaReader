@@ -1,9 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
+using MangaReader.Core.Services;
+using NHibernate.Linq;
+using LibraryViewModel = MangaReader.Avalonia.ViewModel.Explorer.LibraryViewModel;
 
 namespace MangaReader.Avalonia.ViewModel
 {
@@ -41,12 +45,12 @@ namespace MangaReader.Avalonia.ViewModel
       }
     }
 
-    public void SelectDefaultTab()
+    public async Task SelectDefaultTab()
     {
       var hasManga = false;
       using (var context = Repository.GetEntityContext("Check has any manga to select default tab"))
       {
-        hasManga = context.Get<IManga>().Any();
+        hasManga = await context.Get<IManga>().AnyAsync().ConfigureAwait(true);
       }
 
       this.SelectedTab = hasManga ? Tabs.OrderBy(t => t.Priority).FirstOrDefault() : Tabs.OfType<SearchViewModel>().FirstOrDefault();
@@ -57,7 +61,7 @@ namespace MangaReader.Avalonia.ViewModel
     {
       if (e == ConvertState.Completed)
       {
-        SelectDefaultTab();
+        SelectDefaultTab().LogException();
       }
     }
 

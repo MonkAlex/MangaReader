@@ -12,6 +12,7 @@ using MangaReader.Avalonia.ViewModel.Command.Manga;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
+using NHibernate.Linq;
 using ReactiveUI.Legacy;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
@@ -77,7 +78,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       }
       using (var context = Core.NHibernate.Repository.GetEntityContext("Library items loading"))
       {
-        var mangas = context.Get<IManga>().Select(m => new MangaModel(m)).ToList();
+        var mangas = await context.Get<IManga>().Select(m => new MangaModel(m)).ToListAsync().ConfigureAwait(true);
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
           Items = new ObservableCollection<MangaModel>(mangas);
@@ -125,6 +126,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     private async void LibraryOnLibraryChanged(object sender, LibraryViewModelArgs args)
     {
+      // Сохраняем, пока Id не почистился при удалении.
+      var mangaId = args.Manga?.Id;
       if (items == null)
       {
         await RefreshItems().ConfigureAwait(true);
@@ -149,7 +152,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
                 break;
               case MangaOperation.Deleted:
               {
-                var mangaModels = this.Items.Where(i => i.Id == libraryViewModelArgs.MangaId).ToList();
+                var mangaModels = this.Items.Where(i => i.Id == mangaId).ToList();
                 foreach (var mangaModel in mangaModels)
                   this.Items.Remove(mangaModel);
                 break;

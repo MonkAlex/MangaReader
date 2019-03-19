@@ -13,6 +13,7 @@ using MangaReader.Core.NHibernate;
 using MangaReader.Core.Properties;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
+using NHibernate.Linq;
 
 namespace MangaReader.Core.Manga
 {
@@ -195,7 +196,7 @@ namespace MangaReader.Core.Manga
     /// <summary>
     /// Статус корректности манги.
     /// </summary>
-    public virtual bool IsValid()
+    public virtual async Task<bool> IsValid()
     {
       return !string.IsNullOrWhiteSpace(this.Name);
     }
@@ -476,7 +477,7 @@ namespace MangaReader.Core.Manga
       Log.Info(Strings.Mangas_Compress_Completed);
     }
 
-    public override Task BeforeSave(ChangeTrackerArgs args)
+    public override async Task BeforeSave(ChangeTrackerArgs args)
     {
       if (!args.IsNewEntity)
       {
@@ -498,7 +499,7 @@ namespace MangaReader.Core.Manga
         }
       }
 
-      if (!this.IsValid())
+      if (!await this.IsValid().ConfigureAwait(false))
         throw new SaveValidationException("Нельзя сохранять невалидную сущность", this);
 
       if (!args.CanAddEntities)
@@ -515,7 +516,7 @@ namespace MangaReader.Core.Manga
 
       using (var context = Repository.GetEntityContext())
       {
-        if (context.Get<IManga>().Any(m => m.Id != this.Id && m.Folder == this.Folder))
+        if (await context.Get<IManga>().AnyAsync(m => m.Id != this.Id && m.Folder == this.Folder).ConfigureAwait(false))
           throw new SaveValidationException($"Другая манга уже использует папку {this.Folder}.", this);
       }
 
@@ -535,7 +536,7 @@ namespace MangaReader.Core.Manga
         }
       }
 
-      return base.BeforeSave(args);
+      await base.BeforeSave(args).ConfigureAwait(false);
     }
 
     public virtual void RefreshFolder()
@@ -568,14 +569,15 @@ namespace MangaReader.Core.Manga
     /// <param name="uri">Ссылка на мангу.</param>
     /// <returns>Манга.</returns>
     /// <remarks>Не сохранена в базе, требует заполнения полей.</remarks>
-    public static IManga Create(Uri uri)
+    public static async Task<IManga> Create(Uri uri)
     {
       IManga manga = null;
       MangaSetting setting;
 
       using (var context = Repository.GetEntityContext($"Local create manga from {uri}"))
       {
-        setting = context.Get<MangaSetting>().ToList().SingleOrDefault(s => s.MainUri.Host == uri.Host);
+        var settings = await context.Get<MangaSetting>().ToListAsync().ConfigureAwait(false);
+        setting = settings.SingleOrDefault(s => s.MainUri.Host == uri.Host);
         if (setting != null)
         {
           var plugin = ConfigStorage.Plugins.SingleOrDefault(p => Equals(p.GetSettings(), setting));
@@ -611,14 +613,14 @@ namespace MangaReader.Core.Manga
     {
       using (var context = Repository.GetEntityContext($"Web create manga from {uri}"))
       {
-        var manga = Create(uri);
+        var manga = await Create(uri).ConfigureAwait(false);
         if (manga != null)
         {
           // Только для местной реализации - вызвать CreatedFromWeb\Refresh.
           if (manga is Mangas mangas)
             await mangas.CreatedFromWeb(uri).ConfigureAwait(false);
 
-          if (manga.IsValid())
+          if (await manga.IsValid().ConfigureAwait(false))
             await context.Save(manga).ConfigureAwait(false);
         }
 

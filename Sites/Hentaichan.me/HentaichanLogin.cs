@@ -65,7 +65,7 @@ namespace Hentaichan
 
         await Task.WhenAll(mangas.Select(async m =>
         {
-          var manga = Mangas.Create(m);
+          var manga = await Mangas.Create(m).ConfigureAwait(false);
           if (manga == null)
             return;
           

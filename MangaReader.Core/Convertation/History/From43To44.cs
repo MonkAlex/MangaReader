@@ -6,6 +6,7 @@ using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
+using NHibernate.Linq;
 
 namespace MangaReader.Core.Convertation.History
 {
@@ -20,7 +21,11 @@ namespace MangaReader.Core.Convertation.History
     {
       using (var context = Repository.GetEntityContext())
       {
-        var mangas = context.Get<Manga.Mangas>().Where(m => !m.Volumes.Any() && !m.Chapters.Any() && !m.Pages.Any()).ToList();
+        var mangas = await context
+          .Get<Manga.Mangas>()
+          .Where(m => !m.Volumes.Any() && !m.Chapters.Any() && !m.Pages.Any())
+          .ToListAsync()
+          .ConfigureAwait(false);
         if (mangas.Any())
           process.ProgressState = ProgressState.Normal;
 

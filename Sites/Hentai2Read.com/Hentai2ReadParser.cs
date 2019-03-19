@@ -198,7 +198,7 @@ namespace Hentai2Read.com
       var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
       var mangaName = mangaNode.InnerText.Trim();
 
-      var result = Mangas.Create(new Uri(host, mangaUri));
+      var result = await Mangas.Create(new Uri(host, mangaUri)).ConfigureAwait(false);
       result.Name = WebUtility.HtmlDecode(mangaName);
       if (!string.IsNullOrWhiteSpace(imageUri) && client != null)
         result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri)).ConfigureAwait(false);

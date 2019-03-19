@@ -11,6 +11,7 @@ using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Properties;
 using MangaReader.Core.Services.Config;
+using NHibernate.Linq;
 
 namespace MangaReader.Core.Services
 {
@@ -116,7 +117,7 @@ namespace MangaReader.Core.Services
     {
       using (var context = Repository.GetEntityContext())
       {
-        var manga = context.Get<IManga>().FirstOrDefault(m => m.Uri == uri);
+        var manga = await context.Get<IManga>().FirstOrDefaultAsync(m => m.Uri == uri).ConfigureAwait(false);
         if (manga != null)
         {
           Log.Info("Манга уже добавлена.");
@@ -125,7 +126,7 @@ namespace MangaReader.Core.Services
       }
 
       var newManga = await Mangas.CreateFromWeb(uri).ConfigureAwait(false);
-      if (newManga == null || !newManga.IsValid())
+      if (newManga == null || !await newManga.IsValid().ConfigureAwait(false))
       {
         Log.Info("Не удалось найти мангу.");
         return (false, null);
@@ -246,7 +247,7 @@ namespace MangaReader.Core.Services
           if (orderBy != null && mangas == null)
             entities = orderBy(entities);
 
-          materialized = entities.Select(e => e.Id).ToList();
+          materialized = await entities.Select(e => e.Id).ToListAsync().ConfigureAwait(false);
 
           // Если указаны Id, пытаемся качать в их внутреннем порядке.
           if (mangas != null)
@@ -259,7 +260,7 @@ namespace MangaReader.Core.Services
         {
           if (args.MangaOperation == MangaOperation.Added)
           {
-            materialized.Add(args.MangaId);
+            materialized.Add(args.Manga.Id);
             mangasCount = materialized.Count;
             Log.Info($"Манга {args.Manga.Name} добавлена при обновлении и будет загружена автоматически");
           }
@@ -272,7 +273,7 @@ namespace MangaReader.Core.Services
 
           using (var context = Repository.GetEntityContext($"Download updates for manga with id {materialized[i]}"))
           {
-            var current = context.Get<IManga>().Single(m => m.Id == materialized[i]);
+            var current = await context.Get<IManga>().SingleAsync(m => m.Id == materialized[i]).ConfigureAwait(false);
             Log.Info(Strings.Library_Status_MangaUpdate + current.Name);
             OnLibraryChanged(new LibraryViewModelArgs(null, current, MangaOperation.UpdateStarted, LibraryOperation.UpdateMangaChanged));
             current.PropertyChanged += CurrentOnDownloadChanged;
@@ -347,7 +348,6 @@ namespace MangaReader.Core.Services
   {
     public double? Percent { get; }
     public IManga Manga { get; }
-    public int MangaId { get; }
     public MangaOperation MangaOperation { get; }
     public LibraryOperation LibraryOperation { get; }
 
@@ -356,7 +356,6 @@ namespace MangaReader.Core.Services
     {
       this.Percent = percent;
       this.Manga = manga;
-      this.MangaId = manga?.Id ?? 0;
       this.MangaOperation = mangaOperation;
       this.LibraryOperation = libraryOperation;
     }

@@ -5,6 +5,7 @@ using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
+using NHibernate.Linq;
 
 namespace Acomics.Convertation
 {
@@ -20,7 +21,7 @@ namespace Acomics.Convertation
       var parser = new Parser();
       using (var context = Repository.GetEntityContext())
       {
-        var acomics = context.Get<Acomics>().ToList();
+        var acomics = await context.Get<Acomics>().ToListAsync().ConfigureAwait(false);
         foreach (var acomic in acomics)
         {
           await parser.UpdateContentType(acomic).ConfigureAwait(false);

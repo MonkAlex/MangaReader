@@ -75,7 +75,7 @@ namespace Acomics
       {
         var name = WebUtility.HtmlDecode(node.ChildNodes.Single().InnerText);
         var url = node.Attributes.Single().Value;
-        var manga = Mangas.Create(new Uri(this.MainUri, url));
+        var manga = await Mangas.Create(new Uri(this.MainUri, url)).ConfigureAwait(false);
         manga.Name = name;
         bookmarks.Add(manga);
       }

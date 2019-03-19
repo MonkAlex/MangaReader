@@ -60,7 +60,7 @@ namespace Tests.Entities.Manga
 
     private async Task<IManga> Get(string url)
     {
-      var manga = Mangas.Create(new Uri(url));
+      var manga = await Mangas.Create(new Uri(url)).ConfigureAwait(false);
       await parser.UpdateContent(manga).ConfigureAwait(false);
       return manga;
     }

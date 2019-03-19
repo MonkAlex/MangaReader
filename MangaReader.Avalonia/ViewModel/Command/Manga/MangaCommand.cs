@@ -8,6 +8,7 @@ using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
+using NHibernate.Linq;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
@@ -46,7 +47,8 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       using (var context = Repository.GetEntityContext($"Manga command '{this.Name}'"))
       {
         var ids = SelectedModels.Select(m => m.Id).ToList();
-        var mangas = context.Get<IManga>().Where(m => ids.Contains(m.Id)).ToList().OrderBy(m => ids.IndexOf(m.Id)).ToList();
+        var query = await context.Get<IManga>().Where(m => ids.Contains(m.Id)).ToListAsync().ConfigureAwait(true);
+        var mangas = query.OrderBy(m => ids.IndexOf(m.Id)).ToList();
         try
         {
           await this.Execute(mangas).ConfigureAwait(true);

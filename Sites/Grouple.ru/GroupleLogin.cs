@@ -78,7 +78,7 @@ namespace Grouple
 
         await Task.WhenAll(loadedBookmarks.Select(async b =>
         {
-          var manga = Mangas.Create(b);
+          var manga = await Mangas.Create(b).ConfigureAwait(false);
           await parser.UpdateNameAndStatus(manga).ConfigureAwait(false);
           bookmarks.Add(manga);
         })).ConfigureAwait(false);

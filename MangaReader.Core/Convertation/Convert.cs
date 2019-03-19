@@ -6,6 +6,7 @@ using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
+using NHibernate.Linq;
 
 namespace MangaReader.Core.Convertation
 {
@@ -32,13 +33,13 @@ namespace MangaReader.Core.Convertation
 
       using (var context = NHibernate.Repository.GetEntityContext("Actualize app version in db"))
       {
-        var databaseConfig = context.Get<DatabaseConfig>().Single();
+        var databaseConfig = await context.Get<DatabaseConfig>().SingleAsync().ConfigureAwait(false);
         var oldVersion = databaseConfig.Version;
         databaseConfig.Version = process.Version;
         await context.Save(databaseConfig).ConfigureAwait(false);
         process.State = ConvertState.Completed;
 
-        if (process.Version.CompareTo(oldVersion) > 0 && context.Get<IManga>().Any())
+        if (process.Version.CompareTo(oldVersion) > 0 && await context.Get<IManga>().AnyAsync().ConfigureAwait(false))
           Client.OnClientUpdated(oldVersion);
       }
     }

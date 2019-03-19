@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
+using NHibernate.Linq;
 
 namespace MangaReader.Core.Convertation.Mangas
 {
@@ -27,7 +28,7 @@ namespace MangaReader.Core.Convertation.Mangas
       var mainHosts = Repository.GetStateless<Services.MangaSetting>().Select(s => s.MainUri.Host).Distinct().ToList();
       using (var context = Repository.GetEntityContext())
       {
-        foreach (var manga in context.Get<IManga>())
+        foreach (var manga in await context.Get<IManga>().ToListAsync().ConfigureAwait(false))
         {
           if (mainHosts.Contains(manga.Uri.Host))
             continue;

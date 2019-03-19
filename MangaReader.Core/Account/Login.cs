@@ -70,11 +70,12 @@ namespace MangaReader.Core.Account
 
     protected abstract Task<List<IManga>> DownloadBookmarks();
     
-    public static ILogin Get(Type type)
+    public static async Task<ILogin> Get(Type type)
     {
       using (var context = NHibernate.Repository.GetEntityContext())
       {
-        return context.Get<ILogin>().ToList().SingleOrDefault(l => l.GetType() == type) ?? (ILogin)Activator.CreateInstance(type);
+        var logins = await context.Get<ILogin>().ToListAsync().ConfigureAwait(false);
+        return logins.SingleOrDefault(l => l.GetType() == type) ?? (ILogin)Activator.CreateInstance(type);
       }
     }
 

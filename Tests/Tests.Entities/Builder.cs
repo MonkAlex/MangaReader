@@ -25,7 +25,7 @@ namespace Tests.Entities
     {
       using (var context = Repository.GetEntityContext())
       {
-        var manga = Mangas.Create(ReadmangaUri) as Grouple.Readmanga;
+        var manga = await Mangas.Create(ReadmangaUri).ConfigureAwait(false) as Grouple.Readmanga;
         manga.Status = "example status";
         manga.NeedUpdate = false;
         manga.Name = "readmanga from example" + Guid.NewGuid();
@@ -53,7 +53,7 @@ namespace Tests.Entities
     {
       using (var context = Repository.GetEntityContext())
       {
-        var manga = Mangas.Create(AcomicsUri) as Acomics.Acomics;
+        var manga = await Mangas.Create(AcomicsUri).ConfigureAwait(false) as Acomics.Acomics;
         manga.Status = "example status";
         manga.NeedUpdate = false;
         manga.Name = "Acomics from example" + Guid.NewGuid();

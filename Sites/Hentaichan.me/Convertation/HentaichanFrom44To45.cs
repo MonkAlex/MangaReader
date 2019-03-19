@@ -5,6 +5,7 @@ using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
+using NHibernate.Linq;
 
 namespace Hentaichan.Convertation
 {
@@ -19,7 +20,7 @@ namespace Hentaichan.Convertation
     {
       using (var context = Repository.GetEntityContext())
       {
-        var mangas = context.Get<Hentaichan>().ToList();
+        var mangas = await context.Get<Hentaichan>().ToListAsync().ConfigureAwait(false);
         foreach (var manga in mangas)
         {
           manga.Uri = new Uri(manga.Uri.OriginalString.Replace("/related/", "/manga/"));

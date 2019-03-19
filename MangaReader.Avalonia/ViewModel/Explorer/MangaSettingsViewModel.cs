@@ -7,6 +7,7 @@ using MangaReader.Core.Services;
 using System.Windows.Input;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
+using NHibernate.Linq;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
 {
@@ -80,11 +81,11 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public ICommand UndoChanged { get; }
 
-    private void ReloadConfig()
+    private async Task ReloadConfig()
     {
       using (var context = Repository.GetEntityContext())
       {
-        var setting = context.Get<MangaSetting>().SingleOrDefault(s => s.Id == mangaSettingsId);
+        var setting = await context.Get<MangaSetting>().SingleOrDefaultAsync(s => s.Id == mangaSettingsId).ConfigureAwait(true);
         if (setting != null)
         {
           this.Compress = setting.CompressManga;
@@ -101,7 +102,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     {
       using (var context = Repository.GetEntityContext())
       {
-        var setting = context.Get<MangaSetting>().SingleOrDefault(s => s.Id == mangaSettingsId);
+        var setting = await context.Get<MangaSetting>().SingleOrDefaultAsync(s => s.Id == mangaSettingsId).ConfigureAwait(true);
         if (setting != null)
         {
           setting.CompressManga = this.Compress == true;
@@ -124,9 +125,9 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       this.FolderNamingStrategies = Core.Services.FolderNamingStrategies.Strategies.ToList();
       this.FolderNamingStrategies.Insert(0, new BaseFolderNameStrategy("Использовать общие настройки"));
 
-      ReloadConfig();
+      ReloadConfig().LogException();
       this.Save = new DelegateCommand(SaveConfig, () => true);
-      this.UndoChanged = new DelegateCommand(ReloadConfig);
+      this.UndoChanged = new DelegateCommand(ReloadConfig, () => true);
     }
 
     private class BaseFolderNameStrategy : IFolderNamingStrategy

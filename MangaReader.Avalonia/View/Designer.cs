@@ -85,7 +85,7 @@ namespace MangaReader.Avalonia.View
       public ICollection<MangaHistory> Histories { get; }
       public DateTime? Created { get; set; }
       public bool NeedUpdate { get; set; }
-      public bool IsValid()
+      public Task<bool> IsValid()
       {
         throw new NotImplementedException();
       }

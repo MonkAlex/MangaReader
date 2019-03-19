@@ -41,18 +41,14 @@ namespace Hentaichan.Mangachan
         return bookmarks;
       }
 
-      var parser = new Parser();
-      var mangas = nodes
-        .Select(u =>
-        {
-          var manga = Mangas.Create(new Uri(u.Attributes[0].Value));
-          manga.ServerName = WebUtility.HtmlDecode(u.InnerText);
-          return manga;
-        })
-//        .Where(m => !string.IsNullOrWhiteSpace(m.Name))
-        .ToList();
-
-      bookmarks.AddRange(mangas);
+      await Task.WhenAll(nodes.Select(async u =>
+      {
+        var manga = await Mangas.Create(new Uri(u.Attributes[0].Value)).ConfigureAwait(false);
+        if (manga == null)
+          return;
+        manga.ServerName = WebUtility.HtmlDecode(u.InnerText);
+        bookmarks.Add(manga);
+      })).ConfigureAwait(false);
 
       return bookmarks;
     }

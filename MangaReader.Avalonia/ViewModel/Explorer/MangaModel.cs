@@ -8,6 +8,7 @@ using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
+using NHibernate.Linq;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
 {
@@ -240,28 +241,28 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     private DateTime? created;
     private DateTime? downloadedAt;
 
-    public override Task OnUnselected(ExplorerTabViewModel newModel)
+    public override async Task OnUnselected(ExplorerTabViewModel newModel)
     {
-      this.UndoChangedImpl();
+      await this.UndoChangedImpl().ConfigureAwait(true);
       ExplorerViewModel.Instance.Tabs.Remove(this);
-      return base.OnUnselected(newModel);
+      await base.OnUnselected(newModel).ConfigureAwait(true);
     }
 
     public ICommand Save => new MangaSaveCommand(this, ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().First().Library);
 
-    public void UndoChanged()
+    public async Task UndoChanged()
     {
-      UndoChangedImpl();
+      await UndoChangedImpl().ConfigureAwait(true);
       ExplorerViewModel.Instance.SelectedTab = ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().FirstOrDefault();
     }
 
-    private void UndoChangedImpl()
+    private async Task UndoChangedImpl()
     {
       if (Saved && !IsUndoCompleted)
       {
         using (var context = Repository.GetEntityContext($"Undo any changes in memory for manga {OriginalName}"))
         {
-          var manga = context.Get<IManga>().First(m => m.Id == Id);
+          var manga = await context.Get<IManga>().FirstAsync(m => m.Id == Id).ConfigureAwait(true);
           UpdateProperties(manga);
         }
 

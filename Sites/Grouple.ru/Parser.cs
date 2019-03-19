@@ -288,7 +288,7 @@ namespace Grouple
       if (!Uri.TryCreate(mangaUri, UriKind.Relative, out Uri test))
         return null;
 
-      var result = Mangas.Create(new Uri(host, mangaUri));
+      var result = await Mangas.Create(new Uri(host, mangaUri)).ConfigureAwait(false);
       result.Name = WebUtility.HtmlDecode(mangaName);
       if (!string.IsNullOrWhiteSpace(imageUri))
         result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri)).ConfigureAwait(false);

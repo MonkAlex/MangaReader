@@ -40,7 +40,7 @@ namespace Tests.Entities.Manga
 
     private async Task<int> GetCountOfChapters(string url)
     {
-      var manga = Mangas.Create(new Uri(url));
+      var manga = await Mangas.Create(new Uri(url)).ConfigureAwait(false);
       await new Parser().UpdateContent(manga).ConfigureAwait(false);
       return manga.Volumes.Sum(v => v.Container.Count());
     }

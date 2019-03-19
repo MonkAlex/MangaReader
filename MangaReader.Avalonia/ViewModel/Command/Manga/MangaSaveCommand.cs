@@ -7,6 +7,7 @@ using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
+using NHibernate.Linq;
 using LibraryViewModel = MangaReader.Core.Services.LibraryViewModel;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
@@ -28,7 +29,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
         {
           if (model.Saved)
           {
-            var manga = context.Get<IManga>().First(m => m.Id == model.Id);
+            var manga = await context.Get<IManga>().FirstAsync(m => m.Id == model.Id).ConfigureAwait(true);
             if (model.MangaName != manga.ServerName)
             {
               var name = model.MangaName;
@@ -70,7 +71,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
         if (model.Saved)
           using (var context = Repository.GetEntityContext())
           {
-            var manga = context.Get<IManga>().First(m => m.Id == model.Id);
+            var manga = await context.Get<IManga>().FirstAsync(m => m.Id == model.Id).ConfigureAwait(true);
             model.UpdateProperties(manga);
           }
       }

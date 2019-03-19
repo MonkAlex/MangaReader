@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.NHibernate;
+using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
+using NHibernate.Linq;
 
 namespace Grouple.Convertation
 {
@@ -14,7 +16,7 @@ namespace Grouple.Convertation
     {
       using (var context = Repository.GetEntityContext())
       {
-        var settings = context.Get<MangaReader.Core.Services.MangaSetting>().ToList();
+        var settings = await context.Get<MangaSetting>().ToListAsync().ConfigureAwait(false);
         var readmanga = settings.SingleOrDefault(s => ReadmangaPlugin.Manga == s.Manga);
         var mintmanga = settings.SingleOrDefault(s => MintmangaPlugin.Manga == s.Manga);
         if (readmanga != null)

@@ -5,6 +5,7 @@ using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
+using NHibernate.Linq;
 
 namespace MangaReader.Core.Convertation.Mangas
 {
@@ -22,7 +23,7 @@ namespace MangaReader.Core.Convertation.Mangas
       {
         using (var transaction = context.OpenTransaction())
         {
-          var mangas = context.Get<IManga>().Where(m => m.DownloadedAt == null).OrderBy(m => m.Id).ToList();
+          var mangas = await context.Get<IManga>().Where(m => m.DownloadedAt == null).OrderBy(m => m.Id).ToListAsync().ConfigureAwait(false);
           foreach (var manga in mangas)
           {
             process.Percent += 100.0 / mangas.Count;

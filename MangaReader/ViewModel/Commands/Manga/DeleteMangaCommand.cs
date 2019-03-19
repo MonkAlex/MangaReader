@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Properties;
@@ -23,16 +24,18 @@ namespace MangaReader.ViewModel.Commands.Manga
 
       if (dialogResult.Item1)
       {
-        Library.ThreadAction(async () =>
-        {
-          foreach (var manga in list)
-          {
-            await Library.Remove(manga).ConfigureAwait(true);
+        Library.ThreadAction(DeleteManga(list, dialogResult)).LogException();
+      }
+    }
 
-            if (dialogResult.Item2)
-              DirectoryHelpers.DeleteDirectory(manga.GetAbsoluteFolderPath());
-          }
-        }).LogException();
+    protected async Task DeleteManga(List<IManga> list, Tuple<bool, bool> dialogResult)
+    {
+      foreach (var manga in list)
+      {
+        await Library.Remove(manga).ConfigureAwait(true);
+
+        if (dialogResult.Item2)
+          DirectoryHelpers.DeleteDirectory(manga.GetAbsoluteFolderPath());
       }
     }
 

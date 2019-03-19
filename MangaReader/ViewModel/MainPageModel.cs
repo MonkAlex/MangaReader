@@ -226,7 +226,7 @@ namespace MangaReader.ViewModel
     {
       if (args.LibraryOperation == LibraryOperation.UpdateMangaChanged)
       {
-        var model = this.MangaViewModels.SingleOrDefault(m => Equals(m.Id, args.Manga?.Id));
+        var model = this.MangaViewModels.SingleOrDefault(m => Equals(m.Id, args.MangaId));
         switch (args.MangaOperation)
         {
           case MangaOperation.Added:

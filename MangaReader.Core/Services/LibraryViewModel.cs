@@ -89,27 +89,6 @@ namespace MangaReader.Core.Services
       }
     }
 
-    /// <summary>
-    /// Выполнить тяжелое действие изменения библиотеки в отдельном потоке.
-    /// </summary>
-    /// <param name="action">Выполняемое действие.</param>
-    /// <remarks>Только одно действие за раз. Доступность выполнения можно проверить в IsAvaible.</remarks>
-    public async Task ThreadAction(Action action)
-    {
-      if (!IsAvaible)
-        throw new MangaReaderException("Library not avaible.");
-
-      try
-      {
-        IsAvaible = false;
-        await Task.Run(action).ConfigureAwait(false);
-      }
-      finally
-      {
-        IsAvaible = true;
-      }
-    }
-
     #region Методы
 
     /// <summary>
@@ -280,7 +259,7 @@ namespace MangaReader.Core.Services
         {
           if (args.MangaOperation == MangaOperation.Added)
           {
-            materialized.Add(args.Manga.Id);
+            materialized.Add(args.MangaId);
             mangasCount = materialized.Count;
             Log.Info($"Манга {args.Manga.Name} добавлена при обновлении и будет загружена автоматически");
           }
@@ -368,6 +347,7 @@ namespace MangaReader.Core.Services
   {
     public double? Percent { get; }
     public IManga Manga { get; }
+    public int MangaId { get; }
     public MangaOperation MangaOperation { get; }
     public LibraryOperation LibraryOperation { get; }
 
@@ -376,6 +356,7 @@ namespace MangaReader.Core.Services
     {
       this.Percent = percent;
       this.Manga = manga;
+      this.MangaId = manga?.Id ?? 0;
       this.MangaOperation = mangaOperation;
       this.LibraryOperation = libraryOperation;
     }

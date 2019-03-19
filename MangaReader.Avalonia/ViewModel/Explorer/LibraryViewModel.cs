@@ -130,26 +130,26 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         await RefreshItems().ConfigureAwait(true);
       }
 
-      await Dispatcher.UIThread.InvokeAsync(() =>
+      void ProcessArgs(LibraryViewModelArgs libraryViewModelArgs)
       {
-        switch (args.LibraryOperation)
+        switch (libraryViewModelArgs.LibraryOperation)
         {
           case LibraryOperation.UpdateStarted:
             UpdatePercent = null;
             break;
           case LibraryOperation.UpdatePercentChanged:
-            UpdatePercent = args.Percent == 0 ? null : args.Percent;
+            UpdatePercent = libraryViewModelArgs.Percent == 0 ? null : libraryViewModelArgs.Percent;
             break;
           case LibraryOperation.UpdateMangaChanged:
           {
-            switch (args.MangaOperation)
+            switch (libraryViewModelArgs.MangaOperation)
             {
               case MangaOperation.Added:
-                this.Items.Add(new MangaModel(args.Manga));
+                this.Items.Add(new MangaModel(libraryViewModelArgs.Manga));
                 break;
               case MangaOperation.Deleted:
               {
-                var mangaModels = this.Items.Where(i => i.Id == args.Manga.Id).ToList();
+                var mangaModels = this.Items.Where(i => i.Id == libraryViewModelArgs.MangaId).ToList();
                 foreach (var mangaModel in mangaModels)
                   this.Items.Remove(mangaModel);
                 break;
@@ -172,7 +172,12 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           default:
             throw new ArgumentOutOfRangeException();
         }
-      }).ConfigureAwait(true);
+      }
+
+      if (Dispatcher.UIThread.CheckAccess())
+        ProcessArgs(args);
+      else
+        await Dispatcher.UIThread.InvokeAsync(() => ProcessArgs(args)).ConfigureAwait(true);
     }
   }
 }

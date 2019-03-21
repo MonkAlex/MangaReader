@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
+using MangaReader.Core.Services;
 using NUnit.Framework;
 
 namespace Tests.Entities.CRUD
@@ -20,13 +21,13 @@ namespace Tests.Entities.CRUD
 
       using (var context = Repository.GetEntityContext())
       {
-        var fromDb = context.Get<IManga>().FirstOrDefault(m => m.Id == mangaId);
+        var fromDb = await context.Get<IManga>().FirstOrDefaultAsync(m => m.Id == mangaId).ConfigureAwait(false);
         Assert.AreNotEqual(null, fromDb);
 
         await Builder.DeleteReadmanga(newManga).ConfigureAwait(false);
         Assert.AreEqual(0, newManga.Id);
 
-        fromDb = context.Get<IManga>().FirstOrDefault(m => m.Id == mangaId);
+        fromDb = await context.Get<IManga>().FirstOrDefaultAsync(m => m.Id == mangaId).ConfigureAwait(false);
         Assert.AreEqual(null, fromDb);
       }
     }
@@ -41,7 +42,7 @@ namespace Tests.Entities.CRUD
 
       using (var context = Repository.GetEntityContext())
       {
-        var manga = context.Get<IManga>().Single(m => m.Id == mangaId);
+        var manga = await context.Get<IManga>().SingleAsync(m => m.Id == mangaId).ConfigureAwait(false);
         Assert.AreEqual(name, manga.Name);
         manga.Name = updatedName;
         await context.Save(manga).ConfigureAwait(false);
@@ -49,7 +50,7 @@ namespace Tests.Entities.CRUD
 
       using (var context = Repository.GetEntityContext())
       {
-        var manga = context.Get<IManga>().Single(m => m.Id == mangaId);
+        var manga = await context.Get<IManga>().SingleAsync(m => m.Id == mangaId).ConfigureAwait(false);
         Assert.AreEqual(updatedName, manga.Name);
       }
     }
@@ -64,7 +65,7 @@ namespace Tests.Entities.CRUD
 
       using (var context = Repository.GetEntityContext())
       {
-        var manga = context.Get<IManga>().Single(m => m.Id == mangaId);
+        var manga = await context.Get<IManga>().SingleAsync(m => m.Id == mangaId).ConfigureAwait(false);
         manga.Uri = testUri;
         await context.Save(manga).ConfigureAwait(false);
         Assert.AreNotEqual(uri, manga.Uri);
@@ -72,7 +73,7 @@ namespace Tests.Entities.CRUD
 
       using (var context = Repository.GetEntityContext())
       {
-        var manga = context.Get<IManga>().Single(m => m.Id == mangaId);
+        var manga = await context.Get<IManga>().SingleAsync(m => m.Id == mangaId).ConfigureAwait(false);
         manga.Uri = Builder.ReadmangaUri;
         Assert.CatchAsync<SaveValidationException>(async () => await context.Save(manga).ConfigureAwait(false));
         Assert.AreEqual(Builder.ReadmangaUri, manga.Uri);
@@ -80,7 +81,7 @@ namespace Tests.Entities.CRUD
 
       using (var context = Repository.GetEntityContext())
       {
-        var manga = context.Get<IManga>().Single(m => m.Id == mangaId);
+        var manga = await context.Get<IManga>().SingleAsync(m => m.Id == mangaId).ConfigureAwait(false);
         Assert.AreEqual(testUri, manga.Uri);
       }
     }

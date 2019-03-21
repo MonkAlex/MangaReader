@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using MangaReader.Core.Services;
 using MangaReader.ViewModel.Commands.Primitives;
@@ -30,13 +31,13 @@ namespace MangaReader.ViewModel.Commands
       return ActiveCommand.CanExecute(parameter);
     }
 
-    public override void Execute(object parameter)
+    public override async Task Execute(object parameter)
     {
       if (ActiveCommand == Update)
       {
         if (ActiveCommand.CanExecute(parameter))
         {
-          ActiveCommand.Execute(parameter);
+          await ActiveCommand.Execute(parameter).ConfigureAwait(true);
           ActiveCommand = Pause;
         }
       }
@@ -44,7 +45,7 @@ namespace MangaReader.ViewModel.Commands
       {
         if (ActiveCommand.CanExecute(parameter))
         {
-          ActiveCommand.Execute(parameter);
+          await ActiveCommand.Execute(parameter).ConfigureAwait(true);
           ActiveCommand = Continue;
         }
       }
@@ -52,7 +53,7 @@ namespace MangaReader.ViewModel.Commands
       {
         if (ActiveCommand.CanExecute(parameter))
         {
-          ActiveCommand.Execute(parameter);
+          await ActiveCommand.Execute(parameter).ConfigureAwait(true);
           ActiveCommand = Pause;
         }
       }

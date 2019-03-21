@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
@@ -12,7 +13,7 @@ namespace MangaReader.ViewModel.Commands.Manga
 {
   public class HistoryClearMangaCommand : MultipleMangasBaseCommand
   {
-    public override void Execute(IEnumerable<IManga> mangas)
+    public override async Task Execute(IEnumerable<IManga> mangas)
     {
       var list = mangas.ToList();
 
@@ -27,7 +28,7 @@ namespace MangaReader.ViewModel.Commands.Manga
         }
 
         using (var context = Repository.GetEntityContext())
-          list.SaveAll(context).GetAwaiter().GetResult();
+          await list.SaveAll(context).ConfigureAwait(true);
       }
     }
 

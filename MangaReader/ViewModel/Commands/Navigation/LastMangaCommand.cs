@@ -1,4 +1,5 @@
-﻿using System.Windows.Data;
+﻿using System.Threading.Tasks;
+using System.Windows.Data;
 using MangaReader.ViewModel.Commands.Primitives;
 
 namespace MangaReader.ViewModel.Commands.Navigation
@@ -10,11 +11,10 @@ namespace MangaReader.ViewModel.Commands.Navigation
       return base.CanExecute(parameter) && !IsLast;
     }
 
-    public override void Execute(object parameter)
+    public override Task Execute(object parameter)
     {
-      base.Execute(parameter);
-
       View.MoveCurrentToLast();
+      return Task.CompletedTask;
     }
 
     public LastMangaCommand(ListCollectionView view) : base(view)

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using MangaReader.Core.Services;
 using MangaReader.ViewModel.Commands.Primitives;
@@ -10,10 +11,8 @@ namespace MangaReader.ViewModel.Commands
   {
     private readonly ListCollectionView view;
 
-    public override async void Execute(object parameter)
+    public override async Task Execute(object parameter)
     {
-      base.Execute(parameter);
-
       if (Library.IsAvaible)
         await Library.ThreadAction(Library.Update(view.OfType<MangaModel>().Select(m => m.Id).ToList())).ConfigureAwait(true);
     }

@@ -4,7 +4,7 @@ using MangaReader.Core.Services;
 
 namespace MangaReader.ViewModel.Commands.Primitives
 {
-  public class LibraryBaseCommand : BaseCommand
+  public abstract class LibraryBaseCommand : BaseCommand
   {
     protected LibraryViewModel Library { get; }
 
@@ -13,7 +13,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
       return base.CanExecute(parameter) && Library.IsAvaible;
     }
 
-    public LibraryBaseCommand(LibraryViewModel model)
+    protected LibraryBaseCommand(LibraryViewModel model)
     {
       Library = model;
       Library.PropertyChanged += LibraryOnPropertyChanged;

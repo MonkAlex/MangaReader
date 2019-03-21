@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Grouple;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
@@ -18,7 +19,7 @@ namespace Tests.Entities.Manga
       var model = new MangaReader.Core.Services.LibraryViewModel();
       using (var context = Repository.GetEntityContext())
       {
-        foreach (var remove in context.Get<IManga>().ToList().Where(m => m.ServerName.Contains("btooom")))
+        foreach (var remove in (await context.Get<IManga>().ToListAsync().ConfigureAwait(false)).Where(m => m.ServerName.Contains("btooom")))
           await model.Remove(remove).ConfigureAwait(false);
 
         var manga = await Builder.CreateReadmanga().ConfigureAwait(false);
@@ -27,7 +28,7 @@ namespace Tests.Entities.Manga
         manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(new Uri("http://readmanga.me/btoom/vol1/1?mature=1")));
         await context.Save(manga).ConfigureAwait(false);
 
-        manga = context.Get<Grouple.Readmanga>().FirstOrDefault(m => m.Id == manga.Id);
+        manga = await context.Get<Readmanga>().FirstOrDefaultAsync(m => m.Id == manga.Id).ConfigureAwait(false);
         await manga.Refresh().ConfigureAwait(false);
         
         // Если сайт больше не редиректит, осталась возможность редиректа вручную в клиенте.

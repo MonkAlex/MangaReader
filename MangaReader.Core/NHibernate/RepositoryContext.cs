@@ -8,7 +8,6 @@ using MangaReader.Core.Entity;
 using MangaReader.Core.Exception;
 using MangaReader.Core.Services;
 using NHibernate;
-using NHibernate.Linq;
 
 namespace MangaReader.Core.NHibernate
 {

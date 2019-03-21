@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
@@ -14,7 +15,6 @@ namespace MangaReader.ViewModel.Commands.Primitives
   public abstract class MultipleMangasBaseCommand : LibraryBaseCommand
   {
     private bool canExecuteNeedSelection;
-    private bool isVisible;
     protected bool NeedRefresh { get; set; }
 
     protected bool CanExecuteNeedSelection
@@ -28,33 +28,22 @@ namespace MangaReader.ViewModel.Commands.Primitives
       }
     }
 
-    public bool IsVisible
-    {
-      get { return isVisible; }
-      set
-      {
-        isVisible = value;
-        OnPropertyChanged();
-      }
-    }
-
     protected MainPageModel PageModel { get; }
 
     protected IEnumerable<MangaModel> SelectedModels => PageModel.SelectedMangaModels;
 
-    public override void Execute(object parameter)
+    public override async Task Execute(object parameter)
     {
-      base.Execute(parameter);
-
       using (var context = Repository.GetEntityContext($"Manga command '{this.Name}'"))
       {
         var ids = SelectedModels.Select(m => m.Id).ToList();
-        var mangas = context.Get<IManga>().Where(m => ids.Contains(m.Id)).ToList().OrderBy(m => ids.IndexOf(m.Id)).ToList();
+        var query = await context.Get<IManga>().Where(m => ids.Contains(m.Id)).ToListAsync().ConfigureAwait(true);
+        var mangas = query.OrderBy(m => ids.IndexOf(m.Id)).ToList();
         try
         {
           foreach (var model in SelectedModels)
             model.ContextManga = mangas.SingleOrDefault(m => m.Id == model.Id);
-          this.Execute(mangas);
+          await this.Execute(mangas).ConfigureAwait(true);
         }
         catch (Exception e)
         {
@@ -77,7 +66,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
         command.OnCanExecuteChanged();
     }
 
-    public abstract void Execute(IEnumerable<IManga> mangas);
+    public abstract Task Execute(IEnumerable<IManga> mangas);
 
     private void SubscribeToSelection(bool subscribe)
     {
@@ -98,12 +87,6 @@ namespace MangaReader.ViewModel.Commands.Primitives
       PageModel = model;
       this.NeedRefresh = true;
       this.CanExecuteNeedSelection = false;
-      this.CanExecuteChanged += OnCanExecuteChanged;
-    }
-
-    private void OnCanExecuteChanged(object sender, EventArgs eventArgs)
-    {
-      IsVisible = CanExecute(null);
     }
   }
 }

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Threading.Tasks;
+using System.Windows;
 using MangaReader.ViewModel.Commands.Primitives;
 using WindowState = System.Windows.WindowState;
 
@@ -6,10 +7,8 @@ namespace MangaReader.ViewModel.Commands
 {
   public class ShowMainWindowCommand : BaseCommand
   {
-    public override void Execute(object parameter)
+    public override Task Execute(object parameter)
     {
-      base.Execute(parameter);
-
       var mainWindow = Application.Current.MainWindow;
       if (mainWindow != null)
       {
@@ -18,6 +17,8 @@ namespace MangaReader.ViewModel.Commands
         if (mainWindow.WindowState == WindowState.Minimized)
           mainWindow.WindowState = WindowState.Normal;
       }
+
+      return Task.CompletedTask;
     }
   }
 }

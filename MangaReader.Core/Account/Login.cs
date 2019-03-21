@@ -5,7 +5,6 @@ using System.Net;
 using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
-using NHibernate.Linq;
 
 namespace MangaReader.Core.Account
 {

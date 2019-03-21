@@ -6,6 +6,7 @@ using System.Windows.Input;
 using MangaReader.Core.Account;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
+using MangaReader.Core.Services;
 using MangaReader.ViewModel.Commands.AddManga;
 using MangaReader.ViewModel.Primitive;
 
@@ -85,16 +86,16 @@ namespace MangaReader.ViewModel
       OnPropertyChanged(nameof(Password));
     }
 
-    public void Save()
+    public async Task Save()
     {
       if (this.login != null)
       {
         using (var context = Repository.GetEntityContext($"Save settings for {LoginId}"))
         {
-          var actualLogin = context.Get<ILogin>().Single(s => s.Id == LoginId);
+          var actualLogin = await context.Get<ILogin>().SingleAsync(s => s.Id == LoginId).ConfigureAwait(true);
           actualLogin.Name = this.Login;
           actualLogin.Password = this.Password;
-          context.Save(actualLogin).GetAwaiter().GetResult();
+          await context.Save(actualLogin).ConfigureAwait(true);
           this.login = actualLogin;
         }
       }

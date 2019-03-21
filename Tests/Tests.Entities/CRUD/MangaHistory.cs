@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
+using MangaReader.Core.Services;
 using NUnit.Framework;
 
 namespace Tests.Entities.CRUD
@@ -23,19 +24,19 @@ namespace Tests.Entities.CRUD
         Assert.AreNotEqual(0, history.Id);
         Assert.AreNotEqual(null, manga.Histories.FirstOrDefault());
 
-        var mangaHistory = context.Get<MangaReader.Core.Manga.MangaHistory>().FirstOrDefault(h => h.Id == historyId);
+        var mangaHistory = await context.Get<MangaReader.Core.Manga.MangaHistory>().FirstOrDefaultAsync(h => h.Id == historyId).ConfigureAwait(false);
         Assert.AreNotEqual(null, mangaHistory);
 
-        var mangas = context.Get<IManga>().FirstOrDefault(m => m.Id == mangaId);
+        var mangas = await context.Get<IManga>().FirstOrDefaultAsync(m => m.Id == mangaId).ConfigureAwait(false);
         Assert.AreNotEqual(null, mangas);
 
         await Builder.DeleteMangaHistory(manga).ConfigureAwait(false);
         await Builder.DeleteAcomics(manga).ConfigureAwait(false);
 
-        mangaHistory = context.Get<MangaReader.Core.Manga.MangaHistory>().FirstOrDefault(h => h.Id == historyId);
+        mangaHistory = await context.Get<MangaReader.Core.Manga.MangaHistory>().FirstOrDefaultAsync(h => h.Id == historyId).ConfigureAwait(false);
         Assert.AreEqual(null, mangaHistory);
 
-        mangas = context.Get<IManga>().FirstOrDefault(m => m.Id == mangaId);
+        mangas = await context.Get<IManga>().FirstOrDefaultAsync(m => m.Id == mangaId).ConfigureAwait(false);
         Assert.AreEqual(null, mangas);
       }
     }

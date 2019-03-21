@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Avalonia.Threading;
 using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Avalonia.ViewModel.Command.Library;
@@ -12,7 +11,6 @@ using MangaReader.Avalonia.ViewModel.Command.Manga;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
-using NHibernate.Linq;
 using ReactiveUI.Legacy;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer

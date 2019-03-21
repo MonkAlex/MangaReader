@@ -7,7 +7,6 @@ using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
-using NHibernate.Linq;
 using LibraryViewModel = MangaReader.Core.Services.LibraryViewModel;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga

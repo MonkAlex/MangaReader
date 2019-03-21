@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using MangaReader.Core;
 using MangaReader.Core.NHibernate;
@@ -37,6 +38,12 @@ namespace MangaReader.ViewModel
         hint = value;
         OnPropertyChanged();
       }
+    }
+
+    public override Task Save()
+    {
+#warning What the hell with this base class? Only for header property?
+      throw new NotImplementedException();
     }
 
     private void InputChanged(string newValue)

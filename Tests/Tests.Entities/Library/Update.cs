@@ -21,7 +21,7 @@ namespace Tests.Entities.Library
     {
       var library = new LibraryViewModel();
       using (var context = Repository.GetEntityContext())
-        foreach (var forDelete in context.Get<IManga>())
+        foreach (var forDelete in await context.Get<IManga>().ToListAsync().ConfigureAwait(false))
           await context.Delete(forDelete).ConfigureAwait(false);
       var manga = await Builder.CreateReadmanga().ConfigureAwait(false);
       await TestUpdateFromConfig(library, ListSortDirection.Ascending, nameof(IManga.DownloadedAt)).ConfigureAwait(false);

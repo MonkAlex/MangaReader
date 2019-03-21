@@ -31,7 +31,13 @@ namespace MangaReader.ViewModel
     public ICommand Add { get; }
 
     public LoginModel Login { get; }
-    
+
+    public override Task Save()
+    {
+#warning What the hell with this base class? Only for header property?
+      throw new NotImplementedException();
+    }
+
     private async Task LoadBookmarks()
     {
       var siteBookmarks = await Login.GetBookmarks().ConfigureAwait(true);

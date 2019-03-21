@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 
@@ -71,13 +72,11 @@ namespace MangaReader.ViewModel.Setting
 
     public FolderNamingModel FolderNamingStrategy { get; set; }
 
-    public override void Save()
+    public override async Task Save()
     {
-      base.Save();
-
       using (var context = Repository.GetEntityContext($"Save settings for {Header}"))
       {
-        var setting = context.Get<MangaSetting>().Single(s => s.Id == id);
+        var setting = await context.Get<MangaSetting>().SingleAsync(s => s.Id == id).ConfigureAwait(true);
         setting.CompressManga = this.CompressManga;
         setting.DefaultCompression = this.DefaultCompression;
         setting.Folder = this.Folder;
@@ -85,8 +84,8 @@ namespace MangaReader.ViewModel.Setting
         setting.FolderNamingStrategy = this.FolderNamingStrategy.Selected.Id;
         if (Uri.TryCreate(this.MainUri, UriKind.Absolute, out Uri parsedUri) && parsedUri != setting.MainUri)
           setting.MainUri = parsedUri;
-        this.Login.Save();
-        context.Save(setting).GetAwaiter().GetResult();
+        await this.Login.Save().ConfigureAwait(true);
+        await context.Save(setting).ConfigureAwait(true);
       }
     }
 

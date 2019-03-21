@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Grouple;
 using MangaReader.Core.NHibernate;
+using MangaReader.Core.Services;
 using NUnit.Framework;
 
 namespace Tests.Entities.Manga
@@ -27,7 +29,7 @@ namespace Tests.Entities.Manga
         Assert.AreEqual(serverName, manga.ServerName);
 
         await context.Save(manga).ConfigureAwait(false);
-        manga = context.Get<Grouple.Readmanga>().Single(m => m.Id == manga.Id);
+        manga = await context.Get<Readmanga>().SingleAsync(m => m.Id == manga.Id).ConfigureAwait(false);
         Assert.AreEqual(mangaLocalName, manga.Name);
         Assert.AreEqual(mangaLocalName, manga.LocalName);
         Assert.AreEqual(serverName, manga.ServerName);
@@ -38,7 +40,7 @@ namespace Tests.Entities.Manga
         Assert.AreEqual(serverName, manga.ServerName);
 
         await context.Save(manga).ConfigureAwait(false);
-        manga = context.Get<Grouple.Readmanga>().Single(m => m.Id == manga.Id);
+        manga = await context.Get<Readmanga>().SingleAsync(m => m.Id == manga.Id).ConfigureAwait(false);
         Assert.AreEqual(serverName, manga.Name);
         Assert.AreEqual(mangaLocalName, manga.LocalName);
         Assert.AreEqual(serverName, manga.ServerName);

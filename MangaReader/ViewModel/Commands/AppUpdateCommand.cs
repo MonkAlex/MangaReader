@@ -1,4 +1,5 @@
-﻿using MangaReader.Core.Services;
+﻿using System.Threading.Tasks;
+using MangaReader.Core.Services;
 using MangaReader.Core.Update;
 using MangaReader.Properties;
 using MangaReader.Services;
@@ -8,9 +9,8 @@ namespace MangaReader.ViewModel.Commands
 {
   public class AppUpdateCommand : LibraryBaseCommand
   {
-    public override async void Execute(object parameter)
+    public override async Task Execute(object parameter)
     {
-      base.Execute(parameter);
       await Updater.StartUpdate().ConfigureAwait(true);
     }
 

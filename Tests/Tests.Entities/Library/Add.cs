@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Grouple;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using NUnit.Framework;
@@ -38,8 +39,8 @@ namespace Tests.Entities.Library
 
       using (var context = Repository.GetEntityContext())
       {
-        var mangas = context.Get<Grouple.Readmanga>()
-          .ToList()
+        var mangas = (await context.Get<Readmanga>()
+            .ToListAsync().ConfigureAwait(false))
           .Where(m => m.Uri.AbsoluteUri.Contains("berserk"))
           .ToList();
         foreach (var manga in mangas)

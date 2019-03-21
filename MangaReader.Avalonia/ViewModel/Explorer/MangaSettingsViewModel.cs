@@ -7,7 +7,6 @@ using MangaReader.Core.Services;
 using System.Windows.Input;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
-using NHibernate.Linq;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
 {

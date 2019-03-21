@@ -83,7 +83,7 @@ namespace Tests
       {
         if (mangaInfo.Uri == MangaInfos.Mangachan.EveScramble.Uri)
         {
-          var login = context.Get<MangachanLogin>().Single();
+          var login = await context.Get<MangachanLogin>().SingleAsync().ConfigureAwait(false);
           login.PasswordHash = "e84fce6c43aacd7f8452409a63083c18";
           login.UserId = "282433";
           login.IsLogined = true;
@@ -91,7 +91,7 @@ namespace Tests
         }
 
         var mangaUri = new Uri(mangaInfo.Uri);
-        var existsManga = context.Get<IManga>().FirstOrDefault(m => m.Uri == mangaUri);
+        var existsManga = await context.Get<IManga>().FirstOrDefaultAsync(m => m.Uri == mangaUri).ConfigureAwait(false);
         if (existsManga != null)
           await context.Delete(existsManga).ConfigureAwait(false);
         manga = await Mangas.CreateFromWeb(mangaUri).ConfigureAwait(false);

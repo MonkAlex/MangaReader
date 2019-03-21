@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
@@ -85,10 +86,8 @@ namespace MangaReader.ViewModel.Setting
 
     public SortModel Sort { get; set; }
 
-    public override void Save()
+    public override async Task Save()
     {
-      base.Save();
-
       var appConfig = ConfigStorage.Instance.AppConfig;
       appConfig.Language = Language;
       appConfig.UpdateReader = UpdateReader;
@@ -107,9 +106,9 @@ namespace MangaReader.ViewModel.Setting
 
       using (var context = Repository.GetEntityContext())
       {
-        var config = context.Get<DatabaseConfig>().Single();
+        var config = await context.Get<DatabaseConfig>().SingleAsync().ConfigureAwait(true);
         config.FolderNamingStrategy = FolderNamingStrategy.Selected.Id;
-        context.Save(config).GetAwaiter().GetResult();
+        await context.Save(config).ConfigureAwait(true);
       }
     }
 
@@ -130,6 +129,7 @@ namespace MangaReader.ViewModel.Setting
       this.FolderNamingStrategy = new FolderNamingModel();
       using (var context = Repository.GetEntityContext())
       {
+#warning DB connection in ctor
         var config = context.Get<DatabaseConfig>().Single();
         this.FolderNamingStrategy.SelectedGuid = config.FolderNamingStrategy;
       }

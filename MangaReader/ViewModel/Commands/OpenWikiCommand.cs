@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using MangaReader.Core.Services;
 using MangaReader.ViewModel.Commands.Primitives;
 
@@ -6,11 +7,10 @@ namespace MangaReader.ViewModel.Commands
 {
   public class OpenWikiCommand : BaseCommand
   {
-    public override void Execute(object parameter)
+    public override Task Execute(object parameter)
     {
-      base.Execute(parameter);
-
       Helper.StartUseShell("https://github.com/MonkAlex/MangaReader/wiki");
+      return Task.CompletedTask;
     }
 
     public OpenWikiCommand()

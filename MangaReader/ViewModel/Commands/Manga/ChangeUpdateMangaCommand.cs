@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
@@ -12,15 +13,16 @@ namespace MangaReader.ViewModel.Commands.Manga
   {
     protected readonly bool NeedUpdate;
 
-    public override void Execute(IEnumerable<IManga> mangas)
+    public override async Task Execute(IEnumerable<IManga> mangas)
     {
       using (var context = Repository.GetEntityContext())
       {
-        foreach (var manga in mangas.Where(m => m.NeedUpdate == NeedUpdate))
+        var mangaNeedUpdate = mangas.Where(m => m.NeedUpdate == NeedUpdate).ToList();
+        foreach (var manga in mangaNeedUpdate)
         {
           manga.NeedUpdate = !manga.NeedUpdate;
-          context.Save(manga).GetAwaiter().GetResult();
         }
+        await mangaNeedUpdate.SaveAll(context).ConfigureAwait(true);
       }
     }
 

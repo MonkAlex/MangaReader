@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Hentaichan.Mangachan;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
+using MangaReader.Core.Services;
 using NUnit.Framework;
 
 namespace Tests.Entities.Manga
@@ -16,7 +17,7 @@ namespace Tests.Entities.Manga
     {
       using (var context = Repository.GetEntityContext())
       { 
-        var login = context.Get<MangachanLogin>().Single();
+        var login = await context.Get<MangachanLogin>().SingleAsync().ConfigureAwait(false);
         login.PasswordHash = "e84fce6c43aacd7f8452409a63083c18";
         login.UserId = "282433";
         login.IsLogined = true;
@@ -46,7 +47,7 @@ namespace Tests.Entities.Manga
       using (var context = Repository.GetEntityContext())
       {
         var uri = new Uri("http://mintmanga.com/haruka_na_receive");
-        var toRemove = context.Get<IManga>().Where(m => m.Uri == uri).ToList();
+        var toRemove = await context.Get<IManga>().Where(m => m.Uri == uri).ToListAsync().ConfigureAwait(false);
         foreach (var remove in toRemove)
           await context.Delete(remove).ConfigureAwait(false);
         var manga = await Mangas.CreateFromWeb(uri).ConfigureAwait(false);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using MangaReader.Core.Services;
 using MangaReader.Properties;
@@ -10,11 +11,10 @@ namespace MangaReader.ViewModel.Commands
   {
     public static bool CommandRunned { get; set; }
 
-    public override void Execute(object parameter)
+    public override Task Execute(object parameter)
     {
       if (!CommandRunned)
       {
-        base.Execute(parameter);
         CommandRunned = true;
 
         Log.Add("Application will be closed.");
@@ -23,6 +23,7 @@ namespace MangaReader.ViewModel.Commands
         Application.Current.Exit += (sender, args) => Environment.Exit(args.ApplicationExitCode);
         Application.Current.Shutdown(0);
       }
+      return Task.CompletedTask;
     }
 
     public ExitCommand()

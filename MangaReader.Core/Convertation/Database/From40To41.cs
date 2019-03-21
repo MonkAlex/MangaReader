@@ -5,7 +5,6 @@ using MangaReader.Core.Services.Config;
 using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Core.NHibernate;
-using NHibernate.Linq;
 
 namespace MangaReader.Core.Convertation.Database
 {

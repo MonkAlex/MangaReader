@@ -6,7 +6,6 @@ using MangaReader.Core.Convertation;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
-using NHibernate.Linq;
 using LibraryViewModel = MangaReader.Avalonia.ViewModel.Explorer.LibraryViewModel;
 
 namespace MangaReader.Avalonia.ViewModel

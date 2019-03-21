@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
+using MangaReader.Core.Services;
 using NUnit.Framework;
 
 namespace Tests.Entities.Mapping
@@ -15,7 +16,7 @@ namespace Tests.Entities.Mapping
     {
       using (var context = Repository.GetEntityContext())
       {
-        var mangas = context.Get<IManga>().Where(m => m.ServerName == "Strays");
+        var mangas = await context.Get<IManga>().Where(m => m.ServerName == "Strays").ToListAsync().ConfigureAwait(false);
         foreach (var deleting in mangas)
           await context.Delete(deleting).ConfigureAwait(false);
 

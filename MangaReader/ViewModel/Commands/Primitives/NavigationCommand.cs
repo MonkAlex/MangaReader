@@ -3,7 +3,7 @@ using System.Windows.Data;
 
 namespace MangaReader.ViewModel.Commands.Primitives
 {
-  public class NavigationCommand : BaseCommand
+  public abstract class NavigationCommand : BaseCommand
   {
     protected ListCollectionView View;
 
@@ -16,7 +16,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
       return base.CanExecute(parameter) && View != null;
     }
 
-    public NavigationCommand(ListCollectionView view)
+    protected NavigationCommand(ListCollectionView view)
     {
       this.View = view;
       this.View.CurrentChanged += ViewOnCurrentChanged;

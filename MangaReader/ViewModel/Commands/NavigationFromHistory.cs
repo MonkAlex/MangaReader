@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using MangaReader.Core.Services;
 using MangaReader.ViewModel.Commands.Primitives;
 
@@ -9,12 +10,11 @@ namespace MangaReader.ViewModel.Commands
   {
     private const string RepoUri = "https://github.com/MonkAlex/MangaReader/path_to_remove";
 
-    public override void Execute(object parameter)
+    public override Task Execute(object parameter)
     {
-      base.Execute(parameter);
-
       var uri = new Uri($"{RepoUri}{parameter}");
       Helper.StartUseShell(uri.ToString());
+      return Task.CompletedTask;
     }
   }
 }

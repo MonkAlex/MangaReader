@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Threading;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Avalonia.ViewModel.Command
 {
@@ -52,6 +53,8 @@ namespace MangaReader.Avalonia.ViewModel.Command
 
     async void ICommand.Execute(object parameter)
     {
+      var commandName = Name ?? GetType().Name;
+      Log.Add($"Command '{commandName}' started.");
       await Execute(parameter).ConfigureAwait(true);
     }
 

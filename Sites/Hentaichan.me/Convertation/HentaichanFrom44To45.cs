@@ -5,7 +5,6 @@ using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
-using NHibernate.Linq;
 
 namespace Hentaichan.Convertation
 {

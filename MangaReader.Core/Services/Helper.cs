@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -191,6 +192,46 @@ namespace MangaReader.Core.Services
           current: () => current,
           dispose: seqEnum.Dispose);
       });
+    }
+
+    public static Task<List<T>> ToListAsync<T>(this IQueryable<T> queryable)
+    {
+      return global::NHibernate.Linq.LinqExtensionMethods.ToListAsync(queryable);
+    }
+
+    public static Task<T> FirstOrDefaultAsync<T>(this IQueryable<T> queryable, Expression<Func<T, bool>> predicate)
+    {
+      return global::NHibernate.Linq.LinqExtensionMethods.FirstOrDefaultAsync(queryable, predicate);
+    }
+
+    public static Task<T> FirstAsync<T>(this IQueryable<T> queryable, Expression<Func<T, bool>> predicate)
+    {
+      return global::NHibernate.Linq.LinqExtensionMethods.FirstAsync(queryable, predicate);
+    }
+
+    public static Task<T> SingleAsync<T>(this IQueryable<T> queryable, Expression<Func<T, bool>> predicate)
+    {
+      return global::NHibernate.Linq.LinqExtensionMethods.SingleAsync(queryable, predicate);
+    }
+
+    public static Task<T> SingleOrDefaultAsync<T>(this IQueryable<T> queryable, Expression<Func<T, bool>> predicate)
+    {
+      return global::NHibernate.Linq.LinqExtensionMethods.SingleOrDefaultAsync(queryable, predicate);
+    }
+
+    public static Task<T> SingleAsync<T>(this IQueryable<T> queryable)
+    {
+      return global::NHibernate.Linq.LinqExtensionMethods.SingleAsync(queryable);
+    }
+
+    public static Task<bool> AnyAsync<T>(this IQueryable<T> queryable, Expression<Func<T, bool>> predicate)
+    {
+      return global::NHibernate.Linq.LinqExtensionMethods.AnyAsync(queryable, predicate);
+    }
+
+    public static Task<bool> AnyAsync<T>(this IQueryable<T> queryable)
+    {
+      return global::NHibernate.Linq.LinqExtensionMethods.AnyAsync(queryable);
     }
   }
 }

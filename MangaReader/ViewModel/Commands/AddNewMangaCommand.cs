@@ -1,4 +1,5 @@
-﻿using MangaReader.Core.Services;
+﻿using System.Threading.Tasks;
+using MangaReader.Core.Services;
 using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
 
@@ -6,11 +7,11 @@ namespace MangaReader.ViewModel.Commands
 {
   public class AddNewMangaCommand : LibraryBaseCommand
   {
-    public override void Execute(object parameter)
+    public override Task Execute(object parameter)
     {
-      base.Execute(parameter);
       var vm = new AddNewModel();
       vm.Show();
+      return Task.CompletedTask;
     }
 
     public override bool CanExecute(object parameter)

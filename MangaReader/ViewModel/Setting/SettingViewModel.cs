@@ -1,8 +1,9 @@
-﻿using MangaReader.ViewModel.Primitive;
+﻿using System.Threading.Tasks;
+using MangaReader.ViewModel.Primitive;
 
 namespace MangaReader.ViewModel.Setting
 {
-  public class SettingViewModel : BaseViewModel
+  public abstract class SettingViewModel : BaseViewModel
   {
     private string header;
 
@@ -16,9 +17,6 @@ namespace MangaReader.ViewModel.Setting
       }
     }
 
-    public virtual void Save()
-    {
-
-    }
+    public abstract Task Save();
   }
 }

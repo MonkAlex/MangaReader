@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Core.Account;
 using MangaReader.Core.Entity;
-using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
-using NHibernate.Linq;
 
 namespace MangaReader.Core.Services
 {

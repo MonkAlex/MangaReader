@@ -1,4 +1,5 @@
-﻿using MangaReader.Core.Services;
+﻿using System.Threading.Tasks;
+using MangaReader.Core.Services;
 using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
 
@@ -7,10 +8,8 @@ namespace MangaReader.ViewModel.Commands
   public class UpdateAllCommand : LibraryBaseCommand
   {
 
-    public override async void Execute(object parameter)
+    public override async Task Execute(object parameter)
     {
-      base.Execute(parameter);
-
       if (Library.IsAvaible)
         await Library.ThreadAction(Library.Update()).ConfigureAwait(true);
     }

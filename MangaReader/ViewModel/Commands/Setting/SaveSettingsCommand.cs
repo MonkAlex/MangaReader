@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
@@ -16,16 +17,13 @@ namespace MangaReader.ViewModel.Commands.Setting
   {
     private readonly SettingModel settingModel;
 
-    public override void Execute(object parameter)
+    public override async Task Execute(object parameter)
     {
-      base.Execute(parameter);
-
       var skinGuid = ConfigStorage.Instance.ViewConfig.SkinGuid;
 
       try
       {
-        foreach (var mangaSetting in settingModel.Views)
-          mangaSetting.Save();
+        await Task.WhenAll(settingModel.Views.Select(v => v.Save()).ToArray()).ConfigureAwait(true);
 
         ConfigStorage.Instance.Save();
       }
@@ -42,7 +40,7 @@ namespace MangaReader.ViewModel.Commands.Setting
         if (restart)
         {
           // TODO: потенциальная гонка условий, может не запуститься.
-          new ExitCommand().Execute(parameter);
+          await new ExitCommand().Execute(parameter).ConfigureAwait(true);
           Helper.StartUseShell(Application.ResourceAssembly.Location);
         }
       }

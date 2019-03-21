@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Properties;
@@ -8,10 +9,12 @@ namespace MangaReader.ViewModel.Commands.Manga
 {
   public class CompressMangaCommand : MultipleMangasBaseCommand
   {
-    public override void Execute(IEnumerable<IManga> mangas)
+    public override Task Execute(IEnumerable<IManga> mangas)
     {
       foreach (var m in mangas)
         m.Compress();
+
+      return Task.CompletedTask;
     }
 
     public CompressMangaCommand(MainPageModel model) : base(model)

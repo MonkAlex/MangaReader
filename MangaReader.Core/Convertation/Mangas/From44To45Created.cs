@@ -6,8 +6,6 @@ using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
-using MangaReader.Core.Services.Config;
-using NHibernate.Linq;
 
 namespace MangaReader.Core.Convertation.Mangas
 {

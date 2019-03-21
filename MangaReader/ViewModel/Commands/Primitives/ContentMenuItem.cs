@@ -102,11 +102,11 @@ namespace MangaReader.ViewModel.Commands.Primitives
         this.Name = baseCommand.Name;
       if (args.PropertyName == nameof(baseCommand.Icon))
         this.Icon = new ImageSourceVM(baseCommand.Icon);
-      if (args.PropertyName == nameof(MultipleMangasBaseCommand.IsVisible))
-        this.IsVisible = ((MultipleMangasBaseCommand) baseCommand).IsVisible;
+      if (args.PropertyName == nameof(BaseCommand.IsVisible))
+        this.IsVisible = baseCommand.IsVisible;
     }
 
-    public ContentMenuItem(ICommand command, string name) : this(name)
+    private ContentMenuItem(ICommand command, string name) : this(name)
     {
       this.Command = command;
     }

@@ -20,6 +20,7 @@ namespace MangaReader.Core
 
     public virtual MangaSetting GetSettings()
     {
+#warning will be reworked -- entities returned with closed session
       using (var context = NHibernate.Repository.GetEntityContext("Just get settings"))
         return context.Get<MangaSetting>().Single(m => m.Manga == this.MangaGuid);
     }

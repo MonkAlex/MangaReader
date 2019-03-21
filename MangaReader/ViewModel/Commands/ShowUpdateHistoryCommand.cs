@@ -1,4 +1,5 @@
-﻿using MangaReader.Properties;
+﻿using System.Threading.Tasks;
+using MangaReader.Properties;
 using MangaReader.Services;
 using MangaReader.ViewModel.Commands.Primitives;
 
@@ -6,11 +7,11 @@ namespace MangaReader.ViewModel.Commands
 {
   public class ShowUpdateHistoryCommand : BaseCommand
   {
-    public override void Execute(object parameter)
+    public override Task Execute(object parameter)
     {
-      base.Execute(parameter);
-
       new VersionHistoryModel().Show();
+
+      return Task.CompletedTask;
     }
 
     public ShowUpdateHistoryCommand()

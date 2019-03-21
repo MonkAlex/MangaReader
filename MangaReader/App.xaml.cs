@@ -11,9 +11,9 @@ namespace MangaReader
   /// </summary>
   public partial class App : Application
   {
-    private void App_OnExit(object sender, ExitEventArgs e)
+    private async void App_OnExit(object sender, ExitEventArgs e)
     {
-      new ExitCommand().Execute(sender);
+      await new ExitCommand().Execute(sender).ConfigureAwait(true);
     }
 
     private async void App_OnStartup(object sender, StartupEventArgs e)

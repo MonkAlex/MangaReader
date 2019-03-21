@@ -12,7 +12,7 @@ namespace MangaReader.ViewModel.Commands.Manga
 {
   public class DeleteMangaCommand : MultipleMangasBaseCommand
   {
-    public override void Execute(IEnumerable<IManga> mangas)
+    public override async Task Execute(IEnumerable<IManga> mangas)
     {
       var list = mangas.ToList();
       var isSingle = list.Count == 1;
@@ -24,7 +24,7 @@ namespace MangaReader.ViewModel.Commands.Manga
 
       if (dialogResult.Item1)
       {
-        Library.ThreadAction(DeleteManga(list, dialogResult)).LogException();
+        await Library.ThreadAction(DeleteManga(list, dialogResult)).LogException().ConfigureAwait(true);
       }
     }
 

@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Grouple;
 using MangaReader.Core.Exception;
+using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using NUnit.Framework;
@@ -75,7 +76,7 @@ namespace Tests.Entities.Manga
     {
       using (var context = Repository.GetEntityContext())
       {
-        manga = context.Get<MangaReader.Core.Manga.IManga>().Single(m => m.Id == manga.Id);
+        manga = await context.Get<IManga>().SingleAsync(m => m.Id == manga.Id).ConfigureAwait(false);
         await context.Save(manga).ConfigureAwait(false);
       }
     }

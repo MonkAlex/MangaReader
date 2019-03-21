@@ -1,16 +1,18 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using MangaReader.Core.Services;
 
 namespace MangaReader.ViewModel.Commands.Primitives
 {
-  public class BaseCommand : ICommand, INotifyPropertyChanged
+  public abstract class BaseCommand : ICommand, INotifyPropertyChanged
   {
     private string name;
     private string icon;
+    private bool isVisible = true;
 
     public string Name
     {
@@ -32,16 +34,37 @@ namespace MangaReader.ViewModel.Commands.Primitives
       }
     }
 
+    public bool IsVisible
+    {
+      get { return isVisible; }
+      set
+      {
+        isVisible = value;
+        OnPropertyChanged();
+      }
+    }
+
+
+    bool ICommand.CanExecute(object parameter)
+    {
+      var canExecute = this.CanExecute(parameter);
+      IsVisible = canExecute;
+      return canExecute;
+    }
+
+    async void ICommand.Execute(object parameter)
+    {
+      var commandName = Name ?? GetType().Name;
+      Log.Add($"Command '{commandName}' started.");
+      await Execute(parameter).ConfigureAwait(true);
+    }
+
     public virtual bool CanExecute(object parameter)
     {
       return true;
     }
 
-    public virtual void Execute(object parameter)
-    {
-      var commandName = Name ?? GetType().Name;
-      Log.Add($"Command '{commandName}' started.");
-    }
+    public abstract Task Execute(object parameter);
 
     public event EventHandler CanExecuteChanged;
 

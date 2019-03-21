@@ -6,14 +6,12 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 using MangaReader.Core.Entity;
 using MangaReader.Core.Exception;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Properties;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
-using NHibernate.Linq;
 
 namespace MangaReader.Core.Manga
 {
@@ -196,9 +194,9 @@ namespace MangaReader.Core.Manga
     /// <summary>
     /// Статус корректности манги.
     /// </summary>
-    public virtual async Task<bool> IsValid()
+    public virtual Task<bool> IsValid()
     {
-      return !string.IsNullOrWhiteSpace(this.Name);
+      return Task.FromResult(!string.IsNullOrWhiteSpace(this.Name));
     }
 
     /// <summary>

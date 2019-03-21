@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using MangaReader.Core.Exception;
 using MangaReader.Core.NHibernate;
@@ -12,10 +13,8 @@ namespace MangaReader.ViewModel.Commands.Manga
   {
     private readonly MangaModel model;
 
-    public override void Execute(object parameter)
+    public override async Task Execute(object parameter)
     {
-      base.Execute(parameter);
-
       try
       {
         var manga = model.ContextManga;
@@ -38,7 +37,7 @@ namespace MangaReader.ViewModel.Commands.Manga
           if (Uri.TryCreate(model.Uri, UriKind.Absolute, out Uri parsedUri) && parsedUri != manga.Uri)
             manga.Uri = parsedUri;
 
-          context.Save(manga).GetAwaiter().GetResult();
+          await context.Save(manga).ConfigureAwait(true);
           model.UpdateProperties(manga);
         }
         model.Close();
@@ -48,7 +47,7 @@ namespace MangaReader.ViewModel.Commands.Manga
         MessageBox.Show(ex.Message);
         using (var context = Repository.GetEntityContext())
         {
-          context.Refresh(model.ContextManga).GetAwaiter().GetResult();
+          await context.Refresh(model.ContextManga).ConfigureAwait(true);
           model.UpdateProperties(model.ContextManga);
         }
       }

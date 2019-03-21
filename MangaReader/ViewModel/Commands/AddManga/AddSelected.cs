@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Exception;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
@@ -16,10 +17,8 @@ namespace MangaReader.ViewModel.Commands.AddManga
 
     private AddFromUri model;
 
-    public override async void Execute(object parameter)
+    public override async Task Execute(object parameter)
     {
-      base.Execute(parameter);
-
       try
       {
         if (Uri.TryCreate(model.InputText, UriKind.Absolute, out Uri uri))

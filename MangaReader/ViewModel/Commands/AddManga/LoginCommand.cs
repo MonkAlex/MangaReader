@@ -1,4 +1,5 @@
-﻿using MangaReader.Core.Account;
+﻿using System.Threading.Tasks;
+using MangaReader.Core.Account;
 using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
 
@@ -13,10 +14,8 @@ namespace MangaReader.ViewModel.Commands.AddManga
       return base.CanExecute(parameter) && (!login.IsLogined || login.CanLogin);
     }
 
-    public override async void Execute(object parameter)
+    public override async Task Execute(object parameter)
     {
-      base.Execute(parameter);
-
       await login.DoLogin().ConfigureAwait(true);
     }
 

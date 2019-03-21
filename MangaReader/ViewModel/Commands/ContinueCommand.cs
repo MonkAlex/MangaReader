@@ -1,4 +1,5 @@
-﻿using MangaReader.Core.Services;
+﻿using System.Threading.Tasks;
+using MangaReader.Core.Services;
 using MangaReader.Properties;
 using MangaReader.ViewModel.Commands.Primitives;
 
@@ -11,11 +12,10 @@ namespace MangaReader.ViewModel.Commands
       return Library.IsPaused && !Library.IsAvaible;
     }
 
-    public override void Execute(object parameter)
+    public override Task Execute(object parameter)
     {
-      base.Execute(parameter);
-
       Library.IsPaused = false;
+      return Task.CompletedTask;
     }
 
     public ContinueCommand(LibraryViewModel model) : base(model)

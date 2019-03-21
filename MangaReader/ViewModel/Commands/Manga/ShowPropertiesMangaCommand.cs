@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Properties;
@@ -12,16 +13,17 @@ namespace MangaReader.ViewModel.Commands.Manga
   {
     private MangaModel model;
 
-    public override void Execute(object parameter)
+    public override async Task Execute(object parameter)
     {
       model = (MangaModel)parameter;
-      base.Execute(parameter);
+      await base.Execute(parameter).ConfigureAwait(true);
     }
 
-    public override void Execute(IEnumerable<IManga> mangas)
+    public override Task Execute(IEnumerable<IManga> mangas)
     {
       model.UpdateProperties(model.ContextManga);
       model.Show();
+      return Task.CompletedTask;
     }
 
     public override bool CanExecute(object parameter)

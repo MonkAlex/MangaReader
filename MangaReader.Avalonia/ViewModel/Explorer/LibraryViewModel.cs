@@ -32,7 +32,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       set { RaiseAndSetIfChanged(ref items, value); }
     }
 
-    public IReactiveDerivedList<MangaModel> FilteredItems
+    public IEnumerable<MangaModel> FilteredItems
     {
       get
       {
@@ -40,7 +40,6 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           RefreshItems().LogException();
         return filteredItems;
       }
-      private set { RaiseAndSetIfChanged(ref filteredItems, value); }
     }
 
     public ObservableCollection<MangaModel> SelectedMangaModels { get; }
@@ -51,7 +50,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       set
       {
         RaiseAndSetIfChanged(ref search, value);
-        FilteredItems.Reset();
+        ResetView();
       }
     }
 
@@ -80,11 +79,22 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
           Items = new ObservableCollection<MangaModel>(mangas);
-          FilteredItems = Items.CreateDerivedCollection(
+          filteredItems = Items.CreateDerivedCollection(
             x => x,
             Filter,
             ConfigStorage.Instance.ViewConfig.LibraryFilter.Compare);
+          ResetView();
         }, DispatcherPriority.ApplicationIdle).ConfigureAwait(true);
+      }
+    }
+
+    public void ResetView()
+    {
+      if (filteredItems != null)
+      {
+        filteredItems.Reset();
+        RaisePropertyChanged(nameof(FilteredItems));
+        RaisePropertyChanged(nameof(SelectedMangaModels));
       }
     }
 

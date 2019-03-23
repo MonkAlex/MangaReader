@@ -90,7 +90,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
 #warning Нужно ресетить только после изменения порядка сортировки.
         foreach (var model in ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>())
-          model.FilteredItems.Reset();
+          model.ResetView();
       }
     }
 

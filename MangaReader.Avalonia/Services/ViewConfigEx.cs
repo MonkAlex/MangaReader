@@ -21,7 +21,7 @@ namespace MangaReader.Avalonia.Services
         main.WindowState = (AvaloniaWindowState)Enum.Parse(typeof(ConfigWindowState), config.WindowStates.WindowState.ToString(), true);
         if (config.WindowStates.CanShow)
         {
-          main.Position = PixelPoint.FromPoint(new Point(config.WindowStates.Left, config.WindowStates.Top), 1);
+          main.Position = new PixelPoint((int)config.WindowStates.Left, (int)config.WindowStates.Top);
           main.Width = config.WindowStates.Width;
           main.Height = config.WindowStates.Height;
         }

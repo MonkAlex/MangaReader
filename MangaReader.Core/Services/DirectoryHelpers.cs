@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
@@ -9,6 +11,9 @@ namespace MangaReader.Core.Services
 {
   public static class DirectoryHelpers
   {
+    private static readonly string NormalizationPattern = string.Format(@"([{0}]*\.+$)|([{0}]+)", Regex.Escape(string.Concat(new string(Path.GetInvalidPathChars()), "?", "/", "*", "\"")));
+    private static readonly string[] DosReservedNames = { "CON", "PRN", "AUX", "NUL", "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9" };
+
     public static bool Equals(string one, string two)
     {
       return string.Compare(new DirectoryInfo(one).FullName.TrimEnd('\\'),
@@ -78,7 +83,7 @@ namespace MangaReader.Core.Services
       if (Environment.OSVersion.Platform == PlatformID.Unix ||
           Environment.OSVersion.Platform == PlatformID.MacOSX)
         return name;
-      
+
       const string replacement = ".";
       var matchesCount = Regex.Matches(name, @":\\").Count;
       string correctName;
@@ -90,10 +95,26 @@ namespace MangaReader.Core.Services
       else
         correctName = name.Replace(":", replacement);
 
-      var invalidChars = Regex.Escape(string.Concat(new string(Path.GetInvalidPathChars()), "?", "/", "*", "\""));
-      var invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
+      var replace = Regex.Replace(correctName, NormalizationPattern, replacement);
+      foreach (var reservedName in DosReservedNames)
+      {
+        var builder = new List<string>();
+        foreach (var folder in replace.Split(Path.DirectorySeparatorChar))
+        {
+          var changedName = folder;
+          if (string.Equals(folder, reservedName, StringComparison.InvariantCultureIgnoreCase))
+            changedName = replacement + reservedName;
 
-      return Regex.Replace(correctName, invalidRegStr, replacement);
+          var value = reservedName + '.';
+          if (folder.StartsWith(value, StringComparison.InvariantCultureIgnoreCase))
+            changedName = replacement + value + folder.Remove(0, value.Length);
+
+          builder.Add(changedName);
+        }
+
+        replace = string.Join<string>(Path.DirectorySeparatorChar.ToString(), builder);
+      }
+      return replace.TrimEnd(' ', '.');
     }
 
 

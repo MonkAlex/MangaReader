@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using MangaReader.Core.Exception;
@@ -21,10 +22,11 @@ namespace MangaReader.Core.Services
         StringComparison.InvariantCultureIgnoreCase) == 0;
     }
 
-    private static void CopyDirectory(string sourceFolder, string destFolder)
+    private static IEnumerable<string> CopyDirectory(string sourceFolder, string destFolder)
     {
       try
       {
+        var result = new List<string>();
         if (!Directory.Exists(destFolder))
           Directory.CreateDirectory(destFolder);
         var files = Directory.GetFiles(sourceFolder);
@@ -33,14 +35,21 @@ namespace MangaReader.Core.Services
           var name = Path.GetFileName(file);
           var dest = Path.Combine(destFolder, name);
           File.Copy(file, dest);
+          result.Add(file);
         }
+
         var folders = Directory.GetDirectories(sourceFolder);
         foreach (var folder in folders)
         {
+          if (DirectoryHelpers.Equals(folder, destFolder))
+            continue;
+
           var name = Path.GetFileName(folder);
           var dest = Path.Combine(destFolder, name);
-          CopyDirectory(folder, dest);
+          result.AddRange(CopyDirectory(folder, dest));
         }
+
+        return result;
       }
       catch (System.Exception e)
       {
@@ -52,8 +61,18 @@ namespace MangaReader.Core.Services
     {
       try
       {
-        CopyDirectory(sourceFolder, destFolder);
-        Directory.Delete(sourceFolder, true);
+        var copied = CopyDirectory(sourceFolder, destFolder);
+        if (Path.GetFullPath(destFolder).StartsWith(Path.GetFullPath(sourceFolder), StringComparison.InvariantCultureIgnoreCase))
+        {
+          foreach (var file in copied)
+          {
+            File.Delete(file);
+          }
+
+          DeleteEmptyFolder(sourceFolder);
+        }
+        else
+          Directory.Delete(sourceFolder, true);
       }
       catch (System.Exception ex)
       {
@@ -72,6 +91,28 @@ namespace MangaReader.Core.Services
         Log.Exception(ex, $"Не удалось удалить папку {folder}");
       }
     }
+
+    internal static void DeleteEmptyFolder(string folder)
+    {
+      var subfolders = Directory.GetDirectories(folder).ToList();
+      foreach (var subfolder in subfolders)
+      {
+        DeleteEmptyFolder(subfolder);
+      }
+
+      if (!Directory.EnumerateFileSystemEntries(folder).Any())
+      {
+        try
+        {
+          Directory.Delete(folder);
+        }
+        catch (IOException ex)
+        {
+          Log.Exception(ex);
+        }
+      }
+    }
+
 
     /// <summary>
     /// Очистка пути от недопустимых символов.

@@ -17,13 +17,17 @@ namespace Tests.API
       ,"\x3F\x3D" // HEX of ?, not valid
       ,@"C:\manga\   trailing space   "
       ,@"C:\manga\...trailing period..."
-      ,@"C:\manga\..." // Bad manga name get the root folder, bug =_=
       ,@"C:\manga\CON"
       ,@"C:\manga\CON.txt"
       ,@"CON"
       ,@"C:\manga\con.txt\context"
       ,@"home\NUL.liza"
       ,@"home\ NUL.liza"
+      ,@"root\..\sub"
+      ,@"root\..\"
+      ,@".\..\some?folder"
+      ,@"C:\manga\..." // Bad manga name get the root folder, bug =_=
+      ,@"root\.." // relative path trimmed, bug =_=
     )] string name, [Values(
       "test"
       ,@"C:\manga\manga.name"
@@ -34,13 +38,17 @@ namespace Tests.API
       ,".="
       ,@"C:\manga\   trailing space"
       ,@"C:\manga\...trailing period"
-      ,@"C:\manga\"
       ,@"C:\manga\.CON"
       ,@"C:\manga\.CON.txt"
       ,@".CON"
       ,@"C:\manga\.CON.txt\context"
       ,@"home\.NUL.liza"
       ,@"home\ NUL.liza"
+      ,@"root\..\sub"
+      ,@"root\..\"
+      ,@".\..\some.folder"
+      ,@"C:\manga\"
+      ,@"root\"
     )] string expected)
     {
       Assert.AreEqual(expected, DirectoryHelpers.MakeValidPath(name));

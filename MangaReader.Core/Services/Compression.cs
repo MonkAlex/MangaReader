@@ -210,28 +210,8 @@ namespace MangaReader.Core.Services
       {
         File.Delete(file);
       }
-      DeleteEmptyFolder(folder);
+      DirectoryHelpers.DeleteEmptyFolder(folder);
     }
 
-    private static void DeleteEmptyFolder(string folder)
-    {
-      var subfolders = Directory.GetDirectories(folder).ToList();
-      foreach (var subfolder in subfolders)
-      {
-        DeleteEmptyFolder(subfolder);
-      }
-
-      if (!Directory.EnumerateFileSystemEntries(folder).Any())
-      {
-        try
-        {
-          Directory.Delete(folder);
-        }
-        catch (IOException ex)
-        {
-          Log.Exception(ex);
-        }
-      }
-    }
   }
 }

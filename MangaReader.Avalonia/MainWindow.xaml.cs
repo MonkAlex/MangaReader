@@ -61,9 +61,9 @@ namespace MangaReader.Avalonia
       var download = dialog.Buttons.AddButton("Скачать обновление");
       var close = dialog.Buttons.AddButton("Закрыть");
 
-      await Dispatcher.UIThread.InvokeAsync(() =>
+      await Dispatcher.UIThread.InvokeAsync(async () =>
       {
-        if (dialog.Show() == download)
+        if (await dialog.ShowAsync().ConfigureAwait(true) == download)
         {
           Helper.StartUseShell(Updater.RepositoryReleaseUri);
         }

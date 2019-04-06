@@ -26,7 +26,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       var yes = dialog.Buttons.AddButton("Да");
       var no = dialog.Buttons.AddButton("Нет");
 
-      if (dialog.Show() == yes)
+      if (await dialog.ShowAsync().ConfigureAwait(true) == yes)
       {
         foreach (var manga in list)
         {

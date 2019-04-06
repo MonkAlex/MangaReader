@@ -24,7 +24,7 @@ namespace Tests.Entities.Manga
         await context.Save(login).ConfigureAwait(false);
       }
 
-      var manga = await Mangas.CreateFromWeb(new Uri("http://mangachan.me/manga/5335-the-breaker-new-waves.html")).ConfigureAwait(false);
+      var manga = await Mangas.CreateFromWeb(new Uri("https://mangachan.me/manga/5335-the-breaker-new-waves.html")).ConfigureAwait(false);
       await manga.Parser.UpdateContent(manga).ConfigureAwait(false);
       var chapters = manga.Volumes.SelectMany(v => v.Container).ToList();
       Assert.AreEqual(1, chapters.Count(c => c.Number == 170));

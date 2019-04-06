@@ -26,13 +26,13 @@ namespace Tests.Entities
 
     public static class Mangachan
     {
-      [InfoCache("http://mangachan.me/manga/35617--rain-.html", true)]
+      [InfoCache("https://mangachan.me/manga/35617--rain-.html", true)]
       public static MangaInfo Rain;
 
-      [InfoCache("http://mangachan.me/manga/15659-this-girlfriend-is-fiction.html", false)]
+      [InfoCache("https://mangachan.me/manga/15659-this-girlfriend-is-fiction.html", false)]
       public static MangaInfo ThisGirlfriendIsFiction;
 
-      [InfoCache("http://mangachan.me/manga/64187-eve-scramble.html", false)]
+      [InfoCache("https://mangachan.me/manga/64187-eve-scramble.html", false)]
       public static MangaInfo EveScramble;
     }
 

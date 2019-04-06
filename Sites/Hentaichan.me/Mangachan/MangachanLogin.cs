@@ -56,7 +56,7 @@ namespace Hentaichan.Mangachan
     public MangachanLogin()
     {
       // Адрес может быть переопределен в базе. Это только дефолтное значение.
-      this.MainUri = new Uri(@"http://mangachan.me/");
+      this.MainUri = new Uri(@"https://mangachan.me/");
     }
   }
 }

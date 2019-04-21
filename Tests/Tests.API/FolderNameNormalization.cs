@@ -58,16 +58,18 @@ namespace Tests.API
         , @"root\.."
         , @".\..\"
         , @".\.."
+        , @".\"
         , @".\..\some.folder"
       )]
       string name, [Values(
         true
         , true
         , true
-        , true
-        , true
-        , true
-        , true
+        , false
+        , false
+        , false
+        , false
+        , false
         , true
       )]
       bool allowed)

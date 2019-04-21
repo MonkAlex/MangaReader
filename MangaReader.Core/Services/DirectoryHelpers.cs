@@ -118,11 +118,14 @@ namespace MangaReader.Core.Services
     /// </summary>
     /// <param name="path">Путь к папке.</param>
     /// <returns>True, если путь в порядке.</returns>
-    /// <remarks>Путь должен существовать или быть значением по умолчанию.</remarks>
+    /// <remarks>Путь должен существовать или быть значением по умолчанию. Не должен заканчиваться относительными путями.</remarks>
     public static bool ValidateSettingPath(string path)
     {
       if (Equals(path, AppConfig.DownloadFolderName) || Equals(path, AppConfig.DownloadFolder))
         return true;
+
+      if (path.TrimEnd(Path.PathSeparator, Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar, Path.VolumeSeparatorChar).EndsWith("."))
+        return false;
 
       return Directory.Exists(path);
     }

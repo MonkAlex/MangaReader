@@ -6,29 +6,29 @@
         xmlns:tb="http://www.hardcodet.net/taskbar"
         mc:Ignorable="d"
         Title="{Binding Content.Title}">
-    <Window.TaskbarItemInfo>
-        <TaskbarItemInfo ProgressState="{Binding TaskbarItemProgressState}" ProgressValue="{Binding Percent}">
-            <TaskbarItemInfo.ThumbButtonInfos>
-                <ThumbButtonInfo ImageSource="../Icons/play.png" 
+  <Window.TaskbarItemInfo>
+    <TaskbarItemInfo ProgressState="{Binding TaskbarItemProgressState}" ProgressValue="{Binding Percent}">
+      <TaskbarItemInfo.ThumbButtonInfos>
+        <ThumbButtonInfo ImageSource="../Icons/play.png" 
                                  Command="{Binding UpdateAll}" 
                                  Description="{Binding RelativeSource={RelativeSource Self}, Path=Command.Name}"/>
-                <ThumbButtonInfo Visibility="Hidden"/>
-                <ThumbButtonInfo ImageSource="../Icons/no.png" 
+        <ThumbButtonInfo Visibility="Hidden"/>
+        <ThumbButtonInfo ImageSource="../Icons/no.png" 
                                  Command="{Binding Close}" 
                                  Description="{Binding RelativeSource={RelativeSource Self}, Path=Command.Name}"/>
-            </TaskbarItemInfo.ThumbButtonInfos>
-        </TaskbarItemInfo>
-    </Window.TaskbarItemInfo>
-    <Grid>
-        <Frame Content="{Binding Content}"/>
-        <tb:TaskbarIcon x:Name="TaskbarIcon" 
+      </TaskbarItemInfo.ThumbButtonInfos>
+    </TaskbarItemInfo>
+  </Window.TaskbarItemInfo>
+  <Grid>
+    <Frame Content="{Binding Content}"/>
+    <tb:TaskbarIcon x:Name="TaskbarIcon" 
                         DataContext="{Binding TaskbarIcon}" 
                         ToolTipText="{Binding ToolTipText}"
                         IconSource="../Icons/main.ico"
                         DoubleClickCommand="{Binding DoubleClickCommand}">
-            <tb:TaskbarIcon.ContextMenu>
-                <ContextMenu ItemsSource="{Binding ContextMenu}" ItemContainerStyle="{StaticResource ContentMenuItem}"/>
-            </tb:TaskbarIcon.ContextMenu>
-        </tb:TaskbarIcon>
-    </Grid>
+      <tb:TaskbarIcon.ContextMenu>
+        <ContextMenu ItemsSource="{Binding ContextMenu}" ItemContainerStyle="{StaticResource ContentMenuItem}"/>
+      </tb:TaskbarIcon.ContextMenu>
+    </tb:TaskbarIcon>
+  </Grid>
 </Window>

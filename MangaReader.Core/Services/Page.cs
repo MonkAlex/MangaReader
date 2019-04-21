@@ -71,7 +71,7 @@ namespace MangaReader.Core.Services
 
     public Page()
     {
-      
+
     }
 
     public Page(Uri response)

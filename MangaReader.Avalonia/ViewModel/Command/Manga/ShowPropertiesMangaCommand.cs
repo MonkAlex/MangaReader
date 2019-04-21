@@ -29,7 +29,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
         searchTab.UpdateProperties(manga);
 
       explorer.SelectedTab = searchTab;
-      
+
       return Task.CompletedTask;
     }
 

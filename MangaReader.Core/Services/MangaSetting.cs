@@ -47,8 +47,8 @@ namespace MangaReader.Core.Services
         {
           using (var context = Repository.GetEntityContext())
           {
-            if (uriState.IsChanged && 
-                Login != null && 
+            if (uriState.IsChanged &&
+                Login != null &&
                 Equals(Login.MainUri, uriState.OldValue) &&
                 !Equals(Login.MainUri, uriState.Value))
               Login.MainUri = MainUri;

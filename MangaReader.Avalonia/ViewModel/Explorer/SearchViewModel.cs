@@ -25,7 +25,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       get { return search; }
       set { RaiseAndSetIfChanged(ref search, value); }
     }
-    
+
     public DelegateCommand StartSearch
     {
       get { return startSearch; }
@@ -87,8 +87,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       this.Name = "Search";
       this.Priority = 20;
       this.Items = new ObservableCollection<MangaSearchViewModel>();
-      this.StartSearch = new DelegateCommand(UpdateManga, () => !string.IsNullOrWhiteSpace(Search)) {Name = "Search"};
-      this.AddManual = new DelegateCommand(ShowPreview, () => !string.IsNullOrWhiteSpace(ManualUri)) {Name = "Add"};
+      this.StartSearch = new DelegateCommand(UpdateManga, () => !string.IsNullOrWhiteSpace(Search)) { Name = "Search" };
+      this.AddManual = new DelegateCommand(ShowPreview, () => !string.IsNullOrWhiteSpace(ManualUri)) { Name = "Add" };
       this.PropertyChanged += (sender, args) =>
       {
         if (args.PropertyName == nameof(Search))

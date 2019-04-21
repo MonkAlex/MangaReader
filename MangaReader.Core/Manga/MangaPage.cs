@@ -137,7 +137,7 @@ namespace MangaReader.Core.Manga
 
     protected MangaPage()
     {
-      
+
     }
 
     #endregion

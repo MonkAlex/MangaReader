@@ -88,9 +88,9 @@
                 Margin="10"
                 IsChecked="{Binding NeedCompress}"
                 IsThreeState="True">
-        <TextBlock VerticalAlignment="Center"
+      <TextBlock VerticalAlignment="Center"
                    Text="Compress after download every"/>
-      </CheckBox>
+    </CheckBox>
     <DropDown Grid.Column="1"
               Grid.Row="4"
               Margin="10"

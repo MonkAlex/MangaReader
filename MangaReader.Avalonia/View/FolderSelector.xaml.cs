@@ -32,7 +32,7 @@ namespace MangaReader.Avalonia.View
     }
 
     private string folderBindingPath;
-    
+
     public FolderSelector()
     {
       this.InitializeComponent();

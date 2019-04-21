@@ -157,7 +157,8 @@ namespace MangaReader.UI
       {
         get
         {
-          if (Width == "*" || Width == "1*") return 1;
+          if (Width == "*" || Width == "1*")
+            return 1;
           if (Width.EndsWith("*"))
           {
             double perc;
@@ -202,7 +203,8 @@ namespace MangaReader.UI
 
       public ListViewResizeBehavior(ListView element)
       {
-        if (element == null) throw new ArgumentNullException("element");
+        if (element == null)
+          throw new ArgumentNullException("element");
         _element = element;
         element.Loaded += OnLoaded;
 

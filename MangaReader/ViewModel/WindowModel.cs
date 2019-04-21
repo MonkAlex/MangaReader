@@ -16,7 +16,7 @@ namespace MangaReader.ViewModel
 {
   public class WindowModel : ProcessModel, IDisposable
   {
-    private static Lazy<WindowModel> lazyModel = new Lazy<WindowModel>(() => new WindowModel()); 
+    private static Lazy<WindowModel> lazyModel = new Lazy<WindowModel>(() => new WindowModel());
     public static WindowModel Instance { get { return lazyModel.Value; } }
 
     private object content;
@@ -140,7 +140,7 @@ namespace MangaReader.ViewModel
     private WindowModel()
     {
       Close = new ExitCommand();
-      
+
       ProgressState = ProgressState.None;
     }
 

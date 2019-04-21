@@ -18,6 +18,6 @@ namespace MangaReader.UI.Skin
     protected SkinSetting()
     {
       this.Name = "Нужно переопределить имя в конструкторе.";
-    } 
+    }
   }
 }

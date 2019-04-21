@@ -69,5 +69,5 @@ namespace MangaReader.UI.MainForm
       menu.ItemsSource = model.MangaMenu;
     }
   }
-  
+
 }

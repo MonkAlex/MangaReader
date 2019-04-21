@@ -14,7 +14,7 @@
       <RowDefinition Height="*"/>
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
-    
+
     <TextBlock Text="{Binding Text}" 
                Grid.Row="0"
                HorizontalAlignment="Center"

@@ -76,7 +76,7 @@ namespace Hentai2Read.com
       document.LoadHtml(page.Content);
 
       var nodes = document.DocumentNode.SelectNodes("//div[@class=\"col-xs-6 col-sm-4 col-md-3 col-lg-2b col-xl-2\"]");
-      
+
       if (nodes == null)
       {
         Log.AddFormat("Bookmarks from '{0}' not found.", this.MainUri);

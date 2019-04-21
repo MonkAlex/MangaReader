@@ -8,38 +8,38 @@
         Title="{x:Static resx:Strings.Library_Action_Settings}"
         Height="370"
         Width="450">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
 
-        <TabControl BorderBrush="Transparent" 
+    <TabControl BorderBrush="Transparent" 
                     ItemsSource="{Binding Views}" 
                     SelectedItem="{Binding SelectedModel}">
-            <TabControl.Resources>
-                <DataTemplate DataType="{x:Type setting:AppSettingModel}">
-                    <ui:AppSettingView/>
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type setting:MangaSettingModel}">
-                    <ui:MangaSettings/>
-                </DataTemplate>
-            </TabControl.Resources>
-            <TabControl.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Header}"/>
-                </DataTemplate>
-            </TabControl.ItemTemplate>
-        </TabControl>
+      <TabControl.Resources>
+        <DataTemplate DataType="{x:Type setting:AppSettingModel}">
+          <ui:AppSettingView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type setting:MangaSettingModel}">
+          <ui:MangaSettings/>
+        </DataTemplate>
+      </TabControl.Resources>
+      <TabControl.ItemTemplate>
+        <DataTemplate>
+          <TextBlock Text="{Binding Header}"/>
+        </DataTemplate>
+      </TabControl.ItemTemplate>
+    </TabControl>
 
-        <Grid Grid.Row="1" VerticalAlignment="Bottom">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" IsDefault="True" Command="{Binding Save}"/>
-            <Button Grid.Column="2" IsCancel="True" Content="Отмена"/>
-        </Grid>
+    <Grid Grid.Row="1" VerticalAlignment="Bottom">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <Button Grid.Column="1" IsDefault="True" Command="{Binding Save}"/>
+      <Button Grid.Column="2" IsCancel="True" Content="Отмена"/>
     </Grid>
+  </Grid>
 </Window>

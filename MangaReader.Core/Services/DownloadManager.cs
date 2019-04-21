@@ -20,7 +20,7 @@ namespace MangaReader.Core.Services
       while (IsPaused)
       {
         await Task.Delay(1000).ConfigureAwait(false);
-      }      
+      }
     }
 
     /// <summary>

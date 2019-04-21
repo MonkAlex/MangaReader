@@ -317,7 +317,7 @@ namespace MangaReader.Core.Services
 
     private void UpdateDownloadPercent(IManga mangas)
     {
-      var percent = (double) (100 * mangaIndex + mangas.Downloaded) / (mangasCount * 100);
+      var percent = (double)(100 * mangaIndex + mangas.Downloaded) / (mangasCount * 100);
       OnLibraryChanged(new LibraryViewModelArgs(percent, mangas, MangaOperation.None, LibraryOperation.UpdatePercentChanged));
     }
 

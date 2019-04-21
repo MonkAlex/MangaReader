@@ -11,13 +11,13 @@ namespace MangaReader.Core
     /// </summary>
     /// <param name="manga">Манга.</param>
     Task UpdateNameAndStatus(IManga manga);
-    
+
     /// <summary>
     /// Обновить служебную информацию - например признак наличия глав и томов в манге.
     /// </summary>
     /// <param name="manga">Манга.</param>
     Task UpdateContentType(IManga manga);
-    
+
     /// <summary>
     /// Обновить служебную информацию - особенно ту, что нужна для скачивания манги, главы, тома, прочее.
     /// </summary>
@@ -36,7 +36,7 @@ namespace MangaReader.Core
     /// <param name="uri">Ссылка.</param>
     /// <returns>Результат парсинга.</returns>
     UriParseResult ParseUri(System.Uri uri);
-    
+
     /// <summary>
     /// Получить превьюшки для манги.
     /// </summary>

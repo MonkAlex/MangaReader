@@ -99,11 +99,11 @@ namespace MangaReader.ViewModel.Setting
       this.DefaultCompression = setting.DefaultCompression;
       this.Folder = setting.Folder;
       this.OnlyUpdate = setting.OnlyUpdate;
-      this.Login = new LoginModel(setting.Login) {IsEnabled = true};
+      this.Login = new LoginModel(setting.Login) { IsEnabled = true };
       this.MainUri = setting.MainUri.OriginalString;
 
       this.FolderNamingStrategy = new FolderNamingModel();
-      this.FolderNamingStrategy.Strategies.Insert(0, new FolderNamingStrategyDto() {Name = "Использовать общие настройки"});
+      this.FolderNamingStrategy.Strategies.Insert(0, new FolderNamingStrategyDto() { Name = "Использовать общие настройки" });
       this.FolderNamingStrategy.SelectedGuid = setting.FolderNamingStrategy;
     }
   }

@@ -18,6 +18,6 @@
   {
     Page,
     Chapter,
-    Volume    
+    Volume
   }
 }

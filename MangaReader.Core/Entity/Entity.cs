@@ -18,7 +18,7 @@ namespace MangaReader.Core.Entity
     }
 
     private int id = 0;
-    
+
     public virtual Task BeforeSave(ChangeTrackerArgs args)
     {
       return Task.CompletedTask;
@@ -38,8 +38,8 @@ namespace MangaReader.Core.Entity
     public override int GetHashCode()
     {
       if (this.Id == 0)
-        return base.GetHashCode()^this.GetType().GetHashCode();
-      return this.Id.GetHashCode()^this.GetType().GetHashCode();
+        return base.GetHashCode() ^ this.GetType().GetHashCode();
+      return this.Id.GetHashCode() ^ this.GetType().GetHashCode();
     }
   }
 }

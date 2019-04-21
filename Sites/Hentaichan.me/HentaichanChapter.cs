@@ -11,7 +11,7 @@ namespace Hentaichan
       return double.Parse(Regex.Match(uri.OriginalString, @"/*(\d+\.\d+|\d+)", RegexOptions.RightToLeft).Groups[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture);
     }
 
-    public HentaichanChapter(Uri uri, string name) 
+    public HentaichanChapter(Uri uri, string name)
       : base(uri, name)
     {
       this.Number = GetChapterNumber(uri);
@@ -19,7 +19,7 @@ namespace Hentaichan
 
     protected HentaichanChapter()
     {
-      
+
     }
   }
 }

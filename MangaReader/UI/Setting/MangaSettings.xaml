@@ -8,71 +8,71 @@
         mc:Ignorable="d" 
         d:DesignHeight="230" d:DesignWidth="500">
 
-    <StackPanel>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="2*"></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                <ColumnDefinition Width="30*"></ColumnDefinition>
-                <ColumnDefinition Width="30*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
+  <StackPanel>
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="2*"></RowDefinition>
+        <RowDefinition Height="2*"></RowDefinition>
+        <RowDefinition Height="2*"></RowDefinition>
+        <RowDefinition Height="2*"></RowDefinition>
+        <RowDefinition Height="2*"></RowDefinition>
+        <RowDefinition Height="2*"></RowDefinition>
+        <RowDefinition Height="2*"></RowDefinition>
+        <RowDefinition Height="2*"></RowDefinition>
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"></ColumnDefinition>
+        <ColumnDefinition Width="30*"></ColumnDefinition>
+        <ColumnDefinition Width="30*"></ColumnDefinition>
+      </Grid.ColumnDefinitions>
 
-          <addNewManga:Login Grid.Row="0" Grid.RowSpan="2"
+      <addNewManga:Login Grid.Row="0" Grid.RowSpan="2"
                              Grid.Column="0" Grid.ColumnSpan="3" DataContext="{Binding Login}"/>
 
-            <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+      <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                    Content="Манга скачивается с: " />
-            <TextBox Grid.Row="2" Grid.Column="2"
+      <TextBox Grid.Row="2" Grid.Column="2"
                      Text="{Binding MainUri}"/>
 
-            <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Манга скачивается в:"/>
-                <Label Grid.Column="1" >
-                    <TextBlock IsEnabled="False" 
+      <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="0" Content="Манга скачивается в:"/>
+        <Label Grid.Column="1" >
+          <TextBlock IsEnabled="False" 
                            x:Name="FolderPath" 
                            TextTrimming="WordEllipsis" 
                            Text="{Binding Folder, Mode=TwoWay}"/>
-                </Label>
-                <Button Content="Изменить" Grid.Column="2" Click="ChangeFolder_OnClick"/>
-            </Grid>
+        </Label>
+        <Button Content="Изменить" Grid.Column="2" Click="ChangeFolder_OnClick"/>
+      </Grid>
 
-            <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+      <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
               Content="Сжатие по умолчанию для новой манги: " />
-            <ComboBox Grid.Row="4" Grid.Column="2"
+      <ComboBox Grid.Row="4" Grid.Column="2"
               ItemsSource="{Binding CompressionModes}" 
               SelectedItem="{Binding DefaultCompression}"/>
 
-            <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" 
+      <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" 
                        TextTrimming="WordEllipsis" 
                        Text="{x:Static resx:Strings.Settings_FolderNaming}"
                        VerticalAlignment="Center"/>
-            <ComboBox Grid.Row="5" Grid.Column="2" 
+      <ComboBox Grid.Row="5" Grid.Column="2" 
                       IsSynchronizedWithCurrentItem="True" 
                       ItemsSource="{Binding FolderNamingStrategy.Strategies}" 
                       SelectedItem="{Binding FolderNamingStrategy.Selected}"
                       VerticalAlignment="Center" 
                       HorizontalAlignment="Stretch"/>
 
-            <CheckBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3"
+      <CheckBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3"
                       Content="{x:Static resx:Strings.Settings_Update}" 
                       IsChecked="{Binding OnlyUpdate}"/>
-            <CheckBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3"
+      <CheckBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3"
                       Content="{x:Static resx:Strings.Settings_Compress}"
                       IsChecked="{Binding CompressManga}"/>
-        </Grid>
-    </StackPanel>
+    </Grid>
+  </StackPanel>
 </UserControl>

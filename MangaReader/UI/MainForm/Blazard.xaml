@@ -5,46 +5,46 @@
         xmlns:base="clr-namespace:MangaReader.UI.MainForm"
         xmlns:mangaUi="clr-namespace:MangaReader.UI.Manga"
         Title="{x:Static resx:Strings.Title}">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
 
-        <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0"
+    <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0"
               ItemsSource="{Binding Menu}" ItemContainerStyle="{StaticResource ContentMenuItem}"/>
 
-        <base:Filter Grid.Row="1" DataContext="{Binding LibraryFilter}"/>
-        <mangaUi:BlazardManga Grid.Row="2" DataContext="{Binding View.CurrentItem}" DataContextChanged="FrameworkElement_OnDataContextChanged"/>
-        <ToolBarPanel HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Row="3" Orientation="Horizontal">
-            <ListView BorderThickness="0" ItemsSource="{Binding NavigationMenu}" ItemContainerStyle="{StaticResource ListViewItemButton}">
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-            </ListView>
-        </ToolBarPanel>
-        <StatusBar Grid.Row="4" DataContext="{Binding LastDownload}">
-            <StatusBar.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="2*"/>
-                        </Grid.ColumnDefinitions>
-                    </Grid>
-                </ItemsPanelTemplate>
-            </StatusBar.ItemsPanel>
-            <StatusBarItem Grid.Column="0" HorizontalContentAlignment="Stretch">
-                <ProgressBar Maximum="100" Value="{Binding Downloaded}" Height="16" />
-            </StatusBarItem>
-            <StatusBarItem Grid.Column="1">
-                <TextBlock Text="{Binding Name}"/>
-            </StatusBarItem>
-        </StatusBar>
-    </Grid>
+    <base:Filter Grid.Row="1" DataContext="{Binding LibraryFilter}"/>
+    <mangaUi:BlazardManga Grid.Row="2" DataContext="{Binding View.CurrentItem}" DataContextChanged="FrameworkElement_OnDataContextChanged"/>
+    <ToolBarPanel HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Row="3" Orientation="Horizontal">
+      <ListView BorderThickness="0" ItemsSource="{Binding NavigationMenu}" ItemContainerStyle="{StaticResource ListViewItemButton}">
+        <ListView.ItemsPanel>
+          <ItemsPanelTemplate>
+            <StackPanel Orientation="Horizontal"/>
+          </ItemsPanelTemplate>
+        </ListView.ItemsPanel>
+      </ListView>
+    </ToolBarPanel>
+    <StatusBar Grid.Row="4" DataContext="{Binding LastDownload}">
+      <StatusBar.ItemsPanel>
+        <ItemsPanelTemplate>
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+          </Grid>
+        </ItemsPanelTemplate>
+      </StatusBar.ItemsPanel>
+      <StatusBarItem Grid.Column="0" HorizontalContentAlignment="Stretch">
+        <ProgressBar Maximum="100" Value="{Binding Downloaded}" Height="16" />
+      </StatusBarItem>
+      <StatusBarItem Grid.Column="1">
+        <TextBlock Text="{Binding Name}"/>
+      </StatusBarItem>
+    </StatusBar>
+  </Grid>
 </base:BaseForm>

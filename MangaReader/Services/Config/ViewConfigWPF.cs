@@ -36,8 +36,8 @@ namespace MangaReader.Services.Config
     {
       if (config.WindowStates == null)
         config.WindowStates = new WindowStates();
-      
-      var state = (WindowState) Enum.Parse(typeof (System.Windows.WindowState), main.WindowState.ToString(), true);
+
+      var state = (WindowState)Enum.Parse(typeof(System.Windows.WindowState), main.WindowState.ToString(), true);
       if (state != WindowState.Minimized)
       {
         config.WindowStates.WindowState = state;

@@ -106,7 +106,7 @@ namespace MangaReader.Core.Manga
 
     protected Chapter()
     {
-      
+
     }
 
     #endregion

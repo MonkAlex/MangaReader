@@ -6,26 +6,26 @@
              xmlns:mainForm="clr-namespace:MangaReader.UI.MainForm"
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="400">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <DockPanel HorizontalAlignment="Stretch" Margin="5" LastChildFill="True" Grid.Column="1" VerticalAlignment="Stretch">
-            <Image VerticalAlignment="Stretch" Width="Auto"/>
-            <RichTextBox VerticalAlignment="Stretch" Width="Auto" IsReadOnly="True">
-                <FlowDocument PageWidth="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type RichTextBox}}}">
-                    <Paragraph>
-                        <Run Text="{Binding Path=Name}"/>
-                    </Paragraph>
-                    <Paragraph>
-                        <Run Text="{Binding Path=Status}"/>
-                    </Paragraph>
-                </FlowDocument>
-            </RichTextBox>
-        </DockPanel>
-        <ToolBarPanel HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.Column="0">
-            <ListView BorderThickness="0" ItemsSource="{Binding DataContext.MangaMenu, RelativeSource={RelativeSource AncestorType=mainForm:BaseForm}}" ItemContainerStyle="{StaticResource ListViewItemButton}"/>
-        </ToolBarPanel>
-    </Grid>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <DockPanel HorizontalAlignment="Stretch" Margin="5" LastChildFill="True" Grid.Column="1" VerticalAlignment="Stretch">
+      <Image VerticalAlignment="Stretch" Width="Auto"/>
+      <RichTextBox VerticalAlignment="Stretch" Width="Auto" IsReadOnly="True">
+        <FlowDocument PageWidth="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type RichTextBox}}}">
+          <Paragraph>
+            <Run Text="{Binding Path=Name}"/>
+          </Paragraph>
+          <Paragraph>
+            <Run Text="{Binding Path=Status}"/>
+          </Paragraph>
+        </FlowDocument>
+      </RichTextBox>
+    </DockPanel>
+    <ToolBarPanel HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.Column="0">
+      <ListView BorderThickness="0" ItemsSource="{Binding DataContext.MangaMenu, RelativeSource={RelativeSource AncestorType=mainForm:BaseForm}}" ItemContainerStyle="{StaticResource ListViewItemButton}"/>
+    </ToolBarPanel>
+  </Grid>
 </UserControl>

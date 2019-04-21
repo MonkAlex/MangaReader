@@ -7,21 +7,21 @@
              xmlns:ui="clr-namespace:MangaReader.UI"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="400">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <ui:MultiSelectComboBox Grid.Column="3" 
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <ui:MultiSelectComboBox Grid.Column="3" 
                                 ItemsSource="{Binding Path=AllTypes, Mode=OneTime}"
                                 SelectedItems="{Binding Path=AllowedTypes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <CheckBox x:Name="Uncompleted" Content="Незавершенная" Grid.Column="2"
+    <CheckBox x:Name="Uncompleted" Content="Незавершенная" Grid.Column="2"
                   IsChecked="{Binding Path=Uncompleted, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <CheckBox x:Name="OnlyUpdate" Content="Обновляемая" Grid.Column="1"
+    <CheckBox x:Name="OnlyUpdate" Content="Обновляемая" Grid.Column="1"
                   IsChecked="{Binding Path=OnlyUpdate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBox x:Name="NameFilter" TextWrapping="Wrap" Grid.Column="0" 
+    <TextBox x:Name="NameFilter" TextWrapping="Wrap" Grid.Column="0" 
                  Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-    </Grid>
+  </Grid>
 </UserControl>

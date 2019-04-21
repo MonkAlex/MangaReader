@@ -16,7 +16,7 @@ namespace Tests.Entities.Manga
     public async Task MangachanBonus()
     {
       using (var context = Repository.GetEntityContext())
-      { 
+      {
         var login = await context.Get<MangachanLogin>().SingleAsync().ConfigureAwait(false);
         login.PasswordHash = "e84fce6c43aacd7f8452409a63083c18";
         login.UserId = "282433";

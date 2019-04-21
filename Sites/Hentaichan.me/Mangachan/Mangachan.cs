@@ -53,7 +53,7 @@ namespace Hentaichan.Mangachan
       if (this.Uri != url && Parser.ParseUri(url).Kind != UriParseKind.Manga)
       {
         await this.UpdateContent().ConfigureAwait(false);
-        
+
         var chapters = this.Volumes.SelectMany(v => v.Container);
         AddHistoryReadedUris(chapters, url);
       }

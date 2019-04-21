@@ -33,7 +33,7 @@ namespace Grouple
 
     protected GroupleChapter()
     {
-      
+
     }
 
     #endregion

@@ -6,103 +6,103 @@
              xmlns:resx="clr-namespace:MangaReader.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="450">
-    <StackPanel>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="45*"></ColumnDefinition>
-                <ColumnDefinition Width="40*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
+  <StackPanel>
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*"></RowDefinition>
+        <RowDefinition Height="*"></RowDefinition>
+        <RowDefinition Height="*"></RowDefinition>
+        <RowDefinition Height="*"></RowDefinition>
+        <RowDefinition Height="*"></RowDefinition>
+        <RowDefinition Height="*"></RowDefinition>
+        <RowDefinition Height="*"></RowDefinition>
+        <RowDefinition Height="*"></RowDefinition>
+        <RowDefinition Height="*"></RowDefinition>
+        <RowDefinition Height="*"></RowDefinition>
+        <RowDefinition Height="*"></RowDefinition>
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="45*"></ColumnDefinition>
+        <ColumnDefinition Width="40*"></ColumnDefinition>
+      </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" 
+      <TextBlock Grid.Row="0" Grid.Column="0" 
                    TextTrimming="WordEllipsis" 
                    Text="{x:Static resx:Strings.Settings_Skin}" 
                    VerticalAlignment="Center"/>
-            <ComboBox Grid.Row="0" Grid.Column="1" 
+      <ComboBox Grid.Row="0" Grid.Column="1" 
                       IsSynchronizedWithCurrentItem="True" 
                       ItemsSource="{Binding SkinSettings}" 
                       SelectedItem="{Binding Skin}"
                       DisplayMemberPath="Name"
                       VerticalAlignment="Center" 
                       HorizontalAlignment="Stretch"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" 
+      <TextBlock Grid.Row="1" Grid.Column="0" 
                    TextTrimming="WordEllipsis" 
                    Text="{x:Static resx:Strings.Settings_Language}" 
                    VerticalAlignment="Center"/>
-            <ComboBox Grid.Row="1" Grid.Column="1" 
+      <ComboBox Grid.Row="1" Grid.Column="1" 
                   IsSynchronizedWithCurrentItem="True" 
                   ItemsSource="{Binding Languages}" 
                                   SelectedItem="{Binding Language}"
                   VerticalAlignment="Center" 
                   HorizontalAlignment="Stretch"/>
-            <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+      <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                    TextWrapping="Wrap" 
                    TextTrimming="WordEllipsis" 
                    Text="{x:Static resx:Strings.Settings_LanguageHint}" 
                    VerticalAlignment="Center"/>
 
-            <TextBlock Grid.Row="3" Grid.Column="0" 
+      <TextBlock Grid.Row="3" Grid.Column="0" 
                    TextTrimming="WordEllipsis" 
                    Text="{x:Static resx:Strings.Settings_UpdateEver}" 
                    VerticalAlignment="Center"/>
-            <TextBox Grid.Row="3" Grid.Column="1" 
+      <TextBox Grid.Row="3" Grid.Column="1" 
                   Text="{Binding AutoUpdateHours}"
                   MinWidth="75"
                   VerticalAlignment="Center" 
                   TextAlignment="Right"
                   HorizontalAlignment="Left"/>
-            <TextBlock Grid.Row="3" Grid.Column="1" 
+      <TextBlock Grid.Row="3" Grid.Column="1" 
                    TextTrimming="WordEllipsis" 
                    Text="{x:Static resx:Strings.Settings_Hours}" 
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"/>
 
-            <TextBlock Grid.Row="4" Grid.Column="0" 
+      <TextBlock Grid.Row="4" Grid.Column="0" 
                        TextTrimming="WordEllipsis" 
                        Text="{x:Static resx:Strings.Settings_FolderNaming}"
                        VerticalAlignment="Center"/>
-            <ComboBox Grid.Row="4" Grid.Column="1" 
+      <ComboBox Grid.Row="4" Grid.Column="1" 
                       IsSynchronizedWithCurrentItem="True" 
                       ItemsSource="{Binding FolderNamingStrategy.Strategies}" 
                       SelectedItem="{Binding FolderNamingStrategy.Selected}"
                       VerticalAlignment="Center" 
                       HorizontalAlignment="Stretch"/>
 
-            <TextBlock Grid.Row="5" Grid.Column="0" 
+      <TextBlock Grid.Row="5" Grid.Column="0" 
                        TextTrimming="WordEllipsis" 
                        Text="{x:Static resx:Strings.Settings_Sort}"
                        VerticalAlignment="Center"/>
-            <ComboBox Grid.Row="5" Grid.Column="1" 
+      <ComboBox Grid.Row="5" Grid.Column="1" 
                       IsSynchronizedWithCurrentItem="True" 
                       ItemsSource="{Binding Sort.Sorts}" 
                       SelectedItem="{Binding Sort.Selected}"
                       VerticalAlignment="Center" 
                       HorizontalAlignment="Stretch"/>
 
-            <CheckBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+      <CheckBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
                                   IsChecked="{Binding UpdateReader}"
                   Content="{x:Static resx:Strings.Settings_UpdateReader}" 
                   VerticalAlignment="Center"/>
-            <CheckBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
+      <CheckBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
                       IsChecked="{Binding MinimizeToTray}"
                       Content="{x:Static resx:Strings.Settings_MinimizeToTray}" 
                       VerticalAlignment="Center"/>
-            <CheckBox Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
+      <CheckBox Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
                       IsChecked="{Binding StartAppMinimizedToTray}"
                       Content="{x:Static resx:Strings.Settings_StartAppMinimizedToTray}" 
                       VerticalAlignment="Center"/>
-        </Grid>
-    </StackPanel>
+    </Grid>
+  </StackPanel>
 </UserControl>

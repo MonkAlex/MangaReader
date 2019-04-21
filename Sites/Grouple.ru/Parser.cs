@@ -260,7 +260,7 @@ namespace Grouple
     protected override async Task<Tuple<HtmlNodeCollection, Uri>> GetMangaNodes(string name, Uri host, CookieClient client)
     {
       var searchHost = new Uri(host, "search");
-      var page = await client.UploadValuesTaskAsync(searchHost, new NameValueCollection() {{"q", WebUtility.UrlEncode(name)}}).ConfigureAwait(false);
+      var page = await client.UploadValuesTaskAsync(searchHost, new NameValueCollection() { { "q", WebUtility.UrlEncode(name) } }).ConfigureAwait(false);
       if (page == null)
         return null;
 

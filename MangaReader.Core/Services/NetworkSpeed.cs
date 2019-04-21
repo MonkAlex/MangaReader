@@ -53,7 +53,7 @@ namespace MangaReader.Core.Services
       receivedStorage.Value.Enqueue(received);
     }
 
-    public static event Action<double> Updated; 
+    public static event Action<double> Updated;
 
     private class LimitedConcurrentQueue<T> : ConcurrentQueue<T>
     {

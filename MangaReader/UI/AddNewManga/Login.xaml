@@ -12,25 +12,25 @@
     <BooleanToVisibilityConverter x:Key="B2V"/>
   </UserControl.Resources>
   <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <TextBox Grid.Column="0"
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="Auto"/>
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <TextBox Grid.Column="0"
                  Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"
                  IsEnabled="{Binding CanEdit}"
                  Visibility="{Binding HasLogin, Converter={StaticResource B2V}}"
                  Grid.Row="0"/>
-        <TextBox Grid.Column="0"
+    <TextBox Grid.Column="0"
                  Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
                  IsEnabled="{Binding CanEdit}"
                  Visibility="{Binding HasLogin, Converter={StaticResource B2V}}"
                  Grid.Row="1"/>
-        <Button x:Name="Enter" 
+    <Button x:Name="Enter" 
                 Visibility="{Binding HasLogin, Converter={StaticResource B2V}}"
                 Style="{DynamicResource BigButton}"
                 Grid.Row="0"
@@ -43,5 +43,5 @@
                VerticalAlignment="Center"
                Visibility="{Binding HasError, Converter={StaticResource B2V}}"
                Text="Логин не найден. Попоробуйте обновить программу."/>
-    </Grid>
+  </Grid>
 </UserControl>

@@ -35,7 +35,7 @@ namespace MangaReader.Core
 
     internal static string[] AssemblyFolders
     {
-      get { return new string[] {LibPath, PluginPath}; }
+      get { return new string[] { LibPath, PluginPath }; }
     }
 
 
@@ -85,12 +85,12 @@ namespace MangaReader.Core
     private static void ProcessInternetZoneOnFiles(System.Exception ex, string libraryName)
     {
       Console.WriteLine($"Just restart app \r\n {libraryName} \r\n {ex}");
-      foreach (var s in new[] {LibPath, PluginPath})
-      foreach (var fileInfo in new DirectoryInfo(s).GetFiles())
-      {
-        var body = File.ReadAllBytes(fileInfo.FullName);
-        File.WriteAllBytes(fileInfo.FullName, body);
-      }
+      foreach (var s in new[] { LibPath, PluginPath })
+        foreach (var fileInfo in new DirectoryInfo(s).GetFiles())
+        {
+          var body = File.ReadAllBytes(fileInfo.FullName);
+          File.WriteAllBytes(fileInfo.FullName, body);
+        }
       Environment.Exit(ex.HResult);
     }
   }

@@ -30,7 +30,7 @@ namespace Tests.Entities.Manga
 
         manga = await context.Get<Readmanga>().FirstOrDefaultAsync(m => m.Id == manga.Id).ConfigureAwait(false);
         await manga.Refresh().ConfigureAwait(false);
-        
+
         // Если сайт больше не редиректит, осталась возможность редиректа вручную в клиенте.
         if (manga.Uri == readmangaUri)
           manga.Uri = new Uri("http://mintmanga.com/btooom_");

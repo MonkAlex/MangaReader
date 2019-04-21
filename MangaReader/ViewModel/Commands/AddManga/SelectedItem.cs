@@ -21,6 +21,6 @@ namespace MangaReader.ViewModel.Commands.AddManga
     public SelectedItem(T value)
     {
       this.Value = value;
-    } 
+    }
   }
 }

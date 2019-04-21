@@ -68,7 +68,7 @@ namespace Tests.Entities.Library
       Assert.AreEqual(false, library.IsPaused);
       Assert.AreEqual(inProcess, library.InProcess);
 
-      var task = library.ThreadAction(library.Update(new List<int>(){manga.Id}, mangas => mangas.OrderBy(m => m.DownloadedAt)));
+      var task = library.ThreadAction(library.Update(new List<int>() { manga.Id }, mangas => mangas.OrderBy(m => m.DownloadedAt)));
 
       Assert.AreEqual(task.IsCompleted, library.IsAvaible);
       Assert.AreEqual(false, library.IsPaused);

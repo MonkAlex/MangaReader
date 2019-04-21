@@ -163,7 +163,7 @@ namespace MangaReader.Core.Services
             .GetFiles(ArchivePattern, SearchOption.AllDirectories)
             .Select(f => f.FullName))
           .ToList();
-        if (!files.Any()) 
+        if (!files.Any())
           return packedFiles;
 
         using (var zip = ZipFile.Open(archive, archiveMode, Encoding.UTF8))

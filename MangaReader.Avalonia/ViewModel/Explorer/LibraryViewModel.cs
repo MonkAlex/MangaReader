@@ -152,31 +152,31 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
             UpdatePercent = libraryViewModelArgs.Percent == 0 ? null : libraryViewModelArgs.Percent;
             break;
           case LibraryOperation.UpdateMangaChanged:
-          {
-            switch (libraryViewModelArgs.MangaOperation)
             {
-              case MangaOperation.Added:
-                this.Items.Add(new MangaModel(libraryViewModelArgs.Manga));
-                break;
-              case MangaOperation.Deleted:
+              switch (libraryViewModelArgs.MangaOperation)
               {
-                var mangaModels = this.Items.Where(i => i.Id == mangaId).ToList();
-                foreach (var mangaModel in mangaModels)
-                  this.Items.Remove(mangaModel);
-                break;
+                case MangaOperation.Added:
+                  this.Items.Add(new MangaModel(libraryViewModelArgs.Manga));
+                  break;
+                case MangaOperation.Deleted:
+                  {
+                    var mangaModels = this.Items.Where(i => i.Id == mangaId).ToList();
+                    foreach (var mangaModel in mangaModels)
+                      this.Items.Remove(mangaModel);
+                    break;
+                  }
+                case MangaOperation.UpdateStarted:
+                  break;
+                case MangaOperation.UpdateCompleted:
+                  break;
+                case MangaOperation.None:
+                  break;
+                default:
+                  throw new ArgumentOutOfRangeException();
               }
-              case MangaOperation.UpdateStarted:
-                break;
-              case MangaOperation.UpdateCompleted:
-                break;
-              case MangaOperation.None:
-                break;
-              default:
-                throw new ArgumentOutOfRangeException();
-            }
 
-            break;
-          }
+              break;
+            }
           case LibraryOperation.UpdateCompleted:
             UpdatePercent = null;
             break;

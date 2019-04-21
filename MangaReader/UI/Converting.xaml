@@ -6,16 +6,16 @@
         ShowInTaskbar="False"
         DataContextChanged="Converting_OnDataContextChanged"
         Title="" Height="100" Width="300">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="{Binding Status}"  TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <ProgressBar Grid.Row="1" 
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <TextBlock Grid.Row="0" Text="{Binding Status}"  TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+    <ProgressBar Grid.Row="1" 
                      Maximum="100"
                      Height="25"
                      Value="{Binding Percent}"
                      IsIndeterminate="{Binding IsIndeterminate}"/>
-    </Grid>
+  </Grid>
 </Window>

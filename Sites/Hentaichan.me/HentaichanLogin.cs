@@ -68,7 +68,7 @@ namespace Hentaichan
           var manga = await Mangas.Create(m).ConfigureAwait(false);
           if (manga == null)
             return;
-          
+
           await parser.UpdateNameAndStatus(manga).ConfigureAwait(false);
           if (!string.IsNullOrWhiteSpace(manga.Name))
             bookmarks.Add(manga);

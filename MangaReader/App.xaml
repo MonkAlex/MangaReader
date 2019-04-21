@@ -117,7 +117,7 @@
                 IsDefault="True"/>
       </Grid>
     </DataTemplate>
-    
+
     <DataTemplate DataType="{x:Type viewModel:AddFromUri}">
       <addNewManga:AddNew/>
     </DataTemplate>

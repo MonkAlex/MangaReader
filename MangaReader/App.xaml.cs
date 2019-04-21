@@ -24,7 +24,7 @@ namespace MangaReader
       Core.Loader.Init();
       await Client.Run().ConfigureAwait(true);
     }
-    
+
     #region Консоль
 
     public static void ShowConsoleWindow()

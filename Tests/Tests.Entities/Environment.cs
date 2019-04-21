@@ -26,7 +26,7 @@ namespace Tests
     }
 
     public static bool InitClient = false;
-    
+
     public static void SetUp(bool initSession)
     {
       InitClient = initSession;
@@ -144,13 +144,13 @@ namespace Tests
     {
       var dd = AppDomain.CurrentDomain.BaseDirectory;
       File.Delete(Path.Combine(dd, "storage.db"));
-      var masks = new[] {"System.Data.SQLite*", "*.dbak"};
+      var masks = new[] { "System.Data.SQLite*", "*.dbak" };
       foreach (var mask in masks)
       {
         foreach (var file in Directory.GetFiles(dd, mask, SearchOption.TopDirectoryOnly))
         {
           File.Delete(file);
-        }        
+        }
       }
     }
 

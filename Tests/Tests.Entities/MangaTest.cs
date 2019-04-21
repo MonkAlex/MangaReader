@@ -125,7 +125,7 @@ namespace Tests
     public static List<string> GetWords(string str)
     {
       return str
-        .Split(new[] {" ", ",", System.Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
+        .Split(new[] { " ", ",", System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
         .Select(s => Regex.Replace(s, "\\d+(,\\d+)*", "some_counts", RegexOptions.None))
         .ToList();
     }

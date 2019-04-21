@@ -21,7 +21,7 @@ namespace Hentaichan.Mangachan
 
     protected MangachanChapter()
     {
-      
+
     }
   }
 }

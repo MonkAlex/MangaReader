@@ -9,7 +9,7 @@ namespace MangaReader.Avalonia.ViewModel.Command
     protected Func<Task> taskExecute;
     protected Action actionExecute;
     protected Func<bool> canExecute;
-    
+
     public override bool CanExecute(object parameter)
     {
       return base.CanExecute(parameter) && canExecute.Invoke();

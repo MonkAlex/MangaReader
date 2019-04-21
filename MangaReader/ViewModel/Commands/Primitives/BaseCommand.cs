@@ -75,7 +75,7 @@ namespace MangaReader.ViewModel.Commands.Primitives
       else
         Client.Dispatcher.InvokeAsync(() => CanExecuteChanged?.Invoke(this, EventArgs.Empty));
     }
-    
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

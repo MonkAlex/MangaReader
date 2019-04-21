@@ -46,7 +46,7 @@ namespace MangaReader.Core.Services.Config
     /// </summary>
     public static IList<IPlugin> Plugins { get { return plugins; } }
 
-    private static IList<IPlugin> plugins; 
+    private static IList<IPlugin> plugins;
 
     /// <summary>
     /// Настройки программы.

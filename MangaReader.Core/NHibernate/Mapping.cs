@@ -89,9 +89,9 @@ namespace MangaReader.Core.NHibernate
     {
       foreach (var source in config.ClassMappings.Where(m => m.Discriminator != null && m is RootClass))
       {
-        source.Where = string.Format("{0} in ('{1}')", 
+        source.Where = string.Format("{0} in ('{1}')",
           source.Discriminator.ColumnIterator.Single().Text,
-          string.Join("', '", source.SubclassIterator.Select(i => i.DiscriminatorValue).Concat(new []{ source.DiscriminatorValue })));
+          string.Join("', '", source.SubclassIterator.Select(i => i.DiscriminatorValue).Concat(new[] { source.DiscriminatorValue })));
       }
 
       config.EventListeners.PreInsertEventListeners = new IPreInsertEventListener[] { new SaveOrUpdateEvent() };

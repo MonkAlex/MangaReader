@@ -19,7 +19,7 @@ namespace MangaReader.UI.Services
         var windowType = ViewResolver.Instance.TryGet(key.GetType());
         if (windowType != null)
         {
-          value = (T) Activator.CreateInstance(windowType);
+          value = (T)Activator.CreateInstance(windowType);
           value.DataContext = key;
           AddOrReplace(key, value);
         }

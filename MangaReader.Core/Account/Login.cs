@@ -43,7 +43,7 @@ namespace MangaReader.Core.Account
     {
       return new CookieClient(this.ClientCookie) { BaseAddress = MainUri.ToString() };
     }
-    
+
     private bool isLogined;
 
     public abstract Task<bool> DoLogin();
@@ -68,7 +68,7 @@ namespace MangaReader.Core.Account
     }
 
     protected abstract Task<List<IManga>> DownloadBookmarks();
-    
+
     public static async Task<ILogin> Get(Type type)
     {
       using (var context = NHibernate.Repository.GetEntityContext())

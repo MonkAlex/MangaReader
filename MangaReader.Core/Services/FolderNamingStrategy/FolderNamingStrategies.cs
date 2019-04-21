@@ -51,7 +51,7 @@ namespace MangaReader.Core.Services
       public static StrategyCache Lock(IManga manga)
       {
         mangaCache.GetOrAdd(manga, GetNamingStrategy);
-        return new StrategyCache(){manga = manga};
+        return new StrategyCache() { manga = manga };
       }
 
       public void Dispose()

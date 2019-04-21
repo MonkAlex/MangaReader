@@ -25,7 +25,7 @@ namespace MangaReader.ViewModel
       var window = ViewService.Instance.TryGet<System.Windows.Window>(this);
       if (window != null)
       {
-        window.ContentRendered += async (sender, args) => 
+        window.ContentRendered += async (sender, args) =>
         {
           try
           {

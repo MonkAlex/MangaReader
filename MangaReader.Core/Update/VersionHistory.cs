@@ -7,7 +7,7 @@ namespace MangaReader.Core.Update
 {
   public static class VersionHistory
   {
-    private static readonly Assembly Assembly = typeof (VersionHistory).Assembly;
+    private static readonly Assembly Assembly = typeof(VersionHistory).Assembly;
 
     public static string GetHistory()
     {

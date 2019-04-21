@@ -54,14 +54,14 @@ namespace MangaReader.Core.Services
       {
         exists = session.Query<MangaHistory>().Where(h => uris.Contains(h.Uri)).Select(h => h.Uri).ToList();
       }
-      
+
       foreach (var item in internalContainer.OfType<IDownloadableContainer<IDownloadable>>())
       {
         var wh = GetItemsWithoutHistory(item);
         if (wh.Any())
           exists.Remove(item.Uri);
       }
-      
+
       var historyNotFound = internalContainer.Where(c => uris.Except(exists).Contains(c.Uri)).ToList();
       return historyNotFound.Where(c => c.DownloadedAt == null).ToList();
     }

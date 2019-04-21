@@ -4,16 +4,16 @@ using Avalonia.Markup.Xaml;
 
 namespace MangaReader.Avalonia.View
 {
-    public class Library : UserControl
+  public class Library : UserControl
+  {
+    public Library()
     {
-        public Library()
-        {
-            this.InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+      this.InitializeComponent();
     }
+
+    private void InitializeComponent()
+    {
+      AvaloniaXamlLoader.Load(this);
+    }
+  }
 }

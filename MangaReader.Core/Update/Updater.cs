@@ -69,13 +69,13 @@ namespace MangaReader.Core.Update
         Log.InfoFormat($"Апдейтер не найден, скачайте обновление вручную по ссылке {RepositoryReleaseUri}");
         return;
       }
-     
+
       var args = string.Format("--fromFile \"{0}\" --version \"{1}\" --outputFolder \"{2}\"",
         UpdateConfig, ClientVersion, ConfigStorage.WorkFolder.TrimEnd('\\'));
       Log.InfoFormat("Запущен процесс обновления: Файл '{0}', с аргументами '{1}', в папке '{2}'",
         UpdateFilename, args, ConfigStorage.WorkFolder);
 
-      Process.Start(new ProcessStartInfo {FileName = UpdateFilename, Arguments = args});
+      Process.Start(new ProcessStartInfo { FileName = UpdateFilename, Arguments = args });
     }
 
     /// <summary>

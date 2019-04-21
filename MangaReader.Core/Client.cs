@@ -23,7 +23,7 @@ namespace MangaReader.Core
 
     public static event EventHandler ClientBeenClosed;
 
-    public static event EventHandler<Version> ClientUpdated; 
+    public static event EventHandler<Version> ClientUpdated;
 
     public static void Init()
     {
@@ -44,7 +44,7 @@ namespace MangaReader.Core
       try
       {
         await Updater.Initialize().ConfigureAwait(false);
-        
+
         ConfigStorage.RefreshPlugins();
         NHibernate.Mapping.Initialize(process);
         await DatabaseConfig.Initialize().ConfigureAwait(false);

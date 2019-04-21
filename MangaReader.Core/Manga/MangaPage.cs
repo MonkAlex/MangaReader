@@ -86,7 +86,10 @@ namespace MangaReader.Core.Manga
         using (await ThrottleService.WaitAsync().ConfigureAwait(false))
         {
           await DownloadManager.CheckPause().ConfigureAwait(false);
-          chapterFolder = DirectoryHelpers.MakeValidPath(chapterFolder);
+
+          if (!DirectoryHelpers.ValidateSettingPath(chapterFolder))
+            throw new DirectoryNotFoundException($"Попытка скачивания в папку {chapterFolder}, папка не существует.");
+
           if (!Directory.Exists(chapterFolder))
             Directory.CreateDirectory(chapterFolder);
 

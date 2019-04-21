@@ -343,6 +343,10 @@ namespace MangaReader.Core.Manga
         {
           NetworkSpeed.Clear();
           var plugin = Plugin;
+
+          if (!Directory.Exists(mangaFolder))
+            Directory.CreateDirectory(mangaFolder);
+
           var tasks = this.ActiveVolumes.Select(
               v =>
               {
@@ -521,7 +525,6 @@ namespace MangaReader.Core.Manga
       if (!args.IsNewEntity)
       {
         var dirName = args.GetPropertyState<string>(nameof(Folder)).OldValue;
-        dirName = DirectoryHelpers.MakeValidPath(dirName);
         var newValue = this.GetAbsoluteFolderPath();
         var oldValue = DirectoryHelpers.GetAbsoluteFolderPath(dirName);
         if (oldValue != null && !DirectoryHelpers.Equals(newValue, oldValue) && Directory.Exists(oldValue))
@@ -539,8 +542,11 @@ namespace MangaReader.Core.Manga
 
     public virtual void RefreshFolder()
     {
-      var mangaFolder = DirectoryHelpers.MakeValidPath(this.Name.Replace(Path.DirectorySeparatorChar, '.'));
-      Folder = DirectoryHelpers.MakeValidPath(Path.Combine(this.Setting.Folder, mangaFolder));
+      if (!DirectoryHelpers.ValidateSettingPath(this.Setting.Folder))
+        throw new DirectoryNotFoundException($"Попытка скачивания в папку {this.Setting.Folder}, папка не существует.");
+
+      var mangaFolder = DirectoryHelpers.RemoveInvalidCharsFromName(this.Name);
+      Folder = Path.Combine(this.Setting.Folder, mangaFolder);
     }
 
     public override string ToString()

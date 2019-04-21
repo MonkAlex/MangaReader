@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using MangaReader.Core.NHibernate;
 using NUnit.Framework;
 
@@ -17,6 +18,7 @@ namespace Tests.Entities.MangaSetting
         var settingFolder = manga.Setting.Folder;
         Assert.NotNull(folder);
         manga.Setting.Folder += "2";
+        Directory.CreateDirectory(manga.Setting.Folder);
         await context.Save(manga.Setting).ConfigureAwait(false);
 
         Assert.AreNotEqual(folder, manga.Folder);

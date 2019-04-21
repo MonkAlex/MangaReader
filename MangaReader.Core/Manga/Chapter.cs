@@ -43,7 +43,10 @@ namespace MangaReader.Core.Manga
     public override async Task Download(string downloadFolder = null)
     {
       await DownloadManager.CheckPause().ConfigureAwait(false);
-      var chapterFolder = Path.Combine(downloadFolder, this.Folder);
+      if (!DirectoryHelpers.ValidateSettingPath(downloadFolder))
+        throw new DirectoryNotFoundException($"Попытка скачивания в папку {downloadFolder}, папка не существует.");
+
+      var chapterFolder = Path.Combine(downloadFolder, DirectoryHelpers.RemoveInvalidCharsFromName(this.Folder));
 
       if (this.Container == null || !this.Container.Any())
         await this.UpdatePages().ConfigureAwait(false);
@@ -58,7 +61,6 @@ namespace MangaReader.Core.Manga
       try
       {
         await DownloadManager.CheckPause().ConfigureAwait(false);
-        chapterFolder = DirectoryHelpers.MakeValidPath(chapterFolder);
         if (!Directory.Exists(chapterFolder))
           Directory.CreateDirectory(chapterFolder);
 

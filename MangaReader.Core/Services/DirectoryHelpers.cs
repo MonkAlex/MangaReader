@@ -12,7 +12,7 @@ namespace MangaReader.Core.Services
 {
   public static class DirectoryHelpers
   {
-    private static readonly string NormalizationPattern = string.Format(@"([{0}]*\.+$)|([{0}]+)", Regex.Escape(string.Concat(new string(Path.GetInvalidPathChars()), "?", "/", "*", "\"")));
+    private static readonly string NormalizationPattern = string.Format(@"([{0}]*\.+$)|([{0}]+)", Regex.Escape(string.Concat(new string(Path.GetInvalidPathChars()), "?", "/", "*", "\"", ":", "\\")));
     private static readonly string[] DosReservedNames = { "CON", "PRN", "AUX", "NUL", "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9" };
 
     public static bool Equals(string one, string two)
@@ -113,49 +113,51 @@ namespace MangaReader.Core.Services
       }
     }
 
+    /// <summary>
+    /// Проверить путь к папке хранения указываемый в настройках.
+    /// </summary>
+    /// <param name="path">Путь к папке.</param>
+    /// <returns>True, если путь в порядке.</returns>
+    /// <remarks>Путь должен существовать или быть значением по умолчанию.</remarks>
+    public static bool ValidateSettingPath(string path)
+    {
+      if (Equals(path, AppConfig.DownloadFolderName) || Equals(path, AppConfig.DownloadFolder))
+        return true;
+
+      return Directory.Exists(path);
+    }
+
 
     /// <summary>
-    /// Очистка пути от недопустимых символов.
+    /// Очистка имени от недопустимых символов.
     /// </summary>
-    /// <param name="name">Путь.</param>
-    /// <returns>Исправленный путь.</returns>
-    public static string MakeValidPath(string name)
+    /// <param name="name">Имя.</param>
+    /// <returns>Имя без недопустимых символов.</returns>
+    /// <remarks>В имени не должно быть разделителей, они будут восприниматься как часть имени.</remarks>
+    public static string RemoveInvalidCharsFromName(string name)
     {
       if (Environment.OSVersion.Platform == PlatformID.Unix ||
           Environment.OSVersion.Platform == PlatformID.MacOSX)
         return name;
 
       const string replacement = ".";
-      var matchesCount = Regex.Matches(name, @":\\").Count;
-      string correctName;
-      if (matchesCount > 0)
-      {
-        var regex = new Regex(@":", RegexOptions.RightToLeft);
-        correctName = regex.Replace(name, replacement, regex.Matches(name).Count - matchesCount);
-      }
-      else
-        correctName = name.Replace(":", replacement);
 
-      var replace = Regex.Replace(correctName, NormalizationPattern, replacement);
+      var folder = Regex.Replace(name, NormalizationPattern, replacement);
       foreach (var reservedName in DosReservedNames)
       {
-        var builder = new List<string>();
-        foreach (var folder in replace.Split(Path.DirectorySeparatorChar))
-        {
-          var changedName = folder;
-          if (string.Equals(folder, reservedName, StringComparison.InvariantCultureIgnoreCase))
-            changedName = replacement + reservedName;
-
-          var value = reservedName + '.';
-          if (folder.StartsWith(value, StringComparison.InvariantCultureIgnoreCase))
-            changedName = replacement + value + folder.Remove(0, value.Length);
-
-          builder.Add(changedName);
-        }
-
-        replace = string.Join<string>(Path.DirectorySeparatorChar.ToString(), builder);
+        var reservedNameWithDot = reservedName + '.';
+        if (string.Equals(folder, reservedName, StringComparison.InvariantCultureIgnoreCase))
+          folder = replacement + reservedName;
+        else if (folder.StartsWith(reservedNameWithDot, StringComparison.InvariantCultureIgnoreCase))
+          folder = replacement + reservedNameWithDot + folder.Remove(0, reservedNameWithDot.Length);
       }
-      return replace.TrimEnd(' ', '.');
+
+      // Если имя оказалось целиком из точек и\или пробелов - заменяем на константу.
+      folder = folder.TrimEnd(' ', '.');
+      if (string.IsNullOrWhiteSpace(folder))
+        folder = "invalid name";
+
+      return folder;
     }
 
 

@@ -1,4 +1,5 @@
-﻿using MangaReader.Core.Services;
+﻿using System.IO;
+using MangaReader.Core.Services;
 using NUnit.Framework;
 
 namespace Tests.API
@@ -7,51 +8,73 @@ namespace Tests.API
   class FolderNameNormalization
   {
     [Test, Sequential]
-    public void CheckNotAllowedNames([Values(
-      "test"
-      ,@"C:\manga\manga:name"
-      ,@"usr\home\manga:name"
-      ,@"start < > : "" / \ | ? * end"
-      ,"\x15\x3D" // less than ASCII space
-      ,"\x21\x3D" // HEX of !, valid
-      ,"\x3F\x3D" // HEX of ?, not valid
-      ,@"C:\manga\   trailing space   "
-      ,@"C:\manga\...trailing period..."
-      ,@"C:\manga\CON"
-      ,@"C:\manga\CON.txt"
-      ,@"CON"
-      ,@"C:\manga\con.txt\context"
-      ,@"home\NUL.liza"
-      ,@"home\ NUL.liza"
-      ,@"root\..\sub"
-      ,@"root\..\"
-      ,@".\..\some?folder"
-      ,@"C:\manga\..." // Bad manga name get the root folder, bug =_=
-      ,@"root\.." // relative path trimmed, bug =_=
-    )] string name, [Values(
-      "test"
-      ,@"C:\manga\manga.name"
-      ,@"usr\home\manga.name"
-      ,@"start . . . . . \ . . . end"
-      ,".="
-      ,"!="
-      ,".="
-      ,@"C:\manga\   trailing space"
-      ,@"C:\manga\...trailing period"
-      ,@"C:\manga\.CON"
-      ,@"C:\manga\.CON.txt"
-      ,@".CON"
-      ,@"C:\manga\.CON.txt\context"
-      ,@"home\.NUL.liza"
-      ,@"home\ NUL.liza"
-      ,@"root\..\sub"
-      ,@"root\..\"
-      ,@".\..\some.folder"
-      ,@"C:\manga\"
-      ,@"root\"
-    )] string expected)
+    public void CheckNotAllowedMangaNames([Values(
+        "test"
+        , @"manga:name"
+        , @"start < > : "" / \ | ? * end"
+        , "\x15\x3D" // less than ASCII space
+        , "\x21\x3D" // HEX of !, valid
+        , "\x3F\x3D" // HEX of ?, not valid
+        , @"   trailing space   "
+        , @"...trailing period..."
+        , @"CON"
+        , @"CON.txt"
+        , @"context"
+        , @"NUL.liza"
+        , @" NUL.liza"
+        , @"some?folder"
+        , @"..."
+        , @".."
+      )]
+      string name, [Values(
+        "test"
+        , @"manga.name"
+        , @"start . . . . . . . . . end"
+        , ".="
+        , "!="
+        , ".="
+        , @"   trailing space"
+        , @"...trailing period"
+        , @".CON"
+        , @".CON.txt"
+        , @"context"
+        , @".NUL.liza"
+        , @" NUL.liza"
+        , @"some.folder"
+        , @"invalid name"
+        , @"invalid name"
+      )]
+      string expected)
     {
-      Assert.AreEqual(expected, DirectoryHelpers.MakeValidPath(name));
+      Assert.AreEqual(expected, DirectoryHelpers.RemoveInvalidCharsFromName(name));
+    }
+
+    [Test, Sequential]
+    public void CheckNotAllowedSettingFolders([Values(
+        "test"
+        , @"manga\manga.name"
+        , @"root\..\sub"
+        , @"root\..\"
+        , @"root\.."
+        , @".\..\"
+        , @".\.."
+        , @".\..\some.folder"
+      )]
+      string name, [Values(
+        true
+        , true
+        , true
+        , true
+        , true
+        , true
+        , true
+        , true
+      )]
+      bool allowed)
+    {
+      var path = Path.Combine(TestContext.CurrentContext.TestDirectory, name);
+      Directory.CreateDirectory(path);
+      Assert.AreEqual(allowed, DirectoryHelpers.ValidateSettingPath(path));
     }
   }
 }

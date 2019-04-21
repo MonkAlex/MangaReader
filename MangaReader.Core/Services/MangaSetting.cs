@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Core.Account;
@@ -39,6 +40,9 @@ namespace MangaReader.Core.Services
 
     public override async Task BeforeSave(ChangeTrackerArgs args)
     {
+      if (!DirectoryHelpers.ValidateSettingPath(this.Folder))
+        throw new DirectoryNotFoundException($"Не найдена папка {this.Folder}, папка должна существовать.");
+      
       if (!args.IsNewEntity)
       {
         var folderState = args.GetPropertyState<string>(nameof(Folder));

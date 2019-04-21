@@ -54,11 +54,16 @@ namespace Tests
     {
       IManga manga;
       var sw = new Stopwatch();
-      using (Repository.GetEntityContext($"Test to download {mangaInfo.Uri}"))
+      using (var context = Repository.GetEntityContext($"Test to download {mangaInfo.Uri}"))
       {
+        foreach (var toDelete in context.Get<IManga>().Where(m => m.Uri.ToString() == mangaInfo.Uri))
+        {
+          await context.Delete(toDelete).ConfigureAwait(false);
+          DirectoryHelpers.DeleteDirectory(toDelete.GetAbsoluteFolderPath());
+        }
+
         manga = await Mangas.CreateFromWeb(new Uri(mangaInfo.Uri)).ConfigureAwait(false);
         sw.Start();
-        DirectoryHelpers.DeleteDirectory(manga.GetAbsoluteFolderPath());
         await manga.Download().ConfigureAwait(false);
       }
 
@@ -73,6 +78,7 @@ namespace Tests
         Assert.AreEqual(1, fileInfos.GroupBy(f => f.Length).Max(g => g.Count()));
       Assert.IsTrue(manga.IsDownloaded);
       Assert.AreEqual(100, manga.Downloaded);
+      DirectoryHelpers.DeleteDirectory(manga.GetAbsoluteFolderPath());
     }
 
     [Test, TestCaseSource(nameof(MangaToValidateStatusAndDescription))]
@@ -105,7 +111,7 @@ namespace Tests
         var storedWords = GetWords(mangaInfo.Status);
         var downloaded = GetWords(manga.Status);
         var changes = storedWords.Except(downloaded).Count() + downloaded.Except(storedWords).Count();
-        // Status can contain regular chagned info, try to compare
+        // Status can contain regular changed info, try to compare
         Assert.LessOrEqual(changes, 2);
       }
     }

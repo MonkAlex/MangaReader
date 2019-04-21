@@ -20,7 +20,11 @@ namespace MangaReader.Core.Manga
 
     public override Task Download(string mangaFolder = null)
     {
-      var volumeFolder = Path.Combine(mangaFolder, this.Folder);
+      if (!DirectoryHelpers.ValidateSettingPath(mangaFolder))
+        throw new DirectoryNotFoundException($"Попытка скачивания в папку {mangaFolder}, папка не существует.");
+      var volumeFolder = Path.Combine(mangaFolder, DirectoryHelpers.RemoveInvalidCharsFromName(this.Folder));
+      if (!Directory.Exists(volumeFolder))
+        Directory.CreateDirectory(volumeFolder);
 
       this.InDownloading = this.Container.ToList();
       if (this.OnlyUpdate)

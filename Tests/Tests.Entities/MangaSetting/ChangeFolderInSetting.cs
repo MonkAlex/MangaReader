@@ -20,7 +20,7 @@ namespace Tests.Entities.MangaSetting
         var settingFolder = manga.Setting.Folder;
         Assert.NotNull(folder);
         manga.Setting.Folder += "2";
-        Directory.CreateDirectory(manga.Setting.Folder);
+        Directory.CreateDirectory(DirectoryHelpers.GetAbsoluteFolderPath(manga.Setting.Folder));
         await context.Save(manga.Setting).ConfigureAwait(false);
 
         Assert.AreNotEqual(folder, manga.Folder);

@@ -56,7 +56,7 @@ namespace MangaReader.Core.NHibernate
       var key = impl.PersistenceContext.GetEntry(entity);
 
       if (key?.LoadedState == null && entity.Id != 0)
-        throw new EntityException("Сущности можно обновлять только в контексте подключения к БД (получение, изменение, сохранение).", entity);
+        throw new EntityException<T>("Сущности можно обновлять только в контексте подключения к БД (получение, изменение, сохранение).", entity);
 
       if (key == null)
       {

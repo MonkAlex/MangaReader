@@ -3,7 +3,7 @@ using MangaReader.Core.Manga;
 
 namespace MangaReader.Core.Exception
 {
-  public class GetSiteInfoException : EntityException
+  public class GetSiteInfoException : EntityException<IManga>
   {
     public Uri Uri { get; }
 
@@ -16,7 +16,7 @@ namespace MangaReader.Core.Exception
     {
     }
 
-    public GetSiteInfoException(string message, Uri uri, Entity.IEntity entity) : base(message, entity)
+    public GetSiteInfoException(string message, Uri uri, IManga manga) : base(message, manga)
     {
       this.Uri = uri;
     }

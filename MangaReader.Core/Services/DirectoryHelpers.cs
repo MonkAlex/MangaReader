@@ -22,6 +22,20 @@ namespace MangaReader.Core.Services
         StringComparison.InvariantCultureIgnoreCase) == 0;
     }
 
+    /// <summary>
+    /// Проверить вхождение одной папки в другую.
+    /// </summary>
+    /// <param name="folder">Папка.</param>
+    /// <param name="subfolder">Папка, которую проверяем на вхождение.</param>
+    /// <returns>True, если subfolder вложена в folder.</returns>
+    public static bool IsSubfolder(string folder, string subfolder)
+    {
+      var folderPaths = folder.Split(Path.DirectorySeparatorChar);
+      var subfolderPaths = subfolder.Split(Path.DirectorySeparatorChar);
+      return subfolderPaths.Length > folderPaths.Length &&
+             subfolderPaths.Take(folderPaths.Length).SequenceEqual(folderPaths);
+    }
+
     private static IEnumerable<string> CopyDirectory(string sourceFolder, string destFolder)
     {
       try
@@ -62,7 +76,7 @@ namespace MangaReader.Core.Services
       try
       {
         var copied = CopyDirectory(sourceFolder, destFolder);
-        if (Path.GetFullPath(destFolder).StartsWith(Path.GetFullPath(sourceFolder), StringComparison.InvariantCultureIgnoreCase))
+        if (IsSubfolder(sourceFolder, destFolder))
         {
           foreach (var file in copied)
           {
@@ -127,7 +141,7 @@ namespace MangaReader.Core.Services
       if (path.TrimEnd(Path.PathSeparator, Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar, Path.VolumeSeparatorChar).EndsWith("."))
         return false;
 
-      return Directory.Exists(path);
+      return Directory.Exists(GetAbsoluteFolderPath(path));
     }
 
 

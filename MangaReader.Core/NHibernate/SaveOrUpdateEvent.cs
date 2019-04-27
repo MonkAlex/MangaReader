@@ -14,7 +14,7 @@ namespace MangaReader.Core.NHibernate
       if (e.Entity is IEntity entity)
       {
         if (e.OldState == null && entity.Id != 0)
-          throw new EntityException("Сущности можно обновлять только в контексте подключения к БД (получение, изменение, сохранение).", entity);
+          throw new EntityException<IEntity>("Сущности можно обновлять только в контексте подключения к БД (получение, изменение, сохранение).", entity);
         await entity.BeforeSave(new ChangeTrackerArgs(e.State, e.OldState, e.Persister.PropertyNames, false)).ConfigureAwait(false);
       }
       return false;

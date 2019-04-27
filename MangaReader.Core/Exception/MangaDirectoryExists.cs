@@ -9,7 +9,7 @@
       return string.Format("{0} Адрес: '{1}'.", base.FormatMessage(), Directory);
     }
 
-    public MangaDirectoryExists(string message, string directory, Entity.Entity entity) : base(message, entity)
+    public MangaDirectoryExists(string message, string directory, Manga.IManga entity) : base(message, entity)
     {
       this.Directory = directory;
     }

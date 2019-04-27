@@ -1,8 +1,13 @@
 ﻿namespace MangaReader.Core.Exception
 {
-  public class SaveValidationException : EntityException
+  public class SaveValidationException : EntityException<Manga.IManga>
   {
-    public SaveValidationException(string message, Entity.IEntity entity) : base(message, entity)
+    public override string FormatMessage()
+    {
+      return $"{base.FormatMessage()} Manga uri = '{this.Entity.Uri}'.";
+    }
+
+    public SaveValidationException(string message, Manga.IManga manga) : base(message, manga)
     {
     }
   }

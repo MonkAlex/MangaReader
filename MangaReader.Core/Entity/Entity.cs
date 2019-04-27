@@ -12,7 +12,7 @@ namespace MangaReader.Core.Entity
         if (id == 0 || value == 0)
           id = value;
         else
-          throw new EntityException("Нельзя изменять ID сущности.", this);
+          throw new EntityException<IEntity>("Нельзя изменять ID сущности.", this);
       }
       get { return id; }
     }

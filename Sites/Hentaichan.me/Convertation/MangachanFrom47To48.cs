@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Linq;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.NHibernate;
@@ -19,6 +20,21 @@ namespace Hentaichan.Convertation
         if (setting != null && Equals(oldMainUri, setting.MainUri))
         {
           setting.MainUri = mainUri;
+
+          var mangas = context.Get<Mangachan.Mangachan>().ToList();
+          foreach (var manga in mangas)
+          {
+            var parsed = manga.Parser.ParseUri(manga.Uri);
+            if (parsed.CanBeParsed)
+              continue;
+
+            var splitted = manga.Uri.OriginalString.Split('/');
+            if (splitted.Length > 3 && string.IsNullOrEmpty(splitted[3]))
+            {
+              splitted[3] = "manga";
+              manga.Uri = new Uri(string.Join("/", splitted));
+            }
+          }
           await context.Save(setting).ConfigureAwait(false);
         }
       }

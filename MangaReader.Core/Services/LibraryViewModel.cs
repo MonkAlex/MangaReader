@@ -350,6 +350,11 @@ namespace MangaReader.Core.Services
     public MangaOperation MangaOperation { get; }
     public LibraryOperation LibraryOperation { get; }
 
+    public override string ToString()
+    {
+      return $"{LibraryOperation}-{MangaOperation}-{Manga?.Name}-{Percent}";
+    }
+
     public LibraryViewModelArgs(double? percent, IManga manga,
       MangaOperation mangaOperation, LibraryOperation libraryOperation)
     {

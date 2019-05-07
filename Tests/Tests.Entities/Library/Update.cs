@@ -59,9 +59,9 @@ namespace Tests.Entities.Library
         events.Add(e);
       }
 
-      var manga = await Builder.CreateReadmanga().ConfigureAwait(false);
       var library = new LibraryViewModel();
       library.LibraryChanged += LibraryOnLibraryChanged;
+      var (_, manga) = await library.Add(new Uri(MangaInfos.Readmanga.Kuroshitsuji.Uri)).ConfigureAwait(false);
 
       var inProcess = false;
       Assert.AreEqual(!inProcess, library.IsAvaible);
@@ -80,17 +80,26 @@ namespace Tests.Entities.Library
       Assert.AreEqual(true, library.IsPaused);
       Assert.AreEqual(!task.IsCompleted, library.InProcess);
 
+      var (added, addedManga) = await library.Add(new Uri(MangaInfos.Mangachan.Rain.Uri)).ConfigureAwait(false);
+      Assert.IsTrue(added);
+
       library.IsPaused = false;
 
       await task.ConfigureAwait(false);
 
       await library.Remove(manga).ConfigureAwait(false);
+      await library.Remove(addedManga).ConfigureAwait(false);
       library.LibraryChanged -= LibraryOnLibraryChanged;
       Assert.AreEqual(0, manga.Id);
 
       Assert.Contains(new LibraryViewModelArgs(null, null, MangaOperation.None, LibraryOperation.UpdateStarted), events);
       Assert.Contains(new LibraryViewModelArgs(null, null, MangaOperation.None, LibraryOperation.UpdateCompleted), events);
+
+      Assert.Contains(new LibraryViewModelArgs(null, manga, MangaOperation.Added, LibraryOperation.UpdateMangaChanged), events);
       Assert.Contains(new LibraryViewModelArgs(null, manga, MangaOperation.Deleted, LibraryOperation.UpdateMangaChanged), events);
+
+      Assert.Contains(new LibraryViewModelArgs(null, addedManga, MangaOperation.Added, LibraryOperation.UpdateMangaChanged), events);
+      Assert.Contains(new LibraryViewModelArgs(null, addedManga, MangaOperation.Deleted, LibraryOperation.UpdateMangaChanged), events);
     }
 
   }

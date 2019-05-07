@@ -9,7 +9,7 @@ namespace MangaReader.Core.Manga
   public class HistoryCollection : IList<MangaHistory>, ICollection, IDisposable
   {
     private IList<MangaHistory> impl;
-    private readonly ReaderWriterLockSlim lockSlim = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+    private readonly ReaderWriterLockSlim lockSlim = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
     public HistoryCollection()
     {
@@ -31,13 +31,12 @@ namespace MangaReader.Core.Manga
       lockSlim.EnterWriteLock();
       try
       {
-        if (!Contains(item))
+        if (!impl.Contains(item))
           impl.Add(item);
       }
       finally
       {
-        if (lockSlim.IsWriteLockHeld)
-          lockSlim.ExitWriteLock();
+        lockSlim.ExitWriteLock();
       }
     }
 
@@ -50,8 +49,7 @@ namespace MangaReader.Core.Manga
       }
       finally
       {
-        if (lockSlim.IsWriteLockHeld)
-          lockSlim.ExitWriteLock();
+        lockSlim.ExitWriteLock();
       }
     }
 
@@ -64,8 +62,7 @@ namespace MangaReader.Core.Manga
       }
       finally
       {
-        if (lockSlim.IsReadLockHeld)
-          lockSlim.ExitReadLock();
+        lockSlim.ExitReadLock();
       }
     }
 
@@ -78,8 +75,7 @@ namespace MangaReader.Core.Manga
       }
       finally
       {
-        if (lockSlim.IsReadLockHeld)
-          lockSlim.ExitReadLock();
+        lockSlim.ExitReadLock();
       }
     }
 
@@ -92,8 +88,7 @@ namespace MangaReader.Core.Manga
       }
       finally
       {
-        if (lockSlim.IsWriteLockHeld)
-          lockSlim.ExitWriteLock();
+        lockSlim.ExitWriteLock();
       }
     }
 
@@ -106,8 +101,7 @@ namespace MangaReader.Core.Manga
       }
       finally
       {
-        if (lockSlim.IsReadLockHeld)
-          lockSlim.ExitReadLock();
+        lockSlim.ExitReadLock();
       }
     }
 
@@ -131,8 +125,7 @@ namespace MangaReader.Core.Manga
       }
       finally
       {
-        if (lockSlim.IsReadLockHeld)
-          lockSlim.ExitReadLock();
+        lockSlim.ExitReadLock();
       }
     }
 
@@ -145,8 +138,7 @@ namespace MangaReader.Core.Manga
       }
       finally
       {
-        if (lockSlim.IsWriteLockHeld)
-          lockSlim.ExitWriteLock();
+        lockSlim.ExitWriteLock();
       }
     }
 
@@ -159,8 +151,7 @@ namespace MangaReader.Core.Manga
       }
       finally
       {
-        if (lockSlim.IsWriteLockHeld)
-          lockSlim.ExitWriteLock();
+        lockSlim.ExitWriteLock();
       }
     }
 
@@ -175,8 +166,7 @@ namespace MangaReader.Core.Manga
         }
         finally
         {
-          if (lockSlim.IsReadLockHeld)
-            lockSlim.ExitReadLock();
+          lockSlim.ExitReadLock();
         }
       }
       set
@@ -188,8 +178,7 @@ namespace MangaReader.Core.Manga
         }
         finally
         {
-          if (lockSlim.IsWriteLockHeld)
-            lockSlim.ExitWriteLock();
+          lockSlim.ExitWriteLock();
         }
       }
     }

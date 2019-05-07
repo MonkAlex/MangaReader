@@ -54,7 +54,7 @@ namespace MangaReader.Core.Services
             var mangaFolders = await context.Get<IManga>().Select(m => m.Folder).ToListAsync().ConfigureAwait(false);
             mangaFolders = mangaFolders.Select(DirectoryHelpers.GetAbsoluteFolderPath).ToList();
             var settingAbsoluteFolderPath = DirectoryHelpers.GetAbsoluteFolderPath(this.Folder);
-            if (mangaFolders.Any(f => DirectoryHelpers.Equals(f, settingAbsoluteFolderPath)))
+            if (mangaFolders.Any(f => DirectoryHelpers.Equals(f, settingAbsoluteFolderPath) || DirectoryHelpers.IsSubfolder(f, settingAbsoluteFolderPath)))
               throw new MangaSettingSaveValidationException($"Папка {this.Folder} используется мангой.", this);
           }
 

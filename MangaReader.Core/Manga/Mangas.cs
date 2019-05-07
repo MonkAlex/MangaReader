@@ -534,7 +534,7 @@ namespace MangaReader.Core.Manga
         var oldValue = DirectoryHelpers.GetAbsoluteFolderPath(dirName);
         if (oldValue != null && !DirectoryHelpers.Equals(newValue, oldValue) && Directory.Exists(oldValue))
         {
-          if (!DirectoryHelpers.IsSubfolder(oldValue, newValue) && Directory.Exists(newValue))
+          if (Directory.Exists(newValue))
             throw new MangaDirectoryExists("Папка уже существует.", newValue, this);
 
           // Копируем папку на новый адрес при изменении имени.

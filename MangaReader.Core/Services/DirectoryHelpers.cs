@@ -76,18 +76,8 @@ namespace MangaReader.Core.Services
       Log.Add($"Move '{sourceFolder}' to '{destFolder}'");
       try
       {
-        var copied = CopyDirectory(sourceFolder, destFolder);
-        if (IsSubfolder(sourceFolder, destFolder))
-        {
-          foreach (var file in copied)
-          {
-            File.Delete(file);
-          }
-
-          DeleteEmptyFolder(sourceFolder);
-        }
-        else
-          Directory.Delete(sourceFolder, true);
+        CopyDirectory(sourceFolder, destFolder);
+        Directory.Delete(sourceFolder, true);
       }
       catch (System.Exception ex)
       {

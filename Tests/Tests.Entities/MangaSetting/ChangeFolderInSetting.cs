@@ -83,6 +83,7 @@ namespace Tests.Entities.MangaSetting
         var manga = await Builder.CreateAcomics().ConfigureAwait(false);
         var mangaFolder = manga.GetAbsoluteFolderPath();
         Directory.CreateDirectory(mangaFolder);
+        File.WriteAllText(Path.Combine(mangaFolder, "file.ext"), "testfile");
 
         string settingPath;
         switch (newSettingPath)
@@ -95,6 +96,9 @@ namespace Tests.Entities.MangaSetting
             break;
           case SettingDirectory.Parent:
             settingPath = "Download4";
+            break;
+          case SettingDirectory.AnotherMangaSubFolder:
+            settingPath = (await Builder.CreateAcomics().ConfigureAwait(false)).Folder + @"\Subfolder5";
             break;
           case SettingDirectory.AnotherMangaFolder:
             settingPath = (await Builder.CreateAcomics().ConfigureAwait(false)).Folder;
@@ -127,7 +131,9 @@ namespace Tests.Entities.MangaSetting
           var newMangaFolder = manga.GetAbsoluteFolderPath();
           Assert.AreNotEqual(mangaFolder, newMangaFolder);
           Assert.IsTrue(Directory.Exists(newMangaFolder));
+          Assert.IsTrue(File.Exists(Path.Combine(newMangaFolder, "file.ext")));
           Assert.IsFalse(Directory.Exists(mangaFolder));
+          Assert.IsFalse(File.Exists(Path.Combine(mangaFolder, "file.ext")));
 
           // Setting folders must be exists
           Assert.IsTrue(Directory.Exists(oldSettingFolder));
@@ -141,6 +147,7 @@ namespace Tests.Entities.MangaSetting
       Same,
       Subfolder,
       Parent,
+      AnotherMangaSubFolder,
       AnotherMangaFolder,
       AnotherMangaAnotherTypeFolder
     }

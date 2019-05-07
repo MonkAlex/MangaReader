@@ -75,7 +75,7 @@ namespace Tests.Entities.CRUD
       {
         var manga = await context.Get<IManga>().SingleAsync(m => m.Id == mangaId).ConfigureAwait(false);
         manga.Uri = Builder.ReadmangaUri;
-        Assert.CatchAsync<SaveValidationException>(async () => await context.Save(manga).ConfigureAwait(false));
+        Assert.CatchAsync<MangaSaveValidationException>(async () => await context.Save(manga).ConfigureAwait(false));
         Assert.AreEqual(Builder.ReadmangaUri, manga.Uri);
       }
 

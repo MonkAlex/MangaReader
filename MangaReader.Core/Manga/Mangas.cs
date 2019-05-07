@@ -481,28 +481,30 @@ namespace MangaReader.Core.Manga
 
     public override async Task BeforeSave(ChangeTrackerArgs args)
     {
+      var debugMessage = string.Empty;
       if (!args.IsNewEntity)
       {
         var uriState = args.GetPropertyState<Uri>(nameof(Uri));
         if (uriState.IsChanged)
         {
+          debugMessage += $" uri changed from '{uriState.OldValue}' to '{uriState.Value}'";
           using (Repository.GetEntityContext("Manga uri changed"))
           {
             var settings = ConfigStorage.Plugins.Where(p => p.GetParser().GetType() == Parser.GetType()).Select(p => p.GetSettings());
             var allowedUris = settings.Select(s => s.MainUri).ToList();
             if (allowedUris.Any(s => s.Host == uriState.OldValue.Host) &&
                 allowedUris.All(s => s.Host != uriState.Value.Host))
-              throw new SaveValidationException("Нельзя менять источник манги на другой сайт.", this);
+              throw new MangaSaveValidationException("Нельзя менять источник манги на другой сайт.", this);
           }
 
           var parseResult = Parser.ParseUri(uriState.Value);
           if (!parseResult.CanBeParsed || parseResult.Kind != UriParseKind.Manga)
-            throw new SaveValidationException("Источник манги не поддерживается.", this);
+            throw new MangaSaveValidationException("Источник манги не поддерживается.", this);
         }
       }
 
       if (!await this.IsValid().ConfigureAwait(false))
-        throw new SaveValidationException("Нельзя сохранять невалидную сущность", this);
+        throw new MangaSaveValidationException("Нельзя сохранять невалидную сущность", this);
 
       if (!args.CanAddEntities)
         Log.Add(Id != 0 ? $"Save {GetType().Name} with id {Id} ({Name})." : $"New {GetType().Name} ({Name}).");
@@ -519,12 +521,15 @@ namespace MangaReader.Core.Manga
       using (var context = Repository.GetEntityContext())
       {
         if (await context.Get<IManga>().AnyAsync(m => m.Id != this.Id && m.Folder == this.Folder).ConfigureAwait(false))
-          throw new SaveValidationException($"Другая манга уже использует папку {this.Folder}.", this);
+          throw new MangaSaveValidationException($"Другая манга уже использует папку {this.Folder}.", this);
       }
 
-      if (!args.IsNewEntity)
+      if (!args.IsNewEntity && !args.CanAddEntities)
       {
-        var dirName = args.GetPropertyState<string>(nameof(Folder)).OldValue;
+        var folderState = args.GetPropertyState<string>(nameof(Folder));
+        if (folderState.IsChanged)
+          debugMessage += $" folder changed from '{folderState.OldValue}' to '{folderState.Value}'";
+        var dirName = folderState.OldValue;
         var newValue = this.GetAbsoluteFolderPath();
         var oldValue = DirectoryHelpers.GetAbsoluteFolderPath(dirName);
         if (oldValue != null && !DirectoryHelpers.Equals(newValue, oldValue) && Directory.Exists(oldValue))
@@ -536,6 +541,9 @@ namespace MangaReader.Core.Manga
           DirectoryHelpers.MoveDirectory(oldValue, newValue);
         }
       }
+
+      if (!string.IsNullOrWhiteSpace(debugMessage) && !args.CanAddEntities)
+        Log.Add($"Manga {ServerName}({Id}) changed:" + debugMessage);
 
       await base.BeforeSave(args).ConfigureAwait(false);
     }

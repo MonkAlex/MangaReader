@@ -46,7 +46,7 @@ namespace MangaReader.Core.Convertation.Primitives
 
     protected async Task<object> RunSql(string command)
     {
-      using (var session = Repository.GetEntityContext())
+      using (var session = Repository.GetEntityContext($"Run sql ({command.Substring(0, 50).Replace('\r', ' ').Replace('\n', ' ').Replace("   ", " ")}...)"))
       {
         return await session.CreateSqlQuery(command).ConfigureAwait(false);
       }

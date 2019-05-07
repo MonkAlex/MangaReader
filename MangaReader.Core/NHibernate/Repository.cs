@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
@@ -8,14 +9,9 @@ namespace MangaReader.Core.NHibernate
 {
   public static class Repository
   {
-    public static RepositoryContext GetEntityContext()
+    public static RepositoryContext GetEntityContext([CallerMemberName] string name = null)
     {
-      return RepositoryContext.Create(Guid.NewGuid().ToString("D"));
-    }
-
-    public static RepositoryContext GetEntityContext(string name)
-    {
-      return RepositoryContext.Create(name);
+      return RepositoryContext.Create(name ?? Guid.NewGuid().ToString("D"));
     }
 
     public static T GetStateless<T>(int id) where T : Entity.IEntity

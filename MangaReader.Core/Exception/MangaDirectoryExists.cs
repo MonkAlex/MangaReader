@@ -1,6 +1,6 @@
 ﻿namespace MangaReader.Core.Exception
 {
-  public class MangaDirectoryExists : SaveValidationException
+  public class MangaDirectoryExists : MangaSaveValidationException
   {
     public string Directory { get; }
 

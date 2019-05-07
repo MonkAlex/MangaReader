@@ -50,7 +50,7 @@ namespace MangaReader.Core.NHibernate
     /// <typeparam name="T"></typeparam>
     /// <param name="entity">Сущность.</param>
     /// <returns>Изменения.</returns>
-    public ChangeTrackerArgs GetState<T>(T entity) where T : IEntity
+    private ChangeTrackerArgs GetState<T>(T entity) where T : IEntity
     {
       var impl = session.GetSessionImplementation();
       var key = impl.PersistenceContext.GetEntry(entity);

@@ -42,7 +42,7 @@ namespace Tests.Entities.Manga
         }
         var manga2 = await Builder.CreateReadmanga().ConfigureAwait(false);
 
-        var exception = Assert.CatchAsync<SaveValidationException>(async () =>
+        var exception = Assert.CatchAsync<MangaSaveValidationException>(async () =>
         {
           using (var context = Repository.GetEntityContext())
           {
@@ -54,13 +54,13 @@ namespace Tests.Entities.Manga
             await context.Save(manga3).ConfigureAwait(false);
           }
         });
-        Assert.IsAssignableFrom<SaveValidationException>(exception);
+        Assert.IsAssignableFrom<MangaSaveValidationException>(exception);
 
         AddRandomHistory(manga2);
         if (inSession)
         {
 #warning Сессия, запоротая исключением, запорота навсегда.
-          Assert.CatchAsync<SaveValidationException>(async () =>
+          Assert.CatchAsync<MangaSaveValidationException>(async () =>
           {
             await ResaveManga(manga2).ConfigureAwait(false);
           });

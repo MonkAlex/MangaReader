@@ -73,6 +73,7 @@ namespace MangaReader.Core.Services
 
     internal static void MoveDirectory(string sourceFolder, string destFolder)
     {
+      Log.Add($"Move '{sourceFolder}' to '{destFolder}'");
       try
       {
         var copied = CopyDirectory(sourceFolder, destFolder);

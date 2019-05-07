@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Core.Account;
 using MangaReader.Core.Entity;
+using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 
@@ -42,29 +43,52 @@ namespace MangaReader.Core.Services
     {
       if (!DirectoryHelpers.ValidateSettingPath(this.Folder))
         throw new DirectoryNotFoundException($"Не найдена папка {this.Folder}, папка должна существовать.");
-      
+
       if (!args.IsNewEntity)
       {
-        var folderState = args.GetPropertyState<string>(nameof(Folder));
-        var uriState = args.GetPropertyState<Uri>(nameof(MainUri));
-        if (folderState.IsChanged || uriState.IsChanged)
+        using (var context = Repository.GetEntityContext())
         {
-          using (var context = Repository.GetEntityContext())
+          var folderState = args.GetPropertyState<string>(nameof(Folder));
+          if (folderState.IsChanged)
           {
-            if (uriState.IsChanged &&
-                Login != null &&
-                Equals(Login.MainUri, uriState.OldValue) &&
-                !Equals(Login.MainUri, uriState.Value))
-              Login.MainUri = MainUri;
+            var mangaFolders = await context.Get<IManga>().Select(m => m.Folder).ToListAsync().ConfigureAwait(false);
+            mangaFolders = mangaFolders.Select(DirectoryHelpers.GetAbsoluteFolderPath).ToList();
+            var settingAbsoluteFolderPath = DirectoryHelpers.GetAbsoluteFolderPath(this.Folder);
+            if (mangaFolders.Any(f => DirectoryHelpers.Equals(f, settingAbsoluteFolderPath)))
+              throw new MangaSettingSaveValidationException($"Папка {this.Folder} используется мангой.", this);
+          }
 
-            var mangas = await context.Get<IManga>().Where(m => m.Setting == this).ToListAsync().ConfigureAwait(false);
-            foreach (var manga in mangas)
+          var uriState = args.GetPropertyState<Uri>(nameof(MainUri));
+          if (folderState.IsChanged || uriState.IsChanged)
+          {
+            if (!args.CanAddEntities)
             {
-              if (uriState.IsChanged)
-                manga.Uri = new Uri(manga.Uri.OriginalString.Replace(uriState.OldValue.GetLeftPart(UriPartial.Authority), uriState.Value.GetLeftPart(UriPartial.Authority)));
+              var debugMessage = $"Manga settings {MangaName}({Manga:D}) changed:";
               if (folderState.IsChanged)
-                manga.RefreshFolder();
-              await context.AddToTransaction(manga).ConfigureAwait(false);
+                debugMessage += $" folder changed from '{folderState.OldValue}' to '{folderState.Value}'";
+              if (uriState.IsChanged)
+                debugMessage += $" uri changed from '{uriState.OldValue}' to '{uriState.Value}'";
+              Log.Add(debugMessage);
+            }
+
+            // Changed manga will be added to session.
+            if (args.CanAddEntities)
+            {
+              if (uriState.IsChanged &&
+                  Login != null &&
+                  Equals(Login.MainUri, uriState.OldValue) &&
+                  !Equals(Login.MainUri, uriState.Value))
+                Login.MainUri = MainUri;
+
+              var mangas = await context.Get<IManga>().Where(m => m.Setting == this).ToListAsync().ConfigureAwait(false);
+              foreach (var manga in mangas)
+              {
+                if (uriState.IsChanged)
+                  manga.Uri = new Uri(manga.Uri.OriginalString.Replace(uriState.OldValue.GetLeftPart(UriPartial.Authority), uriState.Value.GetLeftPart(UriPartial.Authority)));
+                if (folderState.IsChanged)
+                  manga.RefreshFolder();
+                await context.AddToTransaction(manga).ConfigureAwait(false);
+              }
             }
           }
         }

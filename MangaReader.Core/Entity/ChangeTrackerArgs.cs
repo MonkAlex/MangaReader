@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace MangaReader.Core.Entity
+﻿namespace MangaReader.Core.Entity
 {
   public class ChangeTrackerArgs
   {
@@ -12,7 +10,7 @@ namespace MangaReader.Core.Entity
 
     public PropertyChangeTracker<T> GetPropertyState<T>(string propertyName) where T : class
     {
-      var propertyIndex = PropertyNames.ToList().IndexOf(propertyName);
+      var propertyIndex = System.Array.IndexOf(PropertyNames, propertyName);
       return new PropertyChangeTracker<T>(CurrentState[propertyIndex] as T, PreviousState?[propertyIndex] as T);
     }
 

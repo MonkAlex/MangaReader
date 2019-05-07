@@ -15,9 +15,7 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task AddHentaichanMultiPages()
     {
-      await Login().ConfigureAwait(false);
       var manga = await GetManga("http://henchan.me/manga/14212-love-and-devil-glava-25.html").ConfigureAwait(false);
-      await Unlogin().ConfigureAwait(false);
       Assert.AreEqual(25, manga.Chapters.Count);
       Assert.IsTrue(manga.HasChapters);
     }
@@ -76,7 +74,9 @@ namespace Tests.Entities.Manga
 
     private async Task<Hentaichan.Hentaichan> GetManga(string url)
     {
+      await Login().ConfigureAwait(false);
       var manga = await Mangas.CreateFromWeb(new Uri(url)).ConfigureAwait(false) as Hentaichan.Hentaichan;
+      await Unlogin().ConfigureAwait(false);
       return manga;
     }
 

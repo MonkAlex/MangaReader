@@ -43,7 +43,8 @@ namespace Hentaichan.Mangachan
 
       await Task.WhenAll(nodes.Select(async u =>
       {
-        var manga = await Mangas.Create(new Uri(u.Attributes[0].Value)).ConfigureAwait(false);
+#warning HACK for https in bookmarks
+        var manga = await Mangas.Create(new Uri(MainUri, new Uri(u.Attributes[0].Value).PathAndQuery)).ConfigureAwait(false);
         if (manga == null)
           return;
         manga.ServerName = WebUtility.HtmlDecode(u.InnerText);

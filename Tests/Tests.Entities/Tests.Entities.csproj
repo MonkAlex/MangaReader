@@ -98,6 +98,7 @@
     <Compile Include="MangaHistory\AcomicsChapters.cs" />
     <Compile Include="MangaInfo.cs" />
     <Compile Include="MangaInfos.cs" />
+    <Compile Include="MangaSetting\AllLoginTests.cs" />
     <Compile Include="MangaSetting\ChangeFolderInSetting.cs" />
     <Compile Include="MangaTest.cs" />
     <Compile Include="Manga\AcomicsStructure.cs" />

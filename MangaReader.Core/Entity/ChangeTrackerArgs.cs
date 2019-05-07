@@ -2,25 +2,31 @@
 {
   public class ChangeTrackerArgs
   {
-    public object[] CurrentState;
-    public object[] PreviousState;
-    public string[] PropertyNames;
-    public bool CanAddEntities;
-    public bool IsNewEntity;
+    private readonly object[] currentState;
+    private readonly object[] previousState;
+    private readonly string[] propertyNames;
+    public readonly bool CanAddEntities;
+    public readonly bool IsNewEntity;
 
     public PropertyChangeTracker<T> GetPropertyState<T>(string propertyName) where T : class
     {
-      var propertyIndex = System.Array.IndexOf(PropertyNames, propertyName);
-      return new PropertyChangeTracker<T>(CurrentState[propertyIndex] as T, PreviousState?[propertyIndex] as T);
+      var propertyIndex = System.Array.IndexOf(propertyNames, propertyName);
+      return new PropertyChangeTracker<T>(currentState[propertyIndex] as T, previousState?[propertyIndex] as T);
+    }
+
+    public void SetPropertyState(string propertyName, object value)
+    {
+      var propertyIndex = System.Array.IndexOf(propertyNames, propertyName);
+      currentState[propertyIndex] = value;
     }
 
     public ChangeTrackerArgs(object[] currentState, object[] previousState, string[] propertyNames, bool canAddEntities)
     {
-      this.CurrentState = currentState;
-      this.PreviousState = previousState;
-      this.PropertyNames = propertyNames;
+      this.currentState = currentState;
+      this.previousState = previousState;
+      this.propertyNames = propertyNames;
       this.CanAddEntities = canAddEntities;
-      this.IsNewEntity = PreviousState == null;
+      this.IsNewEntity = this.previousState == null;
     }
   }
 

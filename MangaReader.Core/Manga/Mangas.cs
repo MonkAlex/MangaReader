@@ -510,12 +510,12 @@ namespace MangaReader.Core.Manga
         Log.Add(Id != 0 ? $"Save {GetType().Name} with id {Id} ({Name})." : $"New {GetType().Name} ({Name}).");
 
       RefreshFolder();
-      args.CurrentState[args.PropertyNames.ToList().IndexOf(nameof(Folder))] = Folder;
+      args.SetPropertyState(nameof(Folder), Folder);
 
       if (CompressionMode == null)
       {
         CompressionMode = this.GetDefaultCompression();
-        args.CurrentState[args.PropertyNames.ToList().IndexOf(nameof(CompressionMode))] = CompressionMode;
+        args.SetPropertyState(nameof(CompressionMode), CompressionMode);
       }
 
       using (var context = Repository.GetEntityContext())

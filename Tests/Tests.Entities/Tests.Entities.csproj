@@ -90,6 +90,7 @@
     <Compile Include="Compression\MangaCompressionDeleteFolders.cs" />
     <Compile Include="Compression\ArchiveNotInclude.cs" />
     <Compile Include="Compression\CRUD.cs" />
+    <Compile Include="Converter\MangaDateConverterTests.cs" />
     <Compile Include="CRUD\MangaHistory.cs" />
     <Compile Include="CRUD\Manga.cs" />
     <Compile Include="Environment.cs" />

@@ -119,6 +119,7 @@
     <Compile Include="Search\Henchan.cs" />
     <Compile Include="Search\Mangachan.cs" />
     <Compile Include="Services\FolderNaming.cs" />
+    <Compile Include="Services\LibraryFilterTests.cs" />
     <Compile Include="TestClass.cs" />
   </ItemGroup>
   <ItemGroup>

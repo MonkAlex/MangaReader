@@ -29,7 +29,6 @@ namespace MangaReader.Core.Update
     /// <remarks>Завершает обновление и удаляет временные файлы.</remarks>
     public static async Task Initialize()
     {
-      Clean();
       Log.InfoFormat("Версия приложения - {0}.", ClientVersion);
       if (ConfigStorage.Instance.AppConfig.UpdateReader)
         await StartUpdate().ConfigureAwait(false);
@@ -76,23 +75,6 @@ namespace MangaReader.Core.Update
         UpdateFilename, args, ConfigStorage.WorkFolder);
 
       Process.Start(new ProcessStartInfo { FileName = UpdateFilename, Arguments = args });
-    }
-
-    /// <summary>
-    /// Чистка файлов, используемых версией 1.38 и ниже.
-    /// </summary>
-    private static void Clean()
-    {
-      try
-      {
-        var updateExe = Path.Combine(ConfigStorage.WorkFolder, "update.exe");
-        if (File.Exists(updateExe))
-        {
-          File.Delete(updateExe);
-          File.Delete(Path.Combine(ConfigStorage.WorkFolder, "update.it"));
-        }
-      }
-      catch { }
     }
 
     private static void OnNewVersionFound(string e)

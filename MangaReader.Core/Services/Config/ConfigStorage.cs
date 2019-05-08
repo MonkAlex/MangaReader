@@ -101,17 +101,7 @@ namespace MangaReader.Core.Services.Config
     {
       return Plugins.SingleOrDefault(p => p.MangaType == typeof(T));
     }
-
-    public static IPlugin GetPlugin(Type mangaType)
-    {
-      return Plugins.SingleOrDefault(p => p.MangaType == mangaType);
-    }
-
-    public static IPlugin GetPlugin(Guid mangaGuid)
-    {
-      return Plugins.SingleOrDefault(p => p.MangaGuid == mangaGuid);
-    }
-
+    
     public static void RefreshPlugins()
     {
       Loader.Init();

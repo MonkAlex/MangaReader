@@ -44,9 +44,9 @@ namespace MangaReader.Core.Services
 
         using (await ThrottleService.WaitAsync().ConfigureAwait(false))
         {
-          var webClient = client ?? new CookieClient();
-          var task = webClient.DownloadStringTaskAsync(url).ConfigureAwait(false);
-          return new Page(await task, webClient.ResponseUri);
+          var cookieClient = client ?? new CookieClient();
+          var task = cookieClient.DownloadStringTaskAsync(url).ConfigureAwait(false);
+          return new Page(await task, cookieClient.ResponseUri);
         }
       }
       catch (UriFormatException ex)

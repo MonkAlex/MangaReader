@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Grouple;
+using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
@@ -11,10 +12,10 @@ using NUnit.Framework;
 namespace Tests.Entities.Manga
 {
   [TestFixture]
-  public class ReadmangaMoved : TestClass
+  public class MangaMove : TestClass
   {
     [Test]
-    public async Task CreateWithHistoryAndMove()
+    public async Task CreateReadmangaWithHistoryAndMove()
     {
       var model = new MangaReader.Core.Services.LibraryViewModel();
       using (var context = Repository.GetEntityContext())
@@ -42,6 +43,27 @@ namespace Tests.Entities.Manga
 
         var chartersNotInHistory = History.GetItemsWithoutHistory(volume);
         Assert.AreEqual(0, chartersNotInHistory.Count);
+      }
+    }
+
+    [Test]
+    public async Task AcomicsMoveTo([Values]bool sameSite)
+    {
+      using (var context = Repository.GetEntityContext())
+      {
+        var manga = await Builder.CreateAcomics().ConfigureAwait(false);
+
+        async Task SaveManga()
+        {
+          await context.Save(manga).ConfigureAwait(false);
+        }
+
+        manga.Uri = sameSite ? new Uri(MangaInfos.Acomics.SuperScienceFriends.Uri) : new Uri(MangaInfos.Henchan.TwistedIntent.Uri);
+
+        if (sameSite)
+          Assert.DoesNotThrowAsync(SaveManga);
+        else
+          Assert.ThrowsAsync<MangaSaveValidationException>(SaveManga);
       }
     }
   }

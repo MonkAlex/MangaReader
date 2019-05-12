@@ -16,6 +16,11 @@ namespace Hentaichan
 {
   public class HentaichanLogin : BaseLogin
   {
+    protected override CookieClient GetClient()
+    {
+      return new HentaichanClient() { BaseAddress = MainUri.ToString(), Cookie = this.ClientCookie };
+    }
+
     protected override async Task<List<IManga>> DownloadBookmarks()
     {
       var bookmarks = new List<IManga>();

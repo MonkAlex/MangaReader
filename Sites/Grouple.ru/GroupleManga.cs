@@ -55,7 +55,7 @@ namespace Grouple
     /// </summary>
     public override async Task Refresh()
     {
-      var page = await Page.GetPageAsync(this.Uri).ConfigureAwait(false);
+      var page = await Page.GetPageAsync(this.Uri, Parser.GetClient()).ConfigureAwait(false);
       if (!page.HasContent)
         return;
 
@@ -68,9 +68,9 @@ namespace Grouple
       }
 
       // Если на странице редирект - выполняем его и получаем новую ссылку на мангу.
-      if (page.Content.ToLowerInvariant().Contains(Grouple.Parser.CookieKey))
+      if (page.Content.ToLowerInvariant().Contains(Grouple.GroupleParser.CookieKey))
       {
-        var newUri = await Grouple.Parser.GetRedirectUri(page).ConfigureAwait(false);
+        var newUri = await (Parser as Grouple.GroupleParser).GetRedirectUri(page).ConfigureAwait(false);
         if (!this.Uri.Equals(newUri))
         {
           this.Uri = newUri;

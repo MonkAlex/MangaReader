@@ -18,6 +18,7 @@ namespace MangaReader.Core.NHibernate
       Map(x => x.MainUri);
       Map(x => x.FolderNamingStrategy);
       References(x => x.Login).Cascade.All().NotFound.Ignore();
+      References(x => x.ProxySetting);
     }
   }
 }

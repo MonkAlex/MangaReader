@@ -39,6 +39,11 @@ namespace MangaReader.Core.Services
     /// </summary>
     public Guid FolderNamingStrategy { get; set; }
 
+    /// <summary>
+    /// Настройки прокси.
+    /// </summary>
+    public ProxySetting ProxySetting { get; set; }
+
     public override async Task BeforeSave(ChangeTrackerArgs args)
     {
       if (!DirectoryHelpers.ValidateSettingPath(this.Folder))

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Text;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Core.Account
 {
@@ -33,16 +34,10 @@ namespace MangaReader.Core.Account
       return baseResponce;
     }
 
-    public CookieClient() : this(new CookieContainer())
+    protected CookieClient()
     {
-
-    }
-
-    public CookieClient(CookieContainer cookie)
-    {
+      this.Cookie = new CookieContainer();
       this.Encoding = Encoding.UTF8;
-      this.Proxy = SystemProxySetting.SystemProxy.Value;
-      this.Cookie = cookie;
       Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0";
     }
   }

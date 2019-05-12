@@ -35,7 +35,7 @@ namespace MangaReader.Core.Services
     /// <param name="client">Клиент, если нужен специфичный.</param>
     /// <param name="restartCounter">Попыток скачивания.</param>
     /// <returns>Исходный код страницы.</returns>
-    public static async Task<Page> GetPageAsync(Uri url, CookieClient client = null, int restartCounter = 0)
+    public static async Task<Page> GetPageAsync(Uri url, CookieClient client, int restartCounter = 0)
     {
       try
       {
@@ -44,7 +44,7 @@ namespace MangaReader.Core.Services
 
         using (await ThrottleService.WaitAsync().ConfigureAwait(false))
         {
-          var cookieClient = client ?? new CookieClient();
+          var cookieClient = client;
           var task = cookieClient.DownloadStringTaskAsync(url).ConfigureAwait(false);
           return new Page(await task, cookieClient.ResponseUri);
         }

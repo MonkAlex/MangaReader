@@ -19,7 +19,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Grouple
 {
-  public class Parser : BaseSiteParser
+  public abstract class GroupleParser : BaseSiteParser
   {
     /// <summary>
     /// Ключ с куками для редиректа.
@@ -36,19 +36,19 @@ namespace Grouple
     /// </summary>
     /// <param name="page">Содержимое страницы по ссылке.</param>
     /// <returns>Новая ссылка.</returns>
-    public static Task<Uri> GetRedirectUri(Page page)
+    public Task<Uri> GetRedirectUri(Page page)
     {
       return GetRedirectUriInternal(page, 0);
     }
 
-    private static async Task<Uri> GetRedirectUriInternal(Page page, int restartCount)
+    private async Task<Uri> GetRedirectUriInternal(Page page, int restartCount)
     {
       var fullUri = page.ResponseUri.OriginalString;
 
       CookieClient client = null;
       try
       {
-        client = new CookieClient();
+        client = this.GetClient();
         var cookie = new Cookie
         {
           Name = CookieKey,
@@ -93,7 +93,7 @@ namespace Grouple
     {
       groupleChapter.Container.Clear();
       var document = new HtmlDocument();
-      document.LoadHtml((await Page.GetPageAsync(groupleChapter.Uri).ConfigureAwait(false)).Content);
+      document.LoadHtml((await Page.GetPageAsync(groupleChapter.Uri, GetClient()).ConfigureAwait(false)).Content);
       var node = document.DocumentNode.SelectNodes("//div[@class=\"pageBlock container reader-bottom\"]").FirstOrDefault();
       if (node == null)
         return;
@@ -119,7 +119,7 @@ namespace Grouple
 
     public override async Task UpdateNameAndStatus(IManga manga)
     {
-      var page = await Page.GetPageAsync(manga.Uri).ConfigureAwait(false);
+      var page = await Page.GetPageAsync(manga.Uri, GetClient()).ConfigureAwait(false);
       var localizedName = new MangaName();
       try
       {
@@ -170,7 +170,7 @@ namespace Grouple
       var dic = new Dictionary<Uri, string>();
       var links = new List<Uri> { };
       var description = new List<string> { };
-      var page = await Page.GetPageAsync(manga.Uri).ConfigureAwait(false);
+      var page = await Page.GetPageAsync(manga.Uri, GetClient()).ConfigureAwait(false);
       var hasCopyrightNotice = false;
       try
       {
@@ -230,7 +230,7 @@ namespace Grouple
       // Page : -
 
       var hosts = ConfigStorage.Plugins
-        .Where(p => p.GetParser().GetType() == typeof(Parser))
+        .Where(p => p.GetParser() is GroupleParser)
         .Select(p => p.GetSettings().MainUri);
 
       foreach (var host in hosts)
@@ -257,18 +257,19 @@ namespace Grouple
       return GetPreviewsImpl(manga);
     }
 
-    protected override async Task<Tuple<HtmlNodeCollection, Uri>> GetMangaNodes(string name, Uri host, CookieClient client)
+    protected override async Task<(HtmlNodeCollection Nodes, Uri Uri, CookieClient CookieClient)> GetMangaNodes(string name, Uri host)
     {
       var searchHost = new Uri(host, "search");
+      var client = GetClient();
       var page = await client.UploadValuesTaskAsync(searchHost, new NameValueCollection() { { "q", WebUtility.UrlEncode(name) } }).ConfigureAwait(false);
       if (page == null)
-        return null;
+        return (null, null, null);
 
       return await Task.Run(() =>
       {
         var document = new HtmlDocument();
         document.LoadHtml(Encoding.UTF8.GetString(page));
-        return new Tuple<HtmlNodeCollection, Uri>(document.DocumentNode.SelectNodes("//div[contains(@class, 'col-sm-6')]"), host);
+        return (document.DocumentNode.SelectNodes("//div[contains(@class, 'col-sm-6')]"), host, client);
       }).ConfigureAwait(false);
     }
 
@@ -298,7 +299,7 @@ namespace Grouple
     private async Task<IEnumerable<byte[]>> GetPreviewsImpl(IManga manga)
     {
       var document = new HtmlDocument();
-      var client = new CookieClient();
+      var client = this.GetClient();
       document.LoadHtml((await Page.GetPageAsync(manga.Uri, client).ConfigureAwait(false)).Content);
       var banners = document.DocumentNode.SelectSingleNode("//div[@class='picture-fotorama']");
       var images = new List<byte[]>();
@@ -335,29 +336,6 @@ namespace Grouple
       }
 
       return images;
-    }
-
-    public override IMapper GetMapper()
-    {
-      return Mappers.GetOrAdd(typeof(Parser), type =>
-      {
-        var config = new MapperConfiguration(cfg =>
-        {
-          cfg.AddCollectionMappers();
-          cfg.CreateMap<VolumeDto, Volume>()
-            .EqualityComparison((src, dest) => src.Number == dest.Number);
-          cfg.CreateMap<ChapterDto, MangaReader.Core.Manga.Chapter>()
-            .ConstructUsing(dto => new GroupleChapter(dto.Uri, dto.Name))
-            .EqualityComparison((src, dest) => src.Number == dest.Number);
-          cfg.CreateMap<ChapterDto, GroupleChapter>()
-            .IncludeBase<ChapterDto, MangaReader.Core.Manga.Chapter>()
-            .ConstructUsing(dto => new GroupleChapter(dto.Uri, dto.Name))
-            .EqualityComparison((src, dest) => src.Number == dest.Number);
-          cfg.CreateMap<MangaPageDto, MangaPage>()
-            .EqualityComparison((src, dest) => src.ImageLink == dest.ImageLink);
-        });
-        return config.CreateMapper();
-      });
     }
   }
 }

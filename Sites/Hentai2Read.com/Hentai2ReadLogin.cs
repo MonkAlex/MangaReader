@@ -21,6 +21,11 @@ namespace Hentai2Read.com
 
     internal string LogoutNonce { get; set; }
 
+    protected override CookieClient GetClient()
+    {
+      return new Hentai2ReadClient() { BaseAddress = MainUri.ToString(), Cookie = this.ClientCookie };
+    }
+
     public override async Task<bool> DoLogin()
     {
       if (IsLogined || !this.CanLogin)

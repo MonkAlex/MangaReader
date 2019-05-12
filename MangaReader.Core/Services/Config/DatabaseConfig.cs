@@ -59,11 +59,31 @@ namespace MangaReader.Core.Services.Config
           Manga = plugin.MangaGuid,
           MangaName = plugin.Name,
           DefaultCompression = Compression.CompressionMode.Manga,
+          ProxySetting = await context.Get<ProxySetting>().SingleAsync(s => s.SettingType == ProxySettingType.System).ConfigureAwait(false),
           Login = await Login.Get(plugin.LoginType).ConfigureAwait(false)
         };
 
         await context.Save(setting).ConfigureAwait(false);
         settings.Add(setting);
+      }
+
+      foreach (var setting in settings)
+      {
+        MangaSettingCache.Set(new MangaSettingCache(setting));
+      }
+    }
+
+    private static async Task CreateDefaultProxySettings(RepositoryContext context)
+    {
+      var types = new[] { ProxySettingType.NoProxy, ProxySettingType.System };
+      foreach (var settingType in types)
+      {
+        if (!await context.Get<ProxySetting>().AnyAsync(s => s.SettingType == settingType)
+          .ConfigureAwait(false))
+        {
+          var noProxy = new ProxySetting(settingType);
+          await context.Save(noProxy).ConfigureAwait(false);
+        }
       }
     }
 
@@ -77,7 +97,10 @@ namespace MangaReader.Core.Services.Config
     {
       await Repository.GetStateless<DatabaseConfig>().SingleOrCreate().ConfigureAwait(false);
       using (var context = Repository.GetEntityContext("Initialize database config"))
+      {
+        await CreateDefaultProxySettings(context).ConfigureAwait(false);
         await CreateDefaultMangaSettings(context).ConfigureAwait(false);
+      }
     }
   }
 }

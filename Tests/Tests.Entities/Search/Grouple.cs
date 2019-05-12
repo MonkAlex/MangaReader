@@ -18,7 +18,7 @@ namespace Tests.Entities.Search
 
     private IEnumerable<IManga> Search(string name)
     {
-      return new global::Grouple.Parser().Search(name).ToEnumerable();
+      return new global::Grouple.MintmangaParser().Search(name).ToEnumerable();
     }
 
   }

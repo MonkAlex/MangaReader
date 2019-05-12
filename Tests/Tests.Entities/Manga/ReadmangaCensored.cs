@@ -14,7 +14,7 @@ namespace Tests.Entities.Manga
   [TestFixture]
   public class ReadmangaCensored : TestClass
   {
-    private Parser parser = new Grouple.Parser();
+    private ReadmangaParser parser = new Grouple.ReadmangaParser();
 
     // Not censored
     // http://readmanga.me/black_butler_anthology_comic_rainbow_butler/vol1/6

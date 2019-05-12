@@ -2,9 +2,11 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Core.Exception;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Manga
 {
@@ -93,7 +95,11 @@ namespace MangaReader.Core.Manga
           if (!Directory.Exists(chapterFolder))
             Directory.CreateDirectory(chapterFolder);
 
-          var file = await DownloadManager.DownloadImage(this.ImageLink).ConfigureAwait(false);
+          var manga = Chapter?.Volume?.Manga ?? Chapter?.Manga ?? Manga;
+          var plugin = ConfigStorage.Plugins.Single(p => p.MangaType == manga.GetType());
+          var cache = MangaSettingCache.Get(plugin.GetType());
+
+          var file = await DownloadManager.DownloadImage(this.ImageLink, cache).ConfigureAwait(false);
           if (!file.Exist)
             OnDownloadFailed();
           var fileName = this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + file.Extension;
@@ -129,13 +135,15 @@ namespace MangaReader.Core.Manga
     /// <param name="uri">Ссылка на страницу.</param>
     /// <param name="imageLink">Ссылка на изображение.</param>
     /// <param name="number">Номер страницы.</param>
-    public MangaPage(Uri uri, Uri imageLink, int number)
+    /// <param name="chapter">Глава, которой принадлежит страница.</param>
+    public MangaPage(Uri uri, Uri imageLink, int number, Chapter chapter)
     {
       this.Uri = uri;
       this.ImageLink = imageLink;
       this.Number = number;
       this.MaxAttempt = 3;
       this.restartCounter = 0;
+      this.Chapter = chapter;
     }
 
     protected MangaPage()

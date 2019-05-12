@@ -25,13 +25,15 @@ namespace MangaReader.Core.Convertation.Config
         }
 
         await settings.SaveAll(context).ConfigureAwait(false);
+
+        await MangaSettingCache.RevalidateCache().ConfigureAwait(false);
       }
     }
 
     public From47To48()
     {
       this.Name = "Поддержка прокси";
-      this.Version = new Version(1, 48, 0);
+      this.Version = new Version(1, 48, 1);
     }
   }
 }

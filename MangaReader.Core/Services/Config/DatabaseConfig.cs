@@ -67,10 +67,7 @@ namespace MangaReader.Core.Services.Config
         settings.Add(setting);
       }
 
-      foreach (var setting in settings)
-      {
-        MangaSettingCache.Set(new MangaSettingCache(setting));
-      }
+      await MangaSettingCache.RevalidateCache().ConfigureAwait(false);
     }
 
     private static async Task CreateDefaultProxySettings(RepositoryContext context)

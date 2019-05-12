@@ -113,7 +113,7 @@ namespace Grouple
         if (!Uri.TryCreate(uriString, UriKind.Absolute, out Uri imageLink))
           imageLink = new Uri(groupleChapter.Uri.GetLeftPart(UriPartial.Authority) + uriString);
 
-        groupleChapter.Container.Add(new GroupleMangaPage(groupleChapter.Uri, imageLink, i, serversList));
+        groupleChapter.Container.Add(new GroupleMangaPage(groupleChapter.Uri, imageLink, i, serversList, groupleChapter));
       }
     }
 

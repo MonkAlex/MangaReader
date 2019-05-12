@@ -119,7 +119,7 @@ namespace Hentai2Read.com
         for (var i = 0; i < jsonParsed.Count; i++)
         {
           var uriString = jsonParsed[i].ToString();
-          pages.Add(new MangaPage(chapter.Uri, new Uri("https://static.hentaicdn.com/hentai" + uriString), i + 1));
+          pages.Add(new MangaPage(chapter.Uri, new Uri("https://static.hentaicdn.com/hentai" + uriString), i + 1, chapter));
         }
       }
       catch (Exception ex) { Log.Exception(ex); }

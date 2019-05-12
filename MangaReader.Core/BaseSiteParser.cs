@@ -125,22 +125,6 @@ namespace MangaReader.Core
 
     protected abstract Task<IManga> GetMangaFromNode(Uri host, CookieClient client, HtmlNode manga);
 
-    public virtual IMapper GetMapper()
-    {
-      return Mappers.GetOrAdd(typeof(BaseSiteParser), type =>
-      {
-        var config = new MapperConfiguration(cfg =>
-        {
-          cfg.AddCollectionMappers();
-          cfg.CreateMap<VolumeDto, Volume>()
-            .EqualityComparison((src, dest) => src.Number == dest.Number);
-          cfg.CreateMap<ChapterDto, Chapter>()
-            .EqualityComparison((src, dest) => src.Number == dest.Number);
-          cfg.CreateMap<MangaPageDto, MangaPage>()
-            .EqualityComparison((src, dest) => src.ImageLink == dest.ImageLink);
-        });
-        return config.CreateMapper();
-      });
-    }
+    public abstract IMapper GetMapper();
   }
 }

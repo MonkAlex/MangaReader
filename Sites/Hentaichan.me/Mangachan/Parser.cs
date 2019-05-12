@@ -257,7 +257,7 @@ namespace Hentaichan.Mangachan
         var imgs = Regex.Match(document.DocumentNode.OuterHtml, @"""(fullimg.*)", RegexOptions.IgnoreCase).Groups[1].Value.Remove(0, 9);
         foreach (Match match in Regex.Matches(imgs, @"""(.*?)"","))
         {
-          pages.Add(new MangaPage(chapter.Uri, new Uri(match.Groups[1].Value), i++));
+          pages.Add(new MangaPage(chapter.Uri, new Uri(match.Groups[1].Value), i++, chapter));
         }
       }
       catch (Exception ex) { Log.Exception(ex); }

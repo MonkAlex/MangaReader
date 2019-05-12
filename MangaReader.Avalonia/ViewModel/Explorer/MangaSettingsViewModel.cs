@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Core.Services;
 using System.Windows.Input;
+using Dialogs.Buttons;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 
@@ -99,20 +100,37 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     private async Task SaveConfig()
     {
-      using (var context = Repository.GetEntityContext())
+      try
       {
-        var setting = await context.Get<MangaSetting>().SingleOrDefaultAsync(s => s.Id == mangaSettingsId).ConfigureAwait(true);
-        if (setting != null)
+        using (var context = Repository.GetEntityContext())
         {
-          setting.CompressManga = this.Compress == true;
-          setting.OnlyUpdate = this.OnlyUpdate == true;
-          setting.Folder = this.Folder;
-          setting.DefaultCompression = this.Compression;
-          setting.FolderNamingStrategy = this.FolderNamingStrategy.Id;
-          if (Uri.TryCreate(this.MainUri, UriKind.Absolute, out Uri parsedUri) && parsedUri != setting.MainUri)
-            setting.MainUri = parsedUri;
-          await context.Save(setting).ConfigureAwait(true);
+          var setting = await context.Get<MangaSetting>()
+            .SingleOrDefaultAsync(s => s.Id == mangaSettingsId)
+            .ConfigureAwait(true);
+          if (setting != null)
+          {
+            setting.CompressManga = this.Compress == true;
+            setting.OnlyUpdate = this.OnlyUpdate == true;
+            setting.Folder = this.Folder;
+            setting.DefaultCompression = this.Compression;
+            setting.FolderNamingStrategy = this.FolderNamingStrategy.Id;
+            if (Uri.TryCreate(this.MainUri, UriKind.Absolute, out Uri parsedUri) && parsedUri != setting.MainUri)
+              setting.MainUri = parsedUri;
+            await context.Save(setting).ConfigureAwait(true);
+          }
         }
+      }
+      catch (Exception ex)
+      {
+        Log.Exception(ex);
+
+        var dialog = new Dialogs.Avalonia.Dialog
+        {
+          Title = "Не удалось сохранить настройки",
+          Description = ex.Message
+        };
+        dialog.Buttons.AddButton(DefaultButtons.OkButton);
+        await dialog.ShowAsync().ConfigureAwait(true);
       }
     }
 

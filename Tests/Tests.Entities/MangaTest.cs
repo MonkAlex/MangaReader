@@ -63,6 +63,7 @@ namespace Tests
         }
 
         manga = await Mangas.CreateFromWeb(new Uri(mangaInfo.Uri)).ConfigureAwait(false);
+        DirectoryHelpers.DeleteDirectory(manga.GetAbsoluteFolderPath());
         sw.Start();
         await manga.Download().ConfigureAwait(false);
       }

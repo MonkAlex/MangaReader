@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Core.Account
 {
@@ -32,6 +33,8 @@ namespace MangaReader.Core.Account
           return SystemProxy.Value;
         case ProxySettingType.Manual:
           return new WebProxy(Address, true, null, new NetworkCredential(UserName, Password));
+        case ProxySettingType.Parent:
+          return MangaSettingCache.Get(typeof(IPlugin)).Proxy;
         default:
           throw new ArgumentOutOfRangeException();
       }
@@ -52,6 +55,7 @@ namespace MangaReader.Core.Account
   {
     NoProxy,
     System,
-    Manual
+    Manual,
+    Parent
   }
 }

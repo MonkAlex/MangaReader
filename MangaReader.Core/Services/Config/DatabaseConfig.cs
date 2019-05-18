@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Core.Account;
@@ -22,6 +23,7 @@ namespace MangaReader.Core.Services.Config
     /// <summary>
     /// Уникальный идентификатор базы данных.
     /// </summary>
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public Guid UniqueId
     {
       get
@@ -38,6 +40,11 @@ namespace MangaReader.Core.Services.Config
     }
 
     private Guid uniqueId;
+
+    /// <summary>
+    /// Настройки прокси.
+    /// </summary>
+    public ProxySetting ProxySetting { get; set; }
 
     /// <summary>
     /// Создать дефолтные настройки для новых типов.
@@ -59,7 +66,7 @@ namespace MangaReader.Core.Services.Config
           Manga = plugin.MangaGuid,
           MangaName = plugin.Name,
           DefaultCompression = Compression.CompressionMode.Manga,
-          ProxySetting = await context.Get<ProxySetting>().SingleAsync(s => s.SettingType == ProxySettingType.System).ConfigureAwait(false),
+          ProxySetting = await context.Get<ProxySetting>().SingleAsync(s => s.SettingType == ProxySettingType.Parent).ConfigureAwait(false),
           Login = await Login.Get(plugin.LoginType).ConfigureAwait(false)
         };
 
@@ -70,18 +77,21 @@ namespace MangaReader.Core.Services.Config
       await MangaSettingCache.RevalidateCache().ConfigureAwait(false);
     }
 
-    private static async Task CreateDefaultProxySettings(RepositoryContext context)
+    private static async Task<List<ProxySetting>> CreateDefaultProxySettings(RepositoryContext context)
     {
-      var types = new[] { ProxySettingType.NoProxy, ProxySettingType.System };
+      var types = new[] { ProxySettingType.NoProxy, ProxySettingType.System, ProxySettingType.Parent };
+      var created = new List<ProxySetting>();
       foreach (var settingType in types)
       {
-        if (!await context.Get<ProxySetting>().AnyAsync(s => s.SettingType == settingType)
-          .ConfigureAwait(false))
+        if (!await context.Get<ProxySetting>().AnyAsync(s => s.SettingType == settingType).ConfigureAwait(false))
         {
-          var noProxy = new ProxySetting(settingType);
-          await context.Save(noProxy).ConfigureAwait(false);
+          var proxy = new ProxySetting(settingType);
+          await context.Save(proxy).ConfigureAwait(false);
+          created.Add(proxy);
         }
       }
+
+      return created;
     }
 
     public DatabaseConfig()
@@ -92,10 +102,15 @@ namespace MangaReader.Core.Services.Config
 
     public static async Task Initialize()
     {
-      await Repository.GetStateless<DatabaseConfig>().SingleOrCreate().ConfigureAwait(false);
       using (var context = Repository.GetEntityContext("Initialize database config"))
       {
-        await CreateDefaultProxySettings(context).ConfigureAwait(false);
+        var config = await Repository.GetStateless<DatabaseConfig>().SingleOrCreate().ConfigureAwait(false);
+        var proxySettings = await CreateDefaultProxySettings(context).ConfigureAwait(false);
+        if (config.ProxySetting == null)
+        {
+          config.ProxySetting = proxySettings.FirstOrDefault(s => s.SettingType == ProxySettingType.System);
+          await context.Save(config).ConfigureAwait(false);
+        }
         await CreateDefaultMangaSettings(context).ConfigureAwait(false);
       }
     }

@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
+using System.Threading.Tasks;
+using MangaReader.Core.Entity;
 using MangaReader.Core.Services;
 
 namespace MangaReader.Core.Account
 {
+  [DebuggerDisplay("Type = {SettingType}, Id = {Id}, User = {UserName}")]
   public class ProxySetting : Entity.Entity
   {
     internal static readonly Lazy<IWebProxy> SystemProxy = new Lazy<IWebProxy>(() =>
@@ -34,10 +38,32 @@ namespace MangaReader.Core.Account
         case ProxySettingType.Manual:
           return new WebProxy(Address, true, null, new NetworkCredential(UserName, Password));
         case ProxySettingType.Parent:
-          return MangaSettingCache.Get(typeof(IPlugin)).Proxy;
+          return MangaSettingCache.Get(MangaSettingCache.RootPluginType).Proxy;
         default:
           throw new ArgumentOutOfRangeException();
       }
+    }
+
+    public override Task BeforeSave(ChangeTrackerArgs args)
+    {
+      if (!args.IsNewEntity && !args.CanAddEntities)
+      {
+        var typeState = args.GetPropertyState<ProxySettingType>(nameof(SettingType));
+        if (typeState.IsChanged)
+          MangaSettingCache.RevalidateSetting(this);
+        else
+        {
+          var userNameState = args.GetPropertyState<string>(nameof(UserName));
+          var passwordState = args.GetPropertyState<string>(nameof(Password));
+          var addressState = args.GetPropertyState<Uri>(nameof(Address));
+          if (userNameState.IsChanged || passwordState.IsChanged || addressState.IsChanged)
+          {
+            MangaSettingCache.RevalidateSetting(this);
+          }
+        }
+      }
+
+      return base.BeforeSave(args);
     }
 
     protected ProxySetting()

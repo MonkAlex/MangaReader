@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Core.Account;
+using MangaReader.Core.Entity;
 using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Core.Services.Config
@@ -46,12 +47,25 @@ namespace MangaReader.Core.Services.Config
     /// </summary>
     public ProxySetting ProxySetting { get; set; }
 
+    public override Task BeforeSave(ChangeTrackerArgs args)
+    {
+      if (!args.IsNewEntity && !args.CanAddEntities)
+      {
+        var proxyState = args.GetPropertyState<ProxySetting>(nameof(ProxySetting));
+        if (proxyState.IsChanged)
+          MangaSettingCache.RevalidateSetting(MangaSettingCache.RootPluginType, proxyState.Value);
+      }
+
+      return base.BeforeSave(args);
+    }
+
     /// <summary>
     /// Создать дефолтные настройки для новых типов.
     /// </summary>
     /// <param name="context">Контекст подключения к БД.</param>
+    /// <param name="databaseConfig">Настройки приложения.</param>
     /// <returns>Коллекция всех настроек.</returns>
-    private static async Task CreateDefaultMangaSettings(RepositoryContext context)
+    private static async Task CreateDefaultMangaSettings(RepositoryContext context, DatabaseConfig databaseConfig)
     {
       var settings = await context.Get<MangaSetting>().ToListAsync().ConfigureAwait(false);
       var plugins = ConfigStorage.Plugins;
@@ -74,7 +88,11 @@ namespace MangaReader.Core.Services.Config
         settings.Add(setting);
       }
 
-      await MangaSettingCache.RevalidateCache().ConfigureAwait(false);
+      MangaSettingCache.Set(new MangaSettingCache(databaseConfig));
+      foreach (var setting in settings)
+      {
+        MangaSettingCache.Set(new MangaSettingCache(setting));
+      }
     }
 
     private static async Task<List<ProxySetting>> CreateDefaultProxySettings(RepositoryContext context)
@@ -111,7 +129,7 @@ namespace MangaReader.Core.Services.Config
           config.ProxySetting = proxySettings.FirstOrDefault(s => s.SettingType == ProxySettingType.System);
           await context.Save(config).ConfigureAwait(false);
         }
-        await CreateDefaultMangaSettings(context).ConfigureAwait(false);
+        await CreateDefaultMangaSettings(context, config).ConfigureAwait(false);
       }
     }
   }

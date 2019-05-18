@@ -101,6 +101,7 @@
     <Compile Include="MangaInfos.cs" />
     <Compile Include="MangaSetting\AllLoginTests.cs" />
     <Compile Include="MangaSetting\ChangeFolderInSetting.cs" />
+    <Compile Include="MangaSetting\ProxyTests.cs" />
     <Compile Include="MangaTest.cs" />
     <Compile Include="Manga\AcomicsStructure.cs" />
     <Compile Include="Manga\BonusesChapter.cs" />

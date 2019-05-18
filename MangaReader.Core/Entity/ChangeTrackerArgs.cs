@@ -1,4 +1,6 @@
-﻿namespace MangaReader.Core.Entity
+﻿using System;
+
+namespace MangaReader.Core.Entity
 {
   public class ChangeTrackerArgs
   {
@@ -8,10 +10,17 @@
     public readonly bool CanAddEntities;
     public readonly bool IsNewEntity;
 
-    public PropertyChangeTracker<T> GetPropertyState<T>(string propertyName) where T : class
+    /// <summary>
+    /// Get property changes from session.
+    /// </summary>
+    /// <typeparam name="T">Type of property</typeparam>
+    /// <param name="propertyName">Property name. Use nameof() for support refactoring.</param>
+    /// <returns>Old-new value.</returns>
+    /// <remarks>For struct use nullable type for safe invoke. Or use it only for changes, not for first creating.</remarks>
+    public PropertyChangeTracker<T> GetPropertyState<T>(string propertyName)
     {
       var propertyIndex = System.Array.IndexOf(propertyNames, propertyName);
-      return new PropertyChangeTracker<T>(currentState[propertyIndex] as T, previousState?[propertyIndex] as T);
+      return new PropertyChangeTracker<T>((T)currentState[propertyIndex], (T)previousState?[propertyIndex]);
     }
 
     public void SetPropertyState(string propertyName, object value)
@@ -30,7 +39,7 @@
     }
   }
 
-  public struct PropertyChangeTracker<T> where T : class
+  public struct PropertyChangeTracker<T>
   {
     public T Value;
     public T OldValue;

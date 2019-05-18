@@ -2,9 +2,8 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Net;
 using MangaReader.Core.Account;
-using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Services
@@ -13,9 +12,29 @@ namespace MangaReader.Core.Services
   {
     public Type Plugin { get; set; }
 
-    public System.Net.IWebProxy Proxy { get; set; }
+    public IWebProxy Proxy { get; set; }
+
+    public int ProxySettingId { get; set; }
+
+    public bool IsParent { get; private set; }
+
+    public ProxySettingType SettingType { get; set; }
+
+    private void RefreshProperties(ProxySetting setting)
+    {
+      this.ProxySettingId = setting.Id;
+      this.Proxy = setting.GetProxy();
+      this.SettingType = setting.SettingType;
+    }
 
     private static ConcurrentDictionary<Type, MangaSettingCache> caches = new ConcurrentDictionary<Type, MangaSettingCache>();
+
+    public static readonly Type RootPluginType = typeof(IPlugin);
+
+    public static Type GetPluginType(MangaSetting mangaSetting)
+    {
+      return ConfigStorage.Plugins.Single(p => p.MangaGuid == mangaSetting.Manga).GetType();
+    }
 
     public static void Set(MangaSettingCache cache)
     {
@@ -30,42 +49,51 @@ namespace MangaReader.Core.Services
       throw new KeyNotFoundException($"В кеше не найдено ничего с типом {pluginType.Name}");
     }
 
-    public static void Clear()
+    internal static void RevalidateSetting(ProxySetting setting)
     {
-      caches.Clear();
+      RevalidateSetting(null, setting);
     }
 
-    public static async Task RevalidateCache()
+    internal static void RevalidateSetting(Type pluginType, ProxySetting setting)
     {
-      Clear();
+      if (caches.Count == 0)
+        return;
 
-      using (var context = Repository.GetEntityContext())
+      var inCache = pluginType == null ?
+        caches.Values.Where(c => c.ProxySettingId == setting.Id).ToList() :
+        caches.Values.Where(c => c.Plugin == pluginType).ToList();
+
+      foreach (var cache in inCache.OrderByDescending(c => c.IsParent))
+        cache.RefreshProperties(setting);
+
+      Log.Add($"Applied {setting.SettingType} proxy to {string.Join(", ", inCache.Select(s => s.Plugin.Name))}");
+
+      // If any of setting cache is root - need recreate all 'child' caches.
+      if (inCache.Any(r => r.IsParent))
       {
-        var config = await context.Get<DatabaseConfig>().SingleAsync().ConfigureAwait(false);
-        var parentSetting = config.ProxySetting;
-        if (parentSetting != null)
-        {
-          MangaSettingCache.Set(new MangaSettingCache()
-          {
-            Plugin = typeof(IPlugin),
-            Proxy = parentSetting.GetProxy()
-          });
-        }
+        var childs = caches.Values.Where(c => c.SettingType == ProxySettingType.Parent).ToList();
+        foreach (var cache in childs)
+          cache.Proxy = setting.GetProxy();
 
-        var settings = await context.Get<MangaSetting>().Where(s => s.ProxySetting != null).ToListAsync().ConfigureAwait(false);
-        foreach (var setting in settings)
-        {
-          var plugin = ConfigStorage.Plugins.Single(p => p.MangaGuid == setting.Manga).GetType();
-          MangaSettingCache.Set(new MangaSettingCache
-          {
-            Plugin = plugin,
-            Proxy = setting.ProxySetting.SettingType == ProxySettingType.Parent ? Get(typeof(IPlugin)).Proxy : setting.ProxySetting.GetProxy()
-          });
-        }
-
-        foreach (var grouped in settings.GroupBy(s => s.ProxySetting.SettingType))
-          Log.Add($"Applied {grouped.Key} proxy to {string.Join(", ", grouped.Select(s => s.MangaName))}");
+        Log.Add($"Applied {setting.SettingType} proxy to childs {string.Join(", ", childs.Select(s => s.Plugin.Name))}");
       }
+    }
+
+    public MangaSettingCache(MangaSetting mangaSetting) : this(GetPluginType(mangaSetting), mangaSetting.ProxySetting)
+    {
+      
+    }
+
+    public MangaSettingCache(DatabaseConfig config) : this(RootPluginType, config.ProxySetting)
+    {
+      IsParent = true;
+    }
+
+    public MangaSettingCache(Type pluginType, ProxySetting setting)
+    {
+      this.Plugin = pluginType;
+      this.RefreshProperties(setting);
+      this.IsParent = false;
     }
   }
 }

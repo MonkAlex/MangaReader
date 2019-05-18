@@ -96,6 +96,13 @@ namespace MangaReader.Core.Services
               }
             }
           }
+
+          if (!args.CanAddEntities)
+          {
+            var proxyState = args.GetPropertyState<ProxySetting>(nameof(ProxySetting));
+            if (proxyState.IsChanged)
+              MangaSettingCache.RevalidateSetting(MangaSettingCache.GetPluginType(this), proxyState.Value);
+          }
         }
       }
 

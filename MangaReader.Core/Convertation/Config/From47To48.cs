@@ -5,7 +5,6 @@ using MangaReader.Core.Account;
 using MangaReader.Core.Convertation.Primitives;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
-using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Convertation.Config
 {
@@ -26,8 +25,6 @@ namespace MangaReader.Core.Convertation.Config
         }
 
         await settings.SaveAll(context).ConfigureAwait(false);
-
-        await MangaSettingCache.RevalidateCache().ConfigureAwait(false);
       }
     }
 

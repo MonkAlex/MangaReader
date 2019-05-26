@@ -17,7 +17,7 @@ namespace MangaReader.ViewModel.Setting
       {
         if (!Equals(selectedProxySettingModel, value))
         {
-          if (value != null && value.Id == default)
+          if (value != null && value.Id == default(int))
           {
             lastValidProxySettingModel = selectedProxySettingModel;
             CreateNew().LogException();

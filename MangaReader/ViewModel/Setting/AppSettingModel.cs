@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Core.NHibernate;
@@ -86,6 +87,8 @@ namespace MangaReader.ViewModel.Setting
 
     public SortModel Sort { get; set; }
 
+    public ProxySettingSelectorModel ProxySettingSelector { get; private set; }
+
     public override async Task Save()
     {
       var appConfig = ConfigStorage.Instance.AppConfig;
@@ -112,7 +115,7 @@ namespace MangaReader.ViewModel.Setting
       }
     }
 
-    public AppSettingModel()
+    public AppSettingModel(ObservableCollection<ProxySettingModel> proxySettingModels)
     {
       this.Header = "Основные настройки";
       this.Languages = Generic.GetEnumValues<Languages>();
@@ -132,6 +135,7 @@ namespace MangaReader.ViewModel.Setting
 #warning DB connection in ctor
         var config = context.Get<DatabaseConfig>().Single();
         this.FolderNamingStrategy.SelectedGuid = config.FolderNamingStrategy;
+        this.ProxySettingSelector = new ProxySettingSelectorModel(config.ProxySetting, proxySettingModels);
       }
 
       this.Sort = new SortModel();

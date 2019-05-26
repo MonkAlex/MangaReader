@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Core.NHibernate;
@@ -72,6 +73,8 @@ namespace MangaReader.ViewModel.Setting
 
     public FolderNamingModel FolderNamingStrategy { get; set; }
 
+    public ProxySettingSelectorModel ProxySettingSelector { get; private set; }
+
     public override async Task Save()
     {
       using (var context = Repository.GetEntityContext($"Save settings for {Header}"))
@@ -89,7 +92,7 @@ namespace MangaReader.ViewModel.Setting
       }
     }
 
-    public MangaSettingModel(MangaSetting setting)
+    public MangaSettingModel(MangaSetting setting, ObservableCollection<ProxySettingModel> proxySettingModels)
     {
       this.id = setting.Id;
       this.Header = setting.MangaName;
@@ -105,6 +108,8 @@ namespace MangaReader.ViewModel.Setting
       this.FolderNamingStrategy = new FolderNamingModel();
       this.FolderNamingStrategy.Strategies.Insert(0, new FolderNamingStrategyDto() { Name = "Использовать общие настройки" });
       this.FolderNamingStrategy.SelectedGuid = setting.FolderNamingStrategy;
+
+      this.ProxySettingSelector = new ProxySettingSelectorModel(setting.ProxySetting, proxySettingModels);
     }
   }
 }

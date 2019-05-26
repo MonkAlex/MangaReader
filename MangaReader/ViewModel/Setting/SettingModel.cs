@@ -1,6 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using MangaReader.Core.Account;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services.Config;
 using MangaReader.UI.Services;
 using MangaReader.ViewModel.Commands.Setting;
@@ -30,14 +33,20 @@ namespace MangaReader.ViewModel.Setting
 
     public SettingModel()
     {
-      this.AppSetting = new AppSettingModel();
-      this.Views = new ObservableCollection<SettingViewModel>();
-      this.Save = new SaveSettingsCommand(this);
+      using (var context = Repository.GetEntityContext("Load all settings"))
+      {
+        var proxySettingModels = new ObservableCollection<ProxySettingModel>(context.Get<ProxySetting>().Select(s => new ProxySettingModel(s)));
+        proxySettingModels.Add(ProxySettingModel.CreateEmptyModel());
 
-      this.Views.Add(this.AppSetting);
-      foreach (var setting in Core.NHibernate.Repository.GetStateless<Core.Services.MangaSetting>())
-        this.Views.Add(new MangaSettingModel(setting));
-      this.SelectedModel = this.AppSetting;
+        this.AppSetting = new AppSettingModel(proxySettingModels);
+        this.Views = new ObservableCollection<SettingViewModel>();
+        this.Save = new SaveSettingsCommand(this);
+
+        this.Views.Add(this.AppSetting);
+        foreach (var setting in context.Get<Core.Services.MangaSetting>())
+          this.Views.Add(new MangaSettingModel(setting, proxySettingModels));
+        this.SelectedModel = this.AppSetting;
+      }
     }
 
     private void SyncLoginOnModelChange(SettingViewModel model)

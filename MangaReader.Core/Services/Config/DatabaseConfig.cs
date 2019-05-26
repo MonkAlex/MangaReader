@@ -89,7 +89,7 @@ namespace MangaReader.Core.Services.Config
       }
 
       MangaSettingCache.Set(new MangaSettingCache(databaseConfig));
-      foreach (var setting in settings)
+      foreach (var setting in settings.Where(s => s.ProxySetting != null))
       {
         MangaSettingCache.Set(new MangaSettingCache(setting));
       }
@@ -97,16 +97,21 @@ namespace MangaReader.Core.Services.Config
 
     private static async Task<List<ProxySetting>> CreateDefaultProxySettings(RepositoryContext context)
     {
+      var names = new[] { "Без прокси", "Использовать системные настройки прокси", "Использовать общие настройки программы" };
       var types = new[] { ProxySettingType.NoProxy, ProxySettingType.System, ProxySettingType.Parent };
       var created = new List<ProxySetting>();
-      foreach (var settingType in types)
+      for (var index = 0; index < types.Length; index++)
       {
-        if (!await context.Get<ProxySetting>().AnyAsync(s => s.SettingType == settingType).ConfigureAwait(false))
+        var settingType = types[index];
+        var name = names[index];
+        var proxy = await context.Get<ProxySetting>().SingleOrDefaultAsync(s => s.SettingType == settingType).ConfigureAwait(false);
+        if (proxy == null)
         {
-          var proxy = new ProxySetting(settingType);
+          proxy = new ProxySetting(settingType) { Name = name };
           await context.Save(proxy).ConfigureAwait(false);
-          created.Add(proxy);
         }
+
+        created.Add(proxy);
       }
 
       return created;
@@ -122,7 +127,7 @@ namespace MangaReader.Core.Services.Config
     {
       using (var context = Repository.GetEntityContext("Initialize database config"))
       {
-        var config = await Repository.GetStateless<DatabaseConfig>().SingleOrCreate().ConfigureAwait(false);
+        var config = await context.Get<DatabaseConfig>().SingleOrCreate().ConfigureAwait(false);
         var proxySettings = await CreateDefaultProxySettings(context).ConfigureAwait(false);
         if (config.ProxySetting == null)
         {

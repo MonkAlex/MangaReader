@@ -22,7 +22,39 @@
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0DFED62C1FFB5642AE905158A8E924C7/Text/@EntryValue">public $type$ $Property$&#xD;
 {&#xD;
   get =&gt; $property$;&#xD;
-  set =&gt; RaiseAndSetIfChanged(ref $property$, value);&#xD;
+  set =&gt; this.RaiseAndSetIfChanged(ref $property$, value);&#xD;
+}&#xD;
+&#xD;
+private $type$ $property$;&#xD;
+&#xD;
+$END$</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/Description/@EntryValue">Create wpf property</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/Field/=property/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/Field/=Property/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/Field/=property/Expression/@EntryValue">decapitalize(Property)</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/Field/=Property/Expression/@EntryValue">suggestVariableName()</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/Field/=property/InitialRange/@EntryValue">-1</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/Field/=property/Order/@EntryValue">2</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/Field/=Property/Order/@EntryValue">1</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/Field/=type/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/Field/=type/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/IsBlessed/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/Scope/=74A278E9BF386142B53D57114609A033/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/Scope/=74A278E9BF386142B53D57114609A033/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/Scope/=74A278E9BF386142B53D57114609A033/Type/@EntryValue">InCSharpExceptStringLiterals</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/Shortcut/@EntryValue">propw</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=9F3D2046B9876740AC306A4D0DC53850/Text/@EntryValue">public $type$ $Property$&#xD;
+{&#xD;
+  get =&gt; $property$;&#xD;
+  set&#xD;
+  {&#xD;
+    $property$ = value;&#xD;
+    OnPropertyChanged();&#xD;
+  }&#xD;
 }&#xD;
 &#xD;
 private $type$ $property$;&#xD;

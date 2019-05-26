@@ -145,6 +145,12 @@
     <Compile Include="UI\MultiSelectComboBox.xaml.cs">
       <DependentUpon>MultiSelectComboBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Setting\ProxySetting.xaml.cs">
+      <DependentUpon>ProxySetting.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Setting\ProxySettingSelector.xaml.cs">
+      <DependentUpon>ProxySettingSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Setting\SettingsForm.xaml.cs">
       <DependentUpon>SettingsForm.xaml</DependentUpon>
     </Compile>
@@ -174,6 +180,7 @@
     <Compile Include="ViewModel\Commands\OpenWikiCommand.cs" />
     <Compile Include="ViewModel\Commands\Primitives\MultipleMangasBaseCommand.cs" />
     <Compile Include="ViewModel\Commands\Primitives\NavigationCommand.cs" />
+    <Compile Include="ViewModel\Commands\Setting\SaveProxySettingCommand.cs" />
     <Compile Include="ViewModel\Manga\MangaModel.cs" />
     <Compile Include="ViewModel\Primitive\ImageSourceVM.cs" />
     <Compile Include="ViewModel\Setting\AppSettingModel.cs" />
@@ -215,6 +222,8 @@
     <Compile Include="ViewModel\Initialize.cs" />
     <Compile Include="ViewModel\Primitive\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModel\Primitive\ProcessModel.cs" />
+    <Compile Include="ViewModel\Setting\ProxySettingModel.cs" />
+    <Compile Include="ViewModel\Setting\ProxySettingSelectorModel.cs" />
     <Compile Include="ViewModel\Setting\SettingModel.cs" />
     <Compile Include="ViewModel\Setting\SettingViewModel.cs" />
     <Compile Include="ViewModel\Setting\SortModel.cs" />
@@ -270,6 +279,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI\Setting\ProxySetting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Setting\ProxySettingSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Setting\SettingsForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

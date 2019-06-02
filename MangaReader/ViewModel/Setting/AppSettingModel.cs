@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using MangaReader.Core.Account;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
@@ -87,7 +88,44 @@ namespace MangaReader.ViewModel.Setting
 
     public SortModel Sort { get; set; }
 
-    public ProxySettingSelectorModel ProxySettingSelector { get; private set; }
+    private int proxySettingId;
+
+    public IEnumerable<ProxySettingModel> ProxySettingModels
+    {
+      get => proxySettingModels;
+      set
+      {
+        proxySettingModels = value;
+        OnPropertyChanged();
+      }
+    }
+
+    private IEnumerable<ProxySettingModel> proxySettingModels;
+
+    public ProxySettingModel SelectedProxySettingModel
+    {
+      get => selectedProxySettingModel;
+      set
+      {
+        selectedProxySettingModel = value;
+        if (selectedProxySettingModel != null)
+          proxySettingId = selectedProxySettingModel.Id;
+        OnPropertyChanged();
+      }
+    }
+
+    private ProxySettingModel selectedProxySettingModel;
+
+    public override void Load()
+    {
+      base.Load();
+
+      using (var context = Repository.GetEntityContext())
+      {
+        this.ProxySettingModels = context.Get<ProxySetting>().Where(s => s.SettingType != ProxySettingType.Parent).Select(s => new ProxySettingModel(s)).ToList();
+        this.SelectedProxySettingModel = this.ProxySettingModels.FirstOrDefault(m => m.Id == proxySettingId);
+      }
+    }
 
     public override async Task Save()
     {
@@ -111,11 +149,13 @@ namespace MangaReader.ViewModel.Setting
       {
         var config = await context.Get<DatabaseConfig>().SingleAsync().ConfigureAwait(true);
         config.FolderNamingStrategy = FolderNamingStrategy.Selected.Id;
+        if (proxySettingId != config.ProxySetting.Id)
+          config.ProxySetting = await context.Get<ProxySetting>().SingleAsync(s => s.Id == proxySettingId).ConfigureAwait(false);
         await context.Save(config).ConfigureAwait(true);
       }
     }
 
-    public AppSettingModel(ObservableCollection<ProxySettingModel> proxySettingModels)
+    public AppSettingModel()
     {
       this.Header = "Основные настройки";
       this.Languages = Generic.GetEnumValues<Languages>();
@@ -135,7 +175,7 @@ namespace MangaReader.ViewModel.Setting
 #warning DB connection in ctor
         var config = context.Get<DatabaseConfig>().Single();
         this.FolderNamingStrategy.SelectedGuid = config.FolderNamingStrategy;
-        this.ProxySettingSelector = new ProxySettingSelectorModel(config.ProxySetting, proxySettingModels);
+        this.proxySettingId = config.ProxySetting.Id;
       }
 
       this.Sort = new SortModel();

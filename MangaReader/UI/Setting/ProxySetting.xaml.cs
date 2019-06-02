@@ -18,11 +18,12 @@ namespace MangaReader.UI.Setting
   /// <summary>
   /// Interaction logic for ProxySetting.xaml
   /// </summary>
-  public partial class ProxySetting : Window
+  public partial class ProxySetting : UserControl
   {
     public ProxySetting()
     {
       InitializeComponent();
+      ViewModel.Primitive.BaseViewModel.SubToViewModel(this);
     }
   }
 }

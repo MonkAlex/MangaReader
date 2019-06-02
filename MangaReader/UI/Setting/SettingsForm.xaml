@@ -24,6 +24,9 @@
         <DataTemplate DataType="{x:Type setting:MangaSettingModel}">
           <ui:MangaSettings/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type setting:ProxySettingSelectorModel}">
+          <ui:ProxySetting/>
+        </DataTemplate>
       </TabControl.Resources>
       <TabControl.ItemTemplate>
         <DataTemplate>

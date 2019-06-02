@@ -73,7 +73,12 @@
                  TextTrimming="WordEllipsis" 
                  Text="Настройка прокси"
                  VerticalAlignment="Center"/>
-      <setting:ProxySettingSelector DataContext="{Binding ProxySettingSelector}" Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="1"/>
+      <ComboBox Grid.Row="6" Grid.Column="2" 
+                ItemsSource="{Binding ProxySettingModels}" 
+                SelectedItem="{Binding SelectedProxySettingModel}"
+                DisplayMemberPath="Name"
+                VerticalAlignment="Center" 
+                HorizontalAlignment="Stretch"/>
 
       <CheckBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3"
                       Content="{x:Static resx:Strings.Settings_Update}" 

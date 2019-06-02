@@ -8,7 +8,7 @@ using MangaReader.ViewModel.Primitive;
 
 namespace MangaReader.ViewModel.Setting
 {
-  public class ProxySettingSelectorModel : BaseViewModel
+  public class ProxySettingSelectorModel : SettingViewModel
   {
     public ProxySettingModel SelectedProxySettingModel
     {
@@ -17,11 +17,6 @@ namespace MangaReader.ViewModel.Setting
       {
         if (!Equals(selectedProxySettingModel, value))
         {
-          if (value != null && value.Id == default(int))
-          {
-            lastValidProxySettingModel = selectedProxySettingModel;
-            CreateNew().LogException();
-          }
           selectedProxySettingModel = value;
           OnPropertyChanged();
         }
@@ -29,41 +24,51 @@ namespace MangaReader.ViewModel.Setting
     }
 
     private ProxySettingModel selectedProxySettingModel;
-    private ProxySettingModel lastValidProxySettingModel;
 
-    public ObservableCollection<ProxySettingModel> ProxySettingModels { get; private set; }
-
-    public async Task CreateNew()
+    public ObservableCollection<ProxySettingModel> ProxySettingModels
     {
-      using (var context = Repository.GetEntityContext())
+      get => proxySettingModels;
+      set
       {
-        var setting = new ProxySetting(ProxySettingType.Manual);
-        await context.Save(setting).ConfigureAwait(true);
-
-        var model = new ProxySettingModel(setting);
-        model.Show();
-        if (model.IsSaved)
-        {
-          this.ProxySettingModels.Insert(ProxySettingModels.Count - 1, model);
-          this.SelectedProxySettingModel = model;
-        }
-        else
-        {
-          await context.Delete(setting).ConfigureAwait(true);
-          SelectedProxySettingModel = lastValidProxySettingModel;
-        }
+        proxySettingModels = value;
+        OnPropertyChanged();
       }
     }
 
-    public void EditModel()
+    private ObservableCollection<ProxySettingModel> proxySettingModels;
+
+    public override void Load()
     {
-      SelectedProxySettingModel.Show();
+      base.Load();
+
+      using (var context = Repository.GetEntityContext())
+      {
+        this.ProxySettingModels = new ObservableCollection<ProxySettingModel>(context
+          .Get<ProxySetting>()
+          .Select(s => new ProxySettingModel(s)));
+        this.SelectedProxySettingModel = this.ProxySettingModels.FirstOrDefault();
+      }
     }
 
-    public ProxySettingSelectorModel(ProxySetting proxySetting, ObservableCollection<ProxySettingModel> sharedProxySettingModels)
+    public ProxySettingSelectorModel()
     {
-      this.ProxySettingModels = sharedProxySettingModels;
-      this.SelectedProxySettingModel = ProxySettingModels.FirstOrDefault(m => m.Id == proxySetting.Id);
+      this.Header = "Прокси";
+    }
+
+    public override async Task Save()
+    {
+      using (var context = Repository.GetEntityContext())
+      {
+        var setting = await context.Get<ProxySetting>().SingleAsync(s => s.Id == SelectedProxySettingModel.Id).ConfigureAwait(true);
+        setting.Name = SelectedProxySettingModel.Name;
+        setting.Address = SelectedProxySettingModel.Address;
+        setting.UserName = SelectedProxySettingModel.UserName;
+        setting.Password = SelectedProxySettingModel.Password;
+        setting.SettingType = SelectedProxySettingModel.SettingType;
+        await context.Save(setting).ConfigureAwait(true);
+      }
+
+      this.SelectedProxySettingModel.IsSaved = true;
     }
   }
 }

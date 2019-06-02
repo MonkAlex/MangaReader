@@ -35,16 +35,14 @@ namespace MangaReader.ViewModel.Setting
     {
       using (var context = Repository.GetEntityContext("Load all settings"))
       {
-        var proxySettingModels = new ObservableCollection<ProxySettingModel>(context.Get<ProxySetting>().Select(s => new ProxySettingModel(s)));
-        proxySettingModels.Add(ProxySettingModel.CreateEmptyModel());
-
-        this.AppSetting = new AppSettingModel(proxySettingModels);
+        this.AppSetting = new AppSettingModel();
         this.Views = new ObservableCollection<SettingViewModel>();
         this.Save = new SaveSettingsCommand(this);
 
         this.Views.Add(this.AppSetting);
         foreach (var setting in context.Get<Core.Services.MangaSetting>())
-          this.Views.Add(new MangaSettingModel(setting, proxySettingModels));
+          this.Views.Add(new MangaSettingModel(setting));
+        this.Views.Add(new ProxySettingSelectorModel());
         this.SelectedModel = this.AppSetting;
       }
     }

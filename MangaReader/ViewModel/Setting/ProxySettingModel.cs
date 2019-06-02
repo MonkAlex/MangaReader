@@ -81,34 +81,6 @@ namespace MangaReader.ViewModel.Setting
 
     public bool IsSaved { get; set; }
 
-    public override void Show()
-    {
-      base.Show();
-
-      var window = ViewService.Instance.TryGet<System.Windows.Window>(this);
-      if (window != null)
-      {
-        window.Closing += (sender, args) => ViewService.Instance.TryRemove(this);
-        window.ShowDialog();
-      }
-    }
-
-    public void Close()
-    {
-      var window = ViewService.Instance.TryGet<System.Windows.Window>(this);
-      if (window != null)
-      {
-        window.Close();
-      }
-    }
-
-    public ICommand Save { get; set; }
-
-    public static ProxySettingModel CreateEmptyModel()
-    {
-      return new ProxySettingModel() { Name = "Создать новое подключение к прокси..." };
-    }
-
     public ProxySettingModel(ProxySetting setting)
     {
       Id = setting.Id;
@@ -118,12 +90,6 @@ namespace MangaReader.ViewModel.Setting
       Password = setting.Password;
       SettingType = setting.SettingType;
       IsManual = setting.SettingType == ProxySettingType.Manual;
-      this.Save = new SaveProxySettingCommand(this);
-    }
-
-    private ProxySettingModel()
-    {
-
     }
 
   }

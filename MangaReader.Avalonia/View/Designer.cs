@@ -67,6 +67,11 @@ namespace MangaReader.Avalonia.View
         throw new NotImplementedException();
       }
 
+      public Task BeforeDelete(ChangeTrackerArgs args)
+      {
+        throw new NotImplementedException();
+      }
+
       public event PropertyChangedEventHandler PropertyChanged;
       public string Name { get; set; }
       public string LocalName { get; set; }

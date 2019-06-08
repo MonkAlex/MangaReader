@@ -39,9 +39,23 @@ namespace MangaReader.ViewModel.Setting
 
     private ObservableCollection<ProxySettingModel> proxySettingModels;
 
+    public string TestAddress
+    {
+      get => testAddress;
+      set
+      {
+        testAddress = value;
+        OnPropertyChanged();
+      }
+    }
+
+    private string testAddress;
+
     public ICommand Add { get; }
 
     public ICommand Remove { get; }
+
+    public ICommand Test { get; }
 
     public override void Load()
     {
@@ -61,10 +75,15 @@ namespace MangaReader.ViewModel.Setting
       this.Header = "Прокси";
       this.Add = new AddNewProxyCommand(this);
       this.Remove = new RemoveSelectedProxyCommand(this);
+      this.Test = new TestSelectedProxyCommand(this);
+      this.testAddress = "https://github.com/MonkAlex/MangaReader";
     }
 
     public override async Task Save()
     {
+      if (ProxySettingModels == null)
+        return;
+
       using (var context = Repository.GetEntityContext())
       {
         var manualProxies = await context.Get<ProxySetting>().ToListAsync().ConfigureAwait(true);

@@ -23,9 +23,8 @@
       <Button Content="+" Command="{Binding Add}"/>
       <Button Content="-" Command="{Binding Remove}"/>
     </StackPanel>
-    <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" DataContext="{Binding SelectedProxySettingModel}">
+    <Grid Grid.Column="1" Grid.Row="0" DataContext="{Binding SelectedProxySettingModel}">
       <Grid.RowDefinitions>
-        <RowDefinition Height="2*"></RowDefinition>
         <RowDefinition Height="2*"></RowDefinition>
         <RowDefinition Height="2*"></RowDefinition>
         <RowDefinition Height="2*"></RowDefinition>
@@ -34,30 +33,34 @@
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto"></ColumnDefinition>
         <ColumnDefinition Width="30*"></ColumnDefinition>
-        <ColumnDefinition Width="30*"></ColumnDefinition>
       </Grid.ColumnDefinitions>
 
-      <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+      <Label Grid.Row="0" Grid.Column="0" 
              Content="Название: " />
-      <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding Name}" IsEnabled="{Binding IsManual}"/>
+      <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}" IsEnabled="{Binding IsManual}"/>
 
 
-      <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                   Content="Тип: " />
-      <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding SettingType}" IsEnabled="False"/>
-
-
-      <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+      <Label Grid.Row="1" Grid.Column="0" 
              Content="Адрес прокси: " />
-      <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Address}" IsEnabled="{Binding IsManual}"/>
+      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Address}" IsEnabled="{Binding IsManual}"/>
 
-      <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+      <Label Grid.Row="2" Grid.Column="0" 
              Content="Имя пользователя: " />
-      <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding UserName}" IsEnabled="{Binding IsManual}"/>
+      <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding UserName}" IsEnabled="{Binding IsManual}"/>
 
-      <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+      <Label Grid.Row="3" Grid.Column="0" 
              Content="Пароль: " />
-      <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Password}" IsEnabled="{Binding IsManual}"/>
+      <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Password}" IsEnabled="{Binding IsManual}"/>
+    </Grid>
+    <Grid Grid.Column="1" Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <TextBox Grid.Column="0" Text="{Binding TestAddress}"/>
+      <Button Grid.Column="1"
+              Command="{Binding Test}"
+              Content="Проверить"/>
     </Grid>
   </Grid>
 </UserControl>

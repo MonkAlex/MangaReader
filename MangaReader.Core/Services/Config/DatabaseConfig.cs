@@ -97,7 +97,7 @@ namespace MangaReader.Core.Services.Config
 
     private static async Task<List<ProxySetting>> CreateDefaultProxySettings(RepositoryContext context)
     {
-      var names = new[] { "Без прокси", "Использовать системные настройки прокси", "Использовать общие настройки программы" };
+      var names = new[] { "Без прокси", "Cистемные настройки", "Общие настройки" };
       var types = new[] { ProxySettingType.NoProxy, ProxySettingType.System, ProxySettingType.Parent };
       var created = new List<ProxySetting>();
       for (var index = 0; index < types.Length; index++)

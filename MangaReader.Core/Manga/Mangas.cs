@@ -642,7 +642,14 @@ namespace MangaReader.Core.Manga
 
     protected virtual async Task CreatedFromWeb(Uri url)
     {
-      await this.Refresh().ConfigureAwait(false);
+      try
+      {
+        await this.Refresh().ConfigureAwait(false);
+      }
+      catch (System.Exception ex)
+      {
+        Log.Exception(ex);
+      }
     }
 
     protected void AddHistoryReadedUris<T>(T source, Uri url) where T : IEnumerable<IDownloadable>

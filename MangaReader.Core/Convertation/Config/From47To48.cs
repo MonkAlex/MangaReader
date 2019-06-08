@@ -22,6 +22,7 @@ namespace MangaReader.Core.Convertation.Config
         foreach (var setting in settings)
         {
           setting.ProxySetting = settingProxySetting;
+          MangaSettingCache.Set(new MangaSettingCache(setting));
         }
 
         await settings.SaveAll(context).ConfigureAwait(false);

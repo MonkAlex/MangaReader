@@ -94,8 +94,9 @@ namespace MangaReader.Core.NHibernate
           string.Join("', '", source.SubclassIterator.Select(i => i.DiscriminatorValue).Concat(new[] { source.DiscriminatorValue })));
       }
 
-      config.EventListeners.PreInsertEventListeners = new IPreInsertEventListener[] { new SaveOrUpdateEvent() };
-      config.EventListeners.PreUpdateEventListeners = new IPreUpdateEventListener[] { new SaveOrUpdateEvent() };
+      config.EventListeners.PreInsertEventListeners = new IPreInsertEventListener[] { new EntityChangedEvent() };
+      config.EventListeners.PreUpdateEventListeners = new IPreUpdateEventListener[] { new EntityChangedEvent() };
+      config.EventListeners.PreDeleteEventListeners = new IPreDeleteEventListener[] { new EntityChangedEvent() };
       if (File.Exists(Path.Combine(ConfigStorage.WorkFolder, DbFile)))
         new SchemaUpdate(config).Execute(false, true);
       else

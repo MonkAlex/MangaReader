@@ -24,6 +24,11 @@ namespace MangaReader.Core.Entity
       return Task.CompletedTask;
     }
 
+    public virtual Task BeforeDelete(ChangeTrackerArgs args)
+    {
+      return Task.CompletedTask;
+    }
+
     public override bool Equals(object obj)
     {
       if (obj == null)

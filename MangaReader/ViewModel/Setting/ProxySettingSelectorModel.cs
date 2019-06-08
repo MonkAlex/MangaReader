@@ -1,9 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using MangaReader.Core.Account;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
+using MangaReader.ViewModel.Commands.Setting;
 using MangaReader.ViewModel.Primitive;
 
 namespace MangaReader.ViewModel.Setting
@@ -37,6 +39,10 @@ namespace MangaReader.ViewModel.Setting
 
     private ObservableCollection<ProxySettingModel> proxySettingModels;
 
+    public ICommand Add { get; }
+
+    public ICommand Remove { get; }
+
     public override void Load()
     {
       base.Load();
@@ -53,22 +59,33 @@ namespace MangaReader.ViewModel.Setting
     public ProxySettingSelectorModel()
     {
       this.Header = "Прокси";
+      this.Add = new AddNewProxyCommand(this);
+      this.Remove = new RemoveSelectedProxyCommand(this);
     }
 
     public override async Task Save()
     {
       using (var context = Repository.GetEntityContext())
       {
-        var setting = await context.Get<ProxySetting>().SingleAsync(s => s.Id == SelectedProxySettingModel.Id).ConfigureAwait(true);
-        setting.Name = SelectedProxySettingModel.Name;
-        setting.Address = SelectedProxySettingModel.Address;
-        setting.UserName = SelectedProxySettingModel.UserName;
-        setting.Password = SelectedProxySettingModel.Password;
-        setting.SettingType = SelectedProxySettingModel.SettingType;
-        await context.Save(setting).ConfigureAwait(true);
-      }
+        var manualProxies = await context.Get<ProxySetting>().ToListAsync().ConfigureAwait(true);
+        foreach (var model in ProxySettingModels.Where(m => m.IsManual))
+        {
+          var setting = model.Id == 0 ? new ProxySetting(ProxySettingType.Manual) : manualProxies.Single(p => p.Id == model.Id);
+          setting.Name = model.Name;
+          setting.Address = model.Address;
+          setting.UserName = model.UserName;
+          setting.Password = model.Password;
+          setting.SettingType = model.SettingType;
+          await context.Save(setting).ConfigureAwait(true);
+          model.Id = setting.Id;
+        }
 
-      this.SelectedProxySettingModel.IsSaved = true;
+        var toRemove = manualProxies.Where(p => ProxySettingModels.All(m => m.Id != p.Id)).ToList();
+        foreach (var setting in toRemove)
+        {
+          await context.Delete(setting).ConfigureAwait(true);
+        }
+      }
     }
   }
 }

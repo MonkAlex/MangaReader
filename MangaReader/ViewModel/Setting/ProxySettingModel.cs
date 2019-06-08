@@ -79,8 +79,6 @@ namespace MangaReader.ViewModel.Setting
 
     public bool IsManual { get; private set; }
 
-    public bool IsSaved { get; set; }
-
     public ProxySettingModel(ProxySetting setting)
     {
       Id = setting.Id;

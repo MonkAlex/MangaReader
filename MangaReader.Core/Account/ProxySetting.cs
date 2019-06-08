@@ -3,7 +3,10 @@ using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 using MangaReader.Core.Entity;
+using MangaReader.Core.Exception;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Account
 {
@@ -64,6 +67,19 @@ namespace MangaReader.Core.Account
       }
 
       return base.BeforeSave(args);
+    }
+
+    public override async Task BeforeDelete(ChangeTrackerArgs args)
+    {
+      using (var context = Repository.GetEntityContext())
+      {
+        var hasDatabaseConfig = await context.Get<DatabaseConfig>().AnyAsync(c => c.ProxySetting == this).ConfigureAwait(false);
+        var hasMangaSettigns = await context.Get<MangaSetting>().AnyAsync(s => s.ProxySetting == this).ConfigureAwait(false);
+        if (hasDatabaseConfig || hasMangaSettigns)
+          throw new EntityException<ProxySetting>("Настройки прокси уже используются", this);
+      }
+
+      await base.BeforeDelete(args);
     }
 
     protected ProxySetting()

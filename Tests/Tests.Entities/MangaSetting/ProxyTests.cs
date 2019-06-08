@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Core;
 using MangaReader.Core.Account;
+using MangaReader.Core.Exception;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
@@ -11,10 +13,62 @@ namespace Tests.Entities.MangaSetting
 {
   public class ProxyTests : TestClass
   {
+    [Test]
+    public async Task CreateDelete()
+    {
+      using (var context = Repository.GetEntityContext())
+      {
+        var proxy = new ProxySetting(ProxySettingType.Manual);
+        await context.Save(proxy).ConfigureAwait(false);
+        var proxyId = proxy.Id;
+        proxy = await context.Get<ProxySetting>().SingleAsync(s => s.Id == proxyId).ConfigureAwait(false);
+        Assert.NotNull(proxy);
+
+        await context.Delete(proxy).ConfigureAwait(false);
+        proxy = await context.Get<ProxySetting>().SingleOrDefaultAsync(s => s.Id == proxyId).ConfigureAwait(false);
+        Assert.Null(proxy);
+      }
+    }
+
+    /// <summary>
+    /// Delete must be failed, when entity used in other.
+    /// </summary>
+    [Test]
+    public async Task CreateUseAndBlockDelete()
+    {
+      var settingsId = 0;
+      var proxyId = 0;
+      using (var context = Repository.GetEntityContext())
+      {
+        var proxy = new ProxySetting(ProxySettingType.Manual);
+        await context.Save(proxy).ConfigureAwait(false);
+
+        var setting = new MangaReader.Core.Services.MangaSetting() { Folder = AppConfig.DownloadFolder };
+        setting.ProxySetting = proxy;
+        await context.Save(setting).ConfigureAwait(false);
+
+        async Task DeleteProxy()
+        {
+          await context.Delete(proxy).ConfigureAwait(false);
+        }
+
+        settingsId = setting.Id;
+        proxyId = proxy.Id;
+        Assert.ThrowsAsync<EntityException<ProxySetting>>(DeleteProxy);
+      }
+
+      using (var context = Repository.GetEntityContext())
+      {
+        var setting = await context.Get<MangaReader.Core.Services.MangaSetting>().SingleAsync(s => s.Id == settingsId).ConfigureAwait(false);
+        var proxy = await context.Get<ProxySetting>().SingleAsync(s => s.Id == proxyId).ConfigureAwait(false);
+        await context.Delete(setting).ConfigureAwait(false);
+        await context.Delete(proxy).ConfigureAwait(false);
+      }
+    }
+
     /// <summary>
     /// When username-password changed - only proxy property of cache must be changed.
     /// </summary>
-    /// <returns></returns>
     [Test]
     public async Task ChangeProxySetting()
     {

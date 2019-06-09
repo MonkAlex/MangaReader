@@ -41,5 +41,10 @@ namespace MangaReader.Avalonia.ViewModel.Command
       this.taskExecute = execute;
       this.canExecute = canExecute;
     }
+
+    public DelegateCommand(Func<Task> execute, Func<bool> canExecute, Action<DelegateCommand> action) : this(execute, canExecute)
+    {
+      action(this);
+    }
   }
 }

@@ -1,0 +1,81 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="MangaReader.Avalonia.View.ProxySetting">
+  <StackPanel>
+    <Grid>
+      <Grid.Styles>
+        <Style Selector="TextBlock">
+          <Setter Property="VerticalAlignment" Value="Center"/>
+          <Setter Property="Margin" Value="4"/>
+        </Style>
+        <Style Selector="TextBox">
+          <Setter Property="VerticalAlignment" Value="Center"/>
+          <Setter Property="Margin" Value="4"/>
+        </Style>
+        <Style Selector="TextBox:disabled">
+          <Setter Property="Opacity" Value="{DynamicResource ThemeDisabledOpacity}"/>
+        </Style>
+      </Grid.Styles>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <ListBox Grid.Column="0" Grid.Row="0"
+               Items="{Binding ProxySettingModels}" SelectedItem="{Binding SelectedProxySettingModel}">
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <TextBlock Text="{Binding Name}"/>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+      <StackPanel Grid.Column="0" Grid.Row="1"
+                  Orientation="Horizontal">
+        <Button Content="+" Command="{Binding Add}"/>
+        <Button Content="-" Command="{Binding Remove}"/>
+      </StackPanel>
+      <Grid Grid.Column="1" Grid.Row="0" DataContext="{Binding SelectedProxySettingModel}">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="2*"></RowDefinition>
+          <RowDefinition Height="2*"></RowDefinition>
+          <RowDefinition Height="2*"></RowDefinition>
+          <RowDefinition Height="2*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"></ColumnDefinition>
+          <ColumnDefinition Width="30*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Название: " />
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}" IsEnabled="{Binding IsManual}"/>
+
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Адрес прокси: " />
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Address}" IsEnabled="{Binding IsManual}"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Имя пользователя: " />
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding UserName}" IsEnabled="{Binding IsManual}"/>
+
+        <TextBlock Grid.Row="3" Grid.Column="0"
+               Text="Пароль: " />
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Password}" IsEnabled="{Binding IsManual}"/>
+      </Grid>
+      <Grid Grid.Column="1" Grid.Row="1">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBox Grid.Column="0" Text="{Binding TestAddress}"/>
+        <Button Grid.Column="1"
+                Command="{Binding Test}"
+                Content="Проверить"/>
+      </Grid>
+    </Grid>
+  </StackPanel>
+</UserControl>

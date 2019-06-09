@@ -70,7 +70,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     public override async Task OnUnselected(ExplorerTabViewModel newModel)
     {
       await base.OnUnselected(newModel).ConfigureAwait(true);
-      if (!(newModel is SettingsViewModel || newModel is MangaSettingsViewModel))
+      if (!(newModel is SettingsViewModel || newModel is MangaSettingsViewModel || newModel is ProxySettingSelectorModel))
       {
         foreach (var tab in ExplorerViewModel.Instance.Tabs.OfType<MangaSettingsViewModel>().ToList())
           ExplorerViewModel.Instance.Tabs.Remove(tab);

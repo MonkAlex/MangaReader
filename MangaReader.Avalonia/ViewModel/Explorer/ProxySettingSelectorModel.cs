@@ -45,9 +45,15 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public ICommand Save { get; }
 
-    public ICommand Undo { get; }
+    public ICommand UndoChanged { get; }
 
     public override Task OnSelected(ExplorerTabViewModel previousModel)
+    {
+      ReloadData();
+      return base.OnSelected(previousModel);
+    }
+
+    private void ReloadData()
     {
       using (var context = Repository.GetEntityContext())
       {
@@ -56,7 +62,6 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           .Select(s => new ProxySettingModel(s)));
         this.SelectedProxySettingModel = this.ProxySettingModels.FirstOrDefault();
       }
-      return base.OnSelected(previousModel);
     }
 
     public ProxySettingSelectorModel()
@@ -78,9 +83,18 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         models.Remove(selected);
         this.SelectedProxySettingModel = next;
         return Task.CompletedTask;
-      }, () => this.SelectedProxySettingModel?.IsManual == true, SubscribeToCommand(nameof(SelectedProxySettingModel)));
-      this.Test = new DelegateCommand(TestAddressImpl, () => !string.IsNullOrWhiteSpace(this.TestAddress), SubscribeToCommand(nameof(TestAddress)));
+      }, () => this.SelectedProxySettingModel?.IsManual == true);
+      this.Test = new DelegateCommand(TestAddressImpl, () => !string.IsNullOrWhiteSpace(this.TestAddress));
       this.Save = new DelegateCommand(SaveImpl, () => true);
+      this.UndoChanged = new DelegateCommand(ReloadData);
+
+      this.PropertyChanged += (sender, args) =>
+      {
+        if (args.PropertyName == nameof(SelectedProxySettingModel))
+          this.Remove.OnCanExecuteChanged();
+        if (args.PropertyName == nameof(TestAddress))
+          this.Test.OnCanExecuteChanged();
+      };
       this.testAddress = "https://github.com/MonkAlex/MangaReader";
     }
 

@@ -9,7 +9,7 @@ using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
 {
-  public class SettingsViewModel : ExplorerTabViewModel
+  public class SettingsViewModel : SettingTabViewModel
   {
     public int AutoupdateLibraryInHours
     {
@@ -84,15 +84,10 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     public override async Task OnUnselected(ExplorerTabViewModel newModel)
     {
       await base.OnUnselected(newModel).ConfigureAwait(true);
-      if (!(newModel is SettingsViewModel || newModel is MangaSettingsViewModel || newModel is ProxySettingSelectorModel))
-      {
-        foreach (var tab in ExplorerViewModel.Instance.Tabs.OfType<MangaSettingsViewModel>().ToList())
-          ExplorerViewModel.Instance.Tabs.Remove(tab);
 
 #warning Нужно ресетить только после изменения порядка сортировки.
-        foreach (var model in ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>())
-          model.ResetView();
-      }
+      foreach (var model in ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>())
+        model.ResetView();
     }
 
     public ICommand Save { get; }
@@ -145,6 +140,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     {
       this.Name = "Settings";
       this.Priority = 100;
+      this.HideTab = false;
 
       this.Save = new DelegateCommand(SaveConfig, () => true);
       this.UndoChanged = new DelegateCommand(ReloadConfig, () => true);

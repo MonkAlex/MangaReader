@@ -10,7 +10,7 @@ using MangaReader.Core.Services;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
 {
-  public class ProxySettingSelectorModel : ExplorerTabViewModel
+  public class ProxySettingSelectorModel : SettingTabViewModel
   {
 
     public ProxySettingModel SelectedProxySettingModel

@@ -11,7 +11,7 @@ using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
 {
-  public class MangaSettingsViewModel : ExplorerTabViewModel
+  public class MangaSettingsViewModel : SettingTabViewModel
   {
     private readonly int mangaSettingsId;
 
@@ -66,17 +66,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     }
 
     private Compression.CompressionMode compression;
-
-    public override async Task OnUnselected(ExplorerTabViewModel newModel)
-    {
-      await base.OnUnselected(newModel).ConfigureAwait(true);
-      if (!(newModel is SettingsViewModel || newModel is MangaSettingsViewModel || newModel is ProxySettingSelectorModel))
-      {
-        foreach (var tab in ExplorerViewModel.Instance.Tabs.OfType<MangaSettingsViewModel>().ToList())
-          ExplorerViewModel.Instance.Tabs.Remove(tab);
-      }
-    }
-
+    
     public ICommand Save { get; }
 
     public ICommand UndoChanged { get; }

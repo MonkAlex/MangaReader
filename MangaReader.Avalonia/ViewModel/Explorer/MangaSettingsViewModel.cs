@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Core.Services;
 using System.Windows.Input;
-using Dialogs.Buttons;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 
@@ -113,14 +112,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       catch (Exception ex)
       {
         Log.Exception(ex);
-
-        var dialog = new Dialogs.Avalonia.Dialog
-        {
-          Title = "Не удалось сохранить настройки",
-          Description = ex.Message
-        };
-        dialog.Buttons.AddButton(DefaultButtons.OkButton);
-        await dialog.ShowAsync().ConfigureAwait(true);
+        await Services.Dialogs.ShowInfo("Не удалось сохранить настройки", ex.Message);
       }
     }
 

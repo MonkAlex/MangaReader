@@ -142,11 +142,11 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         var proxy = setting.GetProxy();
         var client = new TestCoockieClient() { Proxy = proxy };
         await client.DownloadStringTaskAsync(address).ConfigureAwait(true);
-        Log.Add("Успешно.");
+        await Services.Dialogs.ShowInfo("Проверка прокси", "Успешно.");
       }
       catch (Exception e)
       {
-        Log.Exception(e, "Произошла ошибка.");
+        await Services.Dialogs.ShowInfo("Проверка прокси", "Произошла ошибка. \r\n" + e.Message);
       }
     }
 

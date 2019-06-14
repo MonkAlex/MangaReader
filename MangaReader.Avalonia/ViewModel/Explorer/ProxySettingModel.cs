@@ -52,10 +52,10 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     public ProxySettingModel(ProxySetting setting)
     {
       Id = setting.Id;
-      Name = setting.Name;
+      Name = setting.Name ?? string.Empty;
       Address = setting.Address;
-      UserName = setting.UserName;
-      Password = setting.Password;
+      UserName = setting.UserName ?? string.Empty;
+      Password = setting.Password ?? string.Empty;
       SettingType = setting.SettingType;
       IsManual = setting.SettingType == ProxySettingType.Manual;
     }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Core.Account;
+using MangaReader.Core.Exception;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 
@@ -103,26 +104,34 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       if (ProxySettingModels == null)
         return;
 
-      using (var context = Repository.GetEntityContext())
+      try
       {
-        var manualProxies = await context.Get<ProxySetting>().ToListAsync().ConfigureAwait(true);
-        foreach (var model in ProxySettingModels.Where(m => m.IsManual))
+        using (var context = Repository.GetEntityContext())
         {
-          var setting = model.Id == 0 ? new ProxySetting(ProxySettingType.Manual) : manualProxies.Single(p => p.Id == model.Id);
-          setting.Name = model.Name;
-          setting.Address = model.Address;
-          setting.UserName = model.UserName;
-          setting.Password = model.Password;
-          setting.SettingType = model.SettingType;
-          await context.Save(setting).ConfigureAwait(true);
-          model.Id = setting.Id;
-        }
+          var manualProxies = await context.Get<ProxySetting>().ToListAsync().ConfigureAwait(true);
+          foreach (var model in ProxySettingModels.Where(m => m.IsManual))
+          {
+            var setting = model.Id == 0 ? new ProxySetting(ProxySettingType.Manual) : manualProxies.Single(p => p.Id == model.Id);
+            setting.Name = model.Name;
+            setting.Address = model.Address;
+            setting.UserName = model.UserName;
+            setting.Password = model.Password;
+            setting.SettingType = model.SettingType;
+            await context.Save(setting).ConfigureAwait(true);
+            model.Id = setting.Id;
+          }
 
-        var toRemove = manualProxies.Where(p => ProxySettingModels.All(m => m.Id != p.Id)).ToList();
-        foreach (var setting in toRemove)
-        {
-          await context.Delete(setting).ConfigureAwait(true);
+          var toRemove = manualProxies.Where(p => ProxySettingModels.All(m => m.Id != p.Id)).ToList();
+          foreach (var setting in toRemove)
+          {
+            await context.Delete(setting).ConfigureAwait(true);
+          }
         }
+      }
+      catch (MangaReaderException e)
+      {
+        ReloadData();
+        await Services.Dialogs.ShowInfo("Сохранение прокси", "Произошла ошибка. \r\n" + e.Message);
       }
     }
 

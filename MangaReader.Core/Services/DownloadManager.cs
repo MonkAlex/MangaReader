@@ -47,7 +47,7 @@ namespace MangaReader.Core.Services
       }
       catch (System.Exception ex)
       {
-        Log.Exception(ex, string.Format("Загрузка {0} не завершена.", uri));
+        Log.Exception(ex, string.Format($"Загрузка {uri} не завершена. Использованы настройки прокси {settingCache.SettingType}"));
         return file;
       }
       if (response.ContentLength <= result.LongLength)

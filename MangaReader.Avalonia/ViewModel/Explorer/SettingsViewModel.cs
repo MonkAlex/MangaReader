@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MangaReader.Avalonia.ViewModel.Command;
+using MangaReader.Core.Account;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
@@ -65,6 +66,32 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     private SortSetting sortSetting;
 
+    public ProxySettingModel SelectedProxySettingModel
+    {
+      get
+      {
+        return selectedProxySettingModel;
+      }
+
+      set
+      {
+        this.RaiseAndSetIfChanged(ref selectedProxySettingModel, value);
+        if (selectedProxySettingModel != null)
+          proxySettingId = selectedProxySettingModel.Id;
+      }
+    }
+
+    private ProxySettingModel selectedProxySettingModel;
+    private int proxySettingId;
+
+    public IEnumerable<ProxySettingModel> ProxySettingModels
+    {
+      get => proxySettingModels;
+      set => this.RaiseAndSetIfChanged(ref proxySettingModels, value);
+    }
+
+    private IEnumerable<ProxySettingModel> proxySettingModels;
+
     public override async Task OnSelected(ExplorerTabViewModel previousModel)
     {
       await base.OnSelected(previousModel).ConfigureAwait(true);
@@ -111,6 +138,14 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       {
         var config = await context.Get<DatabaseConfig>().SingleAsync().ConfigureAwait(true);
         this.FolderNamingStrategy = FolderNamingStrategies.FirstOrDefault(s => s.Id == config.FolderNamingStrategy);
+        this.ProxySettingModels = await context
+          .Get<ProxySetting>()
+          .Where(s => s.SettingType != ProxySettingType.Parent)
+          .Select(s => new ProxySettingModel(s))
+          .ToListAsync()
+          .ConfigureAwait(true);
+        this.proxySettingId = config.ProxySetting.Id;
+        this.SelectedProxySettingModel = this.ProxySettingModels.FirstOrDefault(m => m.Id == proxySettingId);
       }
     }
 
@@ -132,6 +167,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       {
         var config = await context.Get<DatabaseConfig>().SingleAsync().ConfigureAwait(true);
         config.FolderNamingStrategy = FolderNamingStrategy.Id;
+        if (proxySettingId != config.ProxySetting.Id)
+          config.ProxySetting = await context.Get<ProxySetting>().SingleAsync(s => s.Id == proxySettingId).ConfigureAwait(false);
         await context.Save(config).ConfigureAwait(true);
       }
     }

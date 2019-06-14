@@ -75,7 +75,7 @@
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <TextBox Grid.Column="0" Text="{Binding TestAddress}"/>
+        <TextBox Grid.Column="0" Text="{Binding TestAddress}" Watermark="Адрес для тестирования"/>
         <Button Grid.Column="1"
                 Command="{Binding Test}"
                 Content="Проверить"/>

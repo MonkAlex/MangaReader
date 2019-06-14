@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MangaReader.Core.Entity;
@@ -74,9 +75,14 @@ namespace MangaReader.Core.Account
       using (var context = Repository.GetEntityContext())
       {
         var hasDatabaseConfig = await context.Get<DatabaseConfig>().AnyAsync(c => c.ProxySetting == this).ConfigureAwait(false);
-        var hasMangaSettigns = await context.Get<MangaSetting>().AnyAsync(s => s.ProxySetting == this).ConfigureAwait(false);
-        if (hasDatabaseConfig || hasMangaSettigns)
-          throw new EntityException<ProxySetting>("Настройки прокси уже используются", this);
+        var usedInMangaSettigns = await context.Get<MangaSetting>().Where(s => s.ProxySetting == this).Select(s => s.MangaName).ToListAsync();
+        if (hasDatabaseConfig || usedInMangaSettigns.Any())
+        {
+          if (hasDatabaseConfig)
+            usedInMangaSettigns.Add("общие настройки");
+          var usedIn = string.Join(string.Empty, usedInMangaSettigns.Select(s => $"\r\n - {s}"));
+          throw new EntityException<ProxySetting>($"Настройки прокси уже используются:{usedIn}\r\n", this);
+        }
       }
 
       await base.BeforeDelete(args);

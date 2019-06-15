@@ -17,10 +17,10 @@ namespace Tests.Entities
 
     public static class Henchan
     {
-      [InfoCache("http://henchan.me/manga/12850-twisted-intent-chast-1.html", true)]
+      [InfoCache("http://h-chan.me/manga/12850-twisted-intent-chast-1.html", true)]
       public static MangaInfo TwistedIntent;
 
-      [InfoCache("http://henchan.me/manga/14212-love-and-devil-glava-25.html", false)]
+      [InfoCache("http://h-chan.me/manga/14212-love-and-devil-glava-25.html", false)]
       public static MangaInfo LoveAndDevil;
     }
 

@@ -17,22 +17,22 @@ namespace Tests.Entities
 
     public static class Henchan
     {
-      [InfoCache("http://henchan.me/manga/12850-twisted-intent-chast-1.html", true)]
+      [InfoCache("http://h-chan.me/manga/12850-twisted-intent-chast-1.html", true)]
       public static MangaInfo TwistedIntent;
 
-      [InfoCache("http://henchan.me/manga/14212-love-and-devil-glava-25.html", false)]
+      [InfoCache("http://h-chan.me/manga/14212-love-and-devil-glava-25.html", false)]
       public static MangaInfo LoveAndDevil;
     }
 
     public static class Mangachan
     {
-      [InfoCache("https://mangachan.me/manga/35617--rain-.html", true)]
+      [InfoCache("https://manga-chan.me/manga/35617--rain-.html", true)]
       public static MangaInfo Rain;
 
-      [InfoCache("https://mangachan.me/manga/15659-this-girlfriend-is-fiction.html", false)]
+      [InfoCache("https://manga-chan.me/manga/15659-this-girlfriend-is-fiction.html", false)]
       public static MangaInfo ThisGirlfriendIsFiction;
 
-      [InfoCache("https://mangachan.me/manga/64187-eve-scramble.html", false)]
+      [InfoCache("https://manga-chan.me/manga/64187-eve-scramble.html", false)]
       public static MangaInfo EveScramble;
     }
 

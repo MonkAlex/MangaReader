@@ -16,7 +16,7 @@ namespace Hentaichan.Convertation
       {
         var setting = ConfigStorage.GetPlugin<Mangachan.Mangachan>().GetSettings();
         var oldMainUri = new Uri("http://mangachan.me/");
-        var mainUri = new Uri("https://mangachan.me/");
+        var mainUri = new Uri("https://manga-chan.me/");
         if (setting != null && Equals(oldMainUri, setting.MainUri))
         {
           setting.MainUri = mainUri;

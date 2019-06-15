@@ -14,7 +14,7 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task AddMangachanMultiPages()
     {
-      var manga = await GetManga("https://mangachan.me/manga/15659-this-girlfriend-is-fiction.html").ConfigureAwait(false);
+      var manga = await GetManga(MangaInfos.Mangachan.ThisGirlfriendIsFiction.Uri).ConfigureAwait(false);
       await new Parser().UpdateContent(manga).ConfigureAwait(false);
       Assert.AreEqual(4, manga.Volumes.Count);
       Assert.AreEqual(34, manga.Volumes.Sum(v => v.Container.Count()));
@@ -23,7 +23,7 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task AddMangachanSingleChapter()
     {
-      var manga = await GetManga("https://mangachan.me/manga/20138-16000-honesty.html").ConfigureAwait(false);
+      var manga = await GetManga("https://manga-chan.me/manga/20138-16000-honesty.html").ConfigureAwait(false);
       await new Parser().UpdateContent(manga).ConfigureAwait(false);
       Assert.AreEqual(1, manga.Volumes.Count);
       Assert.AreEqual(1, manga.Volumes.Sum(v => v.Container.Count()));
@@ -38,22 +38,22 @@ namespace Tests.Entities.Manga
     public async Task MangachanNameParsing()
     {
       // Спецсимвол "
-      await TestNameParsing("https://mangachan.me/manga/48069-isekai-de-kuro-no-iyashi-te-tte-yobarete-imasu.html",
+      await TestNameParsing("https://manga-chan.me/manga/48069-isekai-de-kuro-no-iyashi-te-tte-yobarete-imasu.html",
         "Isekai de \"Kuro no Iyashi Te\" tte Yobarete Imasu",
         "В другом мире моё имя - Чёрный целитель").ConfigureAwait(false);
 
       // Просто проверка.
-      await TestNameParsing("https://mangachan.me/manga/46475-shin5-kekkonshite-mo-koishiteru.html",
+      await TestNameParsing("https://manga-chan.me/manga/46475-shin5-kekkonshite-mo-koishiteru.html",
         "#shin5 - Kekkonshite mo Koishiteru",
         "Любовь после свадьбы").ConfigureAwait(false);
 
       // Нет русского варианта.
-      await TestNameParsing("https://mangachan.me/manga/17625--okazaki-mari.html",
+      await TestNameParsing("https://manga-chan.me/manga/17625--okazaki-mari.html",
         "& (Okazaki Mari)",
         "& (Okazaki Mari)").ConfigureAwait(false);
 
       // Символ звездочки *
-      await TestNameParsing("https://mangachan.me/manga/23099--asterisk.html",
+      await TestNameParsing("https://manga-chan.me/manga/23099--asterisk.html",
         "* - Asterisk",
         "Звездочка").ConfigureAwait(false);
     }

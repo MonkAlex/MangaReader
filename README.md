@@ -12,7 +12,7 @@
  2. [MintManga](http://mintmanga.com)
  3. [Hentaichan](http://henchan.me/)
  4. [Acomics](https://acomics.ru)
- 5. [Mangachan](http://mangachan.me/)
+ 5. [Mangachan](https://manga-chan.me/)
  6. [Hentai2Read](https://hentai2read.com//)
 
 Больше информации по поддержке сайтов - в [справке][Wiki].

@@ -15,7 +15,7 @@ namespace Hentaichan.Mangachan
   {
 
     /// <summary>
-    /// http://mangachan.me/user/RandomUserName/favorites
+    /// https://manga-chan.me//user/RandomUserName/favorites
     /// </summary>
     public override Uri BookmarksUri { get { return new Uri(this.MainUri, $"user/{Name}/favorites"); } }
 
@@ -57,7 +57,7 @@ namespace Hentaichan.Mangachan
     public MangachanLogin()
     {
       // Адрес может быть переопределен в базе. Это только дефолтное значение.
-      this.MainUri = new Uri(@"https://mangachan.me/");
+      this.MainUri = new Uri(@"https://manga-chan.me/");
     }
   }
 }

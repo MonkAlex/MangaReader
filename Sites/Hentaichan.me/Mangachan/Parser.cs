@@ -131,9 +131,9 @@ namespace Hentaichan.Mangachan
 
     public override UriParseResult ParseUri(Uri uri)
     {
-      // Manga : http://mangachan.me/manga/31910-jigoku-koi-sutefu.html
+      // Manga : https://manga-chan.me/manga/31910-jigoku-koi-sutefu.html
       // Volume : -
-      // Chapter : http://mangachan.me/online/249080-jigoku-koi-sutefu_v1_ch6.5.html
+      // Chapter : https://manga-chan.me/online/249080-jigoku-koi-sutefu_v1_ch6.5.html
       // Page : -
 
       var hosts = ConfigStorage.Plugins

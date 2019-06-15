@@ -121,9 +121,17 @@ namespace Tests
     {
       var fields = typeof(MangaInfos).GetNestedTypes().SelectMany(t => t.GetFields(BindingFlags.Static | BindingFlags.Public));
       var cacheAttributes = fields.Select(f => f.GetCustomAttribute<InfoCacheAttribute>()).ToList();
-      var tasks = cacheAttributes.Select(u => Builder.Generate(u)).ToArray();
-      await Task.WhenAll(tasks).ConfigureAwait(false);
-      var infos = tasks.Select(t => t.Result).OrderBy(i => i.Uri).ToList();
+      var tasks = cacheAttributes.Select(u => Builder.Generate(u));
+      List<MangaInfo> infos = new List<MangaInfo>();
+      var completedTasks = tasks.Select(t => t.ContinueWith(task =>
+      {
+        if (task.Exception != null)
+          return;
+
+        infos.Add(task.Result);
+      })).ToArray();
+      await Task.WhenAll(completedTasks);
+      infos = infos.OrderBy(i => i.Uri).ToList();
       var json = JsonConvert.SerializeObject(infos);
       File.WriteAllText(Environment.MangaCache, json);
     }

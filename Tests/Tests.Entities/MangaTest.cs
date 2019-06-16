@@ -79,7 +79,6 @@ namespace Tests
         Assert.AreEqual(1, fileInfos.GroupBy(f => f.Length).Max(g => g.Count()));
       Assert.IsTrue(manga.IsDownloaded);
       Assert.AreEqual(100, manga.Downloaded);
-      DirectoryHelpers.DeleteDirectory(manga.GetAbsoluteFolderPath());
     }
 
     [Test, TestCaseSource(nameof(MangaToValidateStatusAndDescription))]

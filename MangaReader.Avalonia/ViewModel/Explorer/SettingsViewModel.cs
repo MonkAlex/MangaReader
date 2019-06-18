@@ -3,13 +3,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MangaReader.Avalonia.ViewModel.Command;
+using MangaReader.Core.Account;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
 {
-  public class SettingsViewModel : ExplorerTabViewModel
+  public class SettingsViewModel : SettingTabViewModel
   {
     public int AutoupdateLibraryInHours
     {
@@ -65,6 +66,32 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     private SortSetting sortSetting;
 
+    public ProxySettingModel SelectedProxySettingModel
+    {
+      get
+      {
+        return selectedProxySettingModel;
+      }
+
+      set
+      {
+        this.RaiseAndSetIfChanged(ref selectedProxySettingModel, value);
+        if (selectedProxySettingModel != null)
+          proxySettingId = selectedProxySettingModel.Id;
+      }
+    }
+
+    private ProxySettingModel selectedProxySettingModel;
+    private int proxySettingId;
+
+    public IEnumerable<ProxySettingModel> ProxySettingModels
+    {
+      get => proxySettingModels;
+      set => this.RaiseAndSetIfChanged(ref proxySettingModels, value);
+    }
+
+    private IEnumerable<ProxySettingModel> proxySettingModels;
+
     public override async Task OnSelected(ExplorerTabViewModel previousModel)
     {
       await base.OnSelected(previousModel).ConfigureAwait(true);
@@ -76,6 +103,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           await ReloadConfig().ConfigureAwait(true);
           var settings = await context.Get<MangaSetting>().ToListAsync().ConfigureAwait(true);
           ExplorerViewModel.Instance.Tabs.AddRange(settings.Select(s => new MangaSettingsViewModel(s)));
+          ExplorerViewModel.Instance.Tabs.Add(new ProxySettingSelectorModel());
         }
       }
     }
@@ -83,15 +111,10 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     public override async Task OnUnselected(ExplorerTabViewModel newModel)
     {
       await base.OnUnselected(newModel).ConfigureAwait(true);
-      if (!(newModel is SettingsViewModel || newModel is MangaSettingsViewModel))
-      {
-        foreach (var tab in ExplorerViewModel.Instance.Tabs.OfType<MangaSettingsViewModel>().ToList())
-          ExplorerViewModel.Instance.Tabs.Remove(tab);
 
 #warning Нужно ресетить только после изменения порядка сортировки.
-        foreach (var model in ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>())
-          model.ResetView();
-      }
+      foreach (var model in ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>())
+        model.ResetView();
     }
 
     public ICommand Save { get; }
@@ -115,6 +138,14 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       {
         var config = await context.Get<DatabaseConfig>().SingleAsync().ConfigureAwait(true);
         this.FolderNamingStrategy = FolderNamingStrategies.FirstOrDefault(s => s.Id == config.FolderNamingStrategy);
+        this.ProxySettingModels = await context
+          .Get<ProxySetting>()
+          .Where(s => s.SettingType != ProxySettingType.Parent)
+          .Select(s => new ProxySettingModel(s))
+          .ToListAsync()
+          .ConfigureAwait(true);
+        this.proxySettingId = config.ProxySetting.Id;
+        this.SelectedProxySettingModel = this.ProxySettingModels.FirstOrDefault(m => m.Id == proxySettingId);
       }
     }
 
@@ -136,6 +167,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       {
         var config = await context.Get<DatabaseConfig>().SingleAsync().ConfigureAwait(true);
         config.FolderNamingStrategy = FolderNamingStrategy.Id;
+        if (proxySettingId != config.ProxySetting.Id)
+          config.ProxySetting = await context.Get<ProxySetting>().SingleAsync(s => s.Id == proxySettingId).ConfigureAwait(false);
         await context.Save(config).ConfigureAwait(true);
       }
     }
@@ -144,6 +177,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     {
       this.Name = "Settings";
       this.Priority = 100;
+      this.HideTab = false;
 
       this.Save = new DelegateCommand(SaveConfig, () => true);
       this.UndoChanged = new DelegateCommand(ReloadConfig, () => true);

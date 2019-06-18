@@ -20,6 +20,11 @@ namespace Acomics
     public override Uri LogoutUri { get { return new Uri(this.MainUri, "auth/logout"); } }
     public override Uri BookmarksUri { get { return new Uri(this.MainUri, "settings/subscribes"); } }
 
+    protected override CookieClient GetClient()
+    {
+      return new AcomicsClient() { BaseAddress = MainUri.ToString(), Cookie = this.ClientCookie };
+    }
+
     public override async Task<bool> DoLogin()
     {
       if (IsLogined || !this.CanLogin)

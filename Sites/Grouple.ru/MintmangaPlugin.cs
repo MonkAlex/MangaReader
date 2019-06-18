@@ -18,7 +18,7 @@ namespace Grouple
     public override HistoryType HistoryType { get { return HistoryType.Chapter; } }
     public override ISiteParser GetParser()
     {
-      return new Parser();
+      return new MintmangaParser();
     }
   }
 }

@@ -63,6 +63,7 @@ namespace Tests
         }
 
         manga = await Mangas.CreateFromWeb(new Uri(mangaInfo.Uri)).ConfigureAwait(false);
+        DirectoryHelpers.DeleteDirectory(manga.GetAbsoluteFolderPath());
         sw.Start();
         await manga.Download().ConfigureAwait(false);
       }
@@ -78,7 +79,6 @@ namespace Tests
         Assert.AreEqual(1, fileInfos.GroupBy(f => f.Length).Max(g => g.Count()));
       Assert.IsTrue(manga.IsDownloaded);
       Assert.AreEqual(100, manga.Downloaded);
-      DirectoryHelpers.DeleteDirectory(manga.GetAbsoluteFolderPath());
     }
 
     [Test, TestCaseSource(nameof(MangaToValidateStatusAndDescription))]

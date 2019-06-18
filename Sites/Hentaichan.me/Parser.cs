@@ -24,10 +24,10 @@ namespace Hentaichan
     private const string NeedRegister = "Контент запрещен на территории РФ";
     private const string IsDevelopment = "?development_access=true";
 
-    public static CookieClient GetClient()
+    public override CookieClient GetClient()
     {
       var setting = ConfigStorage.GetPlugin<Hentaichan>().GetSettings();
-      var client = new CookieClient();
+      var client = new HentaichanClient();
       if (setting != null)
       {
         var login = setting.Login as HentaichanLogin;
@@ -53,7 +53,7 @@ namespace Hentaichan
 
     public override async Task UpdateNameAndStatus(IManga manga)
     {
-      var page = await Page.GetPageAsync(manga.Uri).ConfigureAwait(false);
+      var page = await Page.GetPageAsync(manga.Uri, GetClient()).ConfigureAwait(false);
       var name = string.Empty;
       try
       {
@@ -154,7 +154,7 @@ namespace Hentaichan
       FillMangaChapters(manga, chapters);
     }
 
-    private static async Task<Tuple<Page, Uri>> GetPageWithRedirect(Uri uri)
+    private async Task<Tuple<Page, Uri>> GetPageWithRedirect(Uri uri)
     {
       uri = new Uri(uri.OriginalString.Replace(@"/manga/", @"/online/"));
       var page = await Page.GetPageAsync(uri, GetClient()).ConfigureAwait(false);
@@ -201,21 +201,23 @@ namespace Hentaichan
 
     public override Task<IEnumerable<byte[]>> GetPreviews(IManga manga)
     {
-      return Mangachan.Parser.GetPreviewsImpl(manga);
+
+      return Mangachan.Parser.GetPreviewsImpl(this, manga);
     }
 
-    protected override async Task<Tuple<HtmlNodeCollection, Uri>> GetMangaNodes(string name, Uri host, CookieClient client)
+    protected override async Task<(HtmlNodeCollection Nodes, Uri Uri, CookieClient CookieClient)> GetMangaNodes(string name, Uri host)
     {
       var searchHost = new Uri(host, "?do=search&subaction=search&story=" + WebUtility.UrlEncode(name));
+      var client = GetClient();
       var page = await Page.GetPageAsync(searchHost, client).ConfigureAwait(false);
       if (!page.HasContent)
-        return null;
+        return (null, null, null);
 
       return await Task.Run(() =>
       {
         var document = new HtmlDocument();
         document.LoadHtml(page.Content);
-        return new Tuple<HtmlNodeCollection, Uri>(document.DocumentNode.SelectNodes("//div[@class='content_row']"), host);
+        return (document.DocumentNode.SelectNodes("//div[@class='content_row']"), host, client);
       }).ConfigureAwait(false);
     }
 
@@ -254,7 +256,7 @@ namespace Hentaichan
         for (var i = 0; i < jsonParsed.Count; i++)
         {
           var uriString = jsonParsed[i].ToString();
-          pages.Add(new MangaPage(chapter.Uri, new Uri(uriString), i + 1));
+          pages.Add(new MangaPage(chapter.Uri, new Uri(uriString), i + 1, chapter));
         }
       }
       catch (Exception ex) { Log.Exception(ex); }

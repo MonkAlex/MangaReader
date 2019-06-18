@@ -7,7 +7,7 @@ using NHibernate.Event;
 
 namespace MangaReader.Core.NHibernate
 {
-  class SaveOrUpdateEvent : IPreUpdateEventListener, IPreInsertEventListener
+  class EntityChangedEvent : IPreUpdateEventListener, IPreInsertEventListener, IPreDeleteEventListener
   {
     public async Task<bool> OnPreUpdateAsync(PreUpdateEvent e, CancellationToken cancellationToken)
     {
@@ -33,6 +33,18 @@ namespace MangaReader.Core.NHibernate
     }
 
     public bool OnPreInsert(PreInsertEvent e)
+    {
+      throw new NotImplementedException();
+    }
+
+    public async Task<bool> OnPreDeleteAsync(PreDeleteEvent e, CancellationToken cancellationToken)
+    {
+      if (e.Entity is IEntity entity)
+        await entity.BeforeDelete(new ChangeTrackerArgs(e.DeletedState, null, e.Persister.PropertyNames, false)).ConfigureAwait(false);
+      return false;
+    }
+
+    public bool OnPreDelete(PreDeleteEvent e)
     {
       throw new NotImplementedException();
     }

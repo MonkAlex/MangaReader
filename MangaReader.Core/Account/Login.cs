@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Account
 {
@@ -39,10 +40,7 @@ namespace MangaReader.Core.Account
     /// </summary>
     protected internal CookieContainer ClientCookie { get; set; }
 
-    protected internal CookieClient GetClient()
-    {
-      return new CookieClient(this.ClientCookie) { BaseAddress = MainUri.ToString() };
-    }
+    protected internal abstract CookieClient GetClient();
 
     private bool isLogined;
 

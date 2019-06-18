@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using MangaReader.Core.Account;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 
@@ -72,6 +74,45 @@ namespace MangaReader.ViewModel.Setting
 
     public FolderNamingModel FolderNamingStrategy { get; set; }
 
+    private int proxySettingId;
+
+    public IEnumerable<ProxySettingModel> ProxySettingModels
+    {
+      get => proxySettingModels;
+      set
+      {
+        proxySettingModels = value;
+        OnPropertyChanged();
+      }
+    }
+
+    private IEnumerable<ProxySettingModel> proxySettingModels;
+
+    public ProxySettingModel SelectedProxySettingModel
+    {
+      get => selectedProxySettingModel;
+      set
+      {
+        selectedProxySettingModel = value;
+        if (selectedProxySettingModel != null)
+          proxySettingId = selectedProxySettingModel.Id;
+        OnPropertyChanged();
+      }
+    }
+
+    private ProxySettingModel selectedProxySettingModel;
+
+    public override void Load()
+    {
+      base.Load();
+
+      using (var context = Repository.GetEntityContext())
+      {
+        this.ProxySettingModels = context.Get<ProxySetting>().Select(s => new ProxySettingModel(s)).ToList();
+        this.SelectedProxySettingModel = this.ProxySettingModels.FirstOrDefault(m => m.Id == proxySettingId);
+      }
+    }
+
     public override async Task Save()
     {
       using (var context = Repository.GetEntityContext($"Save settings for {Header}"))
@@ -84,6 +125,8 @@ namespace MangaReader.ViewModel.Setting
         setting.FolderNamingStrategy = this.FolderNamingStrategy.Selected.Id;
         if (Uri.TryCreate(this.MainUri, UriKind.Absolute, out Uri parsedUri) && parsedUri != setting.MainUri)
           setting.MainUri = parsedUri;
+        if (proxySettingId != setting.ProxySetting.Id)
+          setting.ProxySetting = await context.Get<ProxySetting>().SingleAsync(s => s.Id == proxySettingId).ConfigureAwait(false);
         await this.Login.Save().ConfigureAwait(true);
         await context.Save(setting).ConfigureAwait(true);
       }
@@ -105,6 +148,8 @@ namespace MangaReader.ViewModel.Setting
       this.FolderNamingStrategy = new FolderNamingModel();
       this.FolderNamingStrategy.Strategies.Insert(0, new FolderNamingStrategyDto() { Name = "Использовать общие настройки" });
       this.FolderNamingStrategy.SelectedGuid = setting.FolderNamingStrategy;
+
+      this.proxySettingId = setting.ProxySetting.Id;
     }
   }
 }

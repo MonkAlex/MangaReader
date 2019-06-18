@@ -490,7 +490,7 @@ namespace MangaReader.Core.Manga
           debugMessage += $" uri changed from '{uriState.OldValue}' to '{uriState.Value}'";
           using (Repository.GetEntityContext("Manga uri changed"))
           {
-            var settings = ConfigStorage.Plugins.Where(p => p.GetParser().GetType() == Parser.GetType()).Select(p => p.GetSettings());
+            var settings = ConfigStorage.Plugins.Where(p => p.LoginType == this.Setting.Login.GetType()).Select(p => p.GetSettings());
             var allowedUris = settings.Select(s => s.MainUri).ToList();
             if (allowedUris.Any(s => s.Host == uriState.OldValue.Host) &&
                 allowedUris.All(s => s.Host != uriState.Value.Host))
@@ -642,7 +642,14 @@ namespace MangaReader.Core.Manga
 
     protected virtual async Task CreatedFromWeb(Uri url)
     {
-      await this.Refresh().ConfigureAwait(false);
+      try
+      {
+        await this.Refresh().ConfigureAwait(false);
+      }
+      catch (System.Exception ex)
+      {
+        Log.Exception(ex);
+      }
     }
 
     protected void AddHistoryReadedUris<T>(T source, Uri url) where T : IEnumerable<IDownloadable>

@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using MangaReader.Core.Account;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 
@@ -13,6 +14,10 @@ namespace Hentaichan.Mangachan
 {
   public class MangachanLogin : BaseLogin
   {
+    protected override CookieClient GetClient()
+    {
+      return new MangachanClient() { BaseAddress = MainUri.ToString(), Cookie = this.ClientCookie };
+    }
 
     /// <summary>
     /// https://manga-chan.me//user/RandomUserName/favorites

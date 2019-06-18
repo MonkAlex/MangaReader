@@ -5,12 +5,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:resx="clr-namespace:MangaReader.Properties"
         xmlns:addNewManga="clr-namespace:MangaReader.UI.AddNewManga"
+        xmlns:setting="clr-namespace:MangaReader.UI.Setting"
         mc:Ignorable="d" 
-        d:DesignHeight="230" d:DesignWidth="500">
+        d:DesignHeight="280" d:DesignWidth="500">
 
   <StackPanel>
     <Grid>
       <Grid.RowDefinitions>
+        <RowDefinition Height="2*"></RowDefinition>
         <RowDefinition Height="2*"></RowDefinition>
         <RowDefinition Height="2*"></RowDefinition>
         <RowDefinition Height="2*"></RowDefinition>
@@ -67,10 +69,21 @@
                       VerticalAlignment="Center" 
                       HorizontalAlignment="Stretch"/>
 
-      <CheckBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3"
+      <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" 
+                 TextTrimming="WordEllipsis" 
+                 Text="Настройка прокси"
+                 VerticalAlignment="Center"/>
+      <ComboBox Grid.Row="6" Grid.Column="2" 
+                ItemsSource="{Binding ProxySettingModels}" 
+                SelectedItem="{Binding SelectedProxySettingModel}"
+                DisplayMemberPath="Name"
+                VerticalAlignment="Center" 
+                HorizontalAlignment="Stretch"/>
+
+      <CheckBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3"
                       Content="{x:Static resx:Strings.Settings_Update}" 
                       IsChecked="{Binding OnlyUpdate}"/>
-      <CheckBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3"
+      <CheckBox Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3"
                       Content="{x:Static resx:Strings.Settings_Compress}"
                       IsChecked="{Binding CompressManga}"/>
     </Grid>

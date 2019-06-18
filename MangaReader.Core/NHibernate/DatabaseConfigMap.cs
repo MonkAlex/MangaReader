@@ -12,6 +12,7 @@ namespace MangaReader.Core.NHibernate
       Map(x => x.Version);
       Map(x => x.UniqueId);
       Map(x => x.FolderNamingStrategy);
+      References(x => x.ProxySetting);
     }
   }
 }

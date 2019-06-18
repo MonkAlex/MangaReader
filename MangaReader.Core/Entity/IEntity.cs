@@ -12,5 +12,11 @@
     /// </summary>
     /// <param name="args">Информация о событии.</param>
     System.Threading.Tasks.Task BeforeSave(ChangeTrackerArgs args);
+
+    /// <summary>
+    /// Событие перед удалением - для валидации.
+    /// </summary>
+    /// <param name="args">Информация о событии.</param>
+    System.Threading.Tasks.Task BeforeDelete(ChangeTrackerArgs args);
   }
 }

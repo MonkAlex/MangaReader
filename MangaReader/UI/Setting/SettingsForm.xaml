@@ -6,8 +6,8 @@
         xmlns:ui="clr-namespace:MangaReader.UI.Setting"
         WindowStartupLocation="CenterOwner"
         Title="{x:Static resx:Strings.Library_Action_Settings}"
-        Height="370"
-        Width="450">
+        Height="400"
+        Width="500">
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
@@ -23,6 +23,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type setting:MangaSettingModel}">
           <ui:MangaSettings/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type setting:ProxySettingSelectorModel}">
+          <ui:ProxySetting/>
         </DataTemplate>
       </TabControl.Resources>
       <TabControl.ItemTemplate>

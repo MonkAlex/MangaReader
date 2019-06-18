@@ -110,36 +110,21 @@ namespace MangaReader.Core
 
     public virtual IAsyncEnumerable<IManga> Search(string name)
     {
-      var client = new CookieClient();
       var hosts = ConfigStorage.Plugins
         .Where(p => p.GetParser().GetType() == this.GetType())
         .Select(p => p.GetSettings().MainUri);
-      return hosts.SelectAsync(async host => await GetMangaNodes(name, host, client).ConfigureAwait(false))
-        .Where(nc => nc != null && nc.Item1 != null)
-        .SelectMany(n => n.Item1.SelectAsync(node => GetMangaFromNode(n.Item2, client, node)))
+      return hosts.SelectAsync(async host => await GetMangaNodes(name, host).ConfigureAwait(false))
+        .Where(nc => nc.Nodes != null)
+        .SelectMany(n => n.Nodes.SelectAsync(node => GetMangaFromNode(n.Uri, n.CookieClient, node)))
         .Where(m => m != null);
     }
 
-    protected abstract Task<Tuple<HtmlNodeCollection, Uri>> GetMangaNodes(string name, Uri host, CookieClient client);
+    public abstract CookieClient GetClient();
+
+    protected abstract Task<(HtmlNodeCollection Nodes, Uri Uri, CookieClient CookieClient)> GetMangaNodes(string name, Uri host);
 
     protected abstract Task<IManga> GetMangaFromNode(Uri host, CookieClient client, HtmlNode manga);
 
-    public virtual IMapper GetMapper()
-    {
-      return Mappers.GetOrAdd(typeof(BaseSiteParser), type =>
-      {
-        var config = new MapperConfiguration(cfg =>
-        {
-          cfg.AddCollectionMappers();
-          cfg.CreateMap<VolumeDto, Volume>()
-            .EqualityComparison((src, dest) => src.Number == dest.Number);
-          cfg.CreateMap<ChapterDto, Chapter>()
-            .EqualityComparison((src, dest) => src.Number == dest.Number);
-          cfg.CreateMap<MangaPageDto, MangaPage>()
-            .EqualityComparison((src, dest) => src.ImageLink == dest.ImageLink);
-        });
-        return config.CreateMapper();
-      });
-    }
+    public abstract IMapper GetMapper();
   }
 }

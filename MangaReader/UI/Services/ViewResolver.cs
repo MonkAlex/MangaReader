@@ -20,6 +20,7 @@ namespace MangaReader.UI.Services
       AddOrReplace(typeof(ViewModel.Setting.MangaSettingModel), typeof(MangaReader.UI.Setting.MangaSettings));
       AddOrReplace(typeof(ViewModel.Manga.MangaModel), typeof(MangaReader.UI.Manga.MangaForm));
       AddOrReplace(typeof(ViewModel.ShutdownViewModel), typeof(MangaReader.UI.ShutdownWindow));
+      AddOrReplace(typeof(ViewModel.Setting.ProxySettingModel), typeof(MangaReader.UI.Setting.ProxySetting));
     }
   }
 }

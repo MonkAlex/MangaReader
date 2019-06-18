@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using MangaReader.Core.Manga;
+using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Services
 {
@@ -26,15 +28,17 @@ namespace MangaReader.Core.Services
     /// <summary>
     /// Скачать файл.
     /// </summary>
-    /// <param name="uri">Ссылка на файл.</param>
+    /// <param name="uri">Ссылка на страницу манги.</param>
+    /// <param name="settingCache">Настройки сети.</param>
     /// <returns>Содержимое файла.</returns>
-    public static async Task<ImageFile> DownloadImage(Uri uri)
+    public static async Task<ImageFile> DownloadImage(Uri uri, MangaSettingCache settingCache)
     {
       byte[] result;
       WebResponse response;
       var file = new ImageFile();
       var request = (HttpWebRequest)WebRequest.Create(uri);
       request.Referer = uri.Host;
+      request.Proxy = settingCache.Proxy;
 
       try
       {
@@ -43,7 +47,7 @@ namespace MangaReader.Core.Services
       }
       catch (System.Exception ex)
       {
-        Log.Exception(ex, string.Format("Загрузка {0} не завершена.", uri));
+        Log.Exception(ex, string.Format($"Загрузка {uri} не завершена. Использованы настройки прокси {settingCache.SettingType}"));
         return file;
       }
       if (response.ContentLength <= result.LongLength)

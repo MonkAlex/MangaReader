@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Dialogs.Avalonia;
-using Dialogs.Buttons;
 using MangaReader.Core.Manga;
 using MangaReader.Avalonia.Properties;
 using MangaReader.Avalonia.ViewModel.Explorer;

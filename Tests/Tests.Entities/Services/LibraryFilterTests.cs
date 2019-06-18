@@ -20,12 +20,14 @@ namespace Tests.Entities.Services
       var comparer = new LibraryFilter();
       comparer.SortDescription = new SortDescription(property, direction);
 
+      var utcNow = DateTime.UtcNow;
+
       (int compareDifferent, int compareEquals) CompareManga()
       {
-        IManga manga1 = new Readmanga() { Name = "A-Name", Created = DateTime.UtcNow, DownloadedAt = DateTime.UtcNow };
+        IManga manga1 = new Readmanga() { Name = "A-Name", Created = utcNow, DownloadedAt = utcNow };
         IManga manga2 = new Readmanga()
-          { Name = "b-name", Created = DateTime.UtcNow.AddMinutes(1), DownloadedAt = DateTime.UtcNow.AddMinutes(1) };
-        IManga manga3 = new Readmanga() { Name = "a-name", Created = DateTime.UtcNow, DownloadedAt = DateTime.UtcNow };
+          { Name = "b-name", Created = utcNow.AddMinutes(1), DownloadedAt = utcNow.AddMinutes(1) };
+        IManga manga3 = new Readmanga() { Name = "a-name", Created = utcNow, DownloadedAt = utcNow };
         var i = comparer.Compare(manga1, manga2);
         var compareEquals1 = comparer.Compare(manga1, manga3);
         return (i, compareEquals1);
@@ -33,9 +35,9 @@ namespace Tests.Entities.Services
 
       (int compareDifferent, int compareEquals) CompareProxy()
       {
-        ILibraryFilterableItem manga1 = new MangaProxy(new Readmanga() { Name = "A-Name", Created = DateTime.UtcNow, DownloadedAt = DateTime.UtcNow });
-        ILibraryFilterableItem manga2 = new MangaProxy(new Readmanga() { Name = "b-name", Created = DateTime.UtcNow.AddMinutes(1), DownloadedAt = DateTime.UtcNow.AddMinutes(1) });
-        ILibraryFilterableItem manga3 = new MangaProxy(new Readmanga() { Name = "a-name", Created = DateTime.UtcNow, DownloadedAt = DateTime.UtcNow });
+        ILibraryFilterableItem manga1 = new MangaProxy(new Readmanga() { Name = "A-Name", Created = utcNow, DownloadedAt = utcNow });
+        ILibraryFilterableItem manga2 = new MangaProxy(new Readmanga() { Name = "b-name", Created = utcNow.AddMinutes(1), DownloadedAt = utcNow.AddMinutes(1) });
+        ILibraryFilterableItem manga3 = new MangaProxy(new Readmanga() { Name = "a-name", Created = utcNow, DownloadedAt = utcNow });
         var i = comparer.Compare(manga1, manga2);
         var compareEquals1 = comparer.Compare(manga1, manga3);
         return (i, compareEquals1);

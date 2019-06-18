@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Core.Services;
 using System.Windows.Input;
-using Dialogs.Buttons;
+using MangaReader.Core.Account;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
 {
-  public class MangaSettingsViewModel : ExplorerTabViewModel
+  public class MangaSettingsViewModel : SettingTabViewModel
   {
     private readonly int mangaSettingsId;
 
@@ -67,15 +67,31 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     private Compression.CompressionMode compression;
 
-    public override async Task OnUnselected(ExplorerTabViewModel newModel)
+    public ProxySettingModel SelectedProxySettingModel
     {
-      await base.OnUnselected(newModel).ConfigureAwait(true);
-      if (!(newModel is SettingsViewModel || newModel is MangaSettingsViewModel))
+      get
       {
-        foreach (var tab in ExplorerViewModel.Instance.Tabs.OfType<MangaSettingsViewModel>().ToList())
-          ExplorerViewModel.Instance.Tabs.Remove(tab);
+        return selectedProxySettingModel;
+      }
+
+      set
+      {
+        this.RaiseAndSetIfChanged(ref selectedProxySettingModel, value);
+        if (selectedProxySettingModel != null)
+          proxySettingId = selectedProxySettingModel.Id;
       }
     }
+
+    private ProxySettingModel selectedProxySettingModel;
+    private int proxySettingId;
+
+    public IEnumerable<ProxySettingModel> ProxySettingModels
+    {
+      get => proxySettingModels;
+      set => this.RaiseAndSetIfChanged(ref proxySettingModels, value);
+    }
+
+    private IEnumerable<ProxySettingModel> proxySettingModels;
 
     public ICommand Save { get; }
 
@@ -94,6 +110,13 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           this.Compression = setting.DefaultCompression;
           this.FolderNamingStrategy = FolderNamingStrategies.FirstOrDefault(s => s.Id == setting.FolderNamingStrategy);
           this.MainUri = setting.MainUri.OriginalString;
+          this.ProxySettingModels = await context
+            .Get<ProxySetting>()
+            .Select(s => new ProxySettingModel(s))
+            .ToListAsync()
+            .ConfigureAwait(true);
+          this.proxySettingId = setting.ProxySetting.Id;
+          this.SelectedProxySettingModel = this.ProxySettingModels.FirstOrDefault(m => m.Id == proxySettingId);
         }
       }
     }
@@ -116,6 +139,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
             setting.FolderNamingStrategy = this.FolderNamingStrategy.Id;
             if (Uri.TryCreate(this.MainUri, UriKind.Absolute, out Uri parsedUri) && parsedUri != setting.MainUri)
               setting.MainUri = parsedUri;
+            if (proxySettingId != setting.ProxySetting.Id)
+              setting.ProxySetting = await context.Get<ProxySetting>().SingleAsync(s => s.Id == proxySettingId).ConfigureAwait(false);
             await context.Save(setting).ConfigureAwait(true);
           }
         }
@@ -123,14 +148,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       catch (Exception ex)
       {
         Log.Exception(ex);
-
-        var dialog = new Dialogs.Avalonia.Dialog
-        {
-          Title = "Не удалось сохранить настройки",
-          Description = ex.Message
-        };
-        dialog.Buttons.AddButton(DefaultButtons.OkButton);
-        await dialog.ShowAsync().ConfigureAwait(true);
+        await Services.Dialogs.ShowInfo("Не удалось сохранить настройки", ex.Message);
       }
     }
 

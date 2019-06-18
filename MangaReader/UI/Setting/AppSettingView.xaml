@@ -4,11 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:resx="clr-namespace:MangaReader.Properties"
+             xmlns:setting="clr-namespace:MangaReader.UI.Setting"
              mc:Ignorable="d" 
-             d:DesignHeight="250" d:DesignWidth="450">
+             d:DesignHeight="280" d:DesignWidth="450">
   <StackPanel>
     <Grid>
       <Grid.RowDefinitions>
+        <RowDefinition Height="*"></RowDefinition>
         <RowDefinition Height="*"></RowDefinition>
         <RowDefinition Height="*"></RowDefinition>
         <RowDefinition Height="*"></RowDefinition>
@@ -91,15 +93,26 @@
                       VerticalAlignment="Center" 
                       HorizontalAlignment="Stretch"/>
 
-      <CheckBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+      <TextBlock Grid.Row="6" Grid.Column="0"
+                 TextTrimming="WordEllipsis" 
+                 Text="Настройка прокси"
+                 VerticalAlignment="Center"/>
+      <ComboBox Grid.Row="6" Grid.Column="1" 
+                ItemsSource="{Binding ProxySettingModels}" 
+                SelectedItem="{Binding SelectedProxySettingModel}"
+                DisplayMemberPath="Name"
+                VerticalAlignment="Center" 
+                HorizontalAlignment="Stretch"/>
+
+      <CheckBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
                                   IsChecked="{Binding UpdateReader}"
                   Content="{x:Static resx:Strings.Settings_UpdateReader}" 
                   VerticalAlignment="Center"/>
-      <CheckBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
+      <CheckBox Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
                       IsChecked="{Binding MinimizeToTray}"
                       Content="{x:Static resx:Strings.Settings_MinimizeToTray}" 
                       VerticalAlignment="Center"/>
-      <CheckBox Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
+      <CheckBox Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2"
                       IsChecked="{Binding StartAppMinimizedToTray}"
                       Content="{x:Static resx:Strings.Settings_StartAppMinimizedToTray}" 
                       VerticalAlignment="Center"/>

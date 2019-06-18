@@ -39,7 +39,8 @@ namespace Grouple
     /// <param name="imageLink">Ссылка на изображение.</param>
     /// <param name="number">Номер страницы.</param>
     /// <param name="servers">Сервера, которые могут содержать страницу.</param>
-    public GroupleMangaPage(Uri uri, Uri imageLink, int number, IEnumerable<Uri> servers) : base(uri, imageLink, number)
+    /// <param name="chapter">Глава, которой принадлежит страница.</param>
+    public GroupleMangaPage(Uri uri, Uri imageLink, int number, IEnumerable<Uri> servers, Chapter chapter) : base(uri, imageLink, number, chapter)
     {
       this.Servers = servers.ToList();
       this.MaxAttempt = Math.Max(MaxAttempt, Servers.Count);

@@ -28,7 +28,7 @@ namespace Tests.Entities.MangaHistory
         await context.Save(manga).ConfigureAwait(false);
 
         var chapter = new Chapter(chapterUri, string.Empty);
-        chapter.Container.Add(new MangaPage(new Uri("https://acomics.ru/~ma3/1130"), null, 1));
+        chapter.Container.Add(new MangaPage(new Uri("https://acomics.ru/~ma3/1130"), null, 1, chapter));
         var volume = new Volume() { Uri = volumeUri };
         volume.Container.Add(chapter);
 
@@ -55,7 +55,7 @@ namespace Tests.Entities.MangaHistory
         await context.Save(manga).ConfigureAwait(false);
 
         var chapter = new Chapter(chapterUri, string.Empty);
-        chapter.Container.Add(new MangaPage(new Uri("https://acomics.ru/~ma3/794"), null, 1));
+        chapter.Container.Add(new MangaPage(new Uri("https://acomics.ru/~ma3/794"), null, 1, chapter));
         var volume = new Volume() { Uri = volumeUri };
         volume.Container.Add(chapter);
 

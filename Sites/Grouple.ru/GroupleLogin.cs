@@ -20,6 +20,12 @@ namespace Grouple
     public override Uri LogoutUri { get { return new Uri(this.MainUri, "login/logout"); } }
     public override Uri BookmarksUri { get { return new Uri(this.MainUri, "private/bookmarks"); } }
 
+    protected override CookieClient GetClient()
+    {
+#warning В итоге конкретный клиент тут забит, а логин на совсем другом хосте.
+      return new MintmangaClient() { BaseAddress = MainUri.ToString(), Cookie = this.ClientCookie };
+    }
+
     public override async Task<bool> DoLogin()
     {
       if (IsLogined || !this.CanLogin)
@@ -66,7 +72,8 @@ namespace Grouple
         return bookmarks;
       }
 
-      var parser = new Parser();
+#warning Тоже завязка на конкретный тип
+      var parser = new MintmangaParser();
       using (var context = Repository.GetEntityContext("Loading bookmarks"))
       {
         var loadedBookmarks = Regex

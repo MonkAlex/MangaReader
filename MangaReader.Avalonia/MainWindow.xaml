@@ -19,6 +19,9 @@
     <DataTemplate DataType="c:MangaSettingsViewModel">
       <view:MangaSettings/>
     </DataTemplate>
+    <DataTemplate DataType="c:ProxySettingSelectorModel">
+      <view:ProxySetting/>
+    </DataTemplate>
     <DataTemplate DataType="c:MangaModel">
       <view:MangaView/>
     </DataTemplate>

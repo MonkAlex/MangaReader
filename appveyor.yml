@@ -13,7 +13,7 @@ configuration:
 - Debug
 test: off
 after_build:
-  - nuget install OpenCover -Version 4.7.945-rc -ExcludeVersion -Source https://www.myget.org/F/opencover/api/v3/index.json
+  - nuget install OpenCover -Version 4.6.519 -ExcludeVersion
   - nuget install NUnit.Runners -Version 3.7.0 -ExcludeVersion
   - pip install codecov
 

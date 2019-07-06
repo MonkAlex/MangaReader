@@ -31,7 +31,7 @@ namespace MangaReader.Avalonia
       App.AttachDevTools(this);
       MangaReader.Core.Update.Updater.NewVersionFound += UpdaterOnNewVersionFound;
       explorer.LoadingProcess.Status = Title;
-      Client.Start(explorer.LoadingProcess).ConfigureAwait(true);
+      Task.Run(() => Client.Start(explorer.LoadingProcess));
       this.DataContext = explorer;
 
       // Focus to first textbox

@@ -1,6 +1,7 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:av="clr-namespace:MangaReader.Avalonia;assembly=MangaReader.Avalonia"
+             x:Class="MangaReader.Avalonia.View.Library"
              Design.Width="400" Design.Height="300">
   <Grid RowDefinitions="Auto,*,Auto,Auto" DataContext="{Binding}">
     <TextBox Grid.Row="0" Text="{Binding Search}" Watermark="Поиск по имени" UseFloatingWatermark="True"/>

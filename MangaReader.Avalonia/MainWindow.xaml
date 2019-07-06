@@ -1,5 +1,6 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="MangaReader.Avalonia.MainWindow"
         xmlns:c="clr-namespace:MangaReader.Avalonia.ViewModel.Explorer;assembly=MangaReader.Avalonia"
         xmlns:view="clr-namespace:MangaReader.Avalonia.View;assembly=MangaReader.Avalonia"
         xmlns:av="clr-namespace:MangaReader.Avalonia;assembly=MangaReader.Avalonia"

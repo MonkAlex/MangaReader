@@ -1,5 +1,6 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="MangaReader.Avalonia.View.SettingsMain"
              Design.Width="400" Design.Height="300">
   <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
         DataContext="{Binding}"

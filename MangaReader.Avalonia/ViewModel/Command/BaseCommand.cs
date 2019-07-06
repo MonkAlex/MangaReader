@@ -69,10 +69,20 @@ namespace MangaReader.Avalonia.ViewModel.Command
 
     public virtual void OnCanExecuteChanged()
     {
-      if (Dispatcher.UIThread.CheckAccess())
+      void InvokeCanExecuteChanged()
+      {
+        //HACK: if button deattach from logical tree when isvisible = false, button not attach on next show.
+        // Not attach -> not subscribe to CanExecuteChanged.
+        if (CanExecuteChanged == null && !IsVisible)
+          IsVisible = true;
+
         CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+      }
+
+      if (Dispatcher.UIThread.CheckAccess())
+        InvokeCanExecuteChanged();
       else
-        Dispatcher.UIThread.InvokeAsync(() => CanExecuteChanged?.Invoke(this, EventArgs.Empty));
+        Dispatcher.UIThread.InvokeAsync(InvokeCanExecuteChanged);
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

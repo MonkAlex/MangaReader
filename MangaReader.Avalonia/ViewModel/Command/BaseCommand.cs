@@ -82,7 +82,7 @@ namespace MangaReader.Avalonia.ViewModel.Command
       if (Dispatcher.UIThread.CheckAccess())
         InvokeCanExecuteChanged();
       else
-        Dispatcher.UIThread.InvokeAsync(InvokeCanExecuteChanged);
+        Dispatcher.UIThread.InvokeAsync((Action)InvokeCanExecuteChanged);
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

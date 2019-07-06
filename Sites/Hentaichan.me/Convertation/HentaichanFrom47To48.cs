@@ -15,7 +15,7 @@ namespace Hentaichan.Convertation
       {
         var setting = ConfigStorage.GetPlugin<Hentaichan>().GetSettings();
         var oldMainUri = new Uri("http://henchan.me");
-        var mainUri = new Uri("http://h-chan.me/");
+        var mainUri = new Uri("https://h-chan.me/");
         if (setting != null && Equals(oldMainUri, setting.MainUri))
         {
           setting.MainUri = mainUri;

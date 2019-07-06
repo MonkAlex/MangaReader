@@ -15,7 +15,7 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task AddHentaichanMultiPages()
     {
-      var manga = await GetManga("http://h-chan.me/manga/14212-love-and-devil-glava-25.html").ConfigureAwait(false);
+      var manga = await GetManga("https://h-chan.me/manga/14212-love-and-devil-glava-25.html").ConfigureAwait(false);
       Assert.AreEqual(25, manga.Chapters.Count);
       Assert.IsTrue(manga.HasChapters);
     }
@@ -23,7 +23,7 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task AddHentaichanOneChapter()
     {
-      var manga = await GetManga("http://h-chan.me/manga/15131-chuui-horeru-to-yakui-kara.html").ConfigureAwait(false);
+      var manga = await GetManga("https://h-chan.me/manga/15131-chuui-horeru-to-yakui-kara.html").ConfigureAwait(false);
       Assert.AreEqual(1, manga.Chapters.Count);
       Assert.IsTrue(manga.HasChapters);
     }
@@ -31,7 +31,7 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task AddHentaichanSubdomain()
     {
-      var manga = await GetManga("http://h-chan.me/manga/23083-ponpharse-tokubetsu-hen-chast-1.html").ConfigureAwait(false);
+      var manga = await GetManga("https://h-chan.me/manga/23083-ponpharse-tokubetsu-hen-chast-1.html").ConfigureAwait(false);
       Assert.AreEqual(2, manga.Chapters.Count);
       Assert.IsTrue(manga.HasChapters);
     }
@@ -41,27 +41,27 @@ namespace Tests.Entities.Manga
     public async Task HentaichanNameParsing()
     {
       // Спецсимвол \
-      await TestNameParsing("http://h-chan.me/manga/14504-lets-play-lovegames-shall-we-glava-1.html",
+      await TestNameParsing("https://h-chan.me/manga/14504-lets-play-lovegames-shall-we-glava-1.html",
         "Let's Play Lovegames, Shall We?").ConfigureAwait(false);
 
       // Спецсимвол # и одна глава
-      await TestNameParsing("http://h-chan.me/manga/15109-exhibitionist-renko-chan.html",
+      await TestNameParsing("https://h-chan.me/manga/15109-exhibitionist-renko-chan.html",
         "#Exhibitionist Renko-chan").ConfigureAwait(false);
 
       // Символ звездочки *
-      await TestNameParsing("http://h-chan.me/manga/15131-chuui-horeru-to-yakui-kara.html",
+      await TestNameParsing("https://h-chan.me/manga/15131-chuui-horeru-to-yakui-kara.html",
         "*Chuui* Horeru to Yakui kara").ConfigureAwait(false);
 
       // Символ /
-      await TestNameParsing("http://h-chan.me/manga/10535-blush-dc.-glava-1.html",
+      await TestNameParsing("https://h-chan.me/manga/10535-blush-dc.-glava-1.html",
         "/Blush-DC.").ConfigureAwait(false);
 
       // На всякий случай
-      await TestNameParsing("http://h-chan.me/manga/23083-ponpharse-tokubetsu-hen-chast-1.html",
+      await TestNameParsing("https://h-chan.me/manga/23083-ponpharse-tokubetsu-hen-chast-1.html",
         "Ponpharse - Tokubetsu Hen").ConfigureAwait(false);
 
       // Манга требующая регистрации для просмотра
-      await TestNameParsing("http://h-chan.me/manga/14212-love-and-devil-glava-25.html",
+      await TestNameParsing("https://h-chan.me/manga/14212-love-and-devil-glava-25.html",
         "Love and Devil").ConfigureAwait(false);
     }
 

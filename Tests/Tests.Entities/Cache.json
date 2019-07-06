@@ -1,27 +1,11 @@
 [
   {
-    "Uri": "http://h-chan.me/manga/12850-twisted-intent-chast-1.html",
-    "FolderSize": 9984593,
-    "FilesInFolder": 32,
-    "AllFilesUnique": true,
-    "Description": "",
-    "Status": "Серия League of Legends\r\nАвтор ﻿OptionalTypo\r\nПереводчик ﻿TheMaximchik\r\nЯзык На русском\r\n"
-  },
-  {
-    "Uri": "http://h-chan.me/manga/14212-love-and-devil-glava-25.html",
-    "FolderSize": 0,
-    "FilesInFolder": 0,
-    "AllFilesUnique": false,
-    "Description": "Конец серии + бонусная история",
-    "Status": "Серия Оригинальные работы\r\nАвтор ﻿Yanagi Masashi\r\nПереводчик ﻿Илион\r\nЯзык На русском\r\n"
-  },
-  {
     "Uri": "http://mintmanga.com/haruka_na_receive",
     "FolderSize": 3474445,
     "FilesInFolder": 11,
     "AllFilesUnique": true,
     "Description": "Каната — \r\nопытная пляжная волейболистка, решила бросить спорт из-за своего \r\nнизкого роста, но однажды её двоюродная сестра Харука, уговаривает  вновь вернуться на песок\r\n ради любительского матча... После этого они вместе решают стать \r\nкомандой и принять участие в юношеском турнире.",
-    "Status": "Томов: 7, выпуск продолжается\r\nПеревод: продолжается\r\nЖанры: спорт, сэйнэн, этти\r\nКатегория: Не Яой\r\nАвтор: Нёи Дзидзай\r\nГод выпуска: 2015\r\nИздательство: Houbunsha\r\nЖурнал: Manga Time Kirara Forward\r\nПереводчик: Dr_Feliks Laboratory\r\n"
+    "Status": "Томов: 7, выпуск продолжается\r\nПеревод: продолжается\r\nЖанры: сэйнэн, этти, спорт\r\nКатегория: Не Яой\r\nАвтор: Нёи Дзидзай\r\nГод выпуска: 2015\r\nИздательство: Houbunsha\r\nЖурнал: Manga Time Kirara Forward\r\nПереводчик: Dr_Feliks Laboratory\r\n"
   },
   {
     "Uri": "http://mintmanga.com/love_mate",
@@ -29,7 +13,7 @@
     "FilesInFolder": 0,
     "AllFilesUnique": false,
     "Description": "Ямато, приехал учиться в высшей школе в Токио из предместья Хиросимы. По пути к своей тёте, у которой он поселился на время учёбы,  встречает красивую девушку и влюбляется в нее с первого взгляда. Позже оказывается, что девушка — его соседка, зовут её Судзука, и она  поступила в ту же высшую школу. Он пытается привлечь её внимание, и даже вступает в команду по лёгкой атлетике, в которой она состоит.",
-    "Status": "Томов: 18\r\nПеревод: завершен\r\nЖанры: сёнэн, гарем, романтика, повседневность, этти, спорт, школа, драма …\r\nКатегория: Не Яой\r\nАвтор: Сэо Кодзи\r\nГод выпуска: 2003\r\nИздательство: Kodansha\r\nЖурнал: Shuukan Shounen Magazine\r\nПереводчики: Ной Студия, AngelVan, cheer_less\r\n"
+    "Status": "Томов: 18\r\nПеревод: завершен\r\nЖанры: гарем, повседневность, сёнэн, школа, спорт, романтика, этти, драма …\r\nКатегория: Не Яой\r\nАвтор: Сэо Кодзи\r\nГод выпуска: 2003\r\nИздательство: Kodansha\r\nЖурнал: Shuukan Shounen Magazine\r\nПереводчики: Ной Студия, AngelVan, cheer_less\r\n"
   },
   {
     "Uri": "http://readmanga.me/kuroshitsuji_dj___black_sheep",
@@ -45,7 +29,7 @@
     "FilesInFolder": 0,
     "AllFilesUnique": false,
     "Description": "4-кадровая манга дополнительно включенная в тома манги \"Город,в котором ты живешь\"",
-    "Status": "Томов: 1\r\nПеревод: завершен\r\nЖанры: комедия, повседневность\r\nКатегория: Ёнкома\r\nАвтор: Сэо Кодзи\r\nГод выпуска: 2008\r\nИздательство: Kodansha\r\nПереводчик: Aoshi Shinomori\r\n"
+    "Status": "Томов: 1\r\nПеревод: завершен\r\nЖанры: повседневность, комедия\r\nКатегория: Ёнкома\r\nАвтор: Сэо Кодзи\r\nГод выпуска: 2008\r\nИздательство: Kodansha\r\nПереводчик: Aoshi Shinomori\r\n"
   },
   {
     "Uri": "https://acomics.ru/~MGS-LDIOH",
@@ -64,12 +48,28 @@
     "Status": "https://acomics.ru/~supersciencefriends\r\nАвтор оригинала: Tinman Creative Studios\r\nАвтор оригинала: Tinman Creative Studios\r\nПереводчик: CrownedPenguin\r\nКоличество выпусков: 44\r\nКоличество подписчиков: 281\r\nОфициальный сайт: http://supersciencefriends.com/2099/\r\nВозрастной рейтинг: Parents strongly cautioned (Не рекомендуется лицам до 13 лет)\r\nЛицензия: Нет лицензии или не CC\r\n"
   },
   {
+    "Uri": "https://h-chan.me/manga/12850-twisted-intent-chast-1.html",
+    "FolderSize": 46295753,
+    "FilesInFolder": 47,
+    "AllFilesUnique": true,
+    "Description": "",
+    "Status": "Серия League of Legends\r\nАвтор ﻿OptionalTypo\r\nПереводчик ﻿TheMaximchik\r\nЯзык На русском\r\n"
+  },
+  {
+    "Uri": "https://h-chan.me/manga/14212-love-and-devil-glava-25.html",
+    "FolderSize": 0,
+    "FilesInFolder": 0,
+    "AllFilesUnique": false,
+    "Description": "Конец серии + бонусная история",
+    "Status": "Серия Оригинальные работы\r\nАвтор ﻿Yanagi Masashi\r\nПереводчик ﻿Илион\r\nЯзык На русском\r\n"
+  },
+  {
     "Uri": "https://hentai2read.com/attention_please_yamashita_shunya/",
     "FolderSize": 557885,
     "FilesInFolder": 4,
     "AllFilesUnique": true,
     "Description": "Storyline\r\n\r\nFlight attendant genre + maid.",
-    "Status": "Parody  -\r\nRanking  7133rd\r\nStatus  Completed\r\nRelease Year  2010\r\nView  41,887 views\r\nAuthor  YAMASHITA Shunya\r\nArtist  YAMASHITA Shunya\r\nCategory  Adult, Comedy, Oneshot\r\nContent  Full Color, Gangbang, Group Intercourse, Maids\r\nCharacter  -\r\nLanguage  English\r\n"
+    "Status": "Parody  -\r\nRanking  6891st\r\nStatus  Completed\r\nRelease Year  2010\r\nView  55,715 views\r\nAuthor  YAMASHITA Shunya\r\nArtist  YAMASHITA Shunya\r\nCategory  Adult, Comedy, Oneshot\r\nContent  Full Color, Gangbang, Group Intercourse, Maids\r\nCharacter  -\r\nLanguage  English\r\n"
   },
   {
     "Uri": "https://manga-chan.me/manga/15659-this-girlfriend-is-fiction.html",

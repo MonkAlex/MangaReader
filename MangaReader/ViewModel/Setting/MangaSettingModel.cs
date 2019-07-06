@@ -127,8 +127,8 @@ namespace MangaReader.ViewModel.Setting
           setting.MainUri = parsedUri;
         if (proxySettingId != setting.ProxySetting.Id)
           setting.ProxySetting = await context.Get<ProxySetting>().SingleAsync(s => s.Id == proxySettingId).ConfigureAwait(false);
-        await this.Login.Save().ConfigureAwait(true);
         await context.Save(setting).ConfigureAwait(true);
+        await this.Login.Save().ConfigureAwait(true);
       }
     }
 

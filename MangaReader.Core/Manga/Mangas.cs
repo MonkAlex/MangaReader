@@ -645,6 +645,8 @@ namespace MangaReader.Core.Manga
       try
       {
         await this.Refresh().ConfigureAwait(false);
+        var covers = await Parser.GetPreviews(this).ConfigureAwait(false);
+        Cover = covers.FirstOrDefault();
       }
       catch (System.Exception ex)
       {

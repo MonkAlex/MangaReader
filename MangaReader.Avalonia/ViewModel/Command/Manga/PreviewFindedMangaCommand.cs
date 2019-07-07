@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Manga;
-using MangaReader.Core.NHibernate;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
@@ -18,8 +17,10 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       if (manga == null)
         return;
 
-      manga.Cover = model.Cover;
       await manga.Refresh().ConfigureAwait(true);
+      var covers = await manga.Parser.GetPreviews(manga).ConfigureAwait(true);
+      manga.Cover = covers.FirstOrDefault();
+
       if (await manga.IsValid().ConfigureAwait(true))
       {
         var explorer = ExplorerViewModel.Instance;

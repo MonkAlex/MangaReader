@@ -73,7 +73,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
           LibraryModel.SelectedMangaModels.Add(model);
       }
 
-      foreach (var command in LibraryModel.Commands.Where(m => m.GetType() == GetType()).OfType<MultipleMangasBaseCommand>())
+      foreach (var command in LibraryModel.MangaCommands.Where(m => m.GetType() == GetType()).OfType<MultipleMangasBaseCommand>())
         command.OnCanExecuteChanged();
     }
 

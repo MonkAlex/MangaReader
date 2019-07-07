@@ -54,7 +54,9 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       }
     }
 
-    public ObservableCollection<BaseCommand> Commands { get; }
+    public ObservableCollection<BaseCommand> LibraryCommands { get; }
+
+    public ObservableCollection<BaseCommand> MangaCommands { get; }
 
     public double? UpdatePercent
     {
@@ -113,12 +115,13 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     {
       this.Name = "Main";
       this.Priority = 10;
-      this.Commands = new ObservableCollection<BaseCommand>();
+      this.LibraryCommands = new ObservableCollection<BaseCommand>();
+      this.MangaCommands = new ObservableCollection<BaseCommand>();
       this.SelectedMangaModels = new ObservableCollection<MangaModel>();
       this.Library = new Core.Services.LibraryViewModel();
       this.Library.LibraryChanged += LibraryOnLibraryChanged;
-      this.Commands.Add(new UpdateWithPauseCommand(this, Library));
-      this.Commands.AddRange(new BaseCommand[] {
+      this.LibraryCommands.Add(new UpdateWithPauseCommand(this, Library));
+      this.MangaCommands.AddRange(new BaseCommand[] {
         new OpenFolderCommand(this),
         new ChangeUpdateMangaCommand(false, this),
         new ChangeUpdateMangaCommand(true, this),

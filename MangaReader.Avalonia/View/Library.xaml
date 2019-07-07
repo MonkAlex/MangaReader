@@ -1,6 +1,7 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:av="clr-namespace:MangaReader.Avalonia;assembly=MangaReader.Avalonia"
+             xmlns:v="clr-namespace:MangaReader.Avalonia.View;assembly=MangaReader.Avalonia"
              x:Class="MangaReader.Avalonia.View.Library"
              Design.Width="400" Design.Height="300">
   <Grid RowDefinitions="Auto,*,Auto,Auto" DataContext="{Binding}">
@@ -13,11 +14,16 @@
                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
       <ListBox.ItemTemplate>
         <DataTemplate>
-          <Grid RowDefinitions="*,Auto" Margin="10"
-                Width="150" Height="300">
-            <Image Grid.Row="0" Source="{Binding Cover, Converter={x:Static av:BitmapTypeConverter.Instance}}"/>
-            <TextBlock Grid.Row="1" Text="{Binding MangaName}" TextWrapping="Wrap" ToolTip.Tip="{Binding MangaName}" HorizontalAlignment="Center"/>
-          </Grid>
+          <Border Background="Transparent">
+            <Border.ContextMenu>
+              <v:ContextMenu DataContext="{Binding $parent[UserControl].DataContext}" Items="{Binding MangaCommands}"/>
+            </Border.ContextMenu>
+            <Grid RowDefinitions="*,Auto" Margin="10"
+                  Width="150" Height="300">
+              <Image Grid.Row="0" Source="{Binding Cover, Converter={x:Static av:BitmapTypeConverter.Instance}}"/>
+              <TextBlock Grid.Row="1" Text="{Binding MangaName}" TextWrapping="Wrap" ToolTip.Tip="{Binding MangaName}" HorizontalAlignment="Center"/>
+            </Grid>
+          </Border>
         </DataTemplate>
       </ListBox.ItemTemplate>
       <ListBox.ItemsPanel>
@@ -27,7 +33,7 @@
       </ListBox.ItemsPanel>
     </ListBox>
     <ProgressBar Grid.Row="2" IsVisible="{Binding !!UpdatePercent}" Value="{Binding UpdatePercent}" Minimum="0" Maximum="1"/>
-    <ListBox Grid.Row="3" Items="{Binding Commands}"
+    <ListBox Grid.Row="3" Items="{Binding LibraryCommands}"
                ScrollViewer.VerticalScrollBarVisibility="Auto"
                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
       <ListBox.ItemTemplate>

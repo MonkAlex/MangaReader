@@ -21,7 +21,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       if (parameter != null && Directory.Exists(parameter.GetAbsoluteFolderPath()))
         Helper.StartUseShell(parameter.GetAbsoluteFolderPath());
       else
-        Log.Info(Strings.Library_Status_FolderNotFound);
+        Log.Info(string.Format(Strings.Library_Status_FolderNotFound, parameter?.Folder));
     }
 
     public override bool CanExecute(object parameter)

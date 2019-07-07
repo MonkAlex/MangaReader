@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 using MangaReader.Avalonia.Properties;
 using MangaReader.Core;
 using MangaReader.Core.Services;
@@ -19,8 +20,8 @@ namespace MangaReader.Avalonia.ViewModel.Command
 
         Log.Add("Application will be closed.");
         Client.Close();
-        Application.Current.OnExit += (sender, args) => Environment.Exit(0);
-        Application.Current.Exit();
+        if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime && lifetime != parameter)
+          lifetime.Shutdown();
       }
 
       return Task.CompletedTask;

@@ -75,13 +75,29 @@
                Margin="10"
                VerticalAlignment="Center"
                Text="Download to"/>
-    <TextBox Grid.Column="1"
-             Grid.Row="3"
-             Margin="10"
-             VerticalAlignment="Center"
-             Text="{Binding Folder}"
-             IsEnabled="False"
-             IsReadOnly="True"/>
+    <Grid Grid.Column="1"
+      Grid.Row="3"
+      VerticalAlignment="Center"
+      ColumnDefinitions="*, Auto">
+      <TextBox Grid.Column="0"
+               Margin="10"
+               VerticalAlignment="Center"
+               Text="{Binding Folder}"
+               IsEnabled="False"
+               IsReadOnly="True"/>
+      <Button Grid.Column="1"
+              MinWidth="40"
+              HorizontalContentAlignment="Center"
+              Margin="10, 10, 20, 10"
+              Command="{Binding OpenFolder}"
+              VerticalAlignment="Center">
+        <Button.Template>
+          <ControlTemplate>
+            <TextBlock Text="Open" Cursor="Hand"/>
+          </ControlTemplate>
+        </Button.Template>
+      </Button>
+    </Grid>
 
     <CheckBox Grid.Column="0"
                 Grid.Row="4"

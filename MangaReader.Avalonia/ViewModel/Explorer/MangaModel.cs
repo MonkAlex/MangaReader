@@ -249,6 +249,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public ICommand Save => new MangaSaveCommand(this, ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().First().Library);
 
+    public ICommand OpenFolder => new OpenFolderCommand(ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().First());
+
     public async Task UndoChanged()
     {
       await UndoChangedImpl().ConfigureAwait(true);

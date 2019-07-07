@@ -47,14 +47,15 @@
     <ContentPresenter Grid.Column="1" DataContext="{Binding SelectedTab}" Content="{Binding}" IsVisible="{Binding Loaded}"/>
     <Grid Grid.ColumnSpan="2" IsVisible="{Binding !Loaded}" RowDefinitions="10*,*, 2*">
       <Image Grid.Row="0" Name="image" Margin="75" Source="{Binding !Loaded, Converter={x:Static av:BitmapTypeConverter.Instance}}"/>
-      <!--ProgressBar Grid.Row="1"
+      <ProgressBar Grid.Row="1"
                    MaxWidth="{Binding #image.Bounds.Width}"
                    HorizontalAlignment="Stretch"
                    VerticalAlignment="Center"
                    Height="20"
+                   MinWidth="40"
                    IsIndeterminate="{Binding LoadingProcess.IsIndeterminate}"
                    Value="{Binding LoadingProcess.Percent}"
-                   Maximum="1"/-->
+                   Maximum="1"/>
       <TextBlock Grid.Row="1"
                  MaxWidth="{Binding #image.Bounds.Width}"
                  HorizontalAlignment="Center"

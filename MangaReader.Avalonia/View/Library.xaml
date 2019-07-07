@@ -18,10 +18,14 @@
             <Border.ContextMenu>
               <v:ContextMenu DataContext="{Binding $parent[UserControl].DataContext}" Items="{Binding MangaCommands}"/>
             </Border.ContextMenu>
-            <Grid RowDefinitions="*,Auto" Margin="10"
-                  Width="150" Height="300">
+            <Grid RowDefinitions="12*, Auto, *" Margin="10" Width="150" Height="300">
               <Image Grid.Row="0" Source="{Binding Cover, Converter={x:Static av:BitmapTypeConverter.Instance}}"/>
               <TextBlock Grid.Row="1" Text="{Binding MangaName}" TextWrapping="Wrap" ToolTip.Tip="{Binding MangaName}" HorizontalAlignment="Center"/>
+              <ProgressBar Grid.Row="2" IsVisible="{Binding !!Downloaded}" 
+                           Value="{Binding Downloaded}" Minimum="0" Maximum="100" 
+                           MinWidth="40"
+                           Foreground="{Binding Converter={x:Static v:DownloadColorConverter.Instance}}"/>
+              <TextBlock Grid.Row="2" Text="{Binding Speed}" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Grid>
           </Border>
         </DataTemplate>

@@ -153,6 +153,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
             break;
           case LibraryOperation.UpdatePercentChanged:
             UpdatePercent = libraryViewModelArgs.Percent == 0 ? null : libraryViewModelArgs.Percent;
+            ActualizeSpeedAndProcess(args.Manga);
             break;
           case LibraryOperation.UpdateMangaChanged:
             {
@@ -169,8 +170,10 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
                     break;
                   }
                 case MangaOperation.UpdateStarted:
+                  ActualizeSpeedAndProcess(args.Manga);
                   break;
                 case MangaOperation.UpdateCompleted:
+                  ActualizeSpeedAndProcess(args.Manga);
                   break;
                 case MangaOperation.None:
                   break;
@@ -192,6 +195,19 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         ProcessArgs(args);
       else
         await Dispatcher.UIThread.InvokeAsync(() => ProcessArgs(args)).ConfigureAwait(true);
+    }
+
+    private void ActualizeSpeedAndProcess(IManga manga)
+    {
+      if (manga == null)
+        return;
+
+      var view = Items.SingleOrDefault(m => m.Id == manga.Id);
+      if (view != null)
+      {
+        view.Downloaded = manga.Downloaded;
+        view.Speed = NetworkSpeed.TotalSpeed.HumanizeByteSize();
+      }
     }
   }
 }

@@ -2,22 +2,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:av="clr-namespace:MangaReader.Avalonia;assembly=MangaReader.Avalonia"
              xmlns:v="clr-namespace:MangaReader.Avalonia.View;assembly=MangaReader.Avalonia"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              x:Class="MangaReader.Avalonia.View.Library"
              Design.Width="400" Design.Height="300">
   <Grid RowDefinitions="Auto,*,Auto,Auto" DataContext="{Binding}">
     <TextBox Grid.Row="0" Text="{Binding Search}" Watermark="Поиск по имени" UseFloatingWatermark="True"/>
-    <ListBox Grid.Row="1" Items="{Binding FilteredItems}"
+    <v:ListBox Grid.Row="1" Items="{Binding FilteredItems}"
                SelectedItems="{Binding SelectedMangaModels}"
                SelectionMode="Multiple"
                BorderThickness="0"
                ScrollViewer.VerticalScrollBarVisibility="Auto"
                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-      <ListBox.ItemTemplate>
+      <v:ListBox.ItemTemplate>
         <DataTemplate>
-          <Border Background="Transparent">
+          <Border Name="MangaBorder" Background="Transparent">
             <Border.ContextMenu>
               <v:ContextMenu DataContext="{Binding $parent[UserControl].DataContext}" Items="{Binding MangaCommands}"/>
             </Border.ContextMenu>
+            <i:Interaction.Behaviors>
+              <ia:EventTriggerBehavior EventName="DoubleTapped" SourceObject="{Binding #MangaBorder}">
+                <ia:InvokeCommandAction Command="{Binding $parent[UserControl].DataContext.DefaultMangaCommand}" CommandParameter="{Binding Mode=OneWay}"/>
+              </ia:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
             <Grid RowDefinitions="12*, Auto, *" Margin="10" Width="150" Height="300">
               <Image Grid.Row="0" Source="{Binding Cover, Converter={x:Static av:BitmapTypeConverter.Instance}}"/>
               <TextBlock Grid.Row="1" Text="{Binding MangaName}" TextWrapping="Wrap" ToolTip.Tip="{Binding MangaName}" HorizontalAlignment="Center"/>
@@ -29,13 +36,13 @@
             </Grid>
           </Border>
         </DataTemplate>
-      </ListBox.ItemTemplate>
-      <ListBox.ItemsPanel>
+      </v:ListBox.ItemTemplate>
+      <v:ListBox.ItemsPanel>
         <ItemsPanelTemplate>
           <WrapPanel/>
         </ItemsPanelTemplate>
-      </ListBox.ItemsPanel>
-    </ListBox>
+      </v:ListBox.ItemsPanel>
+    </v:ListBox>
     <ProgressBar Grid.Row="2" IsVisible="{Binding !!UpdatePercent}" Value="{Binding UpdatePercent}" Minimum="0" Maximum="1"/>
     <ListBox Grid.Row="3" Items="{Binding LibraryCommands}"
                ScrollViewer.VerticalScrollBarVisibility="Auto"

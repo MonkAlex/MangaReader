@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Avalonia.Threading;
 using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Avalonia.ViewModel.Command.Library;
@@ -57,6 +58,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     public ObservableCollection<BaseCommand> LibraryCommands { get; }
 
     public ObservableCollection<BaseCommand> MangaCommands { get; }
+
+    public ICommand DefaultMangaCommand { get; }
 
     public double? UpdatePercent
     {
@@ -133,6 +136,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         new ShowPropertiesMangaCommand(this)
         }
       );
+      this.DefaultMangaCommand = this.MangaCommands.First();
     }
 
     private async void LibraryOnLibraryChanged(object sender, LibraryViewModelArgs args)

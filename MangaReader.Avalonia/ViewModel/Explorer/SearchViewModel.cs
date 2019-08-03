@@ -77,7 +77,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
           var model = new MangaSearchViewModel(manga);
           model.Cover = (await manga.Parser.GetPreviews(manga).ConfigureAwait(true)).FirstOrDefault();
-          await model.PreviewFindedManga.Execute(model).ConfigureAwait(true);
+          await model.PreviewFoundManga.Execute(model).ConfigureAwait(true);
         }
       }
     }

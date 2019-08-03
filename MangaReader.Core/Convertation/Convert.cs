@@ -36,6 +36,7 @@ namespace MangaReader.Core.Convertation
         var oldVersion = databaseConfig.Version;
         databaseConfig.Version = process.Version;
         await context.Save(databaseConfig).ConfigureAwait(false);
+        process.ProgressState = ProgressState.None;
         process.State = ConvertState.Completed;
 
         if (process.Version.CompareTo(oldVersion) > 0 && await context.Get<IManga>().AnyAsync().ConfigureAwait(false))

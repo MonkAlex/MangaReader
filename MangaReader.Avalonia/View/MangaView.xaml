@@ -31,7 +31,7 @@
                Text="{Binding Description}" TextWrapping="Wrap"/>
     <view:MangaProperties Grid.Column="1" Grid.Row="3" IsVisible="{Binding Saved}"/>
     <WrapPanel Grid.Column="1" Grid.Row="3" IsVisible="{Binding !Saved}" HorizontalAlignment="Center">
-      <Button Command="{Binding AddToLibrary}" Content="Subscribe"/>
+      <Button Command="{Binding Save}" Content="{Binding Save.Name}"/>
     </WrapPanel>
   </Grid>
 </UserControl>

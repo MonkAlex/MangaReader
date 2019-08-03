@@ -15,15 +15,20 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
   {
     private readonly MangaModel model;
 
+    private bool inProcess = false;
+
     public override bool CanExecute(object parameter)
     {
-      return base.CanExecute(parameter) || !model.Saved;
+      return !inProcess && (base.CanExecute(parameter) || !model.Saved);
     }
 
     public override async Task Execute(object parameter)
     {
       try
       {
+        inProcess = true;
+        this.OnCanExecuteChanged();
+        this.Name = "Process...";
         using (var context = Repository.GetEntityContext())
         {
           if (model.Saved)
@@ -74,12 +79,18 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
             model.UpdateProperties(manga);
           }
       }
+      finally
+      {
+        inProcess = false;
+        this.OnCanExecuteChanged();
+        this.Name = model.Saved ? "Save" : "Subscribe";
+      }
     }
 
     public MangaSaveCommand(MangaModel model, LibraryViewModel library) : base(library)
     {
       this.model = model;
-      this.Name = "Принять";
+      this.Name = model.Saved ? "Save" : "Subscribe";
     }
   }
 }

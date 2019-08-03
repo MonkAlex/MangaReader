@@ -37,8 +37,7 @@
       <ListBox.ItemTemplate>
         <DataTemplate>
           <TextBlock Margin="10"
-                     Text="{Binding Name}"
-                     TextWrapping="NoWrap"
+                     Text="{Binding ShortName}"
                      ToolTip.Tip="{Binding Name}"
                      HorizontalAlignment="Center"/>
         </DataTemplate>

@@ -41,13 +41,13 @@ namespace MangaReader.Avalonia.ViewModel
 
     private string status;
 
-    public PreviewFindedMangaCommand PreviewFindedManga
+    public PreviewFoundMangaCommand PreviewFoundManga
     {
-      get => previewFindedManga;
-      set => RaiseAndSetIfChanged(ref previewFindedManga, value);
+      get => previewFoundManga;
+      set => RaiseAndSetIfChanged(ref previewFoundManga, value);
     }
 
-    private PreviewFindedMangaCommand previewFindedManga;
+    private PreviewFoundMangaCommand previewFoundManga;
 
     public MangaSearchViewModel(IManga manga)
     {
@@ -55,7 +55,7 @@ namespace MangaReader.Avalonia.ViewModel
       this.uri = manga.Uri;
       this.cover = manga.Cover;
       this.status = manga.Status;
-      this.previewFindedManga = new PreviewFindedMangaCommand();
+      this.previewFoundManga = new PreviewFoundMangaCommand();
     }
   }
 }

@@ -7,10 +7,27 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     private string name;
     private int priority;
 
+    public string ShortName
+    {
+      get => shortName;
+      set
+      {
+        if (value?.Length > 11)
+          value = value?.Substring(0, 9) + "...";
+        this.RaiseAndSetIfChanged(ref shortName, value);
+      }
+    }
+
+    private string shortName;
+
     public string Name
     {
       get { return name; }
-      set { RaiseAndSetIfChanged(ref name, value); }
+      set
+      {
+        this.ShortName = value;
+        RaiseAndSetIfChanged(ref name, value);
+      }
     }
 
     public int Priority

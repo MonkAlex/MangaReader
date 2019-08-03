@@ -22,14 +22,14 @@
           <Border Name="MangaBorder" Background="Transparent">
             <i:Interaction.Behaviors>
               <ia:EventTriggerBehavior EventName="DoubleTapped">
-                <ia:InvokeCommandAction Command="{Binding PreviewFindedManga}" CommandParameter="{Binding Mode=OneWay}"/>
+                <ia:InvokeCommandAction Command="{Binding PreviewFoundManga}" CommandParameter="{Binding Mode=OneWay}"/>
               </ia:EventTriggerBehavior>
             </i:Interaction.Behaviors>
             <Grid RowDefinitions="*,Auto,Auto" Margin="10"
                   Width="150" Height="300">
               <Image Grid.Row="0" Source="{Binding Cover, Converter={x:Static av:BitmapTypeConverter.Instance}}"/>
               <TextBlock Grid.Row="1" Text="{Binding Name}" TextWrapping="Wrap" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center"/>
-              <Button Grid.Row="2" Command="{Binding PreviewFindedManga}" CommandParameter="{Binding}" Content="{Binding PreviewFindedManga.Name}"/>
+              <Button Grid.Row="2" Command="{Binding PreviewFoundManga}" CommandParameter="{Binding}" Content="{Binding PreviewFoundManga.Name}"/>
             </Grid>
           </Border>
         </DataTemplate>

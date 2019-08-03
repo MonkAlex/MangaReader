@@ -199,18 +199,6 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       Helper.StartUseShell(this.Uri);
     }
 
-    public void AddToLibrary()
-    {
-      if (Saved)
-        return;
-
-      if (this.Save.CanExecute(this))
-        using (Repository.GetEntityContext($"Add new manga {this.OriginalName} from {Uri}"))
-        {
-          this.Save.Execute(this);
-        }
-    }
-
     private void SetType(IManga manga)
     {
       var result = "NA";

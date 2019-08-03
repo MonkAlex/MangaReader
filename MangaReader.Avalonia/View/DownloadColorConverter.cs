@@ -12,9 +12,9 @@ namespace MangaReader.Avalonia.View
 
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-      if (value is MangaModel manga)
+      if (value is double percent)
       {
-        if (manga.Downloaded == 100)
+        if (percent == 100)
           return Brushes.GreenYellow;
       }
 

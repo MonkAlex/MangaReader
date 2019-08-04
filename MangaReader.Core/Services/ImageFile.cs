@@ -1,8 +1,5 @@
-﻿using System.Drawing;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
-using System.Reflection;
-using System.Drawing.Imaging;
 
 namespace MangaReader.Core.Services
 {
@@ -20,11 +17,7 @@ namespace MangaReader.Core.Services
       get
       {
         if (this.Exist && string.IsNullOrWhiteSpace(this.extension))
-        {
-          var created = Image.FromStream(new MemoryStream(this.Body));
-          var parsed = ImageFileExtension(created.RawFormat, "jpg");
-          this.extension = parsed.ToLower();
-        }
+          this.extension = ImageExtensionParser.Parse(this.Body, ImageExtensionParser.Jpeg);
 
         return this.extension;
       }
@@ -48,19 +41,6 @@ namespace MangaReader.Core.Services
       }
 
       this.Path = path;
-    }
-
-    // Code reworked from https://referencesource.microsoft.com/#System.Drawing/commonui/System/Drawing/Advanced/ImageFormatConverter.cs
-    private static string ImageFileExtension(ImageFormat value, string defaultValue)
-    {
-      var props = typeof(ImageFormat).GetProperties(BindingFlags.Static | BindingFlags.Public);
-      foreach (var p in props)
-      {
-        if (p.GetValue(null, null).Equals(value))
-          return p.Name;
-      }
-
-      return defaultValue;
     }
   }
 }

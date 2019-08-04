@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="ApplicationControl.cs" />
     <Compile Include="FolderNameNormalization.cs" />
+    <Compile Include="ImageExtensionParserTests.cs" />
     <Compile Include="VersionInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

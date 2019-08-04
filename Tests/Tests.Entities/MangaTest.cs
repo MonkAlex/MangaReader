@@ -74,7 +74,7 @@ namespace Tests
       var files = Directory.GetFiles(manga.GetAbsoluteFolderPath(), "*", SearchOption.AllDirectories);
       Assert.AreEqual(mangaInfo.FilesInFolder, files.Length);
       var fileInfos = files.Select(f => new FileInfo(f)).ToList();
-      Assert.AreEqual(mangaInfo.FolderSize, fileInfos.Sum(f => f.Length));
+      Assert.AreEqual(mangaInfo.FolderSize, fileInfos.Sum(f => f.Length), mangaInfo.FolderSize/100.0);
       if (mangaInfo.AllFilesUnique)
         Assert.AreEqual(1, fileInfos.GroupBy(f => f.Length).Max(g => g.Count()));
       Assert.IsTrue(manga.IsDownloaded);

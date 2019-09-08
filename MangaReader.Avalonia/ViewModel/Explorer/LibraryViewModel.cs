@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Threading;
+using MangaReader.Avalonia.Platform.Win;
 using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Avalonia.ViewModel.Command.Library;
 using MangaReader.Avalonia.ViewModel.Command.Manga;
@@ -178,6 +179,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
                   break;
                 case MangaOperation.UpdateCompleted:
                   ActualizeSpeedAndProcess(args.Manga);
+                  ExplorerViewModel.Instance.TrayIcon.ShowBalloon($"Обновление {args.Manga.Name} завершено.");
                   break;
                 case MangaOperation.None:
                   break;

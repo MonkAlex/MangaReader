@@ -8,7 +8,11 @@ namespace MangaReader.Avalonia.Platform.Win
   {
     public ICommand DoubleClickCommand { get; set; }
 
+    public ICommand BalloonClickedCommand { get; set; }
+
     private TaskBarIcon taskBarIcon;
+
+    private object lastBalloonState;
 
     public void SetIcon()
     {
@@ -21,8 +25,9 @@ namespace MangaReader.Avalonia.Platform.Win
       }
     }
 
-    public void ShowBalloon(string text)
+    public void ShowBalloon(string text, object state)
     {
+      this.lastBalloonState = state;
       taskBarIcon?.ShowBalloonTip(nameof(MangaReader), text, BalloonFlags.Info);
     }
 
@@ -34,6 +39,15 @@ namespace MangaReader.Avalonia.Platform.Win
         if (command != null && command.CanExecute(null))
         {
           command.Execute(null);
+        }
+      }
+
+      if (e == MouseEvent.BalloonToolTipClicked)
+      {
+        var command = this.BalloonClickedCommand;
+        if (command != null && command.CanExecute(lastBalloonState))
+        {
+          command.Execute(lastBalloonState);
         }
       }
     }

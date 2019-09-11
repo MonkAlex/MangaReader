@@ -4,8 +4,10 @@
   {
     System.Windows.Input.ICommand DoubleClickCommand { get; set; }
 
+    System.Windows.Input.ICommand BalloonClickedCommand { get; set; }
+
     void SetIcon();
 
-    void ShowBalloon(string text);
+    void ShowBalloon(string text, object state);
   }
 }

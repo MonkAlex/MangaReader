@@ -9,8 +9,7 @@ namespace MangaReader.Avalonia.ViewModel.Command
   {
     public override Task Execute(object parameter)
     {
-      if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime &&
-          lifetime != parameter)
+      if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
       {
         var mainWindow = lifetime.MainWindow;
         if (mainWindow != null)

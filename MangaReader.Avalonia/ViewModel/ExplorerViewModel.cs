@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MangaReader.Avalonia.Platform;
 using MangaReader.Avalonia.Platform.Win;
 using MangaReader.Avalonia.ViewModel.Command;
+using MangaReader.Avalonia.ViewModel.Command.Manga;
 using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Manga;
@@ -83,6 +84,7 @@ namespace MangaReader.Avalonia.ViewModel
       TrayIcon = new WindowsTrayIcon();
       TrayIcon.SetIcon();
       TrayIcon.DoubleClickCommand = new ShowMainWindowCommand();
+      TrayIcon.BalloonClickedCommand = new OpenFolderCommandBase();
     }
 
     public void Dispose()

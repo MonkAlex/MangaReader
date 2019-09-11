@@ -179,7 +179,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
                   break;
                 case MangaOperation.UpdateCompleted:
                   ActualizeSpeedAndProcess(args.Manga);
-                  ExplorerViewModel.Instance.TrayIcon.ShowBalloon($"Обновление {args.Manga.Name} завершено.");
+                  ExplorerViewModel.Instance.TrayIcon.ShowBalloon($"Обновление {args.Manga.Name} завершено.", args.Manga);
                   break;
                 case MangaOperation.None:
                   break;

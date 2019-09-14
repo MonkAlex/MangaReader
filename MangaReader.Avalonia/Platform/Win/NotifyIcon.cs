@@ -23,18 +23,11 @@
 
 
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Threading;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.VisualTree;
 using MangaReader.Avalonia.Platform.Win.Interop;
-using Brushes = Avalonia.Media.Brushes;
 
 namespace MangaReader.Avalonia.Platform.Win
 {
@@ -59,33 +52,9 @@ namespace MangaReader.Avalonia.Platform.Win
     private readonly WindowMessageSink messageSink;
 
     /// <summary>
-    /// An action that is being invoked if the
-    /// <see cref="singleClickTimer"/> fires.
-    /// </summary>
-    private Action singleClickTimerAction;
-
-    /// <summary>
-    /// A timer that is used to differentiate between single
-    /// and double clicks.
-    /// </summary>
-    private readonly Timer singleClickTimer;
-
-    /// <summary>
-    /// The time we should wait for a double click.
-    /// </summary>
-    private int DoubleClickWaitTime => WinApi.GetDoubleClickTime();
-
-    /// <summary>
     /// Indicates whether the taskbar icon has been created or not.
     /// </summary>
     public bool IsTaskbarIconCreated { get; private set; }
-
-    /// <summary>
-    /// Indicates whether custom tooltips are supported, which depends
-    /// on the OS. Windows Vista or higher is required in order to
-    /// support this feature.
-    /// </summary>
-    public bool SupportsCustomToolTips => messageSink.Version == NotifyIconVersion.Vista;
 
     public Icon Icon { get; }
 
@@ -118,9 +87,6 @@ namespace MangaReader.Avalonia.Platform.Win
       messageSink.MouseEventReceived += OnMouseEvent;
       messageSink.TaskbarCreated += OnTaskbarCreated;
 
-      // init single click / balloon timers
-      singleClickTimer = new Timer(DoSingleClickAction);
-
       // register listener in order to get notified when the application closes
       if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
       {
@@ -144,108 +110,24 @@ namespace MangaReader.Avalonia.Platform.Win
       if (IsDisposed)
         return;
 
-      MouseEventHandler?.Invoke(this, me);
       switch (me)
       {
         case MouseEvent.MouseMove:
           // immediately return - there's nothing left to evaluate
           return;
         case MouseEvent.IconRightMouseDown:
-          break;
         case MouseEvent.IconLeftMouseDown:
-          break;
         case MouseEvent.IconRightMouseUp:
-          break;
         case MouseEvent.IconLeftMouseUp:
-          break;
         case MouseEvent.IconMiddleMouseDown:
-          break;
         case MouseEvent.IconMiddleMouseUp:
-          break;
-        case MouseEvent.IconDoubleClick:
-          // cancel single click timer
-          singleClickTimer.Change(Timeout.Infinite, Timeout.Infinite);
-          // bubble event
-          break;
         case MouseEvent.BalloonToolTipClicked:
+        case MouseEvent.IconDoubleClick:
+          MouseEventHandler?.Invoke(this, me);
           break;
         default:
           throw new ArgumentOutOfRangeException(nameof(me), "Missing handler for mouse event flag: " + me);
       }
-
-
-      // get mouse coordinates
-      var cursorPosition = new Interop.Point();
-      if (messageSink.Version == NotifyIconVersion.Vista)
-      {
-        // physical cursor position is supported for Vista and above
-        WinApi.GetPhysicalCursorPos(ref cursorPosition);
-      }
-      else
-      {
-        WinApi.GetCursorPos(ref cursorPosition);
-      }
-
-      cursorPosition = TrayInfo.GetDeviceCoordinates(cursorPosition);
-
-      bool isLeftClickCommandInvoked = false;
-
-      // show context menu, if requested
-      if (IsMatch(me, PopupActivationMode.RightClick))
-      {
-        if (me == MouseEvent.IconLeftMouseUp)
-        {
-          // show context menu once we are sure it's not a double click
-          singleClickTimerAction = () =>
-          {
-            ShowContextMenu(cursorPosition);
-          };
-          singleClickTimer.Change(DoubleClickWaitTime, Timeout.Infinite);
-          isLeftClickCommandInvoked = true;
-        }
-        else
-        {
-          // show context menu immediately
-          ShowContextMenu(cursorPosition);
-        }
-      }
-
-      // make sure the left click command is invoked on mouse clicks
-      if (me == MouseEvent.IconLeftMouseUp && !isLeftClickCommandInvoked)
-      {
-        // show context menu once we are sure it's not a double click
-        singleClickTimer.Change(DoubleClickWaitTime, Timeout.Infinite);
-      }
-    }
-
-    #endregion
-
-    #region Context Menu
-
-    /// <summary>
-    /// Displays the <see cref="ContextMenu"/> if it was set.
-    /// </summary>
-    private void ShowContextMenu(Interop.Point cursorPosition)
-    {
-      //if (IsDisposed)
-      //  return;
-
-      //if (ContextMenu == null)
-      //{
-      //  return;
-      //}
-
-      //// use absolute positioning. We need to set the coordinates, or a delayed opening
-      //// (e.g. when left-clicked) opens the context menu at the wrong place if the mouse
-      //// is moved!
-      //ContextMenu.Open();
-      
-      //var handle = messageSink.MessageWindowHandle;
-
-      //// activate the context menu or the message window to track deactivation - otherwise, the context menu
-      //// does not close if the user clicks somewhere else. With the message window
-      //// fallback, the context menu can't receive keyboard events - should not happen though
-      //WinApi.SetForegroundWindow(handle);
     }
 
     #endregion
@@ -264,35 +146,6 @@ namespace MangaReader.Avalonia.Platform.Win
       lock (lockObject)
       {
         ShowBalloonTip(title, message, symbol, IntPtr.Zero);
-      }
-    }
-
-    /// <summary>
-    /// Displays a balloon tip with the specified title,
-    /// text, and a custom icon in the taskbar for the specified time period.
-    /// </summary>
-    /// <param name="title">The title to display on the balloon tip.</param>
-    /// <param name="message">The text to display on the balloon tip.</param>
-    /// <param name="customIcon">A custom icon.</param>
-    /// <param name="largeIcon">True to allow large icons (Windows Vista and later).</param>
-    /// <exception cref="ArgumentNullException">If <paramref name="customIcon"/>
-    /// is a null reference.</exception>
-    public void ShowBalloonTip(string title, string message, Icon customIcon, bool largeIcon = false)
-    {
-      if (customIcon == null)
-        throw new ArgumentNullException(nameof(customIcon));
-
-      lock (lockObject)
-      {
-        var flags = BalloonFlags.User;
-
-        if (largeIcon)
-        {
-          // ReSharper disable once BitwiseOperatorOnEnumWithoutFlags
-          flags |= BalloonFlags.LargeIcon;
-        }
-
-        ShowBalloonTip(title, message, flags, customIcon.Handle);
       }
     }
 
@@ -329,62 +182,6 @@ namespace MangaReader.Avalonia.Platform.Win
       // reset balloon by just setting the info to an empty string
       iconData.BalloonText = iconData.BalloonTitle = string.Empty;
       WriteIconData(ref iconData, NotifyCommand.Modify, IconDataMembers.Info);
-    }
-
-    #endregion
-
-    #region Single Click Timer event
-
-    /// <summary>
-    /// Performs a delayed action if the user requested an action
-    /// based on a single click of the left mouse.<br/>
-    /// This method is invoked by the <see cref="singleClickTimer"/>.
-    /// </summary>
-    private void DoSingleClickAction(object state)
-    {
-      if (IsDisposed)
-        return;
-
-      // run action
-      Action action = singleClickTimerAction;
-      if (action != null)
-      {
-        // cleanup action
-        singleClickTimerAction = null;
-
-        // switch to UI thread
-        action();
-      }
-    }
-
-    #endregion
-
-    #region Set Version (API)
-
-    /// <summary>
-    /// Sets the version flag for the <see cref="iconData"/>.
-    /// </summary>
-    private void SetVersion()
-    {
-      iconData.VersionOrTimeout = (uint)NotifyIconVersion.Vista;
-      bool status = WinApi.Shell_NotifyIcon(NotifyCommand.SetVersion, ref iconData);
-
-      if (!status)
-      {
-        iconData.VersionOrTimeout = (uint)NotifyIconVersion.Win2000;
-        status = WriteIconData(ref iconData, NotifyCommand.SetVersion);
-      }
-
-      if (!status)
-      {
-        iconData.VersionOrTimeout = (uint)NotifyIconVersion.Win95;
-        status = WriteIconData(ref iconData, NotifyCommand.SetVersion);
-      }
-
-      if (!status)
-      {
-        Debug.Fail("Could not set version");
-      }
     }
 
     #endregion
@@ -428,8 +225,6 @@ namespace MangaReader.Avalonia.Platform.Win
           return;
         }
 
-        //set to most recent version
-        SetVersion();
         messageSink.Version = (NotifyIconVersion)iconData.VersionOrTimeout;
 
         IsTaskbarIconCreated = true;
@@ -550,9 +345,6 @@ namespace MangaReader.Avalonia.Platform.Win
           lifetime.Exit -= OnExit;
         }
 
-        // stop timers
-        singleClickTimer.Dispose();
-
         // dispose message sink
         messageSink.Dispose();
 
@@ -564,21 +356,7 @@ namespace MangaReader.Avalonia.Platform.Win
     #endregion
 
     #region WriteIconData
-
-    /// <summary>
-    /// Updates the taskbar icons with data provided by a given
-    /// <see cref="NotifyIconData"/> instance.
-    /// </summary>
-    /// <param name="data">Configuration settings for the NotifyIcon.</param>
-    /// <param name="command">Operation on the icon (e.g. delete the icon).</param>
-    /// <returns>True if the data was successfully written.</returns>
-    /// <remarks>See Shell_NotifyIcon documentation on MSDN for details.</remarks>
-    private bool WriteIconData(ref NotifyIconData data, NotifyCommand command)
-    {
-      return WriteIconData(ref data, command, data.ValidMembers);
-    }
-
-
+    
     /// <summary>
     /// Updates the taskbar icons with data provided by a given
     /// <see cref="NotifyIconData"/> instance.
@@ -599,63 +377,7 @@ namespace MangaReader.Avalonia.Platform.Win
     }
 
     #endregion
-
-    /// <summary>
-    /// Checks if a given <see cref="PopupActivationMode"/> is a match for
-    /// an effectively pressed mouse button.
-    /// </summary>
-    public static bool IsMatch(MouseEvent me, PopupActivationMode activationMode)
-    {
-      switch (activationMode)
-      {
-        case PopupActivationMode.LeftClick:
-          return me == MouseEvent.IconLeftMouseUp;
-        case PopupActivationMode.RightClick:
-          return me == MouseEvent.IconRightMouseUp;
-        case PopupActivationMode.LeftOrRightClick:
-          return Is(me, MouseEvent.IconLeftMouseUp, MouseEvent.IconRightMouseUp);
-        case PopupActivationMode.LeftOrDoubleClick:
-          return Is(me, MouseEvent.IconLeftMouseUp, MouseEvent.IconDoubleClick);
-        case PopupActivationMode.DoubleClick:
-          return Is(me, MouseEvent.IconDoubleClick);
-        case PopupActivationMode.MiddleClick:
-          return me == MouseEvent.IconMiddleMouseUp;
-        case PopupActivationMode.All:
-          //return true for everything except mouse movements
-          return me != MouseEvent.MouseMove;
-        default:
-          throw new ArgumentOutOfRangeException("activationMode");
-      }
-    }
-
-    /// <summary>
-    /// Checks a list of candidates for equality to a given
-    /// reference value.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="value">The evaluated value.</param>
-    /// <param name="candidates">A liste of possible values that are
-    /// regarded valid.</param>
-    /// <returns>True if one of the submitted <paramref name="candidates"/>
-    /// matches the evaluated value. If the <paramref name="candidates"/>
-    /// parameter itself is null, too, the method returns false as well,
-    /// which allows to check with null values, too.</returns>
-    /// <exception cref="ArgumentNullException">If <paramref name="candidates"/>
-    /// is a null reference.</exception>
-    public static bool Is<T>(T value, params T[] candidates)
-    {
-      if (candidates == null)
-        return false;
-
-      foreach (var t in candidates)
-      {
-        if (value.Equals(t))
-          return true;
-      }
-
-      return false;
-    }
-
+    
     /// <summary>
     /// Reads a given image resource into a WinForms icon.
     /// </summary>

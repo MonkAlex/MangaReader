@@ -121,26 +121,6 @@ namespace MangaReader.Avalonia.Platform.Win.Interop
             CreateMessageWindow();
         }
 
-
-        private WindowMessageSink()
-        {
-        }
-
-        /// <summary>
-        /// Creates a dummy instance that provides an empty
-        /// pointer rather than a real window handler.<br/>
-        /// Used at design time.
-        /// </summary>
-        /// <returns>WindowMessageSink</returns>
-        internal static WindowMessageSink CreateEmpty()
-        {
-            return new WindowMessageSink
-            {
-                MessageWindowHandle = IntPtr.Zero,
-                Version = NotifyIconVersion.Vista
-            };
-        }
-
         #endregion
 
         #region CreateMessageWindow

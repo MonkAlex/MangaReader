@@ -55,37 +55,5 @@ namespace MangaReader.Avalonia.Platform.Win.Interop
         /// <returns>bool</returns>
         [DllImport(User32, SetLastError = true)]
         public static extern bool DestroyWindow(IntPtr hWnd);
-
-
-        /// <summary>
-        /// Gives focus to a given window.
-        /// </summary>
-        /// <param name="hWnd"></param>
-        /// <returns>bool</returns>
-        [DllImport(User32)]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
-
-
-        /// <summary>
-        /// Gets the maximum number of milliseconds that can elapse between a
-        /// first click and a second click for the OS to consider the
-        /// mouse action a double-click.
-        /// </summary>
-        /// <returns>The maximum amount of time, in milliseconds, that can
-        /// elapse between a first click and a second click for the OS to
-        /// consider the mouse action a double-click.</returns>
-        [DllImport(User32, CharSet = CharSet.Auto, ExactSpelling = true)]
-        public static extern int GetDoubleClickTime();
-
-
-        /// <summary>
-        /// Gets the screen coordinates of the current mouse position.
-        /// </summary>
-        [DllImport(User32, SetLastError = true)]
-        public static extern bool GetPhysicalCursorPos(ref Point lpPoint);
-
-
-        [DllImport(User32, SetLastError = true)]
-        public static extern bool GetCursorPos(ref Point lpPoint);
     }
 }

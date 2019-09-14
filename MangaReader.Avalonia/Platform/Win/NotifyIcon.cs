@@ -89,8 +89,6 @@ namespace MangaReader.Avalonia.Platform.Win
 
     public Icon Icon { get; }
 
-    public ContextMenu ContextMenu { get; }
-
     public event EventHandler<MouseEvent> MouseEventHandler;
 
     #endregion
@@ -104,13 +102,6 @@ namespace MangaReader.Avalonia.Platform.Win
     public TaskBarIcon(Icon icon)
     {
       Icon = icon;
-      ContextMenu = new ContextMenu()
-      {
-        Items = new [] { new MenuItem()
-        {
-          Header = "Text"
-        }, }
-      };
 
       // using dummy sink in design mode
       messageSink = new WindowMessageSink(NotifyIconVersion.Vista);
@@ -236,25 +227,25 @@ namespace MangaReader.Avalonia.Platform.Win
     /// </summary>
     private void ShowContextMenu(Interop.Point cursorPosition)
     {
-      if (IsDisposed)
-        return;
+      //if (IsDisposed)
+      //  return;
 
-      if (ContextMenu == null)
-      {
-        return;
-      }
+      //if (ContextMenu == null)
+      //{
+      //  return;
+      //}
 
-      // use absolute positioning. We need to set the coordinates, or a delayed opening
-      // (e.g. when left-clicked) opens the context menu at the wrong place if the mouse
-      // is moved!
-      ContextMenu.Open();
+      //// use absolute positioning. We need to set the coordinates, or a delayed opening
+      //// (e.g. when left-clicked) opens the context menu at the wrong place if the mouse
+      //// is moved!
+      //ContextMenu.Open();
       
-      var handle = messageSink.MessageWindowHandle;
+      //var handle = messageSink.MessageWindowHandle;
 
-      // activate the context menu or the message window to track deactivation - otherwise, the context menu
-      // does not close if the user clicks somewhere else. With the message window
-      // fallback, the context menu can't receive keyboard events - should not happen though
-      WinApi.SetForegroundWindow(handle);
+      //// activate the context menu or the message window to track deactivation - otherwise, the context menu
+      //// does not close if the user clicks somewhere else. With the message window
+      //// fallback, the context menu can't receive keyboard events - should not happen though
+      //WinApi.SetForegroundWindow(handle);
     }
 
     #endregion

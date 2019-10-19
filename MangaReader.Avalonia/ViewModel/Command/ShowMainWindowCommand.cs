@@ -2,6 +2,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using MangaReader.Avalonia.Services;
 
 namespace MangaReader.Avalonia.ViewModel.Command
 {
@@ -15,7 +16,7 @@ namespace MangaReader.Avalonia.ViewModel.Command
         if (mainWindow != null)
         {
           mainWindow.Show();
-          mainWindow.Activate();
+          mainWindow.ActivateWorkaround();
           if (mainWindow.WindowState == WindowState.Minimized)
             mainWindow.WindowState = WindowState.Normal;
         }

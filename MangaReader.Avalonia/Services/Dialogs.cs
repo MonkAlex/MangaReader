@@ -1,6 +1,6 @@
 ﻿namespace MangaReader.Avalonia.Services
 {
-  public class Dialogs
+  public static class Dialogs
   {
     /// <summary>
     /// Показать информационное сообщение с кнопкой "Ок".
@@ -71,6 +71,47 @@
       }
 
       return (result, checkboxValue);
+    }
+
+    // BUG: https://github.com/AvaloniaUI/Avalonia/issues/2975
+    private static readonly bool IsWin32NT = System.Environment.OSVersion.Platform == System.PlatformID.Win32NT;
+
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    [return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.Bool)]
+    private static extern bool SetForegroundWindow(System.IntPtr hWnd);
+
+    public static void ActivateWorkaround(this global::Avalonia.Controls.Window window)
+    {
+      if (ReferenceEquals(window, null))
+        throw new System.ArgumentNullException(nameof(window));
+
+      // Call default Activate() anyway.
+      window.Activate();
+
+      // Skip workaround for non-windows platforms.
+      if (!IsWin32NT)
+        return;
+
+      var platformImpl = window.PlatformImpl;
+      if (ReferenceEquals(platformImpl, null))
+        return;
+
+      var platformHandle = platformImpl.Handle;
+      if (ReferenceEquals(platformHandle, null))
+        return;
+
+      var handle = platformHandle.Handle;
+      if (System.IntPtr.Zero == handle)
+        return;
+
+      try
+      {
+        SetForegroundWindow(handle);
+      }
+      catch
+      {
+        // ignored
+      }
     }
   }
 }

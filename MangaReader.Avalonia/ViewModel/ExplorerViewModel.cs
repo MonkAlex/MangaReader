@@ -1,6 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using MangaReader.Avalonia.Platform;
+using MangaReader.Avalonia.Platform.Win;
+using MangaReader.Avalonia.ViewModel.Command;
+using MangaReader.Avalonia.ViewModel.Command.Manga;
 using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Manga;
@@ -10,9 +14,12 @@ using LibraryViewModel = MangaReader.Avalonia.ViewModel.Explorer.LibraryViewMode
 
 namespace MangaReader.Avalonia.ViewModel
 {
-  public class ExplorerViewModel : ViewModelBase
+  public class ExplorerViewModel : ViewModelBase, System.IDisposable
   {
     private ExplorerTabViewModel selectedTab;
+
+    public ITrayIcon TrayIcon;
+
     public ObservableCollection<ExplorerTabViewModel> Tabs { get; }
 
     public IProcess LoadingProcess { get; set; }
@@ -74,6 +81,15 @@ namespace MangaReader.Avalonia.ViewModel
       };
       LoadingProcess = new ProcessModel();
       LoadingProcess.StateChanged += LoadingProcessOnStateChanged;
+      TrayIcon = new WindowsTrayIcon();
+      TrayIcon.SetIcon();
+      TrayIcon.DoubleClickCommand = new ShowMainWindowCommand();
+      TrayIcon.BalloonClickedCommand = new OpenFolderCommandBase();
+    }
+
+    public void Dispose()
+    {
+      TrayIcon?.Dispose();
     }
   }
 }

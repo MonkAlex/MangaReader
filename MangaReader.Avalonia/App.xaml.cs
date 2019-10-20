@@ -1,17 +1,21 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Diagnostics;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using Avalonia.Threading;
 using MangaReader.Avalonia.ViewModel;
 using MangaReader.Avalonia.ViewModel.Command;
-using MangaReader.Core;
+using MangaReader.Core.ApplicationControl;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 using MangaReader.Core.Update;
+using Client = MangaReader.Core.Client;
 
 namespace MangaReader.Avalonia
 {
@@ -33,7 +37,35 @@ namespace MangaReader.Avalonia
     static void Main(string[] args)
     {
       Client.Init();
+      Client.OtherAppRunning += ClientOnOtherAppRunning;
       BuildAvaloniaApp().StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+    }
+
+    private static void ClientOnOtherAppRunning(object sender, string e)
+    {
+      if (!Messages.TryParse(e, true, out Messages message))
+        return;
+
+      switch (message)
+      {
+        case Messages.Activate:
+          Dispatcher.UIThread.InvokeAsync(() =>
+          {
+            new ShowMainWindowCommand().Execute(null);
+          });
+          break;
+        case Messages.AddManga:
+          Log.Add($"Accept message to add new manga, but not implemented now.");
+          break;
+        case Messages.Close:
+          Dispatcher.UIThread.InvokeAsync(() =>
+          {
+            new ExitCommand().Execute(null);
+          });
+          break;
+        default:
+          throw new ArgumentOutOfRangeException();
+      }
     }
 
     private static async void UpdaterOnNewVersionFound(object sender, string e)
@@ -67,10 +99,19 @@ namespace MangaReader.Avalonia
         // Подключаемся к базе в отдельном потоке, чтобы не зависал UI.
         Task.Run(() => Client.Start(explorer.LoadingProcess));
 
-        var window = new MainWindow();
-        explorer.LoadingProcess.Status = window.Title;
-        window.DataContext = explorer;
-        lifetime.MainWindow = window;
+        var args = Environment.GetCommandLineArgs();
+        if (args.Contains("-m") || args.Contains("/min") || ConfigStorage.Instance.AppConfig.StartMinimizedToTray)
+        {
+          // SaveSettingsCommand.ValidateMangaPaths();
+        }
+        else
+        {
+          var window = new MainWindow();
+          explorer.LoadingProcess.Status = window.Title;
+          window.DataContext = explorer;
+          lifetime.MainWindow = window;
+        }
+
       }
 
       base.OnFrameworkInitializationCompleted();
@@ -79,7 +120,7 @@ namespace MangaReader.Avalonia
     public static void AttachDevTools(Window window)
     {
 #if DEBUG
-      DevTools.Attach(window);
+      DevTools.Attach(window, new KeyGesture(Key.F12, KeyModifiers.Control));
 #endif
     }
   }

@@ -36,6 +36,14 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     private bool minimizeToTray;
 
+    public bool StartAppMinimizedToTray
+    {
+      get => startAppMinimizedToTray;
+      set => this.RaiseAndSetIfChanged(ref startAppMinimizedToTray, value);
+    }
+
+    private bool startAppMinimizedToTray;
+
     public Languages Language
     {
       get => language;
@@ -126,6 +134,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       var appConfig = ConfigStorage.Instance.AppConfig;
       this.CheckAppUpdateOnStart = appConfig.UpdateReader;
       this.MinimizeToTray = appConfig.MinimizeToTray;
+      this.StartAppMinimizedToTray = appConfig.StartMinimizedToTray;
       this.AutoupdateLibraryInHours = appConfig.AutoUpdateInHours;
       this.Language = appConfig.Language;
 
@@ -155,6 +164,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       var appConfig = configStorage.AppConfig;
       appConfig.UpdateReader = this.CheckAppUpdateOnStart;
       appConfig.MinimizeToTray = this.MinimizeToTray;
+      appConfig.StartMinimizedToTray = this.StartAppMinimizedToTray;
       appConfig.AutoUpdateInHours = this.AutoupdateLibraryInHours;
       appConfig.Language = this.Language;
 

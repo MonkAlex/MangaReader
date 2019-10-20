@@ -1,28 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Threading;
+using DynamicData;
 using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Avalonia.ViewModel.Command.Library;
 using MangaReader.Avalonia.ViewModel.Command.Manga;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
-using ReactiveUI.Legacy;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
 {
   public class LibraryViewModel : ExplorerTabViewModel
   {
-    private ObservableCollection<MangaModel> items;
+    private SourceCache<MangaModel, int> items;
     private string search;
-    private IReactiveDerivedList<MangaModel> filteredItems;
+    private ReadOnlyObservableCollection<MangaModel> filteredItems;
 
-    public ObservableCollection<MangaModel> Items
+    public SourceCache<MangaModel, int> Items
     {
       get
       {
@@ -83,11 +84,16 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         var mangas = await context.Get<IManga>().Select(m => new MangaModel(m)).ToListAsync().ConfigureAwait(true);
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
-          Items = new ObservableCollection<MangaModel>(mangas);
-          filteredItems = Items.CreateDerivedCollection(
-            x => x,
-            Filter,
-            ConfigStorage.Instance.ViewConfig.LibraryFilter.Compare);
+          Items = new SourceCache<MangaModel, int>(m => m.Id);
+          Items.AddOrUpdate(mangas);
+          var cancellation = Items
+            .Connect()
+            .Filter(Filter)
+            .Sort(ConfigStorage.Instance.ViewConfig.LibraryFilter)
+            .ObserveOn(SynchronizationContext.Current)
+            .Bind(out filteredItems)
+            .DisposeMany()
+            .Subscribe();
           ResetView();
         }, DispatcherPriority.ApplicationIdle).ConfigureAwait(true);
       }
@@ -95,12 +101,14 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public void ResetView()
     {
-      if (filteredItems != null)
+      Items.Edit(updater =>
       {
-        filteredItems.Reset();
-        RaisePropertyChanged(nameof(FilteredItems));
-        RaisePropertyChanged(nameof(SelectedMangaModels));
-      }
+        var oldItems = Items.Items;
+        updater.Clear();
+        updater.AddOrUpdate(oldItems);
+      });
+      RaisePropertyChanged(nameof(FilteredItems));
+      RaisePropertyChanged(nameof(SelectedMangaModels));
     }
 
     private bool Filter(MangaModel manga)
@@ -164,11 +172,11 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
               switch (libraryViewModelArgs.MangaOperation)
               {
                 case MangaOperation.Added:
-                  this.Items.Add(new MangaModel(libraryViewModelArgs.Manga));
+                  this.Items.AddOrUpdate(new MangaModel(libraryViewModelArgs.Manga));
                   break;
                 case MangaOperation.Deleted:
                   {
-                    var mangaModels = this.Items.Where(i => i.Id == mangaId).ToList();
+                    var mangaModels = this.Items.Items.Where(i => i.Id == mangaId).ToList();
                     foreach (var mangaModel in mangaModels)
                       this.Items.Remove(mangaModel);
                     break;
@@ -178,6 +186,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
                   break;
                 case MangaOperation.UpdateCompleted:
                   ActualizeSpeedAndProcess(args.Manga);
+                  ExplorerViewModel.Instance.TrayIcon.ShowBalloon($"Обновление {args.Manga.Name} завершено.", args.Manga);
                   break;
                 case MangaOperation.None:
                   break;
@@ -206,7 +215,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       if (manga == null)
         return;
 
-      var view = Items.SingleOrDefault(m => m.Id == manga.Id);
+      var view = Items.Items.SingleOrDefault(m => m.Id == manga.Id);
       if (view != null)
       {
         view.Downloaded = manga.Downloaded;

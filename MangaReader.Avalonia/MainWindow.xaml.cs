@@ -1,21 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using Avalonia;
+﻿using System.Runtime.InteropServices;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
-using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
-using Avalonia.Threading;
-using Avalonia.VisualTree;
 using MangaReader.Avalonia.Services;
-using MangaReader.Avalonia.ViewModel;
-using MangaReader.Core;
-using MangaReader.Core.Convertation;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
-using MangaReader.Core.Update;
+using WindowState = Avalonia.Controls.WindowState;
 
 namespace MangaReader.Avalonia
 {
@@ -27,6 +16,28 @@ namespace MangaReader.Avalonia
       Title = "Loading...";
       ConfigStorage.Instance.ViewConfig.UpdateWindowState(this);
       App.AttachDevTools(this);
+    }
+
+    protected override void HandleWindowStateChanged(WindowState state)
+    {
+      if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+      {
+        if (state == WindowState.Minimized && ConfigStorage.Instance.AppConfig.MinimizeToTray)
+        {
+          Log.Add($"App minimized to tray.");
+          this.Hide();
+        }
+
+        if (state != WindowState.Minimized && ConfigStorage.Instance.AppConfig.MinimizeToTray)
+        {
+          Log.Add($"App restored from tray.");
+          this.Show();
+          // BUG: https://github.com/AvaloniaUI/Avalonia/issues/2994
+          this.InvalidateMeasure();
+        }
+      }
+
+      base.HandleWindowStateChanged(state);
     }
 
     protected override bool HandleClosing()

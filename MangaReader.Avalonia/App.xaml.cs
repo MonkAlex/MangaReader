@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Diagnostics;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using Avalonia.Threading;
@@ -108,7 +109,7 @@ namespace MangaReader.Avalonia
     public static void AttachDevTools(Window window)
     {
 #if DEBUG
-      DevTools.Attach(window);
+      DevTools.Attach(window, new KeyGesture(Key.F12, KeyModifiers.Control));
 #endif
     }
   }

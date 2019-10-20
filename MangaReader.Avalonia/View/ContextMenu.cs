@@ -1,5 +1,7 @@
 ﻿using System;
+using Avalonia;
 using Avalonia.Styling;
+using DynamicData.Binding;
 
 namespace MangaReader.Avalonia.View
 {
@@ -10,12 +12,12 @@ namespace MangaReader.Avalonia.View
 
     public ContextMenu()
     {
-      this.DataContextChanged += OnDataContextChanged;
+      this.WhenPropertyChanged(menu => menu.DataContext).Subscribe(OnDataContextChanged);
     }
 
-    private void OnDataContextChanged(object sender, EventArgs e)
+    private void OnDataContextChanged(PropertyValue<ContextMenu, object> obj)
     {
-      if (IsOpen && DataContext == null)
+      if (IsOpen)
         Close();
     }
   }

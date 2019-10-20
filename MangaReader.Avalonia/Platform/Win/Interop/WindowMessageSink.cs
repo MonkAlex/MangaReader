@@ -206,7 +206,6 @@ namespace MangaReader.Avalonia.Platform.Win.Interop
             if (msg != CallbackMessageId) return;
 
             var message = (WindowsMessages) lParam.ToInt32();
-            Debug.WriteLine("Got message " + message);
             switch (message)
             {
                 case WindowsMessages.WM_CONTEXTMENU:

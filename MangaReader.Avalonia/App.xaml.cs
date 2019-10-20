@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -12,6 +13,7 @@ using MangaReader.Avalonia.ViewModel;
 using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Core.ApplicationControl;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 using MangaReader.Core.Update;
 using Client = MangaReader.Core.Client;
 
@@ -97,10 +99,19 @@ namespace MangaReader.Avalonia
         // Подключаемся к базе в отдельном потоке, чтобы не зависал UI.
         Task.Run(() => Client.Start(explorer.LoadingProcess));
 
-        var window = new MainWindow();
-        explorer.LoadingProcess.Status = window.Title;
-        window.DataContext = explorer;
-        lifetime.MainWindow = window;
+        var args = Environment.GetCommandLineArgs();
+        if (args.Contains("-m") || args.Contains("/min") || ConfigStorage.Instance.AppConfig.StartMinimizedToTray)
+        {
+          // SaveSettingsCommand.ValidateMangaPaths();
+        }
+        else
+        {
+          var window = new MainWindow();
+          explorer.LoadingProcess.Status = window.Title;
+          window.DataContext = explorer;
+          lifetime.MainWindow = window;
+        }
+
       }
 
       base.OnFrameworkInitializationCompleted();

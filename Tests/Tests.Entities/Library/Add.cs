@@ -35,7 +35,7 @@ namespace Tests.Entities.Library
     {
       var error = false;
       var result = false;
-      var uri = new Uri(@"http://mintmanga.com/berserk");
+      var uri = new Uri(@"http://mintmanga.live/berserk");
 
       using (var context = Repository.GetEntityContext())
       {

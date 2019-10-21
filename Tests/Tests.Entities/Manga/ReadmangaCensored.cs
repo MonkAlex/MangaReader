@@ -51,11 +51,11 @@ namespace Tests.Entities.Manga
       }
 
       Log.LogReceived += OnLogOnLogReceived;
-      var manga = await Get(@"http://mintmanga.com/in_the_first_grade").ConfigureAwait(false);
+      var manga = await Get(@"http://mintmanga.live/in_the_first_grade").ConfigureAwait(false);
       Log.LogReceived -= OnLogOnLogReceived;
       var chapters = manga.Volumes.SelectMany(v => v.Container).ToList();
       Assert.IsTrue(!chapters.Any());
-      Assert.AreEqual("Запрещена публикация произведения по копирайту, адрес манги http://mintmanga.com/in_the_first_grade", error);
+      Assert.AreEqual("Запрещена публикация произведения по копирайту, адрес манги http://mintmanga.live/in_the_first_grade", error);
     }
 
     private async Task<IManga> Get(string url)

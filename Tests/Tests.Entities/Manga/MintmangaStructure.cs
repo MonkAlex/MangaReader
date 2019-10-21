@@ -13,7 +13,7 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task AddMintmangaWithExtra()
     {
-      var chapters = await GetCountOfChapters("http://mintmanga.com/love_mate").ConfigureAwait(false);
+      var chapters = await GetCountOfChapters("http://mintmanga.live/love_mate").ConfigureAwait(false);
       Assert.AreEqual(168, chapters);
     }
 

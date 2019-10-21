@@ -106,10 +106,7 @@ namespace MangaReader.Avalonia
         }
         else
         {
-          var window = new MainWindow();
-          explorer.LoadingProcess.Status = window.Title;
-          window.DataContext = explorer;
-          lifetime.MainWindow = window;
+          ShowMainWindowCommand.SetLifetime(explorer, lifetime);
         }
 
       }

@@ -17,10 +17,7 @@ namespace MangaReader.Avalonia.ViewModel.Command
         if (mainWindow == null && ConfigStorage.Instance.AppConfig.StartMinimizedToTray)
         {
           var explorer = ExplorerViewModel.Instance;
-          var window = new MainWindow();
-          explorer.LoadingProcess.Status = window.Title;
-          window.DataContext = explorer;
-          lifetime.MainWindow = window;
+          SetLifetime(explorer, lifetime);
           mainWindow = lifetime.MainWindow;
         }
 
@@ -34,6 +31,14 @@ namespace MangaReader.Avalonia.ViewModel.Command
       }
 
       return Task.CompletedTask;
+    }
+
+    public static void SetLifetime(ExplorerViewModel explorer, IClassicDesktopStyleApplicationLifetime lifetime)
+    {
+      var window = new MainWindow();
+      explorer.LoadingProcess.Status = window.Title;
+      window.DataContext = explorer;
+      lifetime.MainWindow = window;
     }
   }
 }

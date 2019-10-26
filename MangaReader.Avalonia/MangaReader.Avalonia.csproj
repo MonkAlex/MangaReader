@@ -5,9 +5,10 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <ApplicationIcon>Assets\main.ico</ApplicationIcon>
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,14 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia.Desktop" Version="0.9.0-preview3" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.0-preview3" />
-    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.9.0-preview3" />
-    <PackageReference Include="DynamicData" Version="6.13.18" />
-    <PackageReference Include="NSubsys" Version="1.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Avalonia.Desktop" Version="0.9.0-preview4" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.0-preview4" />
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.9.0-preview4" />
+    <PackageReference Include="DynamicData" Version="6.13.19" />
   </ItemGroup>
 
   <ItemGroup>

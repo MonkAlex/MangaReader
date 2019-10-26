@@ -1,4 +1,18 @@
 <Project>
+  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\VersionInfo.cs" Link="Properties\VersionInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MangaReader.Core\MangaReader.Core.csproj" />
+  </ItemGroup>
   <!-- Copy plugin dll and pdb files to shared folder after compile -->
   <Target Name="CopyAfterCompile" AfterTargets="CopyFilesToOutputDirectory">
     <ItemGroup>
@@ -10,6 +24,6 @@
           DestinationFiles="@(SourceFiles->'$(ProjectDir)\..\..\MangaReader\Bin\$(ConfigurationName)\Plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy Condition="'$(TargetFramework)' == 'netstandard2.0'"
           SourceFiles="@(SourceFiles)" 
-          DestinationFiles="@(SourceFiles->'$(ProjectDir)\..\..\MangaReader.Avalonia\bin\$(ConfigurationName)\netcoreapp2.1\Plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
+          DestinationFiles="@(SourceFiles->'$(ProjectDir)\..\..\MangaReader.Avalonia\bin\$(ConfigurationName)\netcoreapp3.0\Plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target> 
 </Project>

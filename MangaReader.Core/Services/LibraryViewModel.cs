@@ -234,27 +234,26 @@ namespace MangaReader.Core.Services
       {
         mangaIndex = 0;
         List<int> materialized;
-        using (var context = Repository.GetEntityContext("Prepare selected manga for update"))
+        if (mangas != null)
         {
-          var entities = context.Get<IManga>().Where(m => m.NeedUpdate);
+          materialized = mangas;
+        }
+        else
+        {
+          using (var context = Repository.GetEntityContext("Prepare selected manga for update"))
+          {
+            var entities = context.Get<IManga>().Where(m => m.NeedUpdate);
 
-          // Хибер не умеет в Contains от null, даже если для шарпа он не вычисляется.
-          if (mangas != null)
-            entities = entities.Where(m => mangas.Contains(m.Id));
+            // Пытаемся качать в порядке сортировки.
+            if (orderBy != null)
+              entities = orderBy(entities);
 
-          // Если явно не указаны ID, которые стоит скачать - пытаемся качать в порядке сортировки.
-          if (orderBy != null && mangas == null)
-            entities = orderBy(entities);
-
-          materialized = await entities.Select(e => e.Id).ToListAsync().ConfigureAwait(false);
-
-          // Если указаны Id, пытаемся качать в их внутреннем порядке.
-          if (mangas != null)
-            materialized = materialized.OrderBy(m => mangas.IndexOf(m)).ToList();
-
-          mangasCount = materialized.Count;
+            materialized = await entities.Select(e => e.Id).ToListAsync().ConfigureAwait(false);
+          }
         }
 
+        mangasCount = materialized.Count;
+        
         void OnMangaAddedWhenLibraryUpdating(object sender, LibraryViewModelArgs args)
         {
           if (args.MangaOperation == MangaOperation.Added)
@@ -268,11 +267,20 @@ namespace MangaReader.Core.Services
         LibraryChanged += OnMangaAddedWhenLibraryUpdating;
         for (var i = 0; i < materialized.Count; i++)
         {
+          var mangaId = materialized[i];
           await DownloadManager.CheckPause().ConfigureAwait(false);
 
-          using (var context = Repository.GetEntityContext($"Download updates for manga with id {materialized[i]}"))
+          using (var context = Repository.GetEntityContext($"Download updates for manga with id {mangaId}"))
           {
-            var current = await context.Get<IManga>().SingleAsync(m => m.Id == materialized[i]).ConfigureAwait(false);
+            var current = await context.Get<IManga>().SingleOrDefaultAsync(m => m.Id == mangaId).ConfigureAwait(false);
+            if (current == null || !current.NeedUpdate)
+            {
+              Log.Add(current == null ?
+                $"Manga with id {mangaId} not found" :
+                $"Manga with id {mangaId} has disabled updates");
+              continue;
+            }
+
             Log.Info(Strings.Library_Status_MangaUpdate + current.Name);
             OnLibraryChanged(new LibraryViewModelArgs(null, current, MangaOperation.UpdateStarted, LibraryOperation.UpdateMangaChanged));
             current.PropertyChanged += CurrentOnDownloadChanged;

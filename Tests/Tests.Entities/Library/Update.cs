@@ -102,5 +102,25 @@ namespace Tests.Entities.Library
       Assert.Contains(new LibraryViewModelArgs(null, addedManga, MangaOperation.Deleted, LibraryOperation.UpdateMangaChanged), events);
     }
 
+    [Test]
+    public async Task UpdateManyMangas()
+    {
+      var library = new LibraryViewModel();
+      var ids = Enumerable.Range(40_000, 2500).ToList();
+
+      var lastErrorMessage = string.Empty;
+      void OnLogReceived(LogEventStruct les)
+      {
+        if (les.Level == "Error")
+          lastErrorMessage = les.FormattedMessage;
+      }
+
+      Log.LogReceived += OnLogReceived;
+      await library.Update(ids).ConfigureAwait(false);
+      Log.LogReceived -= OnLogReceived;
+      if (!string.IsNullOrWhiteSpace(lastErrorMessage))
+        Assert.Fail(lastErrorMessage);
+    }
+
   }
 }

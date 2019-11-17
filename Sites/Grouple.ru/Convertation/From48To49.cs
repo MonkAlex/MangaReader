@@ -15,7 +15,19 @@ namespace Grouple.Convertation
       {
         var setting = ConfigStorage.GetPlugin<Mintmanga>().GetSettings();
         var oldMainUri = new Uri("http://mintmanga.com");
-        var mainUri = new Uri("http://mintmanga.live");
+        var mainUri = new Uri("https://mintmanga.live");
+        if (setting != null && Equals(oldMainUri, setting.MainUri))
+        {
+          setting.MainUri = mainUri;
+          await context.Save(setting).ConfigureAwait(false);
+        }
+      }
+
+      using (var context = Repository.GetEntityContext())
+      {
+        var setting = ConfigStorage.GetPlugin<Readmanga>().GetSettings();
+        var oldMainUri = new Uri("http://readmanga.me/");
+        var mainUri = new Uri("https://readmanga.me/");
         if (setting != null && Equals(oldMainUri, setting.MainUri))
         {
           setting.MainUri = mainUri;
@@ -28,6 +40,7 @@ namespace Grouple.Convertation
     {
       this.Version = new Version(1, 49, 0);
       this.CanReportProcess = false;
+      this.Name = "Обновляем ссылки на mintmanga.live и readmanga.me...";
     }
 
   }

@@ -59,24 +59,24 @@ namespace Grouple
       if (!page.HasContent)
         return;
 
-      // Если сайт ответил с другого адреса - переписываем текущий адрес.
-      if (page.ResponseUri != this.Uri)
-      {
-        this.Uri = page.ResponseUri;
-        await this.Refresh().ConfigureAwait(false);
-        return;
-      }
-
       // Если на странице редирект - выполняем его и получаем новую ссылку на мангу.
-      if (page.Content.ToLowerInvariant().Contains(Grouple.GroupleParser.CookieKey))
+      if (page.Content.ToLowerInvariant().Contains(GroupleParser.CookieKey))
       {
-        var newUri = await (Parser as Grouple.GroupleParser).GetRedirectUri(page).ConfigureAwait(false);
+        var newUri = await (Parser as GroupleParser).GetRedirectUri(this, page).ConfigureAwait(false);
         if (!this.Uri.Equals(newUri))
         {
           this.Uri = newUri;
           await this.Refresh().ConfigureAwait(false);
           return;
         }
+      }
+
+      // Если сайт ответил с другого адреса - переписываем текущий адрес.
+      if (page.ResponseUri != this.Uri)
+      {
+        this.Uri = page.ResponseUri;
+        await this.Refresh().ConfigureAwait(false);
+        return;
       }
 
       await base.Refresh().ConfigureAwait(false);

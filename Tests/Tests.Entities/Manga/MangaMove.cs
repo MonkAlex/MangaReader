@@ -24,9 +24,9 @@ namespace Tests.Entities.Manga
           await model.Remove(remove).ConfigureAwait(false);
 
         var manga = await Builder.CreateReadmanga().ConfigureAwait(false);
-        var readmangaUri = new Uri("http://readmanga.me/btoom");
+        var readmangaUri = new Uri("https://readmanga.me/btoom");
         manga.Uri = readmangaUri;
-        manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(new Uri("http://readmanga.me/btoom/vol1/1?mature=1")));
+        manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(new Uri("https://readmanga.me/btoom/vol1/1?mature=1")));
         await context.Save(manga).ConfigureAwait(false);
 
         manga = await context.Get<Readmanga>().FirstOrDefaultAsync(m => m.Id == manga.Id).ConfigureAwait(false);
@@ -34,12 +34,12 @@ namespace Tests.Entities.Manga
 
         // Если сайт больше не редиректит, осталась возможность редиректа вручную в клиенте.
         if (manga.Uri == readmangaUri)
-          manga.Uri = new Uri("http://mintmanga.live/btooom_");
+          manga.Uri = new Uri("https://mintmanga.live/btooom_");
 
         await context.Save(manga).ConfigureAwait(false);
 
         var volume = new Volume();
-        volume.Container.Add(new Chapter(new Uri("http://mintmanga.live/btooom_/vol1/1?mature=1"), string.Empty));
+        volume.Container.Add(new Chapter(new Uri("https://mintmanga.live/btooom_/vol1/1?mature=1"), string.Empty));
 
         var chartersNotInHistory = History.GetItemsWithoutHistory(volume);
         Assert.AreEqual(0, chartersNotInHistory.Count);

@@ -17,14 +17,14 @@ namespace Tests.Entities.Manga
     private ReadmangaParser parser = new Grouple.ReadmangaParser();
 
     // Not censored
-    // http://readmanga.me/black_butler_anthology_comic_rainbow_butler/vol1/6
+    // https://readmanga.me/black_butler_anthology_comic_rainbow_butler/vol1/6
     // Censored
-    // http://readmanga.me/school_teacher/vol2/10?mature=1
+    // https://readmanga.me/school_teacher/vol2/10?mature=1
 
     [Test]
     public async Task NotCensoredReadmanga()
     {
-      var manga = await Get(@"http://readmanga.me/black_butler_anthology_comic_rainbow_butler/vol1/6").ConfigureAwait(false);
+      var manga = await Get(@"https://readmanga.me/black_butler_anthology_comic_rainbow_butler/vol1/6").ConfigureAwait(false);
       var chapter = manga.Volumes.Single(v => v.Number == 1).Container.ToList()[0];
       await parser.UpdatePages(chapter).ConfigureAwait(false);
       Assert.IsTrue(chapter.Container.First().ImageLink.IsAbsoluteUri);
@@ -33,7 +33,7 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task CensoredReadmanga()
     {
-      var manga = await Get(@"http://readmanga.me/school_teacher/vol2/10?mature=1").ConfigureAwait(false);
+      var manga = await Get(@"https://readmanga.me/school_teacher/vol2/10?mature=1").ConfigureAwait(false);
       var chapter = manga.Volumes.Single(v => v.Number == 2).Container.ToList()[5];
       await parser.UpdatePages(chapter).ConfigureAwait(false);
       Assert.IsTrue(chapter.Container.First().ImageLink.IsAbsoluteUri);
@@ -51,11 +51,11 @@ namespace Tests.Entities.Manga
       }
 
       Log.LogReceived += OnLogOnLogReceived;
-      var manga = await Get(@"http://mintmanga.live/in_the_first_grade").ConfigureAwait(false);
+      var manga = await Get(@"https://mintmanga.live/in_the_first_grade").ConfigureAwait(false);
       Log.LogReceived -= OnLogOnLogReceived;
       var chapters = manga.Volumes.SelectMany(v => v.Container).ToList();
       Assert.IsTrue(!chapters.Any());
-      Assert.AreEqual("Запрещена публикация произведения по копирайту, адрес манги http://mintmanga.live/in_the_first_grade", error);
+      Assert.AreEqual("Запрещена публикация произведения по копирайту, адрес манги https://mintmanga.live/in_the_first_grade", error);
     }
 
     private async Task<IManga> Get(string url)

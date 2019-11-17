@@ -40,7 +40,7 @@
         </ItemsPanelTemplate>
       </v:ListBox.ItemsPanel>
     </v:ListBox>
-    <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding ManualUri}" Watermark="Адрес манги, например http://readmanga.me/berserk">
+    <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding ManualUri}" Watermark="Адрес манги, например https://readmanga.me/berserk">
       <TextBox.KeyBindings>
         <KeyBinding Command="{Binding AddManual}" Gesture="Return"/>
       </TextBox.KeyBindings>

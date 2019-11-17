@@ -13,28 +13,28 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task AddEmptyReadmanga()
     {
-      var chapters = await GetCountOfChapters("http://readmanga.me/_my_name_").ConfigureAwait(false);
+      var chapters = await GetCountOfChapters("https://readmanga.me/_my_name_").ConfigureAwait(false);
       Assert.AreEqual(0, chapters);
     }
 
     [Test]
     public async Task AddSingleReadmanga()
     {
-      var chapters = await GetCountOfChapters("http://readmanga.me/traeh").ConfigureAwait(false);
+      var chapters = await GetCountOfChapters("https://readmanga.me/traeh").ConfigureAwait(false);
       Assert.AreEqual(1, chapters);
     }
 
     [Test]
     public async Task AddReadmangaWithoutExtra()
     {
-      var chapters = await GetCountOfChapters("http://readmanga.me/kuroshitsuji_dj___black_sheep").ConfigureAwait(false);
+      var chapters = await GetCountOfChapters("https://readmanga.me/kuroshitsuji_dj___black_sheep").ConfigureAwait(false);
       Assert.AreEqual(4, chapters);
     }
 
     [Test]
     public async Task AddReadmangaWithExtra()
     {
-      var chapters = await GetCountOfChapters("http://readmanga.me/anima").ConfigureAwait(false);
+      var chapters = await GetCountOfChapters("https://readmanga.me/anima").ConfigureAwait(false);
       Assert.AreEqual(59, chapters);
     }
 

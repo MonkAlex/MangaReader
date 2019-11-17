@@ -12,6 +12,7 @@ using HtmlAgilityPack;
 using MangaReader.Core;
 using MangaReader.Core.Account;
 using MangaReader.Core.DataTrasferObject;
+using MangaReader.Core.Exception;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
@@ -34,11 +35,22 @@ namespace Grouple
     /// <summary>
     /// Получить ссылку с редиректа.
     /// </summary>
+    /// <param name="manga">Манга, ссылку которой пытаемся оценить на редирект.</param>
     /// <param name="page">Содержимое страницы по ссылке.</param>
     /// <returns>Новая ссылка.</returns>
-    public Task<Uri> GetRedirectUri(Page page)
+    public async Task<Uri> GetRedirectUri(IManga manga, Page page)
     {
-      return GetRedirectUriInternal(page, 0);
+      var processedUri = new List<Uri>() { page.ResponseUri };
+      while (page.Content.ToLowerInvariant().Contains(CookieKey))
+      {
+        var redirect = await GetRedirectUriInternal(page, 0).ConfigureAwait(false);
+        processedUri.Add(redirect);
+        if (processedUri.Count(u => Equals(u, redirect)) > 5)
+          throw new GetSiteInfoException($"This webpage has a redirect loop problem (ERR_TOO_MANY_REDIRECTS)", processedUri[0], manga);
+        page = await Page.GetPageAsync(redirect, GetClient()).ConfigureAwait(false);
+      }
+
+      return page.ResponseUri;
     }
 
     private async Task<Uri> GetRedirectUriInternal(Page page, int restartCount)
@@ -224,9 +236,9 @@ namespace Grouple
 
     public override UriParseResult ParseUri(Uri uri)
     {
-      // Manga : http://readmanga.me/heroes_of_the_western_world__emerald_
+      // Manga : https://readmanga.me/heroes_of_the_western_world__emerald_
       // Volume : -
-      // Chapter : http://readmanga.me/heroes_of_the_western_world__emerald_/vol0/0
+      // Chapter : https://readmanga.me/heroes_of_the_western_world__emerald_/vol0/0
       // Page : -
 
       var hosts = ConfigStorage.Plugins

@@ -38,19 +38,19 @@ namespace Tests.Entities
 
     public static class Readmanga
     {
-      [InfoCache("http://readmanga.me/kuroshitsuji_dj___black_sheep", true)]
+      [InfoCache("https://readmanga.me/kuroshitsuji_dj___black_sheep", true)]
       public static MangaInfo Kuroshitsuji;
 
-      [InfoCache("http://readmanga.me/love_mate_2", false)]
+      [InfoCache("https://readmanga.me/love_mate_2", false)]
       public static MangaInfo LoveMate2;
     }
 
     public static class Mintmanga
     {
-      [InfoCache("http://mintmanga.live/harukana_receive", true)]
+      [InfoCache("https://mintmanga.live/harukana_receive", true)]
       public static MangaInfo HarukaNaReceive;
 
-      [InfoCache("http://mintmanga.live/love_mate", false)]
+      [InfoCache("https://mintmanga.live/love_mate", false)]
       public static MangaInfo LoveMate;
     }
 

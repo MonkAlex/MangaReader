@@ -183,17 +183,16 @@ namespace Hentaichan
 
       foreach (var host in hosts)
       {
-        var trimmedHost = host.OriginalString.TrimEnd('/');
-        if (!uri.OriginalString.StartsWith(trimmedHost))
+        if (!Equals(uri.Host, host.Host))
           continue;
 
-        var relativeUri = uri.OriginalString.Remove(0, trimmedHost.Length);
+        var uriOriginalString = uri.OriginalString;
         var manga = "/manga/";
-        if (relativeUri.Contains(manga))
+        if (uriOriginalString.Contains(manga))
           return new UriParseResult(true, UriParseKind.Manga, uri);
         var online = "/online/";
-        if (relativeUri.Contains(online))
-          return new UriParseResult(true, UriParseKind.Chapter, new Uri(uri, relativeUri.Replace(online, manga)));
+        if (uriOriginalString.Contains(online))
+          return new UriParseResult(true, UriParseKind.Chapter, new Uri(uri, uriOriginalString.Replace(online, manga)));
       }
 
       return new UriParseResult(false, UriParseKind.Manga, null);

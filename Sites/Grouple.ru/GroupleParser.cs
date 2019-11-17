@@ -194,8 +194,7 @@ namespace Grouple
           .Reverse()
           .ToList();
         links = linkNodes
-          .ConvertAll(r => r.Attributes.ToList().ConvertAll(i => i.Value))
-          .SelectMany(j => j)
+          .ConvertAll(r => r.Attributes.Single(a => a.Name == "href").Value)
           .Where(k => k != string.Empty)
           .Select(s => page.ResponseUri.GetLeftPart(UriPartial.Authority) + s + "?mature=1")
           .Select(s => new Uri(s))
@@ -247,8 +246,7 @@ namespace Grouple
 
       foreach (var host in hosts)
       {
-        var trimmedHost = host.OriginalString.TrimEnd('/');
-        if (!uri.OriginalString.StartsWith(trimmedHost))
+        if (!Equals(uri.Host, host.Host))
           continue;
 
         if (uri.Segments.Length > 1)

@@ -140,8 +140,7 @@ namespace Hentai2Read.com
 
       foreach (var host in hosts)
       {
-        var trimmedHost = host.OriginalString;
-        if (!uri.OriginalString.StartsWith(trimmedHost))
+        if (!Equals(uri.Host, host.Host))
           continue;
 
         if (uri.Segments.Length > 1)

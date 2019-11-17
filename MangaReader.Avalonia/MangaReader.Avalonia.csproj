@@ -47,7 +47,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Plugins Include="$(ProjectDir)\Bin\$(ConfigurationName)\netcoreapp2.1\Plugins\*" />
+    <Plugins Include="$(ProjectDir)\Bin\$(ConfigurationName)\$(TargetFramework)\Plugins\*" />
   </ItemGroup>
 
   <Target Name="CopyPlugins" AfterTargets="Publish">

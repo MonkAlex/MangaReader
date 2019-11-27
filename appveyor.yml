@@ -28,10 +28,6 @@ artifacts:
     name: WPF App
     type: zip
 
-  - path: MangaReader.Avalonia\bin\$(configuration)
-    name: Avalonia app (dotnet core required)
-    type: zip
-
   - path: MangaReader.Avalonia\bin\Publish\netcoreapp3.0\win-x64
     name: Avalonia app win-x64
     type: zip

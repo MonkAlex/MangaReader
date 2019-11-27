@@ -21,7 +21,13 @@ namespace MangaReader.Avalonia
 {
   class App : Application
   {
-    public static AppBuilder BuildAvaloniaApp() => AppBuilder.Configure<App>().UsePlatformDetect().UseReactiveUI();
+    public static AppBuilder BuildAvaloniaApp()
+      => AppBuilder
+        .Configure<App>()
+        .UsePlatformDetect()
+        .With(new X11PlatformOptions() { UseEGL = true })
+        .With(new Win32PlatformOptions() { AllowEglInitialization = true, UseDeferredRendering = false })
+        .UseReactiveUI();
 
     public override void Initialize()
     {

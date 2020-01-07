@@ -55,7 +55,14 @@ namespace MangaReader.Avalonia.ViewModel.Command
     {
       var commandName = Name ?? GetType().Name;
       Log.Add($"Command '{commandName}' started.");
-      await Execute(parameter).ConfigureAwait(true);
+      try
+      {
+        await Execute(parameter).ConfigureAwait(true);
+      }
+      catch (Exception e)
+      {
+        Log.Exception(e, $"Command {commandName} failed.");
+      }
     }
 
     public virtual bool CanExecute(object parameter)

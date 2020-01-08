@@ -12,9 +12,7 @@ namespace MangaReader.Avalonia
 {
   public class BitmapTypeConverter : IValueConverter
   {
-    public static BitmapTypeConverter Instance => instance;
-
-    private static readonly BitmapTypeConverter instance = new BitmapTypeConverter();
+    public static BitmapTypeConverter Instance { get; } = new BitmapTypeConverter();
 
     private static readonly Bitmap DefaultImage = GetNotFoundImage();
 

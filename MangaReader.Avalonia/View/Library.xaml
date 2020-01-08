@@ -8,13 +8,13 @@
              Design.Width="400" Design.Height="300">
   <Grid RowDefinitions="Auto,*,Auto,Auto" DataContext="{Binding}">
     <TextBox Grid.Row="0" Text="{Binding Search}" Watermark="Поиск по имени" UseFloatingWatermark="True"/>
-    <v:ListBox Grid.Row="1" Items="{Binding FilteredItems}"
+    <ListBox Grid.Row="1" Items="{Binding FilteredItems}"
                SelectedItems="{Binding SelectedMangaModels}"
                SelectionMode="Multiple"
                BorderThickness="0"
                ScrollViewer.VerticalScrollBarVisibility="Auto"
                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-      <v:ListBox.ItemTemplate>
+      <ListBox.ItemTemplate>
         <DataTemplate>
           <Border Name="MangaBorder" Background="Transparent">
             <Border.ContextMenu>
@@ -36,13 +36,13 @@
             </Grid>
           </Border>
         </DataTemplate>
-      </v:ListBox.ItemTemplate>
-      <v:ListBox.ItemsPanel>
+      </ListBox.ItemTemplate>
+      <ListBox.ItemsPanel>
         <ItemsPanelTemplate>
           <WrapPanel/>
         </ItemsPanelTemplate>
-      </v:ListBox.ItemsPanel>
-    </v:ListBox>
+      </ListBox.ItemsPanel>
+    </ListBox>
     <ProgressBar Grid.Row="2" IsVisible="{Binding !!UpdatePercent}" Value="{Binding UpdatePercent}" Minimum="0" Maximum="1"/>
     <ListBox Grid.Row="3" Items="{Binding LibraryCommands}"
                ScrollViewer.VerticalScrollBarVisibility="Auto"

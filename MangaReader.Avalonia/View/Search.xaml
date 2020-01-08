@@ -13,11 +13,11 @@
       </TextBox.KeyBindings>
     </TextBox>
     <Button Grid.Row="0" Grid.Column="1" DataContext="{Binding StartSearch}" Command="{Binding}" Content="{Binding Name}"/>
-    <v:ListBox Grid.Row="1" Grid.ColumnSpan="2" Items="{Binding Items}"
+    <ListBox Grid.Row="1" Grid.ColumnSpan="2" Items="{Binding Items}"
              BorderThickness="0"
              ScrollViewer.VerticalScrollBarVisibility="Auto"
              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-      <v:ListBox.ItemTemplate>
+      <ListBox.ItemTemplate>
         <DataTemplate>
           <Border Name="MangaBorder" Background="Transparent">
             <i:Interaction.Behaviors>
@@ -33,13 +33,13 @@
             </Grid>
           </Border>
         </DataTemplate>
-      </v:ListBox.ItemTemplate>
-      <v:ListBox.ItemsPanel>
+      </ListBox.ItemTemplate>
+      <ListBox.ItemsPanel>
         <ItemsPanelTemplate>
           <WrapPanel/>
         </ItemsPanelTemplate>
-      </v:ListBox.ItemsPanel>
-    </v:ListBox>
+      </ListBox.ItemsPanel>
+    </ListBox>
     <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding ManualUri}" Watermark="Адрес манги, например https://readmanga.me/berserk">
       <TextBox.KeyBindings>
         <KeyBinding Command="{Binding AddManual}" Gesture="Return"/>

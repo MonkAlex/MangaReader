@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -112,6 +113,7 @@ namespace Hentaichan
       try
       {
         var document = new HtmlDocument();
+        var mainPage = await Page.GetPageAsync(manga.Uri, GetClient()).ConfigureAwait(false);
         var page = await GetPageWithRedirect(manga.Uri).ConfigureAwait(false);
         var content = page.Item1.Content;
         var uri = page.Item2;
@@ -121,7 +123,11 @@ namespace Hentaichan
           throw new GetSiteInfoException("Требуется регистрация.", manga);
         document.LoadHtml(content);
         var headerNode = document.GetElementbyId("right");
-        if (!headerNode.InnerText.Contains("Похожая манга"))
+
+        var mainDocument = new HtmlDocument();
+        mainDocument.LoadHtml(mainPage.Content);
+        var navigationHeader = mainDocument.DocumentNode.SelectSingleNode("//div[@class=\"extaraNavi\"]");
+        if (!navigationHeader.InnerText.Contains("Похожая манга"))
         {
           var chapterNodes = headerNode.SelectNodes(".//option");
           if (chapterNodes != null)
@@ -149,6 +155,19 @@ namespace Hentaichan
       catch (GetSiteInfoException ex)
       {
         Log.Exception(ex);
+      }
+
+      var doubles = chapters.GroupBy(c => c.Number).Where(g => g.Count() > 1).ToList();
+      foreach (var groupByNumber in doubles)
+      {
+        var currentNumber = groupByNumber.Key.ToString(CultureInfo.InvariantCulture);
+        if (!currentNumber.Contains('.'))
+          currentNumber += '.';
+        for (int i = 1; i <= groupByNumber.Count(); i++)
+        {
+          var chapter = groupByNumber.ElementAt(i - 1);
+          chapter.Number = double.Parse(currentNumber + i, NumberStyles.Float, CultureInfo.InvariantCulture);
+        }
       }
 
       FillMangaChapters(manga, chapters);

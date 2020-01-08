@@ -42,7 +42,7 @@ namespace Tests.Entities.Manga
     public async Task AddReadmangaWithGoldChapters()
     {
       var chapters = await GetCountOfChapters("https://readmanga.me/from_common_job_class_to_the_strongest_in_the_world").ConfigureAwait(false);
-      Assert.AreEqual(16, chapters);
+      Assert.AreEqual(29, chapters);
     }
 
     private async Task<int> GetCountOfChapters(string url)

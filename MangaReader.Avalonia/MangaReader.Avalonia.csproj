@@ -30,20 +30,12 @@
     <PackageReference Include="Avalonia.Desktop" Version="0.9.1" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.1" />
     <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.9.1" />
+    <PackageReference Include="Dialogs.Avalonia" Version="0.1.27" />
     <PackageReference Include="DynamicData" Version="6.13.19" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MangaReader.Core\MangaReader.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Dialogs.Avalonia">
-      <HintPath>lib\Dialogs.Avalonia.dll</HintPath>
-    </Reference>
-    <Reference Include="Dialogs.Interfaces">
-      <HintPath>lib\Dialogs.Interfaces.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>

@@ -63,6 +63,11 @@ namespace MangaReader.Core.Services.Config
     /// </summary>
     public static string PluginPath { get { return Loader.PluginPath; } }
 
+    /// <summary>
+    /// Папки с плагинами.
+    /// </summary>
+    public static string[] PluginFolders { get; set; } = { PluginPath };
+
     public static void Load()
     {
       if (_instance != null)
@@ -101,15 +106,15 @@ namespace MangaReader.Core.Services.Config
     {
       return Plugins.SingleOrDefault(p => p.MangaType == typeof(T));
     }
-    
+
     public static void RefreshPlugins()
     {
       Loader.Init();
       var result = new List<IPlugin>();
 
       Log.Add("Search plugins...");
-      result.AddRange(GetPluginsFrom(ConfigStorage.WorkFolder));
-      result.AddRange(GetPluginsFrom(ConfigStorage.PluginPath));
+      foreach (var pluginFolder in PluginFolders)
+        result.AddRange(GetPluginsFrom(pluginFolder));
       Log.Add("Search plugins completed.");
 
       plugins = result;

@@ -21,8 +21,9 @@ namespace MangaReader.Avalonia.ViewModel.Command
         Log.Add("Application will be closed.");
         ExplorerViewModel.Instance.Dispose();
         Client.Close();
-        if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime && lifetime != parameter)
-          lifetime.Shutdown();
+        //if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime && lifetime != parameter)
+        //  lifetime.Shutdown();
+        Environment.Exit(0);
       }
 
       return Task.CompletedTask;

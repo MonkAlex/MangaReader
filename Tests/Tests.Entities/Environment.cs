@@ -44,12 +44,13 @@ namespace Tests
       DeployToLib(Path.Combine(".", "..", "MangaReader.Core", "bin", "Debug", "net461"));
       DeployToLib(Path.Combine(".", "..", "MangaReader.Core", "bin", "Release", "net461"));
       DeployToLib(Path.Combine(".", "..", "MangaReader.Core", "bin", "Publish", "net461"));
-      MangaReader.Core.Services.Config.ConfigStorage.Instance.AppConfig.UpdateReader = false;
+      ConfigStorage.Instance.AppConfig.UpdateReader = false;
 
       if (initSession && !Mapping.Initialized)
       {
         var process = new ReportProcess();
         MangaReader.Core.Client.Init();
+        ConfigStorage.PluginFolders = new[] { ConfigStorage.WorkFolder };
         MangaReader.Core.Client.Start(process).GetAwaiter().GetResult();
       }
     }

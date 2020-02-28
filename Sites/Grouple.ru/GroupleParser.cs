@@ -119,7 +119,8 @@ namespace Grouple
       for (var i = 0; i < jsonParsed.Count; i++)
       {
         var child = jsonParsed[i];
-        var uriString = child[1].ToString() + child[0] + child[2];
+        var child0 = child[0].ToString();
+        var uriString = child0.StartsWith(groupleChapter.Uri.GetLeftPart(UriPartial.Scheme)) ? (child0 + child[2]) : (child[1] + child0 + child[2]);
 
         // Фикс страницы с цензурой.
         if (!Uri.TryCreate(uriString, UriKind.Absolute, out Uri imageLink))

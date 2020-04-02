@@ -1,5 +1,5 @@
 ﻿using System;
-using Avalonia;
+using Avalonia.Controls.Generators;
 using Avalonia.Styling;
 using DynamicData.Binding;
 
@@ -9,6 +9,16 @@ namespace MangaReader.Avalonia.View
   public class ContextMenu : global::Avalonia.Controls.ContextMenu, IStyleable
   {
     Type IStyleable.StyleKey => typeof(global::Avalonia.Controls.ContextMenu);
+
+    // BUG: https://github.com/AvaloniaUI/Avalonia/issues/3468
+    protected override void OnContainersDematerialized(ItemContainerEventArgs e)
+    {
+      try
+      {
+        base.OnContainersDematerialized(e);
+      }
+      catch { }
+    }
 
     public ContextMenu()
     {

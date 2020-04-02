@@ -80,7 +80,7 @@ namespace Hentai2Read.com
       var page = await Page.GetPageAsync(BookmarksUri, GetClient()).ConfigureAwait(false);
       document.LoadHtml(page.Content);
 
-      var nodes = document.DocumentNode.SelectNodes("//div[@class=\"col-xs-6 col-sm-4 col-md-3 col-lg-2b col-xl-2\"]");
+      var nodes = document.DocumentNode.SelectNodes("//div[@class=\"col-xs-6 col-sm-4 col-md-3 col-xl-2\"]");
 
       if (nodes == null)
       {

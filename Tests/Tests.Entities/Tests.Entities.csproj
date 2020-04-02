@@ -116,6 +116,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Manga\MangaMove.cs" />
     <Compile Include="ReportProcess.cs" />
+    <Compile Include="Search\Hentai2Read.cs" />
     <Compile Include="Search\Acomics.cs" />
     <Compile Include="Search\Grouple.cs" />
     <Compile Include="Search\Henchan.cs" />

@@ -177,7 +177,7 @@ namespace Hentai2Read.com
       var searchHost = new Uri(host, "hentai-list/search/");
       var client = GetClient();
       var page = await client.UploadValuesTaskAsync(searchHost, new NameValueCollection()
-        { { "cmd_wpm_wgt_mng_sch_sbm", "Search" }, {"txt_wpm_wgt_mng_sch_nme", WebUtility.UrlEncode(name)}}).ConfigureAwait(false);
+        { { "cmd_wpm_wgt_mng_sch_sbm", "Search" }, {"txt_wpm_wgt_mng_sch_nme", name}}).ConfigureAwait(false);
       if (page == null)
         return (null, null, null);
 
@@ -185,7 +185,7 @@ namespace Hentai2Read.com
       {
         var document = new HtmlDocument();
         document.LoadHtml(Encoding.UTF8.GetString(page));
-        return (document.DocumentNode.SelectNodes("//div[@class=\"col-xs-6 col-sm-4 col-md-3 col-lg-2b col-xl-2\"]"), host, client);
+        return (document.DocumentNode.SelectNodes("//div[@class=\"col-xs-6 col-sm-4 col-md-3 col-xl-2\"]"), host, client);
       }).ConfigureAwait(false);
     }
 
@@ -199,7 +199,7 @@ namespace Hentai2Read.com
       var image = manga.SelectSingleNode(".//img");
       var imageUri = image?.Attributes.Single(a => a.Name == "data-src").Value;
 
-      var mangaNode = manga.SelectSingleNode(".//div[@class='img-overlay text-center']//a");
+      var mangaNode = manga.SelectSingleNode(".//div[@class='overlay-title']//a");
       var mangaUri = mangaNode.Attributes.Single(a => a.Name == "href").Value;
       var mangaName = mangaNode.InnerText.Trim();
 

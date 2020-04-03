@@ -74,6 +74,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ApplicationControl.cs" />
+    <Compile Include="BackupTests.cs" />
     <Compile Include="FolderNameNormalization.cs" />
     <Compile Include="ImageExtensionParserTests.cs" />
     <Compile Include="VersionInfo.cs" />

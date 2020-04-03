@@ -14,6 +14,7 @@ namespace MangaReader.Core.Services
   {
     public const string ArchiveFormat = ".cbz";
     public const string ArchivePattern = "*.cbz";
+    public const string BackupPattern = "*.cbz.dbak*";
     public const string Separator = " ";
 
     public enum CompressionMode
@@ -152,45 +153,35 @@ namespace MangaReader.Core.Services
       var archiveMode = File.Exists(archive) ? ZipArchiveMode.Update : ZipArchiveMode.Create;
       if (archiveMode == ZipArchiveMode.Update)
         Log.AddFormat("Compression: archive {0} already exists, add folder {1}.", archive, folder);
+      var directories = new DirectoryInfo(folder);
+      var files = directories
+        .GetFiles("*", SearchOption.AllDirectories)
+        .Select(f => f.FullName)
+        .Except(directories
+          .GetFiles(ArchivePattern, SearchOption.AllDirectories)
+          .Select(f => f.FullName))
+        .Except(directories
+          .GetFiles(BackupPattern, SearchOption.AllDirectories)
+          .Select(f => f.FullName))
+        .ToList();
       try
       {
-        var packedFiles = new List<string>();
-        var directories = new DirectoryInfo(folder);
-        var files = directories
-          .GetFiles("*", SearchOption.AllDirectories)
-          .Select(f => f.FullName)
-          .Except(directories
-            .GetFiles(ArchivePattern, SearchOption.AllDirectories)
-            .Select(f => f.FullName))
-          .ToList();
         if (!files.Any())
-          return packedFiles;
+          return new List<string>();
 
-        using (var zip = ZipFile.Open(archive, archiveMode, Encoding.UTF8))
-        {
-          foreach (var file in files)
-          {
-            var fileName = file.Replace(directories.FullName, string.Empty).Trim(Path.DirectorySeparatorChar);
-            if (archiveMode == ZipArchiveMode.Update)
-            {
-              var fileInZip = zip.Entries.SingleOrDefault(f => f.FullName == fileName);
-              if (fileInZip != null)
-                fileInZip.Delete();
-            }
-            zip.CreateEntryFromFile(file, fileName, CompressionLevel.NoCompression);
-            packedFiles.Add(file);
-          }
-        }
-        return packedFiles;
+        return ZipFiles(archive, archiveMode, files, directories);
       }
       catch (InvalidDataException ex)
       {
-        Backup.MoveToBackup(archive);
-        ZipFile.CreateFromDirectory(folder, archive, CompressionLevel.NoCompression, false, Encoding.UTF8);
         var text = string.Format(
           "Не удалось прочитать архив {0} для записи в него папки {1}. \r\n Существующий файл был переименован в {2}. В {3} только содержимое указанной папки.",
           archive, folder, archive + ".bak", archive);
         Log.Exception(ex, text);
+        if (Backup.MoveToBackup(archive))
+        {
+          return ZipFiles(archive, ZipArchiveMode.Create, files, directories);
+        }
+
         return new List<string>();
       }
       catch (System.Exception ex)
@@ -202,6 +193,29 @@ namespace MangaReader.Core.Services
 
         return new List<string>();
       }
+    }
+
+    private static List<string> ZipFiles(string archive, ZipArchiveMode archiveMode, List<string> files, DirectoryInfo directories)
+    {
+      var packedFiles = new List<string>();
+      using (var zip = ZipFile.Open(archive, archiveMode, Encoding.UTF8))
+      {
+        foreach (var file in files)
+        {
+          var fileName = file.Replace(directories.FullName, string.Empty).Trim(Path.DirectorySeparatorChar);
+          if (archiveMode == ZipArchiveMode.Update)
+          {
+            var fileInZip = zip.Entries.SingleOrDefault(f => f.FullName == fileName);
+            if (fileInZip != null)
+              fileInZip.Delete();
+          }
+
+          zip.CreateEntryFromFile(file, fileName, CompressionLevel.NoCompression);
+          packedFiles.Add(file);
+        }
+      }
+
+      return packedFiles;
     }
 
     private static void DeleteCompressedFiles(List<string> files, string folder)

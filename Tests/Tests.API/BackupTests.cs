@@ -8,10 +8,10 @@ namespace Tests.API
   public class BackupTests
   {
     [Test]
-    [TestCase(false, true, FileShare.Read, Description = "Перемещение, позитивный кейс")]
-    [TestCase(true, true, FileShare.Read, Description = "Копирование и остановка, негативный кейс (заблокирован основной архив)")]
-    [TestCase(true, true, FileShare.None, Description = "Копирование и остановка, негативный кейс (заблокирован основной архив, даже чтение запрещено)")]
-    [TestCase(true, false, FileShare.Read, Description = "Копирование и остановка, негативный кейс (заблокирован бэкап основного архива)")]
+    [TestCase(false, true, FileShare.Read)] // Перемещение, позитивный кейс
+    [TestCase(true, true, FileShare.Read)] // Копирование и остановка, негативный кейс (заблокирован основной архив)
+    [TestCase(true, true, FileShare.None)] // Копирование и остановка, негативный кейс (заблокирован основной архив, даже чтение запрещено)
+    [TestCase(true, false, FileShare.Read)] // Копирование и остановка, негативный кейс (заблокирован бэкап основного архива)
     public void BackupWith(bool locked, bool original, FileShare fileShare)
     {
       // Есть текстовый файл (txt), невалидный архив (cbz) и бэкап невалидного архива (cbz.dbak).

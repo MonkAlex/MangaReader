@@ -15,8 +15,10 @@ after_build:
   - nuget install NUnit.Runners -Version 3.11.1 -ExcludeVersion
   - pip install codecov
 
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"Tests\Tests.API\bin\Debug\Tests.API.dll" -excludebyattribute:*.ExcludeFromCodeCoverage* -excludebyfile:*\*Designer.cs -hideskipped:All
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"Tests\Tests.Entities\bin\Debug\Tests.Entities.dll" -excludebyattribute:*.ExcludeFromCodeCoverage* -excludebyfile:*\*Designer.cs -hideskipped:All
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"Tests\Tests.API\bin\Debug\net461\Tests.API.dll" -excludebyattribute:*.ExcludeFromCodeCoverage* -excludebyfile:*\*Designer.cs -hideskipped:All
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"Tests\Tests.API\bin\Debug\netcoreapp3.1\Tests.API.dll" -excludebyattribute:*.ExcludeFromCodeCoverage* -excludebyfile:*\*Designer.cs -hideskipped:All
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"Tests\Tests.Entities\bin\Debug\net461\Tests.Entities.dll" -excludebyattribute:*.ExcludeFromCodeCoverage* -excludebyfile:*\*Designer.cs -hideskipped:All
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register -output:.\coverage.xml -target:"NUnit.ConsoleRunner/tools/nunit3-console.exe"  -targetargs:"Tests\Tests.Entities\bin\Debug\netcoreapp3.1\Tests.Entities.dll" -excludebyattribute:*.ExcludeFromCodeCoverage* -excludebyfile:*\*Designer.cs -hideskipped:All
   - codecov -f "coverage.xml"
 
   - dotnet publish MangaReader.Avalonia\MangaReader.Avalonia.csproj /p:Configuration=Debug /p:Platform=AnyCPU /p:TargetFramework=netcoreapp3.0 /p:PublishDir=bin\Publish\netcoreapp3.0\win-x64\ /p:SelfContained=true /p:RuntimeIdentifier=win7-x64

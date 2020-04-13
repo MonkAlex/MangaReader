@@ -11,7 +11,7 @@ configuration:
 - Debug
 test: off
 after_build:
-  - nuget install OpenCover -Version 4.7.995-rc -ExcludeVersion
+  - nuget install OpenCover -Version 4.6.519 -ExcludeVersion
   - pip install codecov
 
   - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register -output:.\coverage.xml -target:"dotnet.exe"  -targetargs:"test" -excludebyattribute:*.ExcludeFromCodeCoverage* -excludebyfile:*\*Designer.cs -hideskipped:All

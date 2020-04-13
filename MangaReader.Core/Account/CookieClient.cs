@@ -22,16 +22,39 @@ namespace MangaReader.Core.Account
 
     protected override WebResponse GetWebResponse(WebRequest request)
     {
-      var baseResponse = base.GetWebResponse(request);
-      this.ResponseUri = baseResponse.ResponseUri;
-      return baseResponse;
+      return ParseResponseUri(() => base.GetWebResponse(request));
     }
 
     protected override WebResponse GetWebResponse(WebRequest request, IAsyncResult result)
     {
-      var baseResponce = base.GetWebResponse(request, result);
-      this.ResponseUri = baseResponce.ResponseUri;
-      return baseResponce;
+      return ParseResponseUri(() => base.GetWebResponse(request, result));
+    }
+
+    protected virtual WebResponse ParseResponseUri(Func<WebResponse> getResponse)
+    {
+      WebResponse baseResponse;
+      try
+      {
+        baseResponse = getResponse();
+        this.ResponseUri = baseResponse.ResponseUri;
+      }
+      catch (WebException e)
+      {
+        baseResponse = e.Response;
+        if (baseResponse is HttpWebResponse response)
+        {
+          if (response.StatusCode != HttpStatusCode.Redirect)
+            throw;
+
+          var uriString = response.Headers.Get("Location");
+          if (Uri.TryCreate(uriString, UriKind.RelativeOrAbsolute, out var location))
+            this.ResponseUri = location;
+          else
+            Log.Exception(e, $"Parsing location failed. '{uriString}'");
+        }
+      }
+
+      return baseResponse;
     }
 
     protected CookieClient()

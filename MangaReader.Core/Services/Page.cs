@@ -9,6 +9,11 @@ namespace MangaReader.Core.Services
 {
   public class Page
   {
+    /// <summary>
+    /// 4 minutes delay for 429 error
+    /// </summary>
+    private const int Delay = 240000;
+
     public bool HasContent { get { return !string.IsNullOrWhiteSpace(this.Content); } }
 
     public string Content { get; set; }
@@ -17,12 +22,10 @@ namespace MangaReader.Core.Services
 
     public static async Task<bool> DelayOnExpectationFailed(WebException ex)
     {
-      var response = ex.Response as HttpWebResponse;
-      if (response != null && (response.StatusCode == HttpStatusCode.ExpectationFailed || response.StatusCode == (HttpStatusCode)429))
+      if (ex.Response is HttpWebResponse response && (response.StatusCode == HttpStatusCode.ExpectationFailed || response.StatusCode == (HttpStatusCode)429))
       {
-        Log.Exception(ex, $"Доступ к {response.ResponseUri} будет повторно проверен через 4 минуты.");
-        var delay = new TimeSpan(0, 4, 0);
-        await Task.Delay(delay).ConfigureAwait(false);
+        Log.Error($"Доступ к {response.ResponseUri} будет повторно проверен через 4 минуты.");
+        await Task.Delay(Delay).ConfigureAwait(false);
         return true;
       }
       return false;
@@ -55,9 +58,12 @@ namespace MangaReader.Core.Services
       }
       catch (WebException ex)
       {
-        Log.Exception(ex, $"{Strings.Page_GetPage_SiteOff}, ссылка: {url}, попытка номер - {restartCounter}");
-        if (ex.Status != WebExceptionStatus.Timeout && !(await DelayOnExpectationFailed(ex).ConfigureAwait(false)) && ex.HResult != -2146893023 && ex.HResult != 2147012721)
+        if (ex.Status != WebExceptionStatus.Timeout && !(await DelayOnExpectationFailed(ex).ConfigureAwait(false)) &&
+            ex.HResult != -2146893023 && ex.HResult != 2147012721)
+        {
+          Log.Exception(ex, $"{Strings.Page_GetPage_SiteOff}, ссылка: {url}, попытка номер - {restartCounter}");
           return new Page(url);
+        }
         ++restartCounter;
         return await GetPageAsync(url, client, restartCounter).ConfigureAwait(false);
       }

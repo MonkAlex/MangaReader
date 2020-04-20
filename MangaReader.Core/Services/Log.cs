@@ -94,13 +94,11 @@ namespace MangaReader.Core.Services
     /// Добавление записи в лог.
     /// </summary>
     /// <param name="message">Сообщение.</param>
-    public static void Exception(string message)
+    public static void Error(string message)
     {
       WriteExceptionToEventSource(() =>
       {
-        var stack = new StackTrace(1);
-        var content = string.Concat(message, Environment.NewLine, stack.ToString());
-        instance.Value.Logger.Error(content);
+        instance.Value.Logger.Error(message);
       });
     }
 

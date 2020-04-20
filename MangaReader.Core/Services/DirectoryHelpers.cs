@@ -89,7 +89,8 @@ namespace MangaReader.Core.Services
     {
       try
       {
-        Directory.Delete(folder, true);
+        if (Directory.Exists(folder))
+          Directory.Delete(folder, true);
       }
       catch (System.Exception ex)
       {

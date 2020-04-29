@@ -33,8 +33,20 @@ namespace Tests.Entities.Manga
     {
       var manga = await GetManga("https://h-chan.me/manga/23083-ponpharse-tokubetsu-hen-chast-1.html").ConfigureAwait(false);
       Assert.AreEqual(2, manga.Chapters.Count);
-      Assert.AreEqual(1, manga.Chapters.First().Number);
       Assert.IsTrue(manga.HasChapters);
+      Assert.AreEqual(1, manga.Chapters.First().Number);
+    }
+
+    [Test]
+    public async Task ParsingDoublesInChapterName()
+    {
+      var manga = await GetManga(MangaInfos.Henchan.TwistedIntent.Uri).ConfigureAwait(false);
+      var mangaChapters = manga.Chapters.ToList();
+      Assert.AreEqual(3, mangaChapters.Count);
+      Assert.IsTrue(manga.HasChapters);
+      Assert.AreEqual(1, mangaChapters[0].Number);
+      Assert.AreEqual(2.1, mangaChapters[1].Number);
+      Assert.AreEqual(2.2, mangaChapters[2].Number);
     }
 
 

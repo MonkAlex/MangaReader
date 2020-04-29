@@ -6,7 +6,6 @@ platform:
 - Any CPU
 build:
   project: MangaReader.sln 
-  verbosity: normal
 configuration:
 - Debug
 test: off
@@ -23,19 +22,19 @@ after_build:
 
 artifacts:
   - path: MangaReader\bin\$(configuration)
-    name: WPF App
+    name: MangaReader_%APPVEYOR_BUILD_VERSION%.zip
     type: zip
 
   - path: MangaReader.Avalonia\bin\Publish\netcoreapp3.0\win-x64
-    name: Avalonia app win-x64
+    name: MangaReader.Avalonia.Windows_%APPVEYOR_BUILD_VERSION%.zip
     type: zip
 
   - path: MangaReader.Avalonia\bin\Publish\netcoreapp3.0\linux-x64
-    name: Avalonia app linux-x64
+    name: MangaReader.Avalonia.Linux_%APPVEYOR_BUILD_VERSION%.zip
     type: zip
 
   - path: MangaReader.Avalonia\bin\Publish\netcoreapp3.0\osx-x64
-    name: Avalonia app osx-x64
+    name: MangaReader.Avalonia.macOS_%APPVEYOR_BUILD_VERSION%.zip
     type: zip
 
   - path: '**\*.log'

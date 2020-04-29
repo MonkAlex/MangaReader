@@ -18,14 +18,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		appveyor.yml = appveyor.yml
 		CHANGELOG.md = CHANGELOG.md
 		README.md = README.md
+		Sites\Sites.props = Sites\Sites.props
+		Tests\Tests.props = Tests\Tests.props
 		VersionInfo.cs = VersionInfo.cs
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B036F0D7-124C-4FC8-B596-21456DFEFB0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Entities", "Tests\Tests.Entities\Tests.Entities.csproj", "{3B6A42FF-E0CB-4795-9C8E-054BFF696FD3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Entities", "Tests\Tests.Entities\Tests.Entities.csproj", "{3B6A42FF-E0CB-4795-9C8E-054BFF696FD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.API", "Tests\Tests.API\Tests.API.csproj", "{6F6A15E8-5E83-47EC-9A65-CC24E07859C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.API", "Tests\Tests.API\Tests.API.csproj", "{6F6A15E8-5E83-47EC-9A65-CC24E07859C3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sites", "Sites", "{E12FEFB3-A8AD-45A1-B82D-3078D2CE9979}"
 EndProject

@@ -14,7 +14,7 @@ after_build:
   - nuget install OpenCover -Version 4.6.519 -ExcludeVersion
   - pip install codecov
 
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register -output:.\coverage.xml -target:"dotnet.exe"  -targetargs:"test" -excludebyattribute:*.ExcludeFromCodeCoverage* -excludebyfile:*\*Designer.cs -hideskipped:All
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register -output:.\coverage.xml -target:"dotnet.exe"  -targetargs:"test" -excludebyattribute:*.ExcludeFromCodeCoverage* -excludebyfile:*\*Designer.cs -hideskipped:All -oldstyle
   - codecov -f "coverage.xml"
 
   - dotnet publish MangaReader.Avalonia\MangaReader.Avalonia.csproj /p:Configuration=Debug /p:Platform=AnyCPU /p:TargetFramework=netcoreapp3.0 /p:PublishDir=bin\Publish\netcoreapp3.0\win-x64\ /p:SelfContained=true /p:RuntimeIdentifier=win7-x64

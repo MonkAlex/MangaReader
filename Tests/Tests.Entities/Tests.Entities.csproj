@@ -1,34 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFrameworks>net461;netcoreapp3.1</TargetFrameworks>
-
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-
+﻿<Project>
+  <Import Project="..\Tests.props" />
   <ItemGroup>
-    <Compile Include="..\..\MangaReader.Core\Loader.cs" Link="Loader.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="nunit" Version="3.12.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.16.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\MangaReader.Core\MangaReader.Core.csproj" />
     <ProjectReference Include="..\..\Sites\Acomics.ru\Acomics.ru.csproj" />
     <ProjectReference Include="..\..\Sites\Grouple.ru\Grouple.ru.csproj" />
     <ProjectReference Include="..\..\Sites\Hentai2Read.com\Hentai2Read.com.csproj" />
     <ProjectReference Include="..\..\Sites\Hentaichan.me\Hentaichan.me.csproj" />
   </ItemGroup>
-
 </Project>

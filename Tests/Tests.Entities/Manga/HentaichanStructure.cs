@@ -33,6 +33,7 @@ namespace Tests.Entities.Manga
     {
       var manga = await GetManga("https://h-chan.me/manga/23083-ponpharse-tokubetsu-hen-chast-1.html").ConfigureAwait(false);
       Assert.AreEqual(2, manga.Chapters.Count);
+      Assert.AreEqual(1, manga.Chapters.First().Number);
       Assert.IsTrue(manga.HasChapters);
     }
 

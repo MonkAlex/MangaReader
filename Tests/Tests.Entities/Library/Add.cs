@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Grouple;
+using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using NUnit.Framework;
@@ -17,10 +18,11 @@ namespace Tests.Entities.Library
     public async Task AddInvalidUrl()
     {
       var error = false;
-      var result = false;
+      var result = true;
+      IManga manga = null;
       try
       {
-        result = await model.Add(@"http://example.com/").ConfigureAwait(false);
+        (result, manga) = await model.Add(new Uri(@"http://example.com/")).ConfigureAwait(false);
       }
       catch (Exception)
       {
@@ -28,6 +30,7 @@ namespace Tests.Entities.Library
       }
       Assert.IsFalse(error);
       Assert.IsFalse(result);
+      Assert.IsNull(manga);
     }
 
     [Test]

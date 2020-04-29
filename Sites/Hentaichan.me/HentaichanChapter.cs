@@ -8,7 +8,7 @@ namespace Hentaichan
   {
     internal static double GetChapterNumber(Uri uri)
     {
-      return double.Parse(Regex.Match(uri.OriginalString, @"/*(\d+\.\d+|\d+)", RegexOptions.RightToLeft).Groups[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture);
+      return double.Parse(Regex.Match(uri.GetLeftPart(UriPartial.Path), @"/*(\d+\.\d+|\d+)", RegexOptions.RightToLeft).Groups[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture);
     }
 
     public HentaichanChapter(Uri uri, string name)

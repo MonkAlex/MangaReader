@@ -94,23 +94,6 @@ namespace MangaReader.Core.Services
     /// <summary>
     /// Добавить мангу.
     /// </summary>
-    /// <param name="url"></param>
-    public async Task<bool> Add(string url)
-    {
-      if (Uri.TryCreate(url, UriKind.Absolute, out Uri uri))
-      {
-        var added = await Add(uri).ConfigureAwait(false);
-        if (added.Success)
-          return true;
-      }
-
-      Log.Info("Некорректная ссылка.");
-      return false;
-    }
-
-    /// <summary>
-    /// Добавить мангу.
-    /// </summary>
     /// <param name="uri">Ссылка на мангу.</param>
     public async Task<(bool Success, IManga Manga)> Add(Uri uri)
     {
@@ -177,27 +160,9 @@ namespace MangaReader.Core.Services
     /// <summary>
     /// Обновить мангу.
     /// </summary>
-    /// <param name="manga">Обновляемая манга.</param>
-    public Task Update(int manga)
-    {
-      return Update(new List<int> { manga });
-    }
-
-    /// <summary>
-    /// Обновить мангу.
-    /// </summary>
     public Task Update()
     {
       return Update((List<int>)null);
-    }
-
-    /// <summary>
-    /// Обновить мангу.
-    /// </summary>
-    /// <param name="orderBy">Сортировка.</param>
-    public Task Update(Func<IQueryable<IManga>, IOrderedQueryable<IManga>> orderBy)
-    {
-      return Update(null, orderBy);
     }
 
     /// <summary>

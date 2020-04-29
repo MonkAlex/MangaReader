@@ -1,4 +1,4 @@
-﻿<Project>
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\Tests.props" />
   <ItemGroup>
     <ProjectReference Include="..\..\Sites\Acomics.ru\Acomics.ru.csproj" />

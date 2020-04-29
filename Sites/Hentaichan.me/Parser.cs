@@ -31,17 +31,10 @@ namespace Hentaichan
       var client = new HentaichanClient();
       if (setting != null)
       {
-        var login = setting.Login as HentaichanLogin;
-        if (login == null || !login.CanLogin || string.IsNullOrWhiteSpace(login.UserId))
-        {
-          if (login == null)
-          {
-            login = new HentaichanLogin() { Name = setting.Login.Name, Password = setting.Login.Password };
-            setting.Login = login;
-          }
-
+        var login = (HentaichanLogin) setting.Login;
+        if (!login.CanLogin || string.IsNullOrWhiteSpace(login.UserId))
           login.DoLogin().Wait();
-        }
+
         if (!string.IsNullOrWhiteSpace(login.UserId))
         {
           var host = Generic.GetLoginMainUri<Hentaichan>().Host;
@@ -219,7 +212,6 @@ namespace Hentaichan
 
     public override Task<IEnumerable<byte[]>> GetPreviews(IManga manga)
     {
-
       return Mangachan.Parser.GetPreviewsImpl(this, manga);
     }
 

@@ -21,7 +21,7 @@ namespace Hentai2Read.com
 
     internal string LogoutNonce { get; set; }
 
-    public override async Task<bool> DoLogin()
+    public override async Task<bool> DoLogin(Guid mangaType)
     {
       if (IsLogined || !this.CanLogin)
         return IsLogined;
@@ -55,7 +55,7 @@ namespace Hentai2Read.com
       return IsLogined;
     }
 
-    public override async Task<bool> Logout()
+    public override async Task<bool> Logout(Guid mangaType)
     {
       // https://hentai2read.com/logout/?_wpnonce=368febb749
       IsLogined = false;
@@ -64,12 +64,12 @@ namespace Hentai2Read.com
       return true;
     }
 
-    protected override async Task<List<IManga>> DownloadBookmarks()
+    protected override async Task<List<IManga>> DownloadBookmarks(Guid mangaType)
     {
       var bookmarks = new List<IManga>();
       var document = new HtmlDocument();
 
-      await this.DoLogin().ConfigureAwait(false);
+      await this.DoLogin(mangaType).ConfigureAwait(false);
 
       if (!IsLogined)
         return bookmarks;

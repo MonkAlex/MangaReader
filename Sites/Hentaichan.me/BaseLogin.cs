@@ -75,7 +75,7 @@ namespace Hentaichan
 
     protected abstract CookieClient GetClient();
 
-    public override async Task<bool> DoLogin()
+    public override async Task<bool> DoLogin(Guid mangaType)
     {
       if (IsLogined || !this.CanLogin)
         return IsLogined;
@@ -106,6 +106,6 @@ namespace Hentaichan
       return IsLogined;
     }
 
-    protected abstract override Task<List<IManga>> DownloadBookmarks();
+    protected abstract override Task<List<IManga>> DownloadBookmarks(Guid mangaType);
   }
 }

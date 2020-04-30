@@ -20,10 +20,9 @@ namespace MangaReader.ViewModel
       var addFromUri = new AddFromUri(this);
       this.BookmarksModels.Add(addFromUri);
       var settings = Core.NHibernate.Repository.GetStateless<Core.Services.MangaSetting>().ToList();
-      foreach (var setting in settings.GroupBy(s => s.Login).Where(s => s.Key != null))
+      foreach (var setting in settings)
       {
-        var name = string.Join(" \\ ", setting.Select(s => s.MangaName));
-        this.BookmarksModels.Add(new AddBookmarksModel(setting.Key, name, addFromUri, this));
+        this.BookmarksModels.Add(new AddBookmarksModel(setting.Login, setting.MangaName, setting.Manga, addFromUri, this));
       }
     }
 

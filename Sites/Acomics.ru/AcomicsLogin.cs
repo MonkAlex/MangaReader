@@ -20,11 +20,6 @@ namespace Acomics
     public override Uri LogoutUri { get { return new Uri(this.MainUri, "auth/logout"); } }
     public override Uri BookmarksUri { get { return new Uri(this.MainUri, "settings/subscribes"); } }
 
-    protected override CookieClient GetClient()
-    {
-      return new AcomicsClient() { BaseAddress = MainUri.ToString(), Cookie = this.ClientCookie };
-    }
-
     public override async Task<bool> DoLogin()
     {
       if (IsLogined || !this.CanLogin)
@@ -40,8 +35,9 @@ namespace Acomics
 
       try
       {
-        await GetClient().UploadValuesTaskAsync(new Uri(this.MainUri + "action/authLogin"), "POST", loginData).ConfigureAwait(false);
-        this.PasswordHash = ClientCookie.GetCookies(this.MainUri)
+        var cookieClient = AcomicsPlugin.Instance.GetCookieClient();
+        await cookieClient.UploadValuesTaskAsync(new Uri(this.MainUri + "action/authLogin"), "POST", loginData).ConfigureAwait(false);
+        this.PasswordHash = cookieClient.Cookie.GetCookies(this.MainUri)
             .Cast<Cookie>()
             .Single(c => c.Name == "hash")
             .Value;
@@ -65,7 +61,8 @@ namespace Acomics
       if (!IsLogined)
         return bookmarks;
 
-      var page = await Page.GetPageAsync(BookmarksUri, GetClient()).ConfigureAwait(false);
+      var cookieClient = AcomicsPlugin.Instance.GetCookieClient();
+      var page = await Page.GetPageAsync(BookmarksUri, cookieClient).ConfigureAwait(false);
       document.LoadHtml(page.Content);
 
       var nodes = document.DocumentNode.SelectNodes("//table[@class=\"decor\"]//a");

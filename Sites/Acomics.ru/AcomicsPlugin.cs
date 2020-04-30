@@ -1,12 +1,15 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Net;
 using System.Reflection;
 using MangaReader.Core;
+using MangaReader.Core.Account;
+using MangaReader.Core.Services;
 
 namespace Acomics
 {
   [Export(typeof(IPlugin))]
-  public class AcomicsPlugin : BasePlugin
+  public class AcomicsPlugin : BasePlugin<AcomicsPlugin>
   {
     public override string ShortName { get { return "AC"; } }
 
@@ -15,6 +18,15 @@ namespace Acomics
     public override Guid MangaGuid { get { return Manga; } }
     public override Type MangaType { get { return typeof(Acomics); } }
     public override Type LoginType { get { return typeof(AcomicsLogin); } }
+    public override CookieClient GetCookieClient()
+    {
+      var host = Generic.GetLoginMainUri<Acomics>().Host;
+      var client = new AcomicsClient();
+      client.BaseAddress = host;
+      client.Cookie.Add(new Cookie("ageRestrict", "40", "/", host));
+      return client;
+    }
+
     public override HistoryType HistoryType { get { return HistoryType.Page; } }
     public override ISiteParser GetParser()
     {

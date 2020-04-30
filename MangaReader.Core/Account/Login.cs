@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
@@ -35,13 +34,6 @@ namespace MangaReader.Core.Account
 
     public abstract Uri BookmarksUri { get; }
 
-    /// <summary>
-    /// Печеньки с авторизацией.
-    /// </summary>
-    protected internal CookieContainer ClientCookie { get; set; }
-
-    protected internal abstract CookieClient GetClient();
-
     private bool isLogined;
 
     public abstract Task<bool> DoLogin();
@@ -49,7 +41,8 @@ namespace MangaReader.Core.Account
     public virtual async Task<bool> Logout()
     {
       IsLogined = false;
-      await Page.GetPageAsync(LogoutUri, GetClient()).ConfigureAwait(false);
+      var plugin = ConfigStorage.Plugins.First(p => p.LoginType == this.GetType());
+      await Page.GetPageAsync(LogoutUri, plugin.GetCookieClient()).ConfigureAwait(false);
       return true;
     }
 
@@ -74,11 +67,6 @@ namespace MangaReader.Core.Account
         var logins = await context.Get<ILogin>().ToListAsync().ConfigureAwait(false);
         return logins.SingleOrDefault(l => l.GetType() == type) ?? (ILogin)Activator.CreateInstance(type);
       }
-    }
-
-    protected Login()
-    {
-      this.ClientCookie = new CookieContainer();
     }
 
     protected virtual void OnLoginStateChanged(bool e)

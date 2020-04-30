@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using MangaReader.Core.Account;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core
 {
@@ -9,7 +11,7 @@ namespace MangaReader.Core
   /// Базовая реализация плагина для снижения дублирования кода.
   /// </summary>
   /// <remarks>Не обязательна к использованию.</remarks>
-  public abstract class BasePlugin : IPlugin
+  public abstract class BasePlugin<T> : IPlugin where T : class, IPlugin, new()
   {
     public virtual string Name { get { return this.MangaType.Name; } }
     public abstract string ShortName { get; }
@@ -17,6 +19,10 @@ namespace MangaReader.Core
     public abstract Guid MangaGuid { get; }
     public abstract Type MangaType { get; }
     public abstract Type LoginType { get; }
+
+    public static T Instance { get { return ConfigStorage.Plugins.OfType<T>().Single(); } }
+
+    public abstract CookieClient GetCookieClient();
 
     public virtual MangaSetting GetSettings()
     {

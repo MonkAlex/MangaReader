@@ -1,13 +1,15 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Net;
 using System.Reflection;
 using MangaReader.Core;
 using MangaReader.Core.Account;
+using MangaReader.Core.Services;
 
 namespace Grouple
 {
   [Export(typeof(IPlugin))]
-  public class MintmangaPlugin : BasePlugin
+  public class MintmangaPlugin : BasePlugin<MintmangaPlugin>
   {
     public override string ShortName { get { return "MM"; } }
     public override Assembly Assembly { get { return Assembly.GetAssembly(this.GetType()); } }
@@ -15,6 +17,14 @@ namespace Grouple
     public override Guid MangaGuid { get { return Manga; } }
     public override Type MangaType { get { return typeof(Mintmanga); } }
     public override Type LoginType { get { return typeof(GroupleLogin); } }
+    public override CookieClient GetCookieClient()
+    {
+      var host = Generic.GetLoginMainUri<Mintmanga>().Host;
+      var client = new MintmangaClient();
+      client.BaseAddress = host;
+      return client;
+    }
+
     public override HistoryType HistoryType { get { return HistoryType.Chapter; } }
     public override ISiteParser GetParser()
     {

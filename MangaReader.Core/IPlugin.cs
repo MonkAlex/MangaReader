@@ -10,6 +10,7 @@
     System.Type LoginType { get; }
     Services.MangaSetting GetSettings();
     ISiteParser GetParser();
+    Account.CookieClient GetCookieClient();
     HistoryType HistoryType { get; }
   }
 

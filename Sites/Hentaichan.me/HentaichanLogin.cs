@@ -18,7 +18,7 @@ namespace Hentaichan
   {
     protected override CookieClient GetClient()
     {
-      return new HentaichanClient() { BaseAddress = MainUri.ToString(), Cookie = this.ClientCookie };
+      return HentaichanPlugin.Instance.GetCookieClient();
     }
 
     protected override async Task<List<IManga>> DownloadBookmarks()

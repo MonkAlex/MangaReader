@@ -21,11 +21,6 @@ namespace Hentai2Read.com
 
     internal string LogoutNonce { get; set; }
 
-    protected override CookieClient GetClient()
-    {
-      return new Hentai2ReadClient() { BaseAddress = MainUri.ToString(), Cookie = this.ClientCookie };
-    }
-
     public override async Task<bool> DoLogin()
     {
       if (IsLogined || !this.CanLogin)
@@ -44,9 +39,10 @@ namespace Hentai2Read.com
 
       try
       {
-        var loginResult = await GetClient().UploadValuesTaskAsync(new Uri(this.MainUri + "login"), "POST", loginData).ConfigureAwait(false);
+        var cookieClient = Hentai2ReadPlugin.Instance.GetCookieClient();
+        var loginResult = await cookieClient.UploadValuesTaskAsync(new Uri(this.MainUri + "login"), "POST", loginData).ConfigureAwait(false);
         LogoutNonce = Regex.Match(System.Text.Encoding.UTF8.GetString(loginResult), "logout\\/\\?_wpnonce=([a-z0-9]+)&", RegexOptions.Compiled).Groups[1].Value;
-        var hasLoginCookie = ClientCookie.GetCookies(this.MainUri)
+        var hasLoginCookie = cookieClient.Cookie.GetCookies(this.MainUri)
           .Cast<Cookie>()
           .Any(c => c.Name.StartsWith("wordpress_logged_in"));
         this.IsLogined = hasLoginCookie;
@@ -63,7 +59,8 @@ namespace Hentai2Read.com
     {
       // https://hentai2read.com/logout/?_wpnonce=368febb749
       IsLogined = false;
-      await Page.GetPageAsync(new Uri(LogoutUri.OriginalString + $"/?_wpnonce={LogoutNonce}"), GetClient()).ConfigureAwait(false);
+      var cookieClient = Hentai2ReadPlugin.Instance.GetCookieClient();
+      await Page.GetPageAsync(new Uri(LogoutUri.OriginalString + $"/?_wpnonce={LogoutNonce}"), cookieClient).ConfigureAwait(false);
       return true;
     }
 
@@ -77,7 +74,8 @@ namespace Hentai2Read.com
       if (!IsLogined)
         return bookmarks;
 
-      var page = await Page.GetPageAsync(BookmarksUri, GetClient()).ConfigureAwait(false);
+      var cookieClient = Hentai2ReadPlugin.Instance.GetCookieClient();
+      var page = await Page.GetPageAsync(BookmarksUri, cookieClient).ConfigureAwait(false);
       document.LoadHtml(page.Content);
 
       var nodes = document.DocumentNode.SelectNodes("//div[@class=\"col-xs-6 col-sm-4 col-md-3 col-xl-2\"]");

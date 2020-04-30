@@ -2,11 +2,13 @@
 using System.ComponentModel.Composition;
 using System.Reflection;
 using MangaReader.Core;
+using MangaReader.Core.Account;
+using MangaReader.Core.Services;
 
 namespace Hentai2Read.com
 {
   [Export(typeof(IPlugin))]
-  public class Hentai2ReadPlugin : BasePlugin
+  public class Hentai2ReadPlugin : BasePlugin<Hentai2ReadPlugin>
   {
     public override string ShortName { get { return "H2R"; } }
 
@@ -16,6 +18,13 @@ namespace Hentai2Read.com
     public override Type MangaType { get { return typeof(Hentai2Read); } }
     public override Type LoginType { get { return typeof(Hentai2ReadLogin); } }
     public override HistoryType HistoryType { get { return HistoryType.Chapter; } }
+    public override CookieClient GetCookieClient()
+    {
+      var host = Generic.GetLoginMainUri<Hentai2Read>().Host;
+      var client = new Hentai2ReadClient();
+      client.BaseAddress = host;
+      return client;
+    }
     public override ISiteParser GetParser()
     {
       return new Hentai2ReadParser();

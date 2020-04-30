@@ -11,6 +11,7 @@ using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Properties;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 
 namespace Grouple
 {
@@ -33,7 +34,8 @@ namespace Grouple
       };
       try
       {
-        var result = await GetClient().UploadValuesTaskAsync("login/authenticate", "POST", loginData).ConfigureAwait(false);
+        var plugin = ConfigStorage.Plugins.Single(p => p.MangaGuid == mangaType);
+        var result = await plugin.GetCookieClient().UploadValuesTaskAsync("login/authenticate", "POST", loginData).ConfigureAwait(false);
         IsLogined = Encoding.UTF8.GetString(result).Contains("login/logout");
       }
       catch (System.Exception ex)
@@ -53,7 +55,8 @@ namespace Grouple
       if (!IsLogined)
         return bookmarks;
 
-      var page = await Page.GetPageAsync(BookmarksUri, GetClient()).ConfigureAwait(false);
+      var plugin = ConfigStorage.Plugins.Single(p => p.MangaGuid == mangaType);
+      var page = await Page.GetPageAsync(BookmarksUri, plugin.GetCookieClient()).ConfigureAwait(false);
       document.LoadHtml(page.Content);
 
       var firstOrDefault = document.DocumentNode
@@ -66,7 +69,7 @@ namespace Grouple
         return bookmarks;
       }
 
-      var parser = mangaType == MintmangaPlugin.Manga ? (GroupleParser)new MintmangaParser() : new ReadmangaParser();
+      var parser = plugin.GetParser();
       using (var context = Repository.GetEntityContext("Loading bookmarks"))
       {
         var loadedBookmarks = Regex

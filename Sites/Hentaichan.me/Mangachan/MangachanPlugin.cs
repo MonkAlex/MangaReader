@@ -30,7 +30,7 @@ namespace Hentaichan.Mangachan
         var login = (MangachanLogin)setting.Login;
         if (!login.CanLogin || string.IsNullOrWhiteSpace(login.UserId))
         {
-          login.DoLogin().Wait();
+          login.DoLogin(Manga).Wait();
         }
         if (!string.IsNullOrWhiteSpace(login.UserId))
         {

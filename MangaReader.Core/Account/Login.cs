@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Account
 {

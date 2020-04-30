@@ -21,12 +21,12 @@ namespace Hentaichan
       return new HentaichanClient() { BaseAddress = MainUri.ToString(), Cookie = this.ClientCookie };
     }
 
-    protected override async Task<List<IManga>> DownloadBookmarks()
+    protected override async Task<List<IManga>> DownloadBookmarks(Guid mangaType)
     {
       var bookmarks = new List<IManga>();
       var document = new HtmlDocument();
 
-      await this.DoLogin().ConfigureAwait(false);
+      await this.DoLogin(mangaType).ConfigureAwait(false);
 
       if (!IsLogined)
         return bookmarks;

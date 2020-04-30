@@ -16,11 +16,11 @@
 
     System.Uri BookmarksUri { get; }
 
-    System.Threading.Tasks.Task<bool> DoLogin();
+    System.Threading.Tasks.Task<bool> DoLogin(System.Guid mangaType);
 
-    System.Threading.Tasks.Task<bool> Logout();
+    System.Threading.Tasks.Task<bool> Logout(System.Guid mangaType);
 
-    System.Threading.Tasks.Task<System.Collections.Generic.List<Manga.IManga>> GetBookmarks();
+    System.Threading.Tasks.Task<System.Collections.Generic.List<Manga.IManga>> GetBookmarks(System.Guid mangaType);
 
     event System.EventHandler<bool> LoginStateChanged;
   }

@@ -24,12 +24,12 @@ namespace Hentaichan.Mangachan
     /// </summary>
     public override Uri BookmarksUri { get { return new Uri(this.MainUri, $"user/{Name}/favorites"); } }
 
-    protected override async Task<List<IManga>> DownloadBookmarks()
+    protected override async Task<List<IManga>> DownloadBookmarks(Guid mangaType)
     {
       var bookmarks = new List<IManga>();
       var document = new HtmlDocument();
 
-      await this.DoLogin().ConfigureAwait(false);
+      await this.DoLogin(mangaType).ConfigureAwait(false);
 
       if (!IsLogined)
         return bookmarks;

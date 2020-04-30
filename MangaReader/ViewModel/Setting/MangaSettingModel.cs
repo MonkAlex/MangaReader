@@ -142,7 +142,7 @@ namespace MangaReader.ViewModel.Setting
       this.DefaultCompression = setting.DefaultCompression;
       this.Folder = setting.Folder;
       this.OnlyUpdate = setting.OnlyUpdate;
-      this.Login = new LoginModel(setting.Login) { IsEnabled = true };
+      this.Login = new LoginModel(setting.Login, setting.Manga) { IsEnabled = true };
       this.MainUri = setting.MainUri.OriginalString;
 
       this.FolderNamingStrategy = new FolderNamingModel();

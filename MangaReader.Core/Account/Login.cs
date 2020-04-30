@@ -5,7 +5,6 @@ using System.Net;
 using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
-using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Account
 {
@@ -44,28 +43,28 @@ namespace MangaReader.Core.Account
 
     private bool isLogined;
 
-    public abstract Task<bool> DoLogin();
+    public abstract Task<bool> DoLogin(Guid mangaType);
 
-    public virtual async Task<bool> Logout()
+    public virtual async Task<bool> Logout(Guid mangaType)
     {
       IsLogined = false;
       await Page.GetPageAsync(LogoutUri, GetClient()).ConfigureAwait(false);
       return true;
     }
 
-    public async Task<List<IManga>> GetBookmarks()
+    public async Task<List<IManga>> GetBookmarks(Guid mangaType)
     {
       if (this.CanLogin)
       {
         Log.AddFormat("Start load bookmarks from '{0}'.", this.MainUri);
-        var bookmarks = await DownloadBookmarks().ConfigureAwait(false);
+        var bookmarks = await DownloadBookmarks(mangaType).ConfigureAwait(false);
         Log.AddFormat("Finish load bookmarks from '{0}'.", this.MainUri);
         return bookmarks;
       }
       return new List<IManga>();
     }
 
-    protected abstract Task<List<IManga>> DownloadBookmarks();
+    protected abstract Task<List<IManga>> DownloadBookmarks(Guid mangaType);
 
     public static async Task<ILogin> Get(Type type)
     {

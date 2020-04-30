@@ -20,10 +20,13 @@ namespace Acomics
     public override Type LoginType { get { return typeof(AcomicsLogin); } }
     public override CookieClient GetCookieClient()
     {
-      var host = Generic.GetLoginMainUri<Acomics>().Host;
-      var client = new AcomicsClient();
-      client.BaseAddress = host;
-      client.Cookie.Add(new Cookie("ageRestrict", "40", "/", host));
+      var mainUri = Generic.GetLoginMainUri<Acomics>();
+      var client = new AcomicsClient
+      {
+        BaseAddress = mainUri.OriginalString,
+        Cookie = CookieContainer
+      };
+      client.Cookie.Add(new Cookie("ageRestrict", "40", "/", mainUri.Host));
       return client;
     }
 

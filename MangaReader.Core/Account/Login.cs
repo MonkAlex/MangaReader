@@ -41,7 +41,7 @@ namespace MangaReader.Core.Account
     public virtual async Task<bool> Logout(Guid mangaType)
     {
       IsLogined = false;
-      var plugin = ConfigStorage.Plugins.First(p => p.LoginType == this.GetType());
+      var plugin = ConfigStorage.Plugins.Single(p => p.MangaGuid == mangaType);
       await Page.GetPageAsync(LogoutUri, plugin.GetCookieClient()).ConfigureAwait(false);
       return true;
     }

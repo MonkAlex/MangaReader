@@ -21,9 +21,12 @@ namespace Hentaichan
     public override HistoryType HistoryType { get { return HistoryType.Chapter; } }
     public override CookieClient GetCookieClient()
     {
-      var host = Generic.GetLoginMainUri<Hentaichan>().Host;
-      var client = new HentaichanClient();
-      client.BaseAddress = host;
+      var mainUri = Generic.GetLoginMainUri<Hentaichan>();
+      var client = new HentaichanClient
+      {
+        BaseAddress = mainUri.OriginalString,
+        Cookie = CookieContainer
+      };
       var setting = ConfigStorage.GetPlugin<Hentaichan>().GetSettings();
       if (setting != null)
       {
@@ -34,8 +37,8 @@ namespace Hentaichan
         }
         if (!string.IsNullOrWhiteSpace(login.UserId))
         {
-          client.Cookie.Add(new Cookie("dle_user_id", login.UserId, "/", host));
-          client.Cookie.Add(new Cookie("dle_password", login.PasswordHash, "/", host));
+          client.Cookie.Add(new Cookie("dle_user_id", login.UserId, "/", mainUri.Host));
+          client.Cookie.Add(new Cookie("dle_password", login.PasswordHash, "/", mainUri.Host));
         }
       }
       return client;

@@ -19,9 +19,12 @@ namespace Grouple
     public override Type LoginType { get { return typeof(GroupleLogin); } }
     public override CookieClient GetCookieClient()
     {
-      var host = Generic.GetLoginMainUri<Mintmanga>().Host;
-      var client = new MintmangaClient();
-      client.BaseAddress = host;
+      var mainUri = Generic.GetLoginMainUri<Mintmanga>();
+      var client = new MintmangaClient
+      {
+        BaseAddress = mainUri.OriginalString,
+        Cookie = CookieContainer
+      };
       return client;
     }
 

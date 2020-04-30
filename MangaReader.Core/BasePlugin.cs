@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using MangaReader.Core.Account;
 using MangaReader.Core.Services;
@@ -21,6 +22,8 @@ namespace MangaReader.Core
     public abstract Type LoginType { get; }
 
     public static T Instance { get { return ConfigStorage.Plugins.OfType<T>().Single(); } }
+
+    protected CookieContainer CookieContainer = new CookieContainer();
 
     public abstract CookieClient GetCookieClient();
 

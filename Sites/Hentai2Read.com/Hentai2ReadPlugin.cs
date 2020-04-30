@@ -20,9 +20,12 @@ namespace Hentai2Read.com
     public override HistoryType HistoryType { get { return HistoryType.Chapter; } }
     public override CookieClient GetCookieClient()
     {
-      var host = Generic.GetLoginMainUri<Hentai2Read>().Host;
-      var client = new Hentai2ReadClient();
-      client.BaseAddress = host;
+      var mainUri = Generic.GetLoginMainUri<Hentai2Read>();
+      var client = new Hentai2ReadClient
+      {
+        BaseAddress = mainUri.OriginalString,
+        Cookie = CookieContainer
+      };
       return client;
     }
     public override ISiteParser GetParser()

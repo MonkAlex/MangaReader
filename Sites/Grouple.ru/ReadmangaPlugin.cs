@@ -19,9 +19,12 @@ namespace Grouple
     public override HistoryType HistoryType { get { return HistoryType.Chapter; } }
     public override CookieClient GetCookieClient()
     {
-      var host = Generic.GetLoginMainUri<Readmanga>().Host;
-      var client = new ReadmangaClient();
-      client.BaseAddress = host;
+      var mainUri = Generic.GetLoginMainUri<Readmanga>();
+      var client = new ReadmangaClient
+      {
+        BaseAddress = mainUri.OriginalString,
+        Cookie = CookieContainer
+      };
       return client;
     }
     public override ISiteParser GetParser()

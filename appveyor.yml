@@ -11,9 +11,10 @@ configuration:
 test: off
 after_build:
   - nuget install OpenCover -Version 4.6.519 -ExcludeVersion
+  - nuget install Appveyor.TestLogger
   - pip install codecov
 
-  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register -output:.\coverage.xml -target:"dotnet.exe"  -targetargs:"test" -excludebyattribute:*.ExcludeFromCodeCoverage* -excludebyfile:*\*Designer.cs -hideskipped:All -oldstyle
+  - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register -output:.\coverage.xml -target:"dotnet.exe"  -targetargs:"test --test-adapter-path:. --logger:Appveyor" -excludebyattribute:*.ExcludeFromCodeCoverage* -excludebyfile:*\*Designer.cs -hideskipped:All -oldstyle
   - codecov -f "coverage.xml"
 
   - dotnet publish MangaReader.Avalonia\MangaReader.Avalonia.csproj /p:Configuration=Debug /p:Platform=AnyCPU /p:TargetFramework=netcoreapp3.0 /p:PublishDir=bin\Publish\netcoreapp3.0\win-x64\ /p:SelfContained=true /p:RuntimeIdentifier=win7-x64
@@ -22,19 +23,19 @@ after_build:
 
 artifacts:
   - path: MangaReader\bin\$(configuration)
-    name: MangaReader_%APPVEYOR_BUILD_VERSION%.zip
+    name: MangaReader_%APPVEYOR_BUILD_VERSION%
     type: zip
 
   - path: MangaReader.Avalonia\bin\Publish\netcoreapp3.0\win-x64
-    name: MangaReader.Avalonia.Windows_%APPVEYOR_BUILD_VERSION%.zip
+    name: MangaReader.Avalonia.Windows_%APPVEYOR_BUILD_VERSION%
     type: zip
 
   - path: MangaReader.Avalonia\bin\Publish\netcoreapp3.0\linux-x64
-    name: MangaReader.Avalonia.Linux_%APPVEYOR_BUILD_VERSION%.zip
+    name: MangaReader.Avalonia.Linux_%APPVEYOR_BUILD_VERSION%
     type: zip
 
   - path: MangaReader.Avalonia\bin\Publish\netcoreapp3.0\osx-x64
-    name: MangaReader.Avalonia.macOS_%APPVEYOR_BUILD_VERSION%.zip
+    name: MangaReader.Avalonia.macOS_%APPVEYOR_BUILD_VERSION%
     type: zip
 
   - path: '**\*.log'

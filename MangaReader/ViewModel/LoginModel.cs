@@ -16,6 +16,7 @@ namespace MangaReader.ViewModel
   {
     private ILogin login;
     private bool isEnabled;
+    private readonly Guid mangaType;
 
     public int LoginId { get; }
 
@@ -61,17 +62,18 @@ namespace MangaReader.ViewModel
     public async Task<List<IManga>> GetBookmarks()
     {
       if (login != null)
-        return await login.GetBookmarks().ConfigureAwait(true);
+        return await login.GetBookmarks(mangaType).ConfigureAwait(true);
       return new List<IManga>();
     }
 
-    public LoginModel(ILogin login)
+    public LoginModel(ILogin login, Guid mangaType)
     {
       if (login != null)
       {
         this.login = login;
         this.LoginId = login.Id;
-        this.LogInOutCommand = new LogInOutCommand(this.login);
+        this.LogInOutCommand = new LogInOutCommand(this.login, mangaType);
+        this.mangaType = mangaType;
         this.login.LoginStateChanged += LoginOnLoginStateChanged;
         HasLogin = true;
       }

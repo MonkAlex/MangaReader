@@ -25,7 +25,7 @@ namespace Acomics
       return new AcomicsClient() { BaseAddress = MainUri.ToString(), Cookie = this.ClientCookie };
     }
 
-    public override async Task<bool> DoLogin()
+    public override async Task<bool> DoLogin(Guid mangaType)
     {
       if (IsLogined || !this.CanLogin)
         return IsLogined;
@@ -55,12 +55,12 @@ namespace Acomics
       return IsLogined;
     }
 
-    protected override async Task<List<IManga>> DownloadBookmarks()
+    protected override async Task<List<IManga>> DownloadBookmarks(Guid mangaType)
     {
       var bookmarks = new List<IManga>();
       var document = new HtmlDocument();
 
-      await this.DoLogin().ConfigureAwait(false);
+      await this.DoLogin(mangaType).ConfigureAwait(false);
 
       if (!IsLogined)
         return bookmarks;

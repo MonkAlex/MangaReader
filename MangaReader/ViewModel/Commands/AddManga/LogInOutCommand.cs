@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MangaReader.Core.Account;
 using MangaReader.ViewModel.Commands.Primitives;
 
@@ -31,10 +32,10 @@ namespace MangaReader.ViewModel.Commands.AddManga
       await ActiveCommand.Execute(parameter).ConfigureAwait(true);
     }
 
-    public LogInOutCommand(ILogin login)
+    public LogInOutCommand(ILogin login, Guid mangaType)
     {
-      this.Login = new LoginCommand(login);
-      this.Logout = new LogoutCommand(login);
+      this.Login = new LoginCommand(login, mangaType);
+      this.Logout = new LogoutCommand(login, mangaType);
       if (login != null)
       {
         LoginOnLoginStateChanged(this, login.IsLogined);

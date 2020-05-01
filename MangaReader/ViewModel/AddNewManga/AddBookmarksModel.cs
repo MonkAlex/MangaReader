@@ -49,12 +49,12 @@ namespace MangaReader.ViewModel
       Login.IsEnabled = Login.HasLogin;
     }
 
-    public AddBookmarksModel(ILogin login, string name, AddFromUri addFromUriModel, AddNewModel mainModel)
+    public AddBookmarksModel(ILogin login, string name, Guid mangaType, AddFromUri addFromUriModel, AddNewModel mainModel)
     {
       this.bookmarks = new ObservableCollection<SelectedItem<IManga>>();
       this.Header = name;
       this.Add = new AddSelected(addFromUriModel, mainModel);
-      this.Login = new LoginModel(login);
+      this.Login = new LoginModel(login, mangaType);
       if (login != null)
         login.LoginStateChanged += LoginOnLoginStateChanged;
     }

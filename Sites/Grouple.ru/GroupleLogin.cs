@@ -26,7 +26,7 @@ namespace Grouple
       return new MintmangaClient() { BaseAddress = MainUri.ToString(), Cookie = this.ClientCookie };
     }
 
-    public override async Task<bool> DoLogin()
+    public override async Task<bool> DoLogin(Guid mangaType)
     {
       if (IsLogined || !this.CanLogin)
         return IsLogined;
@@ -49,12 +49,12 @@ namespace Grouple
       return IsLogined;
     }
 
-    protected override async Task<List<IManga>> DownloadBookmarks()
+    protected override async Task<List<IManga>> DownloadBookmarks(Guid mangaType)
     {
       var bookmarks = new List<IManga>();
       var document = new HtmlDocument();
 
-      await this.DoLogin().ConfigureAwait(false);
+      await this.DoLogin(mangaType).ConfigureAwait(false);
 
       if (!IsLogined)
         return bookmarks;
@@ -72,8 +72,7 @@ namespace Grouple
         return bookmarks;
       }
 
-#warning Тоже завязка на конкретный тип
-      var parser = new MintmangaParser();
+      var parser = mangaType == MintmangaPlugin.Manga ? (GroupleParser)new MintmangaParser() : new ReadmangaParser();
       using (var context = Repository.GetEntityContext("Loading bookmarks"))
       {
         var loadedBookmarks = Regex
@@ -86,6 +85,8 @@ namespace Grouple
         await Task.WhenAll(loadedBookmarks.Select(async b =>
         {
           var manga = await Mangas.Create(b).ConfigureAwait(false);
+          if (manga.Setting.Manga != mangaType)
+            return;
           await parser.UpdateNameAndStatus(manga).ConfigureAwait(false);
           bookmarks.Add(manga);
         })).ConfigureAwait(false);

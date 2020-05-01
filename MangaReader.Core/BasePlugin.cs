@@ -25,15 +25,22 @@ namespace MangaReader.Core
 
     protected CookieContainer CookieContainer = new CookieContainer();
 
-    public virtual CookieClient GetCookieClient()
+    public CookieClient GetCookieClient()
     {
-      var mainUri = Generic.GetLoginMainUri(this);
-      return new CookieClient(CookieContainer)
+      var mangaSetting = GetSettings();
+      var mainUri = mangaSetting.Login.MainUri;
+      var client = new CookieClient(CookieContainer)
       {
         BaseAddress = mainUri.OriginalString,
         Proxy = MangaSettingCache.Get(this.GetType()).Proxy,
-        MainUri = mainUri
       };
+      this.ConfigureCookieClient(client, mainUri, mangaSetting);
+      return client;
+    }
+
+    protected virtual void ConfigureCookieClient(CookieClient client, Uri mainUri, MangaSetting setting)
+    {
+
     }
 
     public virtual MangaSetting GetSettings()

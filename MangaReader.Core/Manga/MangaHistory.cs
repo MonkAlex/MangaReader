@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Xml.Serialization;
 
 namespace MangaReader.Core.Manga
 {
@@ -10,12 +7,6 @@ namespace MangaReader.Core.Manga
   [DebuggerDisplay("Id = {Id}, Uri = {Uri}, Date = {Date}")]
   public class MangaHistory : Entity.Entity
   {
-
-    public string Url
-    {
-      get { return Uri == null ? null : Uri.ToString(); }
-      set { Uri = value == null ? null : new Uri(value); }
-    }
 
     /// <summary>
     /// Ссылка в историю.

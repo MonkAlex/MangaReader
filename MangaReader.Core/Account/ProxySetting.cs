@@ -75,7 +75,7 @@ namespace MangaReader.Core.Account
       using (var context = Repository.GetEntityContext())
       {
         var hasDatabaseConfig = await context.Get<DatabaseConfig>().AnyAsync(c => c.ProxySetting == this).ConfigureAwait(false);
-        var usedInMangaSettigns = await context.Get<MangaSetting>().Where(s => s.ProxySetting == this).Select(s => s.MangaName).ToListAsync();
+        var usedInMangaSettigns = await context.Get<MangaSetting>().Where(s => s.ProxySetting == this).Select(s => s.MangaName).ToListAsync().ConfigureAwait(false);
         if (hasDatabaseConfig || usedInMangaSettigns.Any())
         {
           if (hasDatabaseConfig)
@@ -85,7 +85,7 @@ namespace MangaReader.Core.Account
         }
       }
 
-      await base.BeforeDelete(args);
+      await base.BeforeDelete(args).ConfigureAwait(false);
     }
 
     protected ProxySetting()

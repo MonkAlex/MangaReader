@@ -6,8 +6,6 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.EquivalencyExpression;
 using HtmlAgilityPack;
 using MangaReader.Core;
 using MangaReader.Core.Account;

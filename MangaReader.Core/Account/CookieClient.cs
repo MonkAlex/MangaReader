@@ -12,8 +12,6 @@ namespace MangaReader.Core.Account
 
     public Uri ResponseUri;
 
-    public Uri MainUri;
-
     protected override WebRequest GetWebRequest(Uri address)
     {
       var request = base.GetWebRequest(address);

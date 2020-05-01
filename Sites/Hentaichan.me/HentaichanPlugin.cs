@@ -5,7 +5,6 @@ using System.Net;
 using System.Reflection;
 using MangaReader.Core;
 using MangaReader.Core.Account;
-using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
 namespace Hentaichan
@@ -22,12 +21,8 @@ namespace Hentaichan
     public override HistoryType HistoryType { get { return HistoryType.Chapter; } }
     public override CookieClient GetCookieClient()
     {
-      var mainUri = Generic.GetLoginMainUri<Hentaichan>();
-      var client = new HentaichanClient
-      {
-        BaseAddress = mainUri.OriginalString,
-        Cookie = CookieContainer
-      };
+      var client = base.GetCookieClient();
+      var mainUri = client.MainUri;
       var setting = ConfigStorage.GetPlugin<Hentaichan>().GetSettings();
       if (setting != null)
       {

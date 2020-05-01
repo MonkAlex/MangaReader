@@ -30,7 +30,7 @@ namespace MangaReader.ViewModel.Commands.Setting
           Address = selected.Address, UserName = selected.UserName, Password = selected.Password
         };
         var proxy = setting.GetProxy();
-        var client = new TestCoockieClient() { Proxy = proxy };
+        var client = new CookieClient(new CookieContainer()) { Proxy = proxy };
         await client.DownloadStringTaskAsync(address).ConfigureAwait(true);
         Dialogs.ShowInfo("Проверка прокси", "Успешно.");
       }
@@ -50,11 +50,6 @@ namespace MangaReader.ViewModel.Commands.Setting
     {
       if (e.PropertyName == nameof(model.TestAddress))
         OnCanExecuteChanged();
-    }
-
-    private class TestCoockieClient : CookieClient
-    {
-
     }
   }
 }

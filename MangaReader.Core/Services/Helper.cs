@@ -121,17 +121,13 @@ namespace MangaReader.Core.Services
         collection.Add(item);
     }
 
-    public static Uri GetLoginMainUri<T>() where T : IManga
+    public static Uri GetLoginMainUri(IPlugin plugin)
     {
       if (NHibernate.Mapping.Initialized)
       {
-        var plugin = ConfigStorage.GetPlugin<T>();
-        if (plugin != null)
-        {
-          var login = plugin.GetSettings();
-          if (login != null)
-            return login.Login.MainUri;
-        }
+        var login = plugin?.GetSettings();
+        if (login != null)
+          return login.Login.MainUri;
       }
 
       return null;

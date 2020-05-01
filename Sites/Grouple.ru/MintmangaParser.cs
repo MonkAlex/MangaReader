@@ -8,9 +8,9 @@ namespace Grouple
 {
   public class MintmangaParser : GroupleParser
   {
-    public override CookieClient GetClient()
+    protected override CookieClient GetClient()
     {
-      return new MintmangaClient();
+      return MintmangaPlugin.Instance.GetCookieClient();
     }
 
     public override IMapper GetMapper()

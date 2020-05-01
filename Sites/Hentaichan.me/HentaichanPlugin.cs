@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using MangaReader.Core;
@@ -31,11 +32,7 @@ namespace Hentaichan
       if (setting != null)
       {
         var login = (HentaichanLogin)setting.Login;
-        if (!login.CanLogin || string.IsNullOrWhiteSpace(login.UserId))
-        {
-          login.DoLogin(Manga).Wait();
-        }
-        if (!string.IsNullOrWhiteSpace(login.UserId))
+        if (!string.IsNullOrWhiteSpace(login.UserId) && !client.Cookie.GetCookies(mainUri).Cast<Cookie>().Any(c => c.Name == "dle_user_id"))
         {
           client.Cookie.Add(new Cookie("dle_user_id", login.UserId, "/", mainUri.Host));
           client.Cookie.Add(new Cookie("dle_password", login.PasswordHash, "/", mainUri.Host));

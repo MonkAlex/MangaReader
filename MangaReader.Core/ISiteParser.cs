@@ -51,12 +51,6 @@ namespace MangaReader.Core
     /// <param name="name">Название манги.</param>
     /// <returns>Найденная манга.</returns>
     IAsyncEnumerable<IManga> Search(string name);
-
-    /// <summary>
-    /// Клиент для работы с сайтом.
-    /// </summary>
-    /// <returns></returns>
-    CookieClient GetClient();
   }
 
   public class UriParseResult

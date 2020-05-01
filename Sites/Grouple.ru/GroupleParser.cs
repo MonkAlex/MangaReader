@@ -32,6 +32,8 @@ namespace Grouple
     /// </summary>
     internal const string Copyright = "Запрещена публикация произведения по копирайту";
 
+    protected abstract CookieClient GetClient();
+
     /// <summary>
     /// Получить ссылку с редиректа.
     /// </summary>

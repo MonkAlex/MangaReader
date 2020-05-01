@@ -8,9 +8,9 @@ namespace Grouple
 {
   public class ReadmangaParser : GroupleParser
   {
-    public override CookieClient GetClient()
+    protected override CookieClient GetClient()
     {
-      return new ReadmangaClient();
+      return ReadmangaPlugin.Instance.GetCookieClient();
     }
 
     public override IMapper GetMapper()

@@ -119,8 +119,6 @@ namespace MangaReader.Core
         .Where(m => m != null);
     }
 
-    public abstract CookieClient GetClient();
-
     protected abstract Task<(HtmlNodeCollection Nodes, Uri Uri, CookieClient CookieClient)> GetMangaNodes(string name, Uri host);
 
     protected abstract Task<IManga> GetMangaFromNode(Uri host, CookieClient client, HtmlNode manga);

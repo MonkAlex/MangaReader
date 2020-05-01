@@ -121,7 +121,7 @@ namespace Tests
 
         infos.Add(task.Result);
       })).ToArray();
-      await Task.WhenAll(completedTasks);
+      await Task.WhenAll(completedTasks).ConfigureAwait(false);
       infos = infos.OrderBy(i => i.Uri).ToList();
       var json = JsonConvert.SerializeObject(infos);
       File.WriteAllText(Environment.MangaCache, json);

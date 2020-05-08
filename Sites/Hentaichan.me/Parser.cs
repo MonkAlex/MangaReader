@@ -114,6 +114,11 @@ namespace Hentaichan
               });
             }
           }
+          else
+          {
+            // Раз не нашли других глав - качаем хотя бы эту.
+            chapters.Add(new ChapterDto(uri, manga.ServerName) { Number = 0 });
+          }
         }
         else
         {
@@ -165,9 +170,9 @@ namespace Hentaichan
 
     public override UriParseResult ParseUri(Uri uri)
     {
-      // Manga : https://h-chan.me/manga/14212-love-and-devil-glava-25.html
+      // Manga : https://henchan.pro/manga/14212-love-and-devil-glava-25.html
       // Volume : -
-      // Chapter : https://h-chan.me/online/14212-love-and-devil-glava-25.html
+      // Chapter : https://henchan.pro/online/14212-love-and-devil-glava-25.html
       // Page : -
 
       var hosts = ConfigStorage.Plugins

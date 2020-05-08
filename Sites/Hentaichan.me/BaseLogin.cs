@@ -77,8 +77,9 @@ namespace Hentaichan
 
     public override async Task<bool> DoLogin(Guid mangaType)
     {
-      if (IsLogined || !this.CanLogin)
-        return IsLogined;
+      var isLogined = this.IsLogined(mangaType);
+      if (isLogined || !this.CanLogin)
+        return isLogined;
 
       var loginData = new NameValueCollection
             {
@@ -98,14 +99,15 @@ namespace Hentaichan
           .Select(c => c.Value)
           .Distinct()
           .Single();
-        this.IsLogined = true;
+        isLogined = true;
       }
       catch (System.Exception ex)
       {
         Log.Exception(ex, Strings.Login_Failed);
-        this.IsLogined = false;
+        isLogined = false;
       }
-      return IsLogined;
+      this.SetLogined(mangaType, isLogined);
+      return isLogined;
     }
 
     protected abstract override Task<List<IManga>> DownloadBookmarks(Guid mangaType);

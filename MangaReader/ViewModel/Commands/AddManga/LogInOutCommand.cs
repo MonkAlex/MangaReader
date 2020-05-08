@@ -7,6 +7,7 @@ namespace MangaReader.ViewModel.Commands.AddManga
 {
   public class LogInOutCommand : BaseCommand
   {
+    private readonly Guid mangaType;
     private LoginCommand Login;
     private LogoutCommand Logout;
     private BaseCommand activeCommand;
@@ -34,18 +35,20 @@ namespace MangaReader.ViewModel.Commands.AddManga
 
     public LogInOutCommand(ILogin login, Guid mangaType)
     {
+      this.mangaType = mangaType;
       this.Login = new LoginCommand(login, mangaType);
       this.Logout = new LogoutCommand(login, mangaType);
       if (login != null)
       {
-        LoginOnLoginStateChanged(this, login.IsLogined);
+        LoginOnLoginStateChanged(login, login.IsLogined(mangaType));
         login.LoginStateChanged += LoginOnLoginStateChanged;
       }
     }
 
     private void LoginOnLoginStateChanged(object sender, bool b)
     {
-      if (b)
+      var login = (ILogin)sender;
+      if (login.IsLogined(mangaType))
         this.ActiveCommand = this.Logout;
       else
         this.ActiveCommand = this.Login;

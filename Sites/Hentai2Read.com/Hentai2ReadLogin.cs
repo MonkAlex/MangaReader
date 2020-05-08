@@ -23,8 +23,9 @@ namespace Hentai2Read.com
 
     public override async Task<bool> DoLogin(Guid mangaType)
     {
-      if (IsLogined || !this.CanLogin)
-        return IsLogined;
+      var isLogined = this.IsLogined(mangaType);
+      if (isLogined || !this.CanLogin)
+        return isLogined;
 
       var loginData = new NameValueCollection
             {
@@ -42,23 +43,23 @@ namespace Hentai2Read.com
         var cookieClient = Hentai2ReadPlugin.Instance.GetCookieClient();
         var loginResult = await cookieClient.UploadValuesTaskAsync(new Uri(this.MainUri + "login"), "POST", loginData).ConfigureAwait(false);
         LogoutNonce = Regex.Match(System.Text.Encoding.UTF8.GetString(loginResult), "logout\\/\\?_wpnonce=([a-z0-9]+)&", RegexOptions.Compiled).Groups[1].Value;
-        var hasLoginCookie = cookieClient.Cookie.GetCookies(this.MainUri)
+        isLogined = cookieClient.Cookie.GetCookies(this.MainUri)
           .Cast<Cookie>()
           .Any(c => c.Name.StartsWith("wordpress_logged_in"));
-        this.IsLogined = hasLoginCookie;
       }
       catch (System.Exception ex)
       {
         Log.Exception(ex, Strings.Login_Failed);
-        this.IsLogined = false;
+        isLogined = false;
       }
-      return IsLogined;
+      this.SetLogined(mangaType, isLogined);
+      return isLogined;
     }
 
     public override async Task<bool> Logout(Guid mangaType)
     {
       // https://hentai2read.com/logout/?_wpnonce=368febb749
-      IsLogined = false;
+      this.SetLogined(mangaType, false);
       var cookieClient = Hentai2ReadPlugin.Instance.GetCookieClient();
       await Page.GetPageAsync(new Uri(LogoutUri.OriginalString + $"/?_wpnonce={LogoutNonce}"), cookieClient).ConfigureAwait(false);
       return true;
@@ -69,9 +70,9 @@ namespace Hentai2Read.com
       var bookmarks = new List<IManga>();
       var document = new HtmlDocument();
 
-      await this.DoLogin(mangaType).ConfigureAwait(false);
+      var isLogined = await this.DoLogin(mangaType).ConfigureAwait(false);
 
-      if (!IsLogined)
+      if (!isLogined)
         return bookmarks;
 
       var cookieClient = Hentai2ReadPlugin.Instance.GetCookieClient();

@@ -29,15 +29,15 @@ namespace Tests.Entities.MangaSetting
     {
       var (login, type) = loginTuple;
       Assert.IsTrue(login.CanLogin);
-      Assert.IsFalse(login.IsLogined);
+      Assert.IsFalse(login.IsLogined(type));
       var loginResult = await login.DoLogin(type).ConfigureAwait(false);
       Assert.IsTrue(loginResult);
       Assert.IsTrue(login.CanLogin);
-      Assert.IsTrue(login.IsLogined);
+      Assert.IsTrue(login.IsLogined(type));
       var logoutResult = await login.Logout(type).ConfigureAwait(false);
       Assert.IsTrue(logoutResult);
       Assert.IsTrue(login.CanLogin);
-      Assert.IsFalse(login.IsLogined);
+      Assert.IsFalse(login.IsLogined(type));
     }
 
     [Test, TestCaseSource(nameof(GetLogins))]
@@ -45,7 +45,7 @@ namespace Tests.Entities.MangaSetting
     {
       var (login, type) = loginTuple;
       await login.DoLogin(type).ConfigureAwait(false);
-      Assert.IsTrue(login.IsLogined);
+      Assert.IsTrue(login.IsLogined(type));
 
       var bookmarks = await login.GetBookmarks(type).ConfigureAwait(false);
       Assert.AreEqual(2, bookmarks.Count);
@@ -54,6 +54,18 @@ namespace Tests.Entities.MangaSetting
         Assert.IsNotNull(manga.Name);
         Assert.IsNotNull(manga.Uri);
       }
+    }
+
+    [Test]
+    public async Task SingleLoginForManySites()
+    {
+      var login = new GroupleLogin() { Name = "alex+grouple@antistarforce.com", Password = "JUadiSHrosiv" };
+
+      var bookmarks = await login.GetBookmarks(MintmangaPlugin.Manga).ConfigureAwait(false);
+      Assert.AreEqual(2, bookmarks.Count);
+
+      bookmarks = await login.GetBookmarks(ReadmangaPlugin.Manga).ConfigureAwait(false);
+      Assert.AreEqual(2, bookmarks.Count);
     }
   }
 }

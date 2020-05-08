@@ -22,8 +22,9 @@ namespace Acomics
 
     public override async Task<bool> DoLogin(Guid mangaType)
     {
-      if (IsLogined || !this.CanLogin)
-        return IsLogined;
+      var isLogined = this.IsLogined(mangaType);
+      if (isLogined || !this.CanLogin)
+        return isLogined;
 
       var loginData = new NameValueCollection
             {
@@ -41,14 +42,15 @@ namespace Acomics
             .Cast<Cookie>()
             .Single(c => c.Name == "hash")
             .Value;
-        this.IsLogined = true;
+        isLogined = true;
       }
       catch (System.Exception ex)
       {
         Log.Exception(ex, Strings.Login_Failed);
-        this.IsLogined = false;
+        isLogined = false;
       }
-      return IsLogined;
+      this.SetLogined(mangaType, isLogined);
+      return isLogined;
     }
 
     protected override async Task<List<IManga>> DownloadBookmarks(Guid mangaType)
@@ -56,9 +58,9 @@ namespace Acomics
       var bookmarks = new List<IManga>();
       var document = new HtmlDocument();
 
-      await this.DoLogin(mangaType).ConfigureAwait(false);
+      var isLogined = await this.DoLogin(mangaType).ConfigureAwait(false);
 
-      if (!IsLogined)
+      if (!isLogined)
         return bookmarks;
 
       var cookieClient = AcomicsPlugin.Instance.GetCookieClient();

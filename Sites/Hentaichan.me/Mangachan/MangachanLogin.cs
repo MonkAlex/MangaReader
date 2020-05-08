@@ -29,9 +29,9 @@ namespace Hentaichan.Mangachan
       var bookmarks = new List<IManga>();
       var document = new HtmlDocument();
 
-      await this.DoLogin(mangaType).ConfigureAwait(false);
+      var isLogined = await this.DoLogin(mangaType).ConfigureAwait(false);
 
-      if (!IsLogined)
+      if (!isLogined)
         return bookmarks;
 
       var cookieClient = MangachanPlugin.Instance.GetCookieClient();

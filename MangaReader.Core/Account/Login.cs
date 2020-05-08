@@ -10,16 +10,6 @@ namespace MangaReader.Core.Account
 {
   public abstract class Login : Entity.Entity, ILogin
   {
-    public bool IsLogined
-    {
-      get { return isLogined; }
-      set
-      {
-        isLogined = value;
-        OnLoginStateChanged(value);
-      }
-    }
-
     public event EventHandler<bool> LoginStateChanged;
 
     public virtual string Name { get; set; }
@@ -34,13 +24,29 @@ namespace MangaReader.Core.Account
 
     public abstract Uri BookmarksUri { get; }
 
-    private bool isLogined;
+    protected HashSet<Guid> logined = new HashSet<Guid>();
+
+    public virtual bool IsLogined(Guid mangaType)
+    {
+      return this.logined.Contains(mangaType);
+    }
+
+    protected void SetLogined(Guid mangaType, bool value)
+    {
+      if (value)
+        logined.Add(mangaType);
+      else 
+        logined.Remove(mangaType);
+
+      LoginStateChanged?.Invoke(this, value);
+    }
 
     public abstract Task<bool> DoLogin(Guid mangaType);
 
     public virtual async Task<bool> Logout(Guid mangaType)
     {
-      IsLogined = false;
+      this.SetLogined(mangaType, false);
+
       var plugin = ConfigStorage.Plugins.Single(p => p.MangaGuid == mangaType);
       await Page.GetPageAsync(LogoutUri, plugin.GetCookieClient()).ConfigureAwait(false);
       return true;
@@ -67,11 +73,6 @@ namespace MangaReader.Core.Account
         var logins = await context.Get<ILogin>().ToListAsync().ConfigureAwait(false);
         return logins.SingleOrDefault(l => l.GetType() == type) ?? (ILogin)Activator.CreateInstance(type);
       }
-    }
-
-    protected virtual void OnLoginStateChanged(bool e)
-    {
-      LoginStateChanged?.Invoke(this, e);
     }
   }
 }

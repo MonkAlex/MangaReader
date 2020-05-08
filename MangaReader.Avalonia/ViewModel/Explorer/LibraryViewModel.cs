@@ -101,7 +101,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public void ResetView()
     {
-      Items.Edit(updater =>
+      Items?.Edit(updater =>
       {
         var oldItems = Items.Items;
         updater.Clear();

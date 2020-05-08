@@ -11,4 +11,4 @@
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-[assembly: AssemblyVersion("1.49.7.54")]
+[assembly: AssemblyVersion("1.49.8.59")]

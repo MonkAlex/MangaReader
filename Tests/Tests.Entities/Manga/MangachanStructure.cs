@@ -35,6 +35,7 @@ namespace Tests.Entities.Manga
     }
 
     [Test]
+    [Parallelizable(ParallelScope.None)]
     public async Task MangachanNameParsing()
     {
       // Спецсимвол "

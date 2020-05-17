@@ -108,7 +108,8 @@ namespace Hentaichan
             foreach (var node in chapterNodes)
             {
               var chapterUri = new Uri(uri, node.Attributes.Single(a => a.Name == "value").Value);
-              chapters.Add(new ChapterDto(chapterUri, WebUtility.HtmlDecode((node.NextSibling ?? node).InnerText))
+              chapterUri = new Uri(chapterUri.GetLeftPart(UriPartial.Path));
+              chapters.Add(new ChapterDto(chapterUri, WebUtility.HtmlDecode(node.InnerText))
               {
                 Number = HentaichanChapter.GetChapterNumber(chapterUri)
               });
@@ -175,6 +176,7 @@ namespace Hentaichan
       // Chapter : https://henchan.pro/online/14212-love-and-devil-glava-25.html
       // Page : -
 
+      uri = new Uri(uri.GetLeftPart(UriPartial.Path));
       var hosts = ConfigStorage.Plugins
         .Where(p => p.GetParser().GetType() == typeof(Parser))
         .Select(p => p.GetSettings().MainUri);

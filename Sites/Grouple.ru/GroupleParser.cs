@@ -61,14 +61,6 @@ namespace Grouple
       try
       {
         client = this.GetClient();
-        var cookie = new Cookie
-        {
-          Name = CookieKey,
-          Value = "true",
-          Expires = DateTime.Today.AddYears(1),
-          Domain = "." + page.ResponseUri.Host
-        };
-        client.Cookie.Add(cookie);
 
         // Пытаемся найти переход с обычной манги на взрослую. Или хоть какой то переход.
         var document = new HtmlDocument();

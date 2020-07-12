@@ -26,7 +26,7 @@ namespace Grouple.Convertation
 
     public From49_8To49_9()
     {
-      this.Version = new Version(1, 49, 8);
+      this.Version = new Version(1, 49, 9, 62);
       this.CanReportProcess = false;
       this.Name = "Обновляем ссылки на readmanga.live...";
     }

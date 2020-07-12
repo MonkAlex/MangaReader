@@ -236,9 +236,9 @@ namespace Grouple
 
     public override UriParseResult ParseUri(Uri uri)
     {
-      // Manga : https://readmanga.me/heroes_of_the_western_world__emerald_
+      // Manga : https://readmanga.live/heroes_of_the_western_world__emerald_
       // Volume : -
-      // Chapter : https://readmanga.me/heroes_of_the_western_world__emerald_/vol0/0
+      // Chapter : https://readmanga.live/heroes_of_the_western_world__emerald_/vol0/0
       // Page : -
 
       var hosts = ConfigStorage.Plugins

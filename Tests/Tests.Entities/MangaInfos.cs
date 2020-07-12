@@ -38,10 +38,10 @@ namespace Tests.Entities
 
     public static class Readmanga
     {
-      [InfoCache("https://readmanga.me/kuroshitsuji_dj___black_sheep", true)]
+      [InfoCache("https://readmanga.live/kuroshitsuji_dj___black_sheep", true)]
       public static MangaInfo Kuroshitsuji;
 
-      [InfoCache("https://readmanga.me/love_mate_2", false)]
+      [InfoCache("https://readmanga.live/love_mate_2", false)]
       public static MangaInfo LoveMate2;
     }
 

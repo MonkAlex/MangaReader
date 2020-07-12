@@ -8,7 +8,7 @@
 Программа предназначеня для скачивания манги с онлайн читалок.
 
 На текущий момент поддерживаются:
- 1. [ReadManga](https://readmanga.me)
+ 1. [ReadManga](https://readmanga.live/)
  2. [MintManga](https://mintmanga.live)
  3. [Hentaichan](https://henchan.pro/)
  4. [Acomics](https://acomics.ru)

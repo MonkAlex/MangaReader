@@ -190,9 +190,9 @@ namespace Hentaichan
 
     public override UriParseResult ParseUri(Uri uri)
     {
-      // Manga : https://henchan.pro/manga/14212-love-and-devil-glava-25.html
+      // Manga : https://hentai-chan.pro/manga/14212-love-and-devil-glava-25.html
       // Volume : -
-      // Chapter : https://henchan.pro/online/14212-love-and-devil-glava-25.html
+      // Chapter : https://hentai-chan.pro/online/14212-love-and-devil-glava-25.html
       // Page : -
 
       uri = new Uri(uri.GetLeftPart(UriPartial.Path));

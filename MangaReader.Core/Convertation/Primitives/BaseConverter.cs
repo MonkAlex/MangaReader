@@ -40,8 +40,9 @@ namespace MangaReader.Core.Convertation.Primitives
 
     protected bool CanConvertVersion(IProcess process)
     {
-      return this.Version.CompareTo(Repository.GetStateless<DatabaseConfig>().Single().Version) > 0 &&
-             process.Version.CompareTo(this.Version) >= 0;
+      var versionGreaterThanDatabase = this.Version.CompareTo(Repository.GetStateless<DatabaseConfig>().Single().Version) > 0;
+      var versionLessOrEqualThanApp = process.Version.CompareTo(this.Version) >= 0;
+      return versionGreaterThanDatabase && versionLessOrEqualThanApp;
     }
 
     protected async Task<object> RunSql(string command)

@@ -24,9 +24,9 @@ namespace Tests.Entities.Manga
           await model.Remove(remove).ConfigureAwait(false);
 
         var manga = await Builder.CreateReadmanga().ConfigureAwait(false);
-        var readmangaUri = new Uri("https://readmanga.me/btoom");
+        var readmangaUri = new Uri("https://readmanga.live/btoom");
         manga.Uri = readmangaUri;
-        manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(new Uri("https://readmanga.me/btoom/vol1/1?mature=1")));
+        manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(new Uri("https://readmanga.live/btoom/vol1/1?mature=1")));
         await context.Save(manga).ConfigureAwait(false);
 
         manga = await context.Get<Readmanga>().FirstOrDefaultAsync(m => m.Id == manga.Id).ConfigureAwait(false);

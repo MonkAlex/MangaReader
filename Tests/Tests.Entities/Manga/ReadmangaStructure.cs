@@ -13,35 +13,35 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task AddEmptyReadmanga()
     {
-      var chapters = await GetCountOfChapters("https://readmanga.me/_my_name_").ConfigureAwait(false);
+      var chapters = await GetCountOfChapters("https://readmanga.live/_my_name_").ConfigureAwait(false);
       Assert.AreEqual(0, chapters);
     }
 
     [Test]
     public async Task AddSingleReadmanga()
     {
-      var chapters = await GetCountOfChapters("https://readmanga.me/traeh").ConfigureAwait(false);
+      var chapters = await GetCountOfChapters("https://readmanga.live/traeh").ConfigureAwait(false);
       Assert.AreEqual(1, chapters);
     }
 
     [Test]
     public async Task AddReadmangaWithoutExtra()
     {
-      var chapters = await GetCountOfChapters("https://readmanga.me/kuroshitsuji_dj___black_sheep").ConfigureAwait(false);
+      var chapters = await GetCountOfChapters("https://readmanga.live/kuroshitsuji_dj___black_sheep").ConfigureAwait(false);
       Assert.AreEqual(4, chapters);
     }
 
     [Test]
     public async Task AddReadmangaWithExtra()
     {
-      var chapters = await GetCountOfChapters("https://readmanga.me/anima").ConfigureAwait(false);
+      var chapters = await GetCountOfChapters("https://readmanga.live/anima").ConfigureAwait(false);
       Assert.AreEqual(59, chapters);
     }
 
     [Test]
     public async Task AddReadmangaWithGoldChapters()
     {
-      var chapters = await GetCountOfChapters("https://readmanga.me/from_common_job_class_to_the_strongest_in_the_world").ConfigureAwait(false);
+      var chapters = await GetCountOfChapters("https://readmanga.live/from_common_job_class_to_the_strongest_in_the_world").ConfigureAwait(false);
       Assert.AreEqual(29, chapters);
     }
 

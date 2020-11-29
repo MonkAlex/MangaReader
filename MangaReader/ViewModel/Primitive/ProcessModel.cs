@@ -74,7 +74,7 @@ namespace MangaReader.ViewModel.Primitive
       this.Percent = 0;
       this.ProgressState = ProgressState.Indeterminate;
       this.Status = string.Empty;
-      this.Version = new Version(AppConfig.Version.Major, AppConfig.Version.Minor, AppConfig.Version.Build);
+      this.Version = AppConfig.Version;
       this.State = ConvertState.None;
     }
 

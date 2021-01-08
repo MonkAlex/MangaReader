@@ -110,10 +110,6 @@ namespace Grouple
       if (node == null)
         return;
 
-      var servers = Regex.Match(node.OuterHtml, @"var servers = (\[.*?\])", RegexOptions.IgnoreCase);
-      var jsonServers = JToken.Parse(servers.Groups[1].Value).Children().ToList();
-      var serversList = jsonServers.Select(server => new Uri(server.ToString())).ToList();
-
       var initBlock = Regex.Match(node.OuterHtml, @"rm_h\.init\([ ]*(\[\[.*?\]\])", RegexOptions.IgnoreCase);
       var jsonParsed = JToken.Parse(initBlock.Groups[1].Value).Children().ToList();
       for (var i = 0; i < jsonParsed.Count; i++)
@@ -126,7 +122,7 @@ namespace Grouple
         if (!Uri.TryCreate(uriString, UriKind.Absolute, out Uri imageLink))
           imageLink = new Uri(groupleChapter.Uri.GetLeftPart(UriPartial.Authority) + uriString);
 
-        groupleChapter.Container.Add(new GroupleMangaPage(groupleChapter.Uri, imageLink, i, serversList, groupleChapter));
+        groupleChapter.Container.Add(new GroupleMangaPage(groupleChapter.Uri, imageLink, i, groupleChapter));
       }
     }
 

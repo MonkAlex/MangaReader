@@ -106,7 +106,7 @@ namespace Grouple
       groupleChapter.Container.Clear();
       var document = new HtmlDocument();
       document.LoadHtml((await Page.GetPageAsync(groupleChapter.Uri, GetClient()).ConfigureAwait(false)).Content);
-      var node = document.DocumentNode.SelectNodes("//div[@class=\"pageBlock container reader-bottom\"]").FirstOrDefault();
+      var node = document.DocumentNode.SelectNodes("//div[contains(@class, 'reader-bottom')]").SingleOrDefault();
       if (node == null)
         return;
 

@@ -16,7 +16,6 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
 
     public UpdateMangaCommand(Explorer.LibraryViewModel model) : base(model)
     {
-      this.NeedRefresh = true;
       this.Name = Strings.Manga_Action_Update;
       this.Icon = "pack://application:,,,/Icons/Manga/start_update.png";
     }

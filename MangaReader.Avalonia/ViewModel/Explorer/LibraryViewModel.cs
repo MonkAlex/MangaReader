@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Threading;
 using DynamicData;
+using DynamicData.Binding;
 using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Avalonia.ViewModel.Command.Library;
 using MangaReader.Avalonia.ViewModel.Command.Manga;
@@ -49,11 +50,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     public string Search
     {
       get { return search; }
-      set
-      {
-        RaiseAndSetIfChanged(ref search, value);
-        ResetView();
-      }
+      set { RaiseAndSetIfChanged(ref search, value); }
     }
 
     public ObservableCollection<BaseCommand> LibraryCommands { get; }
@@ -86,40 +83,29 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         {
           Items = new SourceCache<MangaModel, int>(m => m.Id);
           Items.AddOrUpdate(mangas);
+          var filter = this.WhenValueChanged(x => x.Search).Select(Filter);
           var cancellation = Items
             .Connect()
-            .Filter(Filter)
+            .Filter(filter)
             .Sort(ConfigStorage.Instance.ViewConfig.LibraryFilter)
             .ObserveOn(SynchronizationContext.Current)
             .Bind(out filteredItems)
             .DisposeMany()
             .Subscribe();
-          ResetView();
+
+          RaisePropertyChanged(nameof(FilteredItems));
+          RaisePropertyChanged(nameof(SelectedMangaModels));
+
         }, DispatcherPriority.ApplicationIdle).ConfigureAwait(true);
       }
     }
 
-    public void ResetView()
+    private Func<MangaModel, bool> Filter(string filterName)
     {
-      Items?.Edit(updater =>
-      {
-        var oldItems = Items.Items;
-        updater.Clear();
-        updater.AddOrUpdate(oldItems);
-      });
-      RaisePropertyChanged(nameof(FilteredItems));
-      RaisePropertyChanged(nameof(SelectedMangaModels));
-    }
+      if (filterName == null)
+        return x => true;
 
-    private bool Filter(MangaModel manga)
-    {
-      if (manga == null)
-        return false;
-
-      if (Search == null)
-        return true;
-
-      return manga.Name.IndexOf(Search, StringComparison.InvariantCultureIgnoreCase) >= 0;
+      return x => x.Name.IndexOf(filterName, StringComparison.InvariantCultureIgnoreCase) >= 0;
     }
 
     public LibraryViewModel()

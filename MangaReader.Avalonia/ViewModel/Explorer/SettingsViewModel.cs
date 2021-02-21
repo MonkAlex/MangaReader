@@ -99,6 +99,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     }
 
     private IEnumerable<ProxySettingModel> proxySettingModels;
+    private SortDescription loadedSortDescription;
 
     public override async Task OnSelected(ExplorerTabViewModel previousModel)
     {
@@ -106,6 +107,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
       if (!ExplorerViewModel.Instance.Tabs.OfType<MangaSettingsViewModel>().Any())
       {
+        this.loadedSortDescription = ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription;
         using (var context = Repository.GetEntityContext("Load manga settings"))
         {
           await ReloadConfig().ConfigureAwait(true);
@@ -120,9 +122,11 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     {
       await base.OnUnselected(newModel).ConfigureAwait(true);
 
-#warning Нужно ресетить только после изменения порядка сортировки.
-      foreach (var model in ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>())
-        model.ResetView();
+      if (this.loadedSortDescription != ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription)
+      {
+        foreach (var model in ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>())
+          await model.RefreshItems().ConfigureAwait(true);
+      }
     }
 
     public ICommand Save { get; }

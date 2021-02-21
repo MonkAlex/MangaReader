@@ -110,7 +110,7 @@
       <TextBlock VerticalAlignment="Center"
                    Text="Compress after download every"/>
     </CheckBox>
-    <DropDown Grid.Column="1"
+    <ComboBox Grid.Column="1"
               Grid.Row="4"
               Margin="10"
               VerticalAlignment="Center"

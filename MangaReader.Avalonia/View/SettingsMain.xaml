@@ -17,40 +17,40 @@
 
     <WrapPanel Grid.Row="1" Margin="0, 10, 0, 10" Orientation="Horizontal">
       <TextBlock VerticalAlignment="Center" Text="Default manga name language  "/>
-      <DropDown Items="{Binding AllowedLanguages}" SelectedItem="{Binding Language}" VerticalAlignment="Center"/>
+      <ComboBox Items="{Binding AllowedLanguages}" SelectedItem="{Binding Language}" VerticalAlignment="Center"/>
     </WrapPanel>
 
     <WrapPanel Grid.Row="2" Margin="0, 10, 0, 10" Orientation="Horizontal">
       <TextBlock VerticalAlignment="Center" Text="How to format folder name  "/>
-      <DropDown Items="{Binding FolderNamingStrategies}" SelectedItem="{Binding FolderNamingStrategy}" VerticalAlignment="Center">
-        <DropDown.DataTemplates>
+      <ComboBox Items="{Binding FolderNamingStrategies}" SelectedItem="{Binding FolderNamingStrategy}" VerticalAlignment="Center">
+        <ComboBox.DataTemplates>
           <DataTemplate>
             <TextBlock Text="{Binding Name}"/>
           </DataTemplate>
-        </DropDown.DataTemplates>
-      </DropDown>
+        </ComboBox.DataTemplates>
+      </ComboBox>
     </WrapPanel>
 
     <WrapPanel Grid.Row="3" Margin="0, 10, 0, 10" Orientation="Horizontal">
       <TextBlock VerticalAlignment="Center" Text="Order manga by  "/>
-      <DropDown Items="{Binding SortSettings}" SelectedItem="{Binding SortSetting}" VerticalAlignment="Center">
-        <DropDown.DataTemplates>
+      <ComboBox Items="{Binding SortSettings}" SelectedItem="{Binding SortSetting}" VerticalAlignment="Center">
+        <ComboBox.DataTemplates>
           <DataTemplate>
             <TextBlock Text="{Binding Name}"/>
           </DataTemplate>
-        </DropDown.DataTemplates>
-      </DropDown>
+        </ComboBox.DataTemplates>
+      </ComboBox>
     </WrapPanel>
 
     <WrapPanel Grid.Row="4" Margin="0, 10, 0, 10" Orientation="Horizontal">
       <TextBlock VerticalAlignment="Center" Text="Proxy  "/>
-      <DropDown Items="{Binding ProxySettingModels}" SelectedItem="{Binding SelectedProxySettingModel}" VerticalAlignment="Center">
-        <DropDown.DataTemplates>
+      <ComboBox Items="{Binding ProxySettingModels}" SelectedItem="{Binding SelectedProxySettingModel}" VerticalAlignment="Center">
+        <ComboBox.DataTemplates>
           <DataTemplate>
             <TextBlock Text="{Binding Name}"/>
           </DataTemplate>
-        </DropDown.DataTemplates>
-      </DropDown>
+        </ComboBox.DataTemplates>
+      </ComboBox>
     </WrapPanel>
 
     <CheckBox Grid.Row="5" Margin="0, 10, 0, 10" IsChecked="{Binding CheckAppUpdateOnStart}">

@@ -3,6 +3,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:view="clr-namespace:MangaReader.Avalonia.View;assembly=MangaReader.Avalonia"
+             xmlns:vm="clr-namespace:MangaReader.Avalonia.ViewModel.Explorer"
+             x:DataType="vm:ProxySettingSelectorModel"
+             x:CompileBindings="True"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="MangaReader.Avalonia.View.ProxySetting">
   <StackPanel Margin="10">

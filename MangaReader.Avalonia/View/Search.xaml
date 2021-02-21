@@ -4,9 +4,12 @@
              xmlns:v="clr-namespace:MangaReader.Avalonia.View;assembly=MangaReader.Avalonia"
              xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+             xmlns:vm="clr-namespace:MangaReader.Avalonia.ViewModel.Explorer"
+             x:DataType="vm:SearchViewModel"
+             x:CompileBindings="True"
              x:Class="MangaReader.Avalonia.View.Search"
              Design.Width="400" Design.Height="300">
-  <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*, Auto" DataContext="{Binding}">
+  <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*, Auto">
     <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding Search}" Watermark="Поиск по имени" UseFloatingWatermark="True">
       <TextBox.KeyBindings>
         <KeyBinding Command="{Binding StartSearch}" Gesture="Return"/>

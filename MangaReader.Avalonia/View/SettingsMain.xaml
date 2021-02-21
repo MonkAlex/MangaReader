@@ -1,9 +1,11 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="MangaReader.Avalonia.View.SettingsMain"
+             xmlns:vm="clr-namespace:MangaReader.Avalonia.ViewModel.Explorer"
+             x:DataType="vm:SettingsViewModel"
+             x:CompileBindings="True"
              Design.Width="400" Design.Height="300">
   <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
-        DataContext="{Binding}"
         Margin="30">
     <WrapPanel Grid.Row="0" Margin="0, 10, 0, 10">
       <TextBlock Margin="0, 10, 0, 10"

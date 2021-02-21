@@ -2,10 +2,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="MangaReader.Avalonia.MainWindow"
         xmlns:c="clr-namespace:MangaReader.Avalonia.ViewModel.Explorer;assembly=MangaReader.Avalonia"
+        xmlns:vm="clr-namespace:MangaReader.Avalonia.ViewModel"
         xmlns:view="clr-namespace:MangaReader.Avalonia.View;assembly=MangaReader.Avalonia"
         xmlns:av="clr-namespace:MangaReader.Avalonia;assembly=MangaReader.Avalonia"
         MinWidth="800" MinHeight="600"
         Icon="resm:MangaReader.Avalonia.Assets.main.ico"
+        x:DataType="vm:ExplorerViewModel"
+        x:CompileBindings="True"
         Title="{Binding SelectedTab.Name}">
   <Window.DataTemplates>
     <DataTemplate DataType="c:LibraryViewModel">
@@ -27,7 +30,7 @@
       <view:MangaView/>
     </DataTemplate>
   </Window.DataTemplates>
-  <Grid ColumnDefinitions="Auto,*" DataContext="{Binding}">
+  <Grid ColumnDefinitions="Auto,*">
     <ListBox Grid.Column="0" 
              IsVisible="{Binding Loaded}"
              Items="{Binding Tabs}" 
@@ -37,14 +40,17 @@
       <ListBox.ItemTemplate>
         <DataTemplate>
           <TextBlock Margin="10"
+                     x:DataType="c:ExplorerTabViewModel"
                      Text="{Binding ShortName}"
                      ToolTip.Tip="{Binding Name}"
                      HorizontalAlignment="Center"/>
         </DataTemplate>
       </ListBox.ItemTemplate>
     </ListBox>
-    <ContentPresenter Grid.Column="1" DataContext="{Binding SelectedTab}" Content="{Binding}" IsVisible="{Binding Loaded}"/>
-    <Grid Grid.ColumnSpan="2" IsVisible="{Binding !Loaded}" RowDefinitions="10*,*, 2*">
+    <Border Grid.Column="1" IsVisible="{Binding Loaded}">
+      <ContentPresenter DataContext="{Binding SelectedTab}" Content="{Binding}"/>
+    </Border>
+    <Grid Grid.ColumnSpan="2" IsVisible="{Binding !Loaded}" RowDefinitions="10*, *, 2*">
       <Image Grid.Row="0" Name="image" Margin="75" Source="{Binding !Loaded, Converter={x:Static av:BitmapTypeConverter.Instance}}"/>
       <ProgressBar Grid.Row="1"
                    MaxWidth="{Binding #image.Bounds.Width}"

@@ -33,7 +33,7 @@
                   Width="150" Height="300">
               <Image Grid.Row="0" Source="{Binding Cover, Converter={x:Static av:BitmapTypeConverter.Instance}}"/>
               <TextBlock Grid.Row="1" Text="{Binding Name}" TextWrapping="Wrap" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center"/>
-              <Button Grid.Row="2" Command="{Binding PreviewFoundManga}" CommandParameter="{Binding}" Content="{Binding PreviewFoundManga.Name}"/>
+              <Button Grid.Row="2" Command="{Binding PreviewFoundManga}" CommandParameter="{Binding}" Content="{Binding PreviewFoundManga.Name}" HorizontalAlignment="Center"/>
             </Grid>
           </Border>
         </DataTemplate>

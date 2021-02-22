@@ -10,14 +10,15 @@
              x:Class="MangaReader.Avalonia.View.Search"
              Design.Width="400" Design.Height="300">
   <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*, Auto">
-    <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding Search}" Watermark="Поиск по имени" UseFloatingWatermark="True">
+    <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding Search}" Watermark="Поиск по названию" UseFloatingWatermark="True" Margin="5">
       <TextBox.KeyBindings>
         <KeyBinding Command="{Binding StartSearch}" Gesture="Return"/>
       </TextBox.KeyBindings>
     </TextBox>
-    <Button Grid.Row="0" Grid.Column="1" DataContext="{Binding StartSearch}" Command="{Binding}" Content="{Binding Name}"/>
+    <Button Grid.Row="0" Grid.Column="1" DataContext="{Binding StartSearch}" Command="{Binding}" Content="{Binding Name}" Margin="5"/>
     <ListBox Grid.Row="1" Grid.ColumnSpan="2" Items="{Binding Items}"
              BorderThickness="0"
+             Background="Transparent"
              ScrollViewer.VerticalScrollBarVisibility="Auto"
              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
       <ListBox.ItemTemplate>
@@ -43,11 +44,11 @@
         </ItemsPanelTemplate>
       </ListBox.ItemsPanel>
     </ListBox>
-    <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding ManualUri}" Watermark="Адрес манги, например https://readmanga.live/berserk">
+    <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding ManualUri}" Watermark="Адрес манги, например https://readmanga.live/berserk" Margin="5">
       <TextBox.KeyBindings>
         <KeyBinding Command="{Binding AddManual}" Gesture="Return"/>
       </TextBox.KeyBindings>
     </TextBox>
-    <Button Grid.Row="2" Grid.Column="1" DataContext="{Binding AddManual}" Command="{Binding}" Content="{Binding Name}"/>
+    <Button Grid.Row="2" Grid.Column="1" DataContext="{Binding AddManual}" Command="{Binding}" Content="{Binding Name}" Margin="5"/>
   </Grid>
 </UserControl>

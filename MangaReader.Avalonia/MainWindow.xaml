@@ -35,7 +35,7 @@
              IsVisible="{Binding Loaded}"
              Items="{Binding Tabs}" 
              SelectedItem="{Binding SelectedTab}"
-             Width="100"
+             Width="130"
              BorderThickness="0">
       <ListBox.ItemTemplate>
         <DataTemplate>
@@ -47,9 +47,7 @@
         </DataTemplate>
       </ListBox.ItemTemplate>
     </ListBox>
-    <Border Grid.Column="1" IsVisible="{Binding Loaded}">
-      <ContentPresenter DataContext="{Binding SelectedTab}" Content="{Binding}"/>
-    </Border>
+    <ContentPresenter Grid.Column="1" DataContext="{Binding SelectedTab}" Content="{Binding}"/>
     <Grid Grid.ColumnSpan="2" IsVisible="{Binding !Loaded}" RowDefinitions="10*, *, 2*">
       <Image Grid.Row="0" Name="image" Margin="75" Source="{Binding !Loaded, Converter={x:Static av:BitmapTypeConverter.Instance}}"/>
       <ProgressBar Grid.Row="1"

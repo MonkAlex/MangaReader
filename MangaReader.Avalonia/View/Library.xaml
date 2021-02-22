@@ -11,11 +11,12 @@
              x:Class="MangaReader.Avalonia.View.Library"
              Design.Width="400" Design.Height="300">
   <Grid RowDefinitions="Auto,*,Auto,Auto">
-    <TextBox Grid.Row="0" Text="{Binding Search}" Watermark="Поиск по имени" UseFloatingWatermark="True"/>
+    <TextBox Grid.Row="0" Text="{Binding Search}" Watermark="Поиск по названию" UseFloatingWatermark="True" Margin="5"/>
     <ListBox Grid.Row="1" Items="{Binding FilteredItems}"
                SelectedItems="{Binding SelectedMangaModels}"
                SelectionMode="Multiple"
                BorderThickness="0"
+               Background="Transparent"
                ScrollViewer.VerticalScrollBarVisibility="Auto"
                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
       <ListBox.ItemTemplate>
@@ -48,24 +49,25 @@
       </ListBox.ItemsPanel>
     </ListBox>
     <ProgressBar Grid.Row="2" IsVisible="{Binding !!UpdatePercent}" Value="{Binding UpdatePercent}" Minimum="0" Maximum="1"/>
-    <ListBox Grid.Row="3" Items="{Binding LibraryCommands}"
+    <ItemsControl Grid.Row="3" Items="{Binding LibraryCommands}"
+               Background="Transparent"
                ScrollViewer.VerticalScrollBarVisibility="Auto"
                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-      <ListBox.ItemTemplate>
+      <ItemsControl.ItemTemplate>
         <DataTemplate>
-          <Button Command="{Binding}" Content="{Binding Name}" IsVisible="{ReflectionBinding $self.IsEnabled}"/>
+          <Button Command="{Binding}" Content="{Binding Name}" IsVisible="{ReflectionBinding $self.IsEnabled}" Margin="5"/>
         </DataTemplate>
-      </ListBox.ItemTemplate>
-      <ListBox.ItemsPanel>
+      </ItemsControl.ItemTemplate>
+      <ItemsControl.ItemsPanel>
         <ItemsPanelTemplate>
           <WrapPanel/>
         </ItemsPanelTemplate>
-      </ListBox.ItemsPanel>
-      <ListBox.Styles>
+      </ItemsControl.ItemsPanel>
+      <ItemsControl.Styles>
         <Style Selector="ListBoxItem" x:DataType="c:BaseCommand">
           <Setter Property="IsVisible" Value="{Binding IsVisible}"/>
         </Style>
-      </ListBox.Styles>
-    </ListBox>
+      </ItemsControl.Styles>
+    </ItemsControl>
   </Grid>
 </UserControl>

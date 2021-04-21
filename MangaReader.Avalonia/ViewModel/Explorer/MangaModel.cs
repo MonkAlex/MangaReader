@@ -12,6 +12,7 @@ using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
 {
+  [System.Diagnostics.DebuggerDisplay("{Id}, {Name}")]
   public class MangaModel : ExplorerTabViewModel, ILibraryFilterableItem
   {
     #region MangaProperties

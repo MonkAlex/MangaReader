@@ -27,9 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.0" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.0" />
-    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.2" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.2" />
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.2" />
     <PackageReference Include="Dialogs.Avalonia" Version="0.1.29" />
   </ItemGroup>
 

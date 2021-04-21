@@ -30,7 +30,7 @@
     /// <returns>True, если выбрано Да.</returns>
     public static async System.Threading.Tasks.Task<bool> ShowYesNoDialog(string title, string text, string note)
     {
-      var (result, _) = await ShowYesNoDialog(title, text, note, string.Empty);
+      var (result, _) = await ShowYesNoDialog(title, text, note, string.Empty).ConfigureAwait(true);
       return result;
     }
 

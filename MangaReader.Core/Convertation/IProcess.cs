@@ -4,6 +4,8 @@
   {
     double Percent { get; set; }
 
+    bool IsIndeterminate { get; }
+
     ProgressState ProgressState { get; set; }
 
     string Status { get; set; }

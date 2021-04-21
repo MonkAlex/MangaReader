@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Diagnostics;
-using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using Avalonia.Threading;
@@ -118,13 +116,6 @@ namespace MangaReader.Avalonia
       }
 
       base.OnFrameworkInitializationCompleted();
-    }
-
-    public static void AttachDevTools(Window window)
-    {
-#if DEBUG
-      DevTools.Attach(window, new KeyGesture(Key.F12, KeyModifiers.Control));
-#endif
     }
   }
 }

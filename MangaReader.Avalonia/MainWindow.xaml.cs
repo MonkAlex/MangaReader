@@ -15,7 +15,6 @@ namespace MangaReader.Avalonia
       this.InitializeComponent();
       Title = "Loading...";
       ConfigStorage.Instance.ViewConfig.UpdateWindowState(this);
-      App.AttachDevTools(this);
     }
 
     protected override void HandleWindowStateChanged(WindowState state)
@@ -32,8 +31,6 @@ namespace MangaReader.Avalonia
         {
           Log.Add($"App restored from tray.");
           this.Show();
-          // BUG: https://github.com/AvaloniaUI/Avalonia/issues/2994
-          this.InvalidateMeasure();
         }
       }
 

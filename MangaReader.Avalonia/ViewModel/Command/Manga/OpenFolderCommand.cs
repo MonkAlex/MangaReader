@@ -27,7 +27,6 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       this.baseCommand = new OpenFolderCommandBase();
       this.Name = baseCommand.Name;
       this.Icon = baseCommand.Icon;
-      this.NeedRefresh = false;
     }
   }
 }

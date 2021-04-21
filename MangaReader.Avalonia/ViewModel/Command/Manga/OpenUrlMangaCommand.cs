@@ -38,7 +38,6 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
     {
       this.Name = Strings.Manga_Action_View;
       this.Icon = "pack://application:,,,/Icons/Manga/www.png";
-      this.NeedRefresh = false;
     }
   }
 }

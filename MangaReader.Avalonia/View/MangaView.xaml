@@ -3,15 +3,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:view="clr-namespace:MangaReader.Avalonia.View;assembly=MangaReader.Avalonia"
+             xmlns:vm="clr-namespace:MangaReader.Avalonia.ViewModel.Explorer"
+             x:DataType="vm:MangaModel"
+             x:CompileBindings="True"
              x:Class="MangaReader.Avalonia.View.MangaView"
              mc:Ignorable="d"
              d:DataContext="{x:Static view:Designer.MangaModel}"
              d:DesignWidth="800"
-             d:DesignHeight="480"
+             d:DesignHeight="700"
              xmlns:av="clr-namespace:MangaReader.Avalonia;assembly=MangaReader.Avalonia">
   <Grid RowDefinitions="Auto, Auto, Auto, *"
         ColumnDefinitions="38*, 62*"
-        DataContext="{Binding}"
         Margin="20">
 
     <Image Grid.Column="0"

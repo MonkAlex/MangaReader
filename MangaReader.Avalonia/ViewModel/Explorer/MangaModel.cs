@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Avalonia.ViewModel.Command.Manga;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
@@ -11,6 +12,7 @@ using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
 {
+  [System.Diagnostics.DebuggerDisplay("{Id}, {Name}")]
   public class MangaModel : ExplorerTabViewModel, ILibraryFilterableItem
   {
     #region MangaProperties
@@ -188,17 +190,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       this.IsCompleted = isCompleted;
       this.CompletedIcon = result;
     }
-
-    public void RestoreName()
-    {
-      this.MangaName = this.OriginalName;
-    }
-
-    public void OpenHyperlink()
-    {
-      Helper.StartUseShell(this.Uri);
-    }
-
+    
     private void SetType(IManga manga)
     {
       var result = "NA";
@@ -235,11 +227,17 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       await base.OnUnselected(newModel).ConfigureAwait(true);
     }
 
-    public ICommand Save => new MangaSaveCommand(this, ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().First().Library);
+    public BaseCommand Save => new MangaSaveCommand(this, ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().First().Library);
 
     public ICommand OpenFolder => new OpenFolderCommand(ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().First());
 
-    public async Task UndoChanged()
+    public ICommand RestoreName => new DelegateCommand(() => MangaName = OriginalName);
+
+    public ICommand OpenHyperlink => new DelegateCommand(() => Helper.StartUseShell(Uri));
+
+    public ICommand UndoChanged => new DelegateCommand(UndoChangedBody, () => true);
+
+    public async Task UndoChangedBody()
     {
       await UndoChangedImpl().ConfigureAwait(true);
       ExplorerViewModel.Instance.SelectedTab = ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().FirstOrDefault();

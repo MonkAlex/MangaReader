@@ -98,13 +98,9 @@ namespace Grouple
       groupleChapter.Container.Clear();
       var document = new HtmlDocument();
       document.LoadHtml((await Page.GetPageAsync(groupleChapter.Uri, GetClient()).ConfigureAwait(false)).Content);
-      var node = document.DocumentNode.SelectNodes("//div[@class=\"pageBlock container reader-bottom\"]").FirstOrDefault();
+      var node = document.DocumentNode.SelectNodes("//div[contains(@class, 'reader-bottom')]").SingleOrDefault();
       if (node == null)
         return;
-
-      var servers = Regex.Match(node.OuterHtml, @"var servers = (\[.*?\])", RegexOptions.IgnoreCase);
-      var jsonServers = JToken.Parse(servers.Groups[1].Value).Children().ToList();
-      var serversList = jsonServers.Select(server => new Uri(server.ToString())).ToList();
 
       var initBlock = Regex.Match(node.OuterHtml, @"rm_h\.init\([ ]*(\[\[.*?\]\])", RegexOptions.IgnoreCase);
       var jsonParsed = JToken.Parse(initBlock.Groups[1].Value).Children().ToList();
@@ -118,7 +114,7 @@ namespace Grouple
         if (!Uri.TryCreate(uriString, UriKind.Absolute, out Uri imageLink))
           imageLink = new Uri(groupleChapter.Uri.GetLeftPart(UriPartial.Authority) + uriString);
 
-        groupleChapter.Container.Add(new GroupleMangaPage(groupleChapter.Uri, imageLink, i, serversList, groupleChapter));
+        groupleChapter.Container.Add(new GroupleMangaPage(groupleChapter.Uri, imageLink, i, groupleChapter));
       }
     }
 
@@ -149,7 +145,7 @@ namespace Grouple
       {
         var document = new HtmlDocument();
         document.LoadHtml(page.Content);
-        var nodes = document.DocumentNode.SelectNodes("//div[@class=\"subject-meta col-sm-7\"]//p");
+        var nodes = document.DocumentNode.SelectNodes("//div[contains(@class, 'subject-meta')]//p");
         if (nodes != null)
           status = nodes.Aggregate(status, (current, node) =>
             current + Regex.Replace(WebUtility.HtmlDecode(node.InnerText).Trim(), @"\s+", " ").Replace("\n", "") + Environment.NewLine);
@@ -272,7 +268,7 @@ namespace Grouple
       {
         var document = new HtmlDocument();
         document.LoadHtml(Encoding.UTF8.GetString(page));
-        return (document.DocumentNode.SelectNodes("//div[contains(@class, 'col-sm-6')]"), host, client);
+        return (document.DocumentNode.SelectNodes("//div[contains(@class, 'tile')]"), host, client);
       }).ConfigureAwait(false);
     }
 

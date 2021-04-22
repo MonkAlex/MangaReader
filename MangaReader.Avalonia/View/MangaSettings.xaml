@@ -1,9 +1,11 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:view="clr-namespace:MangaReader.Avalonia.View;assembly=MangaReader.Avalonia"
+             xmlns:vm="clr-namespace:MangaReader.Avalonia.ViewModel.Explorer"
+             x:DataType="vm:MangaSettingsViewModel"
+             x:CompileBindings="True"
              x:Class="MangaReader.Avalonia.View.MangaSettings">
   <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
-      DataContext="{Binding}"
       Margin="30">
     <view:FolderSelector Grid.Row="0"
                          Margin="0, 10, 0, 10"
@@ -12,29 +14,29 @@
 
     <WrapPanel Grid.Row="1" Margin="0, 10, 0, 10" Orientation="Horizontal">
       <TextBlock VerticalAlignment="Center" Text="Compress new manga  "/>
-      <DropDown Items="{Binding Compressions}" SelectedItem="{Binding Compression}" VerticalAlignment="Center"/>
+      <ComboBox Items="{Binding Compressions}" SelectedItem="{Binding Compression}" VerticalAlignment="Center"/>
     </WrapPanel>
 
     <WrapPanel Grid.Row="2" Margin="0, 10, 0, 10" Orientation="Horizontal">
       <TextBlock VerticalAlignment="Center" Text="How to format folder name  "/>
-      <DropDown Items="{Binding FolderNamingStrategies}" SelectedItem="{Binding FolderNamingStrategy}" VerticalAlignment="Center">
-        <DropDown.DataTemplates>
+      <ComboBox Items="{Binding FolderNamingStrategies}" SelectedItem="{Binding FolderNamingStrategy}" VerticalAlignment="Center">
+        <ComboBox.DataTemplates>
           <DataTemplate>
             <TextBlock Text="{Binding Name}"/>
           </DataTemplate>
-        </DropDown.DataTemplates>
-      </DropDown>
+        </ComboBox.DataTemplates>
+      </ComboBox>
     </WrapPanel>
 
     <WrapPanel Grid.Row="3" Margin="0, 10, 0, 10" Orientation="Horizontal">
       <TextBlock VerticalAlignment="Center" Text="Proxy  "/>
-      <DropDown Items="{Binding ProxySettingModels}" SelectedItem="{Binding SelectedProxySettingModel}" VerticalAlignment="Center">
-        <DropDown.DataTemplates>
+      <ComboBox Items="{Binding ProxySettingModels}" SelectedItem="{Binding SelectedProxySettingModel}" VerticalAlignment="Center">
+        <ComboBox.DataTemplates>
           <DataTemplate>
             <TextBlock Text="{Binding Name}"/>
           </DataTemplate>
-        </DropDown.DataTemplates>
-      </DropDown>
+        </ComboBox.DataTemplates>
+      </ComboBox>
     </WrapPanel>
 
     <WrapPanel Grid.Row="4" Margin="0, 10, 0, 10">

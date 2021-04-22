@@ -23,6 +23,7 @@ namespace MangaReader.Core.Convertation.Primitives
 
     public async Task Convert(IProcess process)
     {
+      Log.AddFormat("Converter '{0} {1}' checking...", this.Name, this.Version);
       if (this.CanConvert(process))
       {
         Log.AddFormat("Converter '{0} {1}' started", this.Name, this.Version);

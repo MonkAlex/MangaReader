@@ -1,17 +1,18 @@
 ﻿<Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:MangaReader.Avalonia.ViewModel.Command"
+             x:CompileBindings="True"
              x:Class="MangaReader.Avalonia.App">
   <Application.Styles>
-    <StyleInclude Source="resm:Avalonia.Themes.Default.DefaultTheme.xaml?assembly=Avalonia.Themes.Default"/>
-    <StyleInclude Source="resm:Avalonia.Themes.Default.Accents.BaseLight.xaml?assembly=Avalonia.Themes.Default"/>
+    <FluentTheme Mode="Light"/>
     <Style Selector="Button">
       <Setter Property="MinWidth" Value="72"/>
     </Style>
-    <Style Selector="MenuItem">
+    <Style Selector="MenuItem" x:DataType="c:BaseCommand">
       <Setter Property="Header" Value="{Binding Name}"/>
       <Setter Property="Command" Value="{Binding}"/>
       <Setter Property="IsVisible" Value="{Binding IsVisible}"/>
-      <Setter Property="CommandParameter" Value="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+      <Setter Property="CommandParameter" Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
     </Style>
   </Application.Styles>
 </Application>

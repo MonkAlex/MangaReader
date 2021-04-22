@@ -3,16 +3,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:view="clr-namespace:MangaReader.Avalonia.View;assembly=MangaReader.Avalonia"
+             xmlns:vm="clr-namespace:MangaReader.Avalonia.ViewModel.Explorer"
              x:Class="MangaReader.Avalonia.View.MangaProperties"
              mc:Ignorable="d"
              d:DataContext="{x:Static view:Designer.MangaModel}"
-             d:DesignWidth="500"
-             d:DesignHeight="240"
+             d:DesignWidth="600"
+             d:DesignHeight="320"
+             x:DataType="vm:MangaModel"
+             x:CompileBindings="True"
              xmlns:av="clr-namespace:MangaReader.Avalonia;assembly=MangaReader.Avalonia">
   <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto"
         ColumnDefinitions="Auto, *"
-        Margin="10"
-        DataContext="{Binding}">
+        Margin="10">
 
     <TextBlock Grid.Column="0"
                Grid.Row="0"
@@ -108,7 +110,7 @@
       <TextBlock VerticalAlignment="Center"
                    Text="Compress after download every"/>
     </CheckBox>
-    <DropDown Grid.Column="1"
+    <ComboBox Grid.Column="1"
               Grid.Row="4"
               Margin="10"
               VerticalAlignment="Center"

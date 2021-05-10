@@ -16,9 +16,9 @@ namespace Hentaichan
 {
   public class HentaichanLogin : BaseLogin
   {
-    protected override CookieClient GetClient()
+    protected override Task<CookieClient> GetClient()
     {
-      return HentaichanPlugin.Instance.GetCookieClient();
+      return HentaichanPlugin.Instance.GetCookieClient(false);
     }
 
     protected override async Task<List<IManga>> DownloadBookmarks(Guid mangaType)

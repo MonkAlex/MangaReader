@@ -36,7 +36,7 @@ namespace Acomics
 
       try
       {
-        var cookieClient = AcomicsPlugin.Instance.GetCookieClient();
+        var cookieClient = await AcomicsPlugin.Instance.GetCookieClient(false).ConfigureAwait(false);
         await cookieClient.UploadValuesTaskAsync(new Uri(this.MainUri + "action/authLogin"), "POST", loginData).ConfigureAwait(false);
         this.PasswordHash = cookieClient.Cookie.GetCookies(this.MainUri)
             .Cast<Cookie>()
@@ -63,7 +63,7 @@ namespace Acomics
       if (!isLogined)
         return bookmarks;
 
-      var cookieClient = AcomicsPlugin.Instance.GetCookieClient();
+      var cookieClient = AcomicsPlugin.Instance.GetCookieClient(false);
       var page = await Page.GetPageAsync(BookmarksUri, cookieClient).ConfigureAwait(false);
       document.LoadHtml(page.Content);
 

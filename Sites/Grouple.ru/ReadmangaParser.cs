@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Threading.Tasks;
+using AutoMapper;
 using AutoMapper.EquivalencyExpression;
 using MangaReader.Core.Account;
 using MangaReader.Core.DataTrasferObject;
@@ -8,9 +9,9 @@ namespace Grouple
 {
   public class ReadmangaParser : GroupleParser
   {
-    protected override CookieClient GetClient()
+    protected override Task<CookieClient> GetClient()
     {
-      return ReadmangaPlugin.Instance.GetCookieClient();
+      return ReadmangaPlugin.Instance.GetCookieClient(true);
     }
 
     public override IMapper GetMapper()

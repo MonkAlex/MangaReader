@@ -22,7 +22,7 @@ namespace Hentaichan.Mangachan
   {
     public override async Task UpdateNameAndStatus(IManga manga)
     {
-      var page = await Page.GetPageAsync(manga.Uri, MangachanPlugin.Instance.GetCookieClient()).ConfigureAwait(false);
+      var page = await Page.GetPageAsync(manga.Uri, MangachanPlugin.Instance.GetCookieClient(true)).ConfigureAwait(false);
       var localizedName = new MangaName();
       try
       {
@@ -75,7 +75,7 @@ namespace Hentaichan.Mangachan
       try
       {
         var document = new HtmlDocument();
-        var content = (await Page.GetPageAsync(manga.Uri, MangachanPlugin.Instance.GetCookieClient()).ConfigureAwait(false)).Content;
+        var content = (await Page.GetPageAsync(manga.Uri, MangachanPlugin.Instance.GetCookieClient(true)).ConfigureAwait(false)).Content;
         document.LoadHtml(content);
 
         var chapterNodes = document.DocumentNode.SelectNodes("//table[@class=\"table_cha\"]//a");
@@ -144,7 +144,7 @@ namespace Hentaichan.Mangachan
     protected override async Task<(HtmlNodeCollection Nodes, Uri Uri, CookieClient CookieClient)> GetMangaNodes(string name, Uri host)
     {
       var searchHost = new Uri(host, "?do=search&subaction=search&story=" + WebUtility.UrlEncode(name));
-      var client = MangachanPlugin.Instance.GetCookieClient();
+      var client = await MangachanPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
       var page = await Page.GetPageAsync(searchHost, client).ConfigureAwait(false);
       if (!page.HasContent)
         return (null, null, null);
@@ -176,7 +176,7 @@ namespace Hentaichan.Mangachan
     internal static async Task<IEnumerable<byte[]>> GetPreviewsImpl(ISiteParser parser, IManga manga)
     {
       var links = new List<Uri>();
-      var client = ConfigStorage.Plugins.Single(p => p.MangaType == manga.GetType()).GetCookieClient();
+      var client = await ConfigStorage.Plugins.Single(p => p.MangaType == manga.GetType()).GetCookieClient(true).ConfigureAwait(false);
       try
       {
         var document = new HtmlDocument();
@@ -229,7 +229,7 @@ namespace Hentaichan.Mangachan
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml((await Page.GetPageAsync(chapter.Uri, MangachanPlugin.Instance.GetCookieClient()).ConfigureAwait(false)).Content);
+        document.LoadHtml((await Page.GetPageAsync(chapter.Uri, MangachanPlugin.Instance.GetCookieClient(true)).ConfigureAwait(false)).Content);
 
         var i = 0;
         var imgs = Regex.Match(document.DocumentNode.OuterHtml, @"""(fullimg.*)", RegexOptions.IgnoreCase).Groups[1].Value.Remove(0, 9);

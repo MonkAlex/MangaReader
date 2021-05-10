@@ -30,7 +30,7 @@ namespace Grouple
     /// </summary>
     internal const string Copyright = "Запрещена публикация произведения по копирайту";
 
-    protected abstract CookieClient GetClient();
+    protected abstract Task<CookieClient> GetClient();
 
     /// <summary>
     /// Получить ссылку с редиректа.
@@ -60,7 +60,7 @@ namespace Grouple
       CookieClient client = null;
       try
       {
-        client = this.GetClient();
+        client = await this.GetClient().ConfigureAwait(false);
 
         // Пытаемся найти переход с обычной манги на взрослую. Или хоть какой то переход.
         var document = new HtmlDocument();
@@ -259,7 +259,7 @@ namespace Grouple
     protected override async Task<(HtmlNodeCollection Nodes, Uri Uri, CookieClient CookieClient)> GetMangaNodes(string name, Uri host)
     {
       var searchHost = new Uri(host, "search");
-      var client = GetClient();
+      var client = await GetClient().ConfigureAwait(false);
       var page = await client.UploadValuesTaskAsync(searchHost, new NameValueCollection() { { "q", WebUtility.UrlEncode(name) } }).ConfigureAwait(false);
       if (page == null)
         return (null, null, null);
@@ -298,7 +298,7 @@ namespace Grouple
     private async Task<IEnumerable<byte[]>> GetPreviewsImpl(IManga manga)
     {
       var document = new HtmlDocument();
-      var client = this.GetClient();
+      var client = await this.GetClient().ConfigureAwait(false);
       document.LoadHtml((await Page.GetPageAsync(manga.Uri, client).ConfigureAwait(false)).Content);
       var banners = document.DocumentNode.SelectSingleNode("//div[@class='picture-fotorama']");
       var images = new List<byte[]>();

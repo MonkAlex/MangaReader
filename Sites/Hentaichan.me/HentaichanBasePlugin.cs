@@ -12,13 +12,13 @@ namespace Hentaichan
   {
     public override Assembly Assembly { get { return Assembly.GetAssembly(this.GetType()); } }
     public override HistoryType HistoryType { get { return HistoryType.Chapter; } }
-    protected override void ConfigureCookieClient(CookieClient client, Uri mainUri, MangaSetting setting)
+    protected override void ConfigureCookieClient(CookieClient client, Uri mainUri, ILogin login)
     {
-      var login = (BaseLogin)setting.Login;
-      if (!string.IsNullOrWhiteSpace(login.UserId) && !client.Cookie.GetCookies(mainUri).Cast<Cookie>().Any(c => c.Name == "dle_user_id"))
+      var baseLogin = (BaseLogin)login;
+      if (!string.IsNullOrWhiteSpace(baseLogin.UserId) && !client.Cookie.GetCookies(mainUri).Cast<Cookie>().Any(c => c.Name == "dle_user_id"))
       {
-        client.Cookie.Add(new Cookie("dle_user_id", login.UserId, "/", mainUri.Host));
-        client.Cookie.Add(new Cookie("dle_password", login.PasswordHash, "/", mainUri.Host));
+        client.Cookie.Add(new Cookie("dle_user_id", baseLogin.UserId, "/", mainUri.Host));
+        client.Cookie.Add(new Cookie("dle_password", baseLogin.PasswordHash, "/", mainUri.Host));
       }
     }
   }

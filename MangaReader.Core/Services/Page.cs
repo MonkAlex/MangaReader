@@ -38,6 +38,18 @@ namespace MangaReader.Core.Services
     /// <param name="client">Клиент.</param>
     /// <param name="restartCounter">Попыток скачивания.</param>
     /// <returns>Исходный код страницы.</returns>
+    public static async Task<Page> GetPageAsync(Uri url, Task<CookieClient> client, int restartCounter = 0)
+    {
+      return await GetPageAsync(url, await client.ConfigureAwait(false), restartCounter).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Получить текст страницы.
+    /// </summary>
+    /// <param name="url">Ссылка на страницу.</param>
+    /// <param name="client">Клиент.</param>
+    /// <param name="restartCounter">Попыток скачивания.</param>
+    /// <returns>Исходный код страницы.</returns>
     public static async Task<Page> GetPageAsync(Uri url, CookieClient client, int restartCounter = 0)
     {
       try

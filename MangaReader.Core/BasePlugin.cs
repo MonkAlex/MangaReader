@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Threading.Tasks;
 using MangaReader.Core.Account;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
@@ -25,20 +26,22 @@ namespace MangaReader.Core
 
     protected CookieContainer CookieContainer = new CookieContainer();
 
-    public CookieClient GetCookieClient()
+    public async Task<CookieClient> GetCookieClient(bool withLogin)
     {
-      var mangaSetting = GetSettings();
-      var mainUri = mangaSetting.Login.MainUri;
+      var login = GetSettings().Login;
+      var mainUri = login.MainUri;
       var client = new CookieClient(CookieContainer)
       {
         BaseAddress = mainUri.OriginalString,
         Proxy = MangaSettingCache.Get(this.GetType()).Proxy,
       };
-      this.ConfigureCookieClient(client, mainUri, mangaSetting);
+      this.ConfigureCookieClient(client, mainUri, login);
+      if (withLogin && !login.IsLogined(MangaGuid))
+        await login.DoLogin(MangaGuid).ConfigureAwait(false);
       return client;
     }
 
-    protected virtual void ConfigureCookieClient(CookieClient client, Uri mainUri, MangaSetting setting)
+    protected virtual void ConfigureCookieClient(CookieClient client, Uri mainUri, ILogin login)
     {
 
     }

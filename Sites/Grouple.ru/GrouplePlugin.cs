@@ -12,7 +12,7 @@ namespace Grouple
     public override Assembly Assembly { get { return Assembly.GetAssembly(this.GetType()); } }
     public override Type LoginType { get { return typeof(GroupleLogin); } }
     public override HistoryType HistoryType { get { return HistoryType.Chapter; } }
-    protected override void ConfigureCookieClient(CookieClient client, Uri mainUri, MangaSetting setting)
+    protected override void ConfigureCookieClient(CookieClient client, Uri mainUri, ILogin login)
     {
       var cookie = new Cookie
       {

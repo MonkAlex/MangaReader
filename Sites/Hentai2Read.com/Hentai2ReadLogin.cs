@@ -40,7 +40,7 @@ namespace Hentai2Read.com
 
       try
       {
-        var cookieClient = Hentai2ReadPlugin.Instance.GetCookieClient();
+        var cookieClient = await Hentai2ReadPlugin.Instance.GetCookieClient(false).ConfigureAwait(false);
         var loginResult = await cookieClient.UploadValuesTaskAsync(new Uri(this.MainUri + "login"), "POST", loginData).ConfigureAwait(false);
         LogoutNonce = Regex.Match(System.Text.Encoding.UTF8.GetString(loginResult), "logout\\/\\?_wpnonce=([a-z0-9]+)&", RegexOptions.Compiled).Groups[1].Value;
         isLogined = cookieClient.Cookie.GetCookies(this.MainUri)
@@ -60,7 +60,7 @@ namespace Hentai2Read.com
     {
       // https://hentai2read.com/logout/?_wpnonce=368febb749
       this.SetLogined(mangaType, false);
-      var cookieClient = Hentai2ReadPlugin.Instance.GetCookieClient();
+      var cookieClient = Hentai2ReadPlugin.Instance.GetCookieClient(false);
       await Page.GetPageAsync(new Uri(LogoutUri.OriginalString + $"/?_wpnonce={LogoutNonce}"), cookieClient).ConfigureAwait(false);
       return true;
     }
@@ -75,7 +75,7 @@ namespace Hentai2Read.com
       if (!isLogined)
         return bookmarks;
 
-      var cookieClient = Hentai2ReadPlugin.Instance.GetCookieClient();
+      var cookieClient = Hentai2ReadPlugin.Instance.GetCookieClient(false);
       var page = await Page.GetPageAsync(BookmarksUri, cookieClient).ConfigureAwait(false);
       document.LoadHtml(page.Content);
 

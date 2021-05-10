@@ -55,7 +55,7 @@ namespace Grouple
     /// </summary>
     public override async Task Refresh()
     {
-      var page = await Page.GetPageAsync(this.Uri, Plugin.GetCookieClient()).ConfigureAwait(false);
+      var page = await Page.GetPageAsync(this.Uri, Plugin.GetCookieClient(true)).ConfigureAwait(false);
       if (!page.HasContent)
         return;
 

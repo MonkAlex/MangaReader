@@ -27,7 +27,7 @@ namespace Hentaichan
 
     public override async Task UpdateNameAndStatus(IManga manga)
     {
-      var page = await Page.GetPageAsync(manga.Uri, HentaichanPlugin.Instance.GetCookieClient()).ConfigureAwait(false);
+      var page = await Page.GetPageAsync(manga.Uri, HentaichanPlugin.Instance.GetCookieClient(true)).ConfigureAwait(false);
       var name = string.Empty;
       try
       {
@@ -86,7 +86,7 @@ namespace Hentaichan
       try
       {
         var document = new HtmlDocument();
-        var mainPage = await Page.GetPageAsync(manga.Uri, HentaichanPlugin.Instance.GetCookieClient()).ConfigureAwait(false);
+        var mainPage = await Page.GetPageAsync(manga.Uri, HentaichanPlugin.Instance.GetCookieClient(true)).ConfigureAwait(false);
         var page = await GetPageWithRedirect(manga.Uri).ConfigureAwait(false);
         var content = page.Item1.Content;
         var uri = page.Item2;
@@ -154,7 +154,7 @@ namespace Hentaichan
 
     private async Task<Tuple<Page, Uri>> GetPageWithRedirect(Uri uri)
     {
-      var client = HentaichanPlugin.Instance.GetCookieClient();
+      var client = HentaichanPlugin.Instance.GetCookieClient(true);
       uri = new Uri(uri.OriginalString.Replace(@"/manga/", @"/online/"));
       var page = await Page.GetPageAsync(uri, client).ConfigureAwait(false);
       if (page.ResponseUri != uri)
@@ -206,7 +206,7 @@ namespace Hentaichan
     protected override async Task<(HtmlNodeCollection Nodes, Uri Uri, CookieClient CookieClient)> GetMangaNodes(string name, Uri host)
     {
       var searchHost = new Uri(host, "?do=search&subaction=search&story=" + WebUtility.UrlEncode(name));
-      var client = HentaichanPlugin.Instance.GetCookieClient();
+      var client = await HentaichanPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
       var page = await Page.GetPageAsync(searchHost, client).ConfigureAwait(false);
       if (!page.HasContent)
         return (null, null, null);

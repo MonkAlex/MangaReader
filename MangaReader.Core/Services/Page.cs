@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using MangaReader.Core.Account;
 using MangaReader.Core.Exception;
@@ -28,6 +30,41 @@ namespace MangaReader.Core.Services
         await Task.Delay(Delay).ConfigureAwait(false);
         return true;
       }
+      return false;
+    }
+
+    private static async Task<bool> ExceptionCanBeRetry(WebException ex)
+    {
+      if (ex.Status == WebExceptionStatus.Timeout)
+        return true;
+
+      if (await DelayOnExpectationFailed(ex).ConfigureAwait(false))
+        return true;
+
+      if (ex.HResult == -2146893023)
+        return true;
+
+      if (ex.HResult == 2147012721)
+        return true;
+
+      if (ex.InnerException is IOException)
+        return true;
+
+      if (ex.InnerException is SocketException)
+        return true;
+
+      if (ex.Response is HttpWebResponse httpWebResponse)
+      {
+        if (httpWebResponse.StatusCode == HttpStatusCode.InternalServerError)
+          return true;
+        if (httpWebResponse.StatusCode == HttpStatusCode.BadGateway)
+          return true;
+        if (httpWebResponse.StatusCode == HttpStatusCode.ServiceUnavailable)
+          return true;
+        if (httpWebResponse.StatusCode == HttpStatusCode.GatewayTimeout)
+          return true;
+      }
+
       return false;
     }
 
@@ -70,14 +107,13 @@ namespace MangaReader.Core.Services
       }
       catch (WebException ex)
       {
-        if (ex.Status != WebExceptionStatus.Timeout && !(await DelayOnExpectationFailed(ex).ConfigureAwait(false)) &&
-            ex.HResult != -2146893023 && ex.HResult != 2147012721)
-        {
-          Log.Exception(ex, $"{Strings.Page_GetPage_SiteOff}, ссылка: {url}, попытка номер - {restartCounter}");
-          return new Page(url);
-        }
+        Log.Exception(ex, $"{Strings.Page_GetPage_SiteOff}, ссылка: {url}, попытка номер - {restartCounter}");
         ++restartCounter;
-        return await GetPageAsync(url, client, restartCounter).ConfigureAwait(false);
+
+        if (await ExceptionCanBeRetry(ex).ConfigureAwait(false))
+          return await GetPageAsync(url, client, restartCounter).ConfigureAwait(false);
+
+        return new Page(url);
       }
       catch (System.Exception ex)
       {

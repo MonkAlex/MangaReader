@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using MangaReader.Core.Account;
@@ -58,13 +59,16 @@ namespace MangaReader.Core.Services
       }
       catch (WebException ex)
       {
+        Log.Exception(ex, $"{Strings.Page_GetPage_SiteOff}, ссылка: {url}, попытка номер - {restartCounter}");
+        ++restartCounter;
+
+        if (ex.InnerException is IOException)
+          return await GetPageAsync(url, client, restartCounter).ConfigureAwait(false);
+
         if (ex.Status != WebExceptionStatus.Timeout && !(await DelayOnExpectationFailed(ex).ConfigureAwait(false)) &&
             ex.HResult != -2146893023 && ex.HResult != 2147012721)
-        {
-          Log.Exception(ex, $"{Strings.Page_GetPage_SiteOff}, ссылка: {url}, попытка номер - {restartCounter}");
           return new Page(url);
-        }
-        ++restartCounter;
+
         return await GetPageAsync(url, client, restartCounter).ConfigureAwait(false);
       }
       catch (System.Exception ex)

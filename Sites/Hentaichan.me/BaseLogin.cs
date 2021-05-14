@@ -73,7 +73,7 @@ namespace Hentaichan
       }
     }
 
-    protected abstract Task<CookieClient> GetClient();
+    protected abstract Task<ISiteHttpClient> GetClient();
 
     public override async Task<bool> DoLogin(Guid mangaType)
     {
@@ -81,7 +81,7 @@ namespace Hentaichan
       if (isLogined || !this.CanLogin)
         return isLogined;
 
-      var loginData = new NameValueCollection
+      var loginData = new Dictionary<string, string>()
             {
                 {"login", "submit"},
                 {"login_name", this.Name},
@@ -92,8 +92,8 @@ namespace Hentaichan
       try
       {
         var cookieClient = await GetClient().ConfigureAwait(false);
-        await cookieClient.UploadValuesTaskAsync(new Uri(MainUri, "index.php"), "POST", loginData).ConfigureAwait(false);
-        this.UserId = cookieClient.Cookie.GetCookies(this.MainUri)
+        await cookieClient.Post(new Uri(MainUri, "index.php"), loginData).ConfigureAwait(false);
+        this.UserId = cookieClient.CookieContainer.GetCookies(this.MainUri)
           .Cast<Cookie>()
           .Where(c => c.Name == "dle_user_id")
           .Select(c => c.Value)

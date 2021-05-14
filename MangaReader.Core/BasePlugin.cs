@@ -26,22 +26,18 @@ namespace MangaReader.Core
 
     protected CookieContainer CookieContainer = new CookieContainer();
 
-    public async Task<CookieClient> GetCookieClient(bool withLogin)
+    public async Task<ISiteHttpClient> GetCookieClient(bool withLogin)
     {
       var login = NHibernate.Repository.GetStateless<MangaSetting>().Where(m => m.Manga == this.MangaGuid).Select(m => m.Login).Single();
       var mainUri = login.MainUri;
-      var client = new CookieClient(CookieContainer)
-      {
-        BaseAddress = mainUri.OriginalString,
-        Proxy = MangaSettingCache.Get(this.GetType()).Proxy,
-      };
+      var client = new SiteWebClient(mainUri, this, CookieContainer);
       this.ConfigureCookieClient(client, mainUri, login);
       if (withLogin && !login.IsLogined(MangaGuid))
         await login.DoLogin(MangaGuid).ConfigureAwait(false);
       return client;
     }
 
-    protected virtual void ConfigureCookieClient(CookieClient client, Uri mainUri, ILogin login)
+    protected virtual void ConfigureCookieClient(ISiteHttpClient client, Uri mainUri, ILogin login)
     {
 
     }

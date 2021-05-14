@@ -48,7 +48,8 @@ namespace MangaReader.Core.Account
       this.SetLogined(mangaType, false);
 
       var plugin = ConfigStorage.Plugins.Single(p => p.MangaGuid == mangaType);
-      await Page.GetPageAsync(LogoutUri, plugin.GetCookieClient(false)).ConfigureAwait(false);
+      var client = await plugin.GetCookieClient(false).ConfigureAwait(false);
+      await client.GetPage(LogoutUri).ConfigureAwait(false);
       return true;
     }
 

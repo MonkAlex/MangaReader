@@ -12,7 +12,7 @@ namespace Grouple
     public override Assembly Assembly { get { return Assembly.GetAssembly(this.GetType()); } }
     public override Type LoginType { get { return typeof(GroupleLogin); } }
     public override HistoryType HistoryType { get { return HistoryType.Chapter; } }
-    protected override void ConfigureCookieClient(CookieClient client, Uri mainUri, ILogin login)
+    protected override void ConfigureCookieClient(ISiteHttpClient client, Uri mainUri, ILogin login)
     {
       var cookie = new Cookie
       {
@@ -21,7 +21,7 @@ namespace Grouple
         Expires = DateTime.Today.AddYears(1),
         Domain = "." + mainUri.Host
       };
-      client.Cookie.Add(cookie);
+      client.CookieContainer.Add(cookie);
     }
   }
 }

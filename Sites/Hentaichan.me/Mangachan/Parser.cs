@@ -22,7 +22,8 @@ namespace Hentaichan.Mangachan
   {
     public override async Task UpdateNameAndStatus(IManga manga)
     {
-      var page = await Page.GetPageAsync(manga.Uri, MangachanPlugin.Instance.GetCookieClient(true)).ConfigureAwait(false);
+      var client = await MangachanPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
+      var page = await client.GetPage(manga.Uri).ConfigureAwait(false);
       var localizedName = new MangaName();
       try
       {
@@ -75,7 +76,8 @@ namespace Hentaichan.Mangachan
       try
       {
         var document = new HtmlDocument();
-        var content = (await Page.GetPageAsync(manga.Uri, MangachanPlugin.Instance.GetCookieClient(true)).ConfigureAwait(false)).Content;
+        var client = await MangachanPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
+        var content = (await client.GetPage(manga.Uri).ConfigureAwait(false)).Content;
         document.LoadHtml(content);
 
         var chapterNodes = document.DocumentNode.SelectNodes("//table[@class=\"table_cha\"]//a");
@@ -141,11 +143,11 @@ namespace Hentaichan.Mangachan
       return GetPreviewsImpl(this, manga);
     }
 
-    protected override async Task<(HtmlNodeCollection Nodes, Uri Uri, CookieClient CookieClient)> GetMangaNodes(string name, Uri host)
+    protected override async Task<(HtmlNodeCollection Nodes, Uri Uri, ISiteHttpClient CookieClient)> GetMangaNodes(string name, Uri host)
     {
       var searchHost = new Uri(host, "?do=search&subaction=search&story=" + WebUtility.UrlEncode(name));
       var client = await MangachanPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
-      var page = await Page.GetPageAsync(searchHost, client).ConfigureAwait(false);
+      var page = await client.GetPage(searchHost).ConfigureAwait(false);
       if (!page.HasContent)
         return (null, null, null);
 
@@ -157,7 +159,7 @@ namespace Hentaichan.Mangachan
       }).ConfigureAwait(false);
     }
 
-    protected override async Task<IManga> GetMangaFromNode(Uri host, CookieClient client, HtmlNode manga)
+    protected override async Task<IManga> GetMangaFromNode(Uri host, ISiteHttpClient client, HtmlNode manga)
     {
       var image = manga.SelectSingleNode(".//div[@class='manga_images']//img");
       var imageUri = image?.Attributes.Single(a => a.Name == "src").Value;
@@ -169,7 +171,7 @@ namespace Hentaichan.Mangachan
       var result = await Mangas.Create(new Uri(mangaUri)).ConfigureAwait(false);
       result.Name = WebUtility.HtmlDecode(mangaName);
       if (!string.IsNullOrWhiteSpace(imageUri))
-        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri)).ConfigureAwait(false);
+        result.Cover = await client.GetData(new Uri(host, imageUri)).ConfigureAwait(false);
       return result;
     }
 
@@ -180,7 +182,7 @@ namespace Hentaichan.Mangachan
       try
       {
         var document = new HtmlDocument();
-        var content = (await Page.GetPageAsync(manga.Uri, client).ConfigureAwait(false)).Content;
+        var content = (await client.GetPage(manga.Uri).ConfigureAwait(false)).Content;
         document.LoadHtml(content);
 
         var chapterNodes = document.DocumentNode.SelectNodes("//img[@id='cover']");
@@ -209,7 +211,7 @@ namespace Hentaichan.Mangachan
         byte[] image = null;
         try
         {
-          image = client.DownloadData(link);
+          image = await client.GetData(link).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -229,7 +231,8 @@ namespace Hentaichan.Mangachan
       try
       {
         var document = new HtmlDocument();
-        document.LoadHtml((await Page.GetPageAsync(chapter.Uri, MangachanPlugin.Instance.GetCookieClient(true)).ConfigureAwait(false)).Content);
+        var client = await MangachanPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
+        document.LoadHtml((await client.GetPage(chapter.Uri).ConfigureAwait(false)).Content);
 
         var i = 0;
         var imgs = Regex.Match(document.DocumentNode.OuterHtml, @"""(fullimg.*)", RegexOptions.IgnoreCase).Groups[1].Value.Remove(0, 9);

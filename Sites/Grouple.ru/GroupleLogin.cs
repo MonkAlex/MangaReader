@@ -27,7 +27,7 @@ namespace Grouple
       if (isLogined || !this.CanLogin)
         return isLogined;
 
-      var loginData = new NameValueCollection
+      var loginData = new Dictionary<string, string>()
       {
         {"username", this.Name},
         {"password", this.Password},
@@ -37,8 +37,8 @@ namespace Grouple
       {
         var plugin = ConfigStorage.Plugins.Single(p => p.MangaGuid == mangaType);
         var client = await plugin.GetCookieClient(false).ConfigureAwait(false);
-        var result = await client.UploadValuesTaskAsync("login/authenticate", "POST", loginData).ConfigureAwait(false);
-        isLogined = Encoding.UTF8.GetString(result).Contains("login/logout");
+        var result = await client.Post(new Uri(this.MainUri, "login/authenticate"), loginData).ConfigureAwait(false);
+        isLogined = result.Content.Contains("login/logout");
         this.SetLogined(mangaType, isLogined);
       }
       catch (System.Exception ex)
@@ -59,7 +59,8 @@ namespace Grouple
         return bookmarks;
 
       var plugin = ConfigStorage.Plugins.Single(p => p.MangaGuid == mangaType);
-      var page = await Page.GetPageAsync(BookmarksUri, plugin.GetCookieClient(false)).ConfigureAwait(false);
+      var client = await plugin.GetCookieClient(false).ConfigureAwait(false);
+      var page = await client.GetPage(BookmarksUri).ConfigureAwait(false);
       document.LoadHtml(page.Content);
 
       var firstOrDefault = document.DocumentNode

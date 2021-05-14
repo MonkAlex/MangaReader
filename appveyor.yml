@@ -9,6 +9,12 @@ build:
 configuration:
 - Debug
 test: off
+init:
+- ps: |
+    $env:artifact_suffix = $env:APPVEYOR_BUILD_VERSION
+    if ($env:APPVEYOR_REPO_TAG -eq 'true') {
+      $env:artifact_suffix = $env:APPVEYOR_REPO_TAG_NAME
+    }
 after_build:
   - nuget install OpenCover -Version 4.6.519 -ExcludeVersion
   - nuget install Appveyor.TestLogger
@@ -23,19 +29,19 @@ after_build:
 
 artifacts:
   - path: MangaReader\bin\$(configuration)
-    name: MangaReader_%APPVEYOR_BUILD_VERSION%
+    name: MangaReader_%artifact_suffix%
     type: zip
 
   - path: MangaReader.Avalonia\bin\Publish\netcoreapp3.0\win-x64
-    name: MangaReader.Avalonia.Windows_%APPVEYOR_BUILD_VERSION%
+    name: MangaReader.Avalonia.Windows_%artifact_suffix%
     type: zip
 
   - path: MangaReader.Avalonia\bin\Publish\netcoreapp3.0\linux-x64
-    name: MangaReader.Avalonia.Linux_%APPVEYOR_BUILD_VERSION%
+    name: MangaReader.Avalonia.Linux_%artifact_suffix%
     type: zip
 
   - path: MangaReader.Avalonia\bin\Publish\netcoreapp3.0\osx-x64
-    name: MangaReader.Avalonia.macOS_%APPVEYOR_BUILD_VERSION%
+    name: MangaReader.Avalonia.macOS_%artifact_suffix%
     type: zip
 
   - path: '**\*.log'

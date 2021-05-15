@@ -101,9 +101,9 @@ namespace MangaReader.Core.Account
 
         return content;
       }
-      catch (HttpRequestException ex) when (ex.InnerException is System.Net.Sockets.SocketException)
+      catch (HttpRequestException ex) when (ex.InnerException is System.Net.Sockets.SocketException || ex.InnerException is System.IO.IOException)
       {
-        Log.Error($"{Strings.Page_GetPage_SiteOff}, ссылка: {uri}, попытка номер - {restartCounter}");
+        Log.Exception(ex, $"{Strings.Page_GetPage_SiteOff}, ссылка: {uri}, попытка номер - {restartCounter}");
         ++restartCounter;
         return await DoWithRestarts(uri, client, func, restartCounter).ConfigureAwait(false);
       }

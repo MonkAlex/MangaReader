@@ -30,7 +30,7 @@ namespace MangaReader.Core
     {
       var login = NHibernate.Repository.GetStateless<MangaSetting>().Where(m => m.Manga == this.MangaGuid).Select(m => m.Login).Single();
       var mainUri = login.MainUri;
-      var client = new SiteWebClient(mainUri, this, CookieContainer);
+      var client = new SiteHttpClient(mainUri, this, CookieContainer);
       this.ConfigureCookieClient(client, mainUri, login);
       if (withLogin && !login.IsLogined(MangaGuid))
         await login.DoLogin(MangaGuid).ConfigureAwait(false);

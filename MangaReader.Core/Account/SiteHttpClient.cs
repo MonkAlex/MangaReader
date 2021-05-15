@@ -17,8 +17,7 @@ namespace MangaReader.Core.Account
     {
       var content = await httpClient.GetAsync(uri).ConfigureAwait(false);
       var body = await content.Content.ReadAsStringAsync().ConfigureAwait(false);
-      if (content.Headers.Location != null)
-        uri = content.Headers.Location;
+      uri = GetRequestResponseUri(uri, content);
       return new Page(body, uri);
     }
 
@@ -32,9 +31,17 @@ namespace MangaReader.Core.Account
     {
       var content = await httpClient.PostAsync(uri, new FormUrlEncodedContent(parameters)).ConfigureAwait(false);
       var body = await content.Content.ReadAsStringAsync().ConfigureAwait(false);
+      uri = GetRequestResponseUri(uri, content);
+      return new Page(body, uri);
+    }
+
+    private static Uri GetRequestResponseUri(Uri uri, HttpResponseMessage content)
+    {
       if (content.Headers.Location != null)
         uri = content.Headers.Location;
-      return new Page(body, uri);
+      else if (content.RequestMessage.RequestUri != null)
+        uri = content.RequestMessage.RequestUri;
+      return uri;
     }
 
     public SiteHttpClient(Uri mainUri, IPlugin plugin, CookieContainer cookieContainer)

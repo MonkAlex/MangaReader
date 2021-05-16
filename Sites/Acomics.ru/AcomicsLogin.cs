@@ -26,7 +26,7 @@ namespace Acomics
       if (isLogined || !this.CanLogin)
         return isLogined;
 
-      var loginData = new NameValueCollection
+      var loginData = new Dictionary<string, string>()
             {
                 {"submit", "login"},
                 {"username", this.Name},
@@ -37,11 +37,8 @@ namespace Acomics
       try
       {
         var cookieClient = await AcomicsPlugin.Instance.GetCookieClient(false).ConfigureAwait(false);
-        await cookieClient.UploadValuesTaskAsync(new Uri(this.MainUri + "action/authLogin"), "POST", loginData).ConfigureAwait(false);
-        this.PasswordHash = cookieClient.Cookie.GetCookies(this.MainUri)
-            .Cast<Cookie>()
-            .Single(c => c.Name == "hash")
-            .Value;
+        await cookieClient.Post(new Uri(this.MainUri + "action/authLogin"), loginData).ConfigureAwait(false);
+        this.PasswordHash = cookieClient.GetCookie("hash");
         isLogined = true;
       }
       catch (System.Exception ex)
@@ -63,8 +60,8 @@ namespace Acomics
       if (!isLogined)
         return bookmarks;
 
-      var cookieClient = AcomicsPlugin.Instance.GetCookieClient(false);
-      var page = await Page.GetPageAsync(BookmarksUri, cookieClient).ConfigureAwait(false);
+      var cookieClient = await AcomicsPlugin.Instance.GetCookieClient(false).ConfigureAwait(false);
+      var page = await cookieClient.GetPage(BookmarksUri).ConfigureAwait(false);
       document.LoadHtml(page.Content);
 
       var nodes = document.DocumentNode.SelectNodes("//table[@class=\"decor\"]//a");

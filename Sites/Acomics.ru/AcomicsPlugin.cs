@@ -18,9 +18,9 @@ namespace Acomics
     public override Guid MangaGuid { get { return Manga; } }
     public override Type MangaType { get { return typeof(Acomics); } }
     public override Type LoginType { get { return typeof(AcomicsLogin); } }
-    protected override void ConfigureCookieClient(CookieClient client, Uri mainUri, ILogin login)
+    protected override void ConfigureCookieClient(ISiteHttpClient client, ILogin login)
     {
-      client.Cookie.Add(new Cookie("ageRestrict", "40", "/", mainUri.Host));
+      client.AddCookie("ageRestrict", "40");
     }
 
     public override HistoryType HistoryType { get { return HistoryType.Page; } }

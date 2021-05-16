@@ -9,7 +9,7 @@ namespace Grouple
 {
   public class MintmangaParser : GroupleParser
   {
-    protected override Task<CookieClient> GetClient()
+    protected override Task<ISiteHttpClient> GetClient()
     {
       return MintmangaPlugin.Instance.GetCookieClient(true);
     }

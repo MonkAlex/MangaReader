@@ -13,7 +13,7 @@ namespace MangaReader.Core
     System.Type LoginType { get; }
     Services.MangaSetting GetSettings();
     ISiteParser GetParser();
-    Task<CookieClient> GetCookieClient(bool withLogin);
+    Task<ISiteHttpClient> GetCookieClient(bool withLogin);
     HistoryType HistoryType { get; }
   }
 

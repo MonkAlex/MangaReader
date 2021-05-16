@@ -19,7 +19,7 @@ namespace Hentaichan.Mangachan
     /// </summary>
     public override Uri BookmarksUri { get { return new Uri(this.MainUri, $"user/{Name}/favorites"); } }
 
-    protected override Task<CookieClient> GetClient()
+    protected override Task<ISiteHttpClient> GetClient()
     {
       return MangachanPlugin.Instance.GetCookieClient(false);
     }
@@ -34,7 +34,8 @@ namespace Hentaichan.Mangachan
       if (!isLogined)
         return bookmarks;
 
-      var page = await Page.GetPageAsync(BookmarksUri, GetClient()).ConfigureAwait(false);
+      var client = await GetClient().ConfigureAwait(false);
+      var page = await client.GetPage(BookmarksUri).ConfigureAwait(false);
       document.LoadHtml(page.Content);
 
       var nodes = document.DocumentNode

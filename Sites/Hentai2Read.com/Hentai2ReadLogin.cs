@@ -27,7 +27,7 @@ namespace Hentai2Read.com
       if (isLogined || !this.CanLogin)
         return isLogined;
 
-      var loginData = new NameValueCollection
+      var loginData = new Dictionary<string, string>()
             {
               {"action", "login" },
               {"log", this.Name },
@@ -41,11 +41,9 @@ namespace Hentai2Read.com
       try
       {
         var cookieClient = await Hentai2ReadPlugin.Instance.GetCookieClient(false).ConfigureAwait(false);
-        var loginResult = await cookieClient.UploadValuesTaskAsync(new Uri(this.MainUri + "login"), "POST", loginData).ConfigureAwait(false);
-        LogoutNonce = Regex.Match(System.Text.Encoding.UTF8.GetString(loginResult), "logout\\/\\?_wpnonce=([a-z0-9]+)&", RegexOptions.Compiled).Groups[1].Value;
-        isLogined = cookieClient.Cookie.GetCookies(this.MainUri)
-          .Cast<Cookie>()
-          .Any(c => c.Name.StartsWith("wordpress_logged_in"));
+        var loginResult = await cookieClient.Post(new Uri(this.MainUri + "login"), loginData).ConfigureAwait(false);
+        LogoutNonce = Regex.Match(loginResult.Content, "logout\\/\\?_wpnonce=([a-z0-9]+)&", RegexOptions.Compiled).Groups[1].Value;
+        isLogined = cookieClient.GetCookies().Any(c => c.Name.StartsWith("wordpress_logged_in"));
       }
       catch (System.Exception ex)
       {
@@ -60,8 +58,8 @@ namespace Hentai2Read.com
     {
       // https://hentai2read.com/logout/?_wpnonce=368febb749
       this.SetLogined(mangaType, false);
-      var cookieClient = Hentai2ReadPlugin.Instance.GetCookieClient(false);
-      await Page.GetPageAsync(new Uri(LogoutUri.OriginalString + $"/?_wpnonce={LogoutNonce}"), cookieClient).ConfigureAwait(false);
+      var cookieClient = await Hentai2ReadPlugin.Instance.GetCookieClient(false).ConfigureAwait(false);
+      await cookieClient.GetPage(new Uri(LogoutUri.OriginalString + $"/?_wpnonce={LogoutNonce}")).ConfigureAwait(false);
       return true;
     }
 
@@ -75,8 +73,8 @@ namespace Hentai2Read.com
       if (!isLogined)
         return bookmarks;
 
-      var cookieClient = Hentai2ReadPlugin.Instance.GetCookieClient(false);
-      var page = await Page.GetPageAsync(BookmarksUri, cookieClient).ConfigureAwait(false);
+      var cookieClient = await Hentai2ReadPlugin.Instance.GetCookieClient(false).ConfigureAwait(false);
+      var page = await cookieClient.GetPage(BookmarksUri).ConfigureAwait(false);
       document.LoadHtml(page.Content);
 
       var nodes = document.DocumentNode.SelectNodes("//div[@class=\"col-xs-6 col-sm-4 col-md-3 col-xl-2\"]");

@@ -16,7 +16,7 @@ namespace Hentaichan
 {
   public class HentaichanLogin : BaseLogin
   {
-    protected override Task<CookieClient> GetClient()
+    protected override Task<ISiteHttpClient> GetClient()
     {
       return HentaichanPlugin.Instance.GetCookieClient(false);
     }
@@ -33,9 +33,10 @@ namespace Hentaichan
 
       var pages = new List<Uri>() { BookmarksUri };
 
+      var client = await GetClient().ConfigureAwait(false);
       for (int i = 0; i < pages.Count; i++)
       {
-        var page = await Page.GetPageAsync(pages[i], GetClient()).ConfigureAwait(false);
+        var page = await client.GetPage(pages[i]).ConfigureAwait(false);
         document.LoadHtml(page.Content);
 
         if (i == 0)

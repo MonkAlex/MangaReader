@@ -119,9 +119,9 @@ namespace MangaReader.Core
         .Where(m => m != null);
     }
 
-    protected abstract Task<(HtmlNodeCollection Nodes, Uri Uri, CookieClient CookieClient)> GetMangaNodes(string name, Uri host);
+    protected abstract Task<(HtmlNodeCollection Nodes, Uri Uri, ISiteHttpClient CookieClient)> GetMangaNodes(string name, Uri host);
 
-    protected abstract Task<IManga> GetMangaFromNode(Uri host, CookieClient client, HtmlNode manga);
+    protected abstract Task<IManga> GetMangaFromNode(Uri host, ISiteHttpClient client, HtmlNode manga);
 
     public abstract IMapper GetMapper();
   }

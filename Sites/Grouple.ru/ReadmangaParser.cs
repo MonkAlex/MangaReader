@@ -9,7 +9,7 @@ namespace Grouple
 {
   public class ReadmangaParser : GroupleParser
   {
-    protected override Task<CookieClient> GetClient()
+    protected override Task<ISiteHttpClient> GetClient()
     {
       return ReadmangaPlugin.Instance.GetCookieClient(true);
     }

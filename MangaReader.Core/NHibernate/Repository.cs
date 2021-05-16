@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 
@@ -27,6 +28,14 @@ namespace MangaReader.Core.NHibernate
       using (var session = Mapping.GetStatelessSession())
       {
         return session.Query<T>().ToList();
+      }
+    }
+
+    public static Task<List<T>> GetStatelessAsync<T>() where T : Entity.IEntity
+    {
+      using (var session = Mapping.GetStatelessSession())
+      {
+        return session.Query<T>().ToListAsync();
       }
     }
 

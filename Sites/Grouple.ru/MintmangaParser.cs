@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Threading.Tasks;
+using AutoMapper;
 using AutoMapper.EquivalencyExpression;
 using MangaReader.Core.Account;
 using MangaReader.Core.DataTrasferObject;
@@ -8,9 +9,9 @@ namespace Grouple
 {
   public class MintmangaParser : GroupleParser
   {
-    public override CookieClient GetClient()
+    protected override Task<ISiteHttpClient> GetClient()
     {
-      return new MintmangaClient();
+      return MintmangaPlugin.Instance.GetCookieClient(true);
     }
 
     public override IMapper GetMapper()

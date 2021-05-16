@@ -1,4 +1,7 @@
-﻿namespace MangaReader.Core
+﻿using System.Threading.Tasks;
+using MangaReader.Core.Account;
+
+namespace MangaReader.Core
 {
   public interface IPlugin
   {
@@ -10,6 +13,7 @@
     System.Type LoginType { get; }
     Services.MangaSetting GetSettings();
     ISiteParser GetParser();
+    Task<ISiteHttpClient> GetCookieClient(bool withLogin);
     HistoryType HistoryType { get; }
   }
 

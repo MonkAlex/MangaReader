@@ -73,12 +73,15 @@ namespace Hentaichan
       }
     }
 
+    protected abstract Task<ISiteHttpClient> GetClient();
+
     public override async Task<bool> DoLogin(Guid mangaType)
     {
-      if (IsLogined || !this.CanLogin)
-        return IsLogined;
+      var isLogined = this.IsLogined(mangaType);
+      if (isLogined || !this.CanLogin)
+        return isLogined;
 
-      var loginData = new NameValueCollection
+      var loginData = new Dictionary<string, string>()
             {
                 {"login", "submit"},
                 {"login_name", this.Name},
@@ -88,19 +91,18 @@ namespace Hentaichan
 
       try
       {
-        await GetClient().UploadValuesTaskAsync(new Uri(MainUri, "index.php"), "POST", loginData).ConfigureAwait(false);
-        this.UserId = ClientCookie.GetCookies(this.MainUri)
-            .Cast<Cookie>()
-            .Single(c => c.Name == "dle_user_id")
-            .Value;
-        this.IsLogined = true;
+        var cookieClient = await GetClient().ConfigureAwait(false);
+        await cookieClient.Post(new Uri(MainUri, "index.php"), loginData).ConfigureAwait(false);
+        this.UserId = cookieClient.GetCookie("dle_user_id");
+        isLogined = true;
       }
       catch (System.Exception ex)
       {
         Log.Exception(ex, Strings.Login_Failed);
-        this.IsLogined = false;
+        isLogined = false;
       }
-      return IsLogined;
+      this.SetLogined(mangaType, isLogined);
+      return isLogined;
     }
 
     protected abstract override Task<List<IManga>> DownloadBookmarks(Guid mangaType);

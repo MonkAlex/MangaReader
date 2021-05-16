@@ -6,6 +6,7 @@ using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services.Config;
 using NUnit.Framework;
+using Tests.Entities.MangaSetting;
 
 namespace Tests.Entities.Manga
 {
@@ -95,16 +96,15 @@ namespace Tests.Entities.Manga
 
     private async Task Login()
     {
+      var (testLogin, _) = AllLoginTests.GetLogins().Single(l => l.Item2 == HentaichanPlugin.Manga);
       using (var context = Repository.GetEntityContext())
       {
-        var userId = "235332";
         var setting = ConfigStorage.GetPlugin<Hentaichan.Hentaichan>().GetSettings();
-        var login = setting.Login as Hentaichan.HentaichanLogin;
-        if (login.UserId != userId)
+        var login = setting.Login;
+        if (login.Name != testLogin.Name)
         {
-          login.UserId = userId;
-          login.PasswordHash = "0578caacc02411f8c9a1a0af31b3befa";
-          login.IsLogined = true;
+          setting.Login = testLogin;
+          await testLogin.DoLogin(HentaichanPlugin.Manga).ConfigureAwait(false);
           await context.Save(setting).ConfigureAwait(false);
         }
       }
@@ -115,10 +115,8 @@ namespace Tests.Entities.Manga
       using (var context = Repository.GetEntityContext())
       {
         var setting = ConfigStorage.GetPlugin<Hentaichan.Hentaichan>().GetSettings();
-        var login = setting.Login as Hentaichan.HentaichanLogin;
-        login.UserId = "";
-        login.PasswordHash = "";
-        login.IsLogined = false;
+        var login = setting.Login;
+        await login.Logout(HentaichanPlugin.Manga).ConfigureAwait(false);
         await context.Save(setting).ConfigureAwait(false);
       }
     }

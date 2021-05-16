@@ -6,7 +6,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using MangaReader.Core.Manga;
 using MangaReader.Core.Services.Config;
 using System.Threading.Tasks;
 using MangaReader.Core.NHibernate;
@@ -119,22 +118,6 @@ namespace MangaReader.Core.Services
 
       foreach (var item in items)
         collection.Add(item);
-    }
-
-    public static Uri GetLoginMainUri<T>() where T : IManga
-    {
-      if (NHibernate.Mapping.Initialized)
-      {
-        var plugin = ConfigStorage.GetPlugin<T>();
-        if (plugin != null)
-        {
-          var login = plugin.GetSettings();
-          if (login != null)
-            return login.Login.MainUri;
-        }
-      }
-
-      return null;
     }
 
     public static async Task SaveAll<T>(this IEnumerable<T> objects, RepositoryContext context) where T : Entity.IEntity

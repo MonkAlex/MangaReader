@@ -40,7 +40,7 @@ namespace MangaReader.ViewModel
       }
     }
 
-    public bool CanEdit { get { return IsEnabled && HasLogin && !login.IsLogined; } }
+    public bool CanEdit { get { return IsEnabled && HasLogin && !login.IsLogined(mangaType); } }
 
     public bool IsEnabled
     {

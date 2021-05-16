@@ -14,27 +14,28 @@ namespace Hentaichan.Mangachan
 {
   public class MangachanLogin : BaseLogin
   {
-    protected override CookieClient GetClient()
-    {
-      return new MangachanClient() { BaseAddress = MainUri.ToString(), Cookie = this.ClientCookie };
-    }
-
     /// <summary>
     /// https://manga-chan.me//user/RandomUserName/favorites
     /// </summary>
     public override Uri BookmarksUri { get { return new Uri(this.MainUri, $"user/{Name}/favorites"); } }
+
+    protected override Task<ISiteHttpClient> GetClient()
+    {
+      return MangachanPlugin.Instance.GetCookieClient(false);
+    }
 
     protected override async Task<List<IManga>> DownloadBookmarks(Guid mangaType)
     {
       var bookmarks = new List<IManga>();
       var document = new HtmlDocument();
 
-      await this.DoLogin(mangaType).ConfigureAwait(false);
+      var isLogined = await this.DoLogin(mangaType).ConfigureAwait(false);
 
-      if (!IsLogined)
+      if (!isLogined)
         return bookmarks;
 
-      var page = await Page.GetPageAsync(BookmarksUri, GetClient()).ConfigureAwait(false);
+      var client = await GetClient().ConfigureAwait(false);
+      var page = await client.GetPage(BookmarksUri).ConfigureAwait(false);
       document.LoadHtml(page.Content);
 
       var nodes = document.DocumentNode

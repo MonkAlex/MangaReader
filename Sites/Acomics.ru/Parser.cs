@@ -22,14 +22,6 @@ namespace Acomics
     private static readonly string VolumeXPath = string.Format("//*[@class=\"{0}\"]", VolumeClassName);
     private static readonly string ChapterXPath = "//div[@class=\"chapters\"]//a";
 
-    public override CookieClient GetClient()
-    {
-      var host = Generic.GetLoginMainUri<Acomics>().Host;
-      var client = new AcomicsClient();
-      client.Cookie.Add(new Cookie("ageRestrict", "40", "/", host));
-      return client;
-    }
-
     /// <summary>
     /// Обновить название и статус манги.
     /// </summary>
@@ -38,8 +30,9 @@ namespace Acomics
     {
       try
       {
+        var client = await AcomicsPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
         var document = new HtmlDocument();
-        document.LoadHtml((await Page.GetPageAsync(new Uri(manga.Uri.OriginalString + @"/about"), this.GetClient()).ConfigureAwait(false)).Content);
+        document.LoadHtml((await client.GetPage(new Uri(manga.Uri.OriginalString + @"/about")).ConfigureAwait(false)).Content);
         var nameNode = document.DocumentNode.SelectSingleNode("//head//meta[@property=\"og:title\"]");
         if (nameNode != null && nameNode.Attributes.Any(a => Equals(a.Name, "content")))
         {
@@ -76,8 +69,9 @@ namespace Acomics
     {
       try
       {
+        var client = await AcomicsPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
         var document = new HtmlDocument();
-        document.LoadHtml((await Page.GetPageAsync(new Uri(manga.Uri.OriginalString + @"/content"), this.GetClient()).ConfigureAwait(false)).Content);
+        document.LoadHtml((await client.GetPage(new Uri(manga.Uri.OriginalString + @"/content")).ConfigureAwait(false)).Content);
         manga.HasVolumes = document.DocumentNode.SelectNodes(VolumeXPath) != null;
         manga.HasChapters = document.DocumentNode.SelectNodes(ChapterXPath) != null;
       }
@@ -95,8 +89,9 @@ namespace Acomics
       var pages = new List<MangaPageDto>();
       try
       {
+        var client = await AcomicsPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
         var document = new HtmlDocument();
-        document.LoadHtml((await Page.GetPageAsync(new Uri(manga.Uri.OriginalString + @"/content"), this.GetClient()).ConfigureAwait(false)).Content);
+        document.LoadHtml((await client.GetPage(new Uri(manga.Uri.OriginalString + @"/content")).ConfigureAwait(false)).Content);
 
         var volumeNodes = document.DocumentNode.SelectNodes(VolumeXPath);
         if (volumeNodes != null)
@@ -201,8 +196,8 @@ namespace Acomics
       try
       {
         var document = new HtmlDocument();
-        var client = this.GetClient();
-        document.LoadHtml((await Page.GetPageAsync(new Uri(manga.Uri.OriginalString + @"/banner"), client).ConfigureAwait(false)).Content);
+        var client = await AcomicsPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
+        document.LoadHtml((await client.GetPage(new Uri(manga.Uri.OriginalString + @"/banner")).ConfigureAwait(false)).Content);
         var banners = document.DocumentNode.SelectSingleNode("//div[@class='serial-content']");
         var image = banners.ChildNodes.SkipWhile(n => n.InnerText != "160x90").Skip(1).FirstOrDefault();
         var src = image.ChildNodes[0].Attributes.Single(a => a.Name == "src").Value;
@@ -211,17 +206,17 @@ namespace Acomics
           link = new Uri(manga.Setting.MainUri, src);
         else
           link = new Uri(src);
-        result = client.DownloadData(link);
+        result = await client.GetData(link).ConfigureAwait(false);
       }
       catch (Exception ex) { Log.Exception(ex); }
       return new[] { result };
     }
 
-    protected override async Task<(HtmlNodeCollection Nodes, Uri Uri, CookieClient CookieClient)> GetMangaNodes(string name, Uri host)
+    protected override async Task<(HtmlNodeCollection Nodes, Uri Uri, ISiteHttpClient CookieClient)> GetMangaNodes(string name, Uri host)
     {
       var searchHost = new Uri(host, "search?keyword=" + WebUtility.UrlEncode(name));
-      var client = GetClient();
-      var page = await Page.GetPageAsync(searchHost, client).ConfigureAwait(false);
+      var client = await AcomicsPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
+      var page = await client.GetPage(searchHost).ConfigureAwait(false);
       if (!page.HasContent)
         return (null, null, null);
 
@@ -233,7 +228,7 @@ namespace Acomics
       }).ConfigureAwait(false);
     }
 
-    protected override async Task<IManga> GetMangaFromNode(Uri host, CookieClient client, HtmlNode manga)
+    protected override async Task<IManga> GetMangaFromNode(Uri host, ISiteHttpClient client, HtmlNode manga)
     {
       var image = manga.SelectSingleNode(".//td[@class='catdata1']//a//img");
       var imageUri = image?.Attributes.Single(a => a.Name == "src").Value;
@@ -245,7 +240,7 @@ namespace Acomics
       var result = await Mangas.Create(new Uri(host, mangaUri)).ConfigureAwait(false);
       result.Name = WebUtility.HtmlDecode(mangaName);
       if (!string.IsNullOrWhiteSpace(imageUri))
-        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri)).ConfigureAwait(false);
+        result.Cover = await client.GetData(new Uri(host, imageUri)).ConfigureAwait(false);
       return result;
     }
 
@@ -261,15 +256,15 @@ namespace Acomics
       var images = new List<Uri>();
       try
       {
-        var adultClient = this.GetClient();
+        var adultClient = await AcomicsPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
         var document = new HtmlDocument();
-        document.LoadHtml((await Page.GetPageAsync(uri, adultClient).ConfigureAwait(false)).Content);
+        document.LoadHtml((await adultClient.GetPage(uri).ConfigureAwait(false)).Content);
         var last = document.DocumentNode.SelectSingleNode("//nav[@class='serial']//a[@class='read2']").Attributes[1].Value;
         var count = int.Parse(last.Remove(0, last.LastIndexOf('/') + 1));
         var list = uri.GetLeftPart(UriPartial.Authority) + document.DocumentNode.SelectSingleNode("//nav[@class='serial']//a[@class='read3']").Attributes[1].Value;
         for (var i = 0; i < count; i = i + 5)
         {
-          document.LoadHtml((await Page.GetPageAsync(new Uri(list + "?skip=" + i), adultClient).ConfigureAwait(false)).Content);
+          document.LoadHtml((await adultClient.GetPage(new Uri(list + "?skip=" + i)).ConfigureAwait(false)).Content);
           foreach (var node in document.DocumentNode.SelectNodes("//div[@class=\"issue\"]//a"))
           {
             links.Add(new Uri(node.Attributes[0].Value));

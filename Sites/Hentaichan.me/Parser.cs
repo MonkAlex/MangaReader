@@ -25,29 +25,10 @@ namespace Hentaichan
     private const string NeedRegister = "Контент запрещен на территории РФ";
     private const string IsDevelopment = "?development_access=true";
 
-    public override CookieClient GetClient()
-    {
-      var setting = ConfigStorage.GetPlugin<Hentaichan>().GetSettings();
-      var client = new HentaichanClient();
-      if (setting != null)
-      {
-        var login = (HentaichanLogin) setting.Login;
-        if (!login.CanLogin || string.IsNullOrWhiteSpace(login.UserId))
-          login.DoLogin(HentaichanPlugin.Manga).Wait();
-
-        if (!string.IsNullOrWhiteSpace(login.UserId))
-        {
-          var host = Generic.GetLoginMainUri<Hentaichan>().Host;
-          client.Cookie.Add(new Cookie("dle_user_id", login.UserId, "/", host));
-          client.Cookie.Add(new Cookie("dle_password", login.PasswordHash, "/", host));
-        }
-      }
-      return client;
-    }
-
     public override async Task UpdateNameAndStatus(IManga manga)
     {
-      var page = await Page.GetPageAsync(manga.Uri, GetClient()).ConfigureAwait(false);
+      var client = await HentaichanPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
+      var page = await client.GetPage(manga.Uri).ConfigureAwait(false);
       var name = string.Empty;
       try
       {
@@ -106,7 +87,8 @@ namespace Hentaichan
       try
       {
         var document = new HtmlDocument();
-        var mainPage = await Page.GetPageAsync(manga.Uri, GetClient()).ConfigureAwait(false);
+        var client = await HentaichanPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
+        var mainPage = await client.GetPage(manga.Uri).ConfigureAwait(false);
         var page = await GetPageWithRedirect(manga.Uri).ConfigureAwait(false);
         var content = page.Item1.Content;
         var uri = page.Item2;
@@ -174,15 +156,16 @@ namespace Hentaichan
 
     private async Task<Tuple<Page, Uri>> GetPageWithRedirect(Uri uri)
     {
+      var client = await HentaichanPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
       uri = new Uri(uri.OriginalString.Replace(@"/manga/", @"/online/"));
-      var page = await Page.GetPageAsync(uri, GetClient()).ConfigureAwait(false);
+      var page = await client.GetPage(uri).ConfigureAwait(false);
       if (page.ResponseUri != uri)
       {
         var url = page.ResponseUri.OriginalString;
         if (!url.EndsWith(IsDevelopment))
           url += IsDevelopment;
         uri = new Uri(url);
-        page = await Page.GetPageAsync(uri, GetClient()).ConfigureAwait(false);
+        page = await client.GetPage(uri).ConfigureAwait(false);
       }
 
       return new Tuple<Page, Uri>(page, uri);
@@ -222,11 +205,11 @@ namespace Hentaichan
       return Mangachan.Parser.GetPreviewsImpl(this, manga);
     }
 
-    protected override async Task<(HtmlNodeCollection Nodes, Uri Uri, CookieClient CookieClient)> GetMangaNodes(string name, Uri host)
+    protected override async Task<(HtmlNodeCollection Nodes, Uri Uri, ISiteHttpClient CookieClient)> GetMangaNodes(string name, Uri host)
     {
       var searchHost = new Uri(host, "?do=search&subaction=search&story=" + WebUtility.UrlEncode(name));
-      var client = GetClient();
-      var page = await Page.GetPageAsync(searchHost, client).ConfigureAwait(false);
+      var client = await HentaichanPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
+      var page = await client.GetPage(searchHost).ConfigureAwait(false);
       if (!page.HasContent)
         return (null, null, null);
 
@@ -238,7 +221,7 @@ namespace Hentaichan
       }).ConfigureAwait(false);
     }
 
-    protected override async Task<IManga> GetMangaFromNode(Uri host, CookieClient client, HtmlNode manga)
+    protected override async Task<IManga> GetMangaFromNode(Uri host, ISiteHttpClient client, HtmlNode manga)
     {
       var image = manga.SelectSingleNode(".//div[@class='manga_images']//img");
       var imageUri = image?.Attributes.Single(a => a.Name == "src").Value;
@@ -254,7 +237,7 @@ namespace Hentaichan
       var result = await Mangas.Create(new Uri(mangaUri)).ConfigureAwait(false);
       result.Name = WebUtility.HtmlDecode(mangaName);
       if (!string.IsNullOrWhiteSpace(imageUri))
-        result.Cover = await client.DownloadDataTaskAsync(new Uri(host, imageUri)).ConfigureAwait(false);
+        result.Cover = await client.GetData(new Uri(host, imageUri)).ConfigureAwait(false);
       return result;
     }
 

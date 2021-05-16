@@ -87,15 +87,6 @@ namespace Tests
       IManga manga;
       using (var context = Repository.GetEntityContext("Description"))
       {
-        if (mangaInfo.Uri == MangaInfos.Mangachan.EveScramble.Uri)
-        {
-          var login = await context.Get<MangachanLogin>().SingleAsync().ConfigureAwait(false);
-          login.PasswordHash = "e84fce6c43aacd7f8452409a63083c18";
-          login.UserId = "282433";
-          login.IsLogined = true;
-          await context.Save(login).ConfigureAwait(false);
-        }
-
         var mangaUri = new Uri(mangaInfo.Uri);
         var existsManga = await context.Get<IManga>().FirstOrDefaultAsync(m => m.Uri == mangaUri).ConfigureAwait(false);
         if (existsManga != null)

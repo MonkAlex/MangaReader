@@ -8,13 +8,13 @@
 
     bool CanLogin { get; }
 
-    bool IsLogined { get; set; }
-
     System.Uri MainUri { get; set; }
 
     System.Uri LogoutUri { get; }
 
     System.Uri BookmarksUri { get; }
+
+    bool IsLogined(System.Guid mangaType);
 
     System.Threading.Tasks.Task<bool> DoLogin(System.Guid mangaType);
 

@@ -6,7 +6,7 @@ using MangaReader.Core.Services;
 namespace MangaReader.Core.Account
 {
   [System.ComponentModel.DesignerCategory("Code")]
-  public abstract class CookieClient : WebClient
+  internal sealed class CookieClient : WebClient
   {
     public CookieContainer Cookie { get; set; }
 
@@ -30,7 +30,7 @@ namespace MangaReader.Core.Account
       return ParseResponseUri(() => base.GetWebResponse(request, result));
     }
 
-    protected virtual WebResponse ParseResponseUri(Func<WebResponse> getResponse)
+    private WebResponse ParseResponseUri(Func<WebResponse> getResponse)
     {
       WebResponse baseResponse;
       try
@@ -57,9 +57,9 @@ namespace MangaReader.Core.Account
       return baseResponse;
     }
 
-    protected CookieClient()
+    public CookieClient(CookieContainer cookie)
     {
-      this.Cookie = new CookieContainer();
+      this.Cookie = cookie;
       this.Encoding = Encoding.UTF8;
       Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0";
     }

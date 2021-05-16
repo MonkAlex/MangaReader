@@ -6,7 +6,7 @@ using MangaReader.Core;
 namespace Hentai2Read.com
 {
   [Export(typeof(IPlugin))]
-  public class Hentai2ReadPlugin : BasePlugin
+  public class Hentai2ReadPlugin : BasePlugin<Hentai2ReadPlugin>
   {
     public override string ShortName { get { return "H2R"; } }
 

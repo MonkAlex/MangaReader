@@ -16,9 +16,9 @@ namespace Hentaichan
 {
   public class HentaichanLogin : BaseLogin
   {
-    protected override CookieClient GetClient()
+    protected override Task<ISiteHttpClient> GetClient()
     {
-      return new HentaichanClient() { BaseAddress = MainUri.ToString(), Cookie = this.ClientCookie };
+      return HentaichanPlugin.Instance.GetCookieClient(false);
     }
 
     protected override async Task<List<IManga>> DownloadBookmarks(Guid mangaType)
@@ -26,16 +26,17 @@ namespace Hentaichan
       var bookmarks = new List<IManga>();
       var document = new HtmlDocument();
 
-      await this.DoLogin(mangaType).ConfigureAwait(false);
+      var isLogined = await this.DoLogin(mangaType).ConfigureAwait(false);
 
-      if (!IsLogined)
+      if (!isLogined)
         return bookmarks;
 
       var pages = new List<Uri>() { BookmarksUri };
 
+      var client = await GetClient().ConfigureAwait(false);
       for (int i = 0; i < pages.Count; i++)
       {
-        var page = await Page.GetPageAsync(pages[i], GetClient()).ConfigureAwait(false);
+        var page = await client.GetPage(pages[i]).ConfigureAwait(false);
         document.LoadHtml(page.Content);
 
         if (i == 0)

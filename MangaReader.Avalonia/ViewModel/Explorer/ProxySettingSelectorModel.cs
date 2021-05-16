@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MangaReader.Avalonia.ViewModel.Command;
@@ -131,7 +132,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       catch (MangaReaderException e)
       {
         ReloadData();
-        await Services.Dialogs.ShowInfo("Сохранение прокси", "Произошла ошибка. \r\n" + e.Message);
+        await Services.Dialogs.ShowInfo("Сохранение прокси", "Произошла ошибка. \r\n" + e.Message).ConfigureAwait(true);
       }
     }
 
@@ -140,7 +141,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       try
       {
         var selected = this.SelectedProxySettingModel;
-        var address = this.TestAddress;
+        var address = new Uri(this.TestAddress);
 
         var setting = new ProxySetting(selected.SettingType)
         {
@@ -149,19 +150,17 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           Password = selected.Password
         };
         var proxy = setting.GetProxy();
-        var client = new TestCoockieClient() { Proxy = proxy };
-        await client.DownloadStringTaskAsync(address).ConfigureAwait(true);
-        await Services.Dialogs.ShowInfo("Проверка прокси", "Успешно.");
+        var client = SiteHttpClientFactory.Get(address, proxy, new CookieContainer());
+        var page = await client.GetPage(address).ConfigureAwait(true);
+        if (page.HasContent)
+          await Services.Dialogs.ShowInfo("Проверка прокси", "Успешно.").ConfigureAwait(true);
+        else
+          await Services.Dialogs.ShowInfo("Проверка прокси", "Не удалось получить страницу, проверьте настройки.\r\n" + page.Error).ConfigureAwait(true);
       }
       catch (Exception e)
       {
-        await Services.Dialogs.ShowInfo("Проверка прокси", "Произошла ошибка. \r\n" + e.Message);
+        await Services.Dialogs.ShowInfo("Проверка прокси", "Произошла ошибка. \r\n" + e.Message).ConfigureAwait(true);
       }
-    }
-
-    private class TestCoockieClient : CookieClient
-    {
-
     }
   }
 }

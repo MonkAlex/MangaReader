@@ -23,16 +23,20 @@ namespace MangaReader.ViewModel.Commands.Setting
       try
       {
         var selected = model.SelectedProxySettingModel;
-        var address = model.TestAddress;
+        var address = new Uri(model.TestAddress);
 
         var setting = new ProxySetting(selected.SettingType)
         {
           Address = selected.Address, UserName = selected.UserName, Password = selected.Password
         };
         var proxy = setting.GetProxy();
-        var client = new TestCoockieClient() { Proxy = proxy };
-        await client.DownloadStringTaskAsync(address).ConfigureAwait(true);
-        Dialogs.ShowInfo("Проверка прокси", "Успешно.");
+
+        var client = SiteHttpClientFactory.Get(address, proxy, new CookieContainer());
+        var page = await client.GetPage(address).ConfigureAwait(true);
+        if (page.HasContent)
+          Dialogs.ShowInfo("Проверка прокси", "Успешно.");
+        else
+          Dialogs.ShowInfo("Проверка прокси", "Не удалось получить страницу, проверьте настройки.\r\n" + page.Error);
       }
       catch (Exception e)
       {
@@ -50,11 +54,6 @@ namespace MangaReader.ViewModel.Commands.Setting
     {
       if (e.PropertyName == nameof(model.TestAddress))
         OnCanExecuteChanged();
-    }
-
-    private class TestCoockieClient : CookieClient
-    {
-
     }
   }
 }

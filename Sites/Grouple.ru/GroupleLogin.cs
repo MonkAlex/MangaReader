@@ -11,6 +11,7 @@ using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Properties;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 
 namespace Grouple
 {
@@ -20,18 +21,13 @@ namespace Grouple
     public override Uri LogoutUri { get { return new Uri(this.MainUri, "login/logout"); } }
     public override Uri BookmarksUri { get { return new Uri(this.MainUri, "private/bookmarks"); } }
 
-    protected override CookieClient GetClient()
-    {
-#warning В итоге конкретный клиент тут забит, а логин на совсем другом хосте.
-      return new MintmangaClient() { BaseAddress = MainUri.ToString(), Cookie = this.ClientCookie };
-    }
-
     public override async Task<bool> DoLogin(Guid mangaType)
     {
-      if (IsLogined || !this.CanLogin)
-        return IsLogined;
+      var isLogined = this.IsLogined(mangaType);
+      if (isLogined || !this.CanLogin)
+        return isLogined;
 
-      var loginData = new NameValueCollection
+      var loginData = new Dictionary<string, string>()
       {
         {"username", this.Name},
         {"password", this.Password},
@@ -39,14 +35,17 @@ namespace Grouple
       };
       try
       {
-        var result = await GetClient().UploadValuesTaskAsync("login/authenticate", "POST", loginData).ConfigureAwait(false);
-        IsLogined = Encoding.UTF8.GetString(result).Contains("login/logout");
+        var plugin = ConfigStorage.Plugins.Single(p => p.MangaGuid == mangaType);
+        var client = await plugin.GetCookieClient(false).ConfigureAwait(false);
+        var result = await client.Post(new Uri(this.MainUri, "login/authenticate"), loginData).ConfigureAwait(false);
+        isLogined = result.Content.Contains("login/logout");
+        this.SetLogined(mangaType, isLogined);
       }
       catch (System.Exception ex)
       {
         Log.Exception(ex, Strings.Login_Failed);
       }
-      return IsLogined;
+      return isLogined;
     }
 
     protected override async Task<List<IManga>> DownloadBookmarks(Guid mangaType)
@@ -54,12 +53,14 @@ namespace Grouple
       var bookmarks = new List<IManga>();
       var document = new HtmlDocument();
 
-      await this.DoLogin(mangaType).ConfigureAwait(false);
+      var isLogined = await this.DoLogin(mangaType).ConfigureAwait(false);
 
-      if (!IsLogined)
+      if (!isLogined)
         return bookmarks;
 
-      var page = await Page.GetPageAsync(BookmarksUri, GetClient()).ConfigureAwait(false);
+      var plugin = ConfigStorage.Plugins.Single(p => p.MangaGuid == mangaType);
+      var client = await plugin.GetCookieClient(false).ConfigureAwait(false);
+      var page = await client.GetPage(BookmarksUri).ConfigureAwait(false);
       document.LoadHtml(page.Content);
 
       var firstOrDefault = document.DocumentNode
@@ -72,7 +73,7 @@ namespace Grouple
         return bookmarks;
       }
 
-      var parser = mangaType == MintmangaPlugin.Manga ? (GroupleParser)new MintmangaParser() : new ReadmangaParser();
+      var parser = plugin.GetParser();
       using (var context = Repository.GetEntityContext("Loading bookmarks"))
       {
         var loadedBookmarks = Regex

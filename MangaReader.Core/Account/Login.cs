@@ -1,25 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
+using MangaReader.Core.Entity;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Account
 {
   public abstract class Login : Entity.Entity, ILogin
   {
-    public bool IsLogined
-    {
-      get { return isLogined; }
-      set
-      {
-        isLogined = value;
-        OnLoginStateChanged(value);
-      }
-    }
-
     public event EventHandler<bool> LoginStateChanged;
 
     public virtual string Name { get; set; }
@@ -34,21 +25,32 @@ namespace MangaReader.Core.Account
 
     public abstract Uri BookmarksUri { get; }
 
-    /// <summary>
-    /// Печеньки с авторизацией.
-    /// </summary>
-    protected internal CookieContainer ClientCookie { get; set; }
+    protected HashSet<Guid> logined = new HashSet<Guid>();
 
-    protected internal abstract CookieClient GetClient();
+    public virtual bool IsLogined(Guid mangaType)
+    {
+      return this.logined.Contains(mangaType);
+    }
 
-    private bool isLogined;
+    protected void SetLogined(Guid mangaType, bool value)
+    {
+      if (value)
+        logined.Add(mangaType);
+      else 
+        logined.Remove(mangaType);
+
+      LoginStateChanged?.Invoke(this, value);
+    }
 
     public abstract Task<bool> DoLogin(Guid mangaType);
 
     public virtual async Task<bool> Logout(Guid mangaType)
     {
-      IsLogined = false;
-      await Page.GetPageAsync(LogoutUri, GetClient()).ConfigureAwait(false);
+      this.SetLogined(mangaType, false);
+
+      var plugin = ConfigStorage.Plugins.Single(p => p.MangaGuid == mangaType);
+      var client = await plugin.GetCookieClient(false).ConfigureAwait(false);
+      await client.GetPage(LogoutUri).ConfigureAwait(false);
       return true;
     }
 
@@ -75,14 +77,11 @@ namespace MangaReader.Core.Account
       }
     }
 
-    protected Login()
+    public override async Task BeforeSave(ChangeTrackerArgs args)
     {
-      this.ClientCookie = new CookieContainer();
-    }
+      await base.BeforeSave(args).ConfigureAwait(false);
 
-    protected virtual void OnLoginStateChanged(bool e)
-    {
-      LoginStateChanged?.Invoke(this, e);
+      LoginCache.Reset();
     }
   }
 }

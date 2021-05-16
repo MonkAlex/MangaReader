@@ -32,7 +32,8 @@ namespace Hentaichan.Mangachan
     {
       if (Parser.ParseUri(Uri).Kind != UriParseKind.Manga)
       {
-        var page = await Page.GetPageAsync(Uri, Parser.GetClient()).ConfigureAwait(false);
+        var client = await MangachanPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
+        var page = await client.GetPage(Uri).ConfigureAwait(false);
         if (page.HasContent)
         {
           var match = Regex.Match(page.Content, "content_id\":\"(.*?)\"", RegexOptions.IgnoreCase);

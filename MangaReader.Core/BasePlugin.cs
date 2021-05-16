@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Reflection;
+using System.Threading.Tasks;
+using MangaReader.Core.Account;
 using MangaReader.Core.Services;
+using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core
 {
@@ -9,7 +13,7 @@ namespace MangaReader.Core
   /// Базовая реализация плагина для снижения дублирования кода.
   /// </summary>
   /// <remarks>Не обязательна к использованию.</remarks>
-  public abstract class BasePlugin : IPlugin
+  public abstract class BasePlugin<T> : IPlugin where T : class, IPlugin, new()
   {
     public virtual string Name { get { return this.MangaType.Name; } }
     public abstract string ShortName { get; }
@@ -17,6 +21,26 @@ namespace MangaReader.Core
     public abstract Guid MangaGuid { get; }
     public abstract Type MangaType { get; }
     public abstract Type LoginType { get; }
+
+    public static T Instance { get { return ConfigStorage.Plugins.OfType<T>().Single(); } }
+
+    protected CookieContainer CookieContainer = new CookieContainer();
+
+    public async Task<ISiteHttpClient> GetCookieClient(bool withLogin)
+    {
+      var login = await LoginCache.Get(MangaGuid).ConfigureAwait(false);
+      var mainUri = login.MainUri;
+      var client = SiteHttpClientFactory.Get(mainUri, MangaSettingCache.Get(typeof(T)).Proxy, CookieContainer);
+      this.ConfigureCookieClient(client, login);
+      if (withLogin && !login.IsLogined(MangaGuid))
+        await login.DoLogin(MangaGuid).ConfigureAwait(false);
+      return client;
+    }
+
+    protected virtual void ConfigureCookieClient(ISiteHttpClient client, ILogin login)
+    {
+
+    }
 
     public virtual MangaSetting GetSettings()
     {

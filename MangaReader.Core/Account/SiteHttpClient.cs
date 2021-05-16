@@ -22,6 +22,9 @@ namespace MangaReader.Core.Account
     public async Task<Page> GetPage(Uri uri)
     {
       var content = await DoWithRestarts(uri, httpClient, (u, c) => c.GetAsync(u)).ConfigureAwait(false);
+      if (content == null)
+        return new Page(uri);
+
       var body = await content.Content.ReadAsStringAsync().ConfigureAwait(false);
       uri = GetRequestResponseUri(uri, content);
       return new Page(body, uri);
@@ -30,12 +33,18 @@ namespace MangaReader.Core.Account
     public async Task<byte[]> GetData(Uri uri)
     {
       var content = await DoWithRestarts(uri, httpClient, (u, c) => c.GetAsync(u)).ConfigureAwait(false);
+      if (content == null)
+        return null;
+
       return await content.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
     }
 
     public async Task<Page> Post(Uri uri, Dictionary<string, string> parameters)
     {
       var content = await DoWithRestarts(uri, httpClient, (u, c) => c.PostAsync(u, new FormUrlEncodedContent(parameters))).ConfigureAwait(false);
+      if (content == null)
+        return new Page(uri);
+
       var body = await content.Content.ReadAsStringAsync().ConfigureAwait(false);
       uri = GetRequestResponseUri(uri, content);
       return new Page(body, uri);
@@ -100,6 +109,12 @@ namespace MangaReader.Core.Account
         }
 
         return content;
+      }
+      catch (TaskCanceledException ex)
+      {
+        Log.Exception(ex, $"{Strings.Page_GetPage_SiteOff}, ссылка: {uri}, попытка номер - {restartCounter}");
+        ++restartCounter;
+        return await DoWithRestarts(uri, client, func, restartCounter).ConfigureAwait(false);
       }
       catch (HttpRequestException ex) when (ex.InnerException is System.Net.Sockets.SocketException || ex.InnerException is System.IO.IOException)
       {

@@ -28,7 +28,7 @@ namespace MangaReader.Core
 
     public async Task<ISiteHttpClient> GetCookieClient(bool withLogin)
     {
-      var login = NHibernate.Repository.GetStateless<MangaSetting>().Where(m => m.Manga == this.MangaGuid).Select(m => m.Login).Single();
+      var login = await LoginCache.Get(MangaGuid).ConfigureAwait(false);
       var mainUri = login.MainUri;
       var client = SiteHttpClientFactory.Get(mainUri, MangaSettingCache.Get(typeof(T)).Proxy, CookieContainer);
       this.ConfigureCookieClient(client, login);

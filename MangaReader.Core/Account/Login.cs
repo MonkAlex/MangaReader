@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MangaReader.Core.Entity;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
@@ -74,6 +75,13 @@ namespace MangaReader.Core.Account
         var logins = await context.Get<ILogin>().ToListAsync().ConfigureAwait(false);
         return logins.SingleOrDefault(l => l.GetType() == type) ?? (ILogin)Activator.CreateInstance(type);
       }
+    }
+
+    public override async Task BeforeSave(ChangeTrackerArgs args)
+    {
+      await base.BeforeSave(args).ConfigureAwait(false);
+
+      LoginCache.Reset();
     }
   }
 }

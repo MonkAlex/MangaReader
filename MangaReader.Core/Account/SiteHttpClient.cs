@@ -128,7 +128,7 @@ namespace MangaReader.Core.Account
 
         if (await RequestCanBeRetry(content).ConfigureAwait(false))
         {
-          Log.Error($"{Strings.Page_GetPage_SiteOff}, ссылка: {uri}, попытка номер - {restartCounter}");
+          Log.Error($"{Strings.Page_GetPage_SiteOff}, код {content.StatusCode}, ссылка: {uri}, попытка номер - {restartCounter}");
           ++restartCounter;
           return await DoWithRestarts(uri, client, func, restartCounter).ConfigureAwait(false);
         }

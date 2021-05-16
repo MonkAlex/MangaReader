@@ -35,13 +35,13 @@ namespace MangaReader.Core
 #else
       var client = new SiteHttpClient(mainUri, this, CookieContainer);
 #endif
-      this.ConfigureCookieClient(client, mainUri, login);
+      this.ConfigureCookieClient(client, login);
       if (withLogin && !login.IsLogined(MangaGuid))
         await login.DoLogin(MangaGuid).ConfigureAwait(false);
       return client;
     }
 
-    protected virtual void ConfigureCookieClient(ISiteHttpClient client, Uri mainUri, ILogin login)
+    protected virtual void ConfigureCookieClient(ISiteHttpClient client, ILogin login)
     {
 
     }

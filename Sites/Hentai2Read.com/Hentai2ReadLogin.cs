@@ -43,9 +43,7 @@ namespace Hentai2Read.com
         var cookieClient = await Hentai2ReadPlugin.Instance.GetCookieClient(false).ConfigureAwait(false);
         var loginResult = await cookieClient.Post(new Uri(this.MainUri + "login"), loginData).ConfigureAwait(false);
         LogoutNonce = Regex.Match(loginResult.Content, "logout\\/\\?_wpnonce=([a-z0-9]+)&", RegexOptions.Compiled).Groups[1].Value;
-        isLogined = cookieClient.CookieContainer.GetCookies(this.MainUri)
-          .Cast<Cookie>()
-          .Any(c => c.Name.StartsWith("wordpress_logged_in"));
+        isLogined = cookieClient.GetCookies().Any(c => c.Name.StartsWith("wordpress_logged_in"));
       }
       catch (System.Exception ex)
       {

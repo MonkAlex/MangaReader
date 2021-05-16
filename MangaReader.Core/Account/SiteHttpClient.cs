@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -17,8 +18,9 @@ namespace MangaReader.Core.Account
     private const int Delay = 240000;
 
     private readonly HttpClient httpClient;
-    public Uri MainUri { get; }
-    public CookieContainer CookieContainer { get; }
+    private readonly Uri mainUri;
+    private readonly CookieContainer cookieContainer;
+
     public async Task<Page> GetPage(Uri uri)
     {
       var content = await DoWithRestarts(uri, httpClient, (u, c) => c.GetAsync(u)).ConfigureAwait(false);
@@ -48,6 +50,29 @@ namespace MangaReader.Core.Account
       var body = await content.Content.ReadAsStringAsync().ConfigureAwait(false);
       uri = GetRequestResponseUri(uri, content);
       return new Page(body, uri);
+    }
+
+    public void AddCookie(string name, string value)
+    {
+      cookieContainer.Add(new Cookie(name, value, "/", mainUri.Host)
+      {
+        Expires = DateTime.Today.AddYears(1)
+      });
+    }
+
+    public string GetCookie(string name)
+    {
+      return GetCookies()
+        .Where(c => c.Name == name)
+        .Select(c => c.Value)
+        .Distinct()
+        .Single();
+    }
+
+    public IEnumerable<Cookie> GetCookies()
+    {
+      return cookieContainer.GetCookies(this.mainUri)
+        .Cast<Cookie>();
     }
 
     private static Uri GetRequestResponseUri(Uri uri, HttpResponseMessage content)
@@ -131,8 +156,8 @@ namespace MangaReader.Core.Account
 
     public SiteHttpClient(Uri mainUri, IPlugin plugin, CookieContainer cookieContainer)
     {
-      this.MainUri = mainUri;
-      this.CookieContainer = cookieContainer;
+      this.mainUri = mainUri;
+      this.cookieContainer = cookieContainer;
       this.httpClient = new HttpClient(new HttpClientHandler()
       {
         CookieContainer = cookieContainer,

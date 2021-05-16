@@ -93,12 +93,7 @@ namespace Hentaichan
       {
         var cookieClient = await GetClient().ConfigureAwait(false);
         await cookieClient.Post(new Uri(MainUri, "index.php"), loginData).ConfigureAwait(false);
-        this.UserId = cookieClient.CookieContainer.GetCookies(this.MainUri)
-          .Cast<Cookie>()
-          .Where(c => c.Name == "dle_user_id")
-          .Select(c => c.Value)
-          .Distinct()
-          .Single();
+        this.UserId = cookieClient.GetCookie("dle_user_id");
         isLogined = true;
       }
       catch (System.Exception ex)

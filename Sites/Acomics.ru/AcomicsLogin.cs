@@ -38,10 +38,7 @@ namespace Acomics
       {
         var cookieClient = await AcomicsPlugin.Instance.GetCookieClient(false).ConfigureAwait(false);
         await cookieClient.Post(new Uri(this.MainUri + "action/authLogin"), loginData).ConfigureAwait(false);
-        this.PasswordHash = cookieClient.CookieContainer.GetCookies(this.MainUri)
-            .Cast<Cookie>()
-            .Single(c => c.Name == "hash")
-            .Value;
+        this.PasswordHash = cookieClient.GetCookie("hash");
         isLogined = true;
       }
       catch (System.Exception ex)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -19,11 +20,11 @@ namespace MangaReader.Core.Account
     /// </summary>
     private const int Delay = 240000;
 
-    public Uri MainUri { get; }
+    private readonly Uri mainUri;
 
-    public Type PluginType { get; set; }
+    private readonly Type pluginType;
 
-    public CookieContainer CookieContainer { get; }
+    private readonly CookieContainer cookieContainer;
 
     public Task<Page> GetPage(Uri uri)
     {
@@ -33,10 +34,10 @@ namespace MangaReader.Core.Account
 
     private CookieClient GetCookieClient()
     {
-      return new CookieClient(this.CookieContainer)
+      return new CookieClient(this.cookieContainer)
       {
-        BaseAddress = MainUri.OriginalString,
-        Proxy = MangaSettingCache.Get(PluginType).Proxy,
+        BaseAddress = mainUri.OriginalString,
+        Proxy = MangaSettingCache.Get(pluginType).Proxy,
       };
     }
 
@@ -99,6 +100,29 @@ namespace MangaReader.Core.Account
       return DoWithRestarts(uri, client, (u, c) => PostImpl(u, c, nvc), new Page(uri));
     }
 
+    public void AddCookie(string name, string value)
+    {
+      cookieContainer.Add(new Cookie(name, value, "/", mainUri.Host)
+      {
+        Expires = DateTime.Today.AddYears(1)
+      });
+    }
+
+    public string GetCookie(string name)
+    {
+      return GetCookies()
+        .Where(c => c.Name == name)
+        .Select(c => c.Value)
+        .Distinct()
+        .Single();
+    }
+
+    public IEnumerable<Cookie> GetCookies()
+    {
+      return cookieContainer.GetCookies(this.mainUri)
+        .Cast<Cookie>();
+    }
+
     public static async Task<bool> DelayOnExpectationFailed(WebException ex)
     {
       if (ex.Response is HttpWebResponse response && (response.StatusCode == HttpStatusCode.ExpectationFailed || response.StatusCode == (HttpStatusCode)429))
@@ -153,9 +177,9 @@ namespace MangaReader.Core.Account
 
     public SiteWebClient(Uri mainUri, IPlugin plugin, CookieContainer cookieContainer)
     {
-      MainUri = mainUri;
-      CookieContainer = cookieContainer;
-      PluginType = plugin.GetType();
+      this.mainUri = mainUri;
+      this.cookieContainer = cookieContainer;
+      pluginType = plugin.GetType();
     }
   }
 }

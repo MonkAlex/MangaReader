@@ -23,9 +23,9 @@ namespace MangaReader.Core.Account
 
     public async Task<Page> GetPage(Uri uri)
     {
-      var content = await DoWithRestarts(uri, httpClient, (u, c) => c.GetAsync(u)).ConfigureAwait(false);
+      var (content, exception) = await DoWithRestarts(uri, httpClient, (u, c) => c.GetAsync(u)).ConfigureAwait(false);
       if (content == null)
-        return new Page(uri);
+        return new Page(uri){ Error = exception.GetBaseException().Message };
 
       var body = await content.Content.ReadAsStringAsync().ConfigureAwait(false);
       uri = GetRequestResponseUri(uri, content);
@@ -34,7 +34,7 @@ namespace MangaReader.Core.Account
 
     public async Task<byte[]> GetData(Uri uri)
     {
-      var content = await DoWithRestarts(uri, httpClient, (u, c) => c.GetAsync(u)).ConfigureAwait(false);
+      var (content, _) = await DoWithRestarts(uri, httpClient, (u, c) => c.GetAsync(u)).ConfigureAwait(false);
       if (content == null)
         return null;
 
@@ -43,9 +43,9 @@ namespace MangaReader.Core.Account
 
     public async Task<Page> Post(Uri uri, Dictionary<string, string> parameters)
     {
-      var content = await DoWithRestarts(uri, httpClient, (u, c) => c.PostAsync(u, new FormUrlEncodedContent(parameters))).ConfigureAwait(false);
+      var (content, exception) = await DoWithRestarts(uri, httpClient, (u, c) => c.PostAsync(u, new FormUrlEncodedContent(parameters))).ConfigureAwait(false);
       if (content == null)
-        return new Page(uri);
+        return new Page(uri) { Error = exception.GetBaseException().Message };
 
       var body = await content.Content.ReadAsStringAsync().ConfigureAwait(false);
       uri = GetRequestResponseUri(uri, content);
@@ -112,7 +112,7 @@ namespace MangaReader.Core.Account
       throw new HttpRequestException((int)content.StatusCode + content.ReasonPhrase);
     }
 
-    private static async Task<HttpResponseMessage> DoWithRestarts(Uri uri, HttpClient client,
+    private static async Task<(HttpResponseMessage, System.Exception)> DoWithRestarts(Uri uri, HttpClient client,
       Func<Uri, HttpClient, Task<HttpResponseMessage>> func, int restartCounter = 0)
     {
       try
@@ -133,7 +133,7 @@ namespace MangaReader.Core.Account
           return await DoWithRestarts(uri, client, func, restartCounter).ConfigureAwait(false);
         }
 
-        return content;
+        return (content, null);
       }
       catch (TaskCanceledException ex)
       {
@@ -150,18 +150,18 @@ namespace MangaReader.Core.Account
       catch (System.Exception ex)
       {
         Log.Exception(ex, $"Не удалось получить страницу: {uri}");
-        return null;
+        return (null, ex);
       }
     }
 
-    public SiteHttpClient(Uri mainUri, IPlugin plugin, CookieContainer cookieContainer)
+    public SiteHttpClient(Uri mainUri, IWebProxy proxy, CookieContainer cookieContainer)
     {
       this.mainUri = mainUri;
       this.cookieContainer = cookieContainer;
       this.httpClient = new HttpClient(new HttpClientHandler()
       {
         CookieContainer = cookieContainer,
-        Proxy = MangaSettingCache.Get(plugin.GetType()).Proxy,
+        Proxy = proxy,
       })
       {
         BaseAddress = mainUri

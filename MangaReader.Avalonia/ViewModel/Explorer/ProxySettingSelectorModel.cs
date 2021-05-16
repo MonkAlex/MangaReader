@@ -141,7 +141,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       try
       {
         var selected = this.SelectedProxySettingModel;
-        var address = this.TestAddress;
+        var address = new Uri(this.TestAddress);
 
         var setting = new ProxySetting(selected.SettingType)
         {
@@ -150,9 +150,12 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           Password = selected.Password
         };
         var proxy = setting.GetProxy();
-        var client = new CookieClient(new CookieContainer()) { Proxy = proxy };
-        await client.DownloadStringTaskAsync(address).ConfigureAwait(true);
-        await Services.Dialogs.ShowInfo("Проверка прокси", "Успешно.").ConfigureAwait(true);
+        var client = SiteHttpClientFactory.Get(address, proxy, new CookieContainer());
+        var page = await client.GetPage(address).ConfigureAwait(true);
+        if (page.HasContent)
+          await Services.Dialogs.ShowInfo("Проверка прокси", "Успешно.").ConfigureAwait(true);
+        else
+          await Services.Dialogs.ShowInfo("Проверка прокси", "Не удалось получить страницу, проверьте настройки.\r\n" + page.Error).ConfigureAwait(true);
       }
       catch (Exception e)
       {

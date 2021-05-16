@@ -10,6 +10,8 @@ namespace MangaReader.Core.Services
 
     public Uri ResponseUri { get; set; }
 
+    public string Error { get; set; }
+
     public Page()
     {
 

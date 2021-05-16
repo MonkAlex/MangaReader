@@ -22,14 +22,15 @@ namespace MangaReader.Core.Account
 
     private readonly Uri mainUri;
 
-    private readonly Type pluginType;
+    private readonly IWebProxy proxy;
 
     private readonly CookieContainer cookieContainer;
 
-    public Task<Page> GetPage(Uri uri)
+    public async Task<Page> GetPage(Uri uri)
     {
       var client = GetCookieClient();
-      return DoWithRestarts(uri, client, GetPageImpl, new Page(uri));
+      var (page, exception) = await DoWithRestarts(uri, client, GetPageImpl).ConfigureAwait(false);
+      return page ?? new Page(uri) { Error = exception.GetBaseException().Message };
     }
 
     private CookieClient GetCookieClient()
@@ -37,7 +38,7 @@ namespace MangaReader.Core.Account
       return new CookieClient(this.cookieContainer)
       {
         BaseAddress = mainUri.OriginalString,
-        Proxy = MangaSettingCache.Get(pluginType).Proxy,
+        Proxy = proxy,
       };
     }
 
@@ -47,8 +48,8 @@ namespace MangaReader.Core.Account
       return new Page(await task, client.ResponseUri);
     }
 
-    private static async Task<T> DoWithRestarts<T>(Uri uri, CookieClient client,
-      Func<Uri, CookieClient, Task<T>> func, T defaultValue, int restartCounter = 0)
+    private static async Task<(T, System.Exception)> DoWithRestarts<T>(Uri uri, CookieClient client,
+      Func<Uri, CookieClient, Task<T>> func, int restartCounter = 0)
     {
       try
       {
@@ -57,13 +58,14 @@ namespace MangaReader.Core.Account
 
         using (await ThrottleService.WaitAsync().ConfigureAwait(false))
         {
-          return await func(uri, client).ConfigureAwait(false);
+          var value = await func(uri, client).ConfigureAwait(false);
+          return (value, null);
         }
       }
       catch (UriFormatException ex)
       {
         Log.Exception(ex, $"Некорректная ссылка: {uri}");
-        return defaultValue;
+        return (default, ex);
       }
       catch (WebException ex)
       {
@@ -71,24 +73,26 @@ namespace MangaReader.Core.Account
         ++restartCounter;
 
         if (await ExceptionCanBeRetry(ex).ConfigureAwait(false))
-          return await DoWithRestarts(uri, client, func, defaultValue, restartCounter).ConfigureAwait(false);
+          return await DoWithRestarts(uri, client, func, restartCounter).ConfigureAwait(false);
 
-        return defaultValue;
+        return (default, ex);
       }
       catch (System.Exception ex)
       {
         Log.Exception(ex, $"Не удалось получить страницу: {uri}");
-        return defaultValue;
+        return (default, ex);
       }
     }
 
-    public Task<byte[]> GetData(Uri uri)
+    public async Task<byte[]> GetData(Uri uri)
     {
       var client = GetCookieClient();
-      return DoWithRestarts(uri, client, (u, c) => c.DownloadDataTaskAsync(u), null);
+      var (data, _) = await DoWithRestarts(uri, client, (u, c) => c.DownloadDataTaskAsync(u)).ConfigureAwait(false);
+
+      return data;
     }
 
-    public Task<Page> Post(Uri uri, Dictionary<string, string> parameters)
+    public async Task<Page> Post(Uri uri, Dictionary<string, string> parameters)
     {
       var client = GetCookieClient();
       var nvc = new NameValueCollection();
@@ -97,7 +101,8 @@ namespace MangaReader.Core.Account
         nvc.Add(parameter.Key, parameter.Value);
       }
 
-      return DoWithRestarts(uri, client, (u, c) => PostImpl(u, c, nvc), new Page(uri));
+      var (page, exception) = await DoWithRestarts(uri, client, (u, c) => PostImpl(u, c, nvc)).ConfigureAwait(false);
+      return page ?? new Page(uri) { Error = exception.GetBaseException().Message };
     }
 
     public void AddCookie(string name, string value)
@@ -175,11 +180,11 @@ namespace MangaReader.Core.Account
       return false;
     }
 
-    public SiteWebClient(Uri mainUri, IPlugin plugin, CookieContainer cookieContainer)
+    public SiteWebClient(Uri mainUri, IWebProxy proxy, CookieContainer cookieContainer)
     {
       this.mainUri = mainUri;
       this.cookieContainer = cookieContainer;
-      pluginType = plugin.GetType();
+      this.proxy = proxy;
     }
   }
 }

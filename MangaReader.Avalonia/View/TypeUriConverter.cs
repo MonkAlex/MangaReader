@@ -28,7 +28,8 @@ namespace MangaReader.Avalonia.View
           return new Uri(uriString, UriKind.Relative);
         }
 
-        return new Uri(uriString, UriKind.RelativeOrAbsolute);
+        if (Uri.TryCreate(uriString, UriKind.RelativeOrAbsolute, out var uri))
+          return uri;
       }
 
       return null;

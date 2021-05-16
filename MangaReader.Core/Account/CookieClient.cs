@@ -6,7 +6,7 @@ using MangaReader.Core.Services;
 namespace MangaReader.Core.Account
 {
   [System.ComponentModel.DesignerCategory("Code")]
-  public sealed class CookieClient : WebClient
+  internal sealed class CookieClient : WebClient
   {
     public CookieContainer Cookie { get; set; }
 

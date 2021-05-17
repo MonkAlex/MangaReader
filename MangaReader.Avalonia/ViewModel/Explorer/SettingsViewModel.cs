@@ -105,7 +105,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     {
       await base.OnSelected(previousModel).ConfigureAwait(true);
 
-      if (!ExplorerViewModel.Instance.Tabs.OfType<MangaSettingsViewModel>().Any())
+      if (!ExplorerViewModel.Instance.Tabs.OfType<ProxySettingSelectorModel>().Any())
       {
         this.loadedSortDescription = ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription;
         using (var context = Repository.GetEntityContext("Load manga settings"))

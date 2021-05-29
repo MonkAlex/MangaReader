@@ -1,0 +1,5 @@
+﻿<Project>
+  <Target Name="Build">
+    <Message Text="WPF only for windows build" Importance="high" />
+  </Target>
+</Project>

@@ -23,24 +23,24 @@ after_build:
   - OpenCover\tools\OpenCover.Console.exe -returntargetcode -mergeoutput -register -output:.\coverage.xml -target:"dotnet.exe"  -targetargs:"test --test-adapter-path:. --logger:Appveyor" -excludebyattribute:*.ExcludeFromCodeCoverage* -excludebyfile:*\*Designer.cs -hideskipped:All -oldstyle
   - codecov -f "coverage.xml"
 
-  - dotnet publish MangaReader.Avalonia\MangaReader.Avalonia.csproj /p:Configuration=Debug /p:Platform=AnyCPU /p:TargetFramework=netcoreapp3.0 /p:PublishDir=bin\Publish\netcoreapp3.0\win-x64\ /p:SelfContained=true /p:RuntimeIdentifier=win7-x64
-  - dotnet publish MangaReader.Avalonia\MangaReader.Avalonia.csproj /p:Configuration=Debug /p:Platform=AnyCPU /p:TargetFramework=netcoreapp3.0 /p:PublishDir=bin\Publish\netcoreapp3.0\linux-x64\ /p:SelfContained=true /p:RuntimeIdentifier=linux-x64
-  - dotnet publish MangaReader.Avalonia\MangaReader.Avalonia.csproj /p:Configuration=Debug /p:Platform=AnyCPU /p:TargetFramework=netcoreapp3.0 /p:PublishDir=bin\Publish\netcoreapp3.0\osx-x64\ /p:SelfContained=true /p:RuntimeIdentifier=osx-x64
+  - dotnet publish MangaReader.Avalonia\MangaReader.Avalonia.csproj /p:Configuration=Debug /p:Platform=AnyCPU /p:TargetFramework=netcoreapp3.1 /p:PublishDir=bin\Publish\netcoreapp3.1\win-x64\ /p:SelfContained=true /p:RuntimeIdentifier=win7-x64
+  - dotnet publish MangaReader.Avalonia\MangaReader.Avalonia.csproj /p:Configuration=Debug /p:Platform=AnyCPU /p:TargetFramework=netcoreapp3.1 /p:PublishDir=bin\Publish\netcoreapp3.1\linux-x64\ /p:SelfContained=true /p:RuntimeIdentifier=linux-x64
+  - dotnet publish MangaReader.Avalonia\MangaReader.Avalonia.csproj /p:Configuration=Debug /p:Platform=AnyCPU /p:TargetFramework=netcoreapp3.1 /p:PublishDir=bin\Publish\netcoreapp3.1\osx-x64\ /p:SelfContained=true /p:RuntimeIdentifier=osx-x64
 
 artifacts:
   - path: MangaReader\bin\$(configuration)
     name: MangaReader_%artifact_suffix%
     type: zip
 
-  - path: MangaReader.Avalonia\bin\Publish\netcoreapp3.0\win-x64
+  - path: MangaReader.Avalonia\bin\Publish\netcoreapp3.1\win-x64
     name: MangaReader.Avalonia.Windows_%artifact_suffix%
     type: zip
 
-  - path: MangaReader.Avalonia\bin\Publish\netcoreapp3.0\linux-x64
+  - path: MangaReader.Avalonia\bin\Publish\netcoreapp3.1\linux-x64
     name: MangaReader.Avalonia.Linux_%artifact_suffix%
     type: zip
 
-  - path: MangaReader.Avalonia\bin\Publish\netcoreapp3.0\osx-x64
+  - path: MangaReader.Avalonia\bin\Publish\netcoreapp3.1\osx-x64
     name: MangaReader.Avalonia.macOS_%artifact_suffix%
     type: zip
 

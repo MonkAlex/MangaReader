@@ -25,6 +25,6 @@
           DestinationFiles="@(SourceFiles->'$(ProjectDir)\..\..\MangaReader\Bin\$(ConfigurationName)\Plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy Condition="'$(TargetFramework)' == 'netstandard2.0'"
           SourceFiles="@(SourceFiles)" 
-          DestinationFiles="@(SourceFiles->'$(ProjectDir)\..\..\MangaReader.Avalonia\bin\$(ConfigurationName)\netcoreapp3.0\Plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
+          DestinationFiles="@(SourceFiles->'$(ProjectDir)\..\..\MangaReader.Avalonia\bin\$(ConfigurationName)\netcoreapp3.1\Plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target> 
 </Project>

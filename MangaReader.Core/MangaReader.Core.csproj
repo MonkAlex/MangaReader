@@ -15,15 +15,15 @@
     <EmbeddedResource Include="..\CHANGELOG.md" Link="Update\CHANGELOG.md" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper.Collection" Version="7.0.0" />
-    <PackageReference Include="FluentNHibernate" Version="2.1.2" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.24" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="NLog" Version="4.7.2" />
-    <PackageReference Include="Octokit" Version="0.48.0" />
-    <PackageReference Include="System.ComponentModel.Composition" Version="4.7.0" />
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.113.1" />
-    <PackageReference Include="System.Interactive.Async" Version="3.2.0" />
+    <PackageReference Include="AutoMapper.Collection" Version="7.0.1" />
+    <PackageReference Include="FluentNHibernate" Version="3.1.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.33" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NLog" Version="4.7.10" />
+    <PackageReference Include="Octokit" Version="0.50.0" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.114.1" />
+    <PackageReference Include="System.Interactive.Async" Version="5.0.0" />
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>

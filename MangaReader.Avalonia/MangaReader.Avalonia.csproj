@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <ApplicationIcon>Assets\main.ico</ApplicationIcon>
     <StartupObject />
   </PropertyGroup>
@@ -27,9 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.2" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.2" />
-    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.2" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.5" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.5" />
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.5.1" />
     <PackageReference Include="Dialogs.Avalonia" Version="0.1.29" />
   </ItemGroup>
 

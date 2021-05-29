@@ -160,20 +160,20 @@ namespace MangaReader.Core.Services
 
     public static IAsyncEnumerable<TR> SelectAsync<T, TR>(this IEnumerable<T> seq, Func<T, Task<TR>> selector)
     {
-      return AsyncEnumerable.Create((ct) =>
+      return AsyncEnumerable.CreateEnumerable(() =>
       {
         IEnumerator<T> seqEnum = seq.GetEnumerator();
         var current = default(TR);
-        return AsyncEnumerator.Create(
-          moveNextAsync: async () =>
+        return AsyncEnumerable.CreateEnumerator(
+          moveNext: async ct =>
           {
             if (!seqEnum.MoveNext())
               return false;
             current = await selector(seqEnum.Current).ConfigureAwait(false);
             return true;
           },
-          getCurrent: () => current,
-          disposeAsync: async () => seqEnum.Dispose());
+          current: () => current,
+          dispose: seqEnum.Dispose);
       });
     }
 

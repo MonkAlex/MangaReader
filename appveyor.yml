@@ -16,7 +16,7 @@ init:
       $env:artifact_suffix = $env:APPVEYOR_REPO_TAG_NAME
     }
 after_build:
-  - nuget install OpenCover -Version 4.6.519 -ExcludeVersion
+  - nuget install OpenCover -ExcludeVersion
   - nuget install Appveyor.TestLogger
   - pip install codecov
 

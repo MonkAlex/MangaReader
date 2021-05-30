@@ -14,17 +14,19 @@ namespace Tests.API
     [Test]
     public void SendMessage_Add()
     {
-      TestCommand(Messages.AddManga);
-      TestCommand(Messages.Activate);
-      TestCommand(Messages.Close);
+      var token = new CancellationTokenSource();
+      TestCommand(Messages.AddManga, token.Token);
+      TestCommand(Messages.Activate, token.Token);
+      TestCommand(Messages.Close, token.Token);
+      token.Cancel();
     }
 
-    private static void TestCommand(Messages message)
+    private static void TestCommand(Messages message, CancellationToken token)
     {
       var uniqueId = Guid.NewGuid().ToString("D");
       Log.Add($"Server started on '{uniqueId}'.");
       var resetEvent = new AutoResetEvent(false);
-      Task.Run(() => Server.Run(uniqueId));
+      Server.RunTask(uniqueId, token);
       var lastMessage = string.Empty;
 
       void OnOtherAppRunning(object sender, string les)
@@ -37,7 +39,7 @@ namespace Tests.API
       MangaReader.Core.Client.OtherAppRunning += OnOtherAppRunning;
       Client.Run(uniqueId, message);
 
-      Assert.IsTrue(resetEvent.WaitOne(1000));
+      Assert.IsTrue(resetEvent.WaitOne(100));
       MangaReader.Core.Client.OtherAppRunning -= OnOtherAppRunning;
       Assert.AreEqual(message.ToString("G"), lastMessage);
     }

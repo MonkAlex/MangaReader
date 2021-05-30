@@ -14,6 +14,8 @@ namespace MangaReader.Core
   {
     private static Mutex mutex;
 
+    private static CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
     public static event EventHandler<string> OtherAppRunning;
 
     public static event EventHandler ClientBeenClosed;
@@ -65,10 +67,7 @@ namespace MangaReader.Core
 
         // Сервер стартует отдельно и рекурсивно сам себя поддерживает. Ждать его не нужно и нет никакого смысла.
 #pragma warning disable 4014
-        Task.Run(() =>
-        {
-          ApplicationControl.Server.Run(name);
-        });
+        ApplicationControl.Server.RunTask(name, cancellationTokenSource.Token);
 #pragma warning restore 4014
 
         await Converter.Convert(process).ConfigureAwait(false);
@@ -91,6 +90,9 @@ namespace MangaReader.Core
 
       if (mutex != null && !mutex.SafeWaitHandle.IsClosed)
         mutex.Close();
+
+      if (!cancellationTokenSource.IsCancellationRequested)
+        cancellationTokenSource.Cancel();
 
       Log.Separator("Closed");
     }

@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.Pipes;
+using System.Threading;
 using System.Threading.Tasks;
 using MangaReader.Core.Services;
 
@@ -7,23 +9,34 @@ namespace MangaReader.Core.ApplicationControl
 {
   public static class Server
   {
-    public static void Run(string uniqueId)
+    private static async Task Run(string uniqueId, CancellationToken token)
     {
-      using (var server = new NamedPipeServerStream(uniqueId, PipeDirection.InOut,
-        NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Byte, PipeOptions.None))
+      try
       {
-        server.WaitForConnection();
-        Task.Run(() => Run(uniqueId));
-        using (var reader = new StreamReader(server))
+        using (var server = new NamedPipeServerStream(uniqueId, PipeDirection.InOut,
+          NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Byte, PipeOptions.Asynchronous))
         {
-          while (!reader.EndOfStream)
+          await server.WaitForConnectionAsync(token).ConfigureAwait(false);
+          RunTask(uniqueId, token);
+          using (var reader = new StreamReader(server))
           {
-            var line = reader.ReadLine();
-            Log.Add($"Server get command : {line}");
-            Core.Client.OnOtherAppRunning(line);
+            while (!reader.EndOfStream)
+            {
+              token.ThrowIfCancellationRequested();
+
+              var line = await reader.ReadLineAsync().ConfigureAwait(false);
+              Log.Add($"Server get command : {line}");
+              Core.Client.OnOtherAppRunning(line);
+            }
           }
         }
       }
+      catch (OperationCanceledException ex) when (ex.CancellationToken == token && token.IsCancellationRequested) { }
+    }
+
+    public static Task RunTask(string uniqueId, CancellationToken token)
+    {
+      return Task.Run(() => Run(uniqueId, token), token);
     }
   }
 }

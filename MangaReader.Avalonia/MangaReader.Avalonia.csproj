@@ -31,6 +31,7 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.5" />
     <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.5.1" />
     <PackageReference Include="Dialogs.Avalonia" Version="0.1.29" />
+    <PackageReference Include="Markdown.Avalonia" Version="0.10.4" />
   </ItemGroup>
 
   <ItemGroup>

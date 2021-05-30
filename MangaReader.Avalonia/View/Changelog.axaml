@@ -1,0 +1,16 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="clr-namespace:MangaReader.Avalonia.ViewModel.Explorer"
+             xmlns:md="clr-namespace:Markdown.Avalonia;assembly=Markdown.Avalonia"
+             x:DataType="vm:ChangelogViewModel"
+             x:CompileBindings="True"
+             x:Class="MangaReader.Avalonia.View.Changelog">
+  <md:MarkdownScrollViewer Markdown="{Binding Content}" >
+    <md:MarkdownScrollViewer.Engine>
+      <md:Markdown HyperlinkCommand="{Binding HyperlinkCommand}"/>
+    </md:MarkdownScrollViewer.Engine>
+  </md:MarkdownScrollViewer>
+</UserControl>

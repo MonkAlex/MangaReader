@@ -29,11 +29,14 @@
     <DataTemplate DataType="c:MangaModel">
       <view:MangaView/>
     </DataTemplate>
+    <DataTemplate DataType="c:ChangelogViewModel">
+      <view:Changelog/>
+    </DataTemplate>
   </Window.DataTemplates>
-  <Grid ColumnDefinitions="Auto,*">
-    <ListBox Grid.Column="0" 
+  <Grid ColumnDefinitions="Auto,*" RowDefinitions="*, Auto">
+    <ListBox Grid.Column="0"
              IsVisible="{Binding Loaded}"
-             Items="{Binding Tabs}" 
+             Items="{Binding Tabs}"
              SelectedItem="{Binding SelectedTab}"
              Width="130"
              BorderThickness="0">
@@ -47,8 +50,27 @@
         </DataTemplate>
       </ListBox.ItemTemplate>
     </ListBox>
-    <ContentPresenter Grid.Column="1" DataContext="{Binding SelectedTab}" Content="{Binding}"/>
-    <Grid Grid.ColumnSpan="2" IsVisible="{Binding !Loaded}" RowDefinitions="10*, *, 2*">
+    <ListBox Grid.Column="0"
+             Grid.Row="1"
+             IsVisible="{Binding Loaded}"
+             Items="{Binding BottomTabs}"
+             SelectedItem="{Binding SelectedTab}"
+             Width="130"
+             BorderThickness="0">
+      <ListBox.ItemTemplate>
+        <DataTemplate>
+          <TextBlock Margin="10"
+                     x:DataType="c:ExplorerTabViewModel"
+                     Text="{Binding ShortName}"
+                     ToolTip.Tip="{Binding Name}"
+                     HorizontalAlignment="Center"/>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+    <ContentPresenter Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" 
+                      DataContext="{Binding SelectedTab}" Content="{Binding}"/>
+    <Grid Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" 
+          IsVisible="{Binding !Loaded}" RowDefinitions="10*, *, 2*">
       <Image Grid.Row="0" Name="image" Margin="75" Source="{Binding !Loaded, Converter={x:Static av:BitmapTypeConverter.Instance}}"/>
       <ProgressBar Grid.Row="1"
                    MaxWidth="{Binding #image.Bounds.Width}"

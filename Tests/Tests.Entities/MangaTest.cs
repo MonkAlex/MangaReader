@@ -29,7 +29,7 @@ namespace Tests
         MangaInfos.Henchan.TwistedIntent,
         MangaInfos.Hentai2Read.AttentionPlease,
         MangaInfos.Mangachan.Rain,
-        MangaInfos.Mintmanga.HarukaNaReceive,
+        MangaInfos.Mintmanga.ChiaChia,
         MangaInfos.Readmanga.Kuroshitsuji
       };
     }

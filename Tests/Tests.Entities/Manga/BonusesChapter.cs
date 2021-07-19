@@ -37,7 +37,7 @@ namespace Tests.Entities.Manga
     {
       using (var context = Repository.GetEntityContext())
       {
-        var uri = new Uri(MangaInfos.Mintmanga.HarukaNaReceive.Uri);
+        var uri = new Uri(MangaInfos.Mintmanga.ChiaChia.Uri);
         var toRemove = await context.Get<IManga>().Where(m => m.Uri == uri).ToListAsync().ConfigureAwait(false);
         foreach (var remove in toRemove)
           await context.Delete(remove).ConfigureAwait(false);

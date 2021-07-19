@@ -41,8 +41,12 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task AddReadmangaWithGoldChapters()
     {
-      var chapters = await GetCountOfChapters("https://readmanga.live/from_common_job_class_to_the_strongest_in_the_world").ConfigureAwait(false);
-      Assert.AreEqual(29, chapters);
+      var manga = await Mangas.Create(new Uri("https://readmanga.live/from_common_job_class_to_the_strongest_in_the_world")).ConfigureAwait(false);
+      await new ReadmangaParser().UpdateContent(manga).ConfigureAwait(false);
+
+      var volume = manga.Volumes.FirstOrDefault(v => v.Number == 4);
+      Assert.NotNull(volume);
+      Assert.AreEqual(7, volume.Container.Count);
     }
 
     private async Task<int> GetCountOfChapters(string url)

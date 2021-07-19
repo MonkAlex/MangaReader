@@ -35,17 +35,10 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task MintmangaBonus()
     {
-      using (var context = Repository.GetEntityContext())
-      {
-        var uri = new Uri(MangaInfos.Mintmanga.ChiaChia.Uri);
-        var toRemove = await context.Get<IManga>().Where(m => m.Uri == uri).ToListAsync().ConfigureAwait(false);
-        foreach (var remove in toRemove)
-          await context.Delete(remove).ConfigureAwait(false);
-        var manga = await Mangas.CreateFromWeb(uri).ConfigureAwait(false);
-        await manga.Parser.UpdateContent(manga).ConfigureAwait(false);
-        var chapters = manga.Volumes.SelectMany(v => v.Container).OfType<Grouple.GroupleChapter>();
-        Assert.AreEqual(1, chapters.Count(c => c.VolumeNumber == 1 && c.Number == 0));
-      }
+      var manga = await Mangas.CreateFromWeb(new Uri("https://mintmanga.live/harukana_receive")).ConfigureAwait(false);
+      await manga.Parser.UpdateContent(manga).ConfigureAwait(false);
+      var chapters = manga.Volumes.SelectMany(v => v.Container).OfType<Grouple.GroupleChapter>();
+      Assert.AreEqual(1, chapters.Count(c => c.VolumeNumber == 1 && c.Number == 0));
     }
   }
 }

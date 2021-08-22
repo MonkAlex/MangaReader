@@ -87,7 +87,7 @@ namespace Hentaichan
     public HentaichanLogin()
     {
       // Адрес может быть переопределен в базе. Это только дефолтное значение.
-      this.MainUri = new Uri(@"https://hen-chan.pro/");
+      this.MainUri = new Uri(@"https://hentaichan.live/");
     }
   }
 }

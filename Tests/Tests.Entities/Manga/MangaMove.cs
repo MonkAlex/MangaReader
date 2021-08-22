@@ -39,7 +39,7 @@ namespace Tests.Entities.Manga
         await context.Save(manga).ConfigureAwait(false);
 
         var volume = new Volume();
-        volume.Container.Add(new Chapter(new Uri("https://mintmanga.live/btooom_/vol1/1?mature=1"), string.Empty));
+        volume.Container.Add(new Chapter(new Uri("https://mintmanga.live/vzryv_/vol1/1?mature=1"), string.Empty));
 
         var chartersNotInHistory = History.GetItemsWithoutHistory(volume);
         Assert.AreEqual(0, chartersNotInHistory.Count);

@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Net;
 using System.Reflection;
+using System.Threading.Tasks;
 using MangaReader.Core;
 using MangaReader.Core.Account;
 using MangaReader.Core.Services;
@@ -18,9 +19,10 @@ namespace Acomics
     public override Guid MangaGuid { get { return Manga; } }
     public override Type MangaType { get { return typeof(Acomics); } }
     public override Type LoginType { get { return typeof(AcomicsLogin); } }
-    protected override void ConfigureCookieClient(ISiteHttpClient client, ILogin login)
+    protected override Task ConfigureCookieClient(ISiteHttpClient client, ILogin login)
     {
       client.AddCookie("ageRestrict", "40");
+      return base.ConfigureCookieClient(client, login);
     }
 
     public override HistoryType HistoryType { get { return HistoryType.Page; } }

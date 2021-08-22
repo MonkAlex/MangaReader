@@ -11,7 +11,7 @@ namespace Hentaichan.Mangachan
     public MangachanChapter(Uri uri, string name)
       : base(uri, name)
     {
-      var match = Regex.Match(name, @"v(\d+) - (\d+\.\d+|\d+)", RegexOptions.RightToLeft);
+      var match = Regex.Match(name, @"[a-zA-Z_а-яА-Я]+.*?(\d+).*?[a-zA-Z_-а-яА-Я]+.*?(\d+.\d+|\d+)", RegexOptions.RightToLeft);
       if (match.Groups.Count > 2)
       {
         VolumeNumber = int.Parse(match.Groups[1].Value);

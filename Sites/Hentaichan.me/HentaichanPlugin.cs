@@ -1,6 +1,9 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Linq;
+using System.Threading.Tasks;
 using MangaReader.Core;
+using MangaReader.Core.Account;
 
 namespace Hentaichan
 {
@@ -12,6 +15,16 @@ namespace Hentaichan
     public override Guid MangaGuid { get { return Manga; } }
     public override Type LoginType { get { return typeof(HentaichanLogin); } }
     public override Type MangaType { get { return typeof(Hentaichan); } }
+    protected override async Task ConfigureCookieClient(ISiteHttpClient client, ILogin login)
+    {
+      await base.ConfigureCookieClient(client, login).ConfigureAwait(false);
+
+      if (!client.GetCookies().Any(c => c.Name == "PHPSESSID"))
+      {
+        await client.GetPage(login.MainUri).ConfigureAwait(false);
+      }
+    }
+
     public override ISiteParser GetParser()
     {
       return new Parser();

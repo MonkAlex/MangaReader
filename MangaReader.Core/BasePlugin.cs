@@ -31,15 +31,15 @@ namespace MangaReader.Core
       var login = await LoginCache.Get(MangaGuid).ConfigureAwait(false);
       var mainUri = login.MainUri;
       var client = SiteHttpClientFactory.Get(mainUri, MangaSettingCache.Get(typeof(T)).Proxy, CookieContainer);
-      this.ConfigureCookieClient(client, login);
+      await this.ConfigureCookieClient(client, login).ConfigureAwait(false);
       if (withLogin && !login.IsLogined(MangaGuid))
         await login.DoLogin(MangaGuid).ConfigureAwait(false);
       return client;
     }
 
-    protected virtual void ConfigureCookieClient(ISiteHttpClient client, ILogin login)
+    protected virtual Task ConfigureCookieClient(ISiteHttpClient client, ILogin login)
     {
-
+      return Task.CompletedTask;
     }
 
     public virtual MangaSetting GetSettings()

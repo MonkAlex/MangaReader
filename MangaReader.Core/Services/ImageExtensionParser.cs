@@ -13,12 +13,15 @@ namespace MangaReader.Core.Services
     public const string Gif = "gif";
     public const string Bmp = "bmp";
     public const string Tiff = "tiff";
+    public const string WebP = "webp";
     private static readonly byte[] bmp = { 0x42, 0x4D };
     private static readonly byte[] gif = { 0x47, 0x49, 0x46, 0x38 };
     private static readonly byte[] jpg = { 0xFF, 0xD8, 0xFF };
     private static readonly byte[] png = { 0x89, 0x50, 0x4E, 0x47 };
     private static readonly byte[] tiff1 = { 0x49, 0x49, 0x2A, 0x00 };
     private static readonly byte[] tiff2 = { 0x4D, 0x4D, 0x00, 0x2A };
+    private static readonly byte[] riff = { 0x52, 0x49, 0x46, 0x46 };
+    private static readonly byte[] webP = { 0x57, 0x45, 0x42, 0x50 };
 
     /// <summary>
     /// Спарсить содержимое.
@@ -46,6 +49,16 @@ namespace MangaReader.Core.Services
         return Tiff;
       if (tiff2.SequenceEqual(head.Take(tiff2.Length)))
         return Tiff;
+      if (riff.SequenceEqual(head.Take(riff.Length)))
+      {
+        head = new byte[4];
+        Array.Copy(value, 8, head, 0, 4);
+
+        if (webP.SequenceEqual(head.Take(webP.Length)))
+        {
+          return WebP;
+        }
+      }
 
       var headAsString = string.Join(" ", head.Select(b => $"0x{b:x2}"));
       Log.Add($"Unknown file format with head {headAsString}");

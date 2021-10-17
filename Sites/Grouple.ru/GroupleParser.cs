@@ -175,7 +175,7 @@ namespace Grouple
         links = linkNodes
           .ConvertAll(r => r.Attributes.Single(a => a.Name == "href").Value)
           .Where(k => k != string.Empty)
-          .Select(s => page.ResponseUri.GetLeftPart(UriPartial.Authority) + s + "?mature=1")
+          .Select(s => page.ResponseUri.GetLeftPart(UriPartial.Authority) + s + "?mtr=1")
           .Select(s => new Uri(s))
           .ToList();
         description = linkNodes
@@ -214,9 +214,9 @@ namespace Grouple
 
     public override UriParseResult ParseUri(Uri uri)
     {
-      // Manga : https://readmanga.live/heroes_of_the_western_world__emerald_
+      // Manga : https://readmanga.io/heroes_of_the_western_world__emerald_
       // Volume : -
-      // Chapter : https://readmanga.live/heroes_of_the_western_world__emerald_/vol0/0
+      // Chapter : https://readmanga.io/heroes_of_the_western_world__emerald_/vol0/0
       // Page : -
 
       var hosts = ConfigStorage.Plugins

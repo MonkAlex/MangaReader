@@ -24,9 +24,9 @@ namespace Tests.Entities.Manga
           await model.Remove(remove).ConfigureAwait(false);
 
         var manga = await Builder.CreateReadmanga().ConfigureAwait(false);
-        var readmangaUri = new Uri("https://readmanga.live/btoom");
+        var readmangaUri = new Uri("https://readmanga.io/btoom");
         manga.Uri = readmangaUri;
-        manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(new Uri("https://readmanga.live/btoom/vol1/1?mature=1")));
+        manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(new Uri("https://readmanga.io/btoom/vol1/1?mtr=1")));
         await context.Save(manga).ConfigureAwait(false);
 
         manga = await context.Get<Readmanga>().FirstOrDefaultAsync(m => m.Id == manga.Id).ConfigureAwait(false);
@@ -39,7 +39,7 @@ namespace Tests.Entities.Manga
         await context.Save(manga).ConfigureAwait(false);
 
         var volume = new Volume();
-        volume.Container.Add(new Chapter(new Uri("https://mintmanga.live/vzryv_/vol1/1?mature=1"), string.Empty));
+        volume.Container.Add(new Chapter(new Uri("https://mintmanga.live/vzryv_/vol1/1?mtr=1"), string.Empty));
 
         var chartersNotInHistory = History.GetItemsWithoutHistory(volume);
         Assert.AreEqual(0, chartersNotInHistory.Count);

@@ -13,7 +13,7 @@ namespace Tests.Entities
   public static class Builder
   {
     public static readonly Uri Url = new Uri("http://example.com");
-    public static readonly Uri ReadmangaUri = new Uri("https://readmanga.live/adele");
+    public static readonly Uri ReadmangaUri = new Uri("https://readmanga.io/adele");
     public static readonly Uri AcomicsUri = new Uri("https://acomics.ru/~doodle-time");
     private static List<MangaInfo> _mangaInfos;
 

@@ -25,7 +25,7 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task ReadmangaBonus()
     {
-      var manga = await Mangas.CreateFromWeb(new Uri("https://readmanga.live/animal_country")).ConfigureAwait(false);
+      var manga = await Mangas.CreateFromWeb(new Uri("https://readmanga.io/animal_country")).ConfigureAwait(false);
       await manga.Parser.UpdateContent(manga).ConfigureAwait(false);
       var chapters = manga.Volumes.SelectMany(v => v.Container).OfType<Grouple.GroupleChapter>();
       Assert.AreEqual(1, chapters.Count(c => c.VolumeNumber == 14 && c.Number == 54));

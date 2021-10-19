@@ -41,7 +41,7 @@ namespace Grouple
     public async Task<Uri> GetRedirectUri(IManga manga, Page page)
     {
       var processedUri = new List<Uri>() { page.ResponseUri };
-      while (page.Content.ToLowerInvariant().Contains(CookieKey))
+      while (page.HasContent && page.Content.ToLowerInvariant().Contains(CookieKey))
       {
         var redirect = await GetRedirectUriInternal(page).ConfigureAwait(false);
         processedUri.Add(redirect);

@@ -14,7 +14,7 @@ namespace Tests.Entities.Manga
   [TestFixture]
   public class MangaMove : TestClass
   {
-    [Test]
+    [Test, Ignore("410 ошибка")]
     public async Task CreateReadmangaWithHistoryAndMove()
     {
       var model = new MangaReader.Core.Services.LibraryViewModel();

@@ -211,6 +211,9 @@ namespace MangaReader.Core.Services.Config
           catch (BadImageFormatException)
           {
           }
+          catch (FileLoadException)
+          {
+          }
         }
       }
       public override IQueryable<ComposablePartDefinition> Parts

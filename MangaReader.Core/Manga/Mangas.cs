@@ -311,19 +311,27 @@ namespace MangaReader.Core.Manga
         Log.Exception(ex, $"Не удалось получить информацию о манге {Name} ({Uri})");
       }
 
-      this.ActiveVolumes = this.Volumes;
-      this.ActiveChapters = this.Chapters;
-      this.ActivePages = this.Pages;
-
-      if (this.Setting.OnlyUpdate)
+      try
       {
-        History.FilterActiveElements(this);
+        this.ActiveVolumes = this.Volumes;
+        this.ActiveChapters = this.Chapters;
+        this.ActivePages = this.Pages;
+
+        if (this.Setting.OnlyUpdate)
+        {
+          History.FilterActiveElements(this);
+        }
+
+        if (!this.ActiveChapters.Any() && !this.ActiveVolumes.Any() && !this.ActivePages.Any())
+        {
+          using (var context = Repository.GetEntityContext())
+            await context.Save(this).ConfigureAwait(false);
+          return;
+        }
       }
-
-      if (!this.ActiveChapters.Any() && !this.ActiveVolumes.Any() && !this.ActivePages.Any())
+      catch (System.Exception ex)
       {
-        using (var context = Repository.GetEntityContext())
-          await context.Save(this).ConfigureAwait(false);
+        Log.Exception(ex, $"Не удалось найти историю о манге {Name} ({Uri})");
         return;
       }
 
@@ -342,21 +350,21 @@ namespace MangaReader.Core.Manga
             Directory.CreateDirectory(mangaFolder);
 
           var tasks = this.ActiveVolumes.Select(
-              v =>
+            v =>
+            {
+              v.OnlyUpdate = this.Setting.OnlyUpdate;
+              return v.Download(mangaFolder).ContinueWith(t =>
               {
-                v.OnlyUpdate = this.Setting.OnlyUpdate;
-                return v.Download(mangaFolder).ContinueWith(t =>
-                {
-                  if (t.Exception != null)
-                    Log.Exception(t.Exception, v.Uri?.ToString());
+                if (t.Exception != null)
+                  Log.Exception(t.Exception, v.Uri?.ToString());
 
-                  if (plugin.HistoryType == HistoryType.Chapter)
-                    AddToHistory(v.InDownloading.Where(c => c.IsDownloaded).ToArray());
+                if (plugin.HistoryType == HistoryType.Chapter)
+                  AddToHistory(v.InDownloading.Where(c => c.IsDownloaded).ToArray());
 
-                  if (plugin.HistoryType == HistoryType.Page)
-                    AddToHistory(v.InDownloading.SelectMany(ch => ch.InDownloading).Where(p => p.IsDownloaded).ToArray());
-                });
+                if (plugin.HistoryType == HistoryType.Page)
+                  AddToHistory(v.InDownloading.SelectMany(ch => ch.InDownloading).Where(p => p.IsDownloaded).ToArray());
               });
+            });
           var chTasks = this.ActiveChapters.Select(
             ch =>
             {
@@ -386,12 +394,10 @@ namespace MangaReader.Core.Manga
             });
           await Task.WhenAll(tasks.Concat(chTasks).Concat(pTasks).ToArray()).ConfigureAwait(false);
           this.DownloadedAt = DateTime.Now;
-          OnPropertyChanged(nameof(Downloaded));
         }
 
         using (var context = Repository.GetEntityContext())
           await context.Save(this).ConfigureAwait(false);
-        NetworkSpeed.Clear();
         Log.AddFormat("Download end '{0}'.", this.Name);
       }
 
@@ -403,6 +409,11 @@ namespace MangaReader.Core.Manga
       catch (System.Exception ex)
       {
         Log.Exception(ex);
+      }
+      finally
+      {
+        NetworkSpeed.Clear();
+        OnPropertyChanged(nameof(Downloaded));
       }
     }
 

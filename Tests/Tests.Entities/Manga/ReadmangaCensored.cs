@@ -11,7 +11,7 @@ using NUnit.Framework;
 
 namespace Tests.Entities.Manga
 {
-  [TestFixture]
+  [TestFixture, ReadManga]
   public class ReadmangaCensored : TestClass
   {
     private ReadmangaParser parser = new Grouple.ReadmangaParser();

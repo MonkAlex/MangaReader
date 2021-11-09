@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace Tests.Entities.Manga
 {
-  [TestFixture]
+  [TestFixture, ReadManga]
   public class ReadmangaStructure : TestClass
   {
     [Test]

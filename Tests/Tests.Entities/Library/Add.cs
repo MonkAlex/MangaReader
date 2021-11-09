@@ -38,13 +38,13 @@ namespace Tests.Entities.Library
     {
       var error = false;
       var result = false;
-      var uri = new Uri(@"https://mintmanga.live/berserk");
+      var uri = new Uri(MangaInfos.Mangachan.Rain.Uri);
 
       using (var context = Repository.GetEntityContext())
       {
-        var mangas = (await context.Get<Readmanga>()
+        var mangas = (await context.Get<IManga>()
             .ToListAsync().ConfigureAwait(false))
-          .Where(m => m.Uri.AbsoluteUri.Contains("berserk"))
+          .Where(m => m.Uri.AbsoluteUri.Contains("rain"))
           .ToList();
         foreach (var manga in mangas)
           await model.Remove(manga).ConfigureAwait(false);

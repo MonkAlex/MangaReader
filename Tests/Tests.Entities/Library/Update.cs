@@ -61,7 +61,7 @@ namespace Tests.Entities.Library
 
       var library = new LibraryViewModel();
       library.LibraryChanged += LibraryOnLibraryChanged;
-      var (_, manga) = await library.Add(new Uri(MangaInfos.Readmanga.Kuroshitsuji.Uri)).ConfigureAwait(false);
+      var (_, manga) = await library.Add(new Uri(MangaInfos.Acomics.SuperScienceFriends.Uri)).ConfigureAwait(false);
 
       var inProcess = false;
       Assert.AreEqual(!inProcess, library.IsAvaible);

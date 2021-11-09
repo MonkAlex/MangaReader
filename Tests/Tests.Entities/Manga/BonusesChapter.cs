@@ -22,7 +22,7 @@ namespace Tests.Entities.Manga
       Assert.AreEqual(1, chapters.Count(c => c.Number == 170.1));
     }
 
-    [Test]
+    [Test, ReadManga]
     public async Task ReadmangaBonus()
     {
       var manga = await Mangas.CreateFromWeb(new Uri("https://readmanga.io/animal_country")).ConfigureAwait(false);
@@ -32,7 +32,7 @@ namespace Tests.Entities.Manga
       Assert.AreEqual(1, chapters.Count(c => c.VolumeNumber == 6 && c.Number == 22));
     }
 
-    [Test]
+    [Test, MintManga]
     public async Task MintmangaBonus()
     {
       var manga = await Mangas.CreateFromWeb(new Uri("https://mintmanga.live/harukana_receive")).ConfigureAwait(false);

@@ -20,33 +20,31 @@ namespace Tests
 {
   public class MangaTest : TestClass
   {
-    private static MangaInfo[] MangaToDownload()
+    private static IEnumerable<MangaInfo> MangaToDownload()
     {
       MangaInfos.Init();
-      return new[]
-      {
-        MangaInfos.Acomics.MgsLdioh,
-        MangaInfos.Henchan.TwistedIntent,
-        MangaInfos.Hentai2Read.AttentionPlease,
-        MangaInfos.Mangachan.Rain,
-        MangaInfos.Mintmanga.ChiaChia,
-        MangaInfos.Readmanga.Kuroshitsuji
-      };
+      yield return MangaInfos.Acomics.MgsLdioh;
+      yield return MangaInfos.Henchan.TwistedIntent;
+      yield return MangaInfos.Hentai2Read.AttentionPlease;
+      yield return MangaInfos.Mangachan.Rain;
+      if (!AppveyorHelper.IsRunning())
+        yield return MangaInfos.Mintmanga.ChiaChia;
+      if (!AppveyorHelper.IsRunning())
+        yield return MangaInfos.Readmanga.Kuroshitsuji;
     }
 
-    private static TestCaseData[] MangaToValidateStatusAndDescription()
+    private static IEnumerable<TestCaseData> MangaToValidateStatusAndDescription()
     {
       MangaInfos.Init();
-      return new[]
-      {
-        new TestCaseData(MangaInfos.Acomics.SuperScienceFriends),
-        new TestCaseData(MangaInfos.Henchan.LoveAndDevil),
-        new TestCaseData(MangaInfos.Hentai2Read.AttentionPlease),
-        new TestCaseData(MangaInfos.Mangachan.ThisGirlfriendIsFiction),
-        new TestCaseData(MangaInfos.Mangachan.EveScramble).SetDescription("html codes in description"),
-        new TestCaseData(MangaInfos.Mintmanga.LoveMate),
-        new TestCaseData(MangaInfos.Readmanga.Kuroshitsuji),
-      };
+      yield return new TestCaseData(MangaInfos.Acomics.SuperScienceFriends);
+      yield return new TestCaseData(MangaInfos.Henchan.LoveAndDevil);
+      yield return new TestCaseData(MangaInfos.Hentai2Read.AttentionPlease);
+      yield return new TestCaseData(MangaInfos.Mangachan.ThisGirlfriendIsFiction);
+      yield return new TestCaseData(MangaInfos.Mangachan.EveScramble).SetDescription("html codes in description");
+      if (!AppveyorHelper.IsRunning())
+        yield return new TestCaseData(MangaInfos.Mintmanga.LoveMate);
+      if (!AppveyorHelper.IsRunning())
+        yield return new TestCaseData(MangaInfos.Readmanga.Kuroshitsuji);
     }
 
     [Test, TestCaseSource(nameof(MangaToDownload))]

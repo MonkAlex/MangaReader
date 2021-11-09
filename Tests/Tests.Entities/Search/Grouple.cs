@@ -7,10 +7,10 @@ using NUnit.Framework;
 
 namespace Tests.Entities.Search
 {
-  [TestFixture]
+  [TestFixture, Grouple]
   public class Grouple : TestClass
   {
-    [Test]
+    [Test, MintManga]
     public void SearchOnMintmanga()
     {
       var manga = SearchOnMintmanga("Baka And Boing").FirstOrDefault();
@@ -18,7 +18,7 @@ namespace Tests.Entities.Search
       Assert.IsAssignableFrom<Mintmanga>(manga);
     }
 
-    [Test]
+    [Test, MintManga]
     public void SearchOnReadmanga()
     {
       var manga = SearchOnReadmanga("Baka And Boing").FirstOrDefault();

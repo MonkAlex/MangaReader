@@ -18,7 +18,7 @@ namespace MangaReader.Avalonia.Platform.Win
     {
       if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
       {
-        var iconSource = "MangaReader.Avalonia.Assets.main.ico";
+        var iconSource = "/Assets/main.ico";
         var icon = TaskBarIcon.ToIcon(iconSource);
         taskBarIcon = new TaskBarIcon(icon);
         taskBarIcon.MouseEventHandler += TaskBarIconOnMouseEventHandler;

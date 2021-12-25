@@ -6,7 +6,7 @@
         xmlns:view="clr-namespace:MangaReader.Avalonia.View;assembly=MangaReader.Avalonia"
         xmlns:av="clr-namespace:MangaReader.Avalonia;assembly=MangaReader.Avalonia"
         MinWidth="800" MinHeight="600"
-        Icon="resm:MangaReader.Avalonia.Assets.main.ico"
+        Icon="/Assets/main.ico"
         x:DataType="vm:ExplorerViewModel"
         x:CompileBindings="True"
         Title="{Binding SelectedTab.Name}">

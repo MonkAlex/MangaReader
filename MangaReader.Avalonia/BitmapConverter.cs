@@ -4,8 +4,10 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using MangaReader.Core.Services;
 
 namespace MangaReader.Avalonia
@@ -38,16 +40,16 @@ namespace MangaReader.Avalonia
 
     private static Bitmap GetNotFoundImage()
     {
-      return new Bitmap(System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(GetNotFoundImageName()));
-    }
-
-    private static string GetNotFoundImageName()
-    {
       var random = new Random();
-      return System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames()
-        .Where(n => n.StartsWith("MangaReader.Avalonia.Assets.") && n.EndsWith(".jpg"))
+
+      var loader = AvaloniaLocator.Current.GetService<IAssetLoader>();
+      var assets = loader.GetAssets(new Uri("avares://MangaReader.Avalonia/Assets/"), null);
+
+      var uri = assets.Where(a => a.AbsolutePath.EndsWith(".jpg"))
         .OrderBy(n => random.Next())
         .FirstOrDefault();
+
+      return new Bitmap(loader.Open(uri));
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

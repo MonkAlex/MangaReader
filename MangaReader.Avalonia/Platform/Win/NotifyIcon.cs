@@ -27,6 +27,7 @@ using System.Drawing;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform;
 using MangaReader.Avalonia.Platform.Win.Interop;
 
 namespace MangaReader.Avalonia.Platform.Win
@@ -390,11 +391,13 @@ namespace MangaReader.Avalonia.Platform.Win
       if (imageSource == null)
         return null;
 
-      var executingAssembly = System.Reflection.Assembly.GetExecutingAssembly();
-      if (executingAssembly.GetManifestResourceNames().Contains(imageSource))
+      var loader = AvaloniaLocator.Current.GetService<IAssetLoader>();
+      var asset = loader
+        .GetAssets(new Uri("avares://MangaReader.Avalonia/"), null)
+        .FirstOrDefault(a => a.AbsolutePath.EndsWith(imageSource));
+      if (asset != null)
       {
-        var stream = executingAssembly.GetManifestResourceStream(imageSource);
-        return new Icon(stream);
+        return new Icon(loader.Open(asset));
       }
 
       return null;

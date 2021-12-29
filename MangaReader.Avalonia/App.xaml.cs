@@ -114,9 +114,10 @@ namespace MangaReader.Avalonia
         var selectedMangaModels = new SelectionModel();
         var mangaModelFabric = new MangaModelFabric(navigator, new MangaSaveCommand(library, navigator), new OpenFolderCommand(selectedMangaModels, library));
         var libraryViewModel = new LibraryViewModel(navigator, TrayIcon, library, mangaModelFabric, selectedMangaModels);
-        var previewFoundMangaCommand = new PreviewFoundMangaCommand(navigator, mangaModelFabric);
-        var searchViewModel = new SearchViewModel(new MangaSearchViewModelFabric(previewFoundMangaCommand));
-        var settingsViewModel = new SettingsViewModel(navigator);
+        var previewFoundMangaCommandFabric = new PreviewFoundMangaCommandFabric(navigator, mangaModelFabric);
+        var searchViewModel = new SearchViewModel(new MangaSearchViewModelFabric(previewFoundMangaCommandFabric));
+        var mangaSettingsViewModelFabric = new MangaSettingsViewModelFabric(navigator);
+        var settingsViewModel = new SettingsViewModel(navigator, mangaSettingsViewModelFabric);
         var changelogViewModel = new ChangelogViewModel();
         explorer = new ExplorerViewModel(navigator, libraryViewModel, searchViewModel, settingsViewModel, changelogViewModel, TrayIcon);
 

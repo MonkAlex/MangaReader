@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using MangaReader.Avalonia.Services;
 using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Core.Account;
 using MangaReader.Core.NHibernate;
@@ -12,6 +13,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 {
   public class SettingsViewModel : SettingTabViewModel
   {
+    private readonly IFabric<MangaSetting, MangaSettingsViewModel> mangaSettingsFabric;
+
     public int AutoupdateLibraryInHours
     {
       get => autoupdateLibraryInHours;
@@ -112,7 +115,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         {
           await ReloadConfig().ConfigureAwait(true);
           var settings = await context.Get<MangaSetting>().ToListAsync().ConfigureAwait(true);
-          foreach (var model in settings.Select(s => new MangaSettingsViewModel(s, navigator)))
+          foreach (var model in settings.Select(s => mangaSettingsFabric.Create(s)))
           {
             navigator.Add(model);
           }
@@ -189,8 +192,9 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       }
     }
 
-    public SettingsViewModel(INavigator navigator) : base(navigator)
+    public SettingsViewModel(INavigator navigator, IFabric<MangaSetting, MangaSettingsViewModel> mangaSettingsFabric) : base(navigator)
     {
+      this.mangaSettingsFabric = mangaSettingsFabric;
       this.Name = "Settings";
       this.Priority = 100;
       this.Child = false;

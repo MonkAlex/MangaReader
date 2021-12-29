@@ -4,6 +4,7 @@ using MangaReader.Avalonia.ViewModel;
 using MangaReader.Avalonia.ViewModel.Command.Manga;
 using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Manga;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Avalonia.Services
 {
@@ -43,16 +44,48 @@ namespace MangaReader.Avalonia.Services
 
   public class MangaSearchViewModelFabric : IFabric<IManga, MangaSearchViewModel>
   {
-    private readonly PreviewFoundMangaCommand previewFoundMangaCommand;
+    private readonly IFabric<PreviewFoundMangaCommand> previewFoundMangaCommand;
 
     public MangaSearchViewModel Create(IManga input)
     {
-      return new MangaSearchViewModel(input, previewFoundMangaCommand);
+      return new MangaSearchViewModel(input, previewFoundMangaCommand.Create());
     }
 
-    public MangaSearchViewModelFabric(PreviewFoundMangaCommand previewFoundMangaCommand)
+    public MangaSearchViewModelFabric(IFabric<PreviewFoundMangaCommand> previewFoundMangaCommand)
     {
       this.previewFoundMangaCommand = previewFoundMangaCommand;
+    }
+  }
+
+  public class MangaSettingsViewModelFabric : IFabric<MangaSetting, MangaSettingsViewModel>
+  {
+    private readonly INavigator navigator;
+
+    public MangaSettingsViewModel Create(MangaSetting input)
+    {
+      return new MangaSettingsViewModel(input, navigator);
+    }
+
+    public MangaSettingsViewModelFabric(INavigator navigator)
+    {
+      this.navigator = navigator;
+    }
+  }
+  
+  public class PreviewFoundMangaCommandFabric : IFabric<PreviewFoundMangaCommand>
+  {
+    private readonly INavigator navigator;
+    private readonly ITaskFabric<IManga, MangaModel> mangaModelFabric;
+
+    public PreviewFoundMangaCommand Create()
+    {
+      return new PreviewFoundMangaCommand(navigator, mangaModelFabric);
+    }
+
+    public PreviewFoundMangaCommandFabric(INavigator navigator, ITaskFabric<IManga, MangaModel> mangaModelFabric)
+    {
+      this.navigator = navigator;
+      this.mangaModelFabric = mangaModelFabric;
     }
   }
 
@@ -64,6 +97,11 @@ namespace MangaReader.Avalonia.Services
   public interface IFabric<in TInput, out TOutput>
   {
     TOutput Create(TInput input);
+  }
+
+  public interface IFabric<out TOutput>
+  {
+    TOutput Create();
   }
  
 }

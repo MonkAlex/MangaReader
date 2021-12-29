@@ -15,6 +15,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
   [System.Diagnostics.DebuggerDisplay("{Id}, {Name}")]
   public class MangaModel : ExplorerTabViewModel, ILibraryFilterableItem
   {
+    private readonly INavigator navigator;
+
     #region MangaProperties
 
     private string name;
@@ -223,13 +225,13 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     public override async Task OnUnselected(ExplorerTabViewModel newModel)
     {
       await this.UndoChangedImpl().ConfigureAwait(true);
-      ExplorerViewModel.Instance.Tabs.Remove(this);
+      navigator.Remove(this);
       await base.OnUnselected(newModel).ConfigureAwait(true);
     }
 
-    public BaseCommand Save => new MangaSaveCommand(this, ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().First().Library);
+    public BaseCommand Save { get; }
 
-    public ICommand OpenFolder => new OpenFolderCommand(ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().First());
+    public ICommand OpenFolder { get; }
 
     public ICommand RestoreName => new DelegateCommand(() => MangaName = OriginalName);
 
@@ -237,10 +239,10 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public ICommand UndoChanged => new DelegateCommand(UndoChangedBody, () => true);
 
-    public async Task UndoChangedBody()
+    private async Task UndoChangedBody()
     {
       await UndoChangedImpl().ConfigureAwait(true);
-      ExplorerViewModel.Instance.SelectedTab = ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>().FirstOrDefault();
+      await navigator.OpenLibrary().ConfigureAwait(true);
     }
 
     private async Task UndoChangedImpl()
@@ -257,9 +259,12 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       }
     }
 
-    public MangaModel(IManga manga)
+    public MangaModel(IManga manga, BaseCommand save, ICommand openFolder, INavigator navigator)
     {
+      this.navigator = navigator;
       UpdateProperties(manga);
+      this.Save = save;
+      this.OpenFolder = openFolder;
     }
   }
 }

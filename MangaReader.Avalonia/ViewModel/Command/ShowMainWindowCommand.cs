@@ -9,6 +9,8 @@ namespace MangaReader.Avalonia.ViewModel.Command
 {
   public class ShowMainWindowCommand : BaseCommand
   {
+    private readonly ExplorerViewModel explorerViewModel;
+
     public override Task Execute(object parameter)
     {
       if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
@@ -16,8 +18,7 @@ namespace MangaReader.Avalonia.ViewModel.Command
         var mainWindow = lifetime.MainWindow;
         if (mainWindow == null && ConfigStorage.Instance.AppConfig.StartMinimizedToTray)
         {
-          var explorer = ExplorerViewModel.Instance;
-          SetLifetime(explorer, lifetime);
+          SetLifetime(explorerViewModel, lifetime);
           mainWindow = lifetime.MainWindow;
         }
 
@@ -39,6 +40,11 @@ namespace MangaReader.Avalonia.ViewModel.Command
       explorer.LoadingProcess.Status = window.Title;
       window.DataContext = explorer;
       lifetime.MainWindow = window;
+    }
+
+    public ShowMainWindowCommand(ExplorerViewModel explorerViewModel)
+    {
+      this.explorerViewModel = explorerViewModel;
     }
   }
 }

@@ -29,7 +29,8 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       return base.CanExecute(parameter) && SelectedModels.Any(m => m.NeedUpdate == NeedUpdate);
     }
 
-    public ChangeUpdateMangaCommand(bool needUpdate, Explorer.LibraryViewModel model) : base(model)
+    public ChangeUpdateMangaCommand(bool needUpdate, Explorer.LibraryViewModel model) 
+      : base(model.SelectedMangaModels, model.Library)
     {
       CanExecuteNeedSelection = true;
       this.NeedUpdate = needUpdate;

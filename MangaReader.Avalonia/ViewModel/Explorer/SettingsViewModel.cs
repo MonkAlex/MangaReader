@@ -105,15 +105,18 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     {
       await base.OnSelected(previousModel).ConfigureAwait(true);
 
-      if (!ExplorerViewModel.Instance.Tabs.OfType<ProxySettingSelectorModel>().Any())
+      if (!navigator.Has<ProxySettingSelectorModel>())
       {
         this.loadedSortDescription = ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription;
         using (var context = Repository.GetEntityContext("Load manga settings"))
         {
           await ReloadConfig().ConfigureAwait(true);
           var settings = await context.Get<MangaSetting>().ToListAsync().ConfigureAwait(true);
-          ExplorerViewModel.Instance.Tabs.AddRange(settings.Select(s => new MangaSettingsViewModel(s)));
-          ExplorerViewModel.Instance.Tabs.Add(new ProxySettingSelectorModel());
+          foreach (var model in settings.Select(s => new MangaSettingsViewModel(s, navigator)))
+          {
+            navigator.Add(model);
+          }
+          navigator.Add(new ProxySettingSelectorModel(navigator));
         }
       }
     }
@@ -124,8 +127,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
       if (this.loadedSortDescription != ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription)
       {
-        foreach (var model in ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>())
-          await model.RefreshItems().ConfigureAwait(true);
+        await navigator.ResetLibrary().ConfigureAwait(true);
       }
     }
 
@@ -187,11 +189,11 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       }
     }
 
-    public SettingsViewModel()
+    public SettingsViewModel(INavigator navigator) : base(navigator)
     {
       this.Name = "Settings";
       this.Priority = 100;
-      this.HideTab = false;
+      this.Child = false;
 
       this.Save = new DelegateCommand(SaveConfig, () => true);
       this.UndoChanged = new DelegateCommand(ReloadConfig, () => true);

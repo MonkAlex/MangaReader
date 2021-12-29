@@ -37,7 +37,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       }
     }
 
-    public DeleteMangaCommand(Explorer.LibraryViewModel model) : base(model)
+    public DeleteMangaCommand(Explorer.LibraryViewModel model) : base(model.SelectedMangaModels, model.Library)
     {
       this.Name = Strings.Manga_Action_Remove;
       this.Icon = "pack://application:,,,/Icons/Manga/delete.png";

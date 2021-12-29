@@ -66,7 +66,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       }
     }
 
-    public ProxySettingSelectorModel()
+    public ProxySettingSelectorModel(INavigator navigator) : base(navigator)
     {
       this.Name = "Прокси";
       this.Priority = 600;

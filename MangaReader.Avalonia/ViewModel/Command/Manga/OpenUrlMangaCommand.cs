@@ -34,7 +34,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       return CanExecuteMangaCommand();
     }
 
-    public OpenUrlMangaCommand(Explorer.LibraryViewModel model) : base(model)
+    public OpenUrlMangaCommand(Explorer.LibraryViewModel model) : base(model.SelectedMangaModels, model.Library)
     {
       this.Name = Strings.Manga_Action_View;
       this.Icon = "pack://application:,,,/Icons/Manga/www.png";

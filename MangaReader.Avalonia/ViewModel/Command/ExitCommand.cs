@@ -10,6 +10,7 @@ namespace MangaReader.Avalonia.ViewModel.Command
 {
   public class ExitCommand : BaseCommand
   {
+    private readonly ExplorerViewModel explorerViewModel;
     public static bool CommandRunned { get; set; }
 
     public override Task Execute(object parameter)
@@ -19,7 +20,7 @@ namespace MangaReader.Avalonia.ViewModel.Command
         CommandRunned = true;
 
         Log.Add("Application will be closed.");
-        ExplorerViewModel.Instance.Dispose();
+        explorerViewModel.Dispose();
         Client.Close();
         if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime && lifetime != parameter)
           lifetime.Shutdown();
@@ -28,8 +29,9 @@ namespace MangaReader.Avalonia.ViewModel.Command
       return Task.CompletedTask;
     }
 
-    public ExitCommand()
+    public ExitCommand(ExplorerViewModel explorerViewModel)
     {
+      this.explorerViewModel = explorerViewModel;
       this.Name = Strings.Library_Exit;
       this.Icon = "pack://application:,,,/Icons/Main/close_app.png";
     }

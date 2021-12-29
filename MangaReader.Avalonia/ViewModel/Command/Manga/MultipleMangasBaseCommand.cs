@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
+using LibraryViewModel = MangaReader.Core.Services.LibraryViewModel;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
@@ -26,9 +28,9 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       }
     }
 
-    protected Explorer.LibraryViewModel LibraryModel { get; }
-
-    protected IEnumerable<MangaModel> SelectedModels => LibraryModel.SelectedMangaModels;
+    private readonly SelectionModel selectedModels;
+    
+    protected IEnumerable<MangaModel> SelectedModels => selectedModels;
 
     public override bool CanExecute(object parameter)
     {
@@ -70,9 +72,9 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
     private void SubscribeToSelection(bool subscribe)
     {
       if (subscribe)
-        LibraryModel.SelectedMangaModels.CollectionChanged += SelectedMangaModelsOnCollectionChanged;
+        selectedModels.CollectionChanged += SelectedMangaModelsOnCollectionChanged;
       else
-        LibraryModel.SelectedMangaModels.CollectionChanged -= SelectedMangaModelsOnCollectionChanged;
+        selectedModels.CollectionChanged -= SelectedMangaModelsOnCollectionChanged;
       OnCanExecuteChanged();
     }
 
@@ -81,9 +83,9 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       OnCanExecuteChanged();
     }
 
-    protected MultipleMangasBaseCommand(Explorer.LibraryViewModel model) : base(model.Library)
+    protected MultipleMangasBaseCommand(SelectionModel mangaModels, LibraryViewModel library) : base(library)
     {
-      LibraryModel = model;
+      selectedModels = mangaModels;
       this.CanExecuteNeedSelection = true;
     }
   }

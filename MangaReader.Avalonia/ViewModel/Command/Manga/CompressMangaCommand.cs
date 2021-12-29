@@ -15,7 +15,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       return Task.CompletedTask;
     }
 
-    public CompressMangaCommand(Explorer.LibraryViewModel model) : base(model)
+    public CompressMangaCommand(Explorer.LibraryViewModel model) : base(model.SelectedMangaModels, model.Library)
     {
       this.Name = Strings.Manga_Action_Compress;
       this.Icon = "pack://application:,,,/Icons/Manga/compress.png";

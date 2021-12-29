@@ -152,7 +152,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       }
     }
 
-    public MangaSettingsViewModel(MangaSetting setting)
+    public MangaSettingsViewModel(MangaSetting setting, INavigator navigator) : base(navigator)
     {
       this.Name = setting.MangaName;
       this.Priority = 500;

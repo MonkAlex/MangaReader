@@ -6,15 +6,27 @@ using MangaReader.Core.Account;
 
 namespace Grouple
 {
-  public abstract class GrouplePlugin<T> : BasePlugin<T> where T : class, IPlugin, new()
+  public abstract class GrouplePlugin<T> : BasePlugin<T>, IGrouplePlugin where T : class, IPlugin, new()
   {
     public override Assembly Assembly { get { return Assembly.GetAssembly(this.GetType()); } }
     public override Type LoginType { get { return typeof(GroupleLogin); } }
     public override HistoryType HistoryType { get { return HistoryType.Chapter; } }
+
+    /// <summary>
+    /// Используется в авторизации
+    /// </summary>
+
+    public abstract ushort SiteId { get; }
+
     protected override Task ConfigureCookieClient(ISiteHttpClient client, ILogin login)
     {
       client.AddCookie(GroupleParser.CookieKey, "true");
       return base.ConfigureCookieClient(client, login);
     }
+  }
+
+  internal interface IGrouplePlugin : IPlugin
+  {
+    ushort SiteId { get; }
   }
 }

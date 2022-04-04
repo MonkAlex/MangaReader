@@ -27,16 +27,19 @@ namespace Grouple
       if (isLogined || !this.CanLogin)
         return isLogined;
 
-      var loginData = new Dictionary<string, string>()
-      {
-        {"username", this.Name},
-        {"password", this.Password},
-        {"remember_me", "checked"}
-      };
       try
       {
-        var plugin = ConfigStorage.Plugins.Single(p => p.MangaGuid == mangaType);
+        var plugin = ConfigStorage.Plugins.Single(p => p.MangaGuid == mangaType) as IGrouplePlugin;
         var client = await plugin.GetCookieClient(false).ConfigureAwait(false);
+        var loginData = new Dictionary<string, string>()
+        {
+          {"username", this.Name},
+          {"password", this.Password},
+          {"remember_me", "true"},
+          {"_remember_me_yes", ""},
+          {"remember_me_yes", "on"},
+          {"targetUri", $"/login/continueSso?targetUri=https%3A%2F%2F{this.MainUri.Host}%2F&siteId={plugin.SiteId}"}
+        };
         var result = await client.Post(new Uri(this.MainUri, "login/authenticate"), loginData).ConfigureAwait(false);
         isLogined = result.Content.Contains("login/logout");
         this.SetLogined(mangaType, isLogined);

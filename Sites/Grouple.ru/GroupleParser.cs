@@ -30,6 +30,11 @@ namespace Grouple
     /// </summary>
     internal const string Copyright = "Запрещена публикация произведения по копирайту";
 
+    /// <summary>
+    /// Удалена.
+    /// </summary>
+    internal const string Copyright2 = "Произведение удалено как противоречащее правилам сайта";
+
     protected abstract Task<ISiteHttpClient> GetClient();
 
     /// <summary>
@@ -167,7 +172,7 @@ namespace Grouple
       {
         var document = new HtmlDocument();
         document.LoadHtml(page.Content);
-        hasCopyrightNotice = document.DocumentNode.InnerText.Contains(Copyright);
+        hasCopyrightNotice = document.DocumentNode.InnerText.Contains(Copyright) || document.DocumentNode.InnerText.Contains(Copyright2);
         var linkNodes = document.DocumentNode
           .SelectNodes("//div[@class=\"expandable chapters-link\"]//a[@href]")
           .Reverse()

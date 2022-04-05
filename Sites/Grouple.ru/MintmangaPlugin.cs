@@ -11,6 +11,7 @@ namespace Grouple
     public static Guid Manga { get { return Guid.Parse("64AC91EF-BDB3-4086-BE17-BB1DBE7A7656"); } }
     public override Guid MangaGuid { get { return Manga; } }
     public override Type MangaType { get { return typeof(Mintmanga); } }
+    public override ushort SiteId { get { return 2; } }
     public override ISiteParser GetParser()
     {
       return new MintmangaParser();

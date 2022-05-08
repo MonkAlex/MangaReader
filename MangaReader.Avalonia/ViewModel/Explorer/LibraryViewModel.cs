@@ -118,7 +118,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     }
 
     public LibraryViewModel(INavigator navigator, ITrayIcon trayIcon, Core.Services.LibraryViewModel library, 
-      IFabric<IManga, MangaModel> mangaModelFabric, SelectionModel selectedMangaModels)
+      IFabric<IManga, MangaModel> mangaModelFabric, SelectionModel selectedMangaModels, 
+      IEnumerable<BaseCommand> libraryCommands, IEnumerable<BaseCommand> mangaCommands)
     {
       this.navigator = navigator;
       this.trayIcon = trayIcon;
@@ -130,20 +131,9 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       this.SelectedMangaModels = selectedMangaModels;
       this.Library = library;
       this.Library.LibraryChanged += LibraryOnLibraryChanged;
-      this.LibraryCommands.Add(new UpdateWithPauseCommand(this, Library));
+      this.LibraryCommands.AddRange(libraryCommands);
       
-      this.MangaCommands.AddRange(new BaseCommand[] {
-        new OpenFolderCommand(selectedMangaModels, library),
-        new ChangeUpdateMangaCommand(false, this),
-        new ChangeUpdateMangaCommand(true, this),
-        new UpdateMangaCommand(this),
-        new CompressMangaCommand(this),
-        new OpenUrlMangaCommand(this),
-        new HistoryClearMangaCommand(this),
-        new DeleteMangaCommand(this),
-        new ShowPropertiesMangaCommand(this, navigator, mangaModelFabric)
-        }
-      );
+      this.MangaCommands.AddRange(mangaCommands);
       this.DefaultMangaCommand = this.MangaCommands.First();
     }
 

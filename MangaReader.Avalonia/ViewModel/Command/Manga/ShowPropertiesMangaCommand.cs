@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Avalonia.Properties;
 using MangaReader.Avalonia.Services;
-using MangaReader.Avalonia.ViewModel.Explorer;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
   public class ShowPropertiesMangaCommand : MultipleMangasBaseCommand
   {
     private readonly INavigator navigator;
-    private readonly IFabric<IManga, MangaModel> fabric;
+    private readonly IFabric<IManga, Explorer.MangaModel> fabric;
 
     public override async Task Execute(IEnumerable<IManga> mangas)
     {
@@ -34,8 +34,8 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       return base.CanExecute(parameter) && SelectedModels.Count() == 1;
     }
 
-    public ShowPropertiesMangaCommand(LibraryViewModel model, INavigator navigator, IFabric<IManga, MangaModel> fabric) 
-      : base(model.SelectedMangaModels, model.Library)
+    public ShowPropertiesMangaCommand(SelectionModel mangaModels, LibraryViewModel library, INavigator navigator, IFabric<IManga, Explorer.MangaModel> fabric) 
+      : base(mangaModels, library)
     {
       this.navigator = navigator;
       this.fabric = fabric;

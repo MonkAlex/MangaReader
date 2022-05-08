@@ -29,6 +29,10 @@ namespace MangaReader.Avalonia.ViewModel.Command
           if (mainWindow.WindowState == WindowState.Minimized)
             mainWindow.WindowState = WindowState.Normal;
         }
+        else
+        {
+          Core.Services.Log.Error($"Try to show main window, but window not created. StartMinimizedToTray = {ConfigStorage.Instance.AppConfig.StartMinimizedToTray}");
+        }
       }
 
       return Task.CompletedTask;

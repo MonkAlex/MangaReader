@@ -15,7 +15,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       // When select non-settings tab, remove all child
       if (!(newModel is SettingTabViewModel))
       {
-        foreach (var tab in navigator.Get<SettingTabViewModel>().Where(t => t.Child).ToList())
+        foreach (var tab in navigator.Tabs.OfType<SettingTabViewModel>().Where(t => t.Child).ToList())
           navigator.Remove(tab);
       }
     }

@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using MangaReader.Avalonia.ViewModel.Command;
-using MangaReader.Avalonia.ViewModel.Command.Manga;
 using MangaReader.Avalonia.ViewModel.Explorer;
-using MangaReader.Core.Exception;
-using MangaReader.Core.Manga;
 using MangaReader.Core.Services;
 using LibraryViewModel = MangaReader.Avalonia.ViewModel.Explorer.LibraryViewModel;
 
@@ -15,12 +11,15 @@ namespace MangaReader.Avalonia.ViewModel
 {
   public class Navigator : INavigator
   {
-    public ObservableCollection<ExplorerTabViewModel> Tabs { get; }
+    private ObservableCollection<ExplorerTabViewModel> tabs;
+    public ReadOnlyObservableCollection<ExplorerTabViewModel> Tabs { get; }
+
+    private ObservableCollection<ExplorerTabViewModel> bottomTabs;
+    public ReadOnlyObservableCollection<ExplorerTabViewModel> BottomTabs { get; }
 
     private bool selectedTabChanging = false;
 
-    internal ExplorerTabViewModel SelectedTab { get; private set; }
-    public ObservableCollection<ExplorerTabViewModel> BottomTabs { get; }
+    public ExplorerTabViewModel CurrentTab { get; private set; }
 
     private Task ChangeSelection<T>() where T : ExplorerTabViewModel
     {
@@ -29,7 +28,7 @@ namespace MangaReader.Avalonia.ViewModel
     
     private async Task ChangeSelection(ExplorerTabViewModel value)
     {
-      if (Equals(SelectedTab, value) || Equals(value, null))
+      if (Equals(CurrentTab, value) || Equals(value, null))
         return;
 
       if (selectedTabChanging)
@@ -42,12 +41,12 @@ namespace MangaReader.Avalonia.ViewModel
 
       try
       {
-        var previous = SelectedTab;
+        var previous = CurrentTab;
         if (previous != null)
         {
           await previous.OnUnselected(value).ConfigureAwait(true);
         }
-        SelectedTab = value;
+        CurrentTab = value;
         SelectionChanged?.Invoke(value);
         await value.OnSelected(previous).ConfigureAwait(true);
       }
@@ -55,11 +54,6 @@ namespace MangaReader.Avalonia.ViewModel
       {
         selectedTabChanging = false;
       }
-    }
-
-    public IEnumerable<T> Get<T>() where T : ExplorerTabViewModel
-    {
-      return Tabs.OfType<T>();
     }
 
     public event Action<ExplorerTabViewModel> SelectionChanged;
@@ -102,7 +96,7 @@ namespace MangaReader.Avalonia.ViewModel
         return;
       
       if (!Tabs.Contains(tabViewModel) && !BottomTabs.Contains(tabViewModel)) 
-        Tabs.Add(tabViewModel);
+        tabs.Add(tabViewModel);
     }
     
     public void AddBottom(ExplorerTabViewModel tabViewModel)
@@ -111,7 +105,7 @@ namespace MangaReader.Avalonia.ViewModel
         return;
       
       if (!Tabs.Contains(tabViewModel) && !BottomTabs.Contains(tabViewModel)) 
-        BottomTabs.Add(tabViewModel);
+        bottomTabs.Add(tabViewModel);
     }
 
     public void Remove(ExplorerTabViewModel tabViewModel)
@@ -119,19 +113,27 @@ namespace MangaReader.Avalonia.ViewModel
       if (tabViewModel is null)
         return;
       
-      Tabs.Remove(tabViewModel);
-      BottomTabs.Remove(tabViewModel);
+      tabs.Remove(tabViewModel);
+      bottomTabs.Remove(tabViewModel);
     }
 
     public Navigator()
     {
-      this.Tabs = new ObservableCollection<ExplorerTabViewModel>();
-      this.BottomTabs = new ObservableCollection<ExplorerTabViewModel>();
+      this.tabs = new ObservableCollection<ExplorerTabViewModel>();
+      this.Tabs = new ReadOnlyObservableCollection<ExplorerTabViewModel>(tabs);
+      this.bottomTabs = new ObservableCollection<ExplorerTabViewModel>();
+      this.BottomTabs = new ReadOnlyObservableCollection<ExplorerTabViewModel>(bottomTabs);
     }
   }
 
   public interface INavigator
   {
+    ExplorerTabViewModel CurrentTab { get; }
+
+    ReadOnlyObservableCollection<ExplorerTabViewModel> Tabs { get; }
+
+    ReadOnlyObservableCollection<ExplorerTabViewModel> BottomTabs { get; }
+
     Task Open(ExplorerTabViewModel tabViewModel);
 
     Task OpenLibrary();
@@ -148,8 +150,6 @@ namespace MangaReader.Avalonia.ViewModel
     void AddBottom(ExplorerTabViewModel tabViewModel);
 
     void Remove(ExplorerTabViewModel tabViewModel);
-
-    IEnumerable<T> Get<T>() where T : ExplorerTabViewModel;
 
     event Action<ExplorerTabViewModel> SelectionChanged;
   }

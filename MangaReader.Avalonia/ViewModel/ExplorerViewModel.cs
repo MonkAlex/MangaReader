@@ -21,11 +21,11 @@ namespace MangaReader.Avalonia.ViewModel
   {
     public ITrayIcon TrayIcon;
 
-    private Navigator navigator;
+    private INavigator navigator;
 
-    public ObservableCollection<ExplorerTabViewModel> Tabs => navigator.Tabs;
+    public ReadOnlyObservableCollection<ExplorerTabViewModel> Tabs => navigator.Tabs;
 
-    public ObservableCollection<ExplorerTabViewModel> BottomTabs => navigator.BottomTabs;
+    public ReadOnlyObservableCollection<ExplorerTabViewModel> BottomTabs => navigator.BottomTabs;
 
     public IProcess LoadingProcess { get; set; }
 
@@ -41,12 +41,12 @@ namespace MangaReader.Avalonia.ViewModel
 
     internal ExplorerTabViewModel SelectedTab
     {
-      get { return navigator.SelectedTab; }
+      get { return navigator.CurrentTab; }
       set
       {
         navigator.Open(value).LogException();
         RaisePropertyChanged();
-        this.Loaded = navigator.SelectedTab != null;
+        this.Loaded = navigator.CurrentTab != null;
       }
     }
 
@@ -83,24 +83,26 @@ namespace MangaReader.Avalonia.ViewModel
       }
     }
 
-    internal ExplorerViewModel(Navigator navigator, 
-      LibraryViewModel libraryViewModel, 
-      SearchViewModel searchViewModel, 
-      SettingsViewModel settingsViewModel,
-      ChangelogViewModel changelogViewModel,
-      ITrayIcon trayIcon)
+    internal ExplorerViewModel(INavigator navigator,
+      IEnumerable<ExplorerTabViewModel> tabs,
+      IEnumerable<ExplorerTabViewModel> bottomTabs,
+      ITrayIcon trayIcon,
+      IProcess process)
     {
       this.TrayIcon = trayIcon;
       this.navigator = navigator;
       this.navigator.SelectionChanged += OnNavigatorOnSelectionChanged;
 
-      navigator.Add(libraryViewModel);
-      navigator.Add(searchViewModel);
-      navigator.Add(settingsViewModel);
-      
-      navigator.AddBottom(changelogViewModel);
-      
-      LoadingProcess = new ProcessModel();
+      foreach (var tab in tabs)
+      {
+        navigator.Add(tab);
+      }
+      foreach (var tab in bottomTabs)
+      {
+        navigator.AddBottom(tab);
+      }
+
+      LoadingProcess = process;
       LoadingProcess.StateChanged += LoadingProcessOnStateChanged;
       Client.ClientUpdated += ClientOnClientUpdated;
     }
@@ -108,7 +110,7 @@ namespace MangaReader.Avalonia.ViewModel
     private void OnNavigatorOnSelectionChanged(ExplorerTabViewModel model)
     {
       RaisePropertyChanged(nameof(SelectedTab));
-      this.Loaded = navigator.SelectedTab != null;
+      this.Loaded = navigator.CurrentTab != null;
     }
 
     private void ClientOnClientUpdated(object sender, Version e)

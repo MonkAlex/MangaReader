@@ -14,6 +14,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
   public class SettingsViewModel : SettingTabViewModel
   {
     private readonly IFabric<MangaSetting, MangaSettingsViewModel> mangaSettingsFabric;
+    private readonly IFabric<ProxySetting, ProxySettingModel> proxySettingsFabric;
+    private readonly ProxySettingSelectorModel proxySettingSelector;
 
     public int AutoupdateLibraryInHours
     {
@@ -119,7 +121,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           {
             navigator.Add(model);
           }
-          navigator.Add(new ProxySettingSelectorModel(navigator));
+          navigator.Add(proxySettingSelector);
         }
       }
     }
@@ -159,7 +161,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         this.ProxySettingModels = await context
           .Get<ProxySetting>()
           .Where(s => s.SettingType != ProxySettingType.Parent)
-          .Select(s => new ProxySettingModel(s))
+          .Select(s => proxySettingsFabric.Create(s))
           .ToListAsync()
           .ConfigureAwait(true);
         this.proxySettingId = config.ProxySetting.Id;
@@ -192,9 +194,14 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       }
     }
 
-    public SettingsViewModel(INavigator navigator, IFabric<MangaSetting, MangaSettingsViewModel> mangaSettingsFabric) : base(navigator)
+    public SettingsViewModel(INavigator navigator, 
+      IFabric<MangaSetting, MangaSettingsViewModel> mangaSettingsFabric,
+      IFabric<ProxySetting, ProxySettingModel> proxySettingsFabric,
+      ProxySettingSelectorModel proxySettingSelector) : base(navigator)
     {
       this.mangaSettingsFabric = mangaSettingsFabric;
+      this.proxySettingsFabric = proxySettingsFabric;
+      this.proxySettingSelector = proxySettingSelector;
       this.Name = "Settings";
       this.Priority = 100;
       this.Child = false;

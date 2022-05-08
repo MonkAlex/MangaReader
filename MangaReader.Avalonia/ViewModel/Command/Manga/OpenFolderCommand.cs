@@ -25,9 +25,9 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       return baseCommand.CanExecute(parameter) && CanExecuteMangaCommand();
     }
 
-    public OpenFolderCommand(SelectionModel mangaModels, LibraryViewModel library) : base(mangaModels, library)
+    public OpenFolderCommand(SelectionModel mangaModels, LibraryViewModel library, OpenFolderCommandBase openFolder) : base(mangaModels, library)
     {
-      this.baseCommand = new OpenFolderCommandBase();
+      this.baseCommand = openFolder;
       this.Name = baseCommand.Name;
       this.Icon = baseCommand.Icon;
     }

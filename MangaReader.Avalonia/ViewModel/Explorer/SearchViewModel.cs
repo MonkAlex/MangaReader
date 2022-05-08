@@ -76,6 +76,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       {
         using (Repository.GetEntityContext($"Show preview for manga from uri {parsedUri}"))
         {
+          // TODO Why searchViewModel used, not just previewCommand?
           var manga = await Mangas.Create(parsedUri).ConfigureAwait(true);
           if (manga == null)
             return;

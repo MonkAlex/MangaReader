@@ -57,14 +57,16 @@ namespace MangaReader.Avalonia.ViewModel.Command.Library
           ActiveCommand = Pause;
         }
       }
+
+      OnCanExecuteChanged();
     }
 
-    public UpdateWithPauseCommand(LibraryViewModel view, Core.Services.LibraryViewModel library)
+    public UpdateWithPauseCommand(BaseCommand update, BaseCommand pause, BaseCommand continueCommand, Core.Services.LibraryViewModel library)
     {
       this.library = library;
-      this.Update = new UpdateVisibleMangaCommand(view, library);
-      this.Pause = new PauseCommand(library);
-      this.Continue = new ContinueCommand(library);
+      this.Update = update;
+      this.Pause = pause;
+      this.Continue = continueCommand;
       this.ActiveCommand = this.Update;
       this.Update.CanExecuteChanged += UpdateOnCanExecuteChanged;
     }

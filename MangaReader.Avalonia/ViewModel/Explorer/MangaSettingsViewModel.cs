@@ -8,6 +8,7 @@ using System.Windows.Input;
 using MangaReader.Core.Account;
 using MangaReader.Core.Manga;
 using MangaReader.Core.NHibernate;
+using MangaReader.Avalonia.Services;
 
 namespace MangaReader.Avalonia.ViewModel.Explorer
 {
@@ -97,6 +98,8 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
     public ICommand UndoChanged { get; }
 
+    private readonly IFabric<ProxySetting, ProxySettingModel> proxySettingFabric;
+
     private async Task ReloadConfig()
     {
       using (var context = Repository.GetEntityContext())
@@ -112,7 +115,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           this.MainUri = setting.MainUri.OriginalString;
           this.ProxySettingModels = await context
             .Get<ProxySetting>()
-            .Select(s => new ProxySettingModel(s))
+            .Select(s => proxySettingFabric.Create(s))
             .ToListAsync()
             .ConfigureAwait(true);
           this.proxySettingId = setting.ProxySetting.Id;
@@ -152,8 +155,9 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       }
     }
 
-    public MangaSettingsViewModel(MangaSetting setting, INavigator navigator) : base(navigator)
+    public MangaSettingsViewModel(MangaSetting setting, INavigator navigator, IFabric<ProxySetting, ProxySettingModel> proxySettingFabric) : base(navigator)
     {
+      this.proxySettingFabric = proxySettingFabric;
       this.Name = setting.MangaName;
       this.Priority = 500;
       this.mangaSettingsId = setting.Id;

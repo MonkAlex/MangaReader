@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Core.Properties;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
@@ -15,7 +16,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       return Task.CompletedTask;
     }
 
-    public CompressMangaCommand(Explorer.LibraryViewModel model) : base(model.SelectedMangaModels, model.Library)
+    public CompressMangaCommand(SelectionModel mangaModels, LibraryViewModel library) : base(mangaModels, library)
     {
       this.Name = Strings.Manga_Action_Compress;
       this.Icon = "pack://application:,,,/Icons/Manga/compress.png";

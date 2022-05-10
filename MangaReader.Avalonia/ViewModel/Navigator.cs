@@ -12,9 +12,12 @@ namespace MangaReader.Avalonia.ViewModel
   public class Navigator : INavigator
   {
     private ObservableCollection<ExplorerTabViewModel> tabs;
+    private ObservableCollection<ExplorerTabViewModel> bottomTabs;
+
+    // public for binding only
     public ReadOnlyObservableCollection<ExplorerTabViewModel> Tabs { get; }
 
-    private ObservableCollection<ExplorerTabViewModel> bottomTabs;
+    // public for binding only
     public ReadOnlyObservableCollection<ExplorerTabViewModel> BottomTabs { get; }
 
     private bool selectedTabChanging = false;

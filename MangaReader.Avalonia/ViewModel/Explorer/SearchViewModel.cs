@@ -15,7 +15,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 {
   public class SearchViewModel : ExplorerTabViewModel
   {
-    private readonly MangaSearchViewModelFabric searchViewModelFabric;
+    private readonly IFabric<IManga, MangaSearchViewModel> searchViewModelFabric;
     private ObservableCollection<MangaSearchViewModel> items;
     private string search;
     private DelegateCommand startSearch;
@@ -88,7 +88,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       }
     }
 
-    public SearchViewModel(MangaSearchViewModelFabric searchViewModelFabric)
+    public SearchViewModel(IFabric<IManga, MangaSearchViewModel> searchViewModelFabric)
     {
       this.searchViewModelFabric = searchViewModelFabric;
       this.Name = "Search";

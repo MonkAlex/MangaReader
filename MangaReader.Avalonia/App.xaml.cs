@@ -144,7 +144,7 @@ namespace MangaReader.Avalonia
         TrayIcon.BalloonClickedCommand = new OpenFolderCommandBase();
         
         // DB connection in another thread, then UI work well
-        Task.Run(() => Core.Client.Start(explorer.LoadingProcess));
+        Task.Run(() => Core.Client.Start(process));
 
         var args = Environment.GetCommandLineArgs();
         if (args.Contains("-m") || args.Contains("/min") || ConfigStorage.Instance.AppConfig.StartMinimizedToTray)

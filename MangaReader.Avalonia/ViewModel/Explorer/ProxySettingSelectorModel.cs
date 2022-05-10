@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using MangaReader.Avalonia.Services;
 using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Core.Account;
 using MangaReader.Core.Exception;
@@ -38,6 +39,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     }
 
     private string testAddress;
+    private readonly IFabric<ProxySetting, ProxySettingModel> fabric;
 
     public DelegateCommand Add { get; }
 
@@ -61,18 +63,19 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       {
         this.ProxySettingModels = new ObservableCollection<ProxySettingModel>(context
           .Get<ProxySetting>()
-          .Select(s => new ProxySettingModel(s)));
+          .Select(s => fabric.Create(s)));
         this.SelectedProxySettingModel = this.ProxySettingModels.FirstOrDefault();
       }
     }
 
-    public ProxySettingSelectorModel()
+    public ProxySettingSelectorModel(INavigator navigator, IFabric<ProxySetting, ProxySettingModel> fabric) : base(navigator)
     {
+      this.fabric = fabric;
       this.Name = "Прокси";
       this.Priority = 600;
       this.Add = new DelegateCommand(() =>
       {
-        var newProxy = new ProxySettingModel(new ProxySetting(ProxySettingType.Manual));
+        var newProxy = this.fabric.Create(GetNewManualProxy());
         this.ProxySettingModels.Add(newProxy);
         this.SelectedProxySettingModel = newProxy;
       });
@@ -112,7 +115,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
           var manualProxies = await context.Get<ProxySetting>().ToListAsync().ConfigureAwait(true);
           foreach (var model in ProxySettingModels.Where(m => m.IsManual))
           {
-            var setting = model.Id == 0 ? new ProxySetting(ProxySettingType.Manual) : manualProxies.Single(p => p.Id == model.Id);
+            var setting = model.Id == 0 ? GetNewManualProxy() : manualProxies.Single(p => p.Id == model.Id);
             setting.Name = model.Name;
             setting.Address = model.Address;
             setting.UserName = model.UserName;
@@ -134,6 +137,11 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         ReloadData();
         await Services.Dialogs.ShowInfo("Сохранение прокси", "Произошла ошибка. \r\n" + e.Message).ConfigureAwait(true);
       }
+    }
+
+    private static ProxySetting GetNewManualProxy()
+    {
+      return new ProxySetting(ProxySettingType.Manual);
     }
 
     private async Task TestAddressImpl()

@@ -49,13 +49,13 @@ namespace MangaReader.Avalonia.ViewModel
 
     private PreviewFoundMangaCommand previewFoundManga;
 
-    public MangaSearchViewModel(IManga manga)
+    public MangaSearchViewModel(IManga manga, PreviewFoundMangaCommand previewFoundMangaCommand)
     {
       this.name = manga.Name;
       this.uri = manga.Uri;
       this.cover = manga.Cover;
       this.status = manga.Status;
-      this.previewFoundManga = new PreviewFoundMangaCommand();
+      this.previewFoundManga = previewFoundMangaCommand;
     }
   }
 }

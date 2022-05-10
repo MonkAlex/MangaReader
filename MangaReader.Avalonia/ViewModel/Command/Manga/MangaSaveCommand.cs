@@ -13,12 +13,18 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
   public class MangaSaveCommand : LibraryBaseCommand
   {
-    private readonly MangaModel model;
+    private readonly INavigator navigator;
+    private MangaModel model;
 
     private bool inProcess = false;
 
     public override bool CanExecute(object parameter)
     {
+      if (parameter is MangaModel inputModel)
+      {
+        this.model = inputModel;
+        this.Name = model.Saved ? "Save" : "Subscribe";
+      }
       return !inProcess && (base.CanExecute(parameter) || !model.Saved);
     }
 
@@ -26,6 +32,9 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
     {
       try
       {
+        if (parameter is MangaModel inputModel)
+          this.model = inputModel;
+
         inProcess = true;
         this.OnCanExecuteChanged();
         this.Name = "Process...";
@@ -56,18 +65,15 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
           }
           else
           {
-            foreach (var viewModel in ExplorerViewModel.Instance.Tabs.OfType<Explorer.LibraryViewModel>())
+            var added = await Library.Add(new Uri(model.Uri)).ConfigureAwait(true);
+            if (added.Success)
             {
-              var added = await viewModel.Library.Add(new Uri(model.Uri)).ConfigureAwait(true);
-              if (added.Success)
-              {
-                added.Manga.Cover = model.Cover;
-                await context.Save(added.Manga).ConfigureAwait(true);
-              }
+              added.Manga.Cover = model.Cover;
+              await context.Save(added.Manga).ConfigureAwait(true);
             }
           }
         }
-        ExplorerViewModel.Instance.SelectedTab = ExplorerViewModel.Instance.Tabs.OfType<Explorer.LibraryViewModel>().FirstOrDefault();
+        await navigator.OpenLibrary().ConfigureAwait(true);
       }
       catch (MangaReaderException ex)
       {
@@ -87,10 +93,9 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       }
     }
 
-    public MangaSaveCommand(MangaModel model, LibraryViewModel library) : base(library)
+    public MangaSaveCommand(LibraryViewModel library, INavigator navigator) : base(library)
     {
-      this.model = model;
-      this.Name = model.Saved ? "Save" : "Subscribe";
+      this.navigator = navigator;
     }
   }
 }

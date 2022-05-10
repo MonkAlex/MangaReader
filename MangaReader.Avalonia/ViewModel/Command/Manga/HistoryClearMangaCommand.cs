@@ -30,7 +30,7 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       }
     }
 
-    public HistoryClearMangaCommand(Explorer.LibraryViewModel model) : base(model)
+    public HistoryClearMangaCommand(SelectionModel mangaModels, LibraryViewModel library) : base(mangaModels, library)
     {
       this.Name = Strings.Manga_Action_Remove + " историю";
       this.Icon = "pack://application:,,,/Icons/Manga/history_clear.png";

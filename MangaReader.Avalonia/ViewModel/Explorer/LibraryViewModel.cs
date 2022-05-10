@@ -6,9 +6,12 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using AutoMapper;
 using Avalonia.Threading;
 using DynamicData;
 using DynamicData.Binding;
+using MangaReader.Avalonia.Platform;
+using MangaReader.Avalonia.Services;
 using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Avalonia.ViewModel.Command.Library;
 using MangaReader.Avalonia.ViewModel.Command.Manga;
@@ -20,6 +23,9 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 {
   public class LibraryViewModel : ExplorerTabViewModel
   {
+    private readonly INavigator navigator;
+    private readonly ITrayIcon trayIcon;
+    private readonly IFabric<IManga, MangaModel> mangaModelFabric;
     private SourceCache<MangaModel, int> items;
     private string search;
     private ReadOnlyObservableCollection<MangaModel> filteredItems;
@@ -45,7 +51,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       }
     }
 
-    public ObservableCollection<MangaModel> SelectedMangaModels { get; }
+    public SelectionModel SelectedMangaModels { get; }
 
     public string Search
     {
@@ -78,7 +84,10 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       }
       using (var context = Core.NHibernate.Repository.GetEntityContext("Library items loading"))
       {
-        var mangas = await context.Get<IManga>().Select(m => new MangaModel(m)).ToListAsync().ConfigureAwait(true);
+        var mangas = await context.Get<IManga>()
+          .Select(m => mangaModelFabric.Create(m))
+          .ToListAsync()
+          .ConfigureAwait(true);
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
           Items = new SourceCache<MangaModel, int>(m => m.Id);
@@ -108,28 +117,23 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       return x => x.Name.IndexOf(filterName, StringComparison.InvariantCultureIgnoreCase) >= 0;
     }
 
-    public LibraryViewModel()
+    public LibraryViewModel(INavigator navigator, ITrayIcon trayIcon, Core.Services.LibraryViewModel library, 
+      IFabric<IManga, MangaModel> mangaModelFabric, SelectionModel selectedMangaModels, 
+      IEnumerable<BaseCommand> libraryCommands, IEnumerable<BaseCommand> mangaCommands)
     {
+      this.navigator = navigator;
+      this.trayIcon = trayIcon;
+      this.mangaModelFabric = mangaModelFabric;
       this.Name = "Main";
       this.Priority = 10;
       this.LibraryCommands = new ObservableCollection<BaseCommand>();
       this.MangaCommands = new ObservableCollection<BaseCommand>();
-      this.SelectedMangaModels = new ObservableCollection<MangaModel>();
-      this.Library = new Core.Services.LibraryViewModel();
+      this.SelectedMangaModels = selectedMangaModels;
+      this.Library = library;
       this.Library.LibraryChanged += LibraryOnLibraryChanged;
-      this.LibraryCommands.Add(new UpdateWithPauseCommand(this, Library));
-      this.MangaCommands.AddRange(new BaseCommand[] {
-        new OpenFolderCommand(this),
-        new ChangeUpdateMangaCommand(false, this),
-        new ChangeUpdateMangaCommand(true, this),
-        new UpdateMangaCommand(this),
-        new CompressMangaCommand(this),
-        new OpenUrlMangaCommand(this),
-        new HistoryClearMangaCommand(this),
-        new DeleteMangaCommand(this),
-        new ShowPropertiesMangaCommand(this)
-        }
-      );
+      this.LibraryCommands.AddRange(libraryCommands);
+      
+      this.MangaCommands.AddRange(mangaCommands);
       this.DefaultMangaCommand = this.MangaCommands.First();
     }
 
@@ -158,8 +162,11 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
               switch (libraryViewModelArgs.MangaOperation)
               {
                 case MangaOperation.Added:
-                  this.Items.AddOrUpdate(new MangaModel(libraryViewModelArgs.Manga));
+                {
+                  var mm = mangaModelFabric.Create(libraryViewModelArgs.Manga);
+                  this.Items.AddOrUpdate(mm);
                   break;
+                }
                 case MangaOperation.Deleted:
                   {
                     var mangaModels = this.Items.Items.Where(i => i.Id == mangaId).ToList();
@@ -172,7 +179,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
                   break;
                 case MangaOperation.UpdateCompleted:
                   ActualizeSpeedAndProcess(args.Manga);
-                  ExplorerViewModel.Instance.TrayIcon.ShowBalloon($"Обновление {args.Manga.Name} завершено.", args.Manga);
+                  trayIcon.ShowBalloon($"Обновление {args.Manga.Name} завершено.", args.Manga);
                   break;
                 case MangaOperation.None:
                   break;

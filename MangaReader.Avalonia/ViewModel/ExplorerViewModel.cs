@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,17 +19,15 @@ namespace MangaReader.Avalonia.ViewModel
 {
   public class ExplorerViewModel : ViewModelBase, System.IDisposable
   {
-    private ExplorerTabViewModel selectedTab;
-
     public ITrayIcon TrayIcon;
 
-    public ObservableCollection<ExplorerTabViewModel> Tabs { get; }
+    private INavigator navigator;
 
-    public ObservableCollection<ExplorerTabViewModel> BottomTabs { get; }
+    public ReadOnlyObservableCollection<ExplorerTabViewModel> Tabs => navigator.Tabs;
+
+    public ReadOnlyObservableCollection<ExplorerTabViewModel> BottomTabs => navigator.BottomTabs;
 
     public IProcess LoadingProcess { get; set; }
-
-    public static ExplorerViewModel Instance { get; } = new ExplorerViewModel();
 
     public bool Loaded
     {
@@ -38,46 +37,24 @@ namespace MangaReader.Avalonia.ViewModel
 
     private bool loaded;
 
-    private bool selectedTabChanging = false;
     private bool appUpdated = false;
 
-    public ExplorerTabViewModel SelectedTab
+    internal ExplorerTabViewModel SelectedTab
     {
-      get { return selectedTab; }
+      get { return navigator.CurrentTab; }
       set
       {
-        if (Equals(selectedTab, value) || Equals(value, null))
-          return;
-
-        if (selectedTabChanging)
-        {
-          Log.Add($"Try to change tab selection to {value}, but its already in changing.");
-          return;
-        }
-
-        selectedTabChanging = true;
-
-        try
-        {
-#warning Тут два асинхронных обработчика, похоже нужна команда, а не свойство?
-          var previous = selectedTab;
-          selectedTab?.OnUnselected(value);
-          RaiseAndSetIfChanged(ref selectedTab, value);
-          this.Loaded = selectedTab != null;
-          selectedTab?.OnSelected(previous);
-        }
-        finally
-        {
-          selectedTabChanging = false;
-        }
+        navigator.Open(value).LogException();
+        RaisePropertyChanged();
+        this.Loaded = navigator.CurrentTab != null;
       }
     }
 
-    public async Task SelectDefaultTab()
+    private async Task SelectDefaultTab()
     {
       if (appUpdated)
       {
-        this.SelectedTab = this.BottomTabs.OfType<ChangelogViewModel>().FirstOrDefault();
+        await navigator.OpenChangelog().ConfigureAwait(true);
         return;
       }
 
@@ -87,7 +64,14 @@ namespace MangaReader.Avalonia.ViewModel
         hasManga = await context.Get<IManga>().AnyAsync().ConfigureAwait(true);
       }
 
-      this.SelectedTab = hasManga ? Tabs.OrderBy(t => t.Priority).FirstOrDefault() : Tabs.OfType<SearchViewModel>().FirstOrDefault();
+      if (hasManga)
+      {
+        await navigator.OpenLibrary().ConfigureAwait(true);
+      }
+      else
+      {
+        await navigator.OpenSearch().ConfigureAwait(true);
+      }
     }
 
 
@@ -99,25 +83,34 @@ namespace MangaReader.Avalonia.ViewModel
       }
     }
 
-    private ExplorerViewModel()
+    internal ExplorerViewModel(INavigator navigator,
+      IEnumerable<ExplorerTabViewModel> tabs,
+      IEnumerable<ExplorerTabViewModel> bottomTabs,
+      ITrayIcon trayIcon,
+      IProcess process)
     {
-      this.Tabs = new ObservableCollection<ExplorerTabViewModel>
+      this.TrayIcon = trayIcon;
+      this.navigator = navigator;
+      this.navigator.SelectionChanged += OnNavigatorOnSelectionChanged;
+
+      foreach (var tab in tabs)
       {
-        new LibraryViewModel(),
-        new SearchViewModel(),
-        new SettingsViewModel(),
-      };
-      this.BottomTabs = new ObservableCollection<ExplorerTabViewModel>
+        navigator.Add(tab);
+      }
+      foreach (var tab in bottomTabs)
       {
-        new ChangelogViewModel(),
-      };
-      LoadingProcess = new ProcessModel();
+        navigator.AddBottom(tab);
+      }
+
+      LoadingProcess = process;
       LoadingProcess.StateChanged += LoadingProcessOnStateChanged;
       Client.ClientUpdated += ClientOnClientUpdated;
-      TrayIcon = new WindowsTrayIcon();
-      TrayIcon.SetIcon();
-      TrayIcon.DoubleClickCommand = new ShowMainWindowCommand();
-      TrayIcon.BalloonClickedCommand = new OpenFolderCommandBase();
+    }
+
+    private void OnNavigatorOnSelectionChanged(ExplorerTabViewModel model)
+    {
+      RaisePropertyChanged(nameof(SelectedTab));
+      this.Loaded = navigator.CurrentTab != null;
     }
 
     private void ClientOnClientUpdated(object sender, Version e)
@@ -127,6 +120,8 @@ namespace MangaReader.Avalonia.ViewModel
 
     public void Dispose()
     {
+      this.navigator.SelectionChanged -= OnNavigatorOnSelectionChanged;
+      Client.ClientUpdated -= ClientOnClientUpdated;
       TrayIcon?.Dispose();
     }
   }

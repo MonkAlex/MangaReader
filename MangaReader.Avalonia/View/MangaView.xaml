@@ -33,7 +33,7 @@
                Text="{Binding Description}" TextWrapping="Wrap"/>
     <view:MangaProperties Grid.Column="1" Grid.Row="3" IsVisible="{Binding Saved}"/>
     <WrapPanel Grid.Column="1" Grid.Row="3" IsVisible="{Binding !Saved}" HorizontalAlignment="Center">
-      <Button Command="{Binding Save}" Content="{Binding Save.Name}"/>
+      <Button Command="{Binding Save}" Content="{Binding Save.Name}" CommandParameter="{Binding}"/>
     </WrapPanel>
   </Grid>
 </UserControl>

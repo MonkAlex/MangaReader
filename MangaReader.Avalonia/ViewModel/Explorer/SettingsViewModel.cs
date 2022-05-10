@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using MangaReader.Avalonia.Services;
 using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Core.Account;
 using MangaReader.Core.NHibernate;
@@ -12,6 +13,10 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 {
   public class SettingsViewModel : SettingTabViewModel
   {
+    private readonly IFabric<MangaSetting, MangaSettingsViewModel> mangaSettingsFabric;
+    private readonly IFabric<ProxySetting, ProxySettingModel> proxySettingsFabric;
+    private readonly ProxySettingSelectorModel proxySettingSelector;
+
     public int AutoupdateLibraryInHours
     {
       get => autoupdateLibraryInHours;
@@ -105,15 +110,18 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
     {
       await base.OnSelected(previousModel).ConfigureAwait(true);
 
-      if (!ExplorerViewModel.Instance.Tabs.OfType<ProxySettingSelectorModel>().Any())
+      if (!navigator.Has<ProxySettingSelectorModel>())
       {
         this.loadedSortDescription = ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription;
         using (var context = Repository.GetEntityContext("Load manga settings"))
         {
           await ReloadConfig().ConfigureAwait(true);
           var settings = await context.Get<MangaSetting>().ToListAsync().ConfigureAwait(true);
-          ExplorerViewModel.Instance.Tabs.AddRange(settings.Select(s => new MangaSettingsViewModel(s)));
-          ExplorerViewModel.Instance.Tabs.Add(new ProxySettingSelectorModel());
+          foreach (var model in settings.Select(s => mangaSettingsFabric.Create(s)))
+          {
+            navigator.Add(model);
+          }
+          navigator.Add(proxySettingSelector);
         }
       }
     }
@@ -124,8 +132,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
 
       if (this.loadedSortDescription != ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription)
       {
-        foreach (var model in ExplorerViewModel.Instance.Tabs.OfType<LibraryViewModel>())
-          await model.RefreshItems().ConfigureAwait(true);
+        await navigator.ResetLibrary().ConfigureAwait(true);
       }
     }
 
@@ -154,7 +161,7 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
         this.ProxySettingModels = await context
           .Get<ProxySetting>()
           .Where(s => s.SettingType != ProxySettingType.Parent)
-          .Select(s => new ProxySettingModel(s))
+          .Select(s => proxySettingsFabric.Create(s))
           .ToListAsync()
           .ConfigureAwait(true);
         this.proxySettingId = config.ProxySetting.Id;
@@ -187,11 +194,17 @@ namespace MangaReader.Avalonia.ViewModel.Explorer
       }
     }
 
-    public SettingsViewModel()
+    public SettingsViewModel(INavigator navigator, 
+      IFabric<MangaSetting, MangaSettingsViewModel> mangaSettingsFabric,
+      IFabric<ProxySetting, ProxySettingModel> proxySettingsFabric,
+      ProxySettingSelectorModel proxySettingSelector) : base(navigator)
     {
+      this.mangaSettingsFabric = mangaSettingsFabric;
+      this.proxySettingsFabric = proxySettingsFabric;
+      this.proxySettingSelector = proxySettingSelector;
       this.Name = "Settings";
       this.Priority = 100;
-      this.HideTab = false;
+      this.Child = false;
 
       this.Save = new DelegateCommand(SaveConfig, () => true);
       this.UndoChanged = new DelegateCommand(ReloadConfig, () => true);

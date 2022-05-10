@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using MangaReader.Avalonia.ViewModel.Explorer;
 using MangaReader.Core.Manga;
+using LibraryViewModel = MangaReader.Core.Services.LibraryViewModel;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
@@ -22,9 +25,9 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       return baseCommand.CanExecute(parameter) && CanExecuteMangaCommand();
     }
 
-    public OpenFolderCommand(Explorer.LibraryViewModel model) : base(model)
+    public OpenFolderCommand(SelectionModel mangaModels, LibraryViewModel library, OpenFolderCommandBase openFolder) : base(mangaModels, library)
     {
-      this.baseCommand = new OpenFolderCommandBase();
+      this.baseCommand = openFolder;
       this.Name = baseCommand.Name;
       this.Icon = baseCommand.Icon;
     }

@@ -3,32 +3,30 @@ using System.Linq;
 using System.Threading.Tasks;
 using MangaReader.Core.Manga;
 using MangaReader.Avalonia.Properties;
-using MangaReader.Avalonia.ViewModel.Explorer;
+using MangaReader.Avalonia.Services;
+using MangaReader.Core.Services;
 
 namespace MangaReader.Avalonia.ViewModel.Command.Manga
 {
   public class ShowPropertiesMangaCommand : MultipleMangasBaseCommand
   {
-    public override Task Execute(IEnumerable<IManga> mangas)
+    private readonly INavigator navigator;
+    private readonly IFabric<IManga, Explorer.MangaModel> fabric;
+
+    public override async Task Execute(IEnumerable<IManga> mangas)
     {
       var manga = mangas.Single();
-      var explorer = ExplorerViewModel.Instance;
-      var searchTab = explorer.Tabs.OfType<MangaModel>().SingleOrDefault(t => t.Id == manga.Id);
-      if (searchTab == null)
+      var searchTab = this.SelectedModels.SingleOrDefault(m => m.Id == manga.Id);
+      if (searchTab != null)
       {
-        searchTab = this.LibraryModel.SelectedMangaModels.SingleOrDefault(m => m.Id == manga.Id);
-        if (searchTab != null)
-          searchTab.UpdateProperties(manga);
-        else
-          searchTab = new MangaModel(manga);
-        explorer.Tabs.Add(searchTab);
+        searchTab.UpdateProperties(manga);
       }
       else
-        searchTab.UpdateProperties(manga);
-
-      explorer.SelectedTab = searchTab;
-
-      return Task.CompletedTask;
+      {
+        searchTab = fabric.Create(manga);
+      }
+      
+      await navigator.Open(searchTab).ConfigureAwait(true);
     }
 
     public override bool CanExecute(object parameter)
@@ -36,8 +34,11 @@ namespace MangaReader.Avalonia.ViewModel.Command.Manga
       return base.CanExecute(parameter) && SelectedModels.Count() == 1;
     }
 
-    public ShowPropertiesMangaCommand(Explorer.LibraryViewModel model) : base(model)
+    public ShowPropertiesMangaCommand(SelectionModel mangaModels, LibraryViewModel library, INavigator navigator, IFabric<IManga, Explorer.MangaModel> fabric) 
+      : base(mangaModels, library)
     {
+      this.navigator = navigator;
+      this.fabric = fabric;
       CanExecuteNeedSelection = true;
       this.Name = Strings.Manga_Settings;
       this.Icon = "pack://application:,,,/Icons/Manga/settings.png";

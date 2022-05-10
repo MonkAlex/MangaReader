@@ -28,7 +28,7 @@ namespace MangaReader.Avalonia.View
       proxy.NeedCompress = null;
       proxy.Status = "Томов: 40 , выпуск продолжается\r\nПеревод: продолжается\r\nПросмотров: 34891310\r\nЖанры: трагедия, приключения, фэнтези, героическое фэнтези, сэйнэн, боевик …\r\nАвтор: Миура Кэнтаро\r\nГод выпуска: 1989\r\nИздательства: Hakusensha, Comix-ART\r\nЖурналы: Animal House, Young Animal\r\nПереводчики: The Berserk World, Majin Scanlation, Okami";
       proxy.Description = "Гатс, известный как Чёрный Мечник, ищет убежища от демонов, охотящихся за ним, и отмщения человеку, сделавшему из него жертву на своём алтаре. С помощью только своей титанической силы, умения и меча, Гатс должен биться против жестокого рока, пока битва с ненавистью мало-помалу лишает его человечности.\r\nБерсерк — это тёмная и погружающая в раздумья история о неистовых сражениях и безжалостном роке.\r\nby South Wind";
-      MangaModel = new MangaModel(proxy);
+      MangaModel = new MangaModel(proxy, null, null, null);
     }
 
     static Designer()

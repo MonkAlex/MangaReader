@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hentaichan;
 using MangaReader.Core.Manga;
 using NUnit.Framework;
 
@@ -13,7 +14,7 @@ namespace Tests.Entities.Search
     public void SearchOnHenchan()
     {
       var mangas = Search("Poolside");
-      Assert.IsTrue(mangas.Any(m => m.Uri.OriginalString == "https://hentaichan.live/manga/22839-shalosti-v-basseyne.html"));
+      Assert.IsTrue(mangas.Any(m => m.Uri.OriginalString == $"{Constants.HentaichanHost}manga/22839-shalosti-v-basseyne.html"));
 
       var game = Search("A Tale of Two Swords ");
       Assert.IsEmpty(game);

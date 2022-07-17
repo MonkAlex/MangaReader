@@ -13,35 +13,35 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task AddEmptyReadmanga()
     {
-      var chapters = await GetCountOfChapters("https://readmanga.io/_my_name_").ConfigureAwait(false);
+      var chapters = await GetCountOfChapters($"{Grouple.Constants.ReadmangaHost}_my_name_").ConfigureAwait(false);
       Assert.AreEqual(0, chapters);
     }
 
     [Test]
     public async Task AddSingleReadmanga()
     {
-      var chapters = await GetCountOfChapters("https://readmanga.io/traeh").ConfigureAwait(false);
+      var chapters = await GetCountOfChapters($"{Grouple.Constants.ReadmangaHost}traeh").ConfigureAwait(false);
       Assert.AreEqual(1, chapters);
     }
 
     [Test]
     public async Task AddReadmangaWithoutExtra()
     {
-      var chapters = await GetCountOfChapters("https://readmanga.io/kuroshitsuji_dj___black_sheep").ConfigureAwait(false);
+      var chapters = await GetCountOfChapters($"{Grouple.Constants.ReadmangaHost}kuroshitsuji_dj___black_sheep").ConfigureAwait(false);
       Assert.AreEqual(4, chapters);
     }
 
     [Test]
     public async Task AddReadmangaWithExtra()
     {
-      var chapters = await GetCountOfChapters("https://readmanga.io/anima").ConfigureAwait(false);
+      var chapters = await GetCountOfChapters($"{Grouple.Constants.ReadmangaHost}anima").ConfigureAwait(false);
       Assert.AreEqual(59, chapters);
     }
 
     [Test]
     public async Task AddReadmangaWithGoldChapters()
     {
-      var manga = await Mangas.Create(new Uri("https://readmanga.io/from_common_job_class_to_the_strongest_in_the_world")).ConfigureAwait(false);
+      var manga = await Mangas.Create(new Uri($"{Grouple.Constants.ReadmangaHost}from_common_job_class_to_the_strongest_in_the_world")).ConfigureAwait(false);
       await new ReadmangaParser().UpdateContent(manga).ConfigureAwait(false);
 
       var volume = manga.Volumes.FirstOrDefault(v => v.Number == 4);

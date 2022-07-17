@@ -17,10 +17,10 @@ namespace Tests.Entities
 
     public static class Henchan
     {
-      [InfoCache("https://hentaichan.live/manga/12850-twisted-intent-chast-1.html", true)]
+      [InfoCache("https://y.hentaichan.live/manga/12850-twisted-intent-chast-1.html", true)]
       public static MangaInfo TwistedIntent;
 
-      [InfoCache("https://hentaichan.live/manga/14212-love-and-devil-glava-25.html", false)]
+      [InfoCache("https://y.hentaichan.live/manga/14212-love-and-devil-glava-25.html", false)]
       public static MangaInfo LoveAndDevil;
     }
 
@@ -38,10 +38,10 @@ namespace Tests.Entities
 
     public static class Readmanga
     {
-      [InfoCache("https://readmanga.io/kuroshitsuji_dj___black_sheep", true)]
+      [InfoCache("https://readmanga.live/kuroshitsuji_dj___black_sheep", true)]
       public static MangaInfo Kuroshitsuji;
 
-      [InfoCache("https://readmanga.io/love_mate_2", false)]
+      [InfoCache("https://readmanga.live/love_mate_2", false)]
       public static MangaInfo LoveMate2;
     }
 

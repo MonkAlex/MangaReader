@@ -8,7 +8,7 @@ namespace Tests.Entities.Services
   [TestFixture, Parallelizable(ParallelScope.All)]
   public class FolderNaming
   {
-    private Chapter chapter = new Grouple.GroupleChapter(new Uri("https://readmanga.io/tower_of_god/vol2/318"), "Башня Бога 2 - 318 44F Конечная станция (03)");
+    private Chapter chapter = new Grouple.GroupleChapter(new Uri($"{Grouple.Constants.ReadmangaHost}tower_of_god/vol2/318"), "Башня Бога 2 - 318 44F Конечная станция (03)");
     private Volume volume = new Volume("Башня бога 2", 1);
 
     [Test, Sequential]

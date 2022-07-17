@@ -17,14 +17,14 @@ namespace Tests.Entities.Manga
     private ReadmangaParser parser = new Grouple.ReadmangaParser();
 
     // Not censored
-    // https://readmanga.io/black_butler_anthology_comic_rainbow_butler/vol1/6
+    // https://readmanga.live/black_butler_anthology_comic_rainbow_butler/vol1/6
     // Censored
-    // https://readmanga.io/school_teacher/vol2/10?mtr=1
+    // https://readmanga.live/school_teacher/vol2/10?mtr=1
 
     [Test]
     public async Task NotCensoredReadmanga()
     {
-      var manga = await Get(@"https://readmanga.io/black_butler_anthology_comic_rainbow_butler/vol1/6").ConfigureAwait(false);
+      var manga = await Get($"{Grouple.Constants.ReadmangaHost}black_butler_anthology_comic_rainbow_butler/vol1/6").ConfigureAwait(false);
       var chapter = manga.Volumes.Single(v => v.Number == 1).Container.ToList()[0];
       await parser.UpdatePages(chapter).ConfigureAwait(false);
       Assert.IsTrue(chapter.Container.First().ImageLink.IsAbsoluteUri);
@@ -33,7 +33,7 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task CensoredReadmanga()
     {
-      var manga = await Get(@"https://readmanga.io/school_teacher/vol2/10?mtr=1").ConfigureAwait(false);
+      var manga = await Get($"{Grouple.Constants.ReadmangaHost}school_teacher/vol2/10?mtr=1").ConfigureAwait(false);
       var chapter = manga.Volumes.Single(v => v.Number == 2).Container.ToList()[5];
       await parser.UpdatePages(chapter).ConfigureAwait(false);
       Assert.IsTrue(chapter.Container.First().ImageLink.IsAbsoluteUri);

@@ -86,7 +86,7 @@ namespace Tests.Entities.Manga
       var x = 100000;
       Parallel.For(0, x, i =>
       {
-        manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(new Uri(string.Format("https://readmanga.io/btoom/vol1/{0}?mtr=1", i % y))));
+        manga.Histories.Add(new MangaReader.Core.Manga.MangaHistory(new Uri($"{Constants.ReadmangaHost}btoom/vol1/{i % y}?mtr=1")));
       });
     }
   }

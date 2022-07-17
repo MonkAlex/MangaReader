@@ -30,4 +30,11 @@ namespace Tests.Entities
   public class ReadMangaAttribute : GroupleAttribute { }
 
   public class MintMangaAttribute : GroupleAttribute { }
+
+  public class IssueAttribute : IgnoreAttribute
+  {
+    public IssueAttribute(ushort issue) : base($"Детали в https://github.com/MonkAlex/MangaReader/issues/{issue}")
+    {
+    }
+  }
 }

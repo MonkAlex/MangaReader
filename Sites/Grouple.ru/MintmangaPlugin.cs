@@ -1,12 +1,17 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using MangaReader.Core;
+using MangaReader.Core.Services.Config;
 
 namespace Grouple
 {
   [Export(typeof(IPlugin))]
   public class MintmangaPlugin : GrouplePlugin<MintmangaPlugin>
   {
+    public MintmangaPlugin(PluginManager pluginManager, Config config) : base(pluginManager, config)
+    {
+    }
+
     public override string ShortName { get { return "MM"; } }
     public static Guid Manga { get { return Guid.Parse("64AC91EF-BDB3-4086-BE17-BB1DBE7A7656"); } }
     public override Guid MangaGuid { get { return Manga; } }
@@ -14,7 +19,7 @@ namespace Grouple
     public override ushort SiteId { get { return 2; } }
     public override ISiteParser GetParser()
     {
-      return new MintmangaParser();
+      return new MintmangaParser(pluginManager, config, this);
     }
   }
 }

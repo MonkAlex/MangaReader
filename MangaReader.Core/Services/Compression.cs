@@ -10,12 +10,13 @@ using MangaReader.Core.Services.Config;
 
 namespace MangaReader.Core.Services
 {
-  public static class Compression
+  public class Compression
   {
     public const string ArchiveFormat = ".cbz";
     public const string ArchivePattern = "*.cbz";
     public const string BackupPattern = "*.cbz.dbak*";
     public const string Separator = " ";
+    private readonly Environments environments;
 
     public enum CompressionMode
     {
@@ -24,32 +25,16 @@ namespace MangaReader.Core.Services
       Chapter
     }
 
-    /// <summary>
-    /// Получить упаковку манги по умолчанию.
-    /// </summary>
-    /// <param name="manga">Манга.</param>
-    /// <returns>Режим упаковки.</returns>
-    public static CompressionMode? GetDefaultCompression(this IManga manga)
+    public Compression(Environments environments)
     {
-      CompressionMode? mode = null;
-      if (Mapping.Initialized)
-      {
-        var setting = manga.Setting;
-        if (setting != null)
-          mode = setting.DefaultCompression;
-      }
-
-      if (mode == null || !manga.AllowedCompressionModes.Any(m => Equals(m, mode)))
-        mode = manga.AllowedCompressionModes.FirstOrDefault();
-
-      return mode;
+      this.environments = environments;
     }
 
     /// <summary>
     /// Упаковка всех глав.
     /// </summary>
     /// <param name="message">Папка манги.</param>
-    public static List<string> CompressChapters(string message)
+    public List<string> CompressChapters(string message)
     {
       var files = new List<string>();
 
@@ -58,7 +43,7 @@ namespace MangaReader.Core.Services
         return files;
 
       // Нельзя сжимать папку со всей мангой.
-      if (message.Trim(Path.DirectorySeparatorChar) == AppConfig.DownloadFolder.Trim(Path.DirectorySeparatorChar))
+      if (message.Trim(Path.DirectorySeparatorChar) == environments.DownloadFolder.Trim(Path.DirectorySeparatorChar))
         return files;
 
       Log.AddFormat("Compression: Start {0}.", message);
@@ -82,7 +67,7 @@ namespace MangaReader.Core.Services
     /// Упаковка всех томов.
     /// </summary>
     /// <param name="message">Папка манги.</param>
-    public static List<string> CompressVolumes(string message)
+    public List<string> CompressVolumes(string message)
     {
       var files = new List<string>();
 
@@ -92,7 +77,7 @@ namespace MangaReader.Core.Services
 
 #warning Проверка не учитывает возможность переопределения папки в настройках типа манги.
       // Нельзя сжимать папку со всей мангой.
-      if (message.Trim(Path.DirectorySeparatorChar) == AppConfig.DownloadFolder.Trim(Path.DirectorySeparatorChar))
+      if (message.Trim(Path.DirectorySeparatorChar) == environments.DownloadFolder.Trim(Path.DirectorySeparatorChar))
         return files;
 
       Log.AddFormat("Compression: Start {0}.", message);
@@ -111,7 +96,7 @@ namespace MangaReader.Core.Services
     /// Упаковка всей манги.
     /// </summary>
     /// <param name="message">Папка манги.</param>
-    public static List<string> CompressManga(string message)
+    public List<string> CompressManga(string message)
     {
       var files = new List<string>();
 
@@ -120,7 +105,7 @@ namespace MangaReader.Core.Services
         return files;
 
       // Нельзя сжимать папку со всей мангой.
-      if (message.Trim(Path.DirectorySeparatorChar) == AppConfig.DownloadFolder.Trim(Path.DirectorySeparatorChar))
+      if (message.Trim(Path.DirectorySeparatorChar) == environments.DownloadFolder.Trim(Path.DirectorySeparatorChar))
         return files;
 
       Log.AddFormat("Compression: Start {0}.", message);

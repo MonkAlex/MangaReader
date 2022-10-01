@@ -44,12 +44,11 @@ namespace MangaReader.Avalonia.View
     private async void OnChangeClick(object sender, RoutedEventArgs routedEventArgs)
     {
       var absolutePath = DirectoryHelpers.GetAbsoluteFolderPath(this.Path.Text);
-      var defaultPath = Directory.Exists(absolutePath) ? absolutePath : ConfigStorage.WorkFolder;
+      var defaultPath = Directory.Exists(absolutePath) ? absolutePath : Core.Environments.Instance.WorkFolder;
 
       var dialog = new OpenFolderDialog
       {
-        DefaultDirectory = defaultPath,
-        InitialDirectory = defaultPath,
+        Directory = defaultPath,
         Title = "Select folder"
       };
       Window parent = null;
@@ -58,7 +57,7 @@ namespace MangaReader.Avalonia.View
       var result = await dialog.ShowAsync(parent).ConfigureAwait(true);
       if (!string.IsNullOrWhiteSpace(result))
       {
-        var relativePath = DirectoryHelpers.GetRelativePath(ConfigStorage.WorkFolder, result);
+        var relativePath = DirectoryHelpers.GetRelativePath(Core.Environments.Instance.WorkFolder, result);
         var value = relativePath.StartsWith(@"..\..\") ? result : relativePath;
         Path.Text = value;
       }

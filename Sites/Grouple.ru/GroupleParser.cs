@@ -35,6 +35,11 @@ namespace Grouple
     /// </summary>
     internal const string Copyright2 = "Произведение удалено как противоречащее правилам сайта";
 
+    public GroupleParser(PluginManager pluginManager, Config config, IPlugin plugin) : base(pluginManager, config, plugin)
+    {
+
+    }
+
     protected abstract Task<ISiteHttpClient> GetClient();
 
     /// <summary>
@@ -115,7 +120,7 @@ namespace Grouple
     {
       var client = await GetClient().ConfigureAwait(false);
       var page = await client.GetPage(manga.Uri).ConfigureAwait(false);
-      var localizedName = new MangaName();
+      var localizedName = new MangaName(config);
       try
       {
         var document = new HtmlDocument();
@@ -224,7 +229,7 @@ namespace Grouple
       // Chapter : https://readmanga.live/heroes_of_the_western_world__emerald_/vol0/0
       // Page : -
 
-      var hosts = ConfigStorage.Plugins
+      var hosts = pluginManager.Plugins
         .Where(p => p.GetParser() is GroupleParser)
         .Select(p => p.GetSettings().MainUri);
 

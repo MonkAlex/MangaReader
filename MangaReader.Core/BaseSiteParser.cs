@@ -19,6 +19,9 @@ namespace MangaReader.Core
   public abstract class BaseSiteParser : ISiteParser
   {
     protected static ConcurrentDictionary<Type, IMapper> Mappers = new ConcurrentDictionary<Type, IMapper>();
+    protected readonly PluginManager pluginManager;
+    protected readonly Config config;
+    protected readonly IPlugin plugin;
 
     public abstract Task UpdateNameAndStatus(IManga manga);
 
@@ -110,7 +113,7 @@ namespace MangaReader.Core
 
     public virtual IAsyncEnumerable<IManga> Search(string name)
     {
-      var hosts = ConfigStorage.Plugins
+      var hosts = pluginManager.Plugins
         .Where(p => p.GetParser().GetType() == this.GetType())
         .Select(p => p.GetSettings().MainUri);
       return hosts.SelectAsync(async host => await GetMangaNodes(name, host).ConfigureAwait(false))
@@ -124,5 +127,12 @@ namespace MangaReader.Core
     protected abstract Task<IManga> GetMangaFromNode(Uri host, ISiteHttpClient client, HtmlNode manga);
 
     public abstract IMapper GetMapper();
+
+    public BaseSiteParser(PluginManager pluginManager, Config config, IPlugin plugin)
+    {
+      this.pluginManager = pluginManager;
+      this.config = config;
+      this.plugin = plugin;
+    }
   }
 }

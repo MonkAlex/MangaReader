@@ -12,6 +12,7 @@ using MangaReader.Core.NHibernate;
 using MangaReader.Core.Properties;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
+using static MangaReader.Core.Services.Compression;
 
 namespace MangaReader.Core.Manga
 {
@@ -484,6 +485,27 @@ namespace MangaReader.Core.Manga
       Log.Info(Strings.Mangas_Compress_Completed);
     }
 
+    /// <summary>
+    /// Получить упаковку манги по умолчанию.
+    /// </summary>
+    /// <param name="manga">Манга.</param>
+    /// <returns>Режим упаковки.</returns>
+    public CompressionMode? GetDefaultCompression()
+    {
+      CompressionMode? mode = null;
+      if (mapping.Initialized)
+      {
+        var setting = Setting;
+        if (setting != null)
+          mode = setting.DefaultCompression;
+      }
+
+      if (mode == null || !AllowedCompressionModes.Any(m => Equals(m, mode)))
+        mode = AllowedCompressionModes.FirstOrDefault();
+
+      return mode;
+    }
+
     public override async Task BeforeSave(ChangeTrackerArgs args)
     {
       var debugMessage = string.Empty;
@@ -519,7 +541,7 @@ namespace MangaReader.Core.Manga
 
       if (CompressionMode == null)
       {
-        CompressionMode = this.GetDefaultCompression();
+        CompressionMode = GetDefaultCompression();
         args.SetPropertyState(nameof(CompressionMode), CompressionMode);
       }
 

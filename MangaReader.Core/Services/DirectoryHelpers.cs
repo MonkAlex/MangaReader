@@ -127,7 +127,7 @@ namespace MangaReader.Core.Services
     /// <remarks>Путь должен существовать или быть значением по умолчанию. Не должен заканчиваться относительными путями.</remarks>
     public static bool ValidateSettingPath(string path)
     {
-      if (Equals(path, AppConfig.DownloadFolderName) || Equals(path, AppConfig.DownloadFolder))
+      if (Equals(path, Environments.DownloadFolderName) || Equals(path, Environments.Instance.DownloadFolder))
         return true;
 
       if (path.TrimEnd(Path.PathSeparator, Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar, Path.VolumeSeparatorChar).EndsWith("."))
@@ -183,7 +183,7 @@ namespace MangaReader.Core.Services
       }
       else if (!folderUri.IsAbsoluteUri)
       {
-        return Path.GetFullPath(Path.Combine(ConfigStorage.WorkFolder, folder));
+        return Path.GetFullPath(Path.Combine(Environments.Instance.WorkFolder, folder));
       }
       else
       {

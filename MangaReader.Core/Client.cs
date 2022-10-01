@@ -4,46 +4,41 @@ using System.Threading.Tasks;
 using MangaReader.Core.ApplicationControl;
 using MangaReader.Core.Convertation;
 using MangaReader.Core.Exception;
+using MangaReader.Core.NHibernate;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
 using MangaReader.Core.Update;
 
 namespace MangaReader.Core
 {
-  public static class Client
+  public class Client
   {
-    private static Mutex mutex;
+    private Mutex mutex;
 
-    private static CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+    private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+    private readonly JsonConfigStorage storage;
+    private readonly PluginManager pluginManager;
+    private readonly Mapping mapping;
+    private readonly ClientInit clientInit;
+    private readonly Updater updater;
 
-    public static event EventHandler<string> OtherAppRunning;
-
-    public static event EventHandler ClientBeenClosed;
-
-    public static event EventHandler<Version> ClientUpdated;
-
-    public static void Init()
+    public Client(JsonConfigStorage storage, PluginManager pluginManager, Mapping mapping, ClientInit clientInit, Updater updater)
     {
-      // Все необработанные - логгируем.
-      AppDomain.CurrentDomain.UnhandledException += (o, a) => Log.Exception(a.ExceptionObject as System.Exception);
-
-      // Все необработанные в тасках (и забытые) - пробрасываем наружу, пусть пока падает в такой ситуации, чем зависает.
-      TaskScheduler.UnobservedTaskException += (o, a) =>
-      {
-        Log.Exception(a.Exception, "UnobservedTaskException");
-        a.SetObserved();
-        throw a.Exception;
-      };
+      this.storage = storage;
+      this.pluginManager = pluginManager;
+      this.mapping = mapping;
+      this.clientInit = clientInit;
+      this.updater = updater;
     }
 
-    public static async Task Start(IProcess process)
+    public async Task Start(IProcess process)
     {
       try
       {
-        await Updater.Initialize().ConfigureAwait(false);
+        await updater.Initialize().ConfigureAwait(false);
 
-        ConfigStorage.RefreshPlugins();
-        NHibernate.Mapping.Initialize(process);
+        pluginManager.RefreshPlugins();
+        mapping.Initialize(process);
         await DatabaseConfig.Initialize().ConfigureAwait(false);
 
         var name = NHibernate.Repository.GetDatabaseUniqueId().ToString("D");
@@ -52,7 +47,7 @@ namespace MangaReader.Core
         {
           try
           {
-            OnClientBeenClosed();
+            clientInit.OnClientBeenClosed();
             process.ProgressState = ProgressState.Error;
             process.Status = "Программа уже запущена.";
             Log.Exception(new MangaReaderException("Программа уже запущена."));
@@ -67,7 +62,7 @@ namespace MangaReader.Core
 
         // Сервер стартует отдельно и рекурсивно сам себя поддерживает. Ждать его не нужно и нет никакого смысла.
 #pragma warning disable 4014
-        ApplicationControl.Server.RunTask(name, cancellationTokenSource.Token);
+        ApplicationControl.Server.RunTask(clientInit, name, cancellationTokenSource.Token);
 #pragma warning restore 4014
 
         await Converter.Convert(process).ConfigureAwait(false);
@@ -82,11 +77,10 @@ namespace MangaReader.Core
       }
     }
 
-    public static void Close()
+    public void Close()
     {
-      ConfigStorage.Instance.Save();
-      ConfigStorage.Close();
-      NHibernate.Mapping.Close();
+      storage.Save();
+      mapping.Close();
 
       if (mutex != null && !mutex.SafeWaitHandle.IsClosed)
         mutex.Close();
@@ -95,21 +89,6 @@ namespace MangaReader.Core
         cancellationTokenSource.Cancel();
 
       Log.Separator("Closed");
-    }
-
-    internal static void OnOtherAppRunning(string e)
-    {
-      OtherAppRunning?.Invoke(null, e);
-    }
-
-    internal static void OnClientBeenClosed()
-    {
-      ClientBeenClosed?.Invoke(null, EventArgs.Empty);
-    }
-
-    internal static void OnClientUpdated(Version e)
-    {
-      ClientUpdated?.Invoke(null, e);
     }
   }
 }

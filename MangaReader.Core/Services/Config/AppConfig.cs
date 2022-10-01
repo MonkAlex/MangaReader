@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 namespace MangaReader.Core.Services.Config
 {
@@ -34,21 +33,6 @@ namespace MangaReader.Core.Services.Config
     /// Время последнего обновления.
     /// </summary>
     public DateTime LastUpdate { get; set; }
-
-    /// <summary>
-    /// Версия приложения.
-    /// </summary>
-    public static Version Version { get { return typeof(AppConfig).Assembly.GetName().Version; } }
-
-    /// <summary>
-    /// Папка загрузки.
-    /// </summary>
-    public static string DownloadFolder { get { return Path.Combine(ConfigStorage.WorkFolder, DownloadFolderName); } }
-
-    /// <summary>
-    /// Название папки загрузки.
-    /// </summary>
-    public const string DownloadFolderName = "Download";
 
     /// <summary>
     /// Префикс папки томов.

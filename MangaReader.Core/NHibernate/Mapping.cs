@@ -14,13 +14,18 @@ using NHibernate.Tool.hbm2ddl;
 
 namespace MangaReader.Core.NHibernate
 {
-  public static class Mapping
+  public class Mapping
   {
     private const string DbFile = "storage.db";
+    private readonly Environments environments;
+    private ISessionFactory sessionFactory;
 
-    private static ISessionFactory sessionFactory;
+    public Mapping(Environments environments)
+    {
+      this.environments = environments;
+    }
 
-    public static ISession GetSession()
+    public ISession GetSession()
     {
       if (!CurrentSessionContext.HasBind(sessionFactory))
         CurrentSessionContext.Bind(sessionFactory.OpenSession());
@@ -36,15 +41,15 @@ namespace MangaReader.Core.NHibernate
       return session;
     }
 
-    public static IStatelessSession GetStatelessSession()
+    public IStatelessSession GetStatelessSession()
     {
       var session = sessionFactory.OpenStatelessSession();
       return session;
     }
 
-    public static bool Initialized { get; set; }
+    public bool Initialized { get; set; }
 
-    public static void Initialize(IProcess process)
+    public void Initialize(IProcess process)
     {
       Initialized = false;
       Log.Add("Connect to database...");
@@ -55,7 +60,7 @@ namespace MangaReader.Core.NHibernate
       Initialized = true;
     }
 
-    public static void Close()
+    public void Close()
     {
       if (sessionFactory == null || sessionFactory.IsClosed)
         return;
@@ -66,18 +71,18 @@ namespace MangaReader.Core.NHibernate
       sessionFactory.Close();
     }
 
-    private static ISessionFactory CreateSessionFactory()
+    private ISessionFactory CreateSessionFactory()
     {
       return Fluently
         .Configure()
-        .Database(SQLiteConfiguration.Standard.UsingFile(Path.Combine(ConfigStorage.WorkFolder, DbFile)))
+        .Database(SQLiteConfiguration.Standard.UsingFile(Path.Combine(environments.WorkFolder, DbFile)))
         .Mappings(LoadPlugins)
         .CurrentSessionContext<AsyncLocalSessionContext>()
         .ExposeConfiguration(BuildSchema)
         .BuildSessionFactory();
     }
 
-    private static void LoadPlugins(MappingConfiguration config)
+    private void LoadPlugins(MappingConfiguration config)
     {
       foreach (var assembly in Helper.AllowedAssemblies())
       {
@@ -85,7 +90,7 @@ namespace MangaReader.Core.NHibernate
       }
     }
 
-    private static void BuildSchema(Configuration config)
+    private void BuildSchema(Configuration config)
     {
       foreach (var source in config.ClassMappings.Where(m => m.Discriminator != null && m is RootClass))
       {
@@ -97,7 +102,7 @@ namespace MangaReader.Core.NHibernate
       config.EventListeners.PreInsertEventListeners = new IPreInsertEventListener[] { new EntityChangedEvent() };
       config.EventListeners.PreUpdateEventListeners = new IPreUpdateEventListener[] { new EntityChangedEvent() };
       config.EventListeners.PreDeleteEventListeners = new IPreDeleteEventListener[] { new EntityChangedEvent() };
-      if (File.Exists(Path.Combine(ConfigStorage.WorkFolder, DbFile)))
+      if (File.Exists(Path.Combine(environments.WorkFolder, DbFile)))
         new SchemaUpdate(config).Execute(false, true);
       else
       {

@@ -1,17 +1,24 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.EquivalencyExpression;
+using MangaReader.Core;
 using MangaReader.Core.Account;
 using MangaReader.Core.DataTrasferObject;
 using MangaReader.Core.Manga;
+using MangaReader.Core.Services.Config;
 
 namespace Grouple
 {
   public class MintmangaParser : GroupleParser
   {
+    public MintmangaParser(PluginManager pluginManager, Config config, IPlugin plugin) : base(pluginManager, config, plugin)
+    {
+
+    }
+
     protected override Task<ISiteHttpClient> GetClient()
     {
-      return MintmangaPlugin.Instance.GetCookieClient(true);
+      return plugin.GetCookieClient(true);
     }
 
     public override IMapper GetMapper()

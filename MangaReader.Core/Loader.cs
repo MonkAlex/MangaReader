@@ -5,41 +5,16 @@ using System.Reflection;
 
 namespace MangaReader.Core
 {
-  internal class Loader
+  public class Loader
   {
-    /// <summary>
-    /// Папка программы.
-    /// </summary>
-    internal static string WorkFolder
+    private readonly Environments environments;
+
+    public Loader(Environments environments)
     {
-      get { return workFolder; }
+      this.environments = environments;
     }
 
-    private static string workFolder = AppDomain.CurrentDomain.BaseDirectory;
-
-    /// <summary>
-    /// Папка с либами программы.
-    /// </summary>
-    internal static string LibPath
-    {
-      get { return Path.Combine(WorkFolder, "lib"); }
-    }
-
-    /// <summary>
-    /// Папка с плагинами программы.
-    /// </summary>
-    internal static string PluginPath
-    {
-      get { return Path.Combine(WorkFolder, "Plugins"); }
-    }
-
-    internal static string[] AssemblyFolders
-    {
-      get { return new string[] { LibPath, PluginPath }; }
-    }
-
-
-    internal static void Init()
+    internal void Init()
     {
       AppDomain.CurrentDomain.AssemblyResolve -= LibraryResolve;
       AppDomain.CurrentDomain.AssemblyResolve += LibraryResolve;
@@ -47,7 +22,7 @@ namespace MangaReader.Core
       AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += LibraryResolve;
     }
 
-    private static Assembly LibraryResolve(object sender, ResolveEventArgs args)
+    private Assembly LibraryResolve(object sender, ResolveEventArgs args)
     {
       try
       {
@@ -56,7 +31,7 @@ namespace MangaReader.Core
           libName = libName.Substring(0, libName.IndexOf(','));
         libName = libName + ".dll";
 
-        foreach (var folder in AssemblyFolders)
+        foreach (var folder in environments.AssemblyFolders)
         {
           var directory = new DirectoryInfo(folder);
           var file = directory.Exists ? directory.GetFiles().SingleOrDefault(f => f.Name == libName) : null;
@@ -82,10 +57,10 @@ namespace MangaReader.Core
       return null;
     }
 
-    private static void ProcessInternetZoneOnFiles(System.Exception ex, string libraryName)
+    private void ProcessInternetZoneOnFiles(System.Exception ex, string libraryName)
     {
       Console.WriteLine($"Just restart app \r\n {libraryName} \r\n {ex}");
-      foreach (var s in new[] { LibPath, PluginPath })
+      foreach (var s in new[] { environments.LibPath, environments.PluginPath })
         foreach (var fileInfo in new DirectoryInfo(s).GetFiles())
         {
           var body = File.ReadAllBytes(fileInfo.FullName);

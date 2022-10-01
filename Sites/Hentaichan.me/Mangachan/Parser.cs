@@ -20,11 +20,15 @@ namespace Hentaichan.Mangachan
 {
   public class Parser : BaseSiteParser
   {
+    public Parser(PluginManager pluginManager, Config config, IPlugin plugin) : base(pluginManager, config, plugin)
+    {
+    }
+
     public override async Task UpdateNameAndStatus(IManga manga)
     {
-      var client = await MangachanPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
+      var client = await plugin.GetCookieClient(true).ConfigureAwait(false);
       var page = await client.GetPage(manga.Uri).ConfigureAwait(false);
-      var localizedName = new MangaName();
+      var localizedName = new MangaName(config);
       try
       {
         var document = new HtmlDocument();
@@ -76,7 +80,7 @@ namespace Hentaichan.Mangachan
       try
       {
         var document = new HtmlDocument();
-        var client = await MangachanPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
+        var client = await plugin.GetCookieClient(true).ConfigureAwait(false);
         var content = (await client.GetPage(manga.Uri).ConfigureAwait(false)).Content;
         document.LoadHtml(content);
 
@@ -117,7 +121,7 @@ namespace Hentaichan.Mangachan
       // Chapter : https://manga-chan.me/online/249080-jigoku-koi-sutefu_v1_ch6.5.html
       // Page : -
 
-      var hosts = ConfigStorage.Plugins
+      var hosts = pluginManager.Plugins
         .Where(p => p.GetParser().GetType() == typeof(Parser))
         .Select(p => p.GetSettings().MainUri);
 
@@ -146,7 +150,7 @@ namespace Hentaichan.Mangachan
     protected override async Task<(HtmlNodeCollection Nodes, Uri Uri, ISiteHttpClient CookieClient)> GetMangaNodes(string name, Uri host)
     {
       var searchHost = new Uri(host, "?do=search&subaction=search&story=" + WebUtility.UrlEncode(name));
-      var client = await MangachanPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
+      var client = await plugin.GetCookieClient(true).ConfigureAwait(false);
       var page = await client.GetPage(searchHost).ConfigureAwait(false);
       if (!page.HasContent)
         return (null, null, null);
@@ -175,10 +179,10 @@ namespace Hentaichan.Mangachan
       return result;
     }
 
-    internal static async Task<IEnumerable<byte[]>> GetPreviewsImpl(ISiteParser parser, IManga manga)
+    internal async Task<IEnumerable<byte[]>> GetPreviewsImpl(ISiteParser parser, IManga manga)
     {
       var links = new List<Uri>();
-      var client = await ConfigStorage.Plugins.Single(p => p.MangaType == manga.GetType()).GetCookieClient(true).ConfigureAwait(false);
+      var client = await pluginManager.Plugins.Single(p => p.MangaType == manga.GetType()).GetCookieClient(true).ConfigureAwait(false);
       try
       {
         var document = new HtmlDocument();
@@ -231,7 +235,7 @@ namespace Hentaichan.Mangachan
       try
       {
         var document = new HtmlDocument();
-        var client = await MangachanPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
+        var client = await plugin.GetCookieClient(true).ConfigureAwait(false);
         document.LoadHtml((await client.GetPage(chapter.Uri).ConfigureAwait(false)).Content);
 
         var i = 0;

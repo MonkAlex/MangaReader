@@ -15,6 +15,7 @@ using MangaReader.Avalonia.ViewModel.Command;
 using MangaReader.Avalonia.ViewModel.Command.Library;
 using MangaReader.Avalonia.ViewModel.Command.Manga;
 using MangaReader.Avalonia.ViewModel.Explorer;
+using MangaReader.Core;
 using MangaReader.Core.ApplicationControl;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
@@ -25,6 +26,7 @@ namespace MangaReader.Avalonia
   class App : Application
   {
     private static ExplorerViewModel explorer;
+    private static ClientInit clientInit;
 
     public static AppBuilder BuildAvaloniaApp()
       => AppBuilder
@@ -47,8 +49,9 @@ namespace MangaReader.Avalonia
 
     static void Main(string[] args)
     {
-      Core.Client.Init();
-      Core.Client.OtherAppRunning += ClientOnOtherAppRunning;
+      clientInit = new ClientInit();
+      clientInit.Init();
+      clientInit.OtherAppRunning += ClientOnOtherAppRunning;
       BuildAvaloniaApp().StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
     }
 
@@ -102,14 +105,22 @@ namespace MangaReader.Avalonia
     {
       if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
       {
-        Updater.NewVersionFound += UpdaterOnNewVersionFound;
         lifetime.Exit += LifetimeOnExit;
 
         var TrayIcon = new WindowsTrayIcon();
         TrayIcon.SetIcon();
+
+        var environments = new Environments();
+        var configStorage = new JsonConfigStorage(environments.ConfigPath);
+        var config = configStorage.Load();
+        var updater = new Updater(environments, config);
+        updater.NewVersionFound += UpdaterOnNewVersionFound;
+        var loader = new Loader(environments);
+        var pluginManager = new PluginManager(environments.PluginPath, loader);
+        var mapping = new MangaReader.Core.NHibernate.Mapping(environments);
         
         var navigator = new Navigator();
-        var library = new MangaReader.Core.Services.LibraryViewModel();
+        var library = new MangaReader.Core.Services.LibraryViewModel(config);
         var selectedMangaModels = new SelectionModel();
         var openFolder = new OpenFolderCommand(selectedMangaModels, library, new OpenFolderCommandBase());
         var mangaModelFabric = new MangaModelFabric(navigator, new MangaSaveCommand(library, navigator), openFolder);
@@ -142,12 +153,13 @@ namespace MangaReader.Avalonia
         updateCommand.SetViewModel(libraryViewModel);
         TrayIcon.DoubleClickCommand = new ShowMainWindowCommand(explorer);
         TrayIcon.BalloonClickedCommand = new OpenFolderCommandBase();
-        
+
         // DB connection in another thread, then UI work well
-        Task.Run(() => Core.Client.Start(process));
+        var client = new Core.Client(configStorage, pluginManager, mapping, clientInit, updater);
+        Task.Run(() => client.Start(process));
 
         var args = Environment.GetCommandLineArgs();
-        if (args.Contains("-m") || args.Contains("/min") || ConfigStorage.Instance.AppConfig.StartMinimizedToTray)
+        if (args.Contains("-m") || args.Contains("/min") || config.AppConfig.StartMinimizedToTray)
         {
           // SaveSettingsCommand.ValidateMangaPaths();
         }

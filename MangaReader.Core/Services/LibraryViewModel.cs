@@ -20,7 +20,7 @@ namespace MangaReader.Core.Services
     /// Таймер для автообновления манги.
     /// </summary>
     private readonly Timer Timer = null;
-
+    private readonly Config.Config config;
     private int mangaIndex;
     private int mangasCount;
     private bool isAvaible = true;
@@ -144,11 +144,11 @@ namespace MangaReader.Core.Services
 
     private void TimerTick(object sender)
     {
-      if (IsAvaible && ConfigStorage.Instance.AppConfig.AutoUpdateInHours > 0 &&
-          DateTime.Now > ConfigStorage.Instance.AppConfig.LastUpdate.AddHours(ConfigStorage.Instance.AppConfig.AutoUpdateInHours))
+      if (IsAvaible && config.AppConfig.AutoUpdateInHours > 0 &&
+          DateTime.Now > config.AppConfig.LastUpdate.AddHours(config.AppConfig.AutoUpdateInHours))
       {
         Log.InfoFormat("{0} Время последнего обновления - {1}, частота обновления - каждые {2} часов.",
-          Strings.AutoUpdate, ConfigStorage.Instance.AppConfig.LastUpdate, ConfigStorage.Instance.AppConfig.AutoUpdateInHours);
+          Strings.AutoUpdate, config.AppConfig.LastUpdate, config.AppConfig.AutoUpdateInHours);
 
         if (IsAvaible)
         {
@@ -171,7 +171,7 @@ namespace MangaReader.Core.Services
     /// <param name="mangas">Обновляемая манга.</param>
     public Task Update(List<int> mangas)
     {
-      var saved = ConfigStorage.Instance.ViewConfig.LibraryFilter.SortDescription;
+      var saved = config.ViewConfig.LibraryFilter.SortDescription;
       switch (saved.PropertyName)
       {
         case nameof(IManga.Created):
@@ -275,7 +275,7 @@ namespace MangaReader.Core.Services
       {
         OnLibraryChanged(new LibraryViewModelArgs(null, null, MangaOperation.None, LibraryOperation.UpdateCompleted));
         Log.Info(Strings.Library_Status_UpdateComplete);
-        ConfigStorage.Instance.AppConfig.LastUpdate = DateTime.Now;
+        config.AppConfig.LastUpdate = DateTime.Now;
       }
     }
 
@@ -305,9 +305,10 @@ namespace MangaReader.Core.Services
       PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    public LibraryViewModel()
+    public LibraryViewModel(Config.Config config)
     {
       Timer = new Timer(TimerTick, null, new TimeSpan(0, 1, 0), new TimeSpan(0, 1, 0));
+      this.config = config;
     }
 
     protected virtual void OnLibraryChanged(LibraryViewModelArgs e)

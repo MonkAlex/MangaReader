@@ -14,30 +14,38 @@ namespace MangaReader.Core.Update
     private const int RepositoryId = 17180556;
 
     public static readonly string RepositoryReleaseUri = "https://github.com/MonkAlex/MangaReader/releases/latest";
+    private readonly Environments environments;
+    private readonly Config config;
 
-    private static string UpdateFilename = Path.Combine(ConfigStorage.WorkFolder, "Update", "GitHubUpdater.Launcher.exe");
+    private string UpdateFilename => Path.Combine(environments.WorkFolder, "Update", "GitHubUpdater.Launcher.exe");
 
-    private static string UpdateConfig = Path.Combine(ConfigStorage.WorkFolder, "Update", "MangaReader.config");
+    private string UpdateConfig => Path.Combine(environments.WorkFolder, "Update", "MangaReader.config");
 
-    public static Version ClientVersion = AppConfig.Version;
+    public Version ClientVersion => environments.Version;
 
-    public static event EventHandler<string> NewVersionFound;
+    public event EventHandler<string> NewVersionFound;
+
+    public Updater(Environments environments, Config config)
+    {
+      this.environments = environments;
+      this.config = config;
+    }
 
     /// <summary>
     /// Запуск обновления, вызываемый до инициализации программы.
     /// </summary>
     /// <remarks>Завершает обновление и удаляет временные файлы.</remarks>
-    public static async Task Initialize()
+    public async Task Initialize()
     {
       Log.InfoFormat("Версия приложения - {0}.", ClientVersion);
-      if (ConfigStorage.Instance.AppConfig.UpdateReader)
+      if (config.AppConfig.UpdateReader)
         await StartUpdate().ConfigureAwait(false);
     }
 
     /// <summary>
     /// Запуск обновления.
     /// </summary>
-    public static async Task StartUpdate()
+    public async Task StartUpdate()
     {
       try
       {
@@ -49,7 +57,7 @@ namespace MangaReader.Core.Update
         if (lastVersion != ClientVersion.ToString())
         {
           Log.Info($"Для {productName} найдена версия {lastVersion}. {RepositoryReleaseUri}");
-          OnNewVersionFound(lastVersion);
+          NewVersionFound?.Invoke(null, lastVersion);
         }
         else
         {
@@ -70,16 +78,11 @@ namespace MangaReader.Core.Update
       }
 
       var args = string.Format("--fromFile \"{0}\" --version \"{1}\" --outputFolder \"{2}\"",
-        UpdateConfig, ClientVersion, ConfigStorage.WorkFolder.TrimEnd('\\'));
+        UpdateConfig, ClientVersion, environments.WorkFolder.TrimEnd('\\'));
       Log.InfoFormat("Запущен процесс обновления: Файл '{0}', с аргументами '{1}', в папке '{2}'",
-        UpdateFilename, args, ConfigStorage.WorkFolder);
+        UpdateFilename, args, environments.WorkFolder);
 
       Process.Start(new ProcessStartInfo { FileName = UpdateFilename, Arguments = args });
-    }
-
-    private static void OnNewVersionFound(string e)
-    {
-      NewVersionFound?.Invoke(null, e);
     }
   }
 }

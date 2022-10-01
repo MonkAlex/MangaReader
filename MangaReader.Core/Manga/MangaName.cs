@@ -7,6 +7,7 @@ namespace MangaReader.Core.Manga
     private string english;
     private string russian;
     private string japanese;
+    private readonly Config config;
 
     /// <summary>
     /// Английское название манги.
@@ -57,15 +58,20 @@ namespace MangaReader.Core.Manga
       }
     }
 
+    public MangaName(Config config)
+    {
+      this.config = config;
+    }
+
     /// <summary>
     /// Определение строкового значения по настройкам.
     /// </summary>
     /// <returns>Название манги.</returns>
     public override string ToString()
     {
-      if (ConfigStorage.Instance.AppConfig.Language == Languages.English)
+      if (config.AppConfig.Language == Languages.English)
         return English;
-      if (ConfigStorage.Instance.AppConfig.Language == Languages.Russian)
+      if (config.AppConfig.Language == Languages.Russian)
         return Russian;
       return Japanese;
     }

@@ -13,8 +13,14 @@ namespace MangaReader.Core
   /// Базовая реализация плагина для снижения дублирования кода.
   /// </summary>
   /// <remarks>Не обязательна к использованию.</remarks>
-  public abstract class BasePlugin<T> : IPlugin where T : class, IPlugin, new()
+  public abstract class BasePlugin<T> : IPlugin where T : class, IPlugin
   {
+    protected BasePlugin(PluginManager pluginManager, Config config)
+    {
+      this.pluginManager = pluginManager;
+      this.config = config;
+    }
+
     public virtual string Name { get { return this.MangaType.Name; } }
     public abstract string ShortName { get; }
     public abstract Assembly Assembly { get; }
@@ -22,9 +28,11 @@ namespace MangaReader.Core
     public abstract Type MangaType { get; }
     public abstract Type LoginType { get; }
 
-    public static T Instance { get { return ConfigStorage.Plugins.OfType<T>().Single(); } }
+    public T Instance { get { return pluginManager.Plugins.OfType<T>().Single(); } }
 
-    protected CookieContainer CookieContainer = new CookieContainer();
+    protected readonly CookieContainer CookieContainer = new CookieContainer();
+    protected readonly PluginManager pluginManager;
+    protected readonly Config config;
 
     public async Task<ISiteHttpClient> GetCookieClient(bool withLogin)
     {

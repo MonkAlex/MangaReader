@@ -67,7 +67,7 @@ namespace Hentaichan
                              .OfType<Group>()
                              .Select(g => g.Captures[0])
                              .OfType<Match>()
-                             .Select(m => new Uri(m.Groups[1].Value)));
+                             .Select(m => new Uri(MainUri, new Uri(m.Groups[1].Value).PathAndQuery)));
 
         await Task.WhenAll(mangas.Select(async m =>
         {

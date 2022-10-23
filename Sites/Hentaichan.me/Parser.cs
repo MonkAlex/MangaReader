@@ -234,7 +234,7 @@ namespace Hentaichan
       if (!mangaUri.Contains("/manga/"))
         return null;
 
-      var result = await Mangas.Create(new Uri(mangaUri)).ConfigureAwait(false);
+      var result = await Mangas.Create(new Uri(host, new Uri(mangaUri).PathAndQuery)).ConfigureAwait(false);
       result.Name = WebUtility.HtmlDecode(mangaName);
       if (!string.IsNullOrWhiteSpace(imageUri))
         result.Cover = await client.GetData(new Uri(host, imageUri)).ConfigureAwait(false);

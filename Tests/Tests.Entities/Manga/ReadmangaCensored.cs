@@ -40,7 +40,11 @@ namespace Tests.Entities.Manga
     }
 
     [Test]
-    public async Task MangaRemovedCopyright()
+    [TestCase("https://mintmanga.live/in_the_first_grade")]
+    [TestCase("https://readmanga.live/shaman_warrior")]
+    [TestCase("https://readmanga.live/the_magician_s_bride")]
+    [NonParallelizable]
+    public async Task MangaRemovedCopyright(string mangaUri)
     {
       var error = string.Empty;
 
@@ -51,11 +55,11 @@ namespace Tests.Entities.Manga
       }
 
       Log.LogReceived += OnLogOnLogReceived;
-      var manga = await Get(@"https://mintmanga.live/in_the_first_grade").ConfigureAwait(false);
+      var manga = await Get(mangaUri).ConfigureAwait(false);
       Log.LogReceived -= OnLogOnLogReceived;
       var chapters = manga.Volumes.SelectMany(v => v.Container).ToList();
       Assert.IsTrue(!chapters.Any());
-      Assert.AreEqual("Запрещена публикация произведения по копирайту, адрес манги https://mintmanga.live/in_the_first_grade", error);
+      Assert.AreEqual($"Запрещена публикация произведения по копирайту, адрес манги {mangaUri}", error);
     }
 
     private async Task<IManga> Get(string url)

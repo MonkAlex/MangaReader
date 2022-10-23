@@ -26,14 +26,15 @@ namespace Grouple
     internal const string CookieKey = "red-form";
 
     /// <summary>
-    /// Манга удалена.
+    /// Признак того, что манга удалена.
     /// </summary>
-    internal const string Copyright = "Запрещена публикация произведения по копирайту";
-
-    /// <summary>
-    /// Удалена.
-    /// </summary>
-    internal const string Copyright2 = "Произведение удалено как противоречащее правилам сайта";
+    internal static readonly string[] Copyrights = new string[]
+    {
+      "Запрещена публикация произведения по копирайту",
+      "Произведение удалено как противоречащее правилам сайта",
+      "противоречит правилам",
+      "Манга удалена по запросу",
+    };
 
     protected abstract Task<ISiteHttpClient> GetClient();
 
@@ -172,7 +173,7 @@ namespace Grouple
       {
         var document = new HtmlDocument();
         document.LoadHtml(page.Content);
-        hasCopyrightNotice = document.DocumentNode.InnerText.Contains(Copyright) || document.DocumentNode.InnerText.Contains(Copyright2);
+        hasCopyrightNotice = Copyrights.Any(c => document.DocumentNode.InnerText.Contains(c));
         var linkNodes = document.DocumentNode
           .SelectNodes("//div[@class=\"expandable chapters-link\"]//a[@href]")
           .Reverse()
@@ -194,7 +195,7 @@ namespace Grouple
       catch (ArgumentNullException ex)
       {
         Log.Exception(ex, hasCopyrightNotice
-            ? $"{Copyright}, адрес манги {page.ResponseUri}"
+            ? $"{Copyrights[0]}, адрес манги {page.ResponseUri}"
             : $"Главы не найдены по адресу {page.ResponseUri}");
       }
 

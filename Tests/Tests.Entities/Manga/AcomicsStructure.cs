@@ -63,13 +63,21 @@ namespace Tests.Entities.Manga
     private async Task<Acomics.Acomics> GetManga(string uri)
     {
       var classUri = new Uri(uri);
-      using (var context = Repository.GetEntityContext())
-        foreach (var forDelete in await context.Get<Acomics.Acomics>().Where(m => m.Uri == classUri).ToListAsync().ConfigureAwait(false))
-          await context.Delete(forDelete).ConfigureAwait(false);
 
-      var manga = await Mangas.CreateFromWeb(classUri).ConfigureAwait(false) as Acomics.Acomics;
-      await new Parser().UpdateContent(manga).ConfigureAwait(false);
-      return manga;
+      using (var context = Repository.GetEntityContext("Get acomics manga"))
+      {
+        var manga = await Mangas.CreateFromWeb(classUri).ConfigureAwait(false) as Acomics.Acomics;
+        try
+        {
+          manga = await Mangas.CreateFromWeb(classUri).ConfigureAwait(false) as Acomics.Acomics;
+        }
+        catch (Exception)
+        {
+          manga = await context.Get<Acomics.Acomics>().FirstOrDefaultAsync(a => a.Uri == classUri);
+        }
+        await new Parser().UpdateContent(manga).ConfigureAwait(false);
+        return manga;
+      }
     }
   }
 }

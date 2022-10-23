@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Acomics;
 using MangaReader.Core.Manga;
+using MangaReader.Core.NHibernate;
+using NHibernate.Linq;
 using NUnit.Framework;
 
 namespace Tests.Entities.Manga
@@ -60,7 +62,12 @@ namespace Tests.Entities.Manga
 
     private async Task<Acomics.Acomics> GetManga(string uri)
     {
-      var manga = await Mangas.CreateFromWeb(new Uri(uri)).ConfigureAwait(false) as Acomics.Acomics;
+      var classUri = new Uri(uri);
+      using (var context = Repository.GetEntityContext())
+        foreach (var forDelete in await context.Get<Acomics.Acomics>().Where(m => m.Uri == classUri).ToListAsync().ConfigureAwait(false))
+          await context.Delete(forDelete).ConfigureAwait(false);
+
+      var manga = await Mangas.CreateFromWeb(classUri).ConfigureAwait(false) as Acomics.Acomics;
       await new Parser().UpdateContent(manga).ConfigureAwait(false);
       return manga;
     }

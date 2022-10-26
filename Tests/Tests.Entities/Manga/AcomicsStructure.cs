@@ -66,14 +66,10 @@ namespace Tests.Entities.Manga
 
       using (var context = Repository.GetEntityContext("Get acomics manga"))
       {
-        var manga = await Mangas.CreateFromWeb(classUri).ConfigureAwait(false) as Acomics.Acomics;
-        try
+        var manga = await context.Get<Acomics.Acomics>().FirstOrDefaultAsync(a => a.Uri == classUri);
+        if (manga == null)
         {
           manga = await Mangas.CreateFromWeb(classUri).ConfigureAwait(false) as Acomics.Acomics;
-        }
-        catch (Exception)
-        {
-          manga = await context.Get<Acomics.Acomics>().FirstOrDefaultAsync(a => a.Uri == classUri);
         }
         await new Parser().UpdateContent(manga).ConfigureAwait(false);
         return manga;

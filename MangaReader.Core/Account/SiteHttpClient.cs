@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using MangaReader.Core.Exception;
 using MangaReader.Core.Properties;
@@ -41,9 +42,31 @@ namespace MangaReader.Core.Account
       return await content.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
     }
 
-    public async Task<Page> Post(Uri uri, Dictionary<string, string> parameters)
+    public Task<Page> Post(Uri uri, Dictionary<string, string> parameters)
     {
-      var (content, exception) = await DoWithRestarts(uri, httpClient, (u, c) => c.PostAsync(u, new FormUrlEncodedContent(parameters))).ConfigureAwait(false);
+      return Post(uri, parameters, null);
+    }
+
+    public async Task<Page> Post(Uri uri, Dictionary<string, string> parameters, Dictionary<string, string> headers)
+    {
+      var (content, exception) = await DoWithRestarts(uri, httpClient, (u, c) => 
+      {
+        if (headers != null)
+        {
+          var request = new HttpRequestMessage(HttpMethod.Post, uri);
+          foreach (var header in headers)
+          {
+            request.Headers.Add(header.Key, header.Value);
+          }
+          request.Content = new FormUrlEncodedContent(parameters);
+          return c.SendAsync(request);
+        }
+        else
+        {
+          HttpContent formContent = new FormUrlEncodedContent(parameters);
+          return c.PostAsync(u, formContent);
+        }
+      }).ConfigureAwait(false);
       if (content == null)
         return new Page(uri) { Error = exception.GetBaseException().Message };
 

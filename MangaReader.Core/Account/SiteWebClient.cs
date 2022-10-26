@@ -92,13 +92,25 @@ namespace MangaReader.Core.Account
       return data;
     }
 
-    public async Task<Page> Post(Uri uri, Dictionary<string, string> parameters)
+    public Task<Page> Post(Uri uri, Dictionary<string, string> parameters)
+    {
+      return Post(uri, parameters, null);
+    }
+
+    public async Task<Page> Post(Uri uri, Dictionary<string, string> parameters, Dictionary<string, string> headers)
     {
       var client = GetCookieClient();
       var nvc = new NameValueCollection();
       foreach (var parameter in parameters)
       {
         nvc.Add(parameter.Key, parameter.Value);
+      }
+      if (headers != null)
+      {
+        foreach (var header in headers)
+        {
+          client.Headers.Add(header.Key, header.Value);
+        }
       }
 
       var (page, exception) = await DoWithRestarts(uri, client, (u, c) => PostImpl(u, c, nvc)).ConfigureAwait(false);

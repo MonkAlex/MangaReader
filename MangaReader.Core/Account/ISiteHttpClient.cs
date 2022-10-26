@@ -9,6 +9,7 @@ namespace MangaReader.Core.Account
     Task<Services.Page> GetPage(Uri uri);
     Task<byte[]> GetData(Uri uri);
     Task<Services.Page> Post(Uri uri, Dictionary<string, string> parameters);
+    Task<Services.Page> Post(Uri uri, Dictionary<string, string> parameters, Dictionary<string, string> headers);
 
     void AddCookie(string name, string value);
     string GetCookie(string name);

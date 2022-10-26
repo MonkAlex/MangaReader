@@ -12,6 +12,7 @@ using MangaReader.Core.NHibernate;
 using MangaReader.Core.Properties;
 using MangaReader.Core.Services;
 using MangaReader.Core.Services.Config;
+using Newtonsoft.Json.Linq;
 
 namespace Grouple
 {
@@ -54,38 +55,49 @@ namespace Grouple
     protected override async Task<List<IManga>> DownloadBookmarks(Guid mangaType)
     {
       var bookmarks = new List<IManga>();
-      var document = new HtmlDocument();
 
       var isLogined = await this.DoLogin(mangaType).ConfigureAwait(false);
 
       if (!isLogined)
         return bookmarks;
 
-      var plugin = ConfigStorage.Plugins.Single(p => p.MangaGuid == mangaType);
+      var plugin = ConfigStorage.Plugins.Single(p => p.MangaGuid == mangaType) as IGrouplePlugin;
       var client = await plugin.GetCookieClient(false).ConfigureAwait(false);
-      var page = await client.GetPage(BookmarksUri).ConfigureAwait(false);
-      document.LoadHtml(page.Content);
+      var gwt = client.GetCookie("gwt");
+      // {"bookmarkSort":"NAME","elementFilter":[],"statusFilter":["WATCHING"],"limit":50,"offset":0}
+      var page = await client.Post(new Uri("https://grouple.co/api/bookmark/list"), parameters: new Dictionary<string, string>
+      {
+        { "bookmarkSort", "NAME" },
+        { "limit", "50" },
+        { "offset", "0" },
+      },
+      new Dictionary<string, string> { { "Authorization", "Bearer " + gwt } }).ConfigureAwait(false);
 
-      var firstOrDefault = document.DocumentNode
-          .SelectNodes("//div[@class=\"bookmarks-lists\"]");
-
-      var bookMarksNode = firstOrDefault?.FirstOrDefault();
-      if (bookMarksNode == null)
+      if (!page.HasContent)
       {
         Log.AddFormat("Bookmarks from '{0}' not found.", this.MainUri);
         return bookmarks;
       }
 
-      var parser = plugin.GetParser();
       using (var context = Repository.GetEntityContext("Loading bookmarks"))
       {
-        var loadedBookmarks = Regex
-          .Matches(bookMarksNode.OuterHtml, @"href='(.*?)'", RegexOptions.IgnoreCase)
-          .OfType<Group>()
-          .Select(g => g.Captures[0])
-          .OfType<Match>()
-          .Select(m => new Uri(m.Groups[1].Value));
+        var loadedBookmarks = new List<Uri>();
+        var jsonParsed = JObject.Parse(page.Content)["list"].ToList();
+        var settings = plugin.GetSettings();
+        for (var i = 0; i < jsonParsed.Count; i++)
+        {
+          var child = jsonParsed[i];
+          var element = child["element"]["elementId"];
+          var link = element["linkName"].Value<string>();
+          var site = element["siteId"].Value<int>();
+          var status = child["status"].Value<string>();
+          if (plugin.SiteId == site && status.ToUpperInvariant() != "DROPPED")
+          {
+            loadedBookmarks.Add(new Uri(settings.MainUri, link));
+          }
+        }
 
+        var parser = plugin.GetParser();
         await Task.WhenAll(loadedBookmarks.Select(async b =>
         {
           var manga = await Mangas.Create(b).ConfigureAwait(false);

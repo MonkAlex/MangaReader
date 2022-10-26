@@ -16,11 +16,10 @@ namespace Tests.Entities.MangaSetting
   {
     public static IEnumerable<(ILogin, Guid)> GetLogins()
     {
-      // See issue 174
-      //if (!AppveyorHelper.IsRunning())
-      //  yield return (new GroupleLogin() { Name = "alex+grouple@antistarforce.com", Password = "JUadiSHrosiv" }, MintmangaPlugin.Manga);
-      //if (!AppveyorHelper.IsRunning())
-      //  yield return (new GroupleLogin() { Name = "alex+grouple@antistarforce.com", Password = "JUadiSHrosiv" }, ReadmangaPlugin.Manga);
+      if (!AppveyorHelper.IsRunning())
+        yield return (new GroupleLogin() { Name = "alex+grouple@antistarforce.com", Password = "JUadiSHrosiv" }, MintmangaPlugin.Manga);
+      if (!AppveyorHelper.IsRunning())
+        yield return (new GroupleLogin() { Name = "alex+grouple@antistarforce.com", Password = "JUadiSHrosiv" }, ReadmangaPlugin.Manga);
       yield return (new AcomicsLogin() { Name = "v924147", Password = "ocUsigairtYL" }, AcomicsPlugin.Manga);
       yield return (new HentaichanLogin() { Name = "v924147", Password = "OViLKHoTCHBL" }, HentaichanPlugin.Manga);
       yield return (new MangachanLogin() { Name = "v924147", Password = "gOWElaTERSIt" }, MangachanPlugin.Manga);
@@ -59,7 +58,7 @@ namespace Tests.Entities.MangaSetting
       }
     }
 
-    [Test, MintManga, ReadManga, Grouple, Issue(174)]
+    [Test, MintManga, ReadManga, Grouple]
     public async Task SingleLoginForManySites()
     {
       var login = new GroupleLogin() { Name = "alex+grouple@antistarforce.com", Password = "JUadiSHrosiv" };

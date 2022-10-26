@@ -175,7 +175,7 @@ namespace Grouple
         document.LoadHtml(page.Content);
         hasCopyrightNotice = Copyrights.Any(c => document.DocumentNode.InnerText.Contains(c));
         var linkNodes = document.DocumentNode
-          .SelectNodes("//div[@class=\"expandable chapters-link\"]//a[@href]")
+          .SelectNodes("//div[@class=\"expandable chapters-link\"]//a[contains(@class, 'chapter-link')]")
           .Reverse()
           .ToList();
         links = linkNodes

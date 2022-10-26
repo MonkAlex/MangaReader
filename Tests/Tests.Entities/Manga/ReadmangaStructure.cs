@@ -18,6 +18,16 @@ namespace Tests.Entities.Manga
     }
 
     [Test]
+    public async Task AddReadmangaWithFractionNumber()
+    {
+      var manga = await Mangas.Create(new Uri($"{Grouple.Constants.ReadmangaHost}vanpanchmen")).ConfigureAwait(false);
+      await new ReadmangaParser().UpdateContent(manga).ConfigureAwait(false);
+
+      var chapters = manga.Volumes.SelectMany(v => v.Container);
+      Assert.IsTrue(chapters.Any(c => c.Number == 209.2));
+    }
+
+    [Test]
     public async Task AddSingleReadmanga()
     {
       var chapters = await GetCountOfChapters($"{Grouple.Constants.ReadmangaHost}traeh").ConfigureAwait(false);

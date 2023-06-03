@@ -35,11 +35,13 @@ namespace MangaReader.Core.Account
 
     private CookieClient GetCookieClient()
     {
-      return new CookieClient(this.cookieContainer)
+      var client = new CookieClient(this.cookieContainer)
       {
         BaseAddress = mainUri.OriginalString,
         Proxy = proxy,
       };
+      client.Headers.Add(HttpRequestHeader.Accept, "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+      return client;
     }
 
     private static async Task<Page> GetPageImpl(Uri uri, CookieClient client)

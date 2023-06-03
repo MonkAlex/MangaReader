@@ -24,12 +24,12 @@ namespace Tests
     {
       MangaInfos.Init();
       yield return MangaInfos.Acomics.MgsLdioh;
-      yield return MangaInfos.Henchan.TwistedIntent;
+      yield return MangaInfos.Henchan.YankeeMyHome;
       yield return MangaInfos.Mangachan.Rain;
       if (!AppveyorHelper.IsRunning())
       {
         yield return MangaInfos.Hentai2Read.AttentionPlease;
-        yield return MangaInfos.Mintmanga.ChiaChia;
+        yield return MangaInfos.Mintmanga.Persefona;
         yield return MangaInfos.Readmanga.Kuroshitsuji;
       }
     }
@@ -38,7 +38,7 @@ namespace Tests
     {
       MangaInfos.Init();
       yield return new TestCaseData(MangaInfos.Acomics.SuperScienceFriends);
-      yield return new TestCaseData(MangaInfos.Henchan.LoveAndDevil);
+      yield return new TestCaseData(MangaInfos.Henchan.YankeeMyHome);
       yield return new TestCaseData(MangaInfos.Hentai2Read.AttentionPlease);
       yield return new TestCaseData(MangaInfos.Mangachan.ThisGirlfriendIsFiction);
       yield return new TestCaseData(MangaInfos.Mangachan.EveScramble).SetDescription("html codes in description");
@@ -94,6 +94,7 @@ namespace Tests
         manga = await Mangas.CreateFromWeb(mangaUri).ConfigureAwait(false);
       }
 
+      Assert.AreEqual(mangaInfo.Name, manga.Name);
       Assert.AreEqual(mangaInfo.Description, manga.Description);
       if (Equals(mangaInfo.Status, manga.Status))
         Assert.Pass();
@@ -117,7 +118,10 @@ namespace Tests
       var completedTasks = tasks.Select(t => t.ContinueWith(task =>
       {
         if (task.Exception != null)
+        {
+          Log.Exception(task.Exception);
           return;
+        }
 
         infos.Add(task.Result);
       })).ToArray();

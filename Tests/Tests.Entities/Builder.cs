@@ -112,6 +112,7 @@ namespace Tests.Entities
 
       info.Status = manga.Status;
       info.Description = manga.Description;
+      info.Name = manga.Name;
 
       return info;
     }

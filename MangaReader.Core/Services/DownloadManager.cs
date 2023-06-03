@@ -31,14 +31,15 @@ namespace MangaReader.Core.Services
     /// <param name="uri">Ссылка на страницу манги.</param>
     /// <param name="settingCache">Настройки сети.</param>
     /// <returns>Содержимое файла.</returns>
-    public static async Task<ImageFile> DownloadImage(Uri uri, MangaSettingCache settingCache)
+    public static async Task<ImageFile> DownloadImage(Uri uri, MangaSettingCache settingCache, string referer)
     {
       byte[] result;
       WebResponse response;
       var file = new ImageFile();
       var request = (HttpWebRequest)WebRequest.Create(uri);
-      request.Referer = uri.Host;
+      request.Referer = referer;
       request.Proxy = settingCache.Proxy;
+      request.Accept = "image/webp,*/*";
 
       try
       {
@@ -47,6 +48,11 @@ namespace MangaReader.Core.Services
       }
       catch (System.Exception ex)
       {
+        if (!string.IsNullOrEmpty(uri.Query))
+        {
+          uri = new Uri(uri.GetLeftPart(UriPartial.Path));
+          return await DownloadImage(uri, settingCache, referer);
+        }
         Log.Exception(ex, string.Format($"Загрузка {uri} не завершена. Использованы настройки прокси {settingCache.SettingType}"));
         return file;
       }

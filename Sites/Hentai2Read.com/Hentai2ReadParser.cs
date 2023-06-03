@@ -33,7 +33,11 @@ namespace Hentai2Read.com
         var client = await Hentai2ReadPlugin.Instance.GetCookieClient(true).ConfigureAwait(false);
         var document = new HtmlDocument();
         document.LoadHtml((await client.GetPage(manga.Uri).ConfigureAwait(false)).Content);
-        var nameNode = document.DocumentNode.SelectSingleNode("//span[@itemprop=\"name\"]");
+        var nameNode = document.DocumentNode
+          .SelectNodes("//div[@itemtype=\"http://schema.org/Book\"]")
+          .Single()
+          .SelectNodes(".//span[@itemprop=\"name\"]")
+          .Single();
         if (nameNode != null)
         {
           var name = WebUtility.HtmlDecode(nameNode.InnerText);

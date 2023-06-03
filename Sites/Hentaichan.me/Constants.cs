@@ -6,6 +6,6 @@ namespace Hentaichan
 {
   public static class Constants
   {
-    public const string HentaichanHost = "https://y.hentaichan.live/";
+    public const string HentaichanHost = "https://x.henchan.pro/";
   }
 }

@@ -14,6 +14,8 @@
 
     public string Status;
 
+    public string Name;
+
     public override string ToString()
     {
       return Uri;

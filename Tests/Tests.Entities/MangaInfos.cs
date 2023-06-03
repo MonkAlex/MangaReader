@@ -17,11 +17,11 @@ namespace Tests.Entities
 
     public static class Henchan
     {
-      [InfoCache("https://y.hentaichan.live/manga/12850-twisted-intent-chast-1.html", true)]
-      public static MangaInfo TwistedIntent;
+      [InfoCache("https://x.henchan.pro/manga/30720-yankee-my-home.html", true)]
+      public static MangaInfo YankeeMyHome;
 
-      [InfoCache("https://y.hentaichan.live/manga/14212-love-and-devil-glava-25.html", false)]
-      public static MangaInfo LoveAndDevil;
+      [InfoCache("https://x.henchan.pro/manga/12850-twisted-intent-chast-1.html", false)]
+      public static MangaInfo TwistedIntent;
     }
 
     public static class Mangachan
@@ -47,8 +47,8 @@ namespace Tests.Entities
 
     public static class Mintmanga
     {
-      [InfoCache("https://mintmanga.live/chia_chia", true)]
-      public static MangaInfo ChiaChia;
+      [InfoCache("https://mintmanga.live/persefona", true)]
+      public static MangaInfo Persefona;
 
       [InfoCache("https://mintmanga.live/love_mate", false)]
       public static MangaInfo LoveMate;

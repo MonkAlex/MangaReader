@@ -99,9 +99,11 @@ namespace MangaReader.Core.Manga
           var plugin = ConfigStorage.Plugins.Single(p => p.MangaType == manga.GetType());
           var cache = MangaSettingCache.Get(plugin.GetType());
 
-          var file = await DownloadManager.DownloadImage(this.ImageLink, cache).ConfigureAwait(false);
+          var file = await DownloadManager.DownloadImage(this.ImageLink, cache, this.Uri.Host).ConfigureAwait(false);
           if (!file.Exist)
-            OnDownloadFailed();
+          {
+            ThrowException();
+          }
           var fileName = this.Number.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0') + "." + file.Extension;
           await file.Save(Path.Combine(chapterFolder, fileName)).ConfigureAwait(false);
           this.IsDownloaded = true;
@@ -115,7 +117,7 @@ namespace MangaReader.Core.Manga
       }
     }
 
-    protected virtual void OnDownloadFailed()
+    protected virtual void ThrowException()
     {
       throw new System.Exception("Restart download, downloaded file is corrupted, link = " + this.ImageLink);
     }

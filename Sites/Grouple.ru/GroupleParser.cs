@@ -96,7 +96,7 @@ namespace Grouple
       if (node == null)
         return;
 
-      var initBlock = Regex.Match(node.OuterHtml, @"rm_h\.initReader\(.*?(\[\[.*?\]\])", RegexOptions.IgnoreCase);
+      var initBlock = Regex.Match(node.OuterHtml, @"rm_h\.readerInit\(.*?(\[\[.*?\]\])", RegexOptions.IgnoreCase);
       var jsonParsed = JToken.Parse(initBlock.Groups[1].Value).Children().ToList();
       for (var i = 0; i < jsonParsed.Count; i++)
       {
@@ -175,7 +175,7 @@ namespace Grouple
         document.LoadHtml(page.Content);
         hasCopyrightNotice = Copyrights.Any(c => document.DocumentNode.InnerText.Contains(c));
         var linkNodes = document.DocumentNode
-          .SelectNodes("//div[@class=\"expandable chapters-link\"]//a[contains(@class, 'chapter-link')]")
+          .SelectNodes("//div[@class=\"chapters-link chapters\"]//a[contains(@class, 'chapter-link')]")
           .Reverse()
           .ToList();
         links = linkNodes

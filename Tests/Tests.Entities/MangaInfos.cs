@@ -47,10 +47,10 @@ namespace Tests.Entities
 
     public static class Mintmanga
     {
-      [InfoCache("https://mintmanga.live/persefona", true)]
+      [InfoCache("https://m.mintmanga.live/persefona", true)]
       public static MangaInfo Persefona;
 
-      [InfoCache("https://mintmanga.live/love_mate", false)]
+      [InfoCache("https://m.mintmanga.live/love_mate", false)]
       public static MangaInfo LoveMate;
     }
 

@@ -13,10 +13,10 @@ using SortDescription = MangaReader.Core.Services.Config.SortDescription;
 namespace Tests.Entities.Library
 {
   [TestFixture]
+  [Parallelizable(ParallelScope.None)]
   public class Update : TestClass
   {
     [Test]
-    [Parallelizable(ParallelScope.None)]
     public async Task TestUpdate()
     {
       var library = new LibraryViewModel();
@@ -53,6 +53,10 @@ namespace Tests.Entities.Library
     [Test]
     public async Task UpdateMangaWithPause()
     {
+      using (var context = Repository.GetEntityContext())
+        foreach (var forDelete in await context.Get<IManga>().ToListAsync().ConfigureAwait(false))
+          await context.Delete(forDelete).ConfigureAwait(false);
+
       var events = new List<LibraryViewModelArgs>();
       void LibraryOnLibraryChanged(object sender, LibraryViewModelArgs e)
       {
@@ -105,6 +109,10 @@ namespace Tests.Entities.Library
     [Test]
     public async Task UpdateManyMangas()
     {
+      using (var context = Repository.GetEntityContext())
+        foreach (var forDelete in await context.Get<IManga>().ToListAsync().ConfigureAwait(false))
+          await context.Delete(forDelete).ConfigureAwait(false);
+
       var library = new LibraryViewModel();
       var ids = Enumerable.Range(40_000, 2500).ToList();
 

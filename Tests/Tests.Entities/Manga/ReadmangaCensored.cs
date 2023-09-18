@@ -33,6 +33,8 @@ namespace Tests.Entities.Manga
     [Test]
     public async Task CensoredReadmanga()
     {
+      var login = new GroupleLogin() { Name = "alex+grouple@antistarforce.com", Password = "JUadiSHrosiv" };
+      await login.DoLogin(ReadmangaPlugin.Manga);
       var manga = await Get($"{Grouple.Constants.ReadmangaHost}school_teacher/vol2/10?mtr=1").ConfigureAwait(false);
       var chapter = manga.Volumes.Single(v => v.Number == 2).Container.ToList()[5];
       await parser.UpdatePages(chapter).ConfigureAwait(false);
@@ -40,7 +42,7 @@ namespace Tests.Entities.Manga
     }
 
     [Test]
-    [TestCase("https://mintmanga.live/in_the_first_grade")]
+    [TestCase("https://m.mintmanga.live/in_the_first_grade")]
     [TestCase("https://readmanga.live/shaman_warrior")]
     [TestCase("https://readmanga.live/the_magician_s_bride")]
     [NonParallelizable]

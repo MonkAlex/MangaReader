@@ -35,7 +35,7 @@ namespace Tests.Entities.Manga
     [Test, MintManga]
     public async Task MintmangaBonus()
     {
-      var manga = await Mangas.CreateFromWeb(new Uri("https://mintmanga.live/harukana_receive")).ConfigureAwait(false);
+      var manga = await Mangas.CreateFromWeb(new Uri($"{Grouple.Constants.MintmangaHost}harukana_receive")).ConfigureAwait(false);
       await manga.Parser.UpdateContent(manga).ConfigureAwait(false);
       var chapters = manga.Volumes.SelectMany(v => v.Container).OfType<Grouple.GroupleChapter>();
       Assert.AreEqual(1, chapters.Count(c => c.VolumeNumber == 1 && c.Number == 0));

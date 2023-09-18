@@ -34,12 +34,12 @@ namespace Tests.Entities.Manga
 
         // Если сайт больше не редиректит, осталась возможность редиректа вручную в клиенте.
         if (manga.Uri == readmangaUri)
-          manga.Uri = new Uri("https://mintmanga.live/btooom_");
+          manga.Uri = new Uri($"{Grouple.Constants.MintmangaHost}btooom_");
 
         await context.Save(manga).ConfigureAwait(false);
 
         var volume = new Volume();
-        volume.Container.Add(new Chapter(new Uri("https://mintmanga.live/vzryv_/vol1/1?mtr=1"), string.Empty));
+        volume.Container.Add(new Chapter(new Uri($"{Grouple.Constants.MintmangaHost}vzryv_/vol1/1?mtr=1"), string.Empty));
 
         var chartersNotInHistory = History.GetItemsWithoutHistory(volume);
         Assert.AreEqual(0, chartersNotInHistory.Count);

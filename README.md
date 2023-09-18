@@ -9,7 +9,7 @@
 
 На текущий момент поддерживаются:
  1. [ReadManga](https://readmanga.live/)
- 2. [MintManga](https://mintmanga.live)
+ 2. [MintManga](https://m.mintmanga.live)
  3. [Hentaichan](https://x.henchan.pro/)
  4. [Acomics](https://acomics.ru)
  5. [Mangachan](https://manga-chan.me/)

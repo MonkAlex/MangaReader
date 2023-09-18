@@ -175,7 +175,7 @@ namespace Grouple
         document.LoadHtml(page.Content);
         hasCopyrightNotice = Copyrights.Any(c => document.DocumentNode.InnerText.Contains(c));
         var linkNodes = document.DocumentNode
-          .SelectNodes("//div[@class=\"chapters-link chapters\"]//a[contains(@class, 'chapter-link')]")
+          .SelectNodes("//tr[@class=\"item-row\"]//a[contains(@class, 'chapter-link')]")
           .Reverse()
           .ToList();
         links = linkNodes
